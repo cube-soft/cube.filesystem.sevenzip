@@ -36,17 +36,37 @@
     <Reference Include="nunit.framework">
       <HintPath>..\..\packages\NUnit.3.7.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="Cube.Core">
+      <HintPath>..\..\packages\Cube.Core.1.4.2\lib\net45\Cube.Core.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Details\FileResource.cs" />
+    <Compile Include="DriveTest.cs" />
+    <Compile Include="FileHandlerTest.cs" />
+    <Compile Include="FileInfoTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Libraries\Cube.FileSystem.csproj">
+      <Project>{e89aad2c-5a74-49f6-ad84-65f0016ef1bb}</Project>
+      <Name>Cube.FileSystem</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /Y /I /S "$(ProjectDir)Examples" "$(TargetDir)\Examples"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

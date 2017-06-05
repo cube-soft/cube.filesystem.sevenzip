@@ -30,12 +30,37 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Cube.Core">
+      <HintPath>..\..\packages\Cube.Core.1.4.2\lib\net45\Cube.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Drives\Device.cs" />
+    <Compile Include="Drives\DeviceNumber.cs" />
+    <Compile Include="Drives\Drive.cs" />
+    <Compile Include="Drives\VetoException.cs" />
+    <Compile Include="NativeMethods\Structures\SHFileInfo.cs" />
+    <Compile Include="NativeMethods\Structures\SpDevice.cs" />
+    <Compile Include="NativeMethods\Kernel32.cs" />
+    <Compile Include="NativeMethods\SetupApi.cs" />
+    <Compile Include="NativeMethods\Shell32.cs" />
+    <Compile Include="NativeMethods\WinMM.cs" />
+    <Compile Include="Operations\Files.cs" />
+    <Compile Include="FileHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Packages.config" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
