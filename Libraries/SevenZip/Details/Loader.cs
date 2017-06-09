@@ -18,6 +18,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.ComponentModel;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace Cube.FileSystem.SevenZip
@@ -40,21 +41,29 @@ namespace Cube.FileSystem.SevenZip
         /// Loader
         ///
         /// <summary>
-        /// オブジェクトを開放します。
+        /// オブジェクトを初期化します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public Loader()
+        {
+            var asm = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
+            var dir = System.IO.Path.GetDirectoryName(asm.Location);
+            Initialize(System.IO.Path.Combine(dir, "7z.dll"));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Loader
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public Loader(string path)
         {
-            _handle = Kernel32.NativeMethods.LoadLibrary(path);
-            if (_handle.IsInvalid) throw new Win32Exception("LoadLibrary");
-
-            var ptr = Kernel32.NativeMethods.GetProcAddress(_handle, "GetHandlerProperty");
-            if (ptr == IntPtr.Zero)
-            {
-                _handle.Close();
-                throw new ArgumentException("GetProcAddress");
-            }
+            Initialize(path);
         }
 
         #endregion
@@ -157,9 +166,35 @@ namespace Cube.FileSystem.SevenZip
 
         #endregion
 
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Initialize
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Initialize(string path)
+        {
+            _handle = Kernel32.NativeMethods.LoadLibrary(path);
+            if (_handle.IsInvalid) throw new Win32Exception("LoadLibrary");
+
+            var ptr = Kernel32.NativeMethods.GetProcAddress(_handle, "GetHandlerProperty");
+            if (ptr == IntPtr.Zero)
+            {
+                _handle.Close();
+                throw new ArgumentException("GetProcAddress");
+            }
+        }
+
         #region Fields
         private bool _disposed = false;
         private SafeLibraryHandle _handle;
+        #endregion
+
         #endregion
     }
 }

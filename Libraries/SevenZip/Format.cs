@@ -17,6 +17,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Collections.Generic;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -31,7 +32,8 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     public enum Format
     {
-        SevenZip,
+        Unknown     = -1,
+        SevenZip    =  0,
         Arj,
         BZip2,
         Cab,
@@ -79,30 +81,69 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public static Guid ToClassId(this Format fmt)
         {
-            switch (fmt)
+            if (_guid == null)
             {
-                case Format.SevenZip:   return new Guid("23170f69-40c1-278a-1000-000110070000");
-                case Format.Arj:        return new Guid("23170f69-40c1-278a-1000-000110040000");
-                case Format.BZip2:      return new Guid("23170f69-40c1-278a-1000-000110020000");
-                case Format.Cab:        return new Guid("23170f69-40c1-278a-1000-000110080000");
-                case Format.Chm:        return new Guid("23170f69-40c1-278a-1000-000110e90000");
-                case Format.Compound:   return new Guid("23170f69-40c1-278a-1000-000110e50000");
-                case Format.Cpio:       return new Guid("23170f69-40c1-278a-1000-000110ed0000");
-                case Format.Deb:        return new Guid("23170f69-40c1-278a-1000-000110ec0000");
-                case Format.GZip:       return new Guid("23170f69-40c1-278a-1000-000110ef0000");
-                case Format.Iso:        return new Guid("23170f69-40c1-278a-1000-000110e70000");
-                case Format.Lzh:        return new Guid("23170f69-40c1-278a-1000-000110060000");
-                case Format.Lzma:       return new Guid("23170f69-40c1-278a-1000-0001100a0000");
-                case Format.Nsis:       return new Guid("23170f69-40c1-278a-1000-000110090000");
-                case Format.Rar:        return new Guid("23170f69-40c1-278a-1000-000110030000");
-                case Format.Rpm:        return new Guid("23170f69-40c1-278a-1000-000110eb0000");
-                case Format.Split:      return new Guid("23170f69-40c1-278a-1000-000110ea0000");
-                case Format.Tar:        return new Guid("23170f69-40c1-278a-1000-000110ee0000");
-                case Format.Wim:        return new Guid("23170f69-40c1-278a-1000-000110e60000");
-                case Format.Z:          return new Guid("23170f69-40c1-278a-1000-000110050000");
-                case Format.Zip:        return new Guid("23170f69-40c1-278a-1000-000110010000");
-                default: return Guid.Empty;
+                _guid = new Dictionary<Format, Guid>
+                {
+                    { Format.Unknown,   Guid.Empty },
+                    { Format.SevenZip,  new Guid("23170f69-40c1-278a-1000-000110070000")},
+                    { Format.Arj,       new Guid("23170f69-40c1-278a-1000-000110040000") },
+                    { Format.BZip2,     new Guid("23170f69-40c1-278a-1000-000110020000") },
+                    { Format.Cab,       new Guid("23170f69-40c1-278a-1000-000110080000") },
+                    { Format.Chm,       new Guid("23170f69-40c1-278a-1000-000110e90000") },
+                    { Format.Compound,  new Guid("23170f69-40c1-278a-1000-000110e50000") },
+                    { Format.Cpio,      new Guid("23170f69-40c1-278a-1000-000110ed0000") },
+                    { Format.Deb,       new Guid("23170f69-40c1-278a-1000-000110ec0000") },
+                    { Format.GZip,      new Guid("23170f69-40c1-278a-1000-000110ef0000") },
+                    { Format.Iso,       new Guid("23170f69-40c1-278a-1000-000110e70000") },
+                    { Format.Lzh,       new Guid("23170f69-40c1-278a-1000-000110060000") },
+                    { Format.Lzma,      new Guid("23170f69-40c1-278a-1000-0001100a0000") },
+                    { Format.Nsis,      new Guid("23170f69-40c1-278a-1000-000110090000") },
+                    { Format.Rar,       new Guid("23170f69-40c1-278a-1000-000110030000") },
+                    { Format.Rpm,       new Guid("23170f69-40c1-278a-1000-000110eb0000") },
+                    { Format.Split,     new Guid("23170f69-40c1-278a-1000-000110ea0000") },
+                    { Format.Tar,       new Guid("23170f69-40c1-278a-1000-000110ee0000") },
+                    { Format.Wim,       new Guid("23170f69-40c1-278a-1000-000110e60000") },
+                    { Format.Z,         new Guid("23170f69-40c1-278a-1000-000110050000") },
+                    { Format.Zip,       new Guid("23170f69-40c1-278a-1000-000110010000") },
+                };
             }
+            return _guid.ContainsKey(fmt) ? _guid[fmt] : Guid.Empty;
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// FromExtension
+        ///
+        /// <summary>
+        /// 拡張子に対応する Format を取得します。
+        /// </summary>
+        /// 
+        /// <param name="ext">拡張子</param>
+        /// 
+        /// <returns>Format オブジェクト</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static Format FromExtension(string ext)
+        {
+            if (_ext == null)
+            {
+                _ext = new Dictionary<string, Format>
+                {
+                    { ".7z",  Format.SevenZip },
+                    { ".gz",  Format.GZip },
+                    { ".tar", Format.Tar },
+                    { ".zip", Format.Zip },
+                };
+            }
+
+            var cvt = ext.ToLower();
+            return _ext.ContainsKey(cvt) ? _ext[cvt] : Format.Unknown;
+        }
+
+        #region Fields
+        private static IDictionary<string, Format> _ext;
+        private static IDictionary<Format, Guid> _guid;
+        #endregion
     }
 }
