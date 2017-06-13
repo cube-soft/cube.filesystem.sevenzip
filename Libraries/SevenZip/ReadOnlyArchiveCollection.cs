@@ -16,6 +16,7 @@
 /// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ///
 /* ------------------------------------------------------------------------- */
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -42,12 +43,13 @@ namespace Cube.FileSystem.SevenZip
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
-        /// <param name="raw">生データ</param>
+        /// <param name="obj">生データ</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ReadOnlyArchiveCollection(IInArchive raw)
+        public ReadOnlyArchiveCollection(object obj)
         {
-            _raw = raw;
+            if (obj is IInArchive raw) _raw = raw;
+            else throw new ArgumentException("invalid object");
         }
 
         #endregion

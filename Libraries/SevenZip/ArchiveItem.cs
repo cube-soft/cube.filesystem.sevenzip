@@ -16,6 +16,8 @@
 /// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ///
 /* ------------------------------------------------------------------------- */
+using System;
+
 namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
@@ -39,12 +41,14 @@ namespace Cube.FileSystem.SevenZip
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
-        /// <param name="raw">生データ</param>
+        /// <param name="obj">生データ</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveItem(IInArchive raw, int index)
+        public ArchiveItem(object obj, int index)
         {
-            _raw = raw;
+            if (obj is IInArchive raw) _raw = raw;
+            else throw new ArgumentException("invalid object");
+
             Index = index;
         }
 
