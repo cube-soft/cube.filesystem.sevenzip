@@ -18,6 +18,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.ComponentModel;
+using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -25,43 +26,45 @@ namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// Loader
+    /// NativeLibrary
     /// 
     /// <summary>
-    /// 7z.dll をロードするためのクラスです。
+    /// 7z.dll を扱うためのクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public sealed class Loader : IDisposable
+    internal sealed class NativeLibrary : IDisposable
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Loader
+        /// NativeLibrary
         ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Loader()
+        public NativeLibrary()
         {
-            var asm = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
-            var dir = System.IO.Path.GetDirectoryName(asm.Location);
-            Initialize(System.IO.Path.Combine(dir, "7z.dll"));
+            var asm = Assembly.GetEntryAssembly() ??
+                      Assembly.GetExecutingAssembly();
+            var dir = Path.GetDirectoryName(asm.Location);
+
+            Initialize(Path.Combine(dir, "7z.dll"));
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Loader
+        /// NativeLibrary
         ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Loader(string path)
+        public NativeLibrary(string path)
         {
             Initialize(path);
         }
@@ -123,7 +126,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        ~Loader()
+        ~NativeLibrary()
         {
             Dispose(false);
         }
@@ -179,6 +182,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         private void Initialize(string path)
         {
+            if (!File.Exists(path)) throw new FileNotFoundException();
             _handle = Kernel32.NativeMethods.LoadLibrary(path);
             if (_handle.IsInvalid) throw new Win32Exception("LoadLibrary");
 
