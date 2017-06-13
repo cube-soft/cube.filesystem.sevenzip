@@ -52,6 +52,7 @@
     <Compile Include="FileHandlerTest.cs" />
     <Compile Include="FileInfoTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SevenZip\ArchiveReaderTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages.config" />
@@ -64,7 +65,12 @@
       <Project>{e89aad2c-5a74-49f6-ad84-65f0016ef1bb}</Project>
       <Name>Cube.FileSystem</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Libraries\SevenZip\Cube.FileSystem.SevenZip.csproj">
+      <Project>{74c9f388-360e-4c46-a9a6-e131eab2e49c}</Project>
+      <Name>Cube.FileSystem.SevenZip</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /Y /I /S "$(ProjectDir)Examples" "$(TargetDir)\Examples"</PostBuildEvent>
