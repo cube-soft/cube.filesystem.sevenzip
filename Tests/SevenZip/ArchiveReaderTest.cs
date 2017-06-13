@@ -19,7 +19,6 @@
 using System.Linq;
 using NUnit.Framework;
 
-
 namespace Cube.FileSystem.Tests
 {
     /* --------------------------------------------------------------------- */

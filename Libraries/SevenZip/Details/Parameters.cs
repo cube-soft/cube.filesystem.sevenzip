@@ -27,7 +27,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public enum Mode
+    internal enum Mode
     {
         Extract = 0,
         Test,
@@ -43,7 +43,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public enum Result
+    internal enum Result
     {
         OK = 0,
         UnSupportedMethod,
@@ -60,7 +60,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public enum ItemPropertyId : uint
+    internal enum ItemPropertyId : uint
     {
         NoProperty          = 0x00000,
         HandlerItemIndex    = 0x00002,
@@ -110,7 +110,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public enum ArchivePropertyId : uint
+    internal enum ArchivePropertyId : uint
     {
         Name = 0,
         ClassID,

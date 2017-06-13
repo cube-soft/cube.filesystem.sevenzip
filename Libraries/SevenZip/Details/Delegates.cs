@@ -22,23 +22,23 @@ using System.Runtime.InteropServices;
 namespace Cube.FileSystem.SevenZip
 {
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public delegate int CreateObjectDelegate(
+    internal delegate int CreateObjectDelegate(
         [In] ref Guid classID,
         [In] ref Guid interfaceID,
         [MarshalAs(UnmanagedType.Interface)] out object outObject // out IntPtr outObject
     );
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public delegate int GetHandlerPropertyDelegate(
+    internal delegate int GetHandlerPropertyDelegate(
         ArchivePropertyId propID,
         ref PropVariant value
     );
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public delegate int GetNumberOfFormatsDelegate(out uint numFormats);
+    internal delegate int GetNumberOfFormatsDelegate(out uint numFormats);
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public delegate int GetHandlerProperty2Delegate(
+    internal delegate int GetHandlerProperty2Delegate(
         uint formatIndex,
         ArchivePropertyId propID,
         ref PropVariant value

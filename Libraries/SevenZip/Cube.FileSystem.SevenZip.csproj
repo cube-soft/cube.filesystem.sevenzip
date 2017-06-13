@@ -46,7 +46,7 @@
     <Compile Include="NativeMethods\Ole32.cs" />
     <Compile Include="NativeMethods\Structures\PropVariant.cs" />
     <Compile Include="NativeMethods\Structures\SafeLibraryHandle.cs" />
-    <Compile Include="Parameters.cs" />
+    <Compile Include="Details\Parameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Details\ArchiveStream.cs" />
     <Compile Include="ReadOnlyArchiveCollection.cs" />
