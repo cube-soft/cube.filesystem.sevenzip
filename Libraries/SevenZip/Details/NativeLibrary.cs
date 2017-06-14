@@ -194,6 +194,22 @@ namespace Cube.FileSystem.SevenZip
             }
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CreateObjectDelegate
+        ///
+        /// <summary>
+        /// CreateObject のデリゲートです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        delegate int CreateObjectDelegate(
+            [In] ref Guid classID,
+            [In] ref Guid interfaceID,
+            [MarshalAs(UnmanagedType.Interface)] out object outObject
+        );
+
         #region Fields
         private bool _disposed = false;
         private SafeLibraryHandle _handle;

@@ -38,7 +38,6 @@
   <ItemGroup>
     <Compile Include="ArchiveReader.cs" />
     <Compile Include="ArchiveItem.cs" />
-    <Compile Include="Details\Delegates.cs" />
     <Compile Include="Format.cs" />
     <Compile Include="Details\Interfaces.cs" />
     <Compile Include="Details\NativeLibrary.cs" />
