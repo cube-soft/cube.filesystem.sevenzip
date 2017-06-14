@@ -120,19 +120,19 @@ namespace Cube.FileSystem.SevenZip
         int GetStream(
             uint index,
             [Out, MarshalAs(UnmanagedType.Interface)] out ISequentialOutStream outStream,
-            Mode askExtractMode);
+            AskMode askExtractMode);
 
         /// <summary>
         /// PrepareOperation 7-zip function
         /// </summary>
         /// <param name="askExtractMode">Ask mode</param>
-        void PrepareOperation(Mode askExtractMode);
+        void PrepareOperation(AskMode askExtractMode);
 
         /// <summary>
         /// Sets the operaton result
         /// </summary>
         /// <param name="operationResult">The operation result</param>
-        void SetOperationResult(Result operationResult);
+        void SetOperationResult(OperationResult operationResult);
     }
 
     /// <summary>
@@ -176,7 +176,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="value">Property value</param>
         /// <returns>Zero if Ok</returns>
         [PreserveSig]
-        int GetProperty(uint index, ItemPropertyId propId, ref PropVariant value);
+        int GetProperty(uint index, ItemPropId propId, ref PropVariant value);
 
         /// <summary>
         /// Gets the stream for reading.
@@ -193,7 +193,7 @@ namespace Cube.FileSystem.SevenZip
         /// Sets the result for currently performed operation.
         /// </summary>
         /// <param name="operationResult">The result value.</param>
-        void SetOperationResult(Result operationResult);
+        void SetOperationResult(OperationResult operationResult);
 
         /// <summary>
         /// EnumProperties 7-zip internal function.
@@ -218,7 +218,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="value">The property value.</param>
         [PreserveSig]
         int GetProperty(
-            ItemPropertyId propId, ref PropVariant value);
+            ItemPropId propId, ref PropVariant value);
 
         /// <summary>
         /// Gets the stream for reading the volume.
@@ -400,7 +400,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="value">Property variant value</param>
         void GetProperty(
             uint index,
-            ItemPropertyId propId,
+            ItemPropId propId,
             ref PropVariant value); // PropVariant
 
         /// <summary>
@@ -424,7 +424,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="propId">Archive property identificator</param>
         /// <param name="value">Archive property value</param>
         void GetArchiveProperty(
-            ItemPropertyId propId, // PROPID
+            ItemPropId propId, // PROPID
             ref PropVariant value); // PropVariant
 
         /// <summary>
@@ -443,7 +443,7 @@ namespace Cube.FileSystem.SevenZip
         void GetPropertyInfo(
             uint index,
             [MarshalAs(UnmanagedType.BStr)] out string name,
-            out ItemPropertyId propId, // PROPID
+            out ItemPropId propId, // PROPID
             out ushort varType); //VARTYPE
 
         /// <summary>
@@ -462,7 +462,7 @@ namespace Cube.FileSystem.SevenZip
         void GetArchivePropertyInfo(
             uint index,
             [MarshalAs(UnmanagedType.BStr)] out string name,
-            out ItemPropertyId propId, // PROPID
+            out ItemPropId propId, // PROPID
             out ushort varType); //VARTYPE
     }
 

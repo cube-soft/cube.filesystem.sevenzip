@@ -81,7 +81,7 @@ namespace Cube.FileSystem.SevenZip
             get
             {
                 var dest = new PropVariant();
-                _raw.GetProperty((uint)Index, ItemPropertyId.Path, ref dest);
+                _raw.GetProperty((uint)Index, ItemPropId.Path, ref dest);
                 return dest.GetObject() as string;
             }
         }

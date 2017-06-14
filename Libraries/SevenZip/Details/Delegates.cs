@@ -30,7 +30,7 @@ namespace Cube.FileSystem.SevenZip
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
     internal delegate int GetHandlerPropertyDelegate(
-        ArchivePropertyId propID,
+        ArchivePropId propID,
         ref PropVariant value
     );
 
@@ -40,7 +40,7 @@ namespace Cube.FileSystem.SevenZip
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
     internal delegate int GetHandlerProperty2Delegate(
         uint formatIndex,
-        ArchivePropertyId propID,
+        ArchivePropId propID,
         ref PropVariant value
     );
 }

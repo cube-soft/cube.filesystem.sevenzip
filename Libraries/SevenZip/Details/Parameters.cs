@@ -20,14 +20,14 @@ namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// Mode
+    /// AskMode
     /// 
     /// <summary>
     /// 処理モードを表す列挙型です。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal enum Mode
+    internal enum AskMode
     {
         Extract = 0,
         Test,
@@ -36,14 +36,14 @@ namespace Cube.FileSystem.SevenZip
 
     /* --------------------------------------------------------------------- */
     ///
-    /// Result
+    /// OperationResult
     /// 
     /// <summary>
     /// 処理結果を表す列挙型です。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal enum Result
+    internal enum OperationResult
     {
         OK = 0,
         UnSupportedMethod,
@@ -53,14 +53,14 @@ namespace Cube.FileSystem.SevenZip
 
     /* --------------------------------------------------------------------- */
     ///
-    /// ItemPropertyId
+    /// ItemPropId
     /// 
     /// <summary>
     /// 圧縮ファイル中の各項目の ID を表す列挙型です。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal enum ItemPropertyId : uint
+    internal enum ItemPropId : uint
     {
         NoProperty          = 0x00000,
         HandlerItemIndex    = 0x00002,
@@ -103,14 +103,14 @@ namespace Cube.FileSystem.SevenZip
 
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchivePropertyId
+    /// ArchivePropId
     /// 
     /// <summary>
     /// 圧縮ファイル中の各項目の ID を表す列挙型です。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal enum ArchivePropertyId : uint
+    internal enum ArchivePropId : uint
     {
         Name = 0,
         ClassID,
