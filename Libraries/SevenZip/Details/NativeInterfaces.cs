@@ -22,9 +22,68 @@ using System.Runtime.InteropServices;
 
 namespace Cube.FileSystem.SevenZip
 {
+    /* --------------------------------------------------------------------- */
+    ///
+    /// ICryptoGetTextPassword
+    /// 
     /// <summary>
-    /// 7-zip IArchiveOpenCallback imported interface to handle the opening of an archive.
+    /// 圧縮ファイルに設定されたパスワードを伝えるためのコールバック関数を
+    /// 定義したインターフェースです。
     /// </summary>
+    /// 
+    /* --------------------------------------------------------------------- */
+    [ComImport]
+    [Guid("23170F69-40C1-278A-0000-000500100000")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    internal interface ICryptoGetTextPassword
+    {
+        /// <summary>
+        /// Gets password for the archive
+        /// </summary>
+        /// <param name="password">Password for the archive</param>
+        /// <returns>Zero if everything is OK</returns>
+        [PreserveSig]
+        int CryptoGetTextPassword(
+            [MarshalAs(UnmanagedType.BStr)] out string password);
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// ICryptoGetTextPassword2
+    /// 
+    /// <summary>
+    /// 圧縮ファイルに設定されたパスワードを伝えるためのコールバック関数を
+    /// 定義したインターフェースです。
+    /// </summary>
+    /// 
+    /* --------------------------------------------------------------------- */
+    [ComImport]
+    [Guid("23170F69-40C1-278A-0000-000500110000")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    internal interface ICryptoGetTextPassword2
+    {
+        /// <summary>
+        /// Sets password for the archive
+        /// </summary>
+        /// <param name="passwordIsDefined">Specifies whether archive has a password or not (0 if not)</param>
+        /// <param name="password">Password for the archive</param>
+        /// <returns>Zero if everything is OK</returns>
+        [PreserveSig]
+        int CryptoGetTextPassword2(
+            ref int passwordIsDefined,
+            [MarshalAs(UnmanagedType.BStr)] out string password);
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// IArchiveOpenCallback
+    /// 
+    /// <summary>
+    /// 圧縮ファイルを展開する際のコールバック関数を定義した
+    /// インターフェースです。
+    /// </summary>
+    /// 
+    /* --------------------------------------------------------------------- */
     [ComImport]
     [Guid("23170F69-40C1-278A-0000-000600100000")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -51,47 +110,52 @@ namespace Cube.FileSystem.SevenZip
             IntPtr bytes);
     }
 
+    /* --------------------------------------------------------------------- */
+    ///
+    /// IArchiveOpenVolumeCallback
+    /// 
     /// <summary>
-    /// 7-zip ICryptoGetTextPassword imported interface to get the archive password.
+    /// 分割された圧縮ファイルを展開するためのコールバック関数を
+    /// 定義したインターフェースです。
     /// </summary>
+    /// 
+    /* --------------------------------------------------------------------- */
     [ComImport]
-    [Guid("23170F69-40C1-278A-0000-000500100000")]
+    [Guid("23170F69-40C1-278A-0000-000600300000")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICryptoGetTextPassword
+    internal interface IArchiveOpenVolumeCallback
     {
         /// <summary>
-        /// Gets password for the archive
+        /// Gets the archive property data.
         /// </summary>
-        /// <param name="password">Password for the archive</param>
-        /// <returns>Zero if everything is OK</returns>
+        /// <param name="propId">The property identificator.</param>
+        /// <param name="value">The property value.</param>
         [PreserveSig]
-        int CryptoGetTextPassword(
-            [MarshalAs(UnmanagedType.BStr)] out string password);
-    }
+        int GetProperty(
+            ItemPropId propId, ref PropVariant value);
 
-    /// <summary>
-    /// 7-zip ICryptoGetTextPassword2 imported interface for setting the archive password.
-    /// </summary>
-    [ComImport]
-    [Guid("23170F69-40C1-278A-0000-000500110000")]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICryptoGetTextPassword2
-    {
         /// <summary>
-        /// Sets password for the archive
+        /// Gets the stream for reading the volume.
         /// </summary>
-        /// <param name="passwordIsDefined">Specifies whether archive has a password or not (0 if not)</param>
-        /// <param name="password">Password for the archive</param>
-        /// <returns>Zero if everything is OK</returns>
+        /// <param name="name">The volume file name.</param>
+        /// <param name="inStream">The IInStream pointer for reading.</param>
+        /// <returns>Zero if Ok</returns>
         [PreserveSig]
-        int CryptoGetTextPassword2(
-            ref int passwordIsDefined,
-            [MarshalAs(UnmanagedType.BStr)] out string password);
+        int GetStream(
+            [MarshalAs(UnmanagedType.LPWStr)] string name,
+            [Out, MarshalAs(UnmanagedType.Interface)] out IInStream inStream);
     }
 
+    /* --------------------------------------------------------------------- */
+    ///
+    /// IArchiveExtractCallback
+    /// 
     /// <summary>
-    /// 7-zip IArchiveExtractCallback imported interface.
+    /// 圧縮ファイル中の各ファイルを展開するためのコールバック関数を
+    /// 定義したインターフェースです。
     /// </summary>
+    /// 
+    /* --------------------------------------------------------------------- */
     [ComImport]
     [Guid("23170F69-40C1-278A-0000-000600200000")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -135,9 +199,16 @@ namespace Cube.FileSystem.SevenZip
         void SetOperationResult(OperationResult operationResult);
     }
 
+    /* --------------------------------------------------------------------- */
+    ///
+    /// IArchiveUpdateCallback
+    /// 
     /// <summary>
-    /// 7-zip IArchiveUpdateCallback imported interface.
+    /// 圧縮ファイル中のファイル内容を更新するためのコールバック関数を
+    /// 定義したインターフェースです。
     /// </summary>
+    /// 
+    /* --------------------------------------------------------------------- */
     [ComImport]
     [Guid("23170F69-40C1-278A-0000-000600800000")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -203,47 +274,16 @@ namespace Cube.FileSystem.SevenZip
         long EnumProperties(IntPtr enumerator);
     }
 
+    /* --------------------------------------------------------------------- */
+    ///
+    /// ISequentialInStream
+    /// 
     /// <summary>
-    /// 7-zip IArchiveOpenVolumeCallback imported interface to handle archive volumes.
+    /// 圧縮ファイルの入力ストリームを処理するためのコールバック関数を
+    /// 定義したインターフェースです。
     /// </summary>
-    [ComImport]
-    [Guid("23170F69-40C1-278A-0000-000600300000")]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface IArchiveOpenVolumeCallback
-    {
-        /// <summary>
-        /// Gets the archive property data.
-        /// </summary>
-        /// <param name="propId">The property identificator.</param>
-        /// <param name="value">The property value.</param>
-        [PreserveSig]
-        int GetProperty(
-            ItemPropId propId, ref PropVariant value);
-
-        /// <summary>
-        /// Gets the stream for reading the volume.
-        /// </summary>
-        /// <param name="name">The volume file name.</param>
-        /// <param name="inStream">The IInStream pointer for reading.</param>
-        /// <returns>Zero if Ok</returns>
-        [PreserveSig]
-        int GetStream(
-            [MarshalAs(UnmanagedType.LPWStr)] string name,
-            [Out, MarshalAs(UnmanagedType.Interface)] out IInStream inStream);
-    }
-
-    [ComImport]
-    [Guid("23170F69-40C1-278A-0000-000600400000")]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface IInArchiveGetStream
-    {
-        [return: MarshalAs(UnmanagedType.Interface)]
-        ISequentialInStream GetStream(uint index);
-    }
-
-    /// <summary>
-    /// 7-zip ISequentialInStream imported interface
-    /// </summary>
+    /// 
+    /* --------------------------------------------------------------------- */
     [ComImport]
     [Guid("23170F69-40C1-278A-0000-000300010000")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -265,37 +305,16 @@ namespace Cube.FileSystem.SevenZip
             uint size);
     }
 
+    /* --------------------------------------------------------------------- */
+    ///
+    /// IInStream
+    /// 
     /// <summary>
-    /// 7-zip ISequentialOutStream imported interface
+    /// 圧縮ファイルの入力ストリームを処理するためのコールバック関数を
+    /// 定義したインターフェースです。
     /// </summary>
-    [ComImport]
-    [Guid("23170F69-40C1-278A-0000-000300020000")]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ISequentialOutStream
-    {
-        /// <summary>
-        /// Writes data to unpacked file stream
-        /// </summary>
-        /// <param name="data">Array of bytes available for reading</param>
-        /// <param name="size">Array size</param>
-        /// <param name="processedSize">Processed data size</param>
-        /// <returns>S_OK if success</returns>
-        /// <remarks>If size != 0, return value is S_OK and (*processedSize == 0),
-        ///  then there are no more bytes in stream.
-        /// If (size > 0) and there are bytes in stream, 
-        /// this function must read at least 1 byte.
-        /// This function is allowed to rwrite less than "size" bytes.
-        /// You must call Write function in loop, if you need exact amount of data.
-        /// </remarks>
-        [PreserveSig]
-        int Write(
-            [In, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] byte[] data,
-            uint size, IntPtr processedSize);
-    }
-
-    /// <summary>
-    /// 7-zip IInStream imported interface
-    /// </summary>
+    /// 
+    /* --------------------------------------------------------------------- */
     [ComImport]
     [Guid("23170F69-40C1-278A-0000-000300030000")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -321,9 +340,51 @@ namespace Cube.FileSystem.SevenZip
         void Seek(long offset, SeekOrigin origin, IntPtr newPosition);
     }
 
+    /* --------------------------------------------------------------------- */
+    ///
+    /// ISequentialOutStream
+    /// 
     /// <summary>
-    /// 7-zip IOutStream imported interface
+    /// 圧縮ファイルの出力ストリームを処理するためのコールバック関数を
+    /// 定義したインターフェースです。
     /// </summary>
+    /// 
+    /* --------------------------------------------------------------------- */
+    [ComImport]
+    [Guid("23170F69-40C1-278A-0000-000300020000")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    internal interface ISequentialOutStream
+    {
+        /// <summary>
+        /// Writes data to unpacked file stream
+        /// </summary>
+        /// <param name="data">Array of bytes available for reading</param>
+        /// <param name="size">Array size</param>
+        /// <param name="processedSize">Processed data size</param>
+        /// <returns>S_OK if success</returns>
+        /// <remarks>If size != 0, return value is S_OK and (*processedSize == 0),
+        ///  then there are no more bytes in stream.
+        /// If (size > 0) and there are bytes in stream, 
+        /// this function must read at least 1 byte.
+        /// This function is allowed to rwrite less than "size" bytes.
+        /// You must call Write function in loop, if you need exact amount of data.
+        /// </remarks>
+        [PreserveSig]
+        int Write(
+            [In, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] byte[] data,
+            uint size, IntPtr processedSize);
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// IOutStream
+    /// 
+    /// <summary>
+    /// 圧縮ファイルの出力ストリームを処理するためのコールバック関数を
+    /// 定義したインターフェースです。
+    /// </summary>
+    /// 
+    /* --------------------------------------------------------------------- */
     [ComImport]
     [Guid("23170F69-40C1-278A-0000-000300040000")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -360,9 +421,16 @@ namespace Cube.FileSystem.SevenZip
         int SetSize(long newSize);
     }
 
+    /* --------------------------------------------------------------------- */
+    ///
+    /// IInArchive
+    /// 
     /// <summary>
-    /// 7-zip essential in archive interface
+    /// 既存の圧縮ファイルを処理するためのコールバック関数を定義した
+    /// インターフェースです。
     /// </summary>
+    /// 
+    /* --------------------------------------------------------------------- */
     [ComImport]
     [Guid("23170F69-40C1-278A-0000-000600600000")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -466,9 +534,16 @@ namespace Cube.FileSystem.SevenZip
             out ushort varType); //VARTYPE
     }
 
+    /* --------------------------------------------------------------------- */
+    ///
+    /// IOutArchive
+    /// 
     /// <summary>
-    /// 7-zip essential out archive interface
+    /// 圧縮ファイルを生成するためのコールバック関数を定義した
+    /// インターフェースです。
     /// </summary>
+    /// 
+    /* --------------------------------------------------------------------- */
     [ComImport]
     [Guid("23170F69-40C1-278A-0000-000600A00000")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -492,23 +567,5 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// <param name="type">Type pointer</param>
         void GetFileTimeType(IntPtr type);
-    }
-
-    /// <summary>
-    /// 7-zip ISetProperties interface for setting various archive properties
-    /// </summary>
-    [ComImport]
-    [Guid("23170F69-40C1-278A-0000-000600030000")]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ISetProperties
-    {
-        /// <summary>
-        /// Sets the archive properties
-        /// </summary>
-        /// <param name="names">The names of the properties</param>
-        /// <param name="values">The values of the properties</param>
-        /// <param name="numProperties">The properties count</param>
-        /// <returns></returns>        
-        int SetProperties(IntPtr names, IntPtr values, int numProperties);
     }
 }
