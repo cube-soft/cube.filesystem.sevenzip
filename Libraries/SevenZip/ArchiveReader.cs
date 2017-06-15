@@ -81,13 +81,11 @@ namespace Cube.FileSystem.SevenZip
 
             var pos = 32UL * 1024;
 
-            _lib = new NativeLibrary();
-            _raw = _lib.Create(fmt);
-            _raw.Open(
-                new ArchiveStreamReader(System.IO.File.Open(path, System.IO.FileMode.Open)),
-                ref pos,
-                null
-            );
+            _lib    = new NativeLibrary();
+            _stream = new ArchiveStreamReader(System.IO.File.Open(path, System.IO.FileMode.Open));
+            _raw    = _lib.Create(fmt);
+            _raw.Open(_stream, ref pos, null);
+
             Items = new ReadOnlyArchiveCollection(_raw);
         }
 
@@ -137,6 +135,8 @@ namespace Cube.FileSystem.SevenZip
 
             if (disposing)
             {
+                _raw?.Close();
+                _stream?.Dispose();
                 _lib?.Dispose();
             }
 
@@ -151,6 +151,7 @@ namespace Cube.FileSystem.SevenZip
         private bool _disposed = false;
         private NativeLibrary _lib;
         private IInArchive _raw;
+        private ArchiveStreamReader _stream;
         #endregion
     }
 }
