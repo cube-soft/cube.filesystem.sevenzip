@@ -37,14 +37,21 @@ namespace Cube.FileSystem.SevenZip
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface ICryptoGetTextPassword
     {
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CryptoGetTextPassword
+        /// 
         /// <summary>
         /// Gets password for the archive
         /// </summary>
+        /// 
         /// <param name="password">Password for the archive</param>
+        /// 
         /// <returns>Zero if everything is OK</returns>
+        ///
+        /* ----------------------------------------------------------------- */
         [PreserveSig]
-        int CryptoGetTextPassword(
-            [MarshalAs(UnmanagedType.BStr)] out string password);
+        int CryptoGetTextPassword([MarshalAs(UnmanagedType.BStr)] out string password);
     }
 
     /* --------------------------------------------------------------------- */
@@ -62,16 +69,28 @@ namespace Cube.FileSystem.SevenZip
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface ICryptoGetTextPassword2
     {
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CryptoGetTextPassword2
+        ///
         /// <summary>
         /// Sets password for the archive
         /// </summary>
-        /// <param name="passwordIsDefined">Specifies whether archive has a password or not (0 if not)</param>
+        /// 
+        /// <param name="passwordIsDefined">
+        /// Specifies whether archive has a password or not (0 if not)
+        /// </param>
+        /// 
         /// <param name="password">Password for the archive</param>
+        /// 
         /// <returns>Zero if everything is OK</returns>
+        ///
+        /* ----------------------------------------------------------------- */
         [PreserveSig]
         int CryptoGetTextPassword2(
             ref int passwordIsDefined,
-            [MarshalAs(UnmanagedType.BStr)] out string password);
+            [MarshalAs(UnmanagedType.BStr)] out string password
+        );
     }
 
     /* --------------------------------------------------------------------- */
@@ -89,25 +108,38 @@ namespace Cube.FileSystem.SevenZip
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IArchiveOpenCallback
     {
-        // ref ulong replaced with IntPtr because handlers often pass null value
-        // read actual value with Marshal.ReadInt64
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetTotal
+        /// 
         /// <summary>
         /// Sets total data size
         /// </summary>
+        /// 
         /// <param name="files">Files pointer</param>
         /// <param name="bytes">Total size in bytes</param>
-        void SetTotal(
-            IntPtr files,
-            IntPtr bytes);
+        ///
+        /// <remarks>
+        /// ref ulong replaced with IntPtr because handlers often pass
+        /// null value read actual value with Marshal.ReadInt64
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        void SetTotal(IntPtr files, IntPtr bytes);
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetCompleted
+        ///
         /// <summary>
         /// Sets completed size
         /// </summary>
+        /// 
         /// <param name="files">Files pointer</param>
         /// <param name="bytes">Completed size in bytes</param>
-        void SetCompleted(
-            IntPtr files,
-            IntPtr bytes);
+        /// 
+        /* ----------------------------------------------------------------- */
+        void SetCompleted(IntPtr files, IntPtr bytes);
     }
 
     /* --------------------------------------------------------------------- */
@@ -125,25 +157,39 @@ namespace Cube.FileSystem.SevenZip
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IArchiveOpenVolumeCallback
     {
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetProperty
+        ///
         /// <summary>
         /// Gets the archive property data.
         /// </summary>
-        /// <param name="propId">The property identificator.</param>
+        /// 
+        /// <param name="pid">The property identificator.</param>
         /// <param name="value">The property value.</param>
+        ///
+        /* ----------------------------------------------------------------- */
         [PreserveSig]
-        int GetProperty(
-            ItemPropId propId, ref PropVariant value);
+        int GetProperty(ItemPropId pid, ref PropVariant value);
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetStream
+        ///
         /// <summary>
         /// Gets the stream for reading the volume.
         /// </summary>
+        /// 
         /// <param name="name">The volume file name.</param>
-        /// <param name="inStream">The IInStream pointer for reading.</param>
+        /// <param name="stream">Stream pointer for reading.</param>
+        /// 
         /// <returns>Zero if Ok</returns>
+        /* ----------------------------------------------------------------- */
         [PreserveSig]
         int GetStream(
             [MarshalAs(UnmanagedType.LPWStr)] string name,
-            [Out, MarshalAs(UnmanagedType.Interface)] out IInStream inStream);
+            [Out, MarshalAs(UnmanagedType.Interface)] out IInStream stream
+        );
     }
 
     /* --------------------------------------------------------------------- */
@@ -161,42 +207,81 @@ namespace Cube.FileSystem.SevenZip
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IArchiveExtractCallback
     {
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetTotal
+        /// 
         /// <summary>
         /// Gives the size of the unpacked archive files
         /// </summary>
-        /// <param name="total">Size of the unpacked archive files (in bytes)</param>
+        /// 
+        /// <param name="total">
+        /// Size of the unpacked archive files (bytes)
+        /// </param>
+        /// 
+        /* ----------------------------------------------------------------- */
         void SetTotal(ulong total);
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetCompleted
+        /// 
         /// <summary>
         /// SetCompleted 7-zip function
         /// </summary>
-        /// <param name="completeValue"></param>
-        void SetCompleted([In] ref ulong completeValue);
+        /// 
+        /// <param name="value">completed value</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        void SetCompleted([In] ref ulong value);
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetStream
+        /// 
         /// <summary>
         /// Gets the stream for file extraction
         /// </summary>
-        /// <param name="index">File index in the archive file table</param>
-        /// <param name="outStream">Pointer to the stream</param>
-        /// <param name="askExtractMode">Extraction mode</param>
+        /// 
+        /// <param name="index">Index in the archive file table</param>
+        /// <param name="stream">Pointer to the stream</param>
+        /// <param name="mode">Extraction mode</param>
+        /// 
         /// <returns>S_OK - OK, S_FALSE - skip this file</returns>
+        /// 
+        /* ----------------------------------------------------------------- */
         [PreserveSig]
         int GetStream(
             uint index,
-            [Out, MarshalAs(UnmanagedType.Interface)] out ISequentialOutStream outStream,
-            AskMode askExtractMode);
+            [Out, MarshalAs(UnmanagedType.Interface)] out ISequentialOutStream stream,
+            AskMode mode
+        );
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// PrepareOperation
+        /// 
         /// <summary>
         /// PrepareOperation 7-zip function
         /// </summary>
-        /// <param name="askExtractMode">Ask mode</param>
-        void PrepareOperation(AskMode askExtractMode);
+        /// 
+        /// <param name="mode">Ask extract mode</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        void PrepareOperation(AskMode mode);
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetOperationResult
+        ///
         /// <summary>
         /// Sets the operaton result
         /// </summary>
-        /// <param name="operationResult">The operation result</param>
-        void SetOperationResult(OperationResult operationResult);
+        /// 
+        /// <param name="result">The operation result</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        void SetOperationResult(OperationResult result);
     }
 
     /* --------------------------------------------------------------------- */
@@ -214,63 +299,118 @@ namespace Cube.FileSystem.SevenZip
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IArchiveUpdateCallback
     {
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetTotal
+        /// 
         /// <summary>
         /// Gives the size of the unpacked archive files.
         /// </summary>
-        /// <param name="total">Size of the unpacked archive files (in bytes)</param>
+        /// 
+        /// <param name="total">
+        /// Size of the unpacked archive files (bytes)
+        /// </param>
+        /// 
+        /* ----------------------------------------------------------------- */
         void SetTotal(ulong total);
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetCompleted
+        /// 
         /// <summary>
         /// SetCompleted 7-zip internal function.
         /// </summary>
-        /// <param name="completeValue"></param>
-        void SetCompleted([In] ref ulong completeValue);
+        /// 
+        /// <param name="value">completed value</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        void SetCompleted([In] ref ulong value);
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetUpdateItemInfo
+        ///
         /// <summary>
         /// Gets archive update mode.
         /// </summary>
+        /// 
         /// <param name="index">File index</param>
-        /// <param name="newData">1 if new, 0 if not</param>
-        /// <param name="newProperties">1 if new, 0 if not</param>
+        /// <param name="newdata">1 if new, 0 if not</param>
+        /// <param name="newprop">1 if new, 0 if not</param>
         /// <param name="indexInArchive">-1 if doesn't matter</param>
-        /// <returns></returns>
+        /// 
+        /* ----------------------------------------------------------------- */
         [PreserveSig]
         int GetUpdateItemInfo(
-            uint index, ref int newData,
-            ref int newProperties, ref uint indexInArchive);
+            uint index,
+            ref int newdata,
+            ref int newprop,
+            ref uint indexInArchive
+        );
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetProperty
+        /// 
         /// <summary>
         /// Gets the archive item property data.
         /// </summary>
+        /// 
         /// <param name="index">Item index</param>
-        /// <param name="propId">Property identificator</param>
+        /// <param name="pid">Property identificator</param>
         /// <param name="value">Property value</param>
+        /// 
         /// <returns>Zero if Ok</returns>
+        ///
+        /* ----------------------------------------------------------------- */
         [PreserveSig]
-        int GetProperty(uint index, ItemPropId propId, ref PropVariant value);
+        int GetProperty(uint index, ItemPropId pid, ref PropVariant value);
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetStream
+        /// 
         /// <summary>
         /// Gets the stream for reading.
         /// </summary>
+        /// 
         /// <param name="index">The item index.</param>
-        /// <param name="inStream">The ISequentialInStream pointer for reading.</param>
+        /// <param name="stream">Stream pointer for reading.</param>
+        /// 
         /// <returns>Zero if Ok</returns>
+        ///
+        /* ----------------------------------------------------------------- */
         [PreserveSig]
         int GetStream(
             uint index,
-            [Out, MarshalAs(UnmanagedType.Interface)] out ISequentialInStream inStream);
+            [Out, MarshalAs(UnmanagedType.Interface)] out ISequentialInStream stream
+        );
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetOperationResult
+        /// 
         /// <summary>
         /// Sets the result for currently performed operation.
         /// </summary>
-        /// <param name="operationResult">The result value.</param>
-        void SetOperationResult(OperationResult operationResult);
+        /// 
+        /// <param name="result">The result value.</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        void SetOperationResult(OperationResult result);
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// EnumProperties
+        ///
         /// <summary>
         /// EnumProperties 7-zip internal function.
         /// </summary>
+        /// 
         /// <param name="enumerator">The enumerator pointer.</param>
-        /// <returns></returns>
+        /// 
+        /* ----------------------------------------------------------------- */
         long EnumProperties(IntPtr enumerator);
     }
 
@@ -289,20 +429,31 @@ namespace Cube.FileSystem.SevenZip
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface ISequentialInStream
     {
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Read
+        ///
         /// <summary>
         /// Writes data to 7-zip packer
         /// </summary>
+        /// 
         /// <param name="data">Array of bytes available for writing</param>
         /// <param name="size">Array size</param>
+        /// 
         /// <returns>S_OK if success</returns>
-        /// <remarks>If (size > 0) and there are bytes in stream, 
+        /// 
+        /// <remarks>
+        /// If (size > 0) and there are bytes in stream, 
         /// this function must read at least 1 byte.
         /// This function is allowed to read less than "size" bytes.
-        /// You must call Read function in loop, if you need exact amount of data.
+        /// You must call Read function in loop, if you need exact
+        /// amount of data.
         /// </remarks>
+        /* ----------------------------------------------------------------- */
         int Read(
             [Out, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] byte[] data,
-            uint size);
+            uint size
+        );
     }
 
     /* --------------------------------------------------------------------- */
@@ -320,24 +471,39 @@ namespace Cube.FileSystem.SevenZip
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IInStream
     {
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Read
+        ///
         /// <summary>
         /// Read routine
         /// </summary>
+        /// 
         /// <param name="data">Array of bytes to set</param>
         /// <param name="size">Array size</param>
+        /// 
         /// <returns>Zero if Ok</returns>
+        /// 
+        /* ----------------------------------------------------------------- */
         int Read(
             [Out, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] byte[] data,
             uint size
         );
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Seek
+        /// 
         /// <summary>
         /// Seek routine
         /// </summary>
+        /// 
         /// <param name="offset">Offset value</param>
         /// <param name="origin">Seek origin value</param>
-        /// <param name="newPosition">New position pointer</param>
-        void Seek(long offset, SeekOrigin origin, IntPtr newPosition);
+        /// <param name="newpos">New position pointer</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        void Seek(long offset, SeekOrigin origin, IntPtr newpos);
     }
 
     /* --------------------------------------------------------------------- */
@@ -355,24 +521,37 @@ namespace Cube.FileSystem.SevenZip
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface ISequentialOutStream
     {
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Write
+        /// 
         /// <summary>
         /// Writes data to unpacked file stream
         /// </summary>
+        /// 
         /// <param name="data">Array of bytes available for reading</param>
         /// <param name="size">Array size</param>
         /// <param name="processedSize">Processed data size</param>
+        /// 
         /// <returns>S_OK if success</returns>
-        /// <remarks>If size != 0, return value is S_OK and (*processedSize == 0),
-        ///  then there are no more bytes in stream.
+        /// 
+        /// <remarks>
+        /// If size != 0, return value is S_OK and (*processedSize == 0),
+        /// then there are no more bytes in stream.
         /// If (size > 0) and there are bytes in stream, 
         /// this function must read at least 1 byte.
         /// This function is allowed to rwrite less than "size" bytes.
-        /// You must call Write function in loop, if you need exact amount of data.
+        /// You must call Write function in loop, if you need exact
+        /// amount of data.
         /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
         [PreserveSig]
         int Write(
             [In, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] byte[] data,
-            uint size, IntPtr processedSize);
+            uint size,
+            IntPtr processedSize
+        );
     }
 
     /* --------------------------------------------------------------------- */
@@ -390,35 +569,58 @@ namespace Cube.FileSystem.SevenZip
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IOutStream
     {
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Write
+        /// 
         /// <summary>
         /// Write routine
         /// </summary>
+        /// 
         /// <param name="data">Array of bytes to get</param>
         /// <param name="size">Array size</param>
         /// <param name="processedSize">Processed size</param>
+        /// 
         /// <returns>Zero if Ok</returns>
+        /// 
+        /* ----------------------------------------------------------------- */
         [PreserveSig]
         int Write(
             [In, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] byte[] data,
             uint size,
-            IntPtr processedSize);
+            IntPtr processedSize
+        );
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Seek
+        /// 
         /// <summary>
         /// Seek routine
         /// </summary>
+        /// 
         /// <param name="offset">Offset value</param>
-        /// <param name="seekOrigin">Seek origin value</param>
-        /// <param name="newPosition">New position pointer</param>       
-        void Seek(
-            long offset, SeekOrigin seekOrigin, IntPtr newPosition);
+        /// <param name="origin">Seek origin value</param>
+        /// <param name="newpos">New position pointer</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        void Seek(long offset, SeekOrigin origin, IntPtr newpos);
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetSize
+        /// 
         /// <summary>
         /// Set size routine
         /// </summary>
-        /// <param name="newSize">New size value</param>
+        /// 
+        /// <param name="size">New size value</param>
+        /// 
         /// <returns>Zero if Ok</returns>
+        /// 
+        /* ----------------------------------------------------------------- */
         [PreserveSig]
-        int SetSize(long newSize);
+        int SetSize(long size);
     }
 
     /* --------------------------------------------------------------------- */
@@ -436,102 +638,167 @@ namespace Cube.FileSystem.SevenZip
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IInArchive
     {
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Open
+        /// 
         /// <summary>
         /// Opens archive for reading.
         /// </summary>
+        /// 
         /// <param name="stream">Archive file stream</param>
-        /// <param name="maxCheckStartPosition">Maximum start position for checking</param>
-        /// <param name="openArchiveCallback">Callback for opening archive</param>
-        /// <returns></returns>
+        /// <param name="checkpos">Maximum start position for checking</param>
+        /// <param name="callback">Callback for opening archive</param>
+        /// 
+        /* ----------------------------------------------------------------- */
         [PreserveSig]
         int Open(
             IInStream stream,
-            [In] ref ulong maxCheckStartPosition,
-            [MarshalAs(UnmanagedType.Interface)] IArchiveOpenCallback openArchiveCallback);
+            [In] ref ulong checkpos,
+            [MarshalAs(UnmanagedType.Interface)] IArchiveOpenCallback callback
+        );
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Close
+        /// 
         /// <summary>
         /// Closes the archive.
         /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
         void Close();
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetNumberOfItems
+        /// 
         /// <summary>
         /// Gets the number of files in the archive file table  .          
         /// </summary>
+        /// 
         /// <returns>The number of files in the archive</returns>
+        /// 
+        /* ----------------------------------------------------------------- */
         uint GetNumberOfItems();
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetProperty
+        /// 
         /// <summary>
         /// Retrieves specific property data.
         /// </summary>
+        /// 
         /// <param name="index">File index in the archive file table</param>
-        /// <param name="propId">Property code</param>
+        /// <param name="pid">Property ID</param>
         /// <param name="value">Property variant value</param>
-        void GetProperty(
-            uint index,
-            ItemPropId propId,
-            ref PropVariant value); // PropVariant
+        /// 
+        /* ----------------------------------------------------------------- */
+        void GetProperty(uint index, ItemPropId pid, ref PropVariant value);
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract
+        /// 
         /// <summary>
         /// Extracts files from the opened archive.
         /// </summary>
-        /// <param name="indexes">indexes of files to be extracted (must be sorted)</param>
-        /// <param name="numItems">0xFFFFFFFF means all files</param>
-        /// <param name="testMode">testMode != 0 means "test files operation"</param>
-        /// <param name="extractCallback">IArchiveExtractCallback for operations handling</param>
+        /// 
+        /// <param name="indexes">
+        /// indexes of files to be extracted (must be sorted)
+        /// </param>
+        /// <param name="count">0xFFFFFFFF means all files</param>
+        /// <param name="test">test != 0 means "test files operation"</param>
+        /// <param name="callback">Callback for operations handling</param>
+        /// 
         /// <returns>0 if success</returns>
+        ///
+        /* ----------------------------------------------------------------- */
         [PreserveSig]
         int Extract(
             [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] uint[] indexes,
-            uint numItems,
-            int testMode,
-            [MarshalAs(UnmanagedType.Interface)] IArchiveExtractCallback extractCallback);
+            uint count,
+            int test,
+            [MarshalAs(UnmanagedType.Interface)] IArchiveExtractCallback callback
+        );
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetArchiveProperty
+        /// 
         /// <summary>
         /// Gets archive property data
         /// </summary>
-        /// <param name="propId">Archive property identificator</param>
-        /// <param name="value">Archive property value</param>
-        void GetArchiveProperty(
-            ItemPropId propId, // PROPID
-            ref PropVariant value); // PropVariant
+        /// 
+        /// <param name="pid">Property Id</param>
+        /// <param name="value">Property value</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        void GetArchiveProperty(ItemPropId pid, ref PropVariant value);
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetNumberOfProperties
+        /// 
         /// <summary>
         /// Gets the number of properties
         /// </summary>
+        /// 
         /// <returns>The number of properties</returns>
+        /// 
+        /* ----------------------------------------------------------------- */
         uint GetNumberOfProperties();
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetPropertyInfo
+        /// 
         /// <summary>
         /// Gets property information
         /// </summary>
+        /// 
         /// <param name="index">Item index</param>
         /// <param name="name">Name</param>
-        /// <param name="propId">Property identificator</param>
-        /// <param name="varType">Variant type</param>
+        /// <param name="pid">Property identificator</param>
+        /// <param name="type">Variant type</param>
+        /// 
+        /* ----------------------------------------------------------------- */
         void GetPropertyInfo(
             uint index,
             [MarshalAs(UnmanagedType.BStr)] out string name,
-            out ItemPropId propId, // PROPID
-            out ushort varType); //VARTYPE
+            out ItemPropId pid,
+            out ushort type
+        );
 
+        /* ----------------------------------------------------------------- */
         /// <summary>
         /// Gets the number of archive properties
         /// </summary>
         /// <returns>The number of archive properties</returns>
+        /* ----------------------------------------------------------------- */
         uint GetNumberOfArchiveProperties();
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetArchivePropertyInfo
+        /// 
         /// <summary>
         /// Gets the archive property information
         /// </summary>
+        /// 
         /// <param name="index">Item index</param>
         /// <param name="name">Name</param>
-        /// <param name="propId">Property identificator</param>
-        /// <param name="varType">Variant type</param>
+        /// <param name="pid">Property identificator</param>
+        /// <param name="type">Variant type</param>
+        /// 
+        /* ----------------------------------------------------------------- */
         void GetArchivePropertyInfo(
             uint index,
             [MarshalAs(UnmanagedType.BStr)] out string name,
-            out ItemPropId propId, // PROPID
-            out ushort varType); //VARTYPE
+            out ItemPropId pid,
+            out ushort type
+        );
     }
 
     /* --------------------------------------------------------------------- */
@@ -549,23 +816,41 @@ namespace Cube.FileSystem.SevenZip
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IOutArchive
     {
+        /* ----------------------------------------------------------------- */
+        ///
+        /// UpdateItems
+        /// 
         /// <summary>
         /// Updates archive items
         /// </summary>
-        /// <param name="outStream">The ISequentialOutStream pointer for writing the archive data</param>
-        /// <param name="numItems">Number of archive items</param>
-        /// <param name="updateCallback">The IArchiveUpdateCallback pointer</param>
+        /// 
+        /// <param name="stream">
+        /// Stream pointer for writing the archive data
+        /// </param>
+        /// <param name="count">Number of archive items</param>
+        /// <param name="callback">The Callback pointer</param>
+        /// 
         /// <returns>Zero if Ok</returns>
+        ///
+        /* ----------------------------------------------------------------- */
         [PreserveSig]
         int UpdateItems(
-            [MarshalAs(UnmanagedType.Interface)] ISequentialOutStream outStream,
-            uint numItems,
-            [MarshalAs(UnmanagedType.Interface)] IArchiveUpdateCallback updateCallback);
+            [MarshalAs(UnmanagedType.Interface)] ISequentialOutStream stream,
+            uint count,
+            [MarshalAs(UnmanagedType.Interface)] IArchiveUpdateCallback callback
+        );
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetFileTimeType
+        /// 
         /// <summary>
         /// Gets file time type(?)
         /// </summary>
+        /// 
         /// <param name="type">Type pointer</param>
+        /// 
+        /* ----------------------------------------------------------------- */
         void GetFileTimeType(IntPtr type);
     }
 }
