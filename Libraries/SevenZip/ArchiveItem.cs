@@ -105,6 +105,25 @@ namespace Cube.FileSystem.SevenZip
             }
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// IsDirectory
+        ///
+        /// <summary>
+        /// ディレクトリかどうかを示す値を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public bool IsDirectory
+        {
+            get
+            {
+                var dest = new PropVariant();
+                _raw.GetProperty((uint)Index, ItemPropId.IsFolder, ref dest);
+                return (bool)dest.GetObject();
+            }
+        }
+
         #endregion
 
         #region Fields

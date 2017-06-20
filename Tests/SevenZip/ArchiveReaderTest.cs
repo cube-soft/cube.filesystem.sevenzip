@@ -78,20 +78,54 @@ namespace Cube.FileSystem.Tests
                 {
                     new ExpectedItem
                     {
-                        Path = "Bar.txt",
-                        Size = 7816,
+                        Path        = "Sample",
+                        Size        = 0,
+                        IsDirectory = true,
                     },
 
                     new ExpectedItem
                     {
-                        Path = "Bas.txt",
-                        Size = 0,
+                        Path        = @"Sample\Bar.txt",
+                        Size        = 7816,
+                        IsDirectory = false,
                     },
 
                     new ExpectedItem
                     {
-                        Path = "Foo.txt",
-                        Size = 3,
+                        Path        = @"Sample\Bas.txt",
+                        Size        = 0,
+                        IsDirectory = false,
+                    },
+
+                    new ExpectedItem
+                    {
+                        Path        = @"Sample\Foo.txt",
+                        Size        = 3,
+                        IsDirectory = false,
+                    },
+                });
+
+                yield return new TestCaseData("Password.7z", "password", new List<ExpectedItem>
+                {
+                    new ExpectedItem
+                    {
+                        Path        = "Password",
+                        Size        = 0,
+                        IsDirectory = true,
+                    },
+
+                    new ExpectedItem
+                    {
+                        Path        = @"Password\Second.txt",
+                        Size        = 0,
+                        IsDirectory = false,
+                    },
+
+                    new ExpectedItem
+                    {
+                        Path        = @"Password\First.txt",
+                        Size        = 26,
+                        IsDirectory = false,
                     },
                 });
             }
@@ -110,6 +144,7 @@ namespace Cube.FileSystem.Tests
         {
             public string Path { get; set; }
             public ulong Size { get; set; }
+            public bool IsDirectory { get; set; }
         }
     }
 }
