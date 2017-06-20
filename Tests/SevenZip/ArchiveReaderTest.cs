@@ -16,6 +16,7 @@
 /// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ///
 /* ------------------------------------------------------------------------- */
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 
@@ -43,19 +44,72 @@ namespace Cube.FileSystem.Tests
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [Test]
-        public void Items()
+        [TestCaseSource(nameof(Items_TestCases))]
+        public void Items(string filename, string password, IList<ExpectedItem> expected)
         {
             using (var archive = new SevenZip.ArchiveReader())
             {
-                archive.Open(Example("Sample.zip"), string.Empty);
+                archive.Open(Example(filename), string.Empty);
 
                 var actual = archive.Items.ToList();
-                Assert.That(actual.Count,   Is.EqualTo(3));
-                Assert.That(actual[2].Path, Is.EqualTo("Foo.txt"));
-                Assert.That(actual[0].Path, Is.EqualTo("Bar.txt"));
-                Assert.That(actual[1].Path, Is.EqualTo("Bas.txt"));
+                Assert.That(actual.Count,   Is.EqualTo(expected.Count));
+                for (var i = 0; i < expected.Count; ++i)
+                {
+                    Assert.That(actual[i].Path, Is.EqualTo(expected[i].Path));
+                    Assert.That(actual[i].Size, Is.EqualTo(expected[i].Size));
+                }
             }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Items_TestCases
+        ///
+        /// <summary>
+        /// Items のテスト用データを取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public static IEnumerable<TestCaseData> Items_TestCases
+        {
+            get
+            {
+                yield return new TestCaseData("Sample.zip", string.Empty, new List<ExpectedItem>
+                {
+                    new ExpectedItem
+                    {
+                        Path = "Bar.txt",
+                        Size = 7816,
+                    },
+
+                    new ExpectedItem
+                    {
+                        Path = "Bas.txt",
+                        Size = 0,
+                    },
+
+                    new ExpectedItem
+                    {
+                        Path = "Foo.txt",
+                        Size = 3,
+                    },
+                });
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ExpectedItem
+        ///
+        /// <summary>
+        /// 展開後ファイルの期待値を格納するためのクラスです。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public class ExpectedItem
+        {
+            public string Path { get; set; }
+            public ulong Size { get; set; }
         }
     }
 }
