@@ -100,8 +100,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        // ~Archive() {
-        //   // このコードを変更しないでください。クリーンアップ コードを上の Dispose(bool disposing) に記述します。
+        // ~ArchiveReader() {
         //   Dispose(false);
         // }
 
