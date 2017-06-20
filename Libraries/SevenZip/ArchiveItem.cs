@@ -86,6 +86,25 @@ namespace Cube.FileSystem.SevenZip
             }
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Size
+        ///
+        /// <summary>
+        /// 展開後のファイルサイズを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ulong Size
+        {
+            get
+            {
+                var dest = new PropVariant();
+                _raw.GetProperty((uint)Index, ItemPropId.Size, ref dest);
+                return (ulong)dest.GetObject();
+            }
+        }
+
         #endregion
 
         #region Fields
