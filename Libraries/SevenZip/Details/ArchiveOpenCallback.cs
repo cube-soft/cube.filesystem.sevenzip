@@ -17,33 +17,35 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
-using System.Collections.Generic;
 
 namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveReader
+    /// ArchiveOpenCallback
     /// 
     /// <summary>
-    /// 圧縮ファイルを読み込み、展開するクラスです。
+    /// 圧縮ファイルを開く際のコールバック関数群を定義したクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveReader : IDisposable
+    internal class ArchiveOpenCallback : IArchiveOpenCallback, ICryptoGetTextPassword
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveReader
+        /// ArchiveOpenCallback
         ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public ArchiveReader() { }
+        public ArchiveOpenCallback(string password)
+        {
+            Password = password;
+        }
 
         #endregion
 
@@ -51,106 +53,74 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Items
+        /// Password
         ///
         /// <summary>
-        /// 圧縮ファイルの一覧を取得します。
+        /// 圧縮ファイルのパスワードを取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
-        public IReadOnlyCollection<ArchiveItem> Items { get; private set; }
+        public string Password { get; }
 
         #endregion
 
         #region Methods
 
+        #region ICryptoGetTextPassword
+
         /* ----------------------------------------------------------------- */
         ///
-        /// Open
-        ///
+        /// CryptoGetTextPassword
+        /// 
         /// <summary>
-        /// 圧縮ファイルを開きます。
+        /// 圧縮ファイルのパスワードを取得します。
         /// </summary>
         /// 
+        /// <param name="password">パスワード</param>
+        /// 
+        /// <returns>0 (ゼロ)</returns>
+        ///
         /* ----------------------------------------------------------------- */
-        public void Open(string path, string password)
+        public int CryptoGetTextPassword(out string password)
         {
-            var ext = System.IO.Path.GetExtension(path);
-            var fmt = FormatConversions.FromExtension(ext);
-            if (fmt == Format.Unknown) throw new NotSupportedException();
-
-            var pos = 32UL * 1024;
-
-            _lib    = new NativeLibrary();
-            _stream = new ArchiveStreamReader(System.IO.File.Open(path, System.IO.FileMode.Open));
-            _raw    = _lib.Create(fmt);
-            _raw.Open(_stream, ref pos, new ArchiveOpenCallback(password));
-
-            Items = new ReadOnlyArchiveCollection(_raw, password);
-        }
-
-        #region IDisposable
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ~Archive
-        ///
-        /// <summary>
-        /// オブジェクトを破棄します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        // ~ArchiveReader() {
-        //   Dispose(false);
-        // }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Dispose
-        ///
-        /// <summary>
-        /// リソースを破棄します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public void Dispose()
-        {
-            Dispose(true);
-            // GC.SuppressFinalize(this);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Dispose
-        ///
-        /// <summary>
-        /// リソースを破棄します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        protected virtual void Dispose(bool disposing)
-        {
-            if (_disposed) return;
-
-            if (disposing)
-            {
-                _raw?.Close();
-                _stream?.Dispose();
-                _lib?.Dispose();
-            }
-
-            _disposed = true;
+            password = Password;
+            return 0;
         }
 
         #endregion
 
+        #region IArchiveOpenCallback
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetTotal
+        /// 
+        /// <summary>
+        /// Sets total data size
+        /// </summary>
+        /// 
+        /// <param name="files">Files pointer</param>
+        /// <param name="bytes">Total size in bytes</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void SetTotal(IntPtr files, IntPtr bytes) { }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetCompleted
+        ///
+        /// <summary>
+        /// Sets completed size
+        /// </summary>
+        /// 
+        /// <param name="files">Files pointer</param>
+        /// <param name="bytes">Completed size in bytes</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void SetCompleted(IntPtr files, IntPtr bytes) { }
+
         #endregion
 
-        #region Fields
-        private bool _disposed = false;
-        private NativeLibrary _lib;
-        private IInArchive _raw;
-        private ArchiveStreamReader _stream;
         #endregion
     }
 }

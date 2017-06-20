@@ -35,6 +35,8 @@ namespace Cube.FileSystem.Tests
     [TestFixture]
     class ArchiveReaderTest : FileResource
     {
+        #region Tests
+
         /* ----------------------------------------------------------------- */
         ///
         /// Items
@@ -49,14 +51,24 @@ namespace Cube.FileSystem.Tests
         {
             using (var archive = new SevenZip.ArchiveReader())
             {
-                archive.Open(Example(filename), string.Empty);
+                archive.Open(Example(filename), password);
 
                 var actual = archive.Items.ToList();
-                Assert.That(actual.Count,   Is.EqualTo(expected.Count));
+                Assert.That(actual.Count, Is.EqualTo(expected.Count));
+
                 for (var i = 0; i < expected.Count; ++i)
                 {
-                    Assert.That(actual[i].Path, Is.EqualTo(expected[i].Path));
-                    Assert.That(actual[i].Size, Is.EqualTo(expected[i].Size));
+                    Assert.That(actual[i].Index,       Is.EqualTo(i));
+                    Assert.That(actual[i].Path,        Is.EqualTo(expected[i].Path));
+                    Assert.That(actual[i].Password,    Is.EqualTo(password));
+                    Assert.That(actual[i].Size,        Is.EqualTo(expected[i].Size));
+                    Assert.That(actual[i].IsDirectory, Is.EqualTo(expected[i].IsDirectory));
+
+                    actual[i].Save(Results);
+                    var dest = Result(actual[i].Path);
+                    var dir  = expected[i].IsDirectory;
+                    Assert.That(Exists(dest, dir), Is.True);
+                    Assert.That(Length(dest, dir), Is.EqualTo(expected[i].Size));
                 }
             }
         }
@@ -131,6 +143,38 @@ namespace Cube.FileSystem.Tests
             }
         }
 
+        #endregion
+
+        #region Helper classes and methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Exists
+        ///
+        /// <summary>
+        /// ファイルまたはディレクトリが存在するかどうかを判別します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private bool Exists(string path, bool directory)
+            => directory ?
+               System.IO.Directory.Exists(path) :
+               System.IO.File.Exists(path);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Length
+        ///
+        /// <summary>
+        /// ファイルサイズを取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private long Length(string path, bool directory)
+            => directory ?
+               0 :
+               new System.IO.FileInfo(path).Length;
+
         /* ----------------------------------------------------------------- */
         ///
         /// ExpectedItem
@@ -146,5 +190,7 @@ namespace Cube.FileSystem.Tests
             public ulong Size { get; set; }
             public bool IsDirectory { get; set; }
         }
+
+        #endregion
     }
 }

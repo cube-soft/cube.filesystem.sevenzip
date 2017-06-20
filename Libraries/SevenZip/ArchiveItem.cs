@@ -44,12 +44,13 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="obj">生データ</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveItem(object obj, int index)
+        public ArchiveItem(object obj, int index, string password)
         {
             if (obj is IInArchive raw) _raw = raw;
             else throw new ArgumentException("invalid object");
 
             Index = index;
+            Password = password;
         }
 
         #endregion
@@ -88,6 +89,17 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Password
+        ///
+        /// <summary>
+        /// パスワードを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Password { get; }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Size
         ///
         /// <summary>
@@ -121,6 +133,37 @@ namespace Cube.FileSystem.SevenZip
                 var dest = new PropVariant();
                 _raw.GetProperty((uint)Index, ItemPropId.IsFolder, ref dest);
                 return (bool)dest.GetObject();
+            }
+        }
+
+        #endregion
+
+        #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Save
+        ///
+        /// <summary>
+        /// 展開した内容を保存します。
+        /// </summary>
+        /// 
+        /// <param name="directory">保存するディレクトリ</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Save(string directory)
+        {
+            var dest = System.IO.Path.Combine(directory, Path);
+            if (IsDirectory)
+            {
+                if (!System.IO.Directory.Exists(dest)) System.IO.Directory.CreateDirectory(dest);
+                return;
+            }
+
+            using(var stream = new ArchiveStreamWriter(System.IO.File.Create(dest)))
+            {
+                var callback = new ArchiveExtractCallback(this, stream);
+                _raw.Extract(new[] { (uint)Index }, 1, 0, callback);
             }
         }
 

@@ -46,10 +46,11 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="obj">生データ</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ReadOnlyArchiveCollection(object obj)
+        public ReadOnlyArchiveCollection(object obj, string password)
         {
             if (obj is IInArchive raw) _raw = raw;
             else throw new ArgumentException("invalid object");
+            Password = password;
         }
 
         #endregion
@@ -66,6 +67,17 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public int Count => (int)_raw.GetNumberOfItems();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Password
+        ///
+        /// <summary>
+        /// 圧縮ファイルのパスワードを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Password { get; }
 
         #endregion
 
@@ -84,7 +96,7 @@ namespace Cube.FileSystem.SevenZip
         {
             for (var i = 0; i < Count; ++i)
             {
-                yield return new ArchiveItem(_raw, i);
+                yield return new ArchiveItem(_raw, i, Password);
             }
         }
 
