@@ -18,6 +18,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Runtime.InteropServices;
+using System.Security.Permissions;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -30,8 +31,8 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [StructLayout(LayoutKind.Explicit, Size = 16)]
-    public struct PropVariant
+    [StructLayout(LayoutKind.Explicit)]
+    internal struct PropVariant
     {
         #region Properties
 
@@ -40,11 +41,45 @@ namespace Cube.FileSystem.SevenZip
         /// VarType
         ///
         /// <summary>
-        /// vt フィールドを VarEnum に変換した結果を取得します。
+        /// オブジェクトの種類を取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public VarEnum VarType => (VarEnum)vt;
+        public VarEnum VarType
+        {
+            get { return (VarEnum)_vt; }
+            private set { _vt = (ushort)value; }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// VarType
+        ///
+        /// <summary>
+        /// オブジェクトの内容を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public object Object
+        {
+            get
+            {
+                var sp = new SecurityPermission(SecurityPermissionFlag.UnmanagedCode);
+                sp.Demand();
+
+                switch (VarType)
+                {
+                    case VarEnum.VT_EMPTY:
+                        return null;
+                    case VarEnum.VT_FILETIME:
+                        return DateTime.FromFileTime(_v64);
+                    default:
+                        var h = GCHandle.Alloc(this, GCHandleType.Pinned);
+                        try { return Marshal.GetObjectForNativeVariant(h.AddrOfPinnedObject()); }
+                        finally { h.Free(); }
+                }
+            }
+        }
 
         #endregion
 
@@ -85,7 +120,7 @@ namespace Cube.FileSystem.SevenZip
                 case VarEnum.VT_UINT:
                 case VarEnum.VT_HRESULT:
                 case VarEnum.VT_FILETIME:
-                    vt = 0;
+                    _vt = 0;
                     break;
                 default:
                     Ole32.NativeMethods.PropVariantClear(ref this);
@@ -95,46 +130,111 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetObject
+        /// SetEmpty
         ///
         /// <summary>
-        /// オブジェクトを取得します。
+        /// 空の内容を設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public object GetObject()
+        public void SetEmpty()
         {
-            switch (VarType)
-            {
-                case VarEnum.VT_EMPTY:    return null;
-                case VarEnum.VT_FILETIME: return DateTime.FromFileTime(longValue);
-                default: break;
-            }
+            VarType = VarEnum.VT_EMPTY;
+        }
 
-            var handle = GCHandle.Alloc(this, GCHandleType.Pinned);
-            try { return Marshal.GetObjectForNativeVariant(handle.AddrOfPinnedObject()); }
-            finally { handle.Free(); }
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Set
+        ///
+        /// <summary>
+        /// 真偽値を設定します。
+        /// </summary>
+        /// 
+        /// <param name="value">設定値</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Set(bool value)
+        {
+            VarType = VarEnum.VT_BOOL;
+            _v64u = value ? 1UL : 0UL;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Set
+        ///
+        /// <summary>
+        /// 整数値を設定します。
+        /// </summary>
+        /// 
+        /// <param name="value">設定値</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Set(uint value)
+        {
+            VarType = VarEnum.VT_UI4;
+            _v32u = value;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Set
+        ///
+        /// <summary>
+        /// 整数値を設定します。
+        /// </summary>
+        /// 
+        /// <param name="value">設定値</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Set(ulong value)
+        {
+            VarType = VarEnum.VT_UI8;
+            _v64u = value;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Set
+        ///
+        /// <summary>
+        /// 文字列を設定します。
+        /// </summary>
+        /// 
+        /// <param name="value">設定値</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Set(string value)
+        {
+            VarType = VarEnum.VT_BSTR;
+            _value = Marshal.StringToBSTR(value);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Set
+        ///
+        /// <summary>
+        /// DateTime オブジェクトを設定します。
+        /// </summary>
+        /// 
+        /// <param name="value">設定値</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Set(DateTime value)
+        {
+            VarType = VarEnum.VT_FILETIME;
+            _v64 = value.ToFileTime();
         }
 
         #endregion
 
         #region Fields
-
-        [FieldOffset(0)]
-        public ushort vt;
-
-        [FieldOffset(8)]
-        public IntPtr pointerValue;
-
-        [FieldOffset(8)]
-        public byte byteValue;
-
-        [FieldOffset(8)]
-        public long longValue;
-
-        [FieldOffset(8)]
-        public System.Runtime.InteropServices.ComTypes.FILETIME filetime;
-
+        [FieldOffset(0)] private ushort _vt;
+        [FieldOffset(8)] private IntPtr _value;
+        [FieldOffset(8)] private uint _v32u;
+        [FieldOffset(8)] private long _v64;
+        [FieldOffset(8)] private ulong _v64u;
         #endregion
     }
 }
