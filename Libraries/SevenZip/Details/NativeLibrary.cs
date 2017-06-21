@@ -75,25 +75,25 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Create
+        /// GetInArchive
         ///
         /// <summary>
-        /// InArchive オブジェクトを生成します。
+        /// InArchive オブジェクトを取得します。
         /// </summary>
         /// 
-        /// <param name="fmt">フォーマット</param>
+        /// <param name="format">フォーマット</param>
         /// 
         /// <returns>InArchive オブジェクト</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public IInArchive Create(Format fmt) => Create(fmt.ToClassId());
+        public IInArchive GetInArchive(Format format) => GetInArchive(format.ToClassId());
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Create
+        /// GetInArchive
         ///
         /// <summary>
-        /// InArchive オブジェクトを生成します。
+        /// InArchive オブジェクトを取得します。
         /// </summary>
         /// 
         /// <param name="clsid">Class ID</param>
@@ -101,7 +101,7 @@ namespace Cube.FileSystem.SevenZip
         /// <returns>InArchive オブジェクト</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public IInArchive Create(Guid clsid)
+        public IInArchive GetInArchive(Guid clsid)
         {
             var func = Marshal.GetDelegateForFunctionPointer(
                 Kernel32.NativeMethods.GetProcAddress(_handle, "CreateObject"),
@@ -113,6 +113,48 @@ namespace Cube.FileSystem.SevenZip
             var iid = typeof(IInArchive).GUID;
             func(ref clsid, ref iid, out object result);
             return result as IInArchive;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetOutArchive
+        ///
+        /// <summary>
+        /// OutArchive オブジェクトを取得します。
+        /// </summary>
+        /// 
+        /// <param name="format">フォーマット</param>
+        /// 
+        /// <returns>OutArchive オブジェクト</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public IOutArchive GetOutArchive(Format format) => GetOutArchive(format.ToClassId());
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetOutArchive
+        ///
+        /// <summary>
+        /// OutArchive オブジェクトを取得します。
+        /// </summary>
+        /// 
+        /// <param name="clsid">Class ID</param>
+        /// 
+        /// <returns>OutArchive オブジェクト</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public IOutArchive GetOutArchive(Guid clsid)
+        {
+            var func = Marshal.GetDelegateForFunctionPointer(
+                Kernel32.NativeMethods.GetProcAddress(_handle, "CreateObject"),
+                typeof(CreateObjectDelegate)
+            ) as CreateObjectDelegate;
+
+            if (func == null) return null;
+
+            var iid = typeof(IOutArchive).GUID;
+            func(ref clsid, ref iid, out object result);
+            return result as IOutArchive;
         }
 
         #region IDisposable

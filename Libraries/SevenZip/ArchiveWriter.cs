@@ -17,40 +17,35 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Collections.Generic;
 
 namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveItem
+    /// ArchiveWriter
     /// 
     /// <summary>
-    /// 圧縮ファイルの 1 項目を表すクラスです。
+    /// 圧縮ファイルを作成するクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveItem
+    public class ArchiveWriter : IDisposable
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveItem
+        /// ArchiveWriter
         ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
-        /// <param name="obj">生データ</param>
-        ///
         /* ----------------------------------------------------------------- */
-        public ArchiveItem(object obj, int index, string password)
+        public ArchiveWriter(Format format)
         {
-            if (obj is IInArchive raw) _raw = raw;
-            else throw new ArgumentException("invalid object");
-
-            Index = index;
-            Password = password;
+            Format = format;
         }
 
         #endregion
@@ -59,82 +54,25 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Index
+        /// Format
         ///
         /// <summary>
-        /// 圧縮ファイル中のインデックスを取得します。
+        /// 圧縮ファイルのフォーマットを取得します。
         /// </summary>
-        ///
+        /// 
         /* ----------------------------------------------------------------- */
-        public int Index { get; }
+        public Format Format { get; }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Path
+        /// Items
         ///
         /// <summary>
-        /// ファイル名を取得します。
+        /// 圧縮するファイル一覧を取得または設定します。
         /// </summary>
-        ///
+        /// 
         /* ----------------------------------------------------------------- */
-        public string Path
-        {
-            get
-            {
-                var dest = new PropVariant();
-                _raw.GetProperty((uint)Index, ItemPropId.Path, ref dest);
-                return dest.Object as string;
-            }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Password
-        ///
-        /// <summary>
-        /// パスワードを取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Password { get; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Size
-        ///
-        /// <summary>
-        /// 展開後のファイルサイズを取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public ulong Size
-        {
-            get
-            {
-                var dest = new PropVariant();
-                _raw.GetProperty((uint)Index, ItemPropId.Size, ref dest);
-                return (ulong)dest.Object;
-            }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// IsDirectory
-        ///
-        /// <summary>
-        /// ディレクトリかどうかを示す値を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public bool IsDirectory
-        {
-            get
-            {
-                var dest = new PropVariant();
-                _raw.GetProperty((uint)Index, ItemPropId.IsDirectory, ref dest);
-                return (bool)dest.Object;
-            }
-        }
+        public IList<System.IO.FileInfo> Items { get; } = new List<System.IO.FileInfo>();
 
         #endregion
 
@@ -145,32 +83,78 @@ namespace Cube.FileSystem.SevenZip
         /// Save
         ///
         /// <summary>
-        /// 展開した内容を保存します。
+        /// 圧縮ファイルを作成し保存します。
         /// </summary>
         /// 
-        /// <param name="directory">保存するディレクトリ</param>
-        ///
         /* ----------------------------------------------------------------- */
-        public void Save(string directory)
+        public void Save(string path, string password)
         {
-            var dest = System.IO.Path.Combine(directory, Path);
-            if (IsDirectory)
+            using (var lib = new NativeLibrary())
+            using (var stream = new ArchiveStreamWriter(System.IO.File.Create(path)))
             {
-                if (!System.IO.Directory.Exists(dest)) System.IO.Directory.CreateDirectory(dest);
-                return;
+                var raw = lib.GetOutArchive(Format);
+                var callback = new ArchiveUpdateCallback(Items);
+                raw.UpdateItems(stream, (uint)Items.Count, callback);
             }
+        }
 
-            using(var stream = new ArchiveStreamWriter(System.IO.File.Create(dest)))
-            {
-                var callback = new ArchiveExtractCallback(this, stream);
-                _raw.Extract(new[] { (uint)Index }, 1, 0, callback);
-            }
+        #region IDisposable
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ~ArchiveWriter
+        ///
+        /// <summary>
+        /// オブジェクトを破棄します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        // ~ArchiveWriter() {
+        //   Dispose(false);
+        // }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Dispose
+        ///
+        /// <summary>
+        /// リソースを破棄します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void Dispose()
+        {
+            Dispose(true);
+            // GC.SuppressFinalize(this);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Dispose
+        ///
+        /// <summary>
+        /// リソースを破棄します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed) return;
+
+            //if (disposing)
+            //{
+
+            //}
+
+            _disposed = true;
         }
 
         #endregion
 
+        #endregion
+
         #region Fields
-        private IInArchive _raw;
+        private bool _disposed = false;
         #endregion
     }
 }

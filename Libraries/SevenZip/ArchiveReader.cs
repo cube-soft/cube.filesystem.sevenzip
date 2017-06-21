@@ -83,7 +83,7 @@ namespace Cube.FileSystem.SevenZip
 
             _lib    = new NativeLibrary();
             _stream = new ArchiveStreamReader(System.IO.File.Open(path, System.IO.FileMode.Open));
-            _raw    = _lib.Create(fmt);
+            _raw    = _lib.GetInArchive(fmt);
             _raw.Open(_stream, ref pos, new ArchiveOpenCallback(password));
 
             Items = new ReadOnlyArchiveCollection(_raw, password);

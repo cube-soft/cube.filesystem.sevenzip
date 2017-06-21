@@ -38,8 +38,10 @@
   <ItemGroup>
     <Compile Include="ArchiveReader.cs" />
     <Compile Include="ArchiveItem.cs" />
+    <Compile Include="ArchiveWriter.cs" />
     <Compile Include="Details\ArchiveExtractCallback.cs" />
     <Compile Include="Details\ArchiveOpenCallback.cs" />
+    <Compile Include="Details\ArchiveUpdateCallback.cs" />
     <Compile Include="Format.cs" />
     <Compile Include="Details\NativeInterfaces.cs" />
     <Compile Include="Details\NativeLibrary.cs" />

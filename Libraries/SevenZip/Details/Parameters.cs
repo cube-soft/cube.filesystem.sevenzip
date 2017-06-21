@@ -67,7 +67,7 @@ namespace Cube.FileSystem.SevenZip
         Path,
         Name,
         Extension,
-        IsFolder,
+        IsDirectory,
         Size,
         PackedSize,
         Attributes,

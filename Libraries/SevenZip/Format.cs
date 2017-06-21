@@ -101,7 +101,7 @@ namespace Cube.FileSystem.SevenZip
                 _guid = new Dictionary<Format, Guid>
                 {
                     { Format.Unknown,   Guid.Empty },
-                    { Format.SevenZip,  new Guid("23170f69-40c1-278a-1000-000110070000")},
+                    { Format.SevenZip,  new Guid("23170f69-40c1-278a-1000-000110070000") },
                     { Format.Arj,       new Guid("23170f69-40c1-278a-1000-000110040000") },
                     { Format.BZip2,     new Guid("23170f69-40c1-278a-1000-000110020000") },
                     { Format.Cab,       new Guid("23170f69-40c1-278a-1000-000110080000") },
