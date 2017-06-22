@@ -22,41 +22,15 @@ namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveItem
+    /// IArchiveItem
     /// 
     /// <summary>
-    /// 圧縮ファイルの 1 項目を表すクラスです。
+    /// 圧縮ファイルの 1 項目を表すインターフェースです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveItem : IArchiveItem
+    public interface IArchiveItem
     {
-        #region Constructors
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ArchiveItem
-        ///
-        /// <summary>
-        /// オブジェクトを初期化します。
-        /// </summary>
-        /// 
-        /// <param name="obj">生データ</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public ArchiveItem(object obj, int index, string password)
-        {
-            if (obj is IInArchive raw) _raw = raw;
-            else throw new ArgumentException("invalid object");
-
-            Index = index;
-            Password = password;
-        }
-
-        #endregion
-
-        #region Properties
-
         /* ----------------------------------------------------------------- */
         ///
         /// Index
@@ -66,7 +40,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public int Index { get; }
+        int Index { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -77,15 +51,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Path
-        {
-            get
-            {
-                var dest = new PropVariant();
-                _raw.GetProperty((uint)Index, ItemPropId.Path, ref dest);
-                return dest.Object as string;
-            }
-        }
+        string Path { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -96,7 +62,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Password { get; }
+        string Password { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -107,15 +73,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool IsDirectory
-        {
-            get
-            {
-                var dest = new PropVariant();
-                _raw.GetProperty((uint)Index, ItemPropId.IsDirectory, ref dest);
-                return (bool)dest.Object;
-            }
-        }
+        bool IsDirectory { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -126,51 +84,6 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public long Size
-        {
-            get
-            {
-                var dest = new PropVariant();
-                _raw.GetProperty((uint)Index, ItemPropId.Size, ref dest);
-                return (long)dest.Object;
-            }
-        }
-
-        #endregion
-
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Save
-        ///
-        /// <summary>
-        /// 展開した内容を保存します。
-        /// </summary>
-        /// 
-        /// <param name="directory">保存するディレクトリ</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Save(string directory)
-        {
-            var dest = System.IO.Path.Combine(directory, Path);
-            if (IsDirectory)
-            {
-                if (!System.IO.Directory.Exists(dest)) System.IO.Directory.CreateDirectory(dest);
-                return;
-            }
-
-            using(var stream = new ArchiveStreamWriter(System.IO.File.Create(dest)))
-            {
-                var callback = new ArchiveExtractCallback(this, stream);
-                _raw.Extract(new[] { (uint)Index }, 1, 0, callback);
-            }
-        }
-
-        #endregion
-
-        #region Fields
-        private IInArchive _raw;
-        #endregion
+        long Size { get; }
     }
 }
