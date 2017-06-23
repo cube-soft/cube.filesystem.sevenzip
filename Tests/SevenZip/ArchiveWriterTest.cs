@@ -51,30 +51,13 @@ namespace Cube.FileSystem.Tests
 
             using (var writer = new SevenZip.ArchiveWriter(SevenZip.Format.Zip))
             {
-                writer.Items.Add(GetFileInfo("Sample.txt"));
-                writer.Items.Add(GetFileInfo("Empty.txt"));
+                writer.Add(Example("Sample.txt"));
+                writer.Add(Example("Empty.txt"));
                 writer.Save(dest, string.Empty);
             }
 
             Assert.That(System.IO.File.Exists(dest), Is.True);
         }
-
-        #endregion
-
-        #region Helper methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetFileInfo
-        ///
-        /// <summary>
-        /// 指定されたファイル名に対応する FileInfo オブジェクトを
-        /// 取得します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        private System.IO.FileInfo GetFileInfo(string filename)
-            => new System.IO.FileInfo(Example(filename));
 
         #endregion
     }

@@ -17,6 +17,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.IO;
 using System.Collections.Generic;
 
 namespace Cube.FileSystem.SevenZip
@@ -63,20 +64,37 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public Format Format { get; }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Items
-        ///
-        /// <summary>
-        /// 圧縮するファイル一覧を取得または設定します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public IList<System.IO.FileInfo> Items { get; } = new List<System.IO.FileInfo>();
-
         #endregion
 
         #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Add
+        ///
+        /// <summary>
+        /// ファイルまたはディレクトリを圧縮ファイルに追加します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void Add(string path)
+            => Add(path, Path.GetFileName(path));
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Add
+        ///
+        /// <summary>
+        /// ファイルまたはフォルダを圧縮ファイルに追加します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void Add(string path, string pathInArchive)
+        {
+            if (File.Exists(path)) Add(new FileInfo(path), pathInArchive);
+            else if (Directory.Exists(path)) Add(new DirectoryInfo(path), pathInArchive);
+            else throw new FileNotFoundException(path);
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -90,11 +108,11 @@ namespace Cube.FileSystem.SevenZip
         public void Save(string path, string password)
         {
             using (var lib = new NativeLibrary())
-            using (var stream = new ArchiveStreamWriter(System.IO.File.Create(path)))
+            using (var stream = new ArchiveStreamWriter(File.Create(path)))
             {
                 var raw = lib.GetOutArchive(Format);
-                var callback = new ArchiveUpdateCallback(Items);
-                raw.UpdateItems(stream, (uint)Items.Count, callback);
+                var callback = new ArchiveUpdateCallback(_items);
+                raw.UpdateItems(stream, (uint)_items.Count, callback);
             }
         }
 
@@ -153,8 +171,49 @@ namespace Cube.FileSystem.SevenZip
 
         #endregion
 
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Add
+        ///
+        /// <summary>
+        /// ファイルを圧縮ファイルに追加します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void Add(FileInfo info, string pathInArchive)
+            => _items.Add(new FileItem(info, pathInArchive));
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Add
+        ///
+        /// <summary>
+        /// ディレクトリを圧縮ファイルに追加します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void Add(DirectoryInfo info, string pathInArchive)
+        {
+            _items.Add(new FileItem(info, pathInArchive));
+
+            foreach (var child in info.GetFiles())
+            {
+                Add(child, Path.Combine(pathInArchive, child.Name));
+            }
+
+            foreach (var child in info.GetDirectories())
+            {
+                Add(child, Path.Combine(pathInArchive, child.Name));
+            }
+        }
+
         #region Fields
         private bool _disposed = false;
+        private IList<FileItem> _items = new List<FileItem>();
+        #endregion
+
         #endregion
     }
 }

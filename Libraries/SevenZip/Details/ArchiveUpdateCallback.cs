@@ -46,7 +46,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="items">圧縮するファイル一覧</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public ArchiveUpdateCallback(IList<System.IO.FileInfo> items)
+        public ArchiveUpdateCallback(IList<FileItem> items)
         {
             Items = items;
         }
@@ -64,7 +64,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public IList<System.IO.FileInfo> Items { get; }
+        public IList<FileItem> Items { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -188,7 +188,7 @@ namespace Cube.FileSystem.SevenZip
             switch (pid)
             {
                 case ItemPropId.Path:
-                    value.Set(src.Name);
+                    value.Set(src.Path);
                     break;
                 case ItemPropId.Extension:
                     value.Set(src.Extension);
@@ -210,7 +210,7 @@ namespace Cube.FileSystem.SevenZip
                     value.Set(src.LastWriteTime);
                     break;
                 case ItemPropId.Size:
-                    value.Set((ulong)src.Length);
+                    value.Set((ulong)src.Size);
                     break;
                 default:
                     value.SetEmpty();
@@ -235,7 +235,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int GetStream(uint index, out ISequentialInStream stream)
         {
-            stream = new ArchiveStreamReader(Items[(int)index].OpenRead());
+            stream = new ArchiveStreamReader(Items[(int)index].GetStream());
             return 0;
         }
 

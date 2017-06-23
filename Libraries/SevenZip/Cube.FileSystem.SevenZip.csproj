@@ -42,6 +42,7 @@
     <Compile Include="Details\ArchiveExtractCallback.cs" />
     <Compile Include="Details\ArchiveOpenCallback.cs" />
     <Compile Include="Details\ArchiveUpdateCallback.cs" />
+    <Compile Include="FileItem.cs" />
     <Compile Include="Format.cs" />
     <Compile Include="Details\NativeInterfaces.cs" />
     <Compile Include="Details\NativeLibrary.cs" />

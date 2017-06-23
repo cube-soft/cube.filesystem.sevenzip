@@ -77,15 +77,18 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Path
-        {
-            get
-            {
-                var dest = new PropVariant();
-                _raw.GetProperty((uint)Index, ItemPropId.Path, ref dest);
-                return dest.Object as string;
-            }
-        }
+        public string Path => Get<string>(ItemPropId.Path);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extension
+        ///
+        /// <summary>
+        /// 拡張子を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Extension => Get<string>(ItemPropId.Extension);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -107,15 +110,18 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool IsDirectory
-        {
-            get
-            {
-                var dest = new PropVariant();
-                _raw.GetProperty((uint)Index, ItemPropId.IsDirectory, ref dest);
-                return (bool)dest.Object;
-            }
-        }
+        public bool IsDirectory => Get<bool>(ItemPropId.IsDirectory);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Attributes
+        ///
+        /// <summary>
+        /// 属性を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public uint Attributes => Get<uint>(ItemPropId.Attributes);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -126,15 +132,40 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public long Size
-        {
-            get
-            {
-                var dest = new PropVariant();
-                _raw.GetProperty((uint)Index, ItemPropId.Size, ref dest);
-                return (long)dest.Object;
-            }
-        }
+        public long Size => (long)Get<ulong>(ItemPropId.Size);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CreationTime
+        ///
+        /// <summary>
+        /// 作成日時を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public DateTime CreationTime => Get<DateTime>(ItemPropId.CreationTime);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// LastWriteTime
+        ///
+        /// <summary>
+        /// 最終更新日時を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public DateTime LastWriteTime => Get<DateTime>(ItemPropId.LastWriteTime);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// LastAccessTime
+        ///
+        /// <summary>
+        /// 最終アクセス日時を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public DateTime LastAccessTime => Get<DateTime>(ItemPropId.LastAccessTime);
 
         #endregion
 
@@ -169,8 +200,35 @@ namespace Cube.FileSystem.SevenZip
 
         #endregion
 
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Get
+        ///
+        /// <summary>
+        /// 情報を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private T Get<T>(ItemPropId pid)
+        {
+            try
+            {
+                var var = new PropVariant();
+                _raw.GetProperty((uint)Index, pid, ref var);
+
+                var obj = var.Object;
+                return (obj != null && obj is T) ? (T)obj : default(T);
+            }
+            catch (Exception /* err */) { return default(T); }
+        }
+
+
         #region Fields
         private IInArchive _raw;
+        #endregion
+
         #endregion
     }
 }

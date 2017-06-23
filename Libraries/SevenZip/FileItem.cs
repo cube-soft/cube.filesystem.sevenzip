@@ -17,20 +17,59 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.IO;
 
 namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// IArchiveItem
+    /// FileItem
     /// 
     /// <summary>
-    /// 圧縮ファイルの 1 項目を表すインターフェースです。
+    /// 圧縮予定ファイルの 1 項目を表すインターフェースです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public interface IArchiveItem
+    public class FileItem : IArchiveItem
     {
+        #region Constructors
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// FileItem
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        /// 
+        /// <param name="info">ファイルまたはディレクトリ情報</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public FileItem(FileSystemInfo info)
+            : this(info, info.Name) { }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// FileItem
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        /// 
+        /// <param name="info">ファイルまたはディレクトリ情報</param>
+        /// <param name="pathInArchive">圧縮ファイル中の相対パス</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public FileItem(FileSystemInfo info, string pathInArchive)
+        {
+            _info = info;
+            Path = pathInArchive;
+        }
+
+        #endregion
+
+        #region Properties
+
         /* ----------------------------------------------------------------- */
         ///
         /// Path
@@ -40,29 +79,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        string Path { get; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extension
-        ///
-        /// <summary>
-        /// 拡張子部分を表す文字列を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        string Extension { get; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Attributes
-        ///
-        /// <summary>
-        /// 属性を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        uint Attributes { get; }
+        public string Path { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -73,7 +90,29 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        bool IsDirectory { get; }
+        public bool IsDirectory => _info is DirectoryInfo;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extension
+        ///
+        /// <summary>
+        /// 拡張子部分を表す文字列を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Extension => _info.Extension;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Attributes
+        ///
+        /// <summary>
+        /// 属性を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public uint Attributes => (uint)_info.Attributes;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -84,7 +123,14 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        long Size { get; }
+        public long Size
+        {
+            get
+            {
+                if (_info is FileInfo file) return file.Length;
+                else return 0;
+            }
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -95,7 +141,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        DateTime CreationTime { get; }
+        public DateTime CreationTime => _info.CreationTime;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -106,7 +152,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        DateTime LastWriteTime { get; }
+        public DateTime LastWriteTime => _info.LastWriteTime;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -117,6 +163,27 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        DateTime LastAccessTime { get; }
+        public DateTime LastAccessTime => _info.LastAccessTime;
+
+        #endregion
+
+        #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetStream
+        ///
+        /// <summary>
+        /// 読み取り専用ストリームを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public Stream GetStream() => (_info as FileInfo)?.OpenRead();
+
+        #endregion
+
+        #region Fields
+        private FileSystemInfo _info;
+        #endregion
     }
 }
