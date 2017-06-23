@@ -88,7 +88,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Extension => Get<string>(ItemPropId.Extension);
+        public string Extension => System.IO.Path.GetExtension(Path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -173,7 +173,7 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Save
+        /// Extract
         ///
         /// <summary>
         /// 展開した内容を保存します。
@@ -182,7 +182,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="directory">保存するディレクトリ</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Save(string directory)
+        public void Extract(string directory)
         {
             var dest = System.IO.Path.Combine(directory, Path);
             if (IsDirectory)
