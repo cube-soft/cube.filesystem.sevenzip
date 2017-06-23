@@ -16,6 +16,7 @@
 /// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ///
 /* ------------------------------------------------------------------------- */
+using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace Cube.FileSystem.Tests
@@ -37,26 +38,58 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Save
+        /// Archive
         ///
         /// <summary>
         /// 圧縮ファイルを作成するテストを実行します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [Test]
-        public void Save()
+        [TestCaseSource(nameof(Archive_TestCases))]
+        public void Archive(string filename, long size, string[] items)
         {
-            var dest = Result("ArchiveWriter.zip");
+            var dest = Result(filename);
 
             using (var writer = new SevenZip.ArchiveWriter(SevenZip.Format.Zip))
             {
-                writer.Add(Example("Sample.txt"));
-                writer.Add(Example("Empty.txt"));
+                foreach (var item in items) writer.Add(Example(item));
                 writer.Save(dest, string.Empty);
             }
 
-            Assert.That(System.IO.File.Exists(dest), Is.True);
+            var info = new System.IO.FileInfo(dest);
+            Assert.That(info.Exists, Is.True);
+            Assert.That(info.Length, Is.EqualTo(size));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Archive_TestCases
+        ///
+        /// <summary>
+        /// Archive のテスト用データを取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private static IEnumerable<TestCaseData> Archive_TestCases
+        {
+            get
+            {
+                yield return new TestCaseData("SingleFile.zip", 167L, new[]
+                {
+                    "Sample.txt",
+                });
+
+                yield return new TestCaseData("SingleDirectory.zip", 488L, new[]
+                {
+                    "Archive",
+                });
+
+                yield return new TestCaseData("FileAndDirectory.zip", 633L, new[]
+                {
+                    "Sample.txt",
+                    "Archive",
+                });
+            }
         }
 
         #endregion
