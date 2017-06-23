@@ -194,9 +194,11 @@ namespace Cube.FileSystem.SevenZip
                     value.Set(src.Extension);
                     break;
                 case ItemPropId.Attributes:
-                    value.Set((uint)src.Attributes);
+                    value.Set(src.Attributes);
                     break;
                 case ItemPropId.IsDirectory:
+                    value.Set(src.IsDirectory);
+                    break;
                 case ItemPropId.IsAnti:
                     value.Set(false);
                     break;
@@ -235,7 +237,9 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int GetStream(uint index, out ISequentialInStream stream)
         {
-            stream = new ArchiveStreamReader(Items[(int)index].GetStream());
+            var item = Items[(int)index];
+            System.Diagnostics.Debug.Assert(!item.IsDirectory);
+            stream = new ArchiveStreamReader(item.GetStream());
             return 0;
         }
 
