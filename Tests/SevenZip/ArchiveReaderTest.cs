@@ -16,6 +16,7 @@
 /// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ///
 /* ------------------------------------------------------------------------- */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -46,7 +47,7 @@ namespace Cube.FileSystem.Tests
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [TestCaseSource(nameof(Items_TestCases))]
+        [TestCaseSource(nameof(Extract_TestCases))]
         public void Items(string filename, string password, IList<ExpectedItem> expected)
         {
             using (var archive = new SevenZip.ArchiveReader())
@@ -60,11 +61,35 @@ namespace Cube.FileSystem.Tests
                 {
                     Assert.That(actual[i].Index,       Is.EqualTo(i));
                     Assert.That(actual[i].Path,        Is.EqualTo(expected[i].Path));
+                    Assert.That(actual[i].Extension,   Is.EqualTo(expected[i].Extension));
                     Assert.That(actual[i].Password,    Is.EqualTo(password));
                     Assert.That(actual[i].Size,        Is.EqualTo(expected[i].Size));
                     Assert.That(actual[i].IsDirectory, Is.EqualTo(expected[i].IsDirectory));
+                    Assert.That(actual[i].CreationTime.ToUniversalTime(),  Is.EqualTo(expected[i].CreationTime));
+                    Assert.That(actual[i].LastWriteTime.ToUniversalTime(), Is.EqualTo(expected[i].LastWriteTime));
+                }
+            }
+        }
 
-                    actual[i].Save(Results);
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract
+        ///
+        /// <summary>
+        /// 圧縮ファイルを展開するテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [TestCaseSource(nameof(Extract_TestCases))]
+        public void Extract(string filename, string password, IList<ExpectedItem> expected)
+        {
+            using (var archive = new SevenZip.ArchiveReader())
+            {
+                archive.Open(Example(filename), password);
+                var actual = archive.Items.ToList();
+                for (var i = 0; i < expected.Count; ++i)
+                {
+                    actual[i].Extract(Results);
                     var dest = Result(actual[i].Path);
                     var dir  = expected[i].IsDirectory;
                     Assert.That(Exists(dest, dir), Is.True);
@@ -75,14 +100,14 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Items_TestCases
+        /// Extract_TestCases
         ///
         /// <summary>
-        /// Items のテスト用データを取得します。
+        /// Items および Extract のテスト用データを取得します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public static IEnumerable<TestCaseData> Items_TestCases
+        public static IEnumerable<TestCaseData> Extract_TestCases
         {
             get
             {
@@ -90,30 +115,42 @@ namespace Cube.FileSystem.Tests
                 {
                     new ExpectedItem
                     {
-                        Path        = "Sample",
-                        Size        = 0,
-                        IsDirectory = true,
+                        Path          = "Sample",
+                        Extension     = string.Empty,
+                        Size          = 0,
+                        IsDirectory   = true,
+                        CreationTime  = new DateTime(636335461672026312L, DateTimeKind.Utc),
+                        LastWriteTime = new DateTime(636335461673382389L, DateTimeKind.Utc),
                     },
 
                     new ExpectedItem
                     {
-                        Path        = @"Sample\Bar.txt",
-                        Size        = 7816,
-                        IsDirectory = false,
+                        Path          = @"Sample\Bar.txt",
+                        Extension     = ".txt",
+                        Size          = 7816,
+                        IsDirectory   = false,
+                        CreationTime  = new DateTime(636329192793637655L, DateTimeKind.Utc),
+                        LastWriteTime = new DateTime(636329193340933256L, DateTimeKind.Utc),
                     },
 
                     new ExpectedItem
                     {
-                        Path        = @"Sample\Bas.txt",
-                        Size        = 0,
-                        IsDirectory = false,
+                        Path          = @"Sample\Bas.txt",
+                        Extension     = ".txt",
+                        Size          = 0,
+                        IsDirectory   = false,
+                        CreationTime  = new DateTime(636329193392193901L, DateTimeKind.Utc),
+                        LastWriteTime = new DateTime(636329193392193901L, DateTimeKind.Utc),
                     },
 
                     new ExpectedItem
                     {
-                        Path        = @"Sample\Foo.txt",
-                        Size        = 3,
-                        IsDirectory = false,
+                        Path          = @"Sample\Foo.txt",
+                        Extension     = ".txt",
+                        Size          = 3,
+                        IsDirectory   = false,
+                        CreationTime  = new DateTime(636329192793637655L, DateTimeKind.Utc),
+                        LastWriteTime = new DateTime(636329192889544731L, DateTimeKind.Utc),
                     },
                 });
 
@@ -121,24 +158,33 @@ namespace Cube.FileSystem.Tests
                 {
                     new ExpectedItem
                     {
-                        Path        = "Password",
-                        Size        = 0,
-                        IsDirectory = true,
-                    },
+                        Path          = "Password",
+                        Extension     = string.Empty,
+                        Size          = 0,
+                        IsDirectory   = true,
+                        CreationTime  = new DateTime(0L, DateTimeKind.Utc),
+                        LastWriteTime = new DateTime(636335462377258383L, DateTimeKind.Utc),
+                },
 
                     new ExpectedItem
                     {
-                        Path        = @"Password\Second.txt",
-                        Size        = 0,
-                        IsDirectory = false,
-                    },
+                        Path          = @"Password\Second.txt",
+                        Extension     = ".txt",
+                        Size          = 0,
+                        IsDirectory   = false,
+                        CreationTime  = new DateTime(0L, DateTimeKind.Utc),
+                        LastWriteTime = new DateTime(636335460490216213L, DateTimeKind.Utc),
+                  },
 
                     new ExpectedItem
                     {
-                        Path        = @"Password\First.txt",
-                        Size        = 26,
-                        IsDirectory = false,
-                    },
+                        Path          = @"Password\First.txt",
+                        Extension     = ".txt",
+                        Size          = 26,
+                        IsDirectory   = false,
+                        CreationTime  = new DateTime(0L, DateTimeKind.Utc),
+                        LastWriteTime = new DateTime(636335458772834750L, DateTimeKind.Utc),
+                  },
                 });
             }
         }
@@ -187,8 +233,12 @@ namespace Cube.FileSystem.Tests
         public class ExpectedItem
         {
             public string Path { get; set; }
+            public string Extension { get; set; }
             public ulong Size { get; set; }
             public bool IsDirectory { get; set; }
+            public DateTime CreationTime { get; set; }
+            public DateTime LastWriteTime { get; set; }
+            public DateTime LastAccessTime { get; set; }
         }
 
         #endregion
