@@ -46,14 +46,14 @@ namespace Cube.FileSystem.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(Archive_TestCases))]
-        public void Archive(string filename, long size, string[] items)
+        public void Archive(string filename, string password, long size, string[] items)
         {
             var dest = Result(filename);
 
             using (var writer = new SevenZip.ArchiveWriter(SevenZip.Format.Zip))
             {
                 foreach (var item in items) writer.Add(Example(item));
-                writer.Save(dest, string.Empty);
+                writer.Save(dest, password);
             }
 
             var info = new System.IO.FileInfo(dest);
@@ -74,20 +74,25 @@ namespace Cube.FileSystem.Tests
         {
             get
             {
-                yield return new TestCaseData("SingleFile.zip", 167L, new[]
+                yield return new TestCaseData("SingleFile.zip", "", 167L, new[]
                 {
                     "Sample.txt",
                 });
 
-                yield return new TestCaseData("SingleDirectory.zip", 488L, new[]
+                yield return new TestCaseData("SingleDirectory.zip", "", 488L, new[]
                 {
                     "Archive",
                 });
 
-                yield return new TestCaseData("FileAndDirectory.zip", 633L, new[]
+                yield return new TestCaseData("FileAndDirectory.zip", "", 633L, new[]
                 {
                     "Sample.txt",
                     "Archive",
+                });
+
+                yield return new TestCaseData("PasswordFile.zip", "password", 179L, new[]
+                {
+                    "Sample.txt",
                 });
             }
         }

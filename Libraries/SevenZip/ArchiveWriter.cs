@@ -111,7 +111,7 @@ namespace Cube.FileSystem.SevenZip
             using (var stream = new ArchiveStreamWriter(File.Create(path)))
             {
                 var raw = lib.GetOutArchive(Format);
-                var callback = new ArchiveUpdateCallback(_items);
+                var callback = new ArchiveUpdateCallback(_items) { Password = password };
                 raw.UpdateItems(stream, (uint)_items.Count, callback);
             }
         }
