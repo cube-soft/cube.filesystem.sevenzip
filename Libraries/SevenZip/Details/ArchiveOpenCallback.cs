@@ -29,7 +29,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal class ArchiveOpenCallback : IArchiveOpenCallback, ICryptoGetTextPassword
+    internal sealed class ArchiveOpenCallback : IArchiveOpenCallback, ICryptoGetTextPassword
     {
         #region Constructors
 
