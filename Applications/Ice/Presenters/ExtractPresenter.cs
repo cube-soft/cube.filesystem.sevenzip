@@ -54,12 +54,13 @@ namespace Cube.FileSystem.App.Ice
         {
             // View
             View.EventAggregator = EventAggregator;
+            View.FileName = System.IO.Path.GetFileName(model);
 
             // Model
             Model.PropertyChanged += WhenChanged;
 
             // EventAggregator
-            EventAggregator.GetEvents()?.Show.Subscribe(WhenLoad);
+            EventAggregator.GetEvents()?.Show.Subscribe(WhenShow);
         }
 
         #endregion
@@ -68,14 +69,19 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// WhenLoad
+        /// WhenShow
         /// 
         /// <summary>
-        /// ロード時に実行されるハンドラです。
+        /// 画面表示時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenLoad() => Async(() => Model.Start()).Forget();
+        private async void WhenShow()
+        {
+            Sync(() => View.Start());
+            await Async(() => Model.Start()).ConfigureAwait(false);
+            Sync(() => View.Stop());
+        }
 
         /* ----------------------------------------------------------------- */
         ///

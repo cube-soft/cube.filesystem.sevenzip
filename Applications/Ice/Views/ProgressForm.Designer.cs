@@ -61,13 +61,13 @@
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 48F));
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.RootPanel.Size = new System.Drawing.Size(434, 181);
+            this.RootPanel.Size = new System.Drawing.Size(434, 171);
             this.RootPanel.TabIndex = 0;
             // 
             // ExitButton
             // 
-            this.ExitButton.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.ExitButton.Location = new System.Drawing.Point(275, 141);
+            this.ExitButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.ExitButton.Location = new System.Drawing.Point(275, 129);
             this.ExitButton.Name = "ExitButton";
             this.ExitButton.Size = new System.Drawing.Size(100, 25);
             this.ExitButton.TabIndex = 6;
@@ -105,10 +105,11 @@
             this.MainProgressBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MainProgressBar.Location = new System.Drawing.Point(14, 33);
             this.MainProgressBar.Margin = new System.Windows.Forms.Padding(14, 3, 14, 3);
+            this.MainProgressBar.MarqueeAnimationSpeed = 50;
             this.MainProgressBar.Name = "MainProgressBar";
             this.MainProgressBar.Size = new System.Drawing.Size(406, 18);
             this.MainProgressBar.Step = 1;
-            this.MainProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.MainProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.MainProgressBar.TabIndex = 1;
             // 
             // ElapseLabel
@@ -137,9 +138,9 @@
             // 
             // InterruptButton
             // 
-            this.InterruptButton.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.InterruptButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.InterruptButton.Enabled = false;
-            this.InterruptButton.Location = new System.Drawing.Point(58, 141);
+            this.InterruptButton.Location = new System.Drawing.Point(58, 129);
             this.InterruptButton.Name = "InterruptButton";
             this.InterruptButton.Size = new System.Drawing.Size(100, 25);
             this.InterruptButton.TabIndex = 5;
@@ -149,14 +150,14 @@
             // ProgressForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(434, 181);
+            this.ClientSize = new System.Drawing.Size(434, 171);
             this.Controls.Add(this.RootPanel);
             this.Font = new System.Drawing.Font("Meiryo UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(128)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "ProgressForm";
-            this.Text = "CubeICE 解凍";
+            this.Text = "CubeICE";
             this.RootPanel.ResumeLayout(false);
             this.RootPanel.PerformLayout();
             this.ResumeLayout(false);

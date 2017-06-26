@@ -75,7 +75,13 @@ namespace Cube.FileSystem.App.Ice
             set
             {
                 if (MainProgressBar.Value == value) return;
+
+                MainProgressBar.Style = value > 0 ?
+                                        ProgressBarStyle.Continuous :
+                                        ProgressBarStyle.Marquee;
                 MainProgressBar.Value = value;
+
+                UpdateTitle();
             }
         }
 
@@ -116,6 +122,27 @@ namespace Cube.FileSystem.App.Ice
                 _doneCount = value;
 
                 UpdateFileCountLabel();
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// FileName
+        ///
+        /// <summary>
+        /// 対象とするファイル名を取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string FileName
+        {
+            get { return _fileName; }
+            set
+            {
+                if (_fileName == value) return;
+                _fileName = value;
+
+                UpdateTitle();
             }
         }
 
@@ -179,6 +206,40 @@ namespace Cube.FileSystem.App.Ice
 
         #endregion
 
+        #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Start
+        ///
+        /// <summary>
+        /// タイマーを開始します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Start()
+        {
+            _watch.Start();
+            _timer.Start();
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Stop
+        ///
+        /// <summary>
+        /// タイマーを停止します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Stop()
+        {
+            _timer.Stop();
+            _watch.Stop();
+        }
+
+        #endregion
+
         #region Implementations
 
         /* ----------------------------------------------------------------- */
@@ -197,10 +258,25 @@ namespace Cube.FileSystem.App.Ice
             UpdateFileCountLabel();
             UpdateElapseLabel();
 
-            _timer.Start();
-            _watch.Start();
-
             EventAggregator.GetEvents()?.Show.Publish();
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// UpdateTitle
+        ///
+        /// <summary>
+        /// タイトルバーの表記を更新します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void UpdateTitle()
+        {
+            var ss = new System.Text.StringBuilder();
+            ss.Append($"{Value}%");
+            if (!string.IsNullOrEmpty(FileName)) ss.Append($" - {FileName}");
+            ss.Append($" - {ProductName}");
+            Text = ss.ToString();
         }
 
         /* ----------------------------------------------------------------- */
@@ -240,6 +316,7 @@ namespace Cube.FileSystem.App.Ice
             => string.Format("{0:00}:{1:00}:{2:00}", src.TotalHours, src.Minutes, src.Seconds);
 
         #region Fields
+        private string _fileName = string.Empty;
         private long _doneCount = 0;
         private long _fileCount = 0;
         private Stopwatch _watch = new Stopwatch();
