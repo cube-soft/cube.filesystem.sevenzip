@@ -187,10 +187,11 @@ namespace Cube.FileSystem.SevenZip
             var dest = System.IO.Path.Combine(directory, Path);
             if (IsDirectory)
             {
-                if (!System.IO.Directory.Exists(dest)) System.IO.Directory.CreateDirectory(dest);
+                CreateDirectory(dest);
                 return;
             }
 
+            CreateDirectory(System.IO.Path.GetDirectoryName(dest));
             using(var stream = new ArchiveStreamWriter(System.IO.File.Create(dest)))
             {
                 var callback = new ArchiveExtractCallback(this, stream);
@@ -224,6 +225,20 @@ namespace Cube.FileSystem.SevenZip
             catch (Exception /* err */) { return default(T); }
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CreateDirectory
+        ///
+        /// <summary>
+        /// ディレクトリを生成します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void CreateDirectory(string path)
+        {
+            if (System.IO.Directory.Exists(path)) return;
+            System.IO.Directory.CreateDirectory(path);
+        }
 
         #region Fields
         private IInArchive _raw;
