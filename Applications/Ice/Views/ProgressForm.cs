@@ -32,7 +32,7 @@ namespace Cube.FileSystem.App.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class ProgressForm : Form
+    public partial class ProgressForm : Cube.Forms.FormBase, IProgressView
     {
         #region Constructors
 
@@ -105,7 +105,7 @@ namespace Cube.FileSystem.App.Ice
         /// FileCount
         ///
         /// <summary>
-        /// 処理対象ファイルの合計値を取得または設定します。
+        /// 処理対象ファイル数の合計を取得または設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */

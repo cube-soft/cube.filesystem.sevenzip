@@ -106,5 +106,14 @@ namespace Cube.FileSystem.App.Ice.Properties {
                 return ResourceManager.GetString("MessageRemainTime", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   β に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string VersionSuffix {
+            get {
+                return ResourceManager.GetString("VersionSuffix", resourceCulture);
+            }
+        }
     }
 }
