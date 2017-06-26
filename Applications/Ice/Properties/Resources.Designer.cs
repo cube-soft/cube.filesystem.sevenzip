@@ -99,6 +99,15 @@ namespace Cube.FileSystem.App.Ice.Properties {
         }
         
         /// <summary>
+        ///   ファイルを解凍する準備をしています... に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MessagePreExtract {
+            get {
+                return ResourceManager.GetString("MessagePreExtract", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   残り時間 約 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MessageRemainTime {

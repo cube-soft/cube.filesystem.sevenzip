@@ -16,7 +16,6 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System.ComponentModel;
-using Cube.Tasks;
 
 namespace Cube.FileSystem.App.Ice
 {
@@ -78,8 +77,14 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private async void WhenShow()
         {
-            Sync(() => View.Start());
+            Sync(() =>
+            {
+                View.Status = Properties.Resources.MessagePreExtract;
+                View.Start();
+            });
+
             await Async(() => Model.Start()).ConfigureAwait(false);
+
             Sync(() => View.Stop());
         }
 
