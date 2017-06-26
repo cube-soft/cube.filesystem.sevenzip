@@ -7,7 +7,7 @@
     <ProjectGuid>{E14092D2-266A-4CC7-B1CE-2ADD0CB8E65B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>Cube.FileSystem.App.Ice</RootNamespace>
-    <AssemblyName>Cube.FileSystem.App.Ice</AssemblyName>
+    <AssemblyName>CubeICE</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -106,6 +106,11 @@
     <None Include="Extract.ico" />
     <None Include="Archive.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\SevenZip\Cube.FileSystem.SevenZip.csproj">
+      <Project>{74c9f388-360e-4c46-a9a6-e131eab2e49c}</Project>
+      <Name>Cube.FileSystem.SevenZip</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

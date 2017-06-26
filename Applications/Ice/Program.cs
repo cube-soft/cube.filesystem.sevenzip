@@ -17,6 +17,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace Cube.FileSystem.App.Ice
@@ -44,9 +45,29 @@ namespace Cube.FileSystem.App.Ice
         [STAThread]
         static void Main(string[] args)
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ProgressForm());
+            var type = typeof(Program);
+
+            try
+            {
+                if (args.Length <= 0) return;
+
+                Cube.Log.Operations.Configure();
+                Cube.Log.Operations.ObserveTaskException();
+                Cube.Log.Operations.Info(type, Assembly.GetExecutingAssembly());
+
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+
+                var settings = new SettingsFolder();
+                var events = new EventAggregator();
+                var view = new ProgressForm();
+
+                using (var _ = new ExtractPresenter(view, args[0], settings, events))
+                {
+                    Application.Run(view);
+                }
+            }
+            catch (Exception err) { Cube.Log.Operations.Error(type, err.ToString()); }
         }
     }
 }

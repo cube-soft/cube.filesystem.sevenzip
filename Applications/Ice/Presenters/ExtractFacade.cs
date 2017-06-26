@@ -26,7 +26,7 @@ namespace Cube.FileSystem.App.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ExtractFacade
+    public class ExtractFacade : ObservableProperty
     {
         #region Constructors
 
@@ -73,6 +73,95 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         public string Destination { get; set; }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Current
+        /// 
+        /// <summary>
+        /// 現在処理中のファイルのパスを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Current
+        {
+            get { return _current; }
+            set { SetProperty(ref _current, value); }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// DoneSize
+        /// 
+        /// <summary>
+        /// 展開の終了したファイルサイズを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public long DoneSize
+        {
+            get { return _doneSize; }
+            private set { SetProperty(ref _doneSize, value); }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// FileSize
+        /// 
+        /// <summary>
+        /// 展開後のファイルサイズを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public long FileSize
+        {
+            get { return _fileSize; }
+            private set { SetProperty(ref _fileSize, value); }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// DoneCount
+        /// 
+        /// <summary>
+        /// 展開の終了したファイル数を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public long DoneCount
+        {
+            get { return _doneCount; }
+            set { SetProperty(ref _doneCount, value); }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// FileCount
+        /// 
+        /// <summary>
+        /// 展開後のファイル数を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public long FileCount
+        {
+            get { return _fileCount; }
+            set { SetProperty(ref _fileCount, value); }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Percentage
+        /// 
+        /// <summary>
+        /// 進捗率を示す値をパーセント単位で取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public int Percentage =>
+            FileSize > 0 ?
+            (int)(DoneSize / (double)FileSize * 100.0) :
+            0;
+
         #endregion
 
         #region Methods
@@ -88,8 +177,65 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         public void Start()
         {
-
+            using (var reader = new SevenZip.ArchiveReader())
+            {
+                reader.Open(Source, string.Empty);
+                Calculate(reader);
+                Extract(reader);
+            }
         }
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Calculate
+        /// 
+        /// <summary>
+        /// 展開後のファイル数およびファイルサイズを計算します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Calculate(SevenZip.ArchiveReader reader)
+        {
+            FileCount = reader.Items.Count;
+
+            var size = 0L;
+            foreach (var item in reader.Items) size += item.Size;
+            FileSize = size;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract
+        /// 
+        /// <summary>
+        /// ファイルを展開します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Extract(SevenZip.ArchiveReader reader)
+        {
+            foreach (var item in reader.Items)
+            {
+                Current = item.Path;
+
+                item.Extract(Destination);
+
+                DoneCount++;
+                DoneSize += item.Size;
+            }
+        }
+
+        #region Fields
+        private string _current = string.Empty;
+        private long _doneSize = 0;
+        private long _fileSize = 0;
+        private long _doneCount = 0;
+        private long _fileCount = 0;
+        #endregion
 
         #endregion
     }

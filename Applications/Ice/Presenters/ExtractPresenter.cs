@@ -15,6 +15,9 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System.ComponentModel;
+using Cube.Tasks;
+
 namespace Cube.FileSystem.App.Ice
 {
     /* --------------------------------------------------------------------- */
@@ -49,7 +52,57 @@ namespace Cube.FileSystem.App.Ice
             SettingsFolder settings, IEventAggregator events)
             : base(view, new ExtractFacade(model), settings, events)
         {
+            // View
+            View.EventAggregator = EventAggregator;
 
+            // Model
+            Model.PropertyChanged += WhenChanged;
+
+            // EventAggregator
+            EventAggregator.GetEvents()?.Show.Subscribe(WhenLoad);
+        }
+
+        #endregion
+
+        #region Handlers
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenLoad
+        /// 
+        /// <summary>
+        /// ロード時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenLoad() => Async(() => Model.Start()).Forget();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenChanged
+        /// 
+        /// <summary>
+        /// Model のプロパティが変更された時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(Model.Current):
+                    Sync(() => View.Status = Model.Current);
+                    break;
+                case nameof(Model.FileCount):
+                    Sync(() => View.FileCount = Model.FileCount);
+                    break;
+                case nameof(Model.DoneCount):
+                    Sync(() => View.DoneCount = Model.DoneCount);
+                    break;
+                case nameof(Model.DoneSize):
+                    Sync(() => View.Value = Model.Percentage);
+                    break;
+            }
         }
 
         #endregion

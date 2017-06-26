@@ -81,20 +81,39 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// FileIndex
+        /// Status
         ///
         /// <summary>
-        /// 現在処理中のファイルのインデックスを取得または設定します。
+        /// 現在の状況を表す文字列を取得または設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public int FileIndex
+        public string Status
         {
-            get { return _fileIndex; }
+            get { return StatusLabel.Text; }
             set
             {
-                if (_fileIndex == value) return;
-                _fileIndex = value;
+                if (StatusLabel.Text == value) return;
+                StatusLabel.Text = value;
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// DoneCount
+        ///
+        /// <summary>
+        /// 処理を終了したファイル数を取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public long DoneCount
+        {
+            get { return _doneCount; }
+            set
+            {
+                if (_doneCount == value) return;
+                _doneCount = value;
 
                 UpdateFileCountLabel();
             }
@@ -109,7 +128,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public int FileCount
+        public long FileCount
         {
             get { return _fileCount; }
             set
@@ -164,10 +183,10 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OnShown
+        /// OnLoad
         ///
         /// <summary>
-        /// 初回表示時に実行されます。
+        /// ロード時に実行されます。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -180,6 +199,8 @@ namespace Cube.FileSystem.App.Ice
 
             _timer.Start();
             _watch.Start();
+
+            EventAggregator.GetEvents()?.Show.Publish();
         }
 
         /* ----------------------------------------------------------------- */
@@ -192,7 +213,7 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         private void UpdateFileCountLabel()
-            => FileCountLabel.Text = $"{Properties.Resources.MessageFileCount} {FileIndex} / {FileCount}";
+            => FileCountLabel.Text = $"{Properties.Resources.MessageFileCount} {DoneCount} / {FileCount}";
 
         /* ----------------------------------------------------------------- */
         ///
@@ -219,8 +240,8 @@ namespace Cube.FileSystem.App.Ice
             => string.Format("{0:00}:{1:00}:{2:00}", src.TotalHours, src.Minutes, src.Seconds);
 
         #region Fields
-        private int _fileIndex = 0;
-        private int _fileCount = 0;
+        private long _doneCount = 0;
+        private long _fileCount = 0;
         private Stopwatch _watch = new Stopwatch();
         private Timer _timer = new Timer();
         private TimeSpan _remain = TimeSpan.Zero;
