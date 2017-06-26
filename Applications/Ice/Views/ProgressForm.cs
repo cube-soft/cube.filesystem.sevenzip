@@ -200,7 +200,7 @@ namespace Cube.FileSystem.App.Ice
                 _remain = value;
 
                 RemainLabel.Visible = value >= TimeSpan.Zero;
-                RemainLabel.Text = $"{Properties.Resources.MessageRemainTime} {GetTimeString(value)}";
+                RemainLabel.Text = $"{Properties.Resources.MessageRemainTime} : {GetTimeString(value)}";
             }
         }
 
@@ -289,7 +289,7 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         private void UpdateFileCountLabel()
-            => FileCountLabel.Text = $"{Properties.Resources.MessageFileCount}  {DoneCount:#,0} / {FileCount:#,0}";
+            => FileCountLabel.Text = $"{Properties.Resources.MessageFileCount} : {DoneCount:#,0} / {FileCount:#,0}";
 
         /* ----------------------------------------------------------------- */
         ///
@@ -301,7 +301,7 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         private void UpdateElapseLabel()
-            => ElapseLabel.Text = $"{Properties.Resources.MessageElapsedTime} {GetTimeString(Elapsed)}";
+            => ElapseLabel.Text = $"{Properties.Resources.MessageElapsedTime} : {GetTimeString(Elapsed)}";
 
         /* ----------------------------------------------------------------- */
         ///

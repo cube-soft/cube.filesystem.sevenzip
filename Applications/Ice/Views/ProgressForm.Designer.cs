@@ -83,7 +83,7 @@
             this.RemainLabel.Name = "RemainLabel";
             this.RemainLabel.Size = new System.Drawing.Size(193, 18);
             this.RemainLabel.TabIndex = 3;
-            this.RemainLabel.Text = "残り時間 約 23:55:55";
+            this.RemainLabel.Text = "残り時間 : 約 23:55:55";
             this.RemainLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // FileCountLabel
@@ -96,7 +96,7 @@
             this.FileCountLabel.Name = "FileCountLabel";
             this.FileCountLabel.Size = new System.Drawing.Size(410, 24);
             this.FileCountLabel.TabIndex = 0;
-            this.FileCountLabel.Text = "ファイル数 669 / 796";
+            this.FileCountLabel.Text = "ファイル数 : 669 / 796";
             this.FileCountLabel.TextAlign = System.Drawing.ContentAlignment.BottomRight;
             // 
             // MainProgressBar
@@ -121,7 +121,7 @@
             this.ElapseLabel.Name = "ElapseLabel";
             this.ElapseLabel.Size = new System.Drawing.Size(193, 18);
             this.ElapseLabel.TabIndex = 2;
-            this.ElapseLabel.Text = "経過時間 23:55:55";
+            this.ElapseLabel.Text = "経過時間 : 23:55:55";
             // 
             // StatusLabel
             // 
@@ -155,6 +155,7 @@
             this.Font = new System.Drawing.Font("Meiryo UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(128)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Location = new System.Drawing.Point(0, 0);
             this.MaximizeBox = false;
             this.Name = "ProgressForm";
             this.Text = "CubeICE";
