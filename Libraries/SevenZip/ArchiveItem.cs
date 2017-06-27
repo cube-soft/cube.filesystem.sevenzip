@@ -169,6 +169,37 @@ namespace Cube.FileSystem.SevenZip
 
         #endregion
 
+        #region Events
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Progress
+        ///
+        /// <summary>
+        /// 進捗状況の通知時に発生するイベントです。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// 通知される値は、展開の完了したバイト数です。
+        /// </remarks>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public ValueEventHandler<long> Progress;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OnProgress
+        ///
+        /// <summary>
+        /// Progress イベントを発生させます。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        protected virtual void OnProgress(ValueEventArgs<long> e)
+            => Progress?.Invoke(this, e);
+
+        #endregion
+
         #region Methods
 
         /* ----------------------------------------------------------------- */
@@ -195,7 +226,9 @@ namespace Cube.FileSystem.SevenZip
             using(var stream = new ArchiveStreamWriter(System.IO.File.Create(dest)))
             {
                 var callback = new ArchiveExtractCallback(this, stream);
+                callback.Progress += RaiseProgress;
                 _raw.Extract(new[] { (uint)Index }, 1, 0, callback);
+                callback.Progress -= RaiseProgress;
             }
         }
 
@@ -239,6 +272,18 @@ namespace Cube.FileSystem.SevenZip
             if (System.IO.Directory.Exists(path)) return;
             System.IO.Directory.CreateDirectory(path);
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// RaiseProgress
+        ///
+        /// <summary>
+        /// Progress イベントを発生させます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void RaiseProgress(object sender, ValueEventArgs<long> e)
+            => OnProgress(e);
 
         #region Fields
         private IInArchive _raw;

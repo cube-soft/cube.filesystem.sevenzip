@@ -16,6 +16,8 @@
 /// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ///
 /* ------------------------------------------------------------------------- */
+using System;
+
 namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
@@ -74,6 +76,21 @@ namespace Cube.FileSystem.SevenZip
 
         #endregion
 
+        #region Events
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Progress
+        ///
+        /// <summary>
+        /// 進捗状況を通知する時に発生するイベントです。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public ValueEventHandler<long> Progress;
+
+        #endregion
+
         #region Methods
 
         #region ICryptoGetTextPassword
@@ -106,28 +123,39 @@ namespace Cube.FileSystem.SevenZip
         /// SetTotal
         /// 
         /// <summary>
-        /// Gives the size of the unpacked archive files
+        /// 展開後のバイト数を通知します。
         /// </summary>
         /// 
-        /// <param name="total">
-        /// Size of the unpacked archive files (bytes)
-        /// </param>
+        /// <param name="total">展開後のバイト数</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public void SetTotal(ulong total) { }
+        public void SetTotal(ulong total) => _hack = Math.Max((long)total - Source.Size, 0);
 
         /* ----------------------------------------------------------------- */
         ///
         /// SetCompleted
         /// 
         /// <summary>
-        /// SetCompleted 7-zip function
+        /// 展開の完了したバイトサイズを通知します。
         /// </summary>
         /// 
-        /// <param name="value">completed value</param>
+        /// <param name="value">展開の完了したバイト数</param>
+        /// 
+        /// <remarks>
+        /// IInArchive.Extract を複数回実行する場合、SetTotal および
+        /// SetCompleted で取得できる値が Format によって異なります。
+        /// 例えば、zip の場合は毎回 Extract に指定したファイルのバイト数を
+        /// 表しますが、7z の場合はそれまでに Extract で展開した累積
+        /// バイト数となります。ArchiveExtractCallback では Format 毎の
+        /// 違いをなくすために正規化しています。
+        /// </remarks>
         /// 
         /* ----------------------------------------------------------------- */
-        public void SetCompleted(ref ulong value) { }
+        public void SetCompleted(ref ulong value)
+        {
+            var cvt = Math.Max((long)value - _hack, 0);
+            Progress?.Invoke(this, ValueEventArgs.Create(cvt));
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -178,6 +206,10 @@ namespace Cube.FileSystem.SevenZip
 
         #endregion
 
+        #endregion
+
+        #region Fields
+        private long _hack = 0;
         #endregion
     }
 }
