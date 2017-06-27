@@ -731,11 +731,11 @@ namespace Cube.FileSystem.SevenZip
         /// Gets archive property data
         /// </summary>
         /// 
-        /// <param name="pid">Property Id</param>
+        /// <param name="aid">Archive property ID</param>
         /// <param name="value">Property value</param>
         /// 
         /* ----------------------------------------------------------------- */
-        void GetArchiveProperty(ItemPropId pid, ref PropVariant value);
+        void GetArchiveProperty(ArchivePropId aid, ref PropVariant value);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -772,10 +772,15 @@ namespace Cube.FileSystem.SevenZip
         );
 
         /* ----------------------------------------------------------------- */
+        ///
+        /// GetNumberOfArchiveProperties
+        /// 
         /// <summary>
         /// Gets the number of archive properties
         /// </summary>
+        /// 
         /// <returns>The number of archive properties</returns>
+        /// 
         /* ----------------------------------------------------------------- */
         uint GetNumberOfArchiveProperties();
 
