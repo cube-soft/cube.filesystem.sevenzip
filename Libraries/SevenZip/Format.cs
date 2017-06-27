@@ -177,7 +177,6 @@ namespace Cube.FileSystem.SevenZip
 
         #region Fields
         private static IDictionary<string, Format> _ext;
-        private static IDictionary<Format, Guid> _guid;
         #endregion
     }
 }
