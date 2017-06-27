@@ -46,9 +46,15 @@ namespace Cube.FileSystem.SevenZip
     internal enum OperationResult
     {
         OK = 0,
-        UnSupportedMethod,
+        UnsupportedMethod,
         DataError,
         CrcError,
+        Unavailable,
+        UnexpectedEnd,
+        DataAfterEnd,
+        IsNotArc,
+        HeadersError,
+        WrongPassword
     }
 
     /* --------------------------------------------------------------------- */
