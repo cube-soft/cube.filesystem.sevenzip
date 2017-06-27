@@ -124,6 +124,9 @@
   <data name="Extract" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Extract.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="MessageDoneExtract" xml:space="preserve">
+    <value>圧縮ファイルを {0} に解凍しました。</value>
+  </data>
   <data name="MessageElapsedTime" xml:space="preserve">
     <value>経過時間</value>
   </data>

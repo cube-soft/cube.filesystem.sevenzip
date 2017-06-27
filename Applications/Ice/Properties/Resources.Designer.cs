@@ -81,6 +81,15 @@ namespace Cube.FileSystem.App.Ice.Properties {
         }
         
         /// <summary>
+        ///   圧縮ファイルを {0} に解凍しました。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MessageDoneExtract {
+            get {
+                return ResourceManager.GetString("MessageDoneExtract", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   経過時間 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MessageElapsedTime {

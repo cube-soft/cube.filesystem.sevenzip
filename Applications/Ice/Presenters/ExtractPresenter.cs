@@ -86,7 +86,11 @@ namespace Cube.FileSystem.App.Ice
 
             await Async(() => Model.Start()).ConfigureAwait(false);
 
-            Sync(() => View.Stop());
+            Sync(() =>
+            {
+                View.Stop();
+                View.Status = string.Format(Properties.Resources.MessageDoneExtract, Model.Destination);
+            });
         }
 
         /* ----------------------------------------------------------------- */
