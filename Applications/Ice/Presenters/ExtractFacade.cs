@@ -207,6 +207,8 @@ namespace Cube.FileSystem.App.Ice
             var size = 0L;
             foreach (var item in reader.Items) size += item.Size;
             FileSize = size;
+
+            this.LogDebug($"Count:{FileCount:#,0}\tSize:{FileSize:#,0}\tPath:{Source}");
         }
 
         /* ----------------------------------------------------------------- */
