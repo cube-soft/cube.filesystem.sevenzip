@@ -72,6 +72,22 @@ namespace Cube.FileSystem.SevenZip
         /// 圧縮ファイルを開きます。
         /// </summary>
         /// 
+        /// <param name="path">圧縮ファイルのパス</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void Open(string path) => Open(path, string.Empty);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Open
+        ///
+        /// <summary>
+        /// 圧縮ファイルを開きます。
+        /// </summary>
+        /// 
+        /// <param name="path">圧縮ファイルのパス</param>
+        /// <param name="password">パスワード</param>
+        /// 
         /* ----------------------------------------------------------------- */
         public void Open(string path, string password)
         {
@@ -86,7 +102,7 @@ namespace Cube.FileSystem.SevenZip
             _raw    = _lib.GetInArchive(fmt);
             _raw.Open(_stream, ref pos, new ArchiveOpenCallback(password));
 
-            Items = new ReadOnlyArchiveCollection(_raw) { Password = password };
+            Items = new ReadOnlyArchiveCollection(_raw);
         }
 
         #region IDisposable

@@ -67,17 +67,6 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int Count => (int)_raw.GetNumberOfItems();
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Password
-        ///
-        /// <summary>
-        /// 圧縮ファイルのパスワードを取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Password { get; set; }
-
         #endregion
 
         #region Methods
@@ -95,7 +84,7 @@ namespace Cube.FileSystem.SevenZip
         {
             for (var i = 0; i < Count; ++i)
             {
-                yield return new ArchiveItem(_raw, i, Password);
+                yield return new ArchiveItem(_raw, i);
             }
         }
 

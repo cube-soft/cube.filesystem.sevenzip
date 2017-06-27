@@ -62,7 +62,6 @@ namespace Cube.FileSystem.Tests
                     Assert.That(actual[i].Index,       Is.EqualTo(i));
                     Assert.That(actual[i].Path,        Is.EqualTo(expected[i].Path));
                     Assert.That(actual[i].Extension,   Is.EqualTo(expected[i].Extension));
-                    Assert.That(actual[i].Password,    Is.EqualTo(password));
                     Assert.That(actual[i].Size,        Is.EqualTo(expected[i].Size));
                     Assert.That(actual[i].IsDirectory, Is.EqualTo(expected[i].IsDirectory));
                     Assert.That(actual[i].CreationTime.ToUniversalTime(),  Is.EqualTo(expected[i].CreationTime));
@@ -85,11 +84,11 @@ namespace Cube.FileSystem.Tests
         {
             using (var archive = new SevenZip.ArchiveReader())
             {
-                archive.Open(Example(filename), password);
+                archive.Open(Example(filename));
                 var actual = archive.Items.ToList();
                 for (var i = 0; i < expected.Count; ++i)
                 {
-                    actual[i].Extract(Results);
+                    actual[i].Extract(Results, password);
                     var dest = Result(actual[i].Path);
                     var dir  = expected[i].IsDirectory;
                     Assert.That(Exists(dest, dir), Is.True);

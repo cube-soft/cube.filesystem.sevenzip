@@ -181,7 +181,7 @@ namespace Cube.FileSystem.App.Ice
         {
             using (var reader = new SevenZip.ArchiveReader())
             {
-                reader.Open(Source, string.Empty);
+                reader.Open(Source);
                 Calculate(reader);
                 Extract(reader);
             }

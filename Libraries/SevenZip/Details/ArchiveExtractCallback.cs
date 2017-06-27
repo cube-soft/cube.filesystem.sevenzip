@@ -42,9 +42,10 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public ArchiveExtractCallback(ArchiveItem src, ISequentialOutStream dest)
+        public ArchiveExtractCallback(ArchiveItem src, string password, ISequentialOutStream dest)
         {
-            Source = src;
+            Source      = src;
+            Password    = password;
             Destination = dest;
         }
 
@@ -62,6 +63,17 @@ namespace Cube.FileSystem.SevenZip
         /// 
         /* ----------------------------------------------------------------- */
         public ArchiveItem Source { get; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Password
+        ///
+        /// <summary>
+        /// 圧縮ファイルのパスワードを取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public string Password { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -110,7 +122,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int CryptoGetTextPassword(out string password)
         {
-            password = Source.Password;
+            password = Password;
             return 0;
         }
 

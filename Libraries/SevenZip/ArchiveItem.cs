@@ -41,16 +41,14 @@ namespace Cube.FileSystem.SevenZip
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
-        /// <param name="obj">生データ</param>
+        /// <param name="obj">実装オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveItem(object obj, int index, string password)
+        public ArchiveItem(object obj, int index)
         {
+            Index = index;
             if (obj is IInArchive raw) _raw = raw;
             else throw new ArgumentException("invalid object");
-
-            Index = index;
-            Password = password;
         }
 
         #endregion
@@ -89,17 +87,6 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public string Extension => System.IO.Path.GetExtension(Path);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Password
-        ///
-        /// <summary>
-        /// パスワードを取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Password { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -213,7 +200,21 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="directory">保存するディレクトリ</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Extract(string directory)
+        public void Extract(string directory) => Extract(directory, string.Empty);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract
+        ///
+        /// <summary>
+        /// 展開した内容を保存します。
+        /// </summary>
+        /// 
+        /// <param name="directory">保存するディレクトリ</param>
+        /// <param name="password">パスワード</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Extract(string directory, string password)
         {
             var dest = System.IO.Path.Combine(directory, Path);
             if (IsDirectory)
@@ -225,7 +226,7 @@ namespace Cube.FileSystem.SevenZip
             CreateDirectory(System.IO.Path.GetDirectoryName(dest));
             using(var stream = new ArchiveStreamWriter(System.IO.File.Create(dest)))
             {
-                var callback = new ArchiveExtractCallback(this, stream);
+                var callback = new ArchiveExtractCallback(this, password, stream);
                 callback.Progress += RaiseProgress;
                 _raw.Extract(new[] { (uint)Index }, 1, 0, callback);
                 callback.Progress -= RaiseProgress;
