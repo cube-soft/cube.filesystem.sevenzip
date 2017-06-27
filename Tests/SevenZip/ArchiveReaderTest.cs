@@ -63,6 +63,7 @@ namespace Cube.FileSystem.Tests
                     Assert.That(actual[i].Path,        Is.EqualTo(expected[i].Path));
                     Assert.That(actual[i].Extension,   Is.EqualTo(expected[i].Extension));
                     Assert.That(actual[i].Size,        Is.EqualTo(expected[i].Size));
+                    Assert.That(actual[i].Encrypted,   Is.EqualTo(expected[i].Encrypted));
                     Assert.That(actual[i].IsDirectory, Is.EqualTo(expected[i].IsDirectory));
                     Assert.That(actual[i].CreationTime.ToUniversalTime(),  Is.EqualTo(expected[i].CreationTime));
                     Assert.That(actual[i].LastWriteTime.ToUniversalTime(), Is.EqualTo(expected[i].LastWriteTime));
@@ -117,6 +118,7 @@ namespace Cube.FileSystem.Tests
                         Path          = "Sample",
                         Extension     = string.Empty,
                         Size          = 0,
+                        Encrypted     = false,
                         IsDirectory   = true,
                         CreationTime  = new DateTime(636335461672026312L, DateTimeKind.Utc),
                         LastWriteTime = new DateTime(636335461673382389L, DateTimeKind.Utc),
@@ -127,6 +129,7 @@ namespace Cube.FileSystem.Tests
                         Path          = @"Sample\Bar.txt",
                         Extension     = ".txt",
                         Size          = 7816,
+                        Encrypted     = false,
                         IsDirectory   = false,
                         CreationTime  = new DateTime(636329192793637655L, DateTimeKind.Utc),
                         LastWriteTime = new DateTime(636329193340933256L, DateTimeKind.Utc),
@@ -137,6 +140,7 @@ namespace Cube.FileSystem.Tests
                         Path          = @"Sample\Bas.txt",
                         Extension     = ".txt",
                         Size          = 0,
+                        Encrypted     = false,
                         IsDirectory   = false,
                         CreationTime  = new DateTime(636329193392193901L, DateTimeKind.Utc),
                         LastWriteTime = new DateTime(636329193392193901L, DateTimeKind.Utc),
@@ -147,6 +151,7 @@ namespace Cube.FileSystem.Tests
                         Path          = @"Sample\Foo.txt",
                         Extension     = ".txt",
                         Size          = 3,
+                        Encrypted     = false,
                         IsDirectory   = false,
                         CreationTime  = new DateTime(636329192793637655L, DateTimeKind.Utc),
                         LastWriteTime = new DateTime(636329192889544731L, DateTimeKind.Utc),
@@ -160,6 +165,7 @@ namespace Cube.FileSystem.Tests
                         Path          = "Password",
                         Extension     = string.Empty,
                         Size          = 0,
+                        Encrypted     = false,
                         IsDirectory   = true,
                         CreationTime  = new DateTime(0L, DateTimeKind.Utc),
                         LastWriteTime = new DateTime(636335462377258383L, DateTimeKind.Utc),
@@ -170,6 +176,7 @@ namespace Cube.FileSystem.Tests
                         Path          = @"Password\Second.txt",
                         Extension     = ".txt",
                         Size          = 0,
+                        Encrypted     = false,
                         IsDirectory   = false,
                         CreationTime  = new DateTime(0L, DateTimeKind.Utc),
                         LastWriteTime = new DateTime(636335460490216213L, DateTimeKind.Utc),
@@ -180,6 +187,7 @@ namespace Cube.FileSystem.Tests
                         Path          = @"Password\First.txt",
                         Extension     = ".txt",
                         Size          = 26,
+                        Encrypted     = true,
                         IsDirectory   = false,
                         CreationTime  = new DateTime(0L, DateTimeKind.Utc),
                         LastWriteTime = new DateTime(636335458772834750L, DateTimeKind.Utc),
@@ -234,6 +242,7 @@ namespace Cube.FileSystem.Tests
             public string Path { get; set; }
             public string Extension { get; set; }
             public ulong Size { get; set; }
+            public bool Encrypted { get; set; }
             public bool IsDirectory { get; set; }
             public DateTime CreationTime { get; set; }
             public DateTime LastWriteTime { get; set; }
