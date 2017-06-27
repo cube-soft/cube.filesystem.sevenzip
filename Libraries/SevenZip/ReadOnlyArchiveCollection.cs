@@ -43,14 +43,13 @@ namespace Cube.FileSystem.SevenZip
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
-        /// <param name="obj">生データ</param>
+        /// <param name="obj">実装オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ReadOnlyArchiveCollection(object obj, string password)
+        public ReadOnlyArchiveCollection(object obj)
         {
             if (obj is IInArchive raw) _raw = raw;
             else throw new ArgumentException("invalid object");
-            Password = password;
         }
 
         #endregion
@@ -73,11 +72,11 @@ namespace Cube.FileSystem.SevenZip
         /// Password
         ///
         /// <summary>
-        /// 圧縮ファイルのパスワードを取得します。
+        /// 圧縮ファイルのパスワードを取得または設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Password { get; }
+        public string Password { get; set; }
 
         #endregion
 

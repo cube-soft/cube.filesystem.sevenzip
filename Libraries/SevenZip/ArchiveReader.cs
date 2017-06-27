@@ -82,11 +82,11 @@ namespace Cube.FileSystem.SevenZip
             var pos = 32UL * 1024;
 
             _lib    = new NativeLibrary();
-            _stream = new ArchiveStreamReader(System.IO.File.Open(path, System.IO.FileMode.Open));
+            _stream = new ArchiveStreamReader(System.IO.File.OpenRead(path));
             _raw    = _lib.GetInArchive(fmt);
             _raw.Open(_stream, ref pos, new ArchiveOpenCallback(password));
 
-            Items = new ReadOnlyArchiveCollection(_raw, password);
+            Items = new ReadOnlyArchiveCollection(_raw) { Password = password };
         }
 
         #region IDisposable
