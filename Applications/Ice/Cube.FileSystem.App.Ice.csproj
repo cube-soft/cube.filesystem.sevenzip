@@ -66,9 +66,7 @@
     <Compile Include="Presenters\ExtractFacade.cs" />
     <Compile Include="Presenters\ExtractPresenter.cs" />
     <Compile Include="Views\IProgressView.cs" />
-    <Compile Include="Views\ProgressForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Views\ProgressForm.cs" />
     <Compile Include="Views\ProgressForm.Designer.cs">
       <DependentUpon>ProgressForm.cs</DependentUpon>
     </Compile>
