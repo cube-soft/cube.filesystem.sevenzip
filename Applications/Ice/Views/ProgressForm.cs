@@ -79,7 +79,10 @@ namespace Cube.FileSystem.App.Ice
                 MainProgressBar.Style = value > 0 ?
                                         ProgressBarStyle.Continuous :
                                         ProgressBarStyle.Marquee;
-                MainProgressBar.Value = value;
+
+                var min = MainProgressBar.Minimum;
+                var max = MainProgressBar.Maximum;
+                MainProgressBar.Value = Math.Min(Math.Max(value, min), max);
 
                 UpdateTitle();
             }

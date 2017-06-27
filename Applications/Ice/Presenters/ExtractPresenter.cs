@@ -15,6 +15,7 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System;
 using System.ComponentModel;
 
 namespace Cube.FileSystem.App.Ice
@@ -111,7 +112,7 @@ namespace Cube.FileSystem.App.Ice
                     Sync(() => View.DoneCount = Model.DoneCount);
                     break;
                 case nameof(Model.DoneSize):
-                    Sync(() => View.Value = Model.Percentage);
+                    Sync(() => View.Value = Math.Max(Model.Percentage, 1));
                     break;
             }
         }

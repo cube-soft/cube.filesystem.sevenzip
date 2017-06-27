@@ -15,6 +15,8 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using Cube.Log;
+
 namespace Cube.FileSystem.App.Ice
 {
     /* --------------------------------------------------------------------- */
@@ -218,15 +220,31 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void Extract(SevenZip.ArchiveReader reader)
         {
-            foreach (var item in reader.Items)
+            foreach (var item in reader.Items) Extract(item);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract
+        /// 
+        /// <summary>
+        /// ファイルを展開します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Extract(SevenZip.ArchiveItem src)
+        {
+            var done = DoneSize;
+            ValueEventHandler<long> handler = (s, e) => DoneSize = done + e.Value;
+
+            try
             {
-                Current = item.Path;
-
-                item.Extract(Destination);
-
+                Current = src.Path;
+                src.Progress += handler;
+                src.Extract(Destination);
                 DoneCount++;
-                DoneSize += item.Size;
             }
+            finally { src.Progress -= handler; }
         }
 
         #region Fields
