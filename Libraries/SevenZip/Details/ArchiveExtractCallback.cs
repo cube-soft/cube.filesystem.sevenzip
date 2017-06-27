@@ -86,6 +86,17 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public ISequentialOutStream Destination { get; }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Result
+        ///
+        /// <summary>
+        /// 処理結果を示す値を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public OperationResult Result { get; private set; }
+
         #endregion
 
         #region Events
@@ -174,12 +185,12 @@ namespace Cube.FileSystem.SevenZip
         /// GetStream
         /// 
         /// <summary>
-        /// Gets the stream for file extraction
+        /// 展開した内容を保存するためのストリームを取得します。
         /// </summary>
         /// 
-        /// <param name="index">Index in the archive file table</param>
-        /// <param name="stream">Pointer to the stream</param>
-        /// <param name="mode">Extraction mode</param>
+        /// <param name="index">圧縮ファイル中のインデックス</param>
+        /// <param name="stream">出力ストリーム</param>
+        /// <param name="mode">展開モード</param>
         /// 
         /// <returns>0 (ゼロ)</returns>
         /// 
@@ -195,10 +206,10 @@ namespace Cube.FileSystem.SevenZip
         /// PrepareOperation
         /// 
         /// <summary>
-        /// PrepareOperation 7-zip function
+        /// 展開処理の直前に実行されます。
         /// </summary>
         /// 
-        /// <param name="mode">Ask extract mode</param>
+        /// <param name="mode">展開モード</param>
         ///
         /* ----------------------------------------------------------------- */
         public void PrepareOperation(AskMode mode) { }
@@ -208,13 +219,13 @@ namespace Cube.FileSystem.SevenZip
         /// SetOperationResult
         ///
         /// <summary>
-        /// Sets the operaton result
+        /// 処理結果を通知します。
         /// </summary>
         /// 
-        /// <param name="result">The operation result</param>
+        /// <param name="result">処理結果</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public void SetOperationResult(OperationResult result) { }
+        public void SetOperationResult(OperationResult result) => Result = result;
 
         #endregion
 

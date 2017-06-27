@@ -100,6 +100,27 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Extract_Throws
+        ///
+        /// <summary>
+        /// 暗号化されたファイルの展開に失敗するテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Extract_Throws()
+            => Assert.That(() =>
+            {
+                using (var archive = new SevenZip.ArchiveReader())
+                {
+                    archive.Open(Example("Password.7z"));
+                    foreach (var item in archive.Items) item.Extract(Results);
+                }
+            },
+            Throws.TypeOf<SevenZip.EncryptionException>());
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Extract_TestCases
         ///
         /// <summary>

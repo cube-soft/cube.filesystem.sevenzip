@@ -169,6 +169,8 @@ namespace Cube.FileSystem.SevenZip
 
         #region Events
 
+        #region Progress
+
         /* ----------------------------------------------------------------- */
         ///
         /// Progress
@@ -195,6 +197,43 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         protected virtual void OnProgress(ValueEventArgs<long> e)
             => Progress?.Invoke(this, e);
+
+        #endregion
+
+        #region PasswordRequired
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// PasswordRequired
+        /// 
+        /// <summary>
+        /// パスワードが要求された時に発生するイベントです。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// PasswordRequired イベントに対してイベントハンドラが登録されて
+        /// いない場合、EncryptionException が送出されます。
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        public event QueryEventHandler<string, string> PasswordRequired;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OnPasswordRequired
+        /// 
+        /// <summary>
+        /// PasswordRequired イベントを発生させます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected virtual void OnPasswordRequired(QueryEventArgs<string, string> e)
+        {
+            if (PasswordRequired != null) PasswordRequired(this, e);
+            else throw new EncryptionException(e.Query);
+        }
+
+        #endregion
 
         #endregion
 
@@ -227,26 +266,83 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void Extract(string directory, string password)
         {
-            var dest = System.IO.Path.Combine(directory, Path);
-            if (IsDirectory)
-            {
-                CreateDirectory(dest);
-                return;
-            }
-
-            CreateDirectory(System.IO.Path.GetDirectoryName(dest));
-            using(var stream = new ArchiveStreamWriter(System.IO.File.Create(dest)))
-            {
-                var callback = new ArchiveExtractCallback(this, password, stream);
-                callback.Progress += RaiseProgress;
-                _raw.Extract(new[] { (uint)Index }, 1, 0, callback);
-                callback.Progress -= RaiseProgress;
-            }
+            if (IsDirectory) CreateDirectory(System.IO.Path.Combine(directory, Path));
+            else ExtractFile(directory, password);
         }
 
         #endregion
 
         #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ExtractFile
+        ///
+        /// <summary>
+        /// ファイルを展開します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void ExtractFile(string directory, string password)
+        {
+            var dest = System.IO.Path.Combine(directory, Path);
+            CreateDirectory(System.IO.Path.GetDirectoryName(dest));
+
+            using (var stream = new ArchiveStreamWriter(System.IO.File.Create(dest)))
+            {
+                var callback = new ArchiveExtractCallback(this, password, stream);
+
+                try
+                {
+                    callback.Progress += RaiseProgress;
+                    _raw.Extract(new[] { (uint)Index }, 1, 0, callback);
+                    PostProcess(directory, callback.Result);
+                }
+                finally { callback.Progress -= RaiseProgress; }
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CreateDirectory
+        ///
+        /// <summary>
+        /// ディレクトリを生成します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void CreateDirectory(string path)
+        {
+            if (System.IO.Directory.Exists(path)) return;
+            System.IO.Directory.CreateDirectory(path);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// PostProcess
+        ///
+        /// <summary>
+        /// 展開後の処理を実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void PostProcess(string directory, OperationResult result)
+        {
+            switch (result)
+            {
+                case OperationResult.OK:
+                    break;
+                case OperationResult.DataError:
+                    if (Encrypted) RaisePasswordRequired(directory);
+                    else throw new System.IO.IOException(result.ToString());
+                    break;
+                case OperationResult.WrongPassword:
+                    RaisePasswordRequired(directory);
+                    break;
+                default:
+                    throw new System.IO.IOException(result.ToString());
+            }
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -272,21 +368,6 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CreateDirectory
-        ///
-        /// <summary>
-        /// ディレクトリを生成します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void CreateDirectory(string path)
-        {
-            if (System.IO.Directory.Exists(path)) return;
-            System.IO.Directory.CreateDirectory(path);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// RaiseProgress
         ///
         /// <summary>
@@ -296,6 +377,22 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         private void RaiseProgress(object sender, ValueEventArgs<long> e)
             => OnProgress(e);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// RaisePasswordRequired
+        ///
+        /// <summary>
+        /// PasswordRequired イベントを発生させます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void RaisePasswordRequired(string directory)
+        {
+            var e = new QueryEventArgs<string, string>(Path);
+            OnPasswordRequired(e);
+            if (!e.Cancel) Extract(directory, e.Result);
+        }
 
         #region Fields
         private IInArchive _raw;
