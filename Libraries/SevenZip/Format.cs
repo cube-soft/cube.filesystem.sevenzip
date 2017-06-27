@@ -157,9 +157,13 @@ namespace Cube.FileSystem.SevenZip
                 _ext = new Dictionary<string, Format>
                 {
                     { ".7z",  Format.SevenZip },
-                    { ".gz",  Format.GZip },
-                    { ".tar", Format.Tar },
-                    { ".zip", Format.Zip },
+                    { ".bz",  Format.BZip2    },
+                    { ".gz",  Format.GZip     },
+                    { ".lzh", Format.Lzh      },
+                    { ".rar", Format.Rar      },
+                    { ".tar", Format.Tar      },
+                    { ".xz", Format.XZ        },
+                    { ".zip", Format.Zip      },
                 };
             }
 
