@@ -16,6 +16,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Timers;
 using Cube.Log;
 
 namespace Cube.FileSystem.App.Ice
@@ -48,6 +49,7 @@ namespace Cube.FileSystem.App.Ice
         {
             Source = src;
             Destination = System.IO.Path.GetDirectoryName(Source);
+            _timer.Elapsed += (s, e) => Progress?.Invoke(this, e);
         }
 
         #endregion
@@ -171,6 +173,17 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Progress
+        /// 
+        /// <summary>
+        /// 進捗状況の更新時に発生するイベントです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public EventHandler Progress;
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// PasswordRequired
         /// 
         /// <summary>
@@ -256,7 +269,13 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void Extract(SevenZip.ArchiveReader reader, string password)
         {
-            foreach (var item in reader.Items) Extract(item, password);
+            try
+            {
+                _timer.Start(); // Progress timer
+                foreach (var item in reader.Items) Extract(item, password);
+                Progress?.Invoke(this, EventArgs.Empty);
+            }
+            finally { _timer.Stop(); }
         }
 
         /* ----------------------------------------------------------------- */
@@ -271,20 +290,20 @@ namespace Cube.FileSystem.App.Ice
         private void Extract(SevenZip.ArchiveItem src, string password)
         {
             var done = DoneSize;
-            ValueEventHandler<long> progress = (s, e) => DoneSize = done + e.Value;
+            ValueEventHandler<long> h = (s, e) => DoneSize = done + e.Value;
 
             try
             {
                 Current = src.Path;
                 src.PasswordRequired += RaisePasswordRequired;
-                src.Progress += progress;
+                src.Progress += h;
                 src.Extract(Destination, password);
                 DoneCount++;
             }
             finally
             {
                 src.PasswordRequired -= RaisePasswordRequired;
-                src.Progress -= progress;
+                src.Progress -= h;
             }
         }
 
@@ -305,6 +324,7 @@ namespace Cube.FileSystem.App.Ice
         }
 
         #region Fields
+        private Timer _timer = new Timer(100.0);
         private string _current = string.Empty;
         private long _doneSize = 0;
         private long _fileSize = 0;

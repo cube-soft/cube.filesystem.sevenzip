@@ -58,7 +58,7 @@ namespace Cube.FileSystem.App.Ice
 
             // Model
             Model.PasswordRequired += WhenPasswordRequired;
-            Model.PropertyChanged += WhenChanged;
+            Model.Progress += WhenProgress;
 
             // EventAggregator
             EventAggregator.GetEvents()?.Show.Subscribe(WhenShow);
@@ -108,31 +108,21 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// WhenChanged
+        /// WhenProgress
         /// 
         /// <summary>
-        /// Model のプロパティが変更された時に実行されるハンドラです。
+        /// 進捗状況の更新時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenChanged(object sender, PropertyChangedEventArgs e)
+        private void WhenProgress(object sender, EventArgs e)
+            => Sync(() =>
         {
-            switch (e.PropertyName)
-            {
-                case nameof(Model.Current):
-                    Sync(() => View.Status = Model.Current);
-                    break;
-                case nameof(Model.FileCount):
-                    Sync(() => View.FileCount = Model.FileCount);
-                    break;
-                case nameof(Model.DoneCount):
-                    Sync(() => View.DoneCount = Model.DoneCount);
-                    break;
-                case nameof(Model.DoneSize):
-                    Sync(() => View.Value = Math.Max(Math.Max(Model.Percentage, 1), View.Value));
-                    break;
-            }
-        }
+            View.FileCount = Model.FileCount;
+            View.DoneCount = Model.DoneCount;
+            View.Status    = Model.Current;
+            View.Value     = Math.Max(Math.Max(Model.Percentage, 1), View.Value);
+        });
 
         #endregion
     }
