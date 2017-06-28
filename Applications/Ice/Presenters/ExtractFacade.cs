@@ -200,8 +200,8 @@ namespace Cube.FileSystem.App.Ice
                 try
                 {
                     reader.Open(Source);
-                    Calculate(reader);
-                    Extract(reader);
+                    Collect(reader, out string password);
+                    Extract(reader, password);
                 }
                 catch (SevenZip.EncryptionException /* err */) { /* user cancel */ }
                 catch (Exception err) { this.LogWarn(err.ToString(), err); }
@@ -214,20 +214,33 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Calculate
+        /// Collect
         /// 
         /// <summary>
-        /// 展開後のファイル数およびファイルサイズを計算します。
+        /// 展開処理に関連する各種情報を収集します。
         /// </summary>
-        ///
+        /// 
         /* ----------------------------------------------------------------- */
-        private void Calculate(SevenZip.ArchiveReader reader)
+        private void Collect(SevenZip.ArchiveReader reader, out string password)
         {
             FileCount = reader.Items.Count;
 
-            var size = 0L;
-            foreach (var item in reader.Items) size += item.Size;
+            var query = new QueryEventArgs<string, string>(Source);
+            var done  = false;
+            var size  = 0L;
+
+            foreach (var item in reader.Items)
+            {
+                size += item.Size;
+                if (item.Encrypted && !done)
+                {
+                    RaisePasswordRequired(this, query);
+                    done = true;
+                }
+            }
+
             FileSize = size;
+            password = query.Result ?? string.Empty;
 
             this.LogDebug($"Count:{FileCount:#,0}\tSize:{FileSize:#,0}\tPath:{Source}");
         }
@@ -241,9 +254,9 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Extract(SevenZip.ArchiveReader reader)
+        private void Extract(SevenZip.ArchiveReader reader, string password)
         {
-            foreach (var item in reader.Items) Extract(item);
+            foreach (var item in reader.Items) Extract(item, password);
         }
 
         /* ----------------------------------------------------------------- */
@@ -255,7 +268,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Extract(SevenZip.ArchiveItem src)
+        private void Extract(SevenZip.ArchiveItem src, string password)
         {
             var done = DoneSize;
             ValueEventHandler<long> progress = (s, e) => DoneSize = done + e.Value;
@@ -265,7 +278,7 @@ namespace Cube.FileSystem.App.Ice
                 Current = src.Path;
                 src.PasswordRequired += RaisePasswordRequired;
                 src.Progress += progress;
-                src.Extract(Destination);
+                src.Extract(Destination, password);
                 DoneCount++;
             }
             finally
