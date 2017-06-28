@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
@@ -60,19 +61,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Views\PasswordForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\PasswordForm.Designer.cs">
+      <DependentUpon>PasswordForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\EventAggregator.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\SettingsFolder.cs" />
     <Compile Include="Presenters\ExtractFacade.cs" />
     <Compile Include="Presenters\ExtractPresenter.cs" />
     <Compile Include="Views\IProgressView.cs" />
-    <Compile Include="Views\ProgressForm.cs" />
+    <Compile Include="Views\ProgressForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Views\ProgressForm.Designer.cs">
       <DependentUpon>ProgressForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\ViewFactory.cs" />
+    <EmbeddedResource Include="Views\PasswordForm.resx">
+      <DependentUpon>PasswordForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\ProgressForm.resx">
       <DependentUpon>ProgressForm.cs</DependentUpon>
     </EmbeddedResource>

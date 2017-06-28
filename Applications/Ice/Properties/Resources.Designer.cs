@@ -126,6 +126,15 @@ namespace Cube.FileSystem.App.Ice.Properties {
         }
         
         /// <summary>
+        ///   パスワードの入力 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string TitlePassword {
+            get {
+                return ResourceManager.GetString("TitlePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   β に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string VersionSuffix {

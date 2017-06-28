@@ -139,6 +139,9 @@
   <data name="MessageRemainTime" xml:space="preserve">
     <value>残り時間 約</value>
   </data>
+  <data name="TitlePassword" xml:space="preserve">
+    <value>パスワードの入力</value>
+  </data>
   <data name="VersionSuffix" xml:space="preserve">
     <value>β</value>
   </data>
