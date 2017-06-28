@@ -15,6 +15,8 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System.Windows.Forms;
+
 namespace Cube.FileSystem.App.Ice
 {
     /* --------------------------------------------------------------------- */
@@ -40,6 +42,27 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         public virtual IProgressView CreateProgressView() => new ProgressForm();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowPasswordView
+        /// 
+        /// <summary>
+        /// パスワード入力画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">パスワード情報を保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void ShowPasswordView(QueryEventArgs<string, string> e)
+        {
+            using (var view = new PasswordForm())
+            {
+                view.StartPosition = FormStartPosition.CenterParent;
+                e.Cancel = view.ShowDialog() == DialogResult.Cancel;
+                if (!e.Cancel) e.Result = view.Password;
+            }
+        }
     }
 
     /* --------------------------------------------------------------------- */
@@ -76,6 +99,9 @@ namespace Cube.FileSystem.App.Ice
 
         public static IProgressView CreateProgressView()
             => _factory?.CreateProgressView();
+
+        public static void ShowPasswordView(QueryEventArgs<string, string> e)
+            => _factory?.ShowPasswordView(e);
 
         #endregion
 

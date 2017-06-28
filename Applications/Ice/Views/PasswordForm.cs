@@ -71,32 +71,6 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         public string Password => PasswordTextBox.Text;
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// FileName
-        ///
-        /// <summary>
-        /// ファイル名を取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string FileName
-        {
-            get { return _filename; }
-            set
-            {
-                if (_filename == value) return;
-                _filename = value;
-
-                var ss = new StringBuilder();
-                ss.Append(Properties.Resources.TitlePassword);
-                if (!string.IsNullOrEmpty(value)) ss.Append($" - {value}");
-                ss.Append($" - {ProductName}");
-
-                Text = ss.ToString();
-            }
-        }
-
         #endregion
 
         #region Implementations
@@ -124,10 +98,6 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void WhenCheckedChanged(object sender, EventArgs e)
             => PasswordTextBox.UseSystemPasswordChar = !VisibleCheckBox.Checked;
-
-        #region Fields
-        private string _filename;
-        #endregion
 
         #endregion
     }
