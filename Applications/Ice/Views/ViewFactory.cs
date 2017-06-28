@@ -54,7 +54,7 @@ namespace Cube.FileSystem.App.Ice
         /// <param name="e">パスワード情報を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void ShowPasswordView(QueryEventArgs<string, string> e)
+        public virtual void ShowPasswordView(QueryEventArgs<string, string> e)
         {
             using (var view = new PasswordForm())
             {
