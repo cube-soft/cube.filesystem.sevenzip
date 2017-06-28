@@ -17,6 +17,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using Cube.Log;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -288,17 +289,46 @@ namespace Cube.FileSystem.SevenZip
             var dest = System.IO.Path.Combine(directory, Path);
             CreateDirectory(System.IO.Path.GetDirectoryName(dest));
 
-            using (var stream = new ArchiveStreamWriter(System.IO.File.Create(dest)))
-            {
-                var callback = new ArchiveExtractCallback(this, password, stream);
+            var stream = new ArchiveStreamWriter(System.IO.File.Create(dest));
+            var callback = new ArchiveExtractCallback(this, password, stream);
 
-                try
-                {
-                    callback.Progress += RaiseProgress;
-                    _raw.Extract(new[] { (uint)Index }, 1, 0, callback);
-                    PostProcess(directory, callback.Result);
-                }
-                finally { callback.Progress -= RaiseProgress; }
+            try
+            {
+                callback.Progress += RaiseProgress;
+                _raw.Extract(new[] { (uint)Index }, 1, 0, callback);
+            }
+            finally
+            {
+                callback.Progress -= RaiseProgress;
+                stream.Dispose();
+                ExtractFileResult(directory, callback.Result);
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ExtractFileResult
+        ///
+        /// <summary>
+        /// 展開後の処理を実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void ExtractFileResult(string directory, OperationResult result)
+        {
+            switch (result)
+            {
+                case OperationResult.OK:
+                    break;
+                case OperationResult.DataError:
+                    if (Encrypted) RaisePasswordRequired(directory);
+                    else throw new System.IO.IOException(result.ToString());
+                    break;
+                case OperationResult.WrongPassword:
+                    RaisePasswordRequired(directory);
+                    break;
+                default:
+                    throw new System.IO.IOException(result.ToString());
             }
         }
 
@@ -315,33 +345,6 @@ namespace Cube.FileSystem.SevenZip
         {
             if (System.IO.Directory.Exists(path)) return;
             System.IO.Directory.CreateDirectory(path);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// PostProcess
-        ///
-        /// <summary>
-        /// 展開後の処理を実行します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void PostProcess(string directory, OperationResult result)
-        {
-            switch (result)
-            {
-                case OperationResult.OK:
-                    break;
-                case OperationResult.DataError:
-                    if (Encrypted) RaisePasswordRequired(directory);
-                    else throw new System.IO.IOException(result.ToString());
-                    break;
-                case OperationResult.WrongPassword:
-                    RaisePasswordRequired(directory);
-                    break;
-                default:
-                    throw new System.IO.IOException(result.ToString());
-            }
         }
 
         /* ----------------------------------------------------------------- */
@@ -363,7 +366,11 @@ namespace Cube.FileSystem.SevenZip
                 var obj = var.Object;
                 return (obj != null && obj is T) ? (T)obj : default(T);
             }
-            catch (Exception /* err */) { return default(T); }
+            catch (Exception err)
+            {
+                this.LogWarn(err.ToString(), err);
+                return default(T);
+            }
         }
 
         /* ----------------------------------------------------------------- */

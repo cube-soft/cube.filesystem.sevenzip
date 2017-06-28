@@ -121,6 +121,36 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Extract_PasswordRequired
+        ///
+        /// <summary>
+        /// PasswordRequired を発生させるテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Extract_PasswordRequired()
+        {
+            QueryEventHandler<string, string> h = (s, e) =>
+            {
+                e.Result = "password";
+                e.Cancel = false;
+            };
+
+            using (var archive = new SevenZip.ArchiveReader())
+            {
+                archive.Open(Example("Password.7z"));
+                foreach (var item in archive.Items)
+                {
+                    item.PasswordRequired += h;
+                    item.Extract(Results);
+                    Assert.That(Exists(Result(item.Path), item.IsDirectory), Is.True);
+                }
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Extract_TestCases
         ///
         /// <summary>
