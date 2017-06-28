@@ -57,6 +57,7 @@ namespace Cube.FileSystem.App.Ice
             View.FileName = System.IO.Path.GetFileName(model);
 
             // Model
+            Model.PasswordRequired += WhenPasswordRequired;
             Model.PropertyChanged += WhenChanged;
 
             // EventAggregator
@@ -95,6 +96,18 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// WhenPasswordRequired
+        /// 
+        /// <summary>
+        /// パスワード要求時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenPasswordRequired(object sender, QueryEventArgs<string, string> e)
+            => SyncWait(() => Views.ShowPasswordView(e));
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// WhenChanged
         /// 
         /// <summary>
@@ -116,7 +129,7 @@ namespace Cube.FileSystem.App.Ice
                     Sync(() => View.DoneCount = Model.DoneCount);
                     break;
                 case nameof(Model.DoneSize):
-                    Sync(() => View.Value = Math.Max(Model.Percentage, 1));
+                    Sync(() => View.Value = Math.Max(Math.Max(Model.Percentage, 1), View.Value));
                     break;
             }
         }

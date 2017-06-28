@@ -15,6 +15,7 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System;
 using Cube.Log;
 
 namespace Cube.FileSystem.App.Ice
@@ -28,7 +29,7 @@ namespace Cube.FileSystem.App.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ExtractFacade : ObservableProperty
+    public sealed class ExtractFacade : ObservableProperty
     {
         #region Constructors
 
@@ -166,6 +167,21 @@ namespace Cube.FileSystem.App.Ice
 
         #endregion
 
+        #region Events
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// PasswordRequired
+        /// 
+        /// <summary>
+        /// パスワード要求時に発生するイベントです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public QueryEventHandler<string, string> PasswordRequired;
+
+        #endregion
+
         #region Methods
 
         /* ----------------------------------------------------------------- */
@@ -181,9 +197,14 @@ namespace Cube.FileSystem.App.Ice
         {
             using (var reader = new SevenZip.ArchiveReader())
             {
-                reader.Open(Source);
-                Calculate(reader);
-                Extract(reader);
+                try
+                {
+                    reader.Open(Source);
+                    Calculate(reader);
+                    Extract(reader);
+                }
+                catch (SevenZip.EncryptionException /* err */) { /* user cancel */ }
+                catch (Exception err) { this.LogWarn(err.ToString(), err); }
             }
         }
 
@@ -237,16 +258,37 @@ namespace Cube.FileSystem.App.Ice
         private void Extract(SevenZip.ArchiveItem src)
         {
             var done = DoneSize;
-            ValueEventHandler<long> handler = (s, e) => DoneSize = done + e.Value;
+            ValueEventHandler<long> progress = (s, e) => DoneSize = done + e.Value;
 
             try
             {
                 Current = src.Path;
-                src.Progress += handler;
+                src.PasswordRequired += RaisePasswordRequired;
+                src.Progress += progress;
                 src.Extract(Destination);
                 DoneCount++;
             }
-            finally { src.Progress -= handler; }
+            finally
+            {
+                src.PasswordRequired -= RaisePasswordRequired;
+                src.Progress -= progress;
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// RaisePasswordRequired
+        /// 
+        /// <summary>
+        /// PasswordRequired イベントを発生させます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void RaisePasswordRequired(object sender, QueryEventArgs<string, string> e)
+        {
+            if (PasswordRequired != null) PasswordRequired(this, e);
+            else e.Cancel = true;
+            if (e.Cancel) throw new SevenZip.EncryptionException("user cancel");
         }
 
         #region Fields
