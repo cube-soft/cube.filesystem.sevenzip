@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Details\FileResource.cs" />
+    <Compile Include="Details\MockViewFactory.cs" />
     <Compile Include="Details\ProgressMockView.cs" />
     <Compile Include="Details\MockView.cs" />
     <Compile Include="ExtractPresenterTest.cs" />
