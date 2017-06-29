@@ -15,6 +15,7 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System.Threading.Tasks;
 using NUnit.Framework;
 
 namespace Cube.FileSystem.App.Ice.Tests
@@ -44,7 +45,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Extract()
+        public async Task Extract()
         {
             var model    = Example("Password.7z");
             var settings = new SettingsFolder();
@@ -54,9 +55,13 @@ namespace Cube.FileSystem.App.Ice.Tests
             using (var presenter = new ExtractPresenter(view, model, settings, events))
             {
                 view.Show();
-            }
+                while (!view.Visible) await Task.Delay(100);
 
-            Assert.Pass();
+                Assert.That(view.FileName, Is.EqualTo("Password.7z"));
+                //Assert.That(view.FileCount, Is.EqualTo(3));
+                //Assert.That(view.DoneCount, Is.EqualTo(view.FileCount));
+                //Assert.That(view.Value, Is.EqualTo(100));
+            }
         }
 
         #endregion
