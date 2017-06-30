@@ -47,18 +47,23 @@ namespace Cube.FileSystem.App.Ice.Tests
         [Test]
         public async Task Extract()
         {
-            var model    = Example("Password.7z");
+            var filename = "Sample.zip";
+            var source   = Result(filename);
+
+            System.IO.File.Copy(Example(filename), source);
+            Assert.That(System.IO.File.Exists(source), Is.True);
+
             var settings = new SettingsFolder();
             var events   = new EventAggregator();
             var view     = Views.CreateProgressView();
 
-            using (var presenter = new ExtractPresenter(view, model, settings, events))
+            using (var ep = new ExtractPresenter(view, source, settings, events))
             {
                 view.Show();
                 while (!view.Visible) await Task.Delay(100);
 
-                Assert.That(view.FileName, Is.EqualTo("Password.7z"));
-                //Assert.That(view.FileCount, Is.EqualTo(3));
+                Assert.That(view.FileName, Is.EqualTo(filename));
+                //Assert.That(view.FileCount, Is.EqualTo(4));
                 //Assert.That(view.DoneCount, Is.EqualTo(view.FileCount));
                 //Assert.That(view.Value, Is.EqualTo(100));
             }
