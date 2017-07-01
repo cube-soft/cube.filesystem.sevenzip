@@ -15,6 +15,7 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using NUnit.Framework;
 
@@ -44,10 +45,10 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [Test]
-        public async Task Extract()
+        [TestCase("Sample.zip",  4, 7819)]
+        [TestCase("Password.7z", 3,   26)]
+        public async Task Extract(string filename, long count, long size)
         {
-            var filename = "Sample.zip";
             var source   = Result(filename);
 
             System.IO.File.Copy(Example(filename), source);
@@ -60,12 +61,16 @@ namespace Cube.FileSystem.App.Ice.Tests
             using (var ep = new ExtractPresenter(view, source, settings, events))
             {
                 view.Show();
-                while (!view.Visible) await Task.Delay(100);
 
-                Assert.That(view.FileName, Is.EqualTo(filename));
-                //Assert.That(view.FileCount, Is.EqualTo(4));
-                //Assert.That(view.DoneCount, Is.EqualTo(view.FileCount));
-                //Assert.That(view.Value, Is.EqualTo(100));
+                Assert.That(view.Visible, Is.True);
+                for (var i = 0; view.Visible && i < 20; ++i) await Task.Delay(100);
+                Assert.That(view.Visible, Is.False, "Timeout");
+
+                Assert.That(view.FileName,     Is.EqualTo(filename));
+                Assert.That(view.FileCount,    Is.EqualTo(count));
+                Assert.That(view.DoneCount,    Is.EqualTo(view.FileCount));
+                Assert.That(view.Value,        Is.EqualTo(100));
+                Assert.That(ep.Model.FileSize, Is.EqualTo(size));
             }
         }
 
@@ -83,10 +88,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [OneTimeSetUp]
-        public void OneTimeSetUp()
-        {
-            Views.Configure(new MockViewFactory());
-        }
+        public void OneTimeSetUp() => MockViewFactory.Configure();
 
         #endregion
     }
