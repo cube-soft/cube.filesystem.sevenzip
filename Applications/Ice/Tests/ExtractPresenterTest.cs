@@ -15,7 +15,6 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using NUnit.Framework;
 
@@ -45,12 +44,13 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [TestCase("Sample.zip",  4, 7819)]
-        [TestCase("Password.7z", 3,   26)]
-        public async Task Extract(string filename, long count, long size)
+        [TestCase("Sample.zip",  "",         4, 7819)]
+        [TestCase("Password.7z", "password", 3,   26)]
+        public async Task Extract(string filename, string password, long count, long size)
         {
-            var source   = Result(filename);
+            MockViewFactory.Password = password;
 
+            var source = Result(filename);
             System.IO.File.Copy(Example(filename), source);
             Assert.That(System.IO.File.Exists(source), Is.True);
 
@@ -89,6 +89,18 @@ namespace Cube.FileSystem.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         [OneTimeSetUp]
         public void OneTimeSetUp() => MockViewFactory.Configure();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OneTimeTearDown
+        /// 
+        /// <summary>
+        /// 一度だけ実行される TearDown 処理です。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [OneTimeTearDown]
+        public void OneTimeTearDown() => MockViewFactory.Password = string.Empty;
 
         #endregion
     }

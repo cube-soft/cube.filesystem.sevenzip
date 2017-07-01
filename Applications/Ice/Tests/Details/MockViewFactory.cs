@@ -50,6 +50,19 @@ namespace Cube.FileSystem.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Password
+        /// 
+        /// <summary>
+        /// ShowPasswordView で設定するパスワードを取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static string Password { get; set; }
+
+        #region ViewFactory
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// CreateProgressView
         /// 
         /// <summary>
@@ -73,8 +86,10 @@ namespace Cube.FileSystem.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         public override void ShowPasswordView(QueryEventArgs<string, string> e)
         {
-            e.Cancel = false;
-            e.Result = "password";
+            e.Cancel = string.IsNullOrEmpty(Password);
+            e.Result = Password;
         }
+
+        #endregion
     }
 }
