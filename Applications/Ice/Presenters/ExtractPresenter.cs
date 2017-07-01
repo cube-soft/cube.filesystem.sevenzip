@@ -16,7 +16,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
-using System.ComponentModel;
+using Cube.Tasks;
 
 namespace Cube.FileSystem.App.Ice
 {
@@ -77,7 +77,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private async void WhenShow()
+        private void WhenShow() => Async(() =>
         {
             Sync(() =>
             {
@@ -85,14 +85,14 @@ namespace Cube.FileSystem.App.Ice
                 View.Start();
             });
 
-            await Async(() => Model.Start()).ConfigureAwait(false);
+            Model.Start();
 
             Sync(() =>
             {
                 View.Stop();
                 View.Status = string.Format(Properties.Resources.MessageDoneExtract, Model.Destination);
             });
-        }
+        }).Forget();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -115,8 +115,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenProgress(object sender, EventArgs e)
-            => Sync(() =>
+        private void WhenProgress(object sender, EventArgs e) => Sync(() =>
         {
             View.FileCount = Model.FileCount;
             View.DoneCount = Model.DoneCount;
