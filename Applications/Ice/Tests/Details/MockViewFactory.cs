@@ -15,6 +15,8 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System.Threading;
+
 namespace Cube.FileSystem.App.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
@@ -22,15 +24,53 @@ namespace Cube.FileSystem.App.Ice.Tests
     /// MockViewFactory
     ///
     /// <summary>
-    /// 各種ダミー View の生成用クラスです。
+    /// 各種ダミー View の生成および設定用クラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     class MockViewFactory : ViewFactory
     {
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Configure
+        /// 
+        /// <summary>
+        /// テストに必要な設定を実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static void Configure()
+        {
+            if (SynchronizationContext.Current == null)
+            {
+                SynchronizationContext.SetSynchronizationContext(new SynchronizationContext());
+            }
+            Views.Configure(new MockViewFactory());
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CreateProgressView
+        /// 
+        /// <summary>
+        /// IProgressView オブジェクトを生成します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
         public override IProgressView CreateProgressView()
             => new ProgressMockView();
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowPasswordView
+        /// 
+        /// <summary>
+        /// パスワードを設定します。
+        /// </summary>
+        /// 
+        /// <param name="e">パスワード設定用オブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
         public override void ShowPasswordView(QueryEventArgs<string, string> e)
         {
             e.Cancel = false;
