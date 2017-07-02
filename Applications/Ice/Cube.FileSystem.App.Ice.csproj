@@ -61,6 +61,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Presenters\ArchiveFacade.cs" />
+    <Compile Include="Presenters\ArchivePresenter.cs" />
     <Compile Include="Views\PasswordForm.cs">
       <SubType>Form</SubType>
     </Compile>
