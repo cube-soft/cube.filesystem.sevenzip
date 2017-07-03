@@ -124,6 +124,9 @@
   <data name="Extract" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Extract.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="MessageDoneArchive" xml:space="preserve">
+    <value>圧縮ファイルを {0} に保存しました。</value>
+  </data>
   <data name="MessageDoneExtract" xml:space="preserve">
     <value>圧縮ファイルを {0} に解凍しました。</value>
   </data>
@@ -132,6 +135,9 @@
   </data>
   <data name="MessageFileCount" xml:space="preserve">
     <value>ファイル数</value>
+  </data>
+  <data name="MessagePreArchive" xml:space="preserve">
+    <value>ファイルを圧縮する準備をしています...</value>
   </data>
   <data name="MessagePreExtract" xml:space="preserve">
     <value>ファイルを解凍する準備をしています...</value>

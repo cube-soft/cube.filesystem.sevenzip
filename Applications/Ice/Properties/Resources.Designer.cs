@@ -81,6 +81,15 @@ namespace Cube.FileSystem.App.Ice.Properties {
         }
         
         /// <summary>
+        ///   圧縮ファイルを {0} に保存しました。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MessageDoneArchive {
+            get {
+                return ResourceManager.GetString("MessageDoneArchive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   圧縮ファイルを {0} に解凍しました。 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MessageDoneExtract {
@@ -104,6 +113,15 @@ namespace Cube.FileSystem.App.Ice.Properties {
         internal static string MessageFileCount {
             get {
                 return ResourceManager.GetString("MessageFileCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   ファイルを圧縮する準備をしています... に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MessagePreArchive {
+            get {
+                return ResourceManager.GetString("MessagePreArchive", resourceCulture);
             }
         }
         
