@@ -81,6 +81,7 @@ namespace Cube.FileSystem.App.Ice
         {
             Sync(() =>
             {
+                View.Icon = Properties.Resources.Extract;
                 View.Status = Properties.Resources.MessagePreExtract;
                 View.Start();
             });
