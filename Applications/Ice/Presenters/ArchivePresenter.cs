@@ -15,6 +15,7 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System;
 using Cube.Tasks;
 
 namespace Cube.FileSystem.App.Ice
@@ -51,8 +52,14 @@ namespace Cube.FileSystem.App.Ice
             SettingsFolder settings, IEventAggregator events)
             : base(view, new ArchiveFacade(args), settings, events)
         {
+            // Model
+            Model.Format = SevenZip.Format.Zip;
+            Model.Destination = System.IO.Path.ChangeExtension(Model.Sources[0], ".zip");
+            Model.Progress += WhenProgress;
+
             // View
             View.EventAggregator = EventAggregator;
+            View.FileName = System.IO.Path.GetFileName(Model.Destination);
 
             // EventAggregator
             EventAggregator.GetEvents()?.Show.Subscribe(WhenShow);
@@ -73,8 +80,38 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void WhenShow() => Async(() =>
         {
+            Sync(() =>
+            {
+                View.Icon = Properties.Resources.Archive;
+                View.Status = Properties.Resources.MessagePreArchive;
+                View.Start();
+            });
 
+            Model.Start();
+
+            Sync(() =>
+            {
+                View.Stop();
+                View.Status = string.Format(Properties.Resources.MessageDoneArchive, Model.Destination);
+            });
         }).Forget();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenProgress
+        /// 
+        /// <summary>
+        /// 進捗状況の更新時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenProgress(object sender, EventArgs e) => Sync(() =>
+        {
+            View.FileCount = Model.FileCount;
+            View.DoneCount = Model.DoneCount;
+            View.Status    = Model.Current;
+            View.Value     = Math.Max(Math.Max(Model.Percentage, 1), View.Value);
+        });
 
         #endregion
     }

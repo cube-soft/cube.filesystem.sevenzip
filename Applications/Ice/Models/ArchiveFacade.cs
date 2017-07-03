@@ -16,6 +16,8 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Cube.FileSystem.App.Ice
 {
@@ -28,7 +30,7 @@ namespace Cube.FileSystem.App.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveFacade
+    public class ArchiveFacade : ProgressFacade
     {
         #region Constructors
 
@@ -43,7 +45,36 @@ namespace Cube.FileSystem.App.Ice
         /// <param name="args">コマンドライン</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveFacade(Arguments args) { }
+        public ArchiveFacade(Arguments args) : base()
+        {
+            Sources = args.Get().ToList();
+        }
+
+        #endregion
+
+        #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Format
+        /// 
+        /// <summary>
+        /// 圧縮フォーマットを取得または設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public SevenZip.Format Format { get; set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Sources
+        /// 
+        /// <summary>
+        /// 圧縮するファイルまたはフォルダの一覧を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public IList<string> Sources { get; }
 
         #endregion
 
@@ -58,7 +89,48 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Start() { }
+        public void Start()
+        {
+            using (var writer = new SevenZip.ArchiveWriter(Format))
+            {
+                try
+                {
+                    foreach (var item in Sources) writer.Add(item);
+                    writer.Progress += WhenProgress;
+                    OnProgressStart();
+                    writer.Save(Destination, string.Empty);
+                    OnProgress(EventArgs.Empty);
+                }
+                finally
+                {
+                    OnProgressStop();
+                    writer.Progress -= WhenProgress;
+                }
+            }
+        }
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenProgress
+        /// 
+        /// <summary>
+        /// 進捗状況の更新時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenProgress(object sender, ValueEventArgs<long> e)
+        {
+            if (sender is SevenZip.ArchiveWriter a)
+            {
+                FileCount = a.FileCount;
+                FileSize  = a.FileSize;
+                DoneSize  = e.Value;
+            }
+        }
 
         #endregion
     }
