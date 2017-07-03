@@ -43,18 +43,18 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         /// 
         /// <param name="view">View オブジェクト</param>
-        /// <param name="model">圧縮ファイルのパス</param>
+        /// <param name="model">コマンドライン</param>
         /// <param name="settings">ユーザ設定</param>
         /// <param name="events">イベント集約用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ExtractPresenter(IProgressView view, string model,
+        public ExtractPresenter(IProgressView view, Arguments model,
             SettingsFolder settings, IEventAggregator events)
             : base(view, new ExtractFacade(model), settings, events)
         {
             // View
             View.EventAggregator = EventAggregator;
-            View.FileName = System.IO.Path.GetFileName(model);
+            View.FileName = System.IO.Path.GetFileName(Model.Source);
 
             // Model
             Model.PasswordRequired += WhenPasswordRequired;

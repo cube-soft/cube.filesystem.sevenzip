@@ -54,11 +54,12 @@ namespace Cube.FileSystem.App.Ice.Tests
             System.IO.File.Copy(Example(filename), source);
             Assert.That(System.IO.File.Exists(source), Is.True);
 
+            var model    = new Arguments(new[] { source });
             var settings = new SettingsFolder();
             var events   = new EventAggregator();
             var view     = Views.CreateProgressView();
 
-            using (var ep = new ExtractPresenter(view, source, settings, events))
+            using (var ep = new ExtractPresenter(view, model, settings, events))
             {
                 view.Show();
 

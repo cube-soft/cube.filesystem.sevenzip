@@ -16,6 +16,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Linq;
 using System.Timers;
 using Cube.Log;
 
@@ -42,12 +43,12 @@ namespace Cube.FileSystem.App.Ice
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
-        /// <param name="src">圧縮ファイルのパス</param>
+        /// <param name="args">コマンドライン</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ExtractFacade(string src)
+        public ExtractFacade(Arguments args)
         {
-            Source = src;
+            Source = args.Get().First();
             Destination = System.IO.Path.GetDirectoryName(Source);
             _timer.Elapsed += (s, e) => Progress?.Invoke(this, e);
         }

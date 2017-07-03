@@ -57,11 +57,12 @@ namespace Cube.FileSystem.App.Ice
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
 
+                var model = new Arguments(args);
                 var settings = new SettingsFolder();
                 var events = new EventAggregator();
                 var view = new ProgressForm();
 
-                using (var _ = new ExtractPresenter(view, args[0], settings, events))
+                using (var _ = new ExtractPresenter(view, model, settings, events))
                 {
                     Application.Run(view);
                 }
