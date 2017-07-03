@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace Cube.FileSystem.App.Ice.Tests
 {
@@ -109,6 +110,17 @@ namespace Cube.FileSystem.App.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         public TimeSpan Remain { get; set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Icon
+        ///
+        /// <summary>
+        /// アイコンを取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public Icon Icon { get; set; }
 
         #endregion
 
