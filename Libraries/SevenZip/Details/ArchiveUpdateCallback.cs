@@ -111,7 +111,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public ValueEventHandler<long> Progress;
+        public event ValueEventHandler<long> Progress;
 
         #endregion
 

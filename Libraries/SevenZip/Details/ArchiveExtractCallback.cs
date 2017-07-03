@@ -110,7 +110,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public ValueEventHandler<long> Progress;
+        public event ValueEventHandler<long> Progress;
 
         #endregion
 
@@ -149,10 +149,10 @@ namespace Cube.FileSystem.SevenZip
         /// 展開後のバイト数を通知します。
         /// </summary>
         /// 
-        /// <param name="total">展開後のバイト数</param>
+        /// <param name="size">展開後のバイト数</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public void SetTotal(ulong total) => _hack = Math.Max((long)total - Source.Size, 0);
+        public void SetTotal(ulong size) => _hack = Math.Max((long)size - Source.Size, 0);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -162,7 +162,7 @@ namespace Cube.FileSystem.SevenZip
         /// 展開の完了したバイトサイズを通知します。
         /// </summary>
         /// 
-        /// <param name="value">展開の完了したバイト数</param>
+        /// <param name="size">展開の完了したバイト数</param>
         /// 
         /// <remarks>
         /// IInArchive.Extract を複数回実行する場合、SetTotal および
@@ -174,9 +174,9 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         /// 
         /* ----------------------------------------------------------------- */
-        public void SetCompleted(ref ulong value)
+        public void SetCompleted(ref ulong size)
         {
-            var cvt = Math.Max((long)value - _hack, 0);
+            var cvt = Math.Max((long)size - _hack, 0);
             Progress?.Invoke(this, ValueEventArgs.Create(cvt));
         }
 
