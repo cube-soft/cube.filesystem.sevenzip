@@ -61,7 +61,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Presenters\ArchiveFacade.cs" />
+    <Compile Include="Models\ArchiveFacade.cs" />
+    <Compile Include="Models\ProgressFacade.cs" />
     <Compile Include="Presenters\ArchivePresenter.cs" />
     <Compile Include="Views\PasswordForm.cs">
       <SubType>Form</SubType>
@@ -72,7 +73,7 @@
     <Compile Include="Models\EventAggregator.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\SettingsFolder.cs" />
-    <Compile Include="Presenters\ExtractFacade.cs" />
+    <Compile Include="Models\ExtractFacade.cs" />
     <Compile Include="Presenters\ExtractPresenter.cs" />
     <Compile Include="Views\IProgressView.cs" />
     <Compile Include="Views\ProgressForm.cs">

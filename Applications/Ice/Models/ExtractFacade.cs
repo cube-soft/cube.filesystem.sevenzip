@@ -17,7 +17,6 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Linq;
-using System.Timers;
 using Cube.Log;
 
 namespace Cube.FileSystem.App.Ice
@@ -31,7 +30,7 @@ namespace Cube.FileSystem.App.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public sealed class ExtractFacade : ObservableProperty
+    public sealed class ExtractFacade : ProgressFacade
     {
         #region Constructors
 
@@ -46,11 +45,10 @@ namespace Cube.FileSystem.App.Ice
         /// <param name="args">コマンドライン</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ExtractFacade(Arguments args)
+        public ExtractFacade(Arguments args) : base()
         {
             Source = args.Get().First();
             Destination = System.IO.Path.GetDirectoryName(Source);
-            _timer.Elapsed += (s, e) => Progress?.Invoke(this, e);
         }
 
         #endregion
@@ -78,121 +76,6 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         public string Destination { get; set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Current
-        /// 
-        /// <summary>
-        /// 現在処理中のファイルのパスを取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Current
-        {
-            get { return _current; }
-            set { SetProperty(ref _current, value); }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// DoneSize
-        /// 
-        /// <summary>
-        /// 展開の終了したファイルサイズを取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public long DoneSize
-        {
-            get { return _doneSize; }
-            private set { SetProperty(ref _doneSize, value); }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// FileSize
-        /// 
-        /// <summary>
-        /// 展開後のファイルサイズを取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public long FileSize
-        {
-            get { return _fileSize; }
-            private set { SetProperty(ref _fileSize, value); }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// DoneCount
-        /// 
-        /// <summary>
-        /// 展開の終了したファイル数を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public long DoneCount
-        {
-            get { return _doneCount; }
-            set { SetProperty(ref _doneCount, value); }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// FileCount
-        /// 
-        /// <summary>
-        /// 展開後のファイル数を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public long FileCount
-        {
-            get { return _fileCount; }
-            set { SetProperty(ref _fileCount, value); }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Percentage
-        /// 
-        /// <summary>
-        /// 進捗率を示す値をパーセント単位で取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public int Percentage =>
-            FileSize > 0 ?
-            (int)(DoneSize / (double)FileSize * 100.0) :
-            0;
-
-        #endregion
-
-        #region Events
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Progress
-        /// 
-        /// <summary>
-        /// 進捗状況の更新時に発生するイベントです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public EventHandler Progress;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// PasswordRequired
-        /// 
-        /// <summary>
-        /// パスワード要求時に発生するイベントです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public QueryEventHandler<string, string> PasswordRequired;
 
         #endregion
 
@@ -272,11 +155,11 @@ namespace Cube.FileSystem.App.Ice
         {
             try
             {
-                _timer.Start(); // Progress timer
+                OnProgressStart();
                 foreach (var item in reader.Items) Extract(item, password);
                 Progress?.Invoke(this, EventArgs.Empty);
             }
-            finally { _timer.Stop(); }
+            finally { OnProgressStop(); }
         }
 
         /* ----------------------------------------------------------------- */
@@ -318,20 +201,7 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         private void RaisePasswordRequired(object sender, QueryEventArgs<string, string> e)
-        {
-            if (PasswordRequired != null) PasswordRequired(this, e);
-            else e.Cancel = true;
-            if (e.Cancel) throw new SevenZip.EncryptionException("user cancel");
-        }
-
-        #region Fields
-        private Timer _timer = new Timer(100.0);
-        private string _current = string.Empty;
-        private long _doneSize = 0;
-        private long _fileSize = 0;
-        private long _doneCount = 0;
-        private long _fileCount = 0;
-        #endregion
+            => OnPasswordRequired(e);
 
         #endregion
     }
