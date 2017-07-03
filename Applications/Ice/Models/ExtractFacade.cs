@@ -66,17 +66,6 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         public string Source { get; }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Destination
-        /// 
-        /// <summary>
-        /// 展開したファイルの保存先パスを取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Destination { get; set; }
-
         #endregion
 
         #region Methods
@@ -157,7 +146,7 @@ namespace Cube.FileSystem.App.Ice
             {
                 OnProgressStart();
                 foreach (var item in reader.Items) Extract(item, password);
-                Progress?.Invoke(this, EventArgs.Empty);
+                OnProgress(EventArgs.Empty);
             }
             finally { OnProgressStop(); }
         }
