@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArchivePresenterTest.cs" />
     <Compile Include="Details\FileResource.cs" />
     <Compile Include="Details\MockViewFactory.cs" />
     <Compile Include="Details\ProgressMockView.cs" />
