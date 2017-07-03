@@ -47,6 +47,7 @@ namespace Cube.FileSystem.SevenZip
         public ArchiveWriter(Format format)
         {
             Format = format;
+            _lib = new NativeLibrary();
         }
 
         #endregion
@@ -63,6 +64,59 @@ namespace Cube.FileSystem.SevenZip
         /// 
         /* ----------------------------------------------------------------- */
         public Format Format { get; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// FileCount
+        ///
+        /// <summary>
+        /// 圧縮するファイル数を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public long FileCount => _items.Count;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// FileSize
+        ///
+        /// <summary>
+        /// 圧縮するファイルの合計サイズを取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public long FileSize { get; private set; }
+
+        #endregion
+
+        #region Events
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Progress
+        ///
+        /// <summary>
+        /// 進捗状況の通知時に発生するイベントです。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// 通知される値は、展開の完了したバイト数です。
+        /// </remarks>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public event ValueEventHandler<long> Progress;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OnProgress
+        ///
+        /// <summary>
+        /// Progress イベントを発生させます。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        protected virtual void OnProgress(ValueEventArgs<long> e)
+            => Progress?.Invoke(this, e);
 
         #endregion
 
@@ -107,12 +161,22 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void Save(string path, string password)
         {
-            using (var lib = new NativeLibrary())
-            using (var stream = new ArchiveStreamWriter(File.Create(path)))
+            var raw      = _lib.GetOutArchive(Format);
+            var stream   = new ArchiveStreamWriter(File.Create(path));
+            var callback = new ArchiveUpdateCallback(_items) { Password = password };
+
+            try
             {
-                var raw = lib.GetOutArchive(Format);
-                var callback = new ArchiveUpdateCallback(_items) { Password = password };
+                callback.NotifyFileSize += WhenNotifyFileSize;
+                callback.Progress += RaiseProgress;
                 raw.UpdateItems(stream, (uint)_items.Count, callback);
+            }
+            finally
+            {
+                callback.NotifyFileSize -= WhenNotifyFileSize;
+                callback.Progress -= RaiseProgress;
+                stream.Dispose();
+                SaveResult(path, callback.Result);
             }
         }
 
@@ -159,10 +223,7 @@ namespace Cube.FileSystem.SevenZip
         {
             if (_disposed) return;
 
-            //if (disposing)
-            //{
-
-            //}
+            if (disposing) _lib?.Dispose();
 
             _disposed = true;
         }
@@ -209,8 +270,53 @@ namespace Cube.FileSystem.SevenZip
             }
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SaveResult
+        ///
+        /// <summary>
+        /// 圧縮後の処理を実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void SaveResult(string path, OperationResult result)
+        {
+            switch (result)
+            {
+                case OperationResult.OK:
+                    break;
+                default:
+                    throw new IOException(result.ToString());
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenNotifyFileSize
+        ///
+        /// <summary>
+        /// NotifyFileSize イベント発生時に実行されるハンドラです。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void WhenNotifyFileSize(object sender, ValueEventArgs<long> e)
+            => FileSize = e.Value;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// RaiseProgress
+        ///
+        /// <summary>
+        /// Progress イベントを発生させます。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void RaiseProgress(object sender, ValueEventArgs<long> e)
+            => OnProgress(e);
+
         #region Fields
         private bool _disposed = false;
+        private NativeLibrary _lib;
         private IList<FileItem> _items = new List<FileItem>();
         #endregion
 

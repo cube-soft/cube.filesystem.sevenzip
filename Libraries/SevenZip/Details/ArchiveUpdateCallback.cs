@@ -78,17 +78,6 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// FileSize
-        ///
-        /// <summary>
-        /// 圧縮するファイルの合計サイズを取得します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public long FileSize { get; private set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// Result
         ///
         /// <summary>
@@ -101,6 +90,17 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Events
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// NotifyFileSize
+        ///
+        /// <summary>
+        /// 圧縮するファイルの合計バイト数の通知時に発生するイベントです。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public event ValueEventHandler<long> NotifyFileSize;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -160,7 +160,8 @@ namespace Cube.FileSystem.SevenZip
         /// </param>
         /// 
         /* ----------------------------------------------------------------- */
-        public void SetTotal(ulong size) => FileSize = (long)size;
+        public void SetTotal(ulong size)
+            => NotifyFileSize?.Invoke(this, ValueEventArgs.Create((long)size));
 
         /* ----------------------------------------------------------------- */
         ///
