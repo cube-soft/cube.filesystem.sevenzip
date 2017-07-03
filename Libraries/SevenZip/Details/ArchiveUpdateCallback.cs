@@ -18,7 +18,6 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -77,6 +76,43 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public string Password { get; set; }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// FileSize
+        ///
+        /// <summary>
+        /// 圧縮するファイルの合計サイズを取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public long FileSize { get; private set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Result
+        ///
+        /// <summary>
+        /// 処理結果を示す値を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public OperationResult Result { get; private set; }
+
+        #endregion
+
+        #region Events
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Progress
+        ///
+        /// <summary>
+        /// 進捗状況を通知する時に発生するイベントです。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public ValueEventHandler<long> Progress;
+
         #endregion
 
         #region Methods
@@ -116,28 +152,29 @@ namespace Cube.FileSystem.SevenZip
         /// SetTotal
         /// 
         /// <summary>
-        /// Gives the size of the unpacked archive files.
+        /// 圧縮するファイルの合計バイト数を通知します。
         /// </summary>
         /// 
-        /// <param name="total">
-        /// Size of the unpacked archive files (bytes)
+        /// <param name="size">
+        /// 圧縮するファイルの合計バイト数
         /// </param>
         /// 
         /* ----------------------------------------------------------------- */
-        public void SetTotal(ulong total) { }
+        public void SetTotal(ulong size) => FileSize = (long)size;
 
         /* ----------------------------------------------------------------- */
         ///
         /// SetCompleted
         /// 
         /// <summary>
-        /// SetCompleted 7-zip internal function.
+        /// 圧縮処理の終了したバイト数を通知します。
         /// </summary>
         /// 
-        /// <param name="value">completed value</param>
+        /// <param name="size">処理の終了したバイト数</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public void SetCompleted([In] ref ulong value) { }
+        public void SetCompleted(ref ulong size)
+            => Progress?.Invoke(this, ValueEventArgs.Create((long)size));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -256,7 +293,7 @@ namespace Cube.FileSystem.SevenZip
         /// <returns>0 (ゼロ)</returns>
         /// 
         /* ----------------------------------------------------------------- */
-        public void SetOperationResult(OperationResult result) { }
+        public void SetOperationResult(OperationResult result) => Result = result;
 
         /* ----------------------------------------------------------------- */
         ///
