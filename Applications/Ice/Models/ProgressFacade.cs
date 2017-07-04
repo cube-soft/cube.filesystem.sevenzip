@@ -177,6 +177,37 @@ namespace Cube.FileSystem.App.Ice
 
         #endregion
 
+        #region DestinationRequired
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// DestinationRequired
+        /// 
+        /// <summary>
+        /// 保存パス要求時に発生するイベントです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public QueryEventHandler<string, string> DestinationRequired;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OnDestinationRequired
+        /// 
+        /// <summary>
+        /// DestinationRequired イベントを発生させます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public virtual void OnDestinationRequired(QueryEventArgs<string, string> e)
+        {
+            if (DestinationRequired != null) DestinationRequired(this, e);
+            else e.Cancel = true;
+            if (e.Cancel) RaiseUserCancel();
+        }
+
+        #endregion
+
         #region PasswordRequired
 
         /* ----------------------------------------------------------------- */
@@ -208,7 +239,7 @@ namespace Cube.FileSystem.App.Ice
         {
             if (PasswordRequired != null) PasswordRequired(this, e);
             else e.Cancel = true;
-            if (e.Cancel) throw new SevenZip.EncryptionException("user cancel");
+            if (e.Cancel) RaiseUserCancel();
         }
 
         #endregion
@@ -241,8 +272,23 @@ namespace Cube.FileSystem.App.Ice
 
         #endregion
 
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// RaiseUserCancel
+        /// 
+        /// <summary>
+        /// UserCancelException を送出します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void RaiseUserCancel() => throw new UserCancelException();
+
         #region Fields
         private Timer _timer = new Timer(100.0);
+        #endregion
+
         #endregion
     }
 }
