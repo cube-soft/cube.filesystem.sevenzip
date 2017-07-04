@@ -45,11 +45,7 @@ namespace Cube.FileSystem.App.Ice
         /// <param name="request">コマンドライン</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ExtractFacade(Request request) : base()
-        {
-            Source = request.Sources.First();
-            Destination = System.IO.Path.GetDirectoryName(Source);
-        }
+        public ExtractFacade(Request request) : base(request) { }
 
         #endregion
 
@@ -64,7 +60,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Source { get; }
+        public string Source => Request.Sources.First();
 
         #endregion
 
@@ -85,6 +81,7 @@ namespace Cube.FileSystem.App.Ice
             {
                 try
                 {
+                    SetDestination();
                     reader.Open(Source);
                     Collect(reader, out string password);
                     Extract(reader, password);
@@ -144,11 +141,11 @@ namespace Cube.FileSystem.App.Ice
         {
             try
             {
-                OnProgressStart();
+                ProgressStart();
                 foreach (var item in reader.Items) Extract(item, password);
                 OnProgress(EventArgs.Empty);
             }
-            finally { OnProgressStop(); }
+            finally { ProgressStop(); }
         }
 
         /* ----------------------------------------------------------------- */

@@ -53,8 +53,7 @@ namespace Cube.FileSystem.App.Ice
             : base(view, new ArchiveFacade(args), settings, events)
         {
             // Model
-            Model.Format = SevenZip.Format.Zip;
-            Model.Destination = System.IO.Path.ChangeExtension(Model.Sources[0], ".zip");
+            Model.DestinationRequired += WhenDestinationRequired;
             Model.Progress += WhenProgress;
 
             // View
@@ -95,6 +94,18 @@ namespace Cube.FileSystem.App.Ice
                 View.Status = string.Format(Properties.Resources.MessageDoneArchive, Model.Destination);
             });
         }).Forget();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenDestinationRequired
+        /// 
+        /// <summary>
+        /// 保存パス要求時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenDestinationRequired(object sender, QueryEventArgs<string, string> e)
+            => SyncWait(() => Views.ShowSaveFileView(e));
 
         /* ----------------------------------------------------------------- */
         ///

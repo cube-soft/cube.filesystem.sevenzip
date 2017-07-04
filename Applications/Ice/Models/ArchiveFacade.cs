@@ -45,10 +45,7 @@ namespace Cube.FileSystem.App.Ice
         /// <param name="request">コマンドライン</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveFacade(Request request) : base()
-        {
-            Sources = request.Sources.ToList();
-        }
+        public ArchiveFacade(Request request) : base(request) { }
 
         #endregion
 
@@ -63,7 +60,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public SevenZip.Format Format { get; set; }
+        public SevenZip.Format Format => Request.Format;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -74,7 +71,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public IList<string> Sources { get; }
+        public IList<string> Sources => Request.Sources.ToList();
 
         #endregion
 
@@ -95,15 +92,16 @@ namespace Cube.FileSystem.App.Ice
             {
                 try
                 {
+                    SetDestination();
                     foreach (var item in Sources) writer.Add(item);
                     writer.Progress += WhenProgress;
-                    OnProgressStart();
+                    ProgressStart();
                     writer.Save(Destination, string.Empty);
                     OnProgress(EventArgs.Empty);
                 }
                 finally
                 {
-                    OnProgressStop();
+                    ProgressStop();
                     writer.Progress -= WhenProgress;
                 }
             }

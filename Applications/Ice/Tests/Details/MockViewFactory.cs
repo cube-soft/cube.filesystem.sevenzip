@@ -30,6 +30,35 @@ namespace Cube.FileSystem.App.Ice.Tests
     /* --------------------------------------------------------------------- */
     class MockViewFactory : ViewFactory
     {
+        #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Destination
+        /// 
+        /// <summary>
+        /// ShowSaveFileView または ShowSaveDirectoryView で設定するパスを
+        /// 取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static string Destination { get; set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Password
+        /// 
+        /// <summary>
+        /// ShowPasswordView で設定するパスワードを取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static string Password { get; set; }
+
+        #endregion
+
+        #region Methods
+
         /* ----------------------------------------------------------------- */
         ///
         /// Configure
@@ -50,14 +79,20 @@ namespace Cube.FileSystem.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Password
+        /// Reset
         /// 
         /// <summary>
-        /// ShowPasswordView で設定するパスワードを取得または設定します。
+        /// 各種プロパティの値をリセットします。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public static string Password { get; set; }
+        public static void Reset()
+        {
+            Destination = string.Empty;
+            Password = string.Empty;
+        }
+
+        #endregion
 
         #region ViewFactory
 
@@ -88,6 +123,40 @@ namespace Cube.FileSystem.App.Ice.Tests
         {
             e.Cancel = string.IsNullOrEmpty(Password);
             e.Result = Password;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowSaveFileView
+        /// 
+        /// <summary>
+        /// 保存ファイル名を選択する画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">パスを保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public override void ShowSaveFileView(QueryEventArgs<string, string> e)
+        {
+            e.Cancel = string.IsNullOrEmpty(Destination);
+            e.Result = Destination;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowSaveDirectoryView
+        /// 
+        /// <summary>
+        /// 保存ディレクトリ名を選択する画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">パスを保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public override void ShowSaveDirectoryView(QueryEventArgs<string, string> e)
+        {
+            e.Cancel = string.IsNullOrEmpty(Destination);
+            e.Result = Destination;
         }
 
         #endregion

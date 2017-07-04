@@ -57,6 +57,7 @@ namespace Cube.FileSystem.App.Ice
             View.FileName = System.IO.Path.GetFileName(Model.Source);
 
             // Model
+            Model.DestinationRequired += WhenDestinationRequired;
             Model.PasswordRequired += WhenPasswordRequired;
             Model.Progress += WhenProgress;
 
@@ -94,6 +95,18 @@ namespace Cube.FileSystem.App.Ice
                 View.Status = string.Format(Properties.Resources.MessageDoneExtract, Model.Destination);
             });
         }).Forget();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenDestinationRequired
+        /// 
+        /// <summary>
+        /// 保存パス要求時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenDestinationRequired(object sender, QueryEventArgs<string, string> e)
+            => SyncWait(() => Views.ShowSaveDirectoryView(e));
 
         /* ----------------------------------------------------------------- */
         ///

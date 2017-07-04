@@ -16,6 +16,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Linq;
 using System.Timers;
 
 namespace Cube.FileSystem.App.Ice
@@ -42,8 +43,9 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ProgressFacade()
+        public ProgressFacade(Request request)
         {
+            Request = request;
             _timer.Elapsed += (s, e) => OnProgress(EventArgs.Empty);
         }
 
@@ -53,14 +55,31 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Destination
+        /// Request
         /// 
         /// <summary>
-        /// 圧縮または展開したファイルの保存先パスを取得または設定します。
+        /// リクエストオブジェクトを取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Destination { get; set; }
+        public Request Request { get; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Destination
+        /// 
+        /// <summary>
+        /// 圧縮または展開したファイルの保存先パスを取得します。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// このプロパティは Request.Location および関連するオブジェクト
+        /// から決定されます。Destination の値を設定する場合は、継承クラス
+        /// にて SetDestination メソッドを実行してください。
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Destination { get; private set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -71,7 +90,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Current { get; set; }
+        public string Current { get; protected set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -82,7 +101,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public long DoneSize { get; set; }
+        public long DoneSize { get; protected set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -93,7 +112,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public long FileSize { get; set; }
+        public long FileSize { get; protected set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -104,7 +123,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public long DoneCount { get; set; }
+        public long DoneCount { get; protected set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -115,7 +134,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public long FileCount { get; set; }
+        public long FileCount { get; protected set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -250,25 +269,55 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OnProgressStart
+        /// ProgressStart
         /// 
         /// <summary>
         /// 進捗状況の報告を開始します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected void OnProgressStart() => _timer.Start();
+        protected void ProgressStart() => _timer.Start();
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OnProgressEnd
+        /// ProgressEnd
         /// 
         /// <summary>
         /// 進捗状況の報告を停止します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected void OnProgressStop() => _timer.Stop();
+        protected void ProgressStop() => _timer.Stop();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetDestination
+        /// 
+        /// <summary>
+        /// Destination プロパティを設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected void SetDestination(string query = null)
+        {
+            switch (Request.Location)
+            {
+                case SaveLocation.Desktop:
+                    Destination = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                    break;
+                case SaveLocation.MyDocuments:
+                    Destination = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                    break;
+                case SaveLocation.Runtime:
+                    var e = new QueryEventArgs<string, string>(query);
+                    OnDestinationRequired(e);
+                    Destination = e.Result;
+                    break;
+                case SaveLocation.Source:
+                    Destination = System.IO.Path.GetDirectoryName(Request.Sources.First());
+                    break;
+            }
+        }
 
         #endregion
 

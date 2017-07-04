@@ -47,16 +47,14 @@ namespace Cube.FileSystem.App.Ice.Tests
         [TestCase("Password.7z", "password", 3,   26)]
         public async Task Extract(string filename, string password, long count, long size)
         {
-            MockViewFactory.Password = password;
-
-            var source = Result(filename);
-            System.IO.File.Copy(Example(filename), source);
-            Assert.That(System.IO.File.Exists(source), Is.True);
-
-            var model    = new Request(new[] { "/x", source });
+            var source   = Example(filename);
+            var model    = new Request(new[] { "/x", "/o:runtime", "--", source });
             var settings = new SettingsFolder();
             var events   = new EventAggregator();
             var view     = Views.CreateProgressView();
+
+            MockViewFactory.Destination = Results;
+            MockViewFactory.Password = password;
 
             using (var ep = new ExtractPresenter(view, model, settings, events))
             {
@@ -101,7 +99,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [OneTimeTearDown]
-        public void OneTimeTearDown() => MockViewFactory.Password = string.Empty;
+        public void OneTimeTearDown() => MockViewFactory.Reset();
 
         #endregion
     }

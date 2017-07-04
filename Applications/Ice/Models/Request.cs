@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cube.FileSystem.SevenZip;
 
 namespace Cube.FileSystem.App.Ice
@@ -52,7 +53,7 @@ namespace Cube.FileSystem.App.Ice
             var mode = args[0];
             if (mode.Length < 2 || mode[0] != '/') return;
 
-            switch (args[0][1])
+            switch (mode[1])
             {
                 case 'c':
                     Mode   = Mode.Archive;
@@ -72,6 +73,8 @@ namespace Cube.FileSystem.App.Ice
                 if (item.Key.StartsWith("o")) Location = GetLocation(item.Key);
                 else if (item.Key == "p") Password = true;
             }
+
+            Sources = parser.Get();
         }
 
         #endregion

@@ -53,14 +53,16 @@ namespace Cube.FileSystem.App.Ice.Tests
             var model    = new Request(new[]
             {
                 "/c:zip",
+                "/o:runtime",
+                "--",
                 Example("Sample.txt"),
                 Example("Archive"),
             });
 
+            MockViewFactory.Destination = Result(filename);
+
             using (var ap = new ArchivePresenter(view, model, settings, events))
             {
-                ap.Model.Destination = Result(filename);
-
                 view.Show();
 
                 Assert.That(view.Visible, Is.True);
@@ -102,7 +104,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [OneTimeTearDown]
-        public void OneTimeTearDown() => MockViewFactory.Password = string.Empty;
+        public void OneTimeTearDown() => MockViewFactory.Reset();
 
         #endregion
     }

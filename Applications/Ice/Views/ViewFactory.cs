@@ -45,6 +45,42 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// ShowSaveFileView
+        /// 
+        /// <summary>
+        /// 保存ファイル名を選択する画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">パスを保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public virtual void ShowSaveFileView(QueryEventArgs<string, string> e)
+        {
+            var view = new SaveFileDialog();
+            e.Cancel = view.ShowDialog() == DialogResult.Cancel;
+            e.Result = view.FileName;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowSaveDirectoryView
+        /// 
+        /// <summary>
+        /// 保存ディレクトリ名を選択する画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">パスを保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public virtual void ShowSaveDirectoryView(QueryEventArgs<string, string> e)
+        {
+            var view = new FolderBrowserDialog();
+            e.Cancel = view.ShowDialog() == DialogResult.Cancel;
+            e.Result = view.SelectedPath;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// ShowPasswordView
         /// 
         /// <summary>
@@ -102,6 +138,12 @@ namespace Cube.FileSystem.App.Ice
 
         public static void ShowPasswordView(QueryEventArgs<string, string> e)
             => _factory?.ShowPasswordView(e);
+
+        public static void ShowSaveFileView(QueryEventArgs<string, string> e)
+            => _factory?.ShowSaveFileView(e);
+
+        public static void ShowSaveDirectoryView(QueryEventArgs<string, string> e)
+            => _factory?.ShowSaveDirectoryView(e);
 
         #endregion
 
