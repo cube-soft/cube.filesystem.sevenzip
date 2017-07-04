@@ -48,7 +48,7 @@ namespace Cube.FileSystem.App.Ice
         /// <param name="events">イベント集約用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchivePresenter(IProgressView view, Arguments args,
+        public ArchivePresenter(IProgressView view, Request args,
             SettingsFolder settings, IEventAggregator events)
             : base(view, new ArchiveFacade(args), settings, events)
         {

@@ -42,12 +42,12 @@ namespace Cube.FileSystem.App.Ice
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
-        /// <param name="args">コマンドライン</param>
+        /// <param name="request">コマンドライン</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveFacade(Arguments args) : base()
+        public ArchiveFacade(Request request) : base()
         {
-            Sources = args.Get().ToList();
+            Sources = request.Sources.ToList();
         }
 
         #endregion

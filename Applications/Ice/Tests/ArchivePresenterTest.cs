@@ -50,8 +50,9 @@ namespace Cube.FileSystem.App.Ice.Tests
             var settings = new SettingsFolder();
             var events   = new EventAggregator();
             var view     = Views.CreateProgressView();
-            var model    = new Arguments(new[]
+            var model    = new Request(new[]
             {
+                "/c:zip",
                 Example("Sample.txt"),
                 Example("Archive"),
             });

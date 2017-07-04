@@ -57,14 +57,19 @@ namespace Cube.FileSystem.App.Ice
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
 
-                var model = new Arguments(args);
                 var settings = new SettingsFolder();
-                var events = new EventAggregator();
-                var view = new ProgressForm();
+                var events   = new EventAggregator();
+                var view     = new ProgressForm();
+                var model    = new Request(args);
 
-                using (var _ = new ExtractPresenter(view, model, settings, events))
+                switch (model.Mode)
                 {
-                    Application.Run(view);
+                    case Mode.Archive:
+                        using (var _ = new ArchivePresenter(view, model, settings, events)) Application.Run(view);
+                        break;
+                    case Mode.Extract:
+                        using (var _ = new ExtractPresenter(view, model, settings, events)) Application.Run(view);
+                        break;
                 }
             }
             catch (Exception err) { Cube.Log.Operations.Error(type, err.ToString()); }

@@ -48,7 +48,7 @@ namespace Cube.FileSystem.App.Ice
         /// <param name="events">イベント集約用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ExtractPresenter(IProgressView view, Arguments model,
+        public ExtractPresenter(IProgressView view, Request model,
             SettingsFolder settings, IEventAggregator events)
             : base(view, new ExtractFacade(model), settings, events)
         {

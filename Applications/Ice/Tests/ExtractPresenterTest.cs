@@ -53,7 +53,7 @@ namespace Cube.FileSystem.App.Ice.Tests
             System.IO.File.Copy(Example(filename), source);
             Assert.That(System.IO.File.Exists(source), Is.True);
 
-            var model    = new Arguments(new[] { source });
+            var model    = new Request(new[] { "/x", source });
             var settings = new SettingsFolder();
             var events   = new EventAggregator();
             var view     = Views.CreateProgressView();

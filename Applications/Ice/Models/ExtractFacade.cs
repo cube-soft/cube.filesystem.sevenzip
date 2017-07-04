@@ -42,12 +42,12 @@ namespace Cube.FileSystem.App.Ice
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
-        /// <param name="args">コマンドライン</param>
+        /// <param name="request">コマンドライン</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ExtractFacade(Arguments args) : base()
+        public ExtractFacade(Request request) : base()
         {
-            Source = args.Get().First();
+            Source = request.Sources.First();
             Destination = System.IO.Path.GetDirectoryName(Source);
         }
 

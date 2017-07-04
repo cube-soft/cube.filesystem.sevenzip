@@ -125,6 +125,30 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
+        /// FromString
+        ///
+        /// <summary>
+        /// 文字列に対応する Format を取得します。
+        /// </summary>
+        /// 
+        /// <param name="format">Format を表す文字列</param>
+        /// 
+        /// <returns>Format オブジェクト</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static Format FromString(string format)
+        {
+            var cvt = format.ToLower();
+            if (cvt == "7z") return Format.SevenZip;
+            foreach (Format item in Enum.GetValues(typeof(Format)))
+            {
+                if (item.ToString().ToLower() == cvt) return item;
+            }
+            return Format.Unknown;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// FromExtension
         ///
         /// <summary>
