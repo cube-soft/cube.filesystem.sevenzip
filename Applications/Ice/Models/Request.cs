@@ -116,7 +116,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public SaveLocation Location { get; set; } = SaveLocation.Source;
+        public SaveLocation Location { get; set; } = SaveLocation.Runtime;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -175,14 +175,14 @@ namespace Cube.FileSystem.App.Ice
         private SaveLocation GetLocation(string s)
         {
             var index = s.IndexOf(':');
-            if (index < 0 || index >= s.Length - 1) return SaveLocation.Source;
+            if (index < 0 || index >= s.Length - 1) return SaveLocation.Runtime;
 
             var query = s.Substring(index + 1).ToLower();
             foreach (SaveLocation item in Enum.GetValues(typeof(SaveLocation)))
             {
                 if (item.ToString().ToLower() == query) return item;
             }
-            return SaveLocation.Source;
+            return SaveLocation.Runtime;
         }
 
         #endregion
