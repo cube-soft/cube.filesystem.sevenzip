@@ -48,7 +48,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         public async Task Extract(string filename, string password, long count, long size)
         {
             var source   = Example(filename);
-            var model    = new Request(new[] { "/x", "/o:runtime", "--", source });
+            var model    = new Request(new[] { "/x", "/o:runtime", source });
             var settings = new SettingsFolder();
             var events   = new EventAggregator();
             var view     = Views.CreateProgressView();

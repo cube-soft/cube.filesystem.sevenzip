@@ -67,14 +67,14 @@ namespace Cube.FileSystem.App.Ice
                     return;
             }
 
-            var parser = new Arguments(args, '/');
-            foreach (var item in parser.GetOptions())
+            var sources = new List<string>();
+            for (var i = 1; i < args.Length; ++i)
             {
-                if (item.Key.StartsWith("o")) Location = GetLocation(item.Key);
-                else if (item.Key == "p") Password = true;
+                if (!args[i].StartsWith("/")) sources.Add(args[i]);
+                else if (args[i].StartsWith("/o")) Location = GetLocation(args[i]);
+                else if (args[i] == "p") Password = true;
             }
-
-            Sources = parser.Get();
+            Sources = sources;
         }
 
         #endregion

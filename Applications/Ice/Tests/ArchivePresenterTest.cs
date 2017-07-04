@@ -54,7 +54,6 @@ namespace Cube.FileSystem.App.Ice.Tests
             {
                 "/c:zip",
                 "/o:runtime",
-                "--",
                 Example("Sample.txt"),
                 Example("Archive"),
             });
