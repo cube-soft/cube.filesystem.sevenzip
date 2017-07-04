@@ -81,7 +81,16 @@ namespace Cube.FileSystem.App.Ice.Properties {
         }
         
         /// <summary>
-        ///   圧縮ファイルを {0} に保存しました。 に類似しているローカライズされた文字列を検索します。
+        ///   すべてのファイル (*.*)|*.* に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string FilterAll {
+            get {
+                return ResourceManager.GetString("FilterAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   {0} に保存しました。 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MessageDoneArchive {
             get {
@@ -90,7 +99,7 @@ namespace Cube.FileSystem.App.Ice.Properties {
         }
         
         /// <summary>
-        ///   圧縮ファイルを {0} に解凍しました。 に類似しているローカライズされた文字列を検索します。
+        ///   {0} に解凍しました。 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MessageDoneExtract {
             get {
@@ -104,6 +113,15 @@ namespace Cube.FileSystem.App.Ice.Properties {
         internal static string MessageElapsedTime {
             get {
                 return ResourceManager.GetString("MessageElapsedTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   解凍したファイルを保存するフォルダを選択してください。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MessageExtractDestination {
+            get {
+                return ResourceManager.GetString("MessageExtractDestination", resourceCulture);
             }
         }
         

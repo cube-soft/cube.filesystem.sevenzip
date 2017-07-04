@@ -124,14 +124,20 @@
   <data name="Extract" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Extract.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="FilterAll" xml:space="preserve">
+    <value>すべてのファイル (*.*)|*.*</value>
+  </data>
   <data name="MessageDoneArchive" xml:space="preserve">
-    <value>圧縮ファイルを {0} に保存しました。</value>
+    <value>{0} に保存しました。</value>
   </data>
   <data name="MessageDoneExtract" xml:space="preserve">
-    <value>圧縮ファイルを {0} に解凍しました。</value>
+    <value>{0} に解凍しました。</value>
   </data>
   <data name="MessageElapsedTime" xml:space="preserve">
     <value>経過時間</value>
+  </data>
+  <data name="MessageExtractDestination" xml:space="preserve">
+    <value>解凍したファイルを保存するフォルダを選択してください。</value>
   </data>
   <data name="MessageFileCount" xml:space="preserve">
     <value>ファイル数</value>

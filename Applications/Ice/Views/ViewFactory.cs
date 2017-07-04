@@ -56,7 +56,11 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         public virtual void ShowSaveFileView(QueryEventArgs<string, string> e)
         {
-            var view = new SaveFileDialog();
+            var view = new SaveFileDialog
+            {
+                Filter = Properties.Resources.FilterAll,
+            };
+
             e.Cancel = view.ShowDialog() == DialogResult.Cancel;
             e.Result = view.FileName;
         }
@@ -74,7 +78,11 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         public virtual void ShowSaveDirectoryView(QueryEventArgs<string, string> e)
         {
-            var view = new FolderBrowserDialog();
+            var view = new FolderBrowserDialog
+            {
+                Description = Properties.Resources.MessageExtractDestination,
+            };
+
             e.Cancel = view.ShowDialog() == DialogResult.Cancel;
             e.Result = view.SelectedPath;
         }
