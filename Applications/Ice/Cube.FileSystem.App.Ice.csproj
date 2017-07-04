@@ -64,6 +64,7 @@
     <Compile Include="Models\ArchiveFacade.cs" />
     <Compile Include="Models\Request.cs" />
     <Compile Include="Models\ProgressFacade.cs" />
+    <Compile Include="Models\UserCancelException.cs" />
     <Compile Include="Presenters\ArchivePresenter.cs" />
     <Compile Include="Views\PasswordForm.cs">
       <SubType>Form</SubType>
