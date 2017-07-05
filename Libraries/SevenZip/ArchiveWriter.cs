@@ -17,9 +17,9 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
-using System.ComponentModel;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -66,81 +66,6 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public Format Format { get; }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// FileCount
-        ///
-        /// <summary>
-        /// 圧縮するファイル数を取得します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public long FileCount => _items.Count;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// DoneCount
-        ///
-        /// <summary>
-        /// 圧縮の終了したファイル数を取得します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public long DoneCount { get; private set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// FileSize
-        ///
-        /// <summary>
-        /// 圧縮するファイルの合計バイト数を取得します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public long FileSize { get; private set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// DoneSize
-        ///
-        /// <summary>
-        /// 圧縮の終了したバイト数を取得します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public long DoneSize { get; private set; }
-
-        #endregion
-
-        #region Events
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Progress
-        ///
-        /// <summary>
-        /// 進捗状況の通知時に発生するイベントです。
-        /// </summary>
-        /// 
-        /// <remarks>
-        /// 通知される値は、展開の完了したバイト数です。
-        /// </remarks>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public event ValueEventHandler<long> Progress;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnProgress
-        ///
-        /// <summary>
-        /// Progress イベントを発生させます。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        protected virtual void OnProgress(ValueEventArgs<long> e)
-            => Progress?.Invoke(this, e);
-
         #endregion
 
         #region Methods
@@ -175,35 +100,63 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Save
+        /// SaveAsync
         ///
         /// <summary>
-        /// 圧縮ファイルを作成し保存します。
+        /// 圧縮ファイルを非同期で作成し保存します。
         /// </summary>
         /// 
+        /// <param name="path">保存パス</param>
+        /// 
         /* ----------------------------------------------------------------- */
-        public void Save(string path, string password)
+        public Task SaveAsync(string path) => SaveAsync(path, string.Empty);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SaveAsync
+        ///
+        /// <summary>
+        /// 圧縮ファイルを非同期で作成し保存します。
+        /// </summary>
+        /// 
+        /// <param name="path">保存パス</param>
+        /// <param name="password">パスワード</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public Task SaveAsync(string path, string password)
+            => SaveAsync(path, password, null);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SaveAsync
+        ///
+        /// <summary>
+        /// 圧縮ファイルを非同期で作成し保存します。
+        /// </summary>
+        /// 
+        /// <param name="path">保存パス</param>
+        /// <param name="password">パスワード</param>
+        /// <param name="progress">進捗状況報告用オブジェクト</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public Task SaveAsync(string path, string password,
+            IProgress<ArchiveReport> progress) => Task.Run(() =>
         {
-            DoneCount = 0;
-            DoneSize  = 0;
-            FileSize  = 0;
-
-            var raw      = _lib.GetOutArchive(Format);
-            var stream   = new ArchiveStreamWriter(File.Create(path));
-            var callback = new ArchiveUpdateCallback(_items) { Password = password };
-
-            try
+            var raw = _lib.GetOutArchive(Format);
+            var stream = new ArchiveStreamWriter(File.Create(path));
+            var callback = new ArchiveUpdateCallback(_items)
             {
-                callback.PropertyChanged += WhenPropertyChanged;
-                raw.UpdateItems(stream, (uint)_items.Count, callback);
-            }
+                Password = password,
+                Progress = progress,
+            };
+
+            try { raw.UpdateItems(stream, (uint)_items.Count, callback); }
             finally
             {
-                callback.PropertyChanged -= WhenPropertyChanged;
                 stream.Dispose();
                 SaveResult(path, callback.Result);
             }
-        }
+        });
 
         #region IDisposable
 
@@ -309,61 +262,10 @@ namespace Cube.FileSystem.SevenZip
             switch (result)
             {
                 case OperationResult.OK:
+                case OperationResult.Unknown:
                     break;
                 default:
                     throw new IOException(result.ToString());
-            }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenNotifyFileSize
-        ///
-        /// <summary>
-        /// NotifyFileSize イベント発生時に実行されるハンドラです。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        private void WhenNotifyFileSize(object sender, ValueEventArgs<long> e)
-            => FileSize = e.Value;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// RaiseProgress
-        ///
-        /// <summary>
-        /// Progress イベントを発生させます。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        private void RaiseProgress(object sender, ValueEventArgs<long> e)
-            => OnProgress(e);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenPropertyChanged
-        ///
-        /// <summary>
-        /// プロパティ変更時に実行されるハンドラです。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        private void WhenPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            var ac = sender as ArchiveUpdateCallback;
-            if (ac == null) return;
-
-            switch (e.PropertyName)
-            {
-                case nameof(ac.DoneCount):
-                    DoneCount = ac.DoneCount;
-                    break;
-                case nameof(ac.FileSize):
-                    FileSize = ac.FileSize;
-                    break;
-                case nameof(ac.DoneSize):
-                    OnProgress(ValueEventArgs.Create(ac.DoneSize));
-                    break;
             }
         }
 
