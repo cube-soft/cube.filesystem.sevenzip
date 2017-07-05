@@ -291,7 +291,10 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         private void UpdateFileCountLabel()
-            => FileCountLabel.Text = $"{Properties.Resources.MessageFileCount} : {DoneCount:#,0} / {FileCount:#,0}";
+        {
+            FileCountLabel.Visible = FileCount > 0;
+            FileCountLabel.Text = $"{Properties.Resources.MessageFileCount} : {DoneCount:#,0} / {FileCount:#,0}";
+        }
 
         /* ----------------------------------------------------------------- */
         ///
