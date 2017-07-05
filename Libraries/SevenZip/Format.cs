@@ -166,18 +166,22 @@ namespace Cube.FileSystem.SevenZip
             {
                 _ext = new Dictionary<string, Format>
                 {
-                    { ".7z",  Format.SevenZip },
-                    { ".bz",  Format.BZip2    },
-                    { ".gz",  Format.GZip     },
-                    { ".lzh", Format.Lzh      },
-                    { ".rar", Format.Rar      },
-                    { ".tar", Format.Tar      },
-                    { ".xz", Format.XZ        },
-                    { ".zip", Format.Zip      },
+                    { ".7z", Format.SevenZip },
+                    { ".bz", Format.BZip2    },
+                    { ".gz", Format.GZip     },
+                    { ".xz", Format.XZ       },
+                    { ".z",  Format.Lzw      },
                 };
             }
 
             var cvt = ext.ToLower();
+            if (_ext.ContainsKey(cvt)) return _ext[cvt];
+
+            foreach (Format item in Enum.GetValues(typeof(Format)))
+            {
+                var s = $".{item.ToString().ToLower()}";
+                if (s == cvt) return item;
+            }
             return _ext.ContainsKey(cvt) ? _ext[cvt] : Format.Unknown;
         }
 
