@@ -86,13 +86,8 @@ namespace Cube.FileSystem.App.Ice
                 View.Start();
             });
 
-            Model.Start();
-
-            Sync(() =>
-            {
-                View.Stop();
-                View.Status = string.Format(Properties.Resources.MessageDoneArchive, Model.Destination);
-            });
+            try { Model.Start(); }
+            finally { Sync(() => View.Close()); }
         }).Forget();
 
         /* ----------------------------------------------------------------- */

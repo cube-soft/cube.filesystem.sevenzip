@@ -146,11 +146,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Stop()
-        {
-            _watch.Stop();
-            Close();
-        }
+        public void Stop() => _watch.Stop();
 
         /* ----------------------------------------------------------------- */
         ///
