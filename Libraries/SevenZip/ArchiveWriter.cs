@@ -17,6 +17,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.ComponentModel;
 using System.IO;
 using System.Collections.Generic;
 
@@ -78,14 +79,36 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
+        /// DoneCount
+        ///
+        /// <summary>
+        /// 圧縮の終了したファイル数を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public long DoneCount { get; private set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// FileSize
         ///
         /// <summary>
-        /// 圧縮するファイルの合計サイズを取得します。
+        /// 圧縮するファイルの合計バイト数を取得します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
         public long FileSize { get; private set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// DoneSize
+        ///
+        /// <summary>
+        /// 圧縮の終了したバイト数を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public long DoneSize { get; private set; }
 
         #endregion
 
@@ -161,20 +184,22 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void Save(string path, string password)
         {
+            DoneCount = 0;
+            DoneSize  = 0;
+            FileSize  = 0;
+
             var raw      = _lib.GetOutArchive(Format);
             var stream   = new ArchiveStreamWriter(File.Create(path));
             var callback = new ArchiveUpdateCallback(_items) { Password = password };
 
             try
             {
-                callback.NotifyFileSize += WhenNotifyFileSize;
-                callback.Progress += RaiseProgress;
+                callback.PropertyChanged += WhenPropertyChanged;
                 raw.UpdateItems(stream, (uint)_items.Count, callback);
             }
             finally
             {
-                callback.NotifyFileSize -= WhenNotifyFileSize;
-                callback.Progress -= RaiseProgress;
+                callback.PropertyChanged -= WhenPropertyChanged;
                 stream.Dispose();
                 SaveResult(path, callback.Result);
             }
@@ -313,6 +338,34 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         private void RaiseProgress(object sender, ValueEventArgs<long> e)
             => OnProgress(e);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenPropertyChanged
+        ///
+        /// <summary>
+        /// プロパティ変更時に実行されるハンドラです。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void WhenPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            var ac = sender as ArchiveUpdateCallback;
+            if (ac == null) return;
+
+            switch (e.PropertyName)
+            {
+                case nameof(ac.DoneCount):
+                    DoneCount = ac.DoneCount;
+                    break;
+                case nameof(ac.FileSize):
+                    FileSize = ac.FileSize;
+                    break;
+                case nameof(ac.DoneSize):
+                    OnProgress(ValueEventArgs.Create(ac.DoneSize));
+                    break;
+            }
+        }
 
         #region Fields
         private bool _disposed = false;

@@ -118,6 +118,7 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void WhenProgress(object sender, EventArgs e) => Sync(() =>
         {
+            View.FileName  = System.IO.Path.GetFileName(Model.Destination);
             View.FileCount = Model.FileCount;
             View.DoneCount = Model.DoneCount;
             View.Status    = Model.Current;

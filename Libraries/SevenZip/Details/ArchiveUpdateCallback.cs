@@ -30,7 +30,8 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal sealed class ArchiveUpdateCallback : IArchiveUpdateCallback, ICryptoGetTextPassword2
+    internal sealed class ArchiveUpdateCallback
+        : ProgressCallback, IArchiveUpdateCallback, ICryptoGetTextPassword2
     {
         #region Constructors
 
@@ -45,9 +46,10 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="items">圧縮するファイル一覧</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public ArchiveUpdateCallback(IList<FileItem> items)
+        public ArchiveUpdateCallback(IList<FileItem> items) : base()
         {
-            Items = items;
+            Items     = items;
+            FileCount = items.Count;
         }
 
         #endregion
@@ -75,43 +77,6 @@ namespace Cube.FileSystem.SevenZip
         /// 
         /* ----------------------------------------------------------------- */
         public string Password { get; set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Result
-        ///
-        /// <summary>
-        /// 処理結果を示す値を取得します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public OperationResult Result { get; private set; }
-
-        #endregion
-
-        #region Events
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// NotifyFileSize
-        ///
-        /// <summary>
-        /// 圧縮するファイルの合計バイト数の通知時に発生するイベントです。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public event ValueEventHandler<long> NotifyFileSize;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Progress
-        ///
-        /// <summary>
-        /// 進捗状況を通知する時に発生するイベントです。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public event ValueEventHandler<long> Progress;
 
         #endregion
 
@@ -160,8 +125,7 @@ namespace Cube.FileSystem.SevenZip
         /// </param>
         /// 
         /* ----------------------------------------------------------------- */
-        public void SetTotal(ulong size)
-            => NotifyFileSize?.Invoke(this, ValueEventArgs.Create((long)size));
+        public void SetTotal(ulong size) => FileSize = (long)size;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -174,8 +138,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="size">処理の終了したバイト数</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public void SetCompleted(ref ulong size)
-            => Progress?.Invoke(this, ValueEventArgs.Create((long)size));
+        public void SetCompleted(ref ulong size) => DoneSize = (long)size;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -278,6 +241,7 @@ namespace Cube.FileSystem.SevenZip
             var item = Items[(int)index];
             System.Diagnostics.Debug.Assert(!item.IsDirectory);
             stream = new ArchiveStreamReader(item.GetStream());
+            DoneCount = index + 1;
             return 0;
         }
 

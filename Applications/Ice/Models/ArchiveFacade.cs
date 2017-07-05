@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cube.Log;
 
 namespace Cube.FileSystem.App.Ice
 {
@@ -97,6 +98,11 @@ namespace Cube.FileSystem.App.Ice
                     writer.Progress += WhenProgress;
                     ProgressStart();
                     writer.Save(Destination, string.Empty);
+
+                    var name = System.IO.Path.GetFileName(Destination);
+                    this.LogDebug($"{name}:{DoneSize}/{FileSize}");
+                    DoneSize = FileSize; // hack
+
                     OnProgress(EventArgs.Empty);
                 }
                 finally
@@ -122,10 +128,11 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void WhenProgress(object sender, ValueEventArgs<long> e)
         {
-            if (sender is SevenZip.ArchiveWriter a)
+            if (sender is SevenZip.ArchiveWriter ar)
             {
-                FileCount = a.FileCount;
-                FileSize  = a.FileSize;
+                FileCount = ar.FileCount;
+                DoneCount = ar.DoneCount;
+                FileSize  = ar.FileSize;
                 DoneSize  = e.Value;
             }
         }
