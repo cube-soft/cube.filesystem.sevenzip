@@ -90,6 +90,15 @@ namespace Cube.FileSystem.App.Ice.Properties {
         }
         
         /// <summary>
+        ///   {0} を作成しています... に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MessageArchive {
+            get {
+                return ResourceManager.GetString("MessageArchive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   {0} に保存しました。 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MessageDoneArchive {

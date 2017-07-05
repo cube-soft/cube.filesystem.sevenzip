@@ -121,7 +121,7 @@ namespace Cube.FileSystem.App.Ice
             View.FileName  = System.IO.Path.GetFileName(Model.Destination);
             View.FileCount = Model.FileCount;
             View.DoneCount = Model.DoneCount;
-            View.Status    = Model.Current;
+            View.Status    = string.Format(Properties.Resources.MessageArchive, Model.Destination);
             View.Value     = Math.Max(Math.Max(Model.Percentage, 1), View.Value);
         });
 

@@ -127,6 +127,9 @@
   <data name="FilterAll" xml:space="preserve">
     <value>すべてのファイル (*.*)|*.*</value>
   </data>
+  <data name="MessageArchive" xml:space="preserve">
+    <value>{0} を作成しています...</value>
+  </data>
   <data name="MessageDoneArchive" xml:space="preserve">
     <value>{0} に保存しました。</value>
   </data>
