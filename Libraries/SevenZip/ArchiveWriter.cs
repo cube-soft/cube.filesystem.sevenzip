@@ -19,8 +19,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -105,85 +103,47 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SaveAsync
+        /// Save
         ///
         /// <summary>
-        /// 圧縮ファイルを非同期で作成し保存します。
+        /// 圧縮ファイルを作成し保存します。
         /// </summary>
         /// 
         /// <param name="path">保存パス</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public Task SaveAsync(string path) => SaveAsync(path, string.Empty);
+        public void Save(string path) => Save(path, string.Empty);
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SaveAsync
+        /// Save
         ///
         /// <summary>
-        /// 圧縮ファイルを非同期で作成し保存します。
-        /// </summary>
-        /// 
-        /// <param name="path">保存パス</param>
-        /// <param name="cancel">キャンセル用オブジェクト</param>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public Task SaveAsync(string path, CancellationToken cancel)
-            => SaveAsync(path, string.Empty, cancel);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SaveAsync
-        ///
-        /// <summary>
-        /// 圧縮ファイルを非同期で作成し保存します。
+        /// 圧縮ファイルを作成し保存します。
         /// </summary>
         /// 
         /// <param name="path">保存パス</param>
         /// <param name="password">パスワード</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public Task SaveAsync(string path, string password) => Task.Run(() =>
-        {
-            var dummy = new CancellationTokenSource();
-            Save(path, new PasswordQuery(password), null, dummy.Token);
-        });
+        public void Save(string path, string password)
+            => SaveCore(path, new PasswordQuery(password), null);
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SaveAsync
+        /// Save
         ///
         /// <summary>
-        /// 圧縮ファイルを非同期で作成し保存します。
-        /// </summary>
-        /// 
-        /// <param name="path">保存パス</param>
-        /// <param name="password">パスワード</param>
-        /// <param name="cancel">キャンセル用オブジェクト</param>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public Task SaveAsync(string path, string password, CancellationToken cancel)
-            => Task.Run(() => Save(path, new PasswordQuery(password), null, cancel));
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SaveAsync
-        ///
-        /// <summary>
-        /// 圧縮ファイルを非同期で作成し保存します。
+        /// 圧縮ファイルを作成し保存します。
         /// </summary>
         /// 
         /// <param name="path">保存パス</param>
         /// <param name="password">パスワード取得用オブジェクト</param>
         /// <param name="progress">進捗状況報告用オブジェクト</param>
-        /// <param name="cancel">キャンセル用オブジェクト</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public Task SaveAsync(string path,
-            IQuery<string, string> password,
-            IProgress<ArchiveReport> progress,
-            CancellationToken cancel
-        ) => Task.Run(() => Save(path, new PasswordQuery(password), progress, cancel));
+        public void Save(string path, IQuery<string, string> password, IProgress<ArchiveReport> progress)
+            => SaveCore(path, new PasswordQuery(password), progress);
 
         #endregion
 
@@ -279,23 +239,19 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Save
+        /// SaveCore
         ///
         /// <summary>
         /// 圧縮ファイルを作成し保存します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private void Save(string path,
-            IQuery<string, string> password,
-            IProgress<ArchiveReport> progress,
-            CancellationToken cancel)
+        private void SaveCore(string path, IQuery<string, string> password, IProgress<ArchiveReport> progress)
         {
             var raw = _lib.GetOutArchive(Format);
             var stream = new ArchiveStreamWriter(File.Create(path));
             var callback = new ArchiveUpdateCallback(_items, path)
             {
-                Cancel   = cancel,
                 Password = password,
                 Progress = progress,
             };

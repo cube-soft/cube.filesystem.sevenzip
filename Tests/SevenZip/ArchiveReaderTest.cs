@@ -81,7 +81,7 @@ namespace Cube.FileSystem.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(Extract_TestCases))]
-        public async Task Extract(string filename, string password, IList<ExpectedItem> expected)
+        public void Extract(string filename, string password, IList<ExpectedItem> expected)
         {
             var src = Example(filename);
             using (var archive = new SevenZip.ArchiveReader(src, Password(password)))
@@ -89,7 +89,7 @@ namespace Cube.FileSystem.Tests
                 var actual = archive.Items.ToList();
                 for (var i = 0; i < expected.Count; ++i)
                 {
-                    await actual[i].ExtractAsync(Results);
+                    actual[i].Extract(Results);
                     var dest = Result(actual[i].Path);
                     var dir  = expected[i].IsDirectory;
                     Assert.That(Exists(dest, dir), Is.True);
@@ -109,15 +109,12 @@ namespace Cube.FileSystem.Tests
         /* ----------------------------------------------------------------- */
         [Test]
         public void Extract_Throws()
-            => Assert.That(async () =>
+            => Assert.That(() =>
             {
                 var src = Example("Password.7z");
                 using (var archive = new SevenZip.ArchiveReader(src))
                 {
-                    foreach (var item in archive.Items)
-                    {
-                        await item.ExtractAsync(Results);
-                    }
+                    foreach (var item in archive.Items) item.Extract(Results);
                 }
             },
             Throws.TypeOf<SevenZip.EncryptionException>());

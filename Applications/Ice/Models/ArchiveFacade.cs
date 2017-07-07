@@ -18,8 +18,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Cube.FileSystem.SevenZip;
 using Cube.Log;
 
@@ -83,14 +81,14 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// StartAsync
+        /// Start
         /// 
         /// <summary>
-        /// 圧縮を非同期で開始します。
+        /// 圧縮を開始します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public async Task StartAsync()
+        public void Start()
         {
             using (var writer = new ArchiveWriter(Format))
             {
@@ -100,11 +98,9 @@ namespace Cube.FileSystem.App.Ice
                     foreach (var item in Sources) writer.Add(item);
                     ProgressStart();
 
-                    var dummy = new CancellationTokenSource();
-                    await writer.SaveAsync(Destination,
+                    writer.Save(Destination,
                         null,
-                        new Progress<ArchiveReport>(x => ProgressReport = x),
-                        dummy.Token
+                        new Progress<ArchiveReport>(x => ProgressReport = x)
                     );
 
                     var name = System.IO.Path.GetFileName(Destination);

@@ -207,41 +207,34 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ExtractAsync
+        /// Extract
         ///
         /// <summary>
-        /// 展開した内容を非同期で保存します。
+        /// 展開した内容を保存します。
         /// </summary>
         /// 
         /// <param name="directory">保存ディレクトリ</param>
         ///
         /* ----------------------------------------------------------------- */
-        public async Task ExtractAsync(string directory)
-        {
-            var dummy = new CancellationTokenSource();
-            await ExtractAsync(directory, null, dummy.Token);
-        }
+        public void Extract(string directory) => Extract(directory, null);
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ExtractAsync
+        /// Extract
         ///
         /// <summary>
-        /// 展開した内容を非同期で保存します。
+        /// 展開した内容を保存します。
         /// </summary>
         /// 
         /// <param name="directory">保存ディレクトリ</param>
         /// <param name="progress">進捗報告用オブジェクト</param>
-        /// <param name="cancel">キャンセル用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public Task ExtractAsync(string directory,
-            IProgress<ArchiveReport> progress,
-            CancellationToken cancel) => Task.Run(() =>
+        public void Extract(string directory, IProgress<ArchiveReport> progress)
         {
             if (IsDirectory) CreateDirectory(System.IO.Path.Combine(directory, Path));
-            else ExtractFile(directory, progress, cancel);
-        });
+            else ExtractFile(directory, progress);
+        }
 
         #endregion
 
@@ -256,9 +249,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private void ExtractFile(string directory,
-            IProgress<ArchiveReport> progress,
-            CancellationToken cancel)
+        private void ExtractFile(string directory, IProgress<ArchiveReport> progress)
         {
             var dest = System.IO.Path.Combine(directory, Path);
             CreateDirectory(System.IO.Path.GetDirectoryName(dest));
@@ -268,7 +259,6 @@ namespace Cube.FileSystem.SevenZip
             {
                 Password = Password,
                 Progress = progress,
-                Cancel   = cancel,
             };
 
             try { _raw.Extract(new[] { (uint)Index }, 1, 0, callback); }

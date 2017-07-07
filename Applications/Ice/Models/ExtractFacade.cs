@@ -78,7 +78,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public async Task StartAsync()
+        public void Start()
         {
             var query = new Query<string, string>(x => RaisePasswordRequired(x));
             using (var reader = new ArchiveReader(Source, query))
@@ -87,7 +87,7 @@ namespace Cube.FileSystem.App.Ice
                 {
                     SetDestination();
                     Collect(reader);
-                    await ExtractAsync(reader);
+                    Extract(reader);
                 }
                 catch (EncryptionException /* err */) { /* user cancel */ }
                 catch (Exception err) { this.LogWarn(err.ToString(), err); }
@@ -120,19 +120,19 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ExtractAsync
+        /// Extract
         /// 
         /// <summary>
-        /// 圧縮ファイルを非同期で展開します。
+        /// 圧縮ファイルを展開します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private async Task ExtractAsync(ArchiveReader reader)
+        private void Extract(ArchiveReader reader)
         {
             try
             {
                 ProgressStart();
-                foreach (var item in reader.Items) await ExtractAsync(item);
+                foreach (var item in reader.Items) Extract(item);
                 OnProgress(ValueEventArgs.Create(ProgressReport));
             }
             finally { ProgressStop(); }
@@ -143,18 +143,20 @@ namespace Cube.FileSystem.App.Ice
         /// Extract
         /// 
         /// <summary>
-        /// 圧縮ファイルの一項目を非同期で展開します。
+        /// 圧縮ファイルの一項目を展開します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private async Task ExtractAsync(ArchiveItem src)
+        private void Extract(ArchiveItem src)
         {
             var done = ProgressReport.DoneSize;
-            var progress = new Progress<ArchiveReport>(e => ProgressReport.DoneSize = done + e.DoneSize);
-            var dummy = new CancellationTokenSource();
+            var progress = new Progress<ArchiveReport>(e =>
+            {
+                ProgressReport.DoneSize = done + e.DoneSize;
+            });
 
             Current = src.Path;
-            await src.ExtractAsync(Destination, progress, dummy.Token);
+            src.Extract(Destination, progress);
             ProgressReport.DoneCount++;
         }
 

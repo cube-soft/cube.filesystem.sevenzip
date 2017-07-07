@@ -47,14 +47,14 @@ namespace Cube.FileSystem.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(Archive_TestCases))]
-        public async Task Archive(string filename, string password, long size, string[] items)
+        public void Archive(string filename, string password, long size, string[] items)
         {
             var dest = Result(filename);
 
             using (var writer = new SevenZip.ArchiveWriter(SevenZip.Format.Zip))
             {
                 foreach (var item in items) writer.Add(Example(item));
-                await writer.SaveAsync(dest, password);
+                writer.Save(dest, password);
             }
 
             var info = new System.IO.FileInfo(dest);
