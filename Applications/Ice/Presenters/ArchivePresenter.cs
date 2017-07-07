@@ -59,7 +59,6 @@ namespace Cube.FileSystem.App.Ice
 
             // View
             View.EventAggregator = EventAggregator;
-            View.FileName = System.IO.Path.GetFileName(Model.Destination);
             View.Icon = Properties.Resources.Archive;
             View.Status = Properties.Resources.MessagePreArchive;
 
@@ -80,12 +79,12 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenShow()
+        private async void WhenShow()
         {
             try
             {
                 Sync(() => View.Start());
-                Model.StartAsync().Forget();
+                await Model.StartAsync();
             }
             finally { Sync(() => View.Close()); }
         }

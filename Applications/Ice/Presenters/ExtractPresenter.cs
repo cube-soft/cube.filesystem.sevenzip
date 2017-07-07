@@ -80,12 +80,12 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenShow()
+        private async void WhenShow()
         {
             try
             {
                 Sync(() => View.Start());
-                Model.StartAsync().Forget();
+                await Model.StartAsync();
             }
             finally { Sync(() => View.Close()); }
         }
