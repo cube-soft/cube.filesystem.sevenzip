@@ -84,7 +84,7 @@ namespace Cube.FileSystem.Tests
         public async Task Extract(string filename, string password, IList<ExpectedItem> expected)
         {
             var src = Example(filename);
-            using (var archive = new SevenZip.ArchiveReader(src))
+            using (var archive = new SevenZip.ArchiveReader(src, Password(password)))
             {
                 var actual = archive.Items.ToList();
                 for (var i = 0; i < expected.Count; ++i)
@@ -251,6 +251,22 @@ namespace Cube.FileSystem.Tests
             => directory ?
                0 :
                new System.IO.FileInfo(path).Length;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Password
+        ///
+        /// <summary>
+        /// パスワード取得用オブジェクトを生成します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private IQuery<string, string> Password(string value)
+            => new Query<string, string>(e =>
+            {
+                e.Result = value;
+                e.Cancel = false;
+            });
 
         /* ----------------------------------------------------------------- */
         ///
