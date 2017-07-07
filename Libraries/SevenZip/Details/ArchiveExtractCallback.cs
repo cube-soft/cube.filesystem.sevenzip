@@ -17,6 +17,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Collections.Generic;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -29,7 +30,8 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal sealed class ArchiveExtractCallback : IArchiveExtractCallback, ICryptoGetTextPassword
+    internal sealed class ArchiveExtractCallback
+        : ArchiveCallbackBase, IArchiveExtractCallback, ICryptoGetTextPassword
     {
         #region Constructors
 
@@ -42,11 +44,11 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public ArchiveExtractCallback(ArchiveItem src, string password, ISequentialOutStream dest)
+        public ArchiveExtractCallback(string src, long count, long size,
+            Func<uint, ISequentialOutStream> destination)
         {
-            Source      = src;
-            Password    = password;
-            Destination = dest;
+            ProgressReport.FileCount = count;
+            ProgressReport.FileSize  = size;
         }
 
         #endregion
@@ -58,59 +60,22 @@ namespace Cube.FileSystem.SevenZip
         /// Source
         ///
         /// <summary>
-        /// 圧縮ファイルの項目を表すオブジェクトを取得します。
+        /// 圧縮ファイルのパスを取得します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public ArchiveItem Source { get; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Password
-        ///
-        /// <summary>
-        /// 圧縮ファイルのパスワードを取得します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public string Password { get; }
+        public string Source { get; }
 
         /* ----------------------------------------------------------------- */
         ///
         /// Destination
         ///
         /// <summary>
-        /// 展開先ストリームを取得します。
+        /// 出力ストリームを取得するオブジェクトを取得します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public ISequentialOutStream Destination { get; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Result
-        ///
-        /// <summary>
-        /// 処理結果を示す値を取得します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public OperationResult Result { get; private set; }
-
-        #endregion
-
-        #region Events
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Progress
-        ///
-        /// <summary>
-        /// 進捗状況を通知する時に発生するイベントです。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public event ValueEventHandler<long> Progress;
+        public Func<uint, ISequentialOutStream> Destination { get; }
 
         #endregion
 
@@ -133,7 +98,13 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int CryptoGetTextPassword(out string password)
         {
-            password = Password;
+            Cancel.ThrowIfCancellationRequested();
+
+            var e = new QueryEventArgs<string, string>(Source);
+            if (Password != null) Password.Request(e);
+            else e.Cancel = true;
+
+            password = !e.Cancel ? e.Result : string.Empty;
             return 0;
         }
 
@@ -152,7 +123,13 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="size">展開後のバイト数</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public void SetTotal(ulong size) => _hack = Math.Max((long)size - Source.Size, 0);
+        public void SetTotal(ulong size)
+        {
+            Cancel.ThrowIfCancellationRequested();
+
+            _hack = Math.Max((long)size - ProgressReport.FileSize, 0);
+            Progress?.Report(ProgressReport);
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -176,8 +153,11 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void SetCompleted(ref ulong size)
         {
+            Cancel.ThrowIfCancellationRequested();
+
             var cvt = Math.Max((long)size - _hack, 0);
-            Progress?.Invoke(this, ValueEventArgs.Create(cvt));
+            ProgressReport.DoneSize = cvt;
+            Progress?.Report(ProgressReport);
         }
 
         /* ----------------------------------------------------------------- */
@@ -197,7 +177,9 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int GetStream(uint index, out ISequentialOutStream stream, AskMode mode)
         {
-            stream = (mode == AskMode.Extract) ? Destination : null;
+            Cancel.ThrowIfCancellationRequested();
+
+            stream = (mode == AskMode.Extract) ? Destination(index) : null;
             return 0;
         }
 
@@ -225,7 +207,12 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="result">処理結果</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public void SetOperationResult(OperationResult result) => Result = result;
+        public void SetOperationResult(OperationResult result)
+        {
+            ProgressReport.DoneCount = 1;
+            Progress?.Report(ProgressReport);
+            Result = result;
+        }
 
         #endregion
 

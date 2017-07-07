@@ -17,7 +17,10 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Cube.Log;
+using Cube.FileSystem.SevenZip;
 
 namespace Cube.FileSystem.App.Ice
 {
@@ -75,18 +78,18 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Start()
+        public async Task StartAsync()
         {
-            using (var reader = new SevenZip.ArchiveReader())
+            var query = new Query<string, string>(x => RaisePasswordRequired(x));
+            using (var reader = new ArchiveReader(Source, query))
             {
                 try
                 {
                     SetDestination();
-                    reader.Open(Source);
-                    Collect(reader, out string password);
-                    Extract(reader, password);
+                    Collect(reader);
+                    await ExtractAsync(reader);
                 }
-                catch (SevenZip.EncryptionException /* err */) { /* user cancel */ }
+                catch (EncryptionException /* err */) { /* user cancel */ }
                 catch (Exception err) { this.LogWarn(err.ToString(), err); }
             }
         }
@@ -104,46 +107,33 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private void Collect(SevenZip.ArchiveReader reader, out string password)
+        private void Collect(ArchiveReader reader)
         {
-            FileCount = reader.Items.Count;
+            ProgressReport.FileCount = reader.Items.Count;
+            ProgressReport.FileSize  = reader.Items.Select(x => x.Size)
+                                             .Aggregate(0L, (x, y) => x + y);
 
-            var query = new QueryEventArgs<string, string>(Source);
-            var done  = false;
-            var size  = 0L;
-
-            foreach (var item in reader.Items)
-            {
-                size += item.Size;
-                if (item.Encrypted && !done)
-                {
-                    RaisePasswordRequired(this, query);
-                    done = true;
-                }
-            }
-
-            FileSize = size;
-            password = query.Result ?? string.Empty;
-
-            this.LogDebug($"Count:{FileCount:#,0}\tSize:{FileSize:#,0}\tPath:{Source}");
+            this.LogDebug(string.Format("Count:{0:#,0}\tSize:{1:#,0}\tPath:{2}",
+                ProgressReport.FileCount, ProgressReport.FileSize, Source
+            ));
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract
+        /// ExtractAsync
         /// 
         /// <summary>
-        /// ファイルを展開します。
+        /// 圧縮ファイルを非同期で展開します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Extract(SevenZip.ArchiveReader reader, string password)
+        private async Task ExtractAsync(ArchiveReader reader)
         {
             try
             {
                 ProgressStart();
-                foreach (var item in reader.Items) Extract(item, password);
-                OnProgress(EventArgs.Empty);
+                foreach (var item in reader.Items) await ExtractAsync(item);
+                OnProgress(ValueEventArgs.Create(ProgressReport));
             }
             finally { ProgressStop(); }
         }
@@ -153,28 +143,19 @@ namespace Cube.FileSystem.App.Ice
         /// Extract
         /// 
         /// <summary>
-        /// ファイルを展開します。
+        /// 圧縮ファイルの一項目を非同期で展開します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Extract(SevenZip.ArchiveItem src, string password)
+        private async Task ExtractAsync(ArchiveItem src)
         {
-            var done = DoneSize;
-            ValueEventHandler<long> h = (s, e) => DoneSize = done + e.Value;
+            var done = ProgressReport.DoneSize;
+            var progress = new Progress<ArchiveReport>(e => ProgressReport.DoneSize = done + e.DoneSize);
+            var dummy = new CancellationTokenSource();
 
-            try
-            {
-                Current = src.Path;
-                src.PasswordRequired += RaisePasswordRequired;
-                src.Progress += h;
-                src.Extract(Destination, password);
-                DoneCount++;
-            }
-            finally
-            {
-                src.PasswordRequired -= RaisePasswordRequired;
-                src.Progress -= h;
-            }
+            Current = src.Path;
+            await src.ExtractAsync(Destination, progress, dummy.Token);
+            ProgressReport.DoneCount++;
         }
 
         /* ----------------------------------------------------------------- */
@@ -186,7 +167,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void RaisePasswordRequired(object sender, QueryEventArgs<string, string> e)
+        private void RaisePasswordRequired(QueryEventArgs<string, string> e)
             => OnPasswordRequired(e);
 
         #endregion

@@ -29,7 +29,8 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal sealed class ArchiveOpenCallback : IArchiveOpenCallback, ICryptoGetTextPassword
+    internal sealed class ArchiveOpenCallback
+        : ArchiveCallbackBase, IArchiveOpenCallback, ICryptoGetTextPassword
     {
         #region Constructors
 
@@ -42,9 +43,10 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public ArchiveOpenCallback(string password)
+        public ArchiveOpenCallback(string src)
         {
-            Password = password;
+            Source = src;
+            Result = OperationResult.OK;
         }
 
         #endregion
@@ -53,14 +55,14 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Password
+        /// Source
         ///
         /// <summary>
-        /// 圧縮ファイルのパスワードを取得または設定します。
+        /// 圧縮ファイルのパスを取得します。
         /// </summary>
-        ///
+        /// 
         /* ----------------------------------------------------------------- */
-        public string Password { get; }
+        public string Source { get; }
 
         #endregion
 
@@ -83,7 +85,13 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int CryptoGetTextPassword(out string password)
         {
-            password = Password;
+            Cancel.ThrowIfCancellationRequested();
+
+            var e = new QueryEventArgs<string, string>(Source);
+            if (Password != null) Password.Request(e);
+            else e.Cancel = true;
+
+            password = !e.Cancel ? e.Result : string.Empty;
             return 0;
         }
 

@@ -17,6 +17,8 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Cube.Log;
 
 namespace Cube.FileSystem.SevenZip
@@ -43,11 +45,18 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /// <param name="obj">実装オブジェクト</param>
+        /// <param name="src">圧縮ファイルのパス</param>
+        /// <param name="index">圧縮ファイル中のインデックス</param>
+        /// <param name="password">パスワード取得用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveItem(object obj, int index)
+        public ArchiveItem(object obj, string src, int index,
+            IQuery<string, string> password)
         {
-            Index = index;
+            Source = src;
+            Index  = index;
+            Password = password;
+
             if (obj is IInArchive raw) _raw = raw;
             else throw new ArgumentException("invalid object");
         }
@@ -55,6 +64,17 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Source
+        ///
+        /// <summary>
+        /// 圧縮ファイルのパスを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Source { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -66,6 +86,19 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public int Index { get; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Password
+        ///
+        /// <summary>
+        /// パスワード取得用オブジェクトを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private IQuery<string, string> Password { get; }
+
+        #region IArchiveItem
 
         /* ----------------------------------------------------------------- */
         ///
@@ -168,108 +201,47 @@ namespace Cube.FileSystem.SevenZip
 
         #endregion
 
-        #region Events
-
-        #region Progress
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Progress
-        ///
-        /// <summary>
-        /// 進捗状況の通知時に発生するイベントです。
-        /// </summary>
-        /// 
-        /// <remarks>
-        /// 通知される値は、展開の完了したバイト数です。
-        /// </remarks>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public ValueEventHandler<long> Progress;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnProgress
-        ///
-        /// <summary>
-        /// Progress イベントを発生させます。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        protected virtual void OnProgress(ValueEventArgs<long> e)
-            => Progress?.Invoke(this, e);
-
-        #endregion
-
-        #region PasswordRequired
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// PasswordRequired
-        /// 
-        /// <summary>
-        /// パスワードが要求された時に発生するイベントです。
-        /// </summary>
-        /// 
-        /// <remarks>
-        /// PasswordRequired イベントに対してイベントハンドラが登録されて
-        /// いない場合、EncryptionException が送出されます。
-        /// </remarks>
-        ///
-        /* ----------------------------------------------------------------- */
-        public event QueryEventHandler<string, string> PasswordRequired;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnPasswordRequired
-        /// 
-        /// <summary>
-        /// PasswordRequired イベントを発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected virtual void OnPasswordRequired(QueryEventArgs<string, string> e)
-        {
-            if (PasswordRequired != null) PasswordRequired(this, e);
-            else throw new EncryptionException(e.Query);
-        }
-
-        #endregion
-
         #endregion
 
         #region Methods
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract
+        /// ExtractAsync
         ///
         /// <summary>
-        /// 展開した内容を保存します。
+        /// 展開した内容を非同期で保存します。
         /// </summary>
         /// 
-        /// <param name="directory">保存するディレクトリ</param>
+        /// <param name="directory">保存ディレクトリ</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Extract(string directory) => Extract(directory, string.Empty);
+        public async Task ExtractAsync(string directory)
+        {
+            var dummy = new CancellationTokenSource();
+            await ExtractAsync(directory, null, dummy.Token);
+        }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract
+        /// ExtractAsync
         ///
         /// <summary>
-        /// 展開した内容を保存します。
+        /// 展開した内容を非同期で保存します。
         /// </summary>
         /// 
-        /// <param name="directory">保存するディレクトリ</param>
-        /// <param name="password">パスワード</param>
+        /// <param name="directory">保存ディレクトリ</param>
+        /// <param name="progress">進捗報告用オブジェクト</param>
+        /// <param name="cancel">キャンセル用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Extract(string directory, string password)
+        public Task ExtractAsync(string directory,
+            IProgress<ArchiveReport> progress,
+            CancellationToken cancel) => Task.Run(() =>
         {
             if (IsDirectory) CreateDirectory(System.IO.Path.Combine(directory, Path));
-            else ExtractFile(directory, password);
-        }
+            else ExtractFile(directory, progress, cancel);
+        });
 
         #endregion
 
@@ -284,22 +256,24 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private void ExtractFile(string directory, string password)
+        private void ExtractFile(string directory,
+            IProgress<ArchiveReport> progress,
+            CancellationToken cancel)
         {
             var dest = System.IO.Path.Combine(directory, Path);
             CreateDirectory(System.IO.Path.GetDirectoryName(dest));
 
             var stream = new ArchiveStreamWriter(System.IO.File.Create(dest));
-            var callback = new ArchiveExtractCallback(this, password, stream);
-
-            try
+            var callback = new ArchiveExtractCallback(Source, 1, Size, _ => stream)
             {
-                callback.Progress += RaiseProgress;
-                _raw.Extract(new[] { (uint)Index }, 1, 0, callback);
-            }
+                Password = Password,
+                Progress = progress,
+                Cancel   = cancel,
+            };
+
+            try { _raw.Extract(new[] { (uint)Index }, 1, 0, callback); }
             finally
             {
-                callback.Progress -= RaiseProgress;
                 stream.Dispose();
                 ExtractFileResult(directory, callback.Result);
             }
@@ -319,14 +293,14 @@ namespace Cube.FileSystem.SevenZip
             switch (result)
             {
                 case OperationResult.OK:
+                case OperationResult.Unknown:
                     break;
                 case OperationResult.DataError:
-                    if (Encrypted) RaisePasswordRequired(directory);
+                    if (Encrypted) new EncryptionException();
                     else throw new System.IO.IOException(result.ToString());
                     break;
                 case OperationResult.WrongPassword:
-                    RaisePasswordRequired(directory);
-                    break;
+                    throw new EncryptionException();
                 default:
                     throw new System.IO.IOException(result.ToString());
             }
@@ -371,34 +345,6 @@ namespace Cube.FileSystem.SevenZip
                 this.LogWarn(err.ToString(), err);
                 return default(T);
             }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// RaiseProgress
-        ///
-        /// <summary>
-        /// Progress イベントを発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void RaiseProgress(object sender, ValueEventArgs<long> e)
-            => OnProgress(e);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// RaisePasswordRequired
-        ///
-        /// <summary>
-        /// PasswordRequired イベントを発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void RaisePasswordRequired(string directory)
-        {
-            var e = new QueryEventArgs<string, string>(Path);
-            OnPasswordRequired(e);
-            if (!e.Cancel) Extract(directory, e.Result);
         }
 
         #region Fields

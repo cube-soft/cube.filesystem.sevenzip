@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Cube.FileSystem.SevenZip
@@ -43,6 +44,8 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
+        /// 
+        /// <param name="format">圧縮フォーマット</param>
         /// 
         /* ----------------------------------------------------------------- */
         public ArchiveWriter(Format format)
@@ -98,6 +101,8 @@ namespace Cube.FileSystem.SevenZip
             else throw new FileNotFoundException(path);
         }
 
+        #region SaveAsync
+
         /* ----------------------------------------------------------------- */
         ///
         /// SaveAsync
@@ -120,11 +125,11 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /// <param name="path">保存パス</param>
-        /// <param name="password">パスワード</param>
+        /// <param name="cancel">キャンセル用オブジェクト</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public Task SaveAsync(string path, string password)
-            => SaveAsync(path, password, null);
+        public Task SaveAsync(string path, CancellationToken cancel)
+            => SaveAsync(path, string.Empty, cancel);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -136,27 +141,51 @@ namespace Cube.FileSystem.SevenZip
         /// 
         /// <param name="path">保存パス</param>
         /// <param name="password">パスワード</param>
-        /// <param name="progress">進捗状況報告用オブジェクト</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public Task SaveAsync(string path, string password,
-            IProgress<ArchiveReport> progress) => Task.Run(() =>
+        public Task SaveAsync(string path, string password) => Task.Run(() =>
         {
-            var raw = _lib.GetOutArchive(Format);
-            var stream = new ArchiveStreamWriter(File.Create(path));
-            var callback = new ArchiveUpdateCallback(_items)
-            {
-                Password = password,
-                Progress = progress,
-            };
-
-            try { raw.UpdateItems(stream, (uint)_items.Count, callback); }
-            finally
-            {
-                stream.Dispose();
-                SaveResult(path, callback.Result);
-            }
+            var dummy = new CancellationTokenSource();
+            Save(path, new PasswordQuery(password), null, dummy.Token);
         });
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SaveAsync
+        ///
+        /// <summary>
+        /// 圧縮ファイルを非同期で作成し保存します。
+        /// </summary>
+        /// 
+        /// <param name="path">保存パス</param>
+        /// <param name="password">パスワード</param>
+        /// <param name="cancel">キャンセル用オブジェクト</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public Task SaveAsync(string path, string password, CancellationToken cancel)
+            => Task.Run(() => Save(path, new PasswordQuery(password), null, cancel));
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SaveAsync
+        ///
+        /// <summary>
+        /// 圧縮ファイルを非同期で作成し保存します。
+        /// </summary>
+        /// 
+        /// <param name="path">保存パス</param>
+        /// <param name="password">パスワード取得用オブジェクト</param>
+        /// <param name="progress">進捗状況報告用オブジェクト</param>
+        /// <param name="cancel">キャンセル用オブジェクト</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public Task SaveAsync(string path,
+            IQuery<string, string> password,
+            IProgress<ArchiveReport> progress,
+            CancellationToken cancel
+        ) => Task.Run(() => Save(path, new PasswordQuery(password), progress, cancel));
+
+        #endregion
 
         #region IDisposable
 
@@ -245,6 +274,37 @@ namespace Cube.FileSystem.SevenZip
             foreach (var child in info.GetDirectories())
             {
                 Add(child, Path.Combine(pathInArchive, child.Name));
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Save
+        ///
+        /// <summary>
+        /// 圧縮ファイルを作成し保存します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void Save(string path,
+            IQuery<string, string> password,
+            IProgress<ArchiveReport> progress,
+            CancellationToken cancel)
+        {
+            var raw = _lib.GetOutArchive(Format);
+            var stream = new ArchiveStreamWriter(File.Create(path));
+            var callback = new ArchiveUpdateCallback(_items, path)
+            {
+                Cancel   = cancel,
+                Password = password,
+                Progress = progress,
+            };
+
+            try { raw.UpdateItems(stream, (uint)_items.Count, callback); }
+            finally
+            {
+                stream.Dispose();
+                SaveResult(path, callback.Result);
             }
         }
 

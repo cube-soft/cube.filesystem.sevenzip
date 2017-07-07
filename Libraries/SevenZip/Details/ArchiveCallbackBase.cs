@@ -16,6 +16,9 @@
 /// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ///
 /* ------------------------------------------------------------------------- */
+using System;
+using System.Threading;
+
 namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
@@ -31,24 +34,43 @@ namespace Cube.FileSystem.SevenZip
     /// </remarks>
     /// 
     /* --------------------------------------------------------------------- */
-    internal class ProgressCallback : ObservableProperty
+    internal abstract class ArchiveCallbackBase
     {
-        #region Constructors
+        #region Properties
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ProgressCallback
+        /// Password
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// パスワードの問い合わせに使用するオブジェクトを取得
+        /// または設定します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        protected ProgressCallback() { }
+        public IQuery<string, string> Password { get; set; }
 
-        #endregion
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Progress
+        ///
+        /// <summary>
+        /// 進捗報告に使用するオブジェクトを取得または設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public IProgress<ArchiveReport> Progress { get; set; }
 
-        #region Properties
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Cancel
+        ///
+        /// <summary>
+        /// キャンセル用オブジェクトを取得または設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public CancellationToken Cancel { get; set; } = CancellationToken.None;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -59,80 +81,19 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public OperationResult Result
-        {
-            get { return _result; }
-            protected set { SetProperty(ref _result, value); }
-        }
+        public OperationResult Result { get; protected set; } = OperationResult.Unknown;
 
         /* ----------------------------------------------------------------- */
         ///
-        /// FileCount
+        /// ProgressReport
         ///
         /// <summary>
-        /// 処理対象となるファイル数を取得します。
+        /// 進捗報告の内容を取得または設定します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public long FileCount
-        {
-            get { return _fileCount; }
-            protected set { SetProperty(ref _fileCount, value); }
-        }
+        protected ArchiveReport ProgressReport { get; set; } = new ArchiveReport();
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// DoneCount
-        ///
-        /// <summary>
-        /// 処理の終了したファイル数を取得します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public long DoneCount
-        {
-            get { return _doneCount; }
-            protected set { SetProperty(ref _doneCount, value); }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// FileSize
-        ///
-        /// <summary>
-        /// 処理対象となるバイト数を取得します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public long FileSize
-        {
-            get { return _fileSize; }
-            protected set { SetProperty(ref _fileSize, value); }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// DoneSize
-        ///
-        /// <summary>
-        /// 処理の終了したとなるバイト数を取得します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public long DoneSize
-        {
-            get { return _doneSize; }
-            protected set { SetProperty(ref _doneSize, value); }
-        }
-
-        #endregion
-
-        #region Fields
-        private OperationResult _result = OperationResult.Unknown;
-        private long _fileCount = 0;
-        private long _doneCount = 0;
-        private long _fileSize = 0;
-        private long _doneSize = 0;
         #endregion
     }
 }

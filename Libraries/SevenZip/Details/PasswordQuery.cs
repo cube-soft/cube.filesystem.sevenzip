@@ -16,106 +16,86 @@
 /// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ///
 /* ------------------------------------------------------------------------- */
-using System;
-using System.Threading;
-
-namespace Cube
+namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// IQuery(TQuery, TResult)
+    /// PasswordQuery
     /// 
     /// <summary>
-    /// 問い合わせ用プロバイダーを定義します。
+    /// パスワードの問い合わせ用オブジェクトです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public interface IQuery<TQuery, TResult>
-    {
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Request
-        /// 
-        /// <summary>
-        /// 問い合わせを実行します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        void Request(QueryEventArgs<TQuery, TResult> value);
-    }
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// Query(TQuery, TResult)
-    /// 
-    /// <summary>
-    /// IQuery(TQuery, TResult) を実装したクラスです。
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    public class Query<TQuery, TResult> : IQuery<TQuery, TResult>
+    internal class PasswordQuery : IQuery<string, string>
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Query
-        /// 
+        /// PasswordQuery
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        ///
+        /// 
+        /// <param name="password">パスワード</param>
+        /// 
+        /// <remarks>
+        /// 実行前に既にパスワードを把握している場合に使用します。
+        /// コンストラクタでパスワードを指定した場合、Request の結果は
+        /// 常にこの値が設定されます。
+        /// </remarks>
+        /// 
         /* ----------------------------------------------------------------- */
-        public Query()
+        public PasswordQuery(string password)
         {
-            _context = SynchronizationContext.Current;
+            Password = password;
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Query
-        /// 
+        /// PasswordQuery
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
-        /// <param name="callback">コールバック関数</param>
-        ///
+        /// <param name="inner">
+        /// パスワードの問い合わせ処理の移譲オブジェクト
+        /// </param>
+        /// 
         /* ----------------------------------------------------------------- */
-        public Query(Action<QueryEventArgs<TQuery, TResult>> callback) : this()
+        public PasswordQuery(IQuery<string, string> inner)
         {
-            Requested += (s, e) => callback(e);
+            InnerQuery = inner;
         }
 
         #endregion
 
-        #region Events
+        #region Properties
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Requested
-        /// 
-        /// <summary>
-        /// 問い合わせ時に発生するイベントです。
-        /// </summary>
+        /// Password
         ///
+        /// <summary>
+        /// パスワードを取得します。
+        /// </summary>
+        /// 
         /* ----------------------------------------------------------------- */
-        public event QueryEventHandler<TQuery, TResult> Requested;
+        public string Password { get; private set; }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OnRequested
-        /// 
-        /// <summary>
-        /// Requested イベントを発生させます。
-        /// </summary>
+        /// InnerQuery
         ///
+        /// <summary>
+        /// パスワードの問い合わせ処理の移譲オブジェクトを取得します。
+        /// </summary>
+        /// 
         /* ----------------------------------------------------------------- */
-        public virtual void OnRequested(QueryEventArgs<TQuery, TResult> e)
-        {
-            if (Requested == null) return;
-            _context.Send(_ => Requested(this, e), null);
-        }
+        public IQuery<string, string> InnerQuery { get; private set; }
 
         #endregion
 
@@ -124,24 +104,28 @@ namespace Cube
         /* ----------------------------------------------------------------- */
         ///
         /// Request
-        /// 
+        ///
         /// <summary>
         /// 問い合わせを実行します。
         /// </summary>
         /// 
-        /// <remarks>
-        /// 問い合わせの結果が無効な場合、Cancel プロパティが true に
-        /// 設定されます。
-        /// </remarks>
-        ///
+        /// <param name="e">パラメータを保持するオブジェクト</param>
+        /// 
         /* ----------------------------------------------------------------- */
-        public void Request(QueryEventArgs<TQuery, TResult> value)
-            => OnRequested(value);
+        public void Request(QueryEventArgs<string, string> e)
+        {
+            if (!string.IsNullOrEmpty(Password))
+            {
+                e.Result = Password;
+                e.Cancel = false;
+            }
+            else
+            {
+                InnerQuery?.Request(e);
+                if (!e.Cancel && !string.IsNullOrEmpty(e.Result)) Password = e.Result;
+            }
+        }
 
-        #endregion
-
-        #region Fields
-        private readonly SynchronizationContext _context;
         #endregion
     }
 }

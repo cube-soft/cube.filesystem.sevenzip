@@ -72,8 +72,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                 Assert.That(view.FileCount,    Is.EqualTo(4));
                 Assert.That(view.DoneCount,    Is.EqualTo(view.FileCount));
                 Assert.That(view.Value,        Is.EqualTo(100));
-                Assert.That(ap.Model.FileSize, Is.EqualTo(344));
-                Assert.That(ap.Model.DoneSize, Is.EqualTo(ap.Model.FileSize));
             }
         }
 

@@ -16,6 +16,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using Cube.FileSystem.SevenZip;
 using Cube.Tasks;
 
 namespace Cube.FileSystem.App.Ice
@@ -79,15 +80,15 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenShow() => Async(() =>
+        private void WhenShow()
         {
             try
             {
                 Sync(() => View.Start());
-                Model.Start();
+                Model.StartAsync().Forget();
             }
             finally { Sync(() => View.Close()); }
-        }).Forget();
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -110,13 +111,14 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenProgress(object sender, EventArgs e) => Sync(() =>
+        private void WhenProgress(object sender, ValueEventArgs<ArchiveReport> e)
+            => Sync(() =>
         {
             View.FileName  = System.IO.Path.GetFileName(Model.Destination);
-            View.FileCount = Model.FileCount;
-            View.DoneCount = Model.DoneCount;
+            View.FileCount = e.Value.FileCount;
+            View.DoneCount = e.Value.DoneCount;
             View.Status    = string.Format(Properties.Resources.MessageArchive, Model.Destination);
-            View.Value     = Math.Max(Math.Max(Model.Percentage, 1), View.Value);
+            View.Value     = Math.Max(Math.Max((int)e.Value.Percentage, 1), View.Value);
         });
 
         #endregion

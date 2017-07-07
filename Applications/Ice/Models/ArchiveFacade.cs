@@ -18,6 +18,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Cube.FileSystem.SevenZip;
 using Cube.Log;
 
 namespace Cube.FileSystem.App.Ice
@@ -61,7 +64,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public SevenZip.Format Format => Request.Format;
+        public Format Format => Request.Format;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -80,60 +83,37 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Start
+        /// StartAsync
         /// 
         /// <summary>
-        /// 圧縮を開始します。
+        /// 圧縮を非同期で開始します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Start()
+        public async Task StartAsync()
         {
-            using (var writer = new SevenZip.ArchiveWriter(Format))
+            using (var writer = new ArchiveWriter(Format))
             {
                 try
                 {
                     SetDestination();
                     foreach (var item in Sources) writer.Add(item);
-                    writer.Progress += WhenProgress;
                     ProgressStart();
-                    writer.Save(Destination, string.Empty);
+
+                    var dummy = new CancellationTokenSource();
+                    await writer.SaveAsync(Destination,
+                        null,
+                        new Progress<ArchiveReport>(x => ProgressReport = x),
+                        dummy.Token
+                    );
 
                     var name = System.IO.Path.GetFileName(Destination);
-                    this.LogDebug($"{name}:{DoneSize}/{FileSize}");
-                    DoneSize = FileSize; // hack
+                    this.LogDebug($"{name}:{ProgressReport.DoneSize}/{ProgressReport.FileSize}");
+                    ProgressReport.DoneSize = ProgressReport.FileSize; // hack
 
-                    OnProgress(EventArgs.Empty);
+                    OnProgress(ValueEventArgs.Create(ProgressReport));
                 }
-                finally
-                {
-                    ProgressStop();
-                    writer.Progress -= WhenProgress;
-                }
-            }
-        }
-
-        #endregion
-
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenProgress
-        /// 
-        /// <summary>
-        /// 進捗状況の更新時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenProgress(object sender, ValueEventArgs<long> e)
-        {
-            if (sender is SevenZip.ArchiveWriter ar)
-            {
-                FileCount = ar.FileCount;
-                DoneCount = ar.DoneCount;
-                FileSize  = ar.FileSize;
-                DoneSize  = e.Value;
+                finally { ProgressStop(); }
             }
         }
 

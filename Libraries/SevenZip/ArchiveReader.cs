@@ -42,12 +42,61 @@ namespace Cube.FileSystem.SevenZip
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
+        /// <param name="path">圧縮ファイルのパス</param>
+        ///
         /* ----------------------------------------------------------------- */
-        public ArchiveReader() { }
+        public ArchiveReader(string path) : this(path, string.Empty) { }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ArchiveReader
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        /// 
+        /// <param name="path">圧縮ファイルのパス</param>
+        /// <param name="password">パスワード</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ArchiveReader(string path, string password)
+        {
+            Source = path;
+            Open(new PasswordQuery(password));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ArchiveReader
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        /// 
+        /// <param name="path">圧縮ファイルのパス</param>
+        /// <param name="password">パスワード取得用オブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ArchiveReader(string path, IQuery<string, string> password)
+        {
+            Source = path;
+            Open(new PasswordQuery(password));
+        }
 
         #endregion
 
         #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Source
+        ///
+        /// <summary>
+        /// 圧縮ファイルのパスを取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public string Source { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -63,47 +112,6 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Open
-        ///
-        /// <summary>
-        /// 圧縮ファイルを開きます。
-        /// </summary>
-        /// 
-        /// <param name="path">圧縮ファイルのパス</param>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public void Open(string path) => Open(path, string.Empty);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Open
-        ///
-        /// <summary>
-        /// 圧縮ファイルを開きます。
-        /// </summary>
-        /// 
-        /// <param name="path">圧縮ファイルのパス</param>
-        /// <param name="password">パスワード</param>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public void Open(string path, string password)
-        {
-            var ext = System.IO.Path.GetExtension(path);
-            var fmt = FormatConversions.FromExtension(ext);
-            if (fmt == Format.Unknown) throw new NotSupportedException();
-
-            var pos = 32UL * 1024;
-
-            _lib    = new NativeLibrary();
-            _stream = new ArchiveStreamReader(System.IO.File.OpenRead(path));
-            _raw    = _lib.GetInArchive(fmt);
-            _raw.Open(_stream, ref pos, new ArchiveOpenCallback(password));
-
-            Items = new ReadOnlyArchiveCollection(_raw);
-        }
 
         #region IDisposable
 
@@ -162,11 +170,40 @@ namespace Cube.FileSystem.SevenZip
 
         #endregion
 
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Open
+        ///
+        /// <summary>
+        /// 圧縮ファイルを開きます。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void Open(IQuery<string, string> password)
+        {
+            var ext = System.IO.Path.GetExtension(Source);
+            var fmt = FormatConversions.FromExtension(ext);
+            if (fmt == Format.Unknown) throw new NotSupportedException();
+
+            var pos = 32UL * 1024;
+
+            _lib = new NativeLibrary();
+            _stream = new ArchiveStreamReader(System.IO.File.OpenRead(Source));
+            _raw = _lib.GetInArchive(fmt);
+            _raw.Open(_stream, ref pos, new ArchiveOpenCallback(Source) { Password = password });
+
+            Items = new ReadOnlyArchiveCollection(_raw, Source, password);
+        }
+
         #region Fields
         private bool _disposed = false;
         private NativeLibrary _lib;
         private IInArchive _raw;
         private ArchiveStreamReader _stream;
+        #endregion
+
         #endregion
     }
 }

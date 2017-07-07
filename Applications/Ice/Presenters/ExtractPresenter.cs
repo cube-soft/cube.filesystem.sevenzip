@@ -80,15 +80,15 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenShow() => Async(() =>
+        private void WhenShow()
         {
             try
             {
                 Sync(() => View.Start());
-                Model.Start();
+                Model.StartAsync().Forget();
             }
             finally { Sync(() => View.Close()); }
-        }).Forget();
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -123,12 +123,12 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenProgress(object sender, EventArgs e) => Sync(() =>
+        private void WhenProgress(object sender, ValueEventArgs<SevenZip.ArchiveReport> e) => Sync(() =>
         {
-            View.FileCount = Model.FileCount;
-            View.DoneCount = Model.DoneCount;
+            View.FileCount = e.Value.FileCount;
+            View.DoneCount = e.Value.DoneCount;
             View.Status    = Model.Current;
-            View.Value     = Math.Max(Math.Max(Model.Percentage, 1), View.Value);
+            View.Value     = Math.Max(Math.Max((int)e.Value.Percentage, 1), View.Value);
         });
 
         #endregion

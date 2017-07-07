@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using NUnit.Framework;
 
 namespace Cube.FileSystem.Tests
@@ -50,10 +51,9 @@ namespace Cube.FileSystem.Tests
         [TestCaseSource(nameof(Extract_TestCases))]
         public void Items(string filename, string password, IList<ExpectedItem> expected)
         {
-            using (var archive = new SevenZip.ArchiveReader())
+            var src = Example(filename);
+            using (var archive = new SevenZip.ArchiveReader(src, password))
             {
-                archive.Open(Example(filename), password);
-
                 var actual = archive.Items.ToList();
                 Assert.That(actual.Count, Is.EqualTo(expected.Count));
 
@@ -81,15 +81,15 @@ namespace Cube.FileSystem.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(Extract_TestCases))]
-        public void Extract(string filename, string password, IList<ExpectedItem> expected)
+        public async Task Extract(string filename, string password, IList<ExpectedItem> expected)
         {
-            using (var archive = new SevenZip.ArchiveReader())
+            var src = Example(filename);
+            using (var archive = new SevenZip.ArchiveReader(src))
             {
-                archive.Open(Example(filename));
                 var actual = archive.Items.ToList();
                 for (var i = 0; i < expected.Count; ++i)
                 {
-                    actual[i].Extract(Results, password);
+                    await actual[i].ExtractAsync(Results);
                     var dest = Result(actual[i].Path);
                     var dir  = expected[i].IsDirectory;
                     Assert.That(Exists(dest, dir), Is.True);
@@ -109,45 +109,18 @@ namespace Cube.FileSystem.Tests
         /* ----------------------------------------------------------------- */
         [Test]
         public void Extract_Throws()
-            => Assert.That(() =>
+            => Assert.That(async () =>
             {
-                using (var archive = new SevenZip.ArchiveReader())
+                var src = Example("Password.7z");
+                using (var archive = new SevenZip.ArchiveReader(src))
                 {
-                    archive.Open(Example("Password.7z"));
-                    foreach (var item in archive.Items) item.Extract(Results);
+                    foreach (var item in archive.Items)
+                    {
+                        await item.ExtractAsync(Results);
+                    }
                 }
             },
             Throws.TypeOf<SevenZip.EncryptionException>());
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extract_PasswordRequired
-        ///
-        /// <summary>
-        /// PasswordRequired を発生させるテストを実行します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        [Test]
-        public void Extract_PasswordRequired()
-        {
-            QueryEventHandler<string, string> h = (s, e) =>
-            {
-                e.Result = "password";
-                e.Cancel = false;
-            };
-
-            using (var archive = new SevenZip.ArchiveReader())
-            {
-                archive.Open(Example("Password.7z"));
-                foreach (var item in archive.Items)
-                {
-                    item.PasswordRequired += h;
-                    item.Extract(Results);
-                    Assert.That(Exists(Result(item.Path), item.IsDirectory), Is.True);
-                }
-            }
-        }
 
         /* ----------------------------------------------------------------- */
         ///

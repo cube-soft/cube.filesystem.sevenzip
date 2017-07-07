@@ -44,10 +44,16 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /// <param name="obj">実装オブジェクト</param>
+        /// <param name="src">圧縮ファイルのパス</param>
+        /// <param name="password">パスワード取得用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ReadOnlyArchiveCollection(object obj)
+        public ReadOnlyArchiveCollection(object obj, string src,
+            IQuery<string, string> password)
         {
+            Source   = src;
+            Password = password;
+
             if (obj is IInArchive raw) _raw = raw;
             else throw new ArgumentException("invalid object");
         }
@@ -67,6 +73,28 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int Count => (int)_raw.GetNumberOfItems();
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Source
+        ///
+        /// <summary>
+        /// 圧縮ファイルのパスを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Source { get; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Password
+        ///
+        /// <summary>
+        /// パスワード取得用オブジェクトを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private IQuery<string, string> Password { get; }
+
         #endregion
 
         #region Methods
@@ -84,7 +112,7 @@ namespace Cube.FileSystem.SevenZip
         {
             for (var i = 0; i < Count; ++i)
             {
-                yield return new ArchiveItem(_raw, i);
+                yield return new ArchiveItem(_raw, Source, i, Password);
             }
         }
 

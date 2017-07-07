@@ -31,7 +31,7 @@ namespace Cube.FileSystem.SevenZip
     ///
     /* --------------------------------------------------------------------- */
     internal sealed class ArchiveUpdateCallback
-        : IArchiveUpdateCallback, ICryptoGetTextPassword2
+        : ArchiveCallbackBase, IArchiveUpdateCallback, ICryptoGetTextPassword2
     {
         #region Constructors
 
@@ -44,12 +44,13 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /// <param name="items">圧縮するファイル一覧</param>
+        /// <param name="dest">保存パス</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public ArchiveUpdateCallback(IList<FileItem> items) : base()
+        public ArchiveUpdateCallback(IList<FileItem> items, string dest) : base()
         {
             Items = items;
-            _report.FileCount = items.Count;
+            ProgressReport.FileCount = items.Count;
         }
 
         #endregion
@@ -69,36 +70,14 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Progress
+        /// Destination
         ///
         /// <summary>
-        /// 進捗報告に使用するオブジェクトを取得または設定します。
+        /// 圧縮ファイルの保存パスを取得します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public IProgress<ArchiveReport> Progress { get; set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Password
-        ///
-        /// <summary>
-        /// 圧縮ファイルに設定するパスワードを取得または設定します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public string Password { get; set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Result
-        ///
-        /// <summary>
-        /// 処理結果を示す値を取得します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public OperationResult Result { get; private set; } = OperationResult.Unknown;
+        public string Destination { get; }
 
         #endregion
 
@@ -125,8 +104,15 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int CryptoGetTextPassword2(ref int enabled, out string password)
         {
-            enabled  = string.IsNullOrEmpty(Password) ? 0 : 1;
-            password = Password;
+            Cancel.ThrowIfCancellationRequested();
+
+            var e = new QueryEventArgs<string, string>(Destination);
+            if (Password != null) Password.Request(e);
+            else e.Cancel = true;
+
+            enabled  = !e.Cancel && !string.IsNullOrEmpty(e.Result) ? 1 : 0;
+            password = e.Result ?? string.Empty;
+
             return 0;
         }
 
@@ -149,8 +135,10 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void SetTotal(ulong size)
         {
-             _report.FileSize = (long)size;
-            Progress?.Report(_report);
+            Cancel.ThrowIfCancellationRequested();
+
+            ProgressReport.FileSize = (long)size;
+            Progress?.Report(ProgressReport);
         }
 
         /* ----------------------------------------------------------------- */
@@ -166,8 +154,10 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void SetCompleted(ref ulong size)
         {
-            _report.DoneSize = (long)size;
-            Progress?.Report(_report);
+            Cancel.ThrowIfCancellationRequested();
+
+            ProgressReport.DoneSize = (long)size;
+            Progress?.Report(ProgressReport);
         }
 
         /* ----------------------------------------------------------------- */
@@ -178,7 +168,7 @@ namespace Cube.FileSystem.SevenZip
         /// 追加する項目に関する情報を取得します。
         /// </summary>
         /// 
-        /// <param name="index">File index</param>
+        /// <param name="index">インデックス</param>
         /// <param name="newdata">1 if new, 0 if not</param>
         /// <param name="newprop">1 if new, 0 if not</param>
         /// <param name="indexInArchive">-1 if doesn't matter</param>
@@ -192,6 +182,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int GetUpdateItemInfo(uint index, ref int newdata, ref int newprop, ref uint indexInArchive)
         {
+            Cancel.ThrowIfCancellationRequested();
+
             newdata = 1;
             newprop = 1;
             indexInArchive = uint.MaxValue;
@@ -215,6 +207,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int GetProperty(uint index, ItemPropId pid, ref PropVariant value)
         {
+            Cancel.ThrowIfCancellationRequested();
+
             var src = Items[(int)index];
             switch (pid)
             {
@@ -268,9 +262,11 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int GetStream(uint index, out ISequentialInStream stream)
         {
+            Cancel.ThrowIfCancellationRequested();
+
             stream = new ArchiveStreamReader(Items[(int)index].GetStream());
-            _report.DoneCount = index + 1;
-            Progress?.Report(_report);
+            ProgressReport.DoneCount = index + 1;
+            Progress?.Report(ProgressReport);
             return 0;
         }
 
@@ -299,15 +295,15 @@ namespace Cube.FileSystem.SevenZip
         /// 
         /// <param name="enumerator">The enumerator pointer.</param>
         /// 
+        /// <remarks>
+        /// このメソッドは未実装です。
+        /// </remarks>
+        /// 
         /* ----------------------------------------------------------------- */
         public long EnumProperties(IntPtr enumerator) => 0x80004001L; // Not implemented
 
         #endregion
 
-        #endregion
-
-        #region Fields
-        private ArchiveReport _report = new ArchiveReport();
         #endregion
     }
 }

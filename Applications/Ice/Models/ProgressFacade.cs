@@ -18,6 +18,7 @@
 using System;
 using System.Linq;
 using System.Timers;
+using Cube.FileSystem.SevenZip;
 
 namespace Cube.FileSystem.App.Ice
 {
@@ -41,12 +42,14 @@ namespace Cube.FileSystem.App.Ice
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
+        /// 
+        /// <param name="request">リクエストオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
         public ProgressFacade(Request request)
         {
             Request = request;
-            _timer.Elapsed += (s, e) => OnProgress(EventArgs.Empty);
+            _timer.Elapsed += (s, e) => OnProgress(ValueEventArgs.Create(ProgressReport));
         }
 
         #endregion
@@ -94,61 +97,14 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// DoneSize
+        /// ProgressReport
         /// 
         /// <summary>
-        /// 展開の終了したファイルサイズを取得します。
+        /// 進捗状況の内容を取得または設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public long DoneSize { get; protected set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// FileSize
-        /// 
-        /// <summary>
-        /// 展開後のファイルサイズを取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public long FileSize { get; protected set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// DoneCount
-        /// 
-        /// <summary>
-        /// 展開の終了したファイル数を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public long DoneCount { get; protected set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// FileCount
-        /// 
-        /// <summary>
-        /// 展開後のファイル数を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public long FileCount { get; protected set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Percentage
-        /// 
-        /// <summary>
-        /// 進捗率を示す値をパーセント単位で取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public int Percentage =>
-            FileSize > 0 ?
-            (int)(DoneSize / (double)FileSize * 100.0) :
-            0;
+        public ArchiveReport ProgressReport { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -180,7 +136,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public EventHandler Progress;
+        public ValueEventHandler<ArchiveReport> Progress;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -191,7 +147,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnProgress(EventArgs e)
+        protected virtual void OnProgress(ValueEventArgs<ArchiveReport> e)
             => Progress?.Invoke(this, e);
 
         #endregion
