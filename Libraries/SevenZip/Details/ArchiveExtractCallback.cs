@@ -17,7 +17,6 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
-using System.Collections.Generic;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -94,19 +93,19 @@ namespace Cube.FileSystem.SevenZip
         /// 
         /// <param name="password">パスワード</param>
         /// 
-        /// <returns>0 (ゼロ)</returns>
+        /// <returns>OperationResult</returns>
         ///
         /* ----------------------------------------------------------------- */
         public int CryptoGetTextPassword(out string password)
         {
-            Cancel.ThrowIfCancellationRequested();
-
             var e = new QueryEventArgs<string, string>(Source);
             if (Password != null) Password.Request(e);
             else e.Cancel = true;
 
-            password = !e.Cancel ? e.Result : string.Empty;
-            return 0;
+            var valid = !e.Cancel && !string.IsNullOrEmpty(e.Result);
+            password = valid ? e.Result : string.Empty;
+            Result   = valid ? OperationResult.OK : OperationResult.WrongPassword;
+            return (int)Result;
         }
 
         #endregion
@@ -126,8 +125,6 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void SetTotal(ulong size)
         {
-            Cancel.ThrowIfCancellationRequested();
-
             _hack = Math.Max((long)size - ProgressReport.FileSize, 0);
             Progress?.Report(ProgressReport);
         }
@@ -154,8 +151,6 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void SetCompleted(ref ulong size)
         {
-            Cancel.ThrowIfCancellationRequested();
-
             var cvt = Math.Max((long)size - _hack, 0);
             ProgressReport.DoneSize = cvt;
             Progress?.Report(ProgressReport);
@@ -173,15 +168,13 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="stream">出力ストリーム</param>
         /// <param name="mode">展開モード</param>
         /// 
-        /// <returns>0 (ゼロ)</returns>
+        /// <returns>OperationResult</returns>
         /// 
         /* ----------------------------------------------------------------- */
         public int GetStream(uint index, out ISequentialOutStream stream, AskMode mode)
         {
-            Cancel.ThrowIfCancellationRequested();
-
             stream = (mode == AskMode.Extract) ? Destination(index) : null;
-            return 0;
+            return (int)OperationResult.OK;
         }
 
         /* ----------------------------------------------------------------- */
@@ -210,7 +203,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void SetOperationResult(OperationResult result)
         {
-            ProgressReport.DoneCount = 1;
+            ProgressReport.DoneCount = ProgressReport.FileCount;
             Progress?.Report(ProgressReport);
             Result = result;
         }
