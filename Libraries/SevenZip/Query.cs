@@ -114,7 +114,8 @@ namespace Cube
         public virtual void OnRequested(QueryEventArgs<TQuery, TResult> e)
         {
             if (Requested == null) return;
-            _context.Send(_ => Requested(this, e), null);
+            if (_context != null) _context.Send(_ => Requested(this, e), null);
+            else Requested(this, e);
         }
 
         #endregion
