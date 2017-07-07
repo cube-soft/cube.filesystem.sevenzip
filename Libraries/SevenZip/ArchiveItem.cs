@@ -286,11 +286,12 @@ namespace Cube.FileSystem.SevenZip
                 case OperationResult.Unknown:
                     break;
                 case OperationResult.DataError:
-                    if (Encrypted) new EncryptionException();
+                    if (Encrypted) EncryptionError();
                     else throw new System.IO.IOException(result.ToString());
                     break;
                 case OperationResult.WrongPassword:
-                    throw new EncryptionException();
+                    EncryptionError();
+                    break;
                 default:
                     throw new System.IO.IOException(result.ToString());
             }
@@ -335,6 +336,21 @@ namespace Cube.FileSystem.SevenZip
                 this.LogWarn(err.ToString(), err);
                 return default(T);
             }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// EncryptionError
+        ///
+        /// <summary>
+        /// パスワードエラーに関する処理を実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void EncryptionError()
+        {
+            if (Password is PasswordQuery query) query.Reset();
+            throw new EncryptionException();
         }
 
         #region Fields

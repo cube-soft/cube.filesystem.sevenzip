@@ -68,6 +68,7 @@
     <Compile Include="Details\ArchiveStream.cs" />
     <Compile Include="Query.cs" />
     <Compile Include="ReadOnlyArchiveCollection.cs" />
+    <Compile Include="UserCancelException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages.config" />

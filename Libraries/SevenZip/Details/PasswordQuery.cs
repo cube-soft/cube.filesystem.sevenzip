@@ -114,17 +114,35 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void Request(QueryEventArgs<string, string> e)
         {
-            if (!string.IsNullOrEmpty(Password))
+            if (!string.IsNullOrEmpty(Password) || !string.IsNullOrEmpty(_cache))
             {
-                e.Result = Password;
+                e.Result = !string.IsNullOrEmpty(Password) ? Password : _cache;
                 e.Cancel = false;
             }
             else
             {
                 InnerQuery?.Request(e);
-                if (!e.Cancel && !string.IsNullOrEmpty(e.Result)) Password = e.Result;
+                if (!e.Cancel && !string.IsNullOrEmpty(e.Result)) _cache = e.Result;
             }
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Reset
+        ///
+        /// <summary>
+        /// 内部状態をリセットします。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void Reset()
+        {
+            _cache = null;
+        }
+
+        #region Fields
+        private string _cache;
+        #endregion
 
         #endregion
     }
