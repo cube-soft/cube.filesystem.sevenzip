@@ -80,7 +80,7 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         public void Start()
         {
-            var query = new Query<string, string>(x => RaisePasswordRequired(x));
+            var query = new Query<string, string>(x => OnPasswordRequired(x));
             using (var reader = new ArchiveReader(Source, query))
             {
                 try
@@ -159,18 +159,6 @@ namespace Cube.FileSystem.App.Ice
             src.Extract(Destination, progress);
             ProgressReport.DoneCount++;
         }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// RaisePasswordRequired
-        /// 
-        /// <summary>
-        /// PasswordRequired イベントを発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void RaisePasswordRequired(QueryEventArgs<string, string> e)
-            => OnPasswordRequired(e);
 
         #endregion
     }
