@@ -45,8 +45,9 @@ namespace Cube.FileSystem.SevenZip
         /// 
         /* ----------------------------------------------------------------- */
         public ArchiveExtractCallback(string src, long count, long size,
-            Func<uint, ISequentialOutStream> destination)
+            Func<uint, ISequentialOutStream> dest)
         {
+            Destination = dest;
             ProgressReport.FileCount = count;
             ProgressReport.FileSize  = size;
         }
