@@ -93,27 +93,23 @@ namespace Cube.FileSystem.SevenZip
         /// 圧縮ファイルに設定するパスワードを取得します。
         /// </summary>
         /// 
-        /// <param name="enabled">
-        /// パスワードを設定するかどうかを示す値
-        /// </param>
-        /// 
+        /// <param name="enabled">パスワードが有効かどうかを示す値</param>
         /// <param name="password">パスワード</param>
         /// 
-        /// <returns>0 (ゼロ)</returns>
+        /// <returns>OperationResult</returns>
         /// 
         /* ----------------------------------------------------------------- */
         public int CryptoGetTextPassword2(ref int enabled, out string password)
         {
-            Cancel.ThrowIfCancellationRequested();
-
             var e = new QueryEventArgs<string, string>(Destination);
             if (Password != null) Password.Request(e);
             else e.Cancel = true;
 
-            enabled  = !e.Cancel && !string.IsNullOrEmpty(e.Result) ? 1 : 0;
-            password = e.Result ?? string.Empty;
+            var valid = !e.Cancel && !string.IsNullOrEmpty(e.Result);
+            enabled  = valid ? 1 : 0;
+            password = valid ? e.Result : string.Empty;
 
-            return 0;
+            return (int)OperationResult.OK;
         }
 
         #endregion
@@ -135,8 +131,6 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void SetTotal(ulong size)
         {
-            Cancel.ThrowIfCancellationRequested();
-
             ProgressReport.FileSize = (long)size;
             Progress?.Report(ProgressReport);
         }
@@ -154,8 +148,6 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void SetCompleted(ref ulong size)
         {
-            Cancel.ThrowIfCancellationRequested();
-
             ProgressReport.DoneSize = (long)size;
             Progress?.Report(ProgressReport);
         }
@@ -173,7 +165,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="newprop">1 if new, 0 if not</param>
         /// <param name="indexInArchive">-1 if doesn't matter</param>
         /// 
-        /// <returns>0 (ゼロ)</returns>
+        /// <returns>OperationResult</returns>
         /// 
         /// <remarks>
         /// 追加や修正時の挙動が未実装なので要実装。
@@ -182,12 +174,11 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int GetUpdateItemInfo(uint index, ref int newdata, ref int newprop, ref uint indexInArchive)
         {
-            Cancel.ThrowIfCancellationRequested();
-
             newdata = 1;
             newprop = 1;
             indexInArchive = uint.MaxValue;
-            return 0;
+
+            return (int)OperationResult.OK;
         }
 
         /* ----------------------------------------------------------------- */
@@ -202,13 +193,11 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="pid">プロパティの種類</param>
         /// <param name="value">プロパティの内容</param>
         /// 
-        /// <returns>0 (ゼロ)</returns>
+        /// <returns>OperationResult</returns>
         /// 
         /* ----------------------------------------------------------------- */
         public int GetProperty(uint index, ItemPropId pid, ref PropVariant value)
         {
-            Cancel.ThrowIfCancellationRequested();
-
             var src = Items[(int)index];
             switch (pid)
             {
@@ -243,7 +232,8 @@ namespace Cube.FileSystem.SevenZip
                     value.SetEmpty();
                     break;
             }
-            return 0;
+
+            return (int)OperationResult.OK;
         }
 
         /* ----------------------------------------------------------------- */
@@ -257,17 +247,16 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="index">圧縮ファイル中のインデックス</param>
         /// <param name="stream">読み込み用ストリーム</param>
         /// 
-        /// <returns>0 (ゼロ)</returns>
+        /// <returns>OperationResult</returns>
         /// 
         /* ----------------------------------------------------------------- */
         public int GetStream(uint index, out ISequentialInStream stream)
         {
-            Cancel.ThrowIfCancellationRequested();
-
             stream = new ArchiveStreamReader(Items[(int)index].GetStream());
             ProgressReport.DoneCount = index + 1;
             Progress?.Report(ProgressReport);
-            return 0;
+
+            return (int)OperationResult.OK;
         }
 
         /* ----------------------------------------------------------------- */

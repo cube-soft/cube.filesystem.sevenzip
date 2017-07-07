@@ -46,7 +46,6 @@ namespace Cube.FileSystem.SevenZip
         public ArchiveOpenCallback(string src)
         {
             Source = src;
-            Result = OperationResult.OK;
         }
 
         #endregion
@@ -80,19 +79,19 @@ namespace Cube.FileSystem.SevenZip
         /// 
         /// <param name="password">パスワード</param>
         /// 
-        /// <returns>0 (ゼロ)</returns>
+        /// <returns>OperationResult</returns>
         ///
         /* ----------------------------------------------------------------- */
         public int CryptoGetTextPassword(out string password)
         {
-            Cancel.ThrowIfCancellationRequested();
-
             var e = new QueryEventArgs<string, string>(Source);
             if (Password != null) Password.Request(e);
             else e.Cancel = true;
 
-            password = !e.Cancel ? e.Result : string.Empty;
-            return 0;
+            var valid = !e.Cancel && !string.IsNullOrEmpty(e.Result);
+            password = valid ? e.Result : string.Empty;
+            Result   = valid ? OperationResult.OK : OperationResult.WrongPassword;
+            return (int)Result;
         }
 
         #endregion
@@ -125,7 +124,8 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="bytes">Completed size in bytes</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public void SetCompleted(IntPtr files, IntPtr bytes) { }
+        public void SetCompleted(IntPtr files, IntPtr bytes)
+            => Result = OperationResult.OK;
 
         #endregion
 
