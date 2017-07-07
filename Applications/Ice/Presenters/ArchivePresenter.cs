@@ -53,14 +53,15 @@ namespace Cube.FileSystem.App.Ice
             SettingsFolder settings, IEventAggregator events)
             : base(view, new ArchiveFacade(args), settings, events)
         {
-            // Model
-            Model.DestinationRequired += WhenDestinationRequired;
-            Model.Progress += WhenProgress;
-
             // View
             View.EventAggregator = EventAggregator;
             View.Icon = Properties.Resources.Archive;
             View.Status = Properties.Resources.MessagePreArchive;
+
+            // Model
+            Model.DestinationRequired += WhenDestinationRequired;
+            Model.PasswordRequired += WhenPasswordRequired;
+            Model.Progress += WhenProgress;
 
             // EventAggregator
             EventAggregator.GetEvents()?.Show.Subscribe(WhenShow);
@@ -100,6 +101,18 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void WhenDestinationRequired(object sender, QueryEventArgs<string, string> e)
             => SyncWait(() => Views.ShowSaveFileView(e));
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenPasswordRequired
+        /// 
+        /// <summary>
+        /// パスワード要求時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenPasswordRequired(object sender, QueryEventArgs<string, string> e)
+            => SyncWait(() => Views.ShowPasswordView(e));
 
         /* ----------------------------------------------------------------- */
         ///

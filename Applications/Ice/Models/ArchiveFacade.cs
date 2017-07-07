@@ -98,8 +98,12 @@ namespace Cube.FileSystem.App.Ice
                     foreach (var item in Sources) writer.Add(item);
                     ProgressStart();
 
+                    var query = Request.Password ?
+                                new Query<string, string>(x => OnPasswordRequired(x)) :
+                                null;
+
                     writer.Save(Destination,
-                        null,
+                        query,
                         new Progress<ArchiveReport>(x => ProgressReport = x)
                     );
 
