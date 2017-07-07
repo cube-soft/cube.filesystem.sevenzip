@@ -72,7 +72,7 @@ namespace Cube.FileSystem.App.Ice
             {
                 if (!args[i].StartsWith("/")) sources.Add(args[i]);
                 else if (args[i].StartsWith("/o")) Location = GetLocation(args[i]);
-                else if (args[i] == "p") Password = true;
+                else if (args[i] == "/p") Password = true;
             }
             Sources = sources;
         }
