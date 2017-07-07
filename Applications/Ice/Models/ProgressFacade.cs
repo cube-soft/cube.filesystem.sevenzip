@@ -104,7 +104,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveReport ProgressReport { get; set; }
+        public ArchiveReport ProgressReport { get; set; } = new ArchiveReport();
 
         /* ----------------------------------------------------------------- */
         ///
