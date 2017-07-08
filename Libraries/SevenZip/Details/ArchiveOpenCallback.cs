@@ -17,6 +17,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Runtime.InteropServices;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -111,29 +112,44 @@ namespace Cube.FileSystem.SevenZip
         /// SetTotal
         /// 
         /// <summary>
-        /// Sets total data size
+        /// 圧縮ファイルの展開時の合計サイズを取得します。
         /// </summary>
         /// 
-        /// <param name="files">Files pointer</param>
-        /// <param name="bytes">Total size in bytes</param>
+        /// <param name="files">ファイル数</param>
+        /// <param name="bytes">バイト数</param>
+        ///
+        /// <remarks>
+        /// 7z.dll で null が設定される事が多いため、ref ulong の代わりに
+        /// IntPtr を使用しています。非 null 時に値を取得する場合、
+        /// Marshal.ReadInt64 を使用して下さい。
+        /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public void SetTotal(IntPtr files, IntPtr bytes) { }
+        public void SetTotal(IntPtr files, IntPtr bytes)
+        {
+            if (files != IntPtr.Zero) ProgressReport.FileCount = Marshal.ReadInt64(files);
+            if (bytes != IntPtr.Zero) ProgressReport.FileSize  = Marshal.ReadInt64(bytes);
+        }
 
         /* ----------------------------------------------------------------- */
         ///
         /// SetCompleted
         ///
         /// <summary>
-        /// Sets completed size
+        /// ストリームの読み込み準備が完了したサイズを取得します。
         /// </summary>
         /// 
-        /// <param name="files">Files pointer</param>
-        /// <param name="bytes">Completed size in bytes</param>
+        /// <param name="files">ファイル数</param>
+        /// <param name="bytes">バイト数</param>
         /// 
         /* ----------------------------------------------------------------- */
         public void SetCompleted(IntPtr files, IntPtr bytes)
-            => Result = OperationResult.OK;
+        {
+            if (files != IntPtr.Zero) ProgressReport.DoneCount = Marshal.ReadInt64(files);
+            if (bytes != IntPtr.Zero) ProgressReport.DoneSize  = Marshal.ReadInt64(bytes);
+            Progress?.Report(ProgressReport);
+            Result = OperationResult.OK;
+        }
 
         #endregion
 
