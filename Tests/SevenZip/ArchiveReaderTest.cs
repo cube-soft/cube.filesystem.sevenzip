@@ -121,6 +121,28 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Extract_UserCancel
+        ///
+        /// <summary>
+        /// パスワード要求時にキャンセルするテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Extract_UserCancel()
+            => Assert.That(() =>
+            {
+                var src = Example("Password.7z");
+                var query = new Query<string, string>(e => e.Cancel = true);
+                using (var archive = new SevenZip.ArchiveReader(src, query))
+                {
+                    foreach (var item in archive.Items) item.Extract(Results);
+                }
+            },
+            Throws.TypeOf<SevenZip.UserCancelException>());
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Extract_TestCases
         ///
         /// <summary>

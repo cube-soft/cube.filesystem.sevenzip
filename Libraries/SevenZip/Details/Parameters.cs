@@ -55,7 +55,10 @@ namespace Cube.FileSystem.SevenZip
         IsNotArc,
         HeadersError,
         WrongPassword,
-        Unknown = -1,
+
+        // Extended for Cube.FileSystem
+        Unknown     = -1,
+        UserCancel  = -2,
     }
 
     /* --------------------------------------------------------------------- */

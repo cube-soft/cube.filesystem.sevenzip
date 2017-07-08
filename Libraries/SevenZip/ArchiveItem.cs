@@ -292,6 +292,8 @@ namespace Cube.FileSystem.SevenZip
                 case OperationResult.WrongPassword:
                     EncryptionError();
                     break;
+                case OperationResult.UserCancel:
+                    throw new UserCancelException();
                 default:
                     throw new System.IO.IOException(result.ToString());
             }

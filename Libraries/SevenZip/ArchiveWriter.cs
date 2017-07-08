@@ -99,8 +99,6 @@ namespace Cube.FileSystem.SevenZip
             else throw new FileNotFoundException(path);
         }
 
-        #region SaveAsync
-
         /* ----------------------------------------------------------------- */
         ///
         /// Save
@@ -144,8 +142,6 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void Save(string path, IQuery<string, string> password, IProgress<ArchiveReport> progress)
             => SaveCore(path, new PasswordQuery(password), progress);
-
-        #endregion
 
         #region IDisposable
 
@@ -280,6 +276,8 @@ namespace Cube.FileSystem.SevenZip
                 case OperationResult.OK:
                 case OperationResult.Unknown:
                     break;
+                case OperationResult.UserCancel:
+                    throw new UserCancelException();
                 default:
                     throw new IOException(result.ToString());
             }

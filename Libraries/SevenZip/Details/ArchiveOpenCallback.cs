@@ -84,13 +84,21 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int CryptoGetTextPassword(out string password)
         {
-            var e = new QueryEventArgs<string, string>(Source);
-            if (Password != null) Password.Request(e);
-            else e.Cancel = true;
-
-            var valid = !e.Cancel && !string.IsNullOrEmpty(e.Result);
-            password = valid ? e.Result : string.Empty;
-            Result   = valid ? OperationResult.OK : OperationResult.WrongPassword;
+            if (Password != null)
+            {
+                var e = new QueryEventArgs<string, string>(Source);
+                Password.Request(e);
+                var valid = !e.Cancel && !string.IsNullOrEmpty(e.Result);
+                password = valid ? e.Result : string.Empty;
+                Result = e.Cancel ? OperationResult.UserCancel :
+                         valid    ? OperationResult.OK :
+                                    OperationResult.WrongPassword;
+            }
+            else
+            {
+                password = string.Empty;
+                Result = OperationResult.WrongPassword;
+            }
             return (int)Result;
         }
 
