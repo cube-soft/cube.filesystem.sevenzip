@@ -16,6 +16,7 @@
 /// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ///
 /* ------------------------------------------------------------------------- */
+using System;
 using System.IO;
 
 namespace Cube.FileSystem.SevenZip
@@ -54,5 +55,28 @@ namespace Cube.FileSystem.SevenZip
         /// 
         /* ----------------------------------------------------------------- */
         public EncryptionException(string message) : base(message) { }
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// UserCancelException
+    ///
+    /// <summary>
+    /// ユーザが処理をキャンセルした事を示す例外クラスです。
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public class UserCancelException : Exception
+    {
+        /* ----------------------------------------------------------------- */
+        ///
+        /// UserCancelException
+        /// 
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public UserCancelException() : base() { }
     }
 }
