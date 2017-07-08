@@ -83,7 +83,7 @@ namespace Cube.FileSystem.Tests
         public void Extract(string filename, string password, IList<ExpectedItem> expected)
         {
             var src = Example(filename);
-            using (var archive = new SevenZip.ArchiveReader(src, Password(password)))
+            using (var archive = new SevenZip.ArchiveReader(src, password))
             {
                 var actual = archive.Items.ToList();
                 for (var i = 0; i < expected.Count; ++i)
@@ -106,12 +106,13 @@ namespace Cube.FileSystem.Tests
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [Test]
-        public void Extract_Throws()
+        [TestCase("")]
+        [TestCase("wrong")]
+        public void Extract_Throws(string password)
             => Assert.That(() =>
             {
                 var src = Example("Password.7z");
-                using (var archive = new SevenZip.ArchiveReader(src))
+                using (var archive = new SevenZip.ArchiveReader(src, password))
                 {
                     foreach (var item in archive.Items) item.Extract(Results);
                 }
@@ -272,22 +273,6 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Password
-        ///
-        /// <summary>
-        /// パスワード取得用オブジェクトを生成します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        private IQuery<string, string> Password(string value)
-            => new Query<string, string>(e =>
-            {
-                e.Result = value;
-                e.Cancel = false;
-            });
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// ExpectedItem
         ///
         /// <summary>
@@ -295,11 +280,12 @@ namespace Cube.FileSystem.Tests
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public class ExpectedItem
+        public class ExpectedItem : SevenZip.IArchiveItem
         {
             public string Path { get; set; }
             public string Extension { get; set; }
-            public ulong Size { get; set; }
+            public long Size { get; set; }
+            public uint Attributes { get; set; }
             public bool Encrypted { get; set; }
             public bool IsDirectory { get; set; }
             public DateTime CreationTime { get; set; }
