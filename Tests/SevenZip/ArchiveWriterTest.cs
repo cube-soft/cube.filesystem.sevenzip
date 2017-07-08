@@ -17,7 +17,6 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using NUnit.Framework;
 
 namespace Cube.FileSystem.Tests
