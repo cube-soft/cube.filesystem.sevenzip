@@ -16,7 +16,6 @@
 /// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ///
 /* ------------------------------------------------------------------------- */
-using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -31,7 +30,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ReadOnlyArchiveCollection : IReadOnlyCollection<ArchiveItem>
+    internal class ReadOnlyArchiveCollection : IReadOnlyCollection<ArchiveItem>
     {
         #region Constructors
 
@@ -43,19 +42,17 @@ namespace Cube.FileSystem.SevenZip
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
-        /// <param name="obj">実装オブジェクト</param>
+        /// <param name="raw">実装オブジェクト</param>
         /// <param name="src">圧縮ファイルのパス</param>
         /// <param name="password">パスワード取得用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ReadOnlyArchiveCollection(object obj, string src,
+        public ReadOnlyArchiveCollection(IInArchive raw, string src,
             IQuery<string, string> password)
         {
             Source   = src;
             Password = password;
-
-            if (obj is IInArchive raw) _raw = raw;
-            else throw new ArgumentException("invalid object");
+            _raw     = raw;
         }
 
         #endregion
@@ -112,7 +109,7 @@ namespace Cube.FileSystem.SevenZip
         {
             for (var i = 0; i < Count; ++i)
             {
-                yield return new ArchiveItem(_raw, Source, i, Password);
+                yield return new ArchiveItemImpl(_raw, Source, i, Password);
             }
         }
 
