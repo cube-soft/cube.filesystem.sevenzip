@@ -27,7 +27,7 @@ namespace Cube.FileSystem.SevenZip
     /// ICryptoGetTextPassword
     /// 
     /// <summary>
-    /// 圧縮ファイルに設定されたパスワードを伝えるためのコールバック関数を
+    /// 圧縮ファイル解凍時にパスワードを伝えるためのコールバック関数を
     /// 定義したインターフェースです。
     /// </summary>
     /// 
@@ -42,12 +42,12 @@ namespace Cube.FileSystem.SevenZip
         /// CryptoGetTextPassword
         /// 
         /// <summary>
-        /// Gets password for the archive
+        /// 圧縮ファイルのパスワードを取得します。
         /// </summary>
         /// 
-        /// <param name="password">Password for the archive</param>
+        /// <param name="password">パスワード</param>
         /// 
-        /// <returns>Zero if everything is OK</returns>
+        /// <returns>OperationResult</returns>
         ///
         /* ----------------------------------------------------------------- */
         [PreserveSig]
@@ -59,8 +59,8 @@ namespace Cube.FileSystem.SevenZip
     /// ICryptoGetTextPassword2
     /// 
     /// <summary>
-    /// 圧縮ファイルに設定されたパスワードを伝えるためのコールバック関数を
-    /// 定義したインターフェースです。
+    /// 圧縮時にパスワードを伝えるためのコールバック関数を定義した
+    /// インターフェースです。
     /// </summary>
     /// 
     /* --------------------------------------------------------------------- */
@@ -74,21 +74,20 @@ namespace Cube.FileSystem.SevenZip
         /// CryptoGetTextPassword2
         ///
         /// <summary>
-        /// Sets password for the archive
+        /// 圧縮ファイルのパスワードを取得します。
         /// </summary>
         /// 
-        /// <param name="passwordIsDefined">
-        /// Specifies whether archive has a password or not (0 if not)
+        /// <param name="enable">
+        /// パスワードを設定するかどうかを示す値 (0 if not)
         /// </param>
+        /// <param name="password">パスワード</param>
         /// 
-        /// <param name="password">Password for the archive</param>
-        /// 
-        /// <returns>Zero if everything is OK</returns>
+        /// <returns>OperationResult</returns>
         ///
         /* ----------------------------------------------------------------- */
         [PreserveSig]
         int CryptoGetTextPassword2(
-            ref int passwordIsDefined,
+            ref int enable,
             [MarshalAs(UnmanagedType.BStr)] out string password
         );
     }
@@ -113,33 +112,34 @@ namespace Cube.FileSystem.SevenZip
         /// SetTotal
         /// 
         /// <summary>
-        /// Sets total data size
+        /// 圧縮ファイルの展開時の合計サイズを取得します。
         /// </summary>
         /// 
-        /// <param name="files">Files pointer</param>
-        /// <param name="bytes">Total size in bytes</param>
+        /// <param name="files">ファイル数</param>
+        /// <param name="bytes">バイト数</param>
         ///
         /// <remarks>
-        /// ref ulong replaced with IntPtr because handlers often pass
-        /// null value read actual value with Marshal.ReadInt64
+        /// 7z.dll で null が設定される事が多いため、ref ulong の代わりに
+        /// IntPtr を使用しています。非 null 時に値を取得する場合、
+        /// Marshal.ReadInt64 を使用して下さい。
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        void SetTotal(IntPtr files, IntPtr bytes);
+        void SetTotal(IntPtr /* ref ulong */ files, IntPtr /* ref ulong */ bytes);
 
         /* ----------------------------------------------------------------- */
         ///
         /// SetCompleted
         ///
         /// <summary>
-        /// Sets completed size
+        /// 展開の完了したサイズを取得します。
         /// </summary>
         /// 
-        /// <param name="files">Files pointer</param>
-        /// <param name="bytes">Completed size in bytes</param>
+        /// <param name="files">ファイル数</param>
+        /// <param name="bytes">バイト数</param>
         /// 
         /* ----------------------------------------------------------------- */
-        void SetCompleted(IntPtr files, IntPtr bytes);
+        void SetCompleted(IntPtr /* ref ulong */ files, IntPtr /* ref ulong */ bytes);
     }
 
     /* --------------------------------------------------------------------- */
@@ -212,12 +212,10 @@ namespace Cube.FileSystem.SevenZip
         /// SetTotal
         /// 
         /// <summary>
-        /// Gives the size of the unpacked archive files
+        /// 展開後のバイト数を通知します。
         /// </summary>
         /// 
-        /// <param name="total">
-        /// Size of the unpacked archive files (bytes)
-        /// </param>
+        /// <param name="size">バイト数</param>
         /// 
         /* ----------------------------------------------------------------- */
         void SetTotal(ulong total);
@@ -227,27 +225,31 @@ namespace Cube.FileSystem.SevenZip
         /// SetCompleted
         /// 
         /// <summary>
-        /// SetCompleted 7-zip function
+        /// 展開の完了したバイト数を通知します。
         /// </summary>
         /// 
-        /// <param name="value">completed value</param>
+        /// <param name="value">バイト数</param>
         /// 
         /* ----------------------------------------------------------------- */
-        void SetCompleted([In] ref ulong value);
+        void SetCompleted(ref ulong value);
 
         /* ----------------------------------------------------------------- */
         ///
         /// GetStream
         /// 
         /// <summary>
-        /// Gets the stream for file extraction
+        /// 展開した内容を保存するためのストリームを取得します。
         /// </summary>
         /// 
-        /// <param name="index">Index in the archive file table</param>
-        /// <param name="stream">Pointer to the stream</param>
-        /// <param name="mode">Extraction mode</param>
+        /// <param name="index">圧縮ファイル中のインデックス</param>
+        /// <param name="stream">出力ストリーム</param>
+        /// <param name="mode">展開モード</param>
         /// 
-        /// <returns>S_OK - OK, S_FALSE - skip this file</returns>
+        /// <returns>OperationResult</returns>
+        /// 
+        /// <remarks>
+        /// 展開をスキップする場合、OperationResult.OK 以外の値を返します。
+        /// </remarks>
         /// 
         /* ----------------------------------------------------------------- */
         [PreserveSig]
@@ -262,10 +264,10 @@ namespace Cube.FileSystem.SevenZip
         /// PrepareOperation
         /// 
         /// <summary>
-        /// PrepareOperation 7-zip function
+        /// 展開処理の直前に実行されます。
         /// </summary>
         /// 
-        /// <param name="mode">Ask extract mode</param>
+        /// <param name="mode">展開モード</param>
         ///
         /* ----------------------------------------------------------------- */
         void PrepareOperation(AskMode mode);
@@ -275,10 +277,10 @@ namespace Cube.FileSystem.SevenZip
         /// SetOperationResult
         ///
         /// <summary>
-        /// Sets the operaton result
+        /// 処理結果を通知します。
         /// </summary>
         /// 
-        /// <param name="result">The operation result</param>
+        /// <param name="result">処理結果</param>
         /// 
         /* ----------------------------------------------------------------- */
         void SetOperationResult(OperationResult result);
@@ -304,41 +306,41 @@ namespace Cube.FileSystem.SevenZip
         /// SetTotal
         /// 
         /// <summary>
-        /// Gives the size of the unpacked archive files.
+        /// 圧縮するファイルの合計バイト数を通知します。
         /// </summary>
         /// 
-        /// <param name="total">
-        /// Size of the unpacked archive files (bytes)
-        /// </param>
+        /// <param name="size">バイト数</param>
         /// 
         /* ----------------------------------------------------------------- */
-        void SetTotal(ulong total);
+        void SetTotal(ulong size);
 
         /* ----------------------------------------------------------------- */
         ///
         /// SetCompleted
         /// 
         /// <summary>
-        /// SetCompleted 7-zip internal function.
+        /// 圧縮処理の終了したバイト数を通知します。
         /// </summary>
         /// 
-        /// <param name="value">completed value</param>
+        /// <param name="size">バイト数</param>
         /// 
         /* ----------------------------------------------------------------- */
-        void SetCompleted([In] ref ulong value);
+        void SetCompleted(ref ulong size);
 
         /* ----------------------------------------------------------------- */
         ///
         /// GetUpdateItemInfo
         ///
         /// <summary>
-        /// Gets archive update mode.
+        /// 追加する項目に関する情報を取得します。
         /// </summary>
         /// 
-        /// <param name="index">File index</param>
+        /// <param name="index">インデックス</param>
         /// <param name="newdata">1 if new, 0 if not</param>
         /// <param name="newprop">1 if new, 0 if not</param>
         /// <param name="indexInArchive">-1 if doesn't matter</param>
+        /// 
+        /// <returns>OperationResult</returns>
         /// 
         /* ----------------------------------------------------------------- */
         [PreserveSig]
@@ -354,15 +356,15 @@ namespace Cube.FileSystem.SevenZip
         /// GetProperty
         /// 
         /// <summary>
-        /// Gets the archive item property data.
+        /// 各種プロパティを取得します。
         /// </summary>
         /// 
-        /// <param name="index">Item index</param>
-        /// <param name="pid">Property identificator</param>
-        /// <param name="value">Property value</param>
+        /// <param name="index">圧縮ファイル中のインデックス</param>
+        /// <param name="pid">プロパティの種類</param>
+        /// <param name="value">プロパティの内容</param>
         /// 
-        /// <returns>Zero if Ok</returns>
-        ///
+        /// <returns>OperationResult</returns>
+        /// 
         /* ----------------------------------------------------------------- */
         [PreserveSig]
         int GetProperty(uint index, ItemPropId pid, ref PropVariant value);
@@ -372,14 +374,14 @@ namespace Cube.FileSystem.SevenZip
         /// GetStream
         /// 
         /// <summary>
-        /// Gets the stream for reading.
+        /// ストリームを取得します。
         /// </summary>
         /// 
-        /// <param name="index">The item index.</param>
-        /// <param name="stream">Stream pointer for reading.</param>
+        /// <param name="index">圧縮ファイル中のインデックス</param>
+        /// <param name="stream">読み込み用ストリーム</param>
         /// 
-        /// <returns>Zero if Ok</returns>
-        ///
+        /// <returns>OperationResult</returns>
+        /// 
         /* ----------------------------------------------------------------- */
         [PreserveSig]
         int GetStream(
@@ -392,10 +394,10 @@ namespace Cube.FileSystem.SevenZip
         /// SetOperationResult
         /// 
         /// <summary>
-        /// Sets the result for currently performed operation.
+        /// 処理結果を設定します。
         /// </summary>
         /// 
-        /// <param name="result">The result value.</param>
+        /// <param name="result">処理結果</param>
         /// 
         /* ----------------------------------------------------------------- */
         void SetOperationResult(OperationResult result);

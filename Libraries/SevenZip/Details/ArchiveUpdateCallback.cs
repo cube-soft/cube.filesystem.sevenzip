@@ -269,8 +269,6 @@ namespace Cube.FileSystem.SevenZip
         /// 
         /// <param name="result">処理結果</param>
         /// 
-        /// <returns>0 (ゼロ)</returns>
-        /// 
         /* ----------------------------------------------------------------- */
         public void SetOperationResult(OperationResult result) => Result = result;
 
@@ -281,8 +279,6 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// EnumProperties 7-zip internal function.
         /// </summary>
-        /// 
-        /// <param name="enumerator">The enumerator pointer.</param>
         /// 
         /// <remarks>
         /// このメソッドは未実装です。

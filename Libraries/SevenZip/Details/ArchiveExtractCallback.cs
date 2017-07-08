@@ -128,7 +128,7 @@ namespace Cube.FileSystem.SevenZip
         /// 展開後のバイト数を通知します。
         /// </summary>
         /// 
-        /// <param name="size">展開後のバイト数</param>
+        /// <param name="size">バイト数</param>
         /// 
         /* ----------------------------------------------------------------- */
         public void SetTotal(ulong size)
@@ -177,6 +177,10 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="mode">展開モード</param>
         /// 
         /// <returns>OperationResult</returns>
+        /// 
+        /// <remarks>
+        /// 展開をスキップする場合、OperationResult.OK 以外の値を返します。
+        /// </remarks>
         /// 
         /* ----------------------------------------------------------------- */
         public int GetStream(uint index, out ISequentialOutStream stream, AskMode mode)

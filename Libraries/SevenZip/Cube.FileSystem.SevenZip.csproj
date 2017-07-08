@@ -53,7 +53,7 @@
     <Compile Include="Details\ArchiveUpdateCallback.cs" />
     <Compile Include="Details\ArchiveCallbackBase.cs" />
     <Compile Include="Details\PasswordQuery.cs" />
-    <Compile Include="EncryptionException.cs" />
+    <Compile Include="Exceptions.cs" />
     <Compile Include="FileItem.cs" />
     <Compile Include="Format.cs" />
     <Compile Include="Details\NativeInterfaces.cs" />
@@ -68,7 +68,6 @@
     <Compile Include="Details\ArchiveStream.cs" />
     <Compile Include="Query.cs" />
     <Compile Include="ReadOnlyArchiveCollection.cs" />
-    <Compile Include="UserCancelException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages.config" />
