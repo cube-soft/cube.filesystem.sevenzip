@@ -19,6 +19,7 @@ using System;
 using System.Linq;
 using System.Timers;
 using Cube.FileSystem.SevenZip;
+using Cube.Log;
 
 namespace Cube.FileSystem.App.Ice
 {
@@ -31,7 +32,7 @@ namespace Cube.FileSystem.App.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ProgressFacade
+    public class ProgressFacade : IDisposable
     {
         #region Constructors
 
@@ -83,6 +84,17 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         public string Destination { get; private set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Tmp
+        /// 
+        /// <summary>
+        /// 一時領域用のパスを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Tmp { get; private set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -275,6 +287,74 @@ namespace Cube.FileSystem.App.Ice
             }
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetTmp
+        /// 
+        /// <summary>
+        /// Tmp にパスを設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected void SetTmp(string directory)
+            => Tmp = System.IO.Path.Combine(directory, new Guid().ToString("D"));
+
+        #region IDisposable
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ~ProgressFacade
+        /// 
+        /// <summary>
+        /// オブジェクトを破棄します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        ~ProgressFacade()
+        {
+            Dispose(false);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Dispose
+        /// 
+        /// <summary>
+        /// リソースを解放します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Dispose
+        /// 
+        /// <summary>
+        /// リソースを解放します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed) return;
+
+            try
+            {
+                if (string.IsNullOrEmpty(Tmp)) return;
+                else if (System.IO.File.Exists(Tmp)) System.IO.File.Delete(Tmp);
+                else if (System.IO.Directory.Exists(Tmp)) System.IO.Directory.Delete(Tmp, true);
+            }
+            catch (Exception err) { this.LogWarn(err.ToString(), err); }
+            finally { _disposed = true; }
+        }
+
+        #endregion
+
         #endregion
 
         #region Implementations
@@ -291,6 +371,7 @@ namespace Cube.FileSystem.App.Ice
         private void RaiseUserCancel() => throw new UserCancelException();
 
         #region Fields
+        private bool _disposed = false;
         private Timer _timer = new Timer(100.0);
         #endregion
 
