@@ -185,9 +185,9 @@ namespace Cube.FileSystem.App.Ice
                 try
                 {
                     src.Extract(Destination, progress);
-                    retry = true;
+                    retry = false;
                 }
-                catch (EncryptionException /* err */) { retry = false; }
+                catch (EncryptionException /* err */) { retry = true; }
             }
             while (retry);
         }
