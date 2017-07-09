@@ -89,7 +89,7 @@ namespace Cube.FileSystem.App.Ice
                     Collect(reader);
                     Extract(reader);
                 }
-                catch (EncryptionException /* err */) { /* user cancel */ }
+                catch (UserCancelException /* err */) { /* user cancel */ }
                 catch (Exception err) { this.LogWarn(err.ToString(), err); }
             }
         }
@@ -156,8 +156,40 @@ namespace Cube.FileSystem.App.Ice
             });
 
             Current = src.Path;
-            src.Extract(Destination, progress);
+            Extract(src, progress);
             ProgressReport.DoneCount++;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract
+        /// 
+        /// <summary>
+        /// 圧縮ファイルの一項目を展開します。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// ArchiveItem.Extract は、入力されたパスワードが間違っていた場合
+        /// には EncryptionException を送出し、ユーザがパスワード入力を
+        /// キャンセルした場合には UserCancelException を送出します。
+        /// ここでは、EncryptionException が送出された場合には再実行し、
+        /// ユーザに再度パスワード入力を促しています。
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Extract(ArchiveItem src, IProgress<ArchiveReport> progress)
+        {
+            var retry = false;
+            do
+            {
+                try
+                {
+                    src.Extract(Destination, progress);
+                    retry = true;
+                }
+                catch (EncryptionException /* err */) { retry = false; }
+            }
+            while (retry);
         }
 
         #endregion

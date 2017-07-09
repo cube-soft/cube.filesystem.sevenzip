@@ -113,6 +113,7 @@ namespace Cube.FileSystem.App.Ice
 
                     OnProgress(ValueEventArgs.Create(ProgressReport));
                 }
+                catch (UserCancelException /* err */) { /* user cancel */ }
                 finally { ProgressStop(); }
             }
         }
