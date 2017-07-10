@@ -48,7 +48,10 @@ namespace Cube.FileSystem.App.Ice
         /// <param name="request">コマンドライン</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ExtractFacade(Request request) : base(request) { }
+        public ExtractFacade(Request request) : base(request)
+        {
+            Source = Request.Sources.First();
+        }
 
         #endregion
 
@@ -59,11 +62,11 @@ namespace Cube.FileSystem.App.Ice
         /// Source
         /// 
         /// <summary>
-        /// 圧縮ファイルのパスを取得します。
+        /// 解凍するファイルのパスを取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Source => Request.Sources.First();
+        public string Source { get; }
 
         #endregion
 
@@ -78,7 +81,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Start()
+        public override void Start()
         {
             var query = new Query<string, string>(x => OnPasswordRequired(x));
             using (var reader = new ArchiveReader(Source, query))

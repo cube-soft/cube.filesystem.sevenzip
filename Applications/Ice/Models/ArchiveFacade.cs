@@ -15,9 +15,6 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Cube.FileSystem.SevenZip;
 using Cube.Log;
 
@@ -51,32 +48,6 @@ namespace Cube.FileSystem.App.Ice
 
         #endregion
 
-        #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Format
-        /// 
-        /// <summary>
-        /// 圧縮フォーマットを取得または設定します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public Format Format => Request.Format;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Sources
-        /// 
-        /// <summary>
-        /// 圧縮するファイルまたはフォルダの一覧を取得します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public IList<string> Sources => Request.Sources.ToList();
-
-        #endregion
-
         #region Methods
 
         /* ----------------------------------------------------------------- */
@@ -88,7 +59,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Start()
+        public override void Start()
         {
             try
             {
@@ -97,9 +68,9 @@ namespace Cube.FileSystem.App.Ice
                             new Query<string, string>(x => OnPasswordRequired(x)) :
                             null;
 
-                using (var writer = new ArchiveWriter(Format))
+                using (var writer = new ArchiveWriter(Request.Format))
                 {
-                    foreach (var item in Sources) writer.Add(item);
+                    foreach (var item in Request.Sources) writer.Add(item);
                     ProgressStart();
                     writer.Save(dest, query, CreateInnerProgress(x => ProgressReport = x));
                 }

@@ -32,7 +32,7 @@ namespace Cube.FileSystem.App.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ProgressFacade : IDisposable
+    public abstract class ProgressFacade : IDisposable
     {
         #region Constructors
 
@@ -272,6 +272,17 @@ namespace Cube.FileSystem.App.Ice
         #endregion
 
         #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Start
+        /// 
+        /// <summary>
+        /// 処理をを開始します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public abstract void Start();
 
         /* ----------------------------------------------------------------- */
         ///
