@@ -71,7 +71,6 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         public SuspendableProgress(WaitHandle wait, Action<T> action)
         {
-            _context = SynchronizationContext.Current;
             _wait = wait;
             if (action != null) ProgressChanged += (s, e) => action(e);
         }
@@ -124,15 +123,11 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         protected virtual void OnReport(T value)
-        {
-            if (ProgressChanged == null) return;
-            _context.Post(_ => ProgressChanged(this, value), null);
-        }
+            => ProgressChanged?.Invoke(this, value);
 
         #endregion
 
         #region Fields
-        private readonly SynchronizationContext _context;
         private readonly WaitHandle _wait;
         #endregion
     }

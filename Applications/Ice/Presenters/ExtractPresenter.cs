@@ -16,7 +16,6 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
-using Cube.Log;
 using Cube.Tasks;
 
 namespace Cube.FileSystem.App.Ice
