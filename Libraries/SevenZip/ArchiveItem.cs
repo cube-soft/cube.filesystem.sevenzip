@@ -89,18 +89,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private IQuery<string, string> Password { get; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// RawObject
-        ///
-        /// <summary>
-        /// 実装用オブジェクトを取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected object RawObject { get; set; }
+        protected IQuery<string, string> Password { get; }
 
         #region IArchiveItem
 
@@ -113,7 +102,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Path => Get<string>(ItemPropId.Path);
+        public string Path { get; protected set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -135,7 +124,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool Encrypted => Get<bool>(ItemPropId.Encrypted);
+        public bool Encrypted { get; protected set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -146,7 +135,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool IsDirectory => Get<bool>(ItemPropId.IsDirectory);
+        public bool IsDirectory { get; protected set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -157,7 +146,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public uint Attributes => Get<uint>(ItemPropId.Attributes);
+        public uint Attributes { get; protected set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -168,7 +157,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public long Size => (long)Get<ulong>(ItemPropId.Size);
+        public long Size { get; protected set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -179,7 +168,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public DateTime CreationTime => Get<DateTime>(ItemPropId.CreationTime);
+        public DateTime CreationTime { get; protected set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -190,7 +179,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public DateTime LastWriteTime => Get<DateTime>(ItemPropId.LastWriteTime);
+        public DateTime LastWriteTime { get; protected set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -201,7 +190,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public DateTime LastAccessTime => Get<DateTime>(ItemPropId.LastAccessTime);
+        public DateTime LastAccessTime { get; protected set; }
 
         #endregion
 
@@ -234,7 +223,71 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="progress">進捗報告用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Extract(string directory, IProgress<ArchiveReport> progress)
+        public abstract void Extract(string directory, IProgress<ArchiveReport> progress);
+
+        #endregion
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// ArchiveItemImpl
+    /// 
+    /// <summary>
+    /// ArchiveItem の実装クラスです。
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    internal class ArchiveItemImpl : ArchiveItem
+    {
+        #region Constructors
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ArchiveItemImpl
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        /// 
+        /// <param name="raw">実装オブジェクト</param>
+        /// <param name="src">圧縮ファイルのパス</param>
+        /// <param name="index">圧縮ファイル中のインデックス</param>
+        /// <param name="password">パスワード取得用オブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ArchiveItemImpl(IInArchive raw,
+            string src, int index, IQuery<string, string> password)
+            : base(src, index, password)
+        {
+            _raw = raw;
+
+            Path           = Get<string>(ItemPropId.Path);
+            Encrypted      = Get<bool>(ItemPropId.Encrypted);
+            IsDirectory    = Get<bool>(ItemPropId.IsDirectory);
+            Attributes     = Get<uint>(ItemPropId.Attributes);
+            Size           = (long)Get<ulong>(ItemPropId.Size);
+            CreationTime   = Get<DateTime>(ItemPropId.CreationTime);
+            LastWriteTime  = Get<DateTime>(ItemPropId.LastWriteTime);
+            LastAccessTime = Get<DateTime>(ItemPropId.LastAccessTime);
+        }
+
+        #endregion
+
+        #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract
+        ///
+        /// <summary>
+        /// 展開した内容を保存します。
+        /// </summary>
+        /// 
+        /// <param name="directory">保存ディレクトリ</param>
+        /// <param name="progress">進捗報告用オブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public override void Extract(string directory, IProgress<ArchiveReport> progress)
         {
             if (IsDirectory) CreateDirectory(System.IO.Path.Combine(directory, Path));
             else ExtractFile(directory, progress);
@@ -265,7 +318,7 @@ namespace Cube.FileSystem.SevenZip
                 Progress = progress,
             };
 
-            try { Get().Extract(new[] { (uint)Index }, 1, 0, callback); }
+            try { _raw.Extract(new[] { (uint)Index }, 1, 0, callback); }
             finally
             {
                 stream.Dispose();
@@ -323,17 +376,6 @@ namespace Cube.FileSystem.SevenZip
         /// Get
         ///
         /// <summary>
-        /// 実装用オブジェクトを取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private IInArchive Get() => RawObject as IInArchive;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Get
-        ///
-        /// <summary>
         /// 情報を取得します。
         /// </summary>
         ///
@@ -343,7 +385,7 @@ namespace Cube.FileSystem.SevenZip
             try
             {
                 var var = new PropVariant();
-                Get().GetProperty((uint)Index, pid, ref var);
+                _raw.GetProperty((uint)Index, pid, ref var);
 
                 var obj = var.Object;
                 return (obj != null && obj is T) ? (T)obj : default(T);
@@ -370,39 +412,10 @@ namespace Cube.FileSystem.SevenZip
             throw new EncryptionException();
         }
 
+        #region Fields
+        private IInArchive _raw;
         #endregion
-    }
 
-    /* --------------------------------------------------------------------- */
-    ///
-    /// ArchiveItemImpl
-    /// 
-    /// <summary>
-    /// 圧縮ファイルの 1 項目を表すクラスです。
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    internal class ArchiveItemImpl : ArchiveItem
-    {
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ArchiveItemImpl
-        ///
-        /// <summary>
-        /// オブジェクトを初期化します。
-        /// </summary>
-        /// 
-        /// <param name="raw">実装オブジェクト</param>
-        /// <param name="src">圧縮ファイルのパス</param>
-        /// <param name="index">圧縮ファイル中のインデックス</param>
-        /// <param name="password">パスワード取得用オブジェクト</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public ArchiveItemImpl(IInArchive raw,
-            string src, int index, IQuery<string, string> password)
-            : base(src, index, password)
-        {
-            RawObject = raw;
-        }
+        #endregion
     }
 }
