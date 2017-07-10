@@ -297,7 +297,7 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         protected void SetTmp(string directory)
-            => Tmp = System.IO.Path.Combine(directory, new Guid().ToString("D"));
+            => Tmp = System.IO.Path.Combine(directory, Guid.NewGuid().ToString("D"));
 
         #region IDisposable
 
