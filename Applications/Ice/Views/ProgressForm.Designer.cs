@@ -70,7 +70,7 @@
             this.ExitButton.Location = new System.Drawing.Point(275, 129);
             this.ExitButton.Name = "ExitButton";
             this.ExitButton.Size = new System.Drawing.Size(100, 25);
-            this.ExitButton.TabIndex = 6;
+            this.ExitButton.TabIndex = 1;
             this.ExitButton.Text = "キャンセル";
             this.ExitButton.UseVisualStyleBackColor = true;
             // 
@@ -140,15 +140,17 @@
             // SuspendButton
             // 
             this.SuspendButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.SuspendButton.Enabled = false;
             this.SuspendButton.Location = new System.Drawing.Point(58, 129);
             this.SuspendButton.Name = "SuspendButton";
             this.SuspendButton.Size = new System.Drawing.Size(100, 25);
-            this.SuspendButton.TabIndex = 5;
+            this.SuspendButton.TabIndex = 0;
             this.SuspendButton.Text = "中断";
             this.SuspendButton.UseVisualStyleBackColor = true;
             // 
             // ProgressForm
             // 
+            this.AcceptButton = this.ExitButton;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(434, 171);
             this.Controls.Add(this.RootPanel);

@@ -85,6 +85,8 @@ namespace Cube.FileSystem.App.Ice
                 var max = MainProgressBar.Maximum;
                 MainProgressBar.Value = Math.Min(Math.Max(value, min), max);
 
+                SuspendButton.Enabled = value > 0;
+
                 UpdateTitle();
                 UpdateRemainLabel();
             }
