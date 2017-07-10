@@ -16,7 +16,6 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
-using System.Text;
 using System.Windows.Forms;
 using Cube.Images.Icons;
 
@@ -48,7 +47,7 @@ namespace Cube.FileSystem.App.Ice
         {
             InitializeComponent();
 
-            IconPictureBox.Image = StockIcons.Information.GetIcon(IconSize.Large).ToBitmap();
+            IconPictureBox.Image = StockIcons.Warning.GetIcon(IconSize.Large).ToBitmap();
 
             ExecButton.Click += (s, e) => Close();
             ExitButton.Click += (s, e) => Close();
