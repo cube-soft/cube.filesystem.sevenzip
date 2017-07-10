@@ -90,32 +90,68 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         public void Start()
         {
-            using (var writer = new ArchiveWriter(Format))
+            try
             {
-                try
+                var dest  = GetDestination();
+                var query = Request.Password ?
+                            new Query<string, string>(x => OnPasswordRequired(x)) :
+                            null;
+
+                using (var writer = new ArchiveWriter(Format))
                 {
-                    SetDestination();
                     foreach (var item in Sources) writer.Add(item);
                     ProgressStart();
-
-                    var query = Request.Password ?
-                                new Query<string, string>(x => OnPasswordRequired(x)) :
-                                null;
-
-                    writer.Save(Destination,
-                        query,
-                        new Progress<ArchiveReport>(x => ProgressReport = x)
-                    );
-
-                    var name = System.IO.Path.GetFileName(Destination);
-                    this.LogDebug($"{name}:{ProgressReport.DoneSize}/{ProgressReport.FileSize}");
-                    ProgressReport.DoneSize = ProgressReport.FileSize; // hack
-
-                    OnProgress(ValueEventArgs.Create(ProgressReport));
+                    writer.Save(dest, query,
+                        new Progress<ArchiveReport>(x => ProgressReport = x));
                 }
-                catch (UserCancelException /* err */) { /* user cancel */ }
-                finally { ProgressStop(); }
+
+                Move();
+
+                var name = System.IO.Path.GetFileName(Destination);
+                this.LogDebug($"{name}:{ProgressReport.DoneSize}/{ProgressReport.FileSize}");
+                ProgressReport.DoneSize = ProgressReport.FileSize; // hack
+
+                OnProgress(ValueEventArgs.Create(ProgressReport));
             }
+            catch (UserCancelException /* err */) { /* user cancel */ }
+            finally { ProgressStop(); }
+        }
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetDestination
+        /// 
+        /// <summary>
+        /// 保存先パスを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private string GetDestination()
+        {
+            SetDestination();
+            if (!System.IO.File.Exists(Destination)) return Destination;
+            SetTmp(System.IO.Path.GetDirectoryName(Destination));
+            return Tmp;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Move
+        /// 
+        /// <summary>
+        /// ファイルを移動します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Move()
+        {
+            if (string.IsNullOrEmpty(Tmp) || !System.IO.File.Exists(Tmp)) return;
+            System.IO.File.Delete(Destination);
+            System.IO.File.Move(Tmp, Destination);
         }
 
         #endregion
