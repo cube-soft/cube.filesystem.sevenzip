@@ -159,6 +159,23 @@ namespace Cube.FileSystem.App.Ice.Tests
             e.Result = Destination;
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowOverwriteView
+        /// 
+        /// <summary>
+        /// 上書き確認用画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">情報を保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public override void ShowOverwriteView(QueryEventArgs<OverwriteInfo, OverwriteMode> e)
+        {
+            e.Cancel = false;
+            e.Result = OverwriteMode.AlwaysYes;
+        }
+
         #endregion
     }
 }
