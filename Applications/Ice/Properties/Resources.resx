@@ -130,6 +130,9 @@
   <data name="MessageArchive" xml:space="preserve">
     <value>{0} を作成しています...</value>
   </data>
+  <data name="MessageCurrentFile" xml:space="preserve">
+    <value>現在のファイル</value>
+  </data>
   <data name="MessageDoneArchive" xml:space="preserve">
     <value>{0} に保存しました。</value>
   </data>
@@ -145,6 +148,18 @@
   <data name="MessageFileCount" xml:space="preserve">
     <value>ファイル数</value>
   </data>
+  <data name="MessageFileSize" xml:space="preserve">
+    <value>サイズ</value>
+  </data>
+  <data name="MessageLastWriteTime" xml:space="preserve">
+    <value>更新日時</value>
+  </data>
+  <data name="MessageNewFile" xml:space="preserve">
+    <value>新しいファイル</value>
+  </data>
+  <data name="MessageOverwrite" xml:space="preserve">
+    <value>この場所には同じ名前のファイルが既に存在します。上書きしますか？</value>
+  </data>
   <data name="MessagePreArchive" xml:space="preserve">
     <value>ファイルを圧縮する準備をしています...</value>
   </data>
@@ -153,6 +168,9 @@
   </data>
   <data name="MessageRemainTime" xml:space="preserve">
     <value>残り時間 約</value>
+  </data>
+  <data name="MessageUnknownFile" xml:space="preserve">
+    <value>不明なファイル</value>
   </data>
   <data name="TitlePassword" xml:space="preserve">
     <value>パスワードの入力</value>

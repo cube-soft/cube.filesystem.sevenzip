@@ -99,6 +99,15 @@ namespace Cube.FileSystem.App.Ice.Properties {
         }
         
         /// <summary>
+        ///   現在のファイル に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MessageCurrentFile {
+            get {
+                return ResourceManager.GetString("MessageCurrentFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   {0} に保存しました。 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MessageDoneArchive {
@@ -144,6 +153,42 @@ namespace Cube.FileSystem.App.Ice.Properties {
         }
         
         /// <summary>
+        ///   サイズ に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MessageFileSize {
+            get {
+                return ResourceManager.GetString("MessageFileSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   更新日時 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MessageLastWriteTime {
+            get {
+                return ResourceManager.GetString("MessageLastWriteTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   新しいファイル に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MessageNewFile {
+            get {
+                return ResourceManager.GetString("MessageNewFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   この場所には同じ名前のファイルが既に存在します。上書きしますか？ に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MessageOverwrite {
+            get {
+                return ResourceManager.GetString("MessageOverwrite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   ファイルを圧縮する準備をしています... に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MessagePreArchive {
@@ -167,6 +212,15 @@ namespace Cube.FileSystem.App.Ice.Properties {
         internal static string MessageRemainTime {
             get {
                 return ResourceManager.GetString("MessageRemainTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   不明なファイル に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MessageUnknownFile {
+            get {
+                return ResourceManager.GetString("MessageUnknownFile", resourceCulture);
             }
         }
         

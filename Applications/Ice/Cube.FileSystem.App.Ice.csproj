@@ -66,6 +66,12 @@
     <Compile Include="Models\Request.cs" />
     <Compile Include="Models\ProgressFacade.cs" />
     <Compile Include="Presenters\ArchivePresenter.cs" />
+    <Compile Include="Views\OverwriteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\OverwriteForm.Designer.cs">
+      <DependentUpon>OverwriteForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\PasswordForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -87,6 +93,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\ViewFactory.cs" />
+    <EmbeddedResource Include="Views\OverwriteForm.resx">
+      <DependentUpon>OverwriteForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\PasswordForm.resx">
       <DependentUpon>PasswordForm.cs</DependentUpon>
     </EmbeddedResource>
