@@ -133,6 +133,17 @@ namespace Cube.FileSystem.App.Ice
             set { _timer.Interval = value.TotalMilliseconds; }
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OverwriteMode
+        /// 
+        /// <summary>
+        /// 上書き方法を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public OverwriteMode OverwriteMode { get; protected set; } = OverwriteMode.Query;
+
         #endregion
 
         #region Events
@@ -228,6 +239,33 @@ namespace Cube.FileSystem.App.Ice
             else e.Cancel = true;
             if (e.Cancel) RaiseUserCancel();
         }
+
+        #endregion
+
+        #region OverwriteRequired
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OverwriteRequired
+        /// 
+        /// <summary>
+        /// ファイルの上書き時に発生するイベントです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public event QueryEventHandler<string, OverwriteMode> OverwriteRequired;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OnOverwriteRequired
+        /// 
+        /// <summary>
+        /// OverwriteRequired イベントを発生させます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected virtual void OnOverwriteRequired(QueryEventArgs<string, OverwriteMode> e)
+            => OverwriteRequired?.Invoke(this, e);
 
         #endregion
 

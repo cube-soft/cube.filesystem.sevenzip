@@ -17,8 +17,6 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Cube.Log;
 using Cube.FileSystem.SevenZip;
 
@@ -86,6 +84,7 @@ namespace Cube.FileSystem.App.Ice
                 try
                 {
                     SetDestination();
+                    SetTmp(Destination);
                     Collect(reader);
                     Extract(reader);
                 }
@@ -184,12 +183,84 @@ namespace Cube.FileSystem.App.Ice
             {
                 try
                 {
-                    src.Extract(Destination, progress);
+                    src.Extract(Tmp, progress);
+                    QueryMove(src);
                     retry = false;
                 }
                 catch (EncryptionException /* err */) { retry = true; }
             }
             while (retry);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// QueryMove
+        /// 
+        /// <summary>
+        /// 必要に応じてファイルを移動します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void QueryMove(ArchiveItem item)
+        {
+            var src    = System.IO.Path.Combine(Tmp, item.Path);
+            var dest   = System.IO.Path.Combine(Destination, item.Path);
+            var exists = item.IsDirectory ?
+                         System.IO.Directory.Exists(dest) :
+                         System.IO.File.Exists(dest);
+
+            if (exists)
+            {
+                if (item.IsDirectory) return;
+                if (!OverwriteMode.HasFlag(OverwriteMode.Always))
+                {
+                    var e = new QueryEventArgs<string, OverwriteMode>(dest);
+                    OnOverwriteRequired(e);
+                    if (e.Result == OverwriteMode.Cancel) throw new UserCancelException();
+                    OverwriteMode = e.Result;
+                    Overwrite(src, dest, item.IsDirectory);
+                }
+            }
+            else Move(src, dest, item.IsDirectory);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Overwrite
+        /// 
+        /// <summary>
+        /// ファイルを上書きコピーします。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Overwrite(string src, string dest, bool directory)
+        {
+            switch (OverwriteMode)
+            {
+                case OverwriteMode.Yes:
+                case OverwriteMode.AlwaysYes:
+                    Move(src, dest, directory);
+                    break;
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Move
+        /// 
+        /// <summary>
+        /// ファイルを移動します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Move(string src, string dest, bool directory)
+        {
+            if (directory) System.IO.Directory.CreateDirectory(dest);
+            else
+            {
+                System.IO.File.Delete(dest);
+                System.IO.File.Move(src, dest);
+            }
         }
 
         #endregion

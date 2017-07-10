@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\ArchiveFacade.cs" />
+    <Compile Include="Models\OverwriteMode.cs" />
     <Compile Include="Models\Request.cs" />
     <Compile Include="Models\ProgressFacade.cs" />
     <Compile Include="Presenters\ArchivePresenter.cs" />
