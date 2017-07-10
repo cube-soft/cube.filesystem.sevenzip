@@ -39,6 +39,8 @@ namespace Cube.FileSystem.Files
         /// ファイルの種類を表す文字列を取得します。
         /// </summary>
         ///
+        /// <param name="fi">FileInfo オブジェクト</param>
+        /// 
         /* ----------------------------------------------------------------- */
         public static string GetTypeName(this System.IO.FileInfo fi)
         {
@@ -52,6 +54,33 @@ namespace Cube.FileSystem.Files
                 attr, ref shfi, (uint)Marshal.SizeOf(shfi), flags);
 
             return (result != IntPtr.Zero) ? shfi.szTypeName : null;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetUniqueName
+        ///
+        /// <summary>
+        /// FileInfo オブジェクトを基にした一意なパスを取得します。
+        /// </summary>
+        /// 
+        /// <param name="fi">FileInfo オブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static string GetUniqueName(this System.IO.FileInfo fi)
+        {
+            if (!fi.Exists) return fi.FullName;
+
+            var path = fi.FullName;
+            var dir  = fi.DirectoryName;
+            var name = System.IO.Path.GetFileNameWithoutExtension(path);
+            var ext  = fi.Extension;
+
+            for (var i = 2; ; ++i)
+            {
+                var dest = System.IO.Path.Combine(dir, $"{name}({i}){ext}");
+                if (!System.IO.File.Exists(dest) && !System.IO.Directory.Exists(dest)) return dest;
+            }
         }
     }
 }
