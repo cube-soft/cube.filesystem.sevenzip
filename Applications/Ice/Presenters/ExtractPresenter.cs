@@ -16,6 +16,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Linq;
 using Cube.Tasks;
 
 namespace Cube.FileSystem.App.Ice
@@ -54,7 +55,7 @@ namespace Cube.FileSystem.App.Ice
         {
             // View
             View.EventAggregator = EventAggregator;
-            View.FileName = System.IO.Path.GetFileName(Model.Source);
+            View.FileName = System.IO.Path.GetFileName(model.Sources.First());
             View.Icon = Properties.Resources.Extract;
             View.Status = Properties.Resources.MessagePreExtract;
 
@@ -117,7 +118,7 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         private void WhenDestinationRequired(object sender, QueryEventArgs<string, string> e)
-            => SyncWait(() => Views.ShowSaveDirectoryView(e));
+            => Execute(() => Views.ShowSaveDirectoryView(e));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -129,7 +130,7 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         private void WhenPasswordRequired(object sender, QueryEventArgs<string, string> e)
-            => SyncWait(() => Views.ShowPasswordView(e));
+            => Execute(() => Views.ShowPasswordView(e));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -141,7 +142,7 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         private void WhenOverwriteRequired(object sender, QueryEventArgs<OverwriteInfo, OverwriteMode> e)
-            => SyncWait(() => Views.ShowOverwriteView(e));
+            => Execute(() => Views.ShowOverwriteView(e));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -152,12 +153,36 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenProgress(object sender, ValueEventArgs<SevenZip.ArchiveReport> e) => Sync(() =>
+        private void WhenProgress(object sender, ValueEventArgs<SevenZip.ArchiveReport> e)
+            => Sync(() =>
         {
             View.FileCount = e.Value.FileCount;
             View.DoneCount = e.Value.DoneCount;
             View.Status    = Model.Current;
             View.Value     = Math.Max(Math.Max((int)e.Value.Percentage, 1), View.Value);
+        });
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Execute
+        /// 
+        /// <summary>
+        /// View の時計を一時停止して処理を実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Execute(Action action) => SyncWait(() =>
+        {
+            try
+            {
+                View.Stop();
+                action();
+            }
+            finally { View.Start(); }
         });
 
         #endregion

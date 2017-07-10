@@ -116,7 +116,7 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         private void WhenDestinationRequired(object sender, QueryEventArgs<string, string> e)
-            => SyncWait(() => Views.ShowSaveFileView(e));
+            => Execute(() => Views.ShowSaveFileView(e));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -128,7 +128,7 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         private void WhenPasswordRequired(object sender, QueryEventArgs<string, string> e)
-            => SyncWait(() => Views.ShowPasswordView(e));
+            => Execute(() => Views.ShowPasswordView(e));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -147,6 +147,29 @@ namespace Cube.FileSystem.App.Ice
             View.DoneCount = e.Value.DoneCount;
             View.Status    = string.Format(Properties.Resources.MessageArchive, Model.Destination);
             View.Value     = Math.Max(Math.Max((int)e.Value.Percentage, 1), View.Value);
+        });
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Execute
+        /// 
+        /// <summary>
+        /// View の時計を一時停止して処理を実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Execute(Action action) => SyncWait(() =>
+        {
+            try
+            {
+                View.Stop();
+                action();
+            }
+            finally { View.Start(); }
         });
 
         #endregion
