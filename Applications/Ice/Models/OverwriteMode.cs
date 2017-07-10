@@ -42,4 +42,64 @@ namespace Cube.FileSystem.App.Ice
         AlwaysNo     = Always | No,
         AlwaysRename = Always | Rename,
     }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// OverwriteInfo
+    /// 
+    /// <summary>
+    /// 上書き対象となる項目の情報を保持するためのクラスです。
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public class OverwriteInfo
+    {
+        #region Constructors
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OverwriteInfo
+        /// 
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        /// 
+        /// <param name="src">上書き元の情報</param>
+        /// <param name="dest">上書き先の情報</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public OverwriteInfo(SevenZip.IArchiveItem src, System.IO.FileInfo dest)
+        {
+            Source      = src;
+            Destination = dest;
+        }
+
+        #endregion
+
+        #region Constructors
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Source
+        /// 
+        /// <summary>
+        /// 上書き元の情報を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public SevenZip.IArchiveItem Source { get; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Destination
+        /// 
+        /// <summary>
+        /// 上書き先の情報を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public System.IO.FileInfo Destination { get; }
+
+        #endregion
+    }
 }

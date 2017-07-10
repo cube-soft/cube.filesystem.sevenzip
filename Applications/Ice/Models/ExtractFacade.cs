@@ -214,7 +214,8 @@ namespace Cube.FileSystem.App.Ice
                 if (item.IsDirectory) return;
                 if (!OverwriteMode.HasFlag(OverwriteMode.Always))
                 {
-                    var e = new QueryEventArgs<string, OverwriteMode>(dest);
+                    var q = new OverwriteInfo(item, new System.IO.FileInfo(dest));
+                    var e = new QueryEventArgs<OverwriteInfo, OverwriteMode>(q);
                     OnOverwriteRequired(e);
                     if (e.Result == OverwriteMode.Cancel) throw new UserCancelException();
                     OverwriteMode = e.Result;

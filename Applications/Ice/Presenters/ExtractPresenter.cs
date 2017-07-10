@@ -61,6 +61,7 @@ namespace Cube.FileSystem.App.Ice
             // Model
             Model.DestinationRequired += WhenDestinationRequired;
             Model.PasswordRequired += WhenPasswordRequired;
+            Model.OverwriteRequired += WhenOverwriteRequired;
             Model.Progress += WhenProgress;
 
             // EventAggregator
@@ -113,6 +114,18 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void WhenPasswordRequired(object sender, QueryEventArgs<string, string> e)
             => SyncWait(() => Views.ShowPasswordView(e));
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenOverwriteRequired
+        /// 
+        /// <summary>
+        /// 上書き確認時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenOverwriteRequired(object sender, QueryEventArgs<OverwriteInfo, OverwriteMode> e)
+            => SyncWait(() => Views.ShowOverwriteView(e));
 
         /* ----------------------------------------------------------------- */
         ///

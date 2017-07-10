@@ -253,7 +253,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public event QueryEventHandler<string, OverwriteMode> OverwriteRequired;
+        public event QueryEventHandler<OverwriteInfo, OverwriteMode> OverwriteRequired;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -264,7 +264,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnOverwriteRequired(QueryEventArgs<string, OverwriteMode> e)
+        protected virtual void OnOverwriteRequired(QueryEventArgs<OverwriteInfo, OverwriteMode> e)
             => OverwriteRequired?.Invoke(this, e);
 
         #endregion

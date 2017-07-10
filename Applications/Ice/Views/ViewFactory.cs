@@ -107,6 +107,28 @@ namespace Cube.FileSystem.App.Ice
                 if (!e.Cancel) e.Result = view.Password;
             }
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowOverwriteView
+        /// 
+        /// <summary>
+        /// 上書き確認用画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">ファイル情報を保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public virtual void ShowOverwriteView(QueryEventArgs<OverwriteInfo, OverwriteMode> e)
+        {
+            using (var view = new OverwriteForm())
+            {
+                view.Source = e.Query.Source;
+                view.Destination = e.Query.Destination;
+                view.ShowDialog();
+                e.Result = view.OverwriteMode;
+            }
+        }
     }
 
     /* --------------------------------------------------------------------- */
@@ -152,6 +174,9 @@ namespace Cube.FileSystem.App.Ice
 
         public static void ShowSaveDirectoryView(QueryEventArgs<string, string> e)
             => _factory?.ShowSaveDirectoryView(e);
+
+        public static void ShowOverwriteView(QueryEventArgs<OverwriteInfo, OverwriteMode> e)
+            => _factory?.ShowOverwriteView(e);
 
         #endregion
 
