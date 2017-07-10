@@ -85,6 +85,7 @@
             this.RemainLabel.TabIndex = 3;
             this.RemainLabel.Text = "残り時間 : 約 23:55:55";
             this.RemainLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.RemainLabel.Visible = false;
             // 
             // FileCountLabel
             // 

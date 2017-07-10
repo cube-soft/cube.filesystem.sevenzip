@@ -48,7 +48,6 @@ namespace Cube.FileSystem.App.Ice
         {
             InitializeComponent();
 
-            Remain = TimeSpan.MinValue;
             ExitButton.Click += (s, e) => Close();
 
             SuspendButton.Tag = false;
@@ -87,6 +86,7 @@ namespace Cube.FileSystem.App.Ice
                 MainProgressBar.Value = Math.Min(Math.Max(value, min), max);
 
                 UpdateTitle();
+                UpdateRemainLabel();
             }
         }
 
@@ -184,30 +184,6 @@ namespace Cube.FileSystem.App.Ice
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public TimeSpan Elapsed => _watch.Elapsed;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Remain
-        ///
-        /// <summary>
-        /// 圧縮・展開処理の残り時間を取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public TimeSpan Remain
-        {
-            get { return _remain; }
-            set
-            {
-                if (_remain == value) return;
-                _remain = value;
-
-                RemainLabel.Visible = value >= TimeSpan.Zero;
-                RemainLabel.Text = $"{Properties.Resources.MessageRemainTime} : {GetTimeString(value)}";
-            }
-        }
 
         #endregion
 
@@ -310,6 +286,26 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void UpdateElapseLabel()
             => ElapseLabel.Text = $"{Properties.Resources.MessageElapsedTime} : {GetTimeString(Elapsed)}";
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// UpdateRemainLabel
+        ///
+        /// <summary>
+        /// RemainLabel の表示内容を更新します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void UpdateRemainLabel()
+        {
+            if (Value <= 1 || Elapsed <= TimeSpan.Zero) return;
+
+            var elapse = Elapsed.TotalMilliseconds;
+            var remain = TimeSpan.FromMilliseconds(elapse * Math.Max(100.0 / Value - 1.0, 0.0));
+
+            RemainLabel.Visible = remain > TimeSpan.Zero;
+            RemainLabel.Text = $"{Properties.Resources.MessageRemainTime} : {GetTimeString(remain)}";
+        }
 
         /* ----------------------------------------------------------------- */
         ///
