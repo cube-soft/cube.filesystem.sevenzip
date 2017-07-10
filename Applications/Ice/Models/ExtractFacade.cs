@@ -16,8 +16,10 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.IO;
 using System.Linq;
 using Cube.Log;
+using Cube.FileSystem.Files;
 using Cube.FileSystem.SevenZip;
 
 namespace Cube.FileSystem.App.Ice
@@ -194,35 +196,21 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// QueryMove
+        /// Move
         /// 
         /// <summary>
-        /// 必要に応じてファイルを移動します。
+        /// ファイルを移動します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void QueryMove(ArchiveItem item)
+        private void Move(string src, string dest, bool directory)
         {
-            var src    = System.IO.Path.Combine(Tmp, item.Path);
-            var dest   = System.IO.Path.Combine(Destination, item.Path);
-            var exists = item.IsDirectory ?
-                         System.IO.Directory.Exists(dest) :
-                         System.IO.File.Exists(dest);
-
-            if (exists)
+            if (directory) Directory.CreateDirectory(dest);
+            else
             {
-                if (item.IsDirectory) return;
-                if (!OverwriteMode.HasFlag(OverwriteMode.Always))
-                {
-                    var q = new OverwriteInfo(item, new System.IO.FileInfo(dest));
-                    var e = new QueryEventArgs<OverwriteInfo, OverwriteMode>(q);
-                    OnOverwriteRequired(e);
-                    if (e.Result == OverwriteMode.Cancel) throw new UserCancelException();
-                    OverwriteMode = e.Result;
-                    Overwrite(src, dest, item.IsDirectory);
-                }
+                File.Delete(dest);
+                File.Move(src, dest);
             }
-            else Move(src, dest, item.IsDirectory);
         }
 
         /* ----------------------------------------------------------------- */
@@ -234,34 +222,61 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Overwrite(string src, string dest, bool directory)
+        private void Overwrite(string src, FileInfo dest, bool directory)
         {
             switch (OverwriteMode)
             {
                 case OverwriteMode.Yes:
                 case OverwriteMode.AlwaysYes:
-                    Move(src, dest, directory);
+                    Move(src, dest.FullName, directory);
+                    break;
+                case OverwriteMode.AlwaysRename:
+                    Move(src, dest.GetUniqueName(), directory);
                     break;
             }
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Move
+        /// QueryMove
         /// 
         /// <summary>
-        /// ファイルを移動します。
+        /// 必要に応じてファイルを移動します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Move(string src, string dest, bool directory)
+        private void QueryMove(ArchiveItem item)
         {
-            if (directory) System.IO.Directory.CreateDirectory(dest);
-            else
+            var src    = Path.Combine(Tmp, item.Path);
+            var dest   = Path.Combine(Destination, item.Path);
+            var exists = item.IsDirectory ? Directory.Exists(dest) : File.Exists(dest);
+
+            if (exists)
             {
-                System.IO.File.Delete(dest);
-                System.IO.File.Move(src, dest);
+                if (item.IsDirectory) return;
+                var fi = new FileInfo(dest);
+                if (!OverwriteMode.HasFlag(OverwriteMode.Always)) RaiseOverwriteRequired(item, fi);
+                Overwrite(src, fi, item.IsDirectory);
             }
+            else Move(src, dest, item.IsDirectory);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// RaiseOverwriteRequired
+        /// 
+        /// <summary>
+        /// OverwriteRequired イベントを発生させます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void RaiseOverwriteRequired(IArchiveItem src, FileInfo dest)
+        {
+            var q = new OverwriteInfo(src, dest);
+            var e = new QueryEventArgs<OverwriteInfo, OverwriteMode>(q);
+            OnOverwriteRequired(e);
+            if (e.Result == OverwriteMode.Cancel) throw new UserCancelException();
+            OverwriteMode = e.Result;
         }
 
         #endregion
