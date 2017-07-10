@@ -17,7 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Linq;
-using System.Timers;
+using System.Threading;
 using Cube.FileSystem.SevenZip;
 using Cube.Log;
 
@@ -275,6 +275,42 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Suspend
+        /// 
+        /// <summary>
+        /// 処理を一時停止します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Suspend() => _wait.Reset();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Resume
+        /// 
+        /// <summary>
+        /// 処理を再開します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Resume() => _wait.Set();
+
+        #region Protected
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CreateInnerProgress
+        /// 
+        /// <summary>
+        /// 内部処理用の IProgress(T) オブジェクトを生成します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected IProgress<ArchiveReport> CreateInnerProgress(Action<ArchiveReport> action)
+            => new SuspendableProgress<ArchiveReport>(_wait, action);
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// ProgressStart
         /// 
         /// <summary>
@@ -336,6 +372,8 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         protected void SetTmp(string directory)
             => Tmp = System.IO.Path.Combine(directory, Guid.NewGuid().ToString("D"));
+
+        #endregion
 
         #region IDisposable
 
@@ -410,7 +448,8 @@ namespace Cube.FileSystem.App.Ice
 
         #region Fields
         private bool _disposed = false;
-        private Timer _timer = new Timer(100.0);
+        private System.Timers.Timer _timer = new System.Timers.Timer(100.0);
+        private ManualResetEvent _wait = new ManualResetEvent(true);
         #endregion
 
         #endregion

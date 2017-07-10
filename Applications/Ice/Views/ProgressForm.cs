@@ -51,6 +51,9 @@ namespace Cube.FileSystem.App.Ice
             Remain = TimeSpan.MinValue;
             ExitButton.Click += (s, e) => Close();
 
+            SuspendButton.Tag = false;
+            SuspendButton.Click += WhenSuspendOrResume;
+
             _timer.Tick += (s, e) => UpdateElapseLabel();
             _timer.Interval = 500;
         }
@@ -319,6 +322,29 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private string GetTimeString(TimeSpan src)
             => string.Format("{0:00}:{1:00}:{2:00}", src.TotalHours, src.Minutes, src.Seconds);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenSuspendOrResume
+        ///
+        /// <summary>
+        /// 一時停止ボタンがクリックされた時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenSuspendOrResume(object sender, EventArgs e)
+        {
+            var suspend = !(bool)SuspendButton.Tag;
+            SuspendButton.Tag  = suspend;
+            SuspendButton.Text = suspend ?
+                                 Properties.Resources.MenuResume :
+                                 Properties.Resources.MenuSuspend;
+
+            if (suspend) Stop();
+            else Start();
+
+            EventAggregator.GetEvents()?.Suspend.Publish(suspend);
+        }
 
         #region Fields
         private string _fileName = string.Empty;

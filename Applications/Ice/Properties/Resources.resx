@@ -127,6 +127,12 @@
   <data name="FilterAll" xml:space="preserve">
     <value>すべてのファイル (*.*)|*.*</value>
   </data>
+  <data name="MenuResume" xml:space="preserve">
+    <value>再開</value>
+  </data>
+  <data name="MenuSuspend" xml:space="preserve">
+    <value>中断</value>
+  </data>
   <data name="MessageArchive" xml:space="preserve">
     <value>{0} を作成しています...</value>
   </data>

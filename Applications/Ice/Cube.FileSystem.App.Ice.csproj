@@ -65,6 +65,7 @@
     <Compile Include="Models\OverwriteMode.cs" />
     <Compile Include="Models\Request.cs" />
     <Compile Include="Models\ProgressFacade.cs" />
+    <Compile Include="Models\SuspendableProgress.cs" />
     <Compile Include="Presenters\ArchivePresenter.cs" />
     <Compile Include="Views\OverwriteForm.cs">
       <SubType>Form</SubType>

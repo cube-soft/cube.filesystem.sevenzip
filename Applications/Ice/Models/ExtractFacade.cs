@@ -151,10 +151,7 @@ namespace Cube.FileSystem.App.Ice
         private void Extract(ArchiveItem src)
         {
             var done = ProgressReport.DoneSize;
-            var progress = new Progress<ArchiveReport>(e =>
-            {
-                ProgressReport.DoneSize = done + e.DoneSize;
-            });
+            var progress = CreateInnerProgress(e => ProgressReport.DoneSize = done + e.DoneSize);
 
             Current = src.Path;
             Extract(src, progress);

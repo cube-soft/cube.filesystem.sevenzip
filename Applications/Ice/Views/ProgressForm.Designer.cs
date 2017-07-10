@@ -36,7 +36,7 @@
             this.MainProgressBar = new System.Windows.Forms.ProgressBar();
             this.ElapseLabel = new System.Windows.Forms.Label();
             this.StatusLabel = new System.Windows.Forms.Label();
-            this.InterruptButton = new System.Windows.Forms.Button();
+            this.SuspendButton = new System.Windows.Forms.Button();
             this.RootPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -51,7 +51,7 @@
             this.RootPanel.Controls.Add(this.MainProgressBar, 0, 1);
             this.RootPanel.Controls.Add(this.ElapseLabel, 0, 2);
             this.RootPanel.Controls.Add(this.StatusLabel, 0, 3);
-            this.RootPanel.Controls.Add(this.InterruptButton, 0, 4);
+            this.RootPanel.Controls.Add(this.SuspendButton, 0, 4);
             this.RootPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RootPanel.Location = new System.Drawing.Point(0, 0);
             this.RootPanel.Name = "RootPanel";
@@ -136,16 +136,15 @@
             this.StatusLabel.TabIndex = 4;
             this.StatusLabel.Text = "ファイル圧縮・解凍処理の準備中です...";
             // 
-            // InterruptButton
+            // SuspendButton
             // 
-            this.InterruptButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.InterruptButton.Enabled = false;
-            this.InterruptButton.Location = new System.Drawing.Point(58, 129);
-            this.InterruptButton.Name = "InterruptButton";
-            this.InterruptButton.Size = new System.Drawing.Size(100, 25);
-            this.InterruptButton.TabIndex = 5;
-            this.InterruptButton.Text = "中断";
-            this.InterruptButton.UseVisualStyleBackColor = true;
+            this.SuspendButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.SuspendButton.Location = new System.Drawing.Point(58, 129);
+            this.SuspendButton.Name = "SuspendButton";
+            this.SuspendButton.Size = new System.Drawing.Size(100, 25);
+            this.SuspendButton.TabIndex = 5;
+            this.SuspendButton.Text = "中断";
+            this.SuspendButton.UseVisualStyleBackColor = true;
             // 
             // ProgressForm
             // 
@@ -172,7 +171,7 @@
         private System.Windows.Forms.Label ElapseLabel;
         private System.Windows.Forms.Label RemainLabel;
         private System.Windows.Forms.Label StatusLabel;
-        private System.Windows.Forms.Button InterruptButton;
+        private System.Windows.Forms.Button SuspendButton;
         private System.Windows.Forms.Button ExitButton;
     }
 }

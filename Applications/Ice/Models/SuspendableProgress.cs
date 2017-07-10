@@ -16,64 +16,80 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using Cube.FileSystem.SevenZip;
-using Cube.Log;
+using System.Threading;
 
 namespace Cube.FileSystem.App.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveFacade
+    /// SuspendableProgress
     ///
     /// <summary>
-    /// 圧縮処理を実行するクラスです。
+    /// 一時停止可能な進捗報告用クラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveFacade : ProgressFacade
+    public class SuspendableProgress<T> : IProgress<T>
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveFacade
+        /// SuspendableProgress
+        /// 
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public SuspendableProgress() : this(null) { }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SuspendableProgress
         /// 
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
-        /// <param name="request">コマンドライン</param>
+        /// <param name="wait">一時停止用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveFacade(Request request) : base(request) { }
+        public SuspendableProgress(WaitHandle wait) : this(wait, null) { }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SuspendableProgress
+        /// 
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        /// 
+        /// <param name="wait">一時停止用オブジェクト</param>
+        /// <param name="action">コールバック</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public SuspendableProgress(WaitHandle wait, Action<T> action)
+        {
+            _context = SynchronizationContext.Current;
+            _wait = wait;
+            if (action != null) ProgressChanged += (s, e) => action(e);
+        }
 
         #endregion
 
-        #region Properties
+        #region Events
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Format
+        /// ProgressChanged
         /// 
         /// <summary>
-        /// 圧縮フォーマットを取得または設定します。
+        /// 進行状況が更新された時に発生するイベントです。
         /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public Format Format => Request.Format;
-
-        /* ----------------------------------------------------------------- */
         ///
-        /// Sources
-        /// 
-        /// <summary>
-        /// 圧縮するファイルまたはフォルダの一覧を取得します。
-        /// </summary>
-        /// 
         /* ----------------------------------------------------------------- */
-        public IList<string> Sources => Request.Sources.ToList();
+        public event EventHandler<T> ProgressChanged;
 
         #endregion
 
@@ -81,78 +97,43 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Start
+        /// Report
         /// 
         /// <summary>
-        /// 圧縮を開始します。
+        /// 進行状況の更新を報告します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Start()
+        public void Report(T value)
         {
-            try
-            {
-                var dest  = GetDestination();
-                var query = Request.Password ?
-                            new Query<string, string>(x => OnPasswordRequired(x)) :
-                            null;
-
-                using (var writer = new ArchiveWriter(Format))
-                {
-                    foreach (var item in Sources) writer.Add(item);
-                    ProgressStart();
-                    writer.Save(dest, query, CreateInnerProgress(x => ProgressReport = x));
-                }
-
-                Move();
-
-                var name = System.IO.Path.GetFileName(Destination);
-                this.LogDebug($"{name}:{ProgressReport.DoneSize}/{ProgressReport.FileSize}");
-                ProgressReport.DoneSize = ProgressReport.FileSize; // hack
-
-                OnProgress(ValueEventArgs.Create(ProgressReport));
-            }
-            catch (UserCancelException /* err */) { /* user cancel */ }
-            finally { ProgressStop(); }
+            _wait?.WaitOne();
+            OnReport(value);
         }
 
         #endregion
 
-        #region Implementations
+        #region Virtual methods
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetDestination
+        /// OnReport
         /// 
         /// <summary>
-        /// 保存先パスを取得します。
+        /// 進行状況の更新を報告します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetDestination()
+        protected virtual void OnReport(T value)
         {
-            SetDestination();
-            if (!System.IO.File.Exists(Destination)) return Destination;
-            SetTmp(System.IO.Path.GetDirectoryName(Destination));
-            return Tmp;
+            if (ProgressChanged == null) return;
+            _context.Post(_ => ProgressChanged(this, value), null);
         }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Move
-        /// 
-        /// <summary>
-        /// ファイルを移動します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Move()
-        {
-            if (string.IsNullOrEmpty(Tmp) || !System.IO.File.Exists(Tmp)) return;
-            System.IO.File.Delete(Destination);
-            System.IO.File.Move(Tmp, Destination);
-        }
+        #endregion
 
+        #region Fields
+        private readonly SynchronizationContext _context;
+        private readonly WaitHandle _wait;
         #endregion
     }
 }

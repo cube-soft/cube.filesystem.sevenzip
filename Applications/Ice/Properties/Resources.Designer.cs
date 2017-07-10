@@ -90,6 +90,24 @@ namespace Cube.FileSystem.App.Ice.Properties {
         }
         
         /// <summary>
+        ///   再開 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuResume {
+            get {
+                return ResourceManager.GetString("MenuResume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   中断 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuSuspend {
+            get {
+                return ResourceManager.GetString("MenuSuspend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   {0} を作成しています... に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MessageArchive {

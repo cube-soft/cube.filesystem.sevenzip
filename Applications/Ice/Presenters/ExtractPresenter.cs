@@ -16,6 +16,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using Cube.Log;
 using Cube.Tasks;
 
 namespace Cube.FileSystem.App.Ice
@@ -66,6 +67,7 @@ namespace Cube.FileSystem.App.Ice
 
             // EventAggregator
             EventAggregator.GetEvents()?.Show.Subscribe(WhenShow);
+            EventAggregator.GetEvents()?.Suspend.Subscribe(WhenSuspend);
         }
 
         #endregion
@@ -90,6 +92,21 @@ namespace Cube.FileSystem.App.Ice
             }
             finally { Sync(() => View.Close()); }
         }).Forget();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenSuspend
+        /// 
+        /// <summary>
+        /// 一時停止または再開時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenSuspend(bool suspend)
+        {
+            if (suspend) Model.Suspend();
+            else Model.Resume();
+        }
 
         /* ----------------------------------------------------------------- */
         ///
