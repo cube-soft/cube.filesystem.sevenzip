@@ -58,14 +58,14 @@ namespace Cube.FileSystem.Tests
 
                 for (var i = 0; i < expected.Count; ++i)
                 {
-                    Assert.That(actual[i].Index,       Is.EqualTo(i));
-                    Assert.That(actual[i].Path,        Is.EqualTo(expected[i].Path));
-                    Assert.That(actual[i].Extension,   Is.EqualTo(expected[i].Extension));
-                    Assert.That(actual[i].Size,        Is.EqualTo(expected[i].Size));
-                    Assert.That(actual[i].Encrypted,   Is.EqualTo(expected[i].Encrypted));
-                    Assert.That(actual[i].IsDirectory, Is.EqualTo(expected[i].IsDirectory));
-                    Assert.That(actual[i].CreationTime.ToUniversalTime(),  Is.EqualTo(expected[i].CreationTime));
-                    Assert.That(actual[i].LastWriteTime.ToUniversalTime(), Is.EqualTo(expected[i].LastWriteTime));
+                    Assert.That(actual[i].Index,         Is.EqualTo(i));
+                    Assert.That(actual[i].Path,          Is.EqualTo(expected[i].Path));
+                    Assert.That(actual[i].Extension,     Is.EqualTo(expected[i].Extension));
+                    Assert.That(actual[i].Size,          Is.EqualTo(expected[i].Size));
+                    Assert.That(actual[i].Encrypted,     Is.EqualTo(expected[i].Encrypted));
+                    Assert.That(actual[i].IsDirectory,   Is.EqualTo(expected[i].IsDirectory));
+                    Assert.That(actual[i].CreationTime,  Is.EqualTo(expected[i].CreationTime.ToLocalTime()));
+                    Assert.That(actual[i].LastWriteTime, Is.EqualTo(expected[i].LastWriteTime.ToLocalTime()));
                 }
             }
         }
@@ -210,7 +210,7 @@ namespace Cube.FileSystem.Tests
                         Size          = 0,
                         Encrypted     = false,
                         IsDirectory   = true,
-                        CreationTime  = new DateTime(0L, DateTimeKind.Utc),
+                        CreationTime  = new DateTime(0L, DateTimeKind.Local),
                         LastWriteTime = new DateTime(636335462377258383L, DateTimeKind.Utc),
                     },
 
@@ -221,7 +221,7 @@ namespace Cube.FileSystem.Tests
                         Size          = 0,
                         Encrypted     = false,
                         IsDirectory   = false,
-                        CreationTime  = new DateTime(0L, DateTimeKind.Utc),
+                        CreationTime  = new DateTime(0L, DateTimeKind.Local),
                         LastWriteTime = new DateTime(636335460490216213L, DateTimeKind.Utc),
                     },
 
@@ -232,7 +232,7 @@ namespace Cube.FileSystem.Tests
                         Size          = 26,
                         Encrypted     = true,
                         IsDirectory   = false,
-                        CreationTime  = new DateTime(0L, DateTimeKind.Utc),
+                        CreationTime  = new DateTime(0L, DateTimeKind.Local),
                         LastWriteTime = new DateTime(636335458772834750L, DateTimeKind.Utc),
                     },
                 });
@@ -246,7 +246,7 @@ namespace Cube.FileSystem.Tests
                         Size          = 7816,
                         Encrypted     = true,
                         IsDirectory   = false,
-                        CreationTime  = new DateTime(0L, DateTimeKind.Utc),
+                        CreationTime  = new DateTime(0L, DateTimeKind.Local),
                         LastWriteTime = new DateTime(636353593020000000L, DateTimeKind.Utc),
                     },
 
@@ -257,8 +257,33 @@ namespace Cube.FileSystem.Tests
                         Size          = 6,
                         Encrypted     = true,
                         IsDirectory   = false,
-                        CreationTime  = new DateTime(0L, DateTimeKind.Utc),
+                        CreationTime  = new DateTime(0L, DateTimeKind.Local),
                         LastWriteTime = new DateTime(636353593220000000L, DateTimeKind.Utc),
+                    },
+                });
+
+                yield return new TestCaseData("PasswordJapanese.zip", "日本語パスワード", new List<ExpectedItem>
+                {
+                    new ExpectedItem
+                    {
+                        Path          = @"Japanese1.txt",
+                        Extension     = ".txt",
+                        Size          = 22187,
+                        Encrypted     = true,
+                        IsDirectory   = false,
+                        CreationTime  = new DateTime(0L, DateTimeKind.Local),
+                        LastWriteTime = new DateTime(636353615100000000L, DateTimeKind.Utc),
+                    },
+
+                    new ExpectedItem
+                    {
+                        Path          = @"Japanese2.txt",
+                        Extension     = ".txt",
+                        Size          = 21,
+                        Encrypted     = true,
+                        IsDirectory   = false,
+                        CreationTime  = new DateTime(0L, DateTimeKind.Local),
+                        LastWriteTime = new DateTime(636353615360000000L, DateTimeKind.Utc),
                     },
                 });
             }
