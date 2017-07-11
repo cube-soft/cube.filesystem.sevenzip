@@ -15,6 +15,7 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System.IO;
 using Cube.FileSystem.SevenZip;
 using Cube.Log;
 
@@ -77,7 +78,7 @@ namespace Cube.FileSystem.App.Ice
 
                 Move();
 
-                var name = System.IO.Path.GetFileName(Destination);
+                var name = Path.GetFileName(Destination);
                 this.LogDebug($"{name}:{ProgressReport.DoneSize}/{ProgressReport.FileSize}");
                 ProgressReport.DoneSize = ProgressReport.FileSize; // hack
 
@@ -130,8 +131,8 @@ namespace Cube.FileSystem.App.Ice
         private string GetDestination()
         {
             SetDestination(Request.Format.ToString());
-            if (!System.IO.File.Exists(Destination)) return Destination;
-            SetTmp(System.IO.Path.GetDirectoryName(Destination));
+            if (!File.Exists(Destination)) return Destination;
+            SetTmp(Path.GetDirectoryName(Destination));
             return Tmp;
         }
 
@@ -146,9 +147,11 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void Move()
         {
-            if (string.IsNullOrEmpty(Tmp) || !System.IO.File.Exists(Tmp)) return;
-            System.IO.File.Delete(Destination);
-            System.IO.File.Move(Tmp, Destination);
+            if (string.IsNullOrEmpty(Tmp) || !File.Exists(Tmp)) return;
+            if (File.Exists(Destination)) File.Delete(Destination);
+            var dir = Path.GetDirectoryName(Destination);
+            if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+            File.Move(Tmp, Destination);
         }
 
         #endregion

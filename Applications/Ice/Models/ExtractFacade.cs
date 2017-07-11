@@ -205,10 +205,15 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void Move(string src, string dest, bool directory)
         {
-            if (directory) Directory.CreateDirectory(dest);
+            if (directory)
+            {
+                if (!Directory.Exists(dest)) Directory.CreateDirectory(dest);
+            }
             else
             {
-                File.Delete(dest);
+                if (File.Exists(dest)) File.Delete(dest);
+                var dir = Path.GetDirectoryName(dest);
+                if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
                 File.Move(src, dest);
             }
         }

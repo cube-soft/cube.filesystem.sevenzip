@@ -7,7 +7,7 @@
     <ProjectGuid>{E14092D2-266A-4CC7-B1CE-2ADD0CB8E65B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>Cube.FileSystem.App.Ice</RootNamespace>
-    <AssemblyName>CubeICE</AssemblyName>
+    <AssemblyName>cubeice</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
