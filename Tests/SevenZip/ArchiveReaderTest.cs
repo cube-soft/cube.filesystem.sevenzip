@@ -212,7 +212,7 @@ namespace Cube.FileSystem.Tests
                         IsDirectory   = true,
                         CreationTime  = new DateTime(0L, DateTimeKind.Utc),
                         LastWriteTime = new DateTime(636335462377258383L, DateTimeKind.Utc),
-                },
+                    },
 
                     new ExpectedItem
                     {
@@ -223,7 +223,7 @@ namespace Cube.FileSystem.Tests
                         IsDirectory   = false,
                         CreationTime  = new DateTime(0L, DateTimeKind.Utc),
                         LastWriteTime = new DateTime(636335460490216213L, DateTimeKind.Utc),
-                  },
+                    },
 
                     new ExpectedItem
                     {
@@ -234,7 +234,32 @@ namespace Cube.FileSystem.Tests
                         IsDirectory   = false,
                         CreationTime  = new DateTime(0L, DateTimeKind.Utc),
                         LastWriteTime = new DateTime(636335458772834750L, DateTimeKind.Utc),
-                  },
+                    },
+                });
+
+                yield return new TestCaseData("PasswordSymbol.zip", "!\"#$%&'()-=^~\\|@`[]{}+*<>,./?_", new List<ExpectedItem>
+                {
+                    new ExpectedItem
+                    {
+                        Path          = @"Symbol1.txt",
+                        Extension     = ".txt",
+                        Size          = 7816,
+                        Encrypted     = true,
+                        IsDirectory   = false,
+                        CreationTime  = new DateTime(0L, DateTimeKind.Utc),
+                        LastWriteTime = new DateTime(636353593020000000L, DateTimeKind.Utc),
+                    },
+
+                    new ExpectedItem
+                    {
+                        Path          = @"Symbol2.txt",
+                        Extension     = ".txt",
+                        Size          = 6,
+                        Encrypted     = true,
+                        IsDirectory   = false,
+                        CreationTime  = new DateTime(0L, DateTimeKind.Utc),
+                        LastWriteTime = new DateTime(636353593220000000L, DateTimeKind.Utc),
+                    },
                 });
             }
         }
