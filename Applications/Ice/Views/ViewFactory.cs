@@ -115,6 +115,27 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// ShowPasswordConfirmView
+        /// 
+        /// <summary>
+        /// 確認項目付パスワード入力画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">パスワード情報を保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public virtual void ShowPasswordConfirmView(QueryEventArgs<string, string> e)
+        {
+            using (var view = new PasswordConfirmForm())
+            {
+                view.StartPosition = FormStartPosition.CenterParent;
+                e.Cancel = view.ShowDialog() == DialogResult.Cancel;
+                if (!e.Cancel) e.Result = view.Password;
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// ShowOverwriteView
         /// 
         /// <summary>
@@ -200,14 +221,17 @@ namespace Cube.FileSystem.App.Ice
         public static IProgressView CreateProgressView()
             => _factory?.CreateProgressView();
 
-        public static void ShowPasswordView(QueryEventArgs<string, string> e)
-            => _factory?.ShowPasswordView(e);
-
         public static void ShowSaveFileView(QueryEventArgs<string, string> e)
             => _factory?.ShowSaveFileView(e);
 
         public static void ShowSaveDirectoryView(QueryEventArgs<string, string> e)
             => _factory?.ShowSaveDirectoryView(e);
+
+        public static void ShowPasswordView(QueryEventArgs<string, string> e)
+            => _factory?.ShowPasswordView(e);
+
+        public static void ShowPasswordConfirmView(QueryEventArgs<string, string> e)
+            => _factory?.ShowPasswordConfirmView(e);
 
         public static void ShowOverwriteView(QueryEventArgs<OverwriteInfo, OverwriteMode> e)
             => _factory?.ShowOverwriteView(e);

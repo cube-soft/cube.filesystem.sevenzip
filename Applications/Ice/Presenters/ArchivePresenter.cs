@@ -128,7 +128,7 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         private void WhenPasswordRequired(object sender, QueryEventArgs<string, string> e)
-            => Execute(() => Views.ShowPasswordView(e));
+            => Execute(() => Views.ShowPasswordConfirmView(e));
 
         /* ----------------------------------------------------------------- */
         ///

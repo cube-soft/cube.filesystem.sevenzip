@@ -110,23 +110,6 @@ namespace Cube.FileSystem.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ShowPasswordView
-        /// 
-        /// <summary>
-        /// パスワードを設定します。
-        /// </summary>
-        /// 
-        /// <param name="e">パスワード設定用オブジェクト</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public override void ShowPasswordView(QueryEventArgs<string, string> e)
-        {
-            e.Cancel = string.IsNullOrEmpty(Password);
-            e.Result = Password;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// ShowSaveFileView
         /// 
         /// <summary>
@@ -157,6 +140,40 @@ namespace Cube.FileSystem.App.Ice.Tests
         {
             e.Cancel = string.IsNullOrEmpty(Destination);
             e.Result = Destination;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowPasswordView
+        /// 
+        /// <summary>
+        /// パスワードを設定します。
+        /// </summary>
+        /// 
+        /// <param name="e">パスワード設定用オブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public override void ShowPasswordView(QueryEventArgs<string, string> e)
+        {
+            e.Cancel = string.IsNullOrEmpty(Password);
+            e.Result = Password;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowPasswordView
+        /// 
+        /// <summary>
+        /// パスワードを設定します。
+        /// </summary>
+        /// 
+        /// <param name="e">パスワード設定用オブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public override void ShowPasswordConfirmView(QueryEventArgs<string, string> e)
+        {
+            e.Cancel = string.IsNullOrEmpty(Password);
+            e.Result = Password;
         }
 
         /* ----------------------------------------------------------------- */
