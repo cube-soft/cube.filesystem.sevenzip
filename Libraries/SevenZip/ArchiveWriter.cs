@@ -274,7 +274,6 @@ namespace Cube.FileSystem.SevenZip
             switch (result)
             {
                 case OperationResult.OK:
-                case OperationResult.Unknown:
                     break;
                 case OperationResult.UserCancel:
                     throw new UserCancelException();
