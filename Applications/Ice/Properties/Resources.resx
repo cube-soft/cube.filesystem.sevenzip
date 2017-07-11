@@ -124,6 +124,9 @@
   <data name="Extract" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Extract.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="File" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\File.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="FilterAll" xml:space="preserve">
     <value>すべてのファイル (*.*)|*.*</value>
   </data>
