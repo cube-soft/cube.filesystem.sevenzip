@@ -68,7 +68,7 @@ namespace Cube.FileSystem.App.Ice
                             new Query<string, string>(x => OnPasswordRequired(x)) :
                             null;
 
-                using (var writer = new ArchiveWriter(Request.Format))
+                using (var writer = new ArchiveWriter(GetFormat()))
                 {
                     foreach (var item in Request.Sources) writer.Add(item);
                     ProgressStart();
@@ -90,6 +90,33 @@ namespace Cube.FileSystem.App.Ice
         #endregion
 
         #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetFormat
+        /// 
+        /// <summary>
+        /// 圧縮フォーマットを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private Format GetFormat()
+        {
+            switch (Request.Format)
+            {
+                case Format.BZip2:
+                case Format.GZip:
+                case Format.XZ:
+                    throw new System.NotSupportedException(Request.Format.ToString());
+                case Format.Tar:
+                case Format.Zip:
+                case Format.SevenZip:
+                case Format.Wim:
+                    return Request.Format;
+                default:
+                    throw new System.NotSupportedException(Request.Format.ToString());
+            }
+        }
 
         /* ----------------------------------------------------------------- */
         ///
