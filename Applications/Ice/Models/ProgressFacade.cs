@@ -351,7 +351,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected void SetDestination()
+        protected void SetDestination(string query)
         {
             switch (Request.Location)
             {
@@ -362,7 +362,7 @@ namespace Cube.FileSystem.App.Ice
                     Destination = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                     break;
                 case SaveLocation.Runtime:
-                    var e = new QueryEventArgs<string, string>("");
+                    var e = new QueryEventArgs<string, string>(query);
                     OnDestinationRequired(e);
                     Destination = e.Result;
                     break;

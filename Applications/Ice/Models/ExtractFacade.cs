@@ -88,7 +88,7 @@ namespace Cube.FileSystem.App.Ice
             {
                 try
                 {
-                    SetDestination();
+                    SetDestination(Source);
                     SetTmp(Destination);
                     Collect(reader);
                     Extract(reader);

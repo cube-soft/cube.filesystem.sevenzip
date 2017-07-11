@@ -127,6 +127,21 @@
   <data name="FilterAll" xml:space="preserve">
     <value>すべてのファイル (*.*)|*.*</value>
   </data>
+  <data name="FilterBzip2" xml:space="preserve">
+    <value>bzip2 ファイル (*.bz2)|*.bz2;*.BZ2;*.tbz;*.TBZ</value>
+  </data>
+  <data name="FilterGzip" xml:space="preserve">
+    <value>gzip ファイル (*.gz)|*.gz;*.GZ;*.tgz;*.TGZ</value>
+  </data>
+  <data name="FilterSevenZip" xml:space="preserve">
+    <value>7z ファイル (*.7z)|*.7z;*.7Z</value>
+  </data>
+  <data name="FilterXZ" xml:space="preserve">
+    <value>xz ファイル (*.xz)|*.xz;*.XZ;*.txz;*.TXZ</value>
+  </data>
+  <data name="FilterZip" xml:space="preserve">
+    <value>zip ファイル (*.zip)|*.zip;*.ZIP</value>
+  </data>
   <data name="MenuResume" xml:space="preserve">
     <value>再開</value>
   </data>

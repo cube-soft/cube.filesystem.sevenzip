@@ -90,6 +90,51 @@ namespace Cube.FileSystem.App.Ice.Properties {
         }
         
         /// <summary>
+        ///   bzip2 ファイル (*.bz2)|*.bz2;*.BZ2;*.tbz;*.TBZ に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string FilterBzip2 {
+            get {
+                return ResourceManager.GetString("FilterBzip2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   gzip ファイル (*.gz)|*.gz;*.GZ;*.tgz;*.TGZ に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string FilterGzip {
+            get {
+                return ResourceManager.GetString("FilterGzip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   7z ファイル (*.7z)|*.7z;*.7Z に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string FilterSevenZip {
+            get {
+                return ResourceManager.GetString("FilterSevenZip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   xz ファイル (*.xz)|*.xz;*.XZ;*.txz;*.TXZ に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string FilterXZ {
+            get {
+                return ResourceManager.GetString("FilterXZ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   zip ファイル (*.zip)|*.zip;*.ZIP に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string FilterZip {
+            get {
+                return ResourceManager.GetString("FilterZip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   再開 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MenuResume {

@@ -30,6 +30,8 @@ namespace Cube.FileSystem.App.Ice
     /* --------------------------------------------------------------------- */
     public class ViewFactory
     {
+        #region Methods
+
         /* ----------------------------------------------------------------- */
         ///
         /// CreateProgressView
@@ -58,7 +60,9 @@ namespace Cube.FileSystem.App.Ice
         {
             var view = new SaveFileDialog
             {
-                Filter = Properties.Resources.FilterAll,
+                AddExtension    = true,
+                Filter          = GetFilter(e.Query),
+                OverwritePrompt = true,
             };
 
             e.Cancel = view.ShowDialog() == DialogResult.Cancel;
@@ -80,7 +84,8 @@ namespace Cube.FileSystem.App.Ice
         {
             var view = new FolderBrowserDialog
             {
-                Description = Properties.Resources.MessageExtractDestination,
+                Description  = Properties.Resources.MessageExtractDestination,
+                SelectedPath = System.IO.Path.GetDirectoryName(e.Query),
             };
 
             e.Cancel = view.ShowDialog() == DialogResult.Cancel;
@@ -129,6 +134,35 @@ namespace Cube.FileSystem.App.Ice
                 e.Result = view.OverwriteMode;
             }
         }
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetFilter
+        /// 
+        /// <summary>
+        /// フィルターを表す文字列を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private string GetFilter(string format)
+        {
+            var cvt  = format.ToLower();
+            var dest = cvt == "zip"   ? Properties.Resources.FilterZip      :
+                       cvt == "7z"    ? Properties.Resources.FilterSevenZip :
+                       cvt == "gzip"  ? Properties.Resources.FilterGzip     :
+                       cvt == "bzip2" ? Properties.Resources.FilterBzip2    :
+                       cvt == "xz"    ? Properties.Resources.FilterXZ       : string.Empty;
+
+            return !string.IsNullOrEmpty(dest) ?
+                   $"{dest}|{Properties.Resources.FilterAll}" :
+                   Properties.Resources.FilterAll;
+        }
+
+        #endregion
     }
 
     /* --------------------------------------------------------------------- */

@@ -102,7 +102,7 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private string GetDestination()
         {
-            SetDestination();
+            SetDestination(Request.Format.ToString());
             if (!System.IO.File.Exists(Destination)) return Destination;
             SetTmp(System.IO.Path.GetDirectoryName(Destination));
             return Tmp;
