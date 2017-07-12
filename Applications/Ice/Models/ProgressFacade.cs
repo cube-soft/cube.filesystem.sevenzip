@@ -116,7 +116,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveReport ProgressReport { get; set; } = new ArchiveReport();
+        public ArchiveReport ProgressReport { get; protected set; } = new ArchiveReport();
 
         /* ----------------------------------------------------------------- */
         ///
