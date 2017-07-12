@@ -94,6 +94,25 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Unit
+        ///
+        /// <summary>
+        /// 進捗状況を示す値の単位を取得または設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public int Unit
+        {
+            get { return MainProgressBar.Maximum; }
+            set
+            {
+                if (MainProgressBar.Maximum == value) return;
+                MainProgressBar.Maximum = value;
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Status
         ///
         /// <summary>
@@ -255,8 +274,9 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void UpdateTitle()
         {
+            var ratio = (int)(Value / (double)Unit * 100.0);
             var ss = new System.Text.StringBuilder();
-            ss.Append($"{Value}%");
+            ss.Append($"{ratio}%");
             if (!string.IsNullOrEmpty(FileName)) ss.Append($" - {FileName}");
             ss.Append($" - {ProductName}");
             Text = ss.ToString();
@@ -303,7 +323,8 @@ namespace Cube.FileSystem.App.Ice
             if (Value <= 1 || Elapsed <= TimeSpan.Zero) return;
 
             var elapse = Elapsed.TotalMilliseconds;
-            var remain = TimeSpan.FromMilliseconds(elapse * Math.Max(100.0 / Value - 1.0, 0.0));
+            var ratio  = Math.Max(Unit / (double)Value - 1.0, 0.0);
+            var remain = TimeSpan.FromMilliseconds(elapse * ratio);
 
             RemainLabel.Visible = remain > TimeSpan.Zero;
             RemainLabel.Text = $"{Properties.Resources.MessageRemainTime} : {GetTimeString(remain)}";

@@ -77,17 +77,14 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Percentage
+        /// Ratio
         ///
         /// <summary>
-        /// 進捗状況をパーセント単位で取得します。
+        /// 進捗状況を示す値を [0, 1] の範囲で取得します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public double Percentage =>
-            FileSize > 0 ?
-            (DoneSize / (double)FileSize) * 100.0 :
-            0.0;
+        public double Ratio => FileSize > 0 ? DoneSize / (double)FileSize : 0.0;
 
         #endregion
     }

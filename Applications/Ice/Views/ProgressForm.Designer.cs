@@ -107,6 +107,7 @@
             this.MainProgressBar.Location = new System.Drawing.Point(14, 33);
             this.MainProgressBar.Margin = new System.Windows.Forms.Padding(14, 3, 14, 3);
             this.MainProgressBar.MarqueeAnimationSpeed = 50;
+            this.MainProgressBar.Maximum = 1000;
             this.MainProgressBar.Name = "MainProgressBar";
             this.MainProgressBar.Size = new System.Drawing.Size(406, 18);
             this.MainProgressBar.Step = 1;

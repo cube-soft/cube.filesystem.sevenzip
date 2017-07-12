@@ -159,7 +159,7 @@ namespace Cube.FileSystem.App.Ice
             View.FileCount = e.Value.FileCount;
             View.DoneCount = e.Value.DoneCount;
             View.Status    = Model.Current;
-            View.Value     = Math.Max(Math.Max((int)e.Value.Percentage, 1), View.Value);
+            View.Value     = Math.Max(Math.Max((int)(e.Value.Ratio * View.Unit), 1), View.Value);
         });
 
         #endregion
