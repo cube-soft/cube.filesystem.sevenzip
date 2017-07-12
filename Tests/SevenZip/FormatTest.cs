@@ -46,6 +46,7 @@ namespace Cube.FileSystem.Tests
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
+        [TestCase("Sample.txt",  ExpectedResult = Format.Unknown)]
         [TestCase("Sample.zip",  ExpectedResult = Format.Zip)]
         [TestCase("Password.7z", ExpectedResult = Format.SevenZip)]
         public Format Detect(string filename)
