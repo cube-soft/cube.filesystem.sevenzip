@@ -370,7 +370,7 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         private string GetTimeString(TimeSpan src)
-            => string.Format("{0:00}:{1:00}:{2:00}", src.TotalHours, src.Minutes, src.Seconds);
+            => $"{src.TotalHours:00}:{src.Minutes:00}:{src.Seconds:00}";
 
         /* ----------------------------------------------------------------- */
         ///

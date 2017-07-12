@@ -30,17 +30,17 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PasswordConfirmForm));
             this.RootPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.IconPictureBox = new System.Windows.Forms.PictureBox();
-            this.DescriptionLabel = new System.Windows.Forms.Label();
-            this.PasswordTextBox = new System.Windows.Forms.TextBox();
-            this.ConfirmTextBox = new System.Windows.Forms.TextBox();
-            this.VisibleCheckBox = new System.Windows.Forms.CheckBox();
             this.ButtonsPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.ExitButton = new System.Windows.Forms.Button();
             this.ExecButton = new System.Windows.Forms.Button();
+            this.VisibleCheckBox = new System.Windows.Forms.CheckBox();
+            this.ConfirmTextBox = new System.Windows.Forms.TextBox();
+            this.PasswordTextBox = new System.Windows.Forms.TextBox();
+            this.DescriptionLabel = new System.Windows.Forms.Label();
+            this.IconPictureBox = new System.Windows.Forms.PictureBox();
             this.RootPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.IconPictureBox)).BeginInit();
             this.ButtonsPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.IconPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // RootPanel
@@ -66,61 +66,6 @@
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.RootPanel.Size = new System.Drawing.Size(384, 181);
             this.RootPanel.TabIndex = 0;
-            // 
-            // IconPictureBox
-            // 
-            this.IconPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.IconPictureBox.Location = new System.Drawing.Point(3, 4);
-            this.IconPictureBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 30);
-            this.IconPictureBox.Name = "IconPictureBox";
-            this.RootPanel.SetRowSpan(this.IconPictureBox, 4);
-            this.IconPictureBox.Size = new System.Drawing.Size(74, 90);
-            this.IconPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.IconPictureBox.TabIndex = 1;
-            this.IconPictureBox.TabStop = false;
-            // 
-            // DescriptionLabel
-            // 
-            this.DescriptionLabel.AutoSize = true;
-            this.DescriptionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DescriptionLabel.Location = new System.Drawing.Point(83, 0);
-            this.DescriptionLabel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 5);
-            this.DescriptionLabel.Name = "DescriptionLabel";
-            this.DescriptionLabel.Size = new System.Drawing.Size(298, 35);
-            this.DescriptionLabel.TabIndex = 100;
-            this.DescriptionLabel.Text = "パスワードを設定して下さい。";
-            this.DescriptionLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            // 
-            // PasswordTextBox
-            // 
-            this.PasswordTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PasswordTextBox.Location = new System.Drawing.Point(83, 44);
-            this.PasswordTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 23, 4);
-            this.PasswordTextBox.Name = "PasswordTextBox";
-            this.PasswordTextBox.Size = new System.Drawing.Size(278, 23);
-            this.PasswordTextBox.TabIndex = 2;
-            this.PasswordTextBox.UseSystemPasswordChar = true;
-            // 
-            // ConfirmTextBox
-            // 
-            this.ConfirmTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ConfirmTextBox.Location = new System.Drawing.Point(83, 73);
-            this.ConfirmTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 23, 4);
-            this.ConfirmTextBox.Name = "ConfirmTextBox";
-            this.ConfirmTextBox.Size = new System.Drawing.Size(278, 23);
-            this.ConfirmTextBox.TabIndex = 3;
-            this.ConfirmTextBox.UseSystemPasswordChar = true;
-            // 
-            // VisibleCheckBox
-            // 
-            this.VisibleCheckBox.AutoSize = true;
-            this.VisibleCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.VisibleCheckBox.Location = new System.Drawing.Point(83, 101);
-            this.VisibleCheckBox.Name = "VisibleCheckBox";
-            this.VisibleCheckBox.Size = new System.Drawing.Size(298, 20);
-            this.VisibleCheckBox.TabIndex = 4;
-            this.VisibleCheckBox.Text = "パスワードを表示する";
-            this.VisibleCheckBox.UseVisualStyleBackColor = true;
             // 
             // ButtonsPanel
             // 
@@ -157,6 +102,61 @@
             this.ExecButton.Text = "OK";
             this.ExecButton.UseVisualStyleBackColor = true;
             // 
+            // VisibleCheckBox
+            // 
+            this.VisibleCheckBox.AutoSize = true;
+            this.VisibleCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.VisibleCheckBox.Location = new System.Drawing.Point(83, 101);
+            this.VisibleCheckBox.Name = "VisibleCheckBox";
+            this.VisibleCheckBox.Size = new System.Drawing.Size(298, 20);
+            this.VisibleCheckBox.TabIndex = 4;
+            this.VisibleCheckBox.Text = "パスワードを表示する";
+            this.VisibleCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // ConfirmTextBox
+            // 
+            this.ConfirmTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ConfirmTextBox.Location = new System.Drawing.Point(83, 73);
+            this.ConfirmTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 23, 4);
+            this.ConfirmTextBox.Name = "ConfirmTextBox";
+            this.ConfirmTextBox.Size = new System.Drawing.Size(278, 23);
+            this.ConfirmTextBox.TabIndex = 3;
+            this.ConfirmTextBox.UseSystemPasswordChar = true;
+            // 
+            // PasswordTextBox
+            // 
+            this.PasswordTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PasswordTextBox.Location = new System.Drawing.Point(83, 44);
+            this.PasswordTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 23, 4);
+            this.PasswordTextBox.Name = "PasswordTextBox";
+            this.PasswordTextBox.Size = new System.Drawing.Size(278, 23);
+            this.PasswordTextBox.TabIndex = 2;
+            this.PasswordTextBox.UseSystemPasswordChar = true;
+            // 
+            // DescriptionLabel
+            // 
+            this.DescriptionLabel.AutoSize = true;
+            this.DescriptionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DescriptionLabel.Location = new System.Drawing.Point(83, 0);
+            this.DescriptionLabel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 5);
+            this.DescriptionLabel.Name = "DescriptionLabel";
+            this.DescriptionLabel.Size = new System.Drawing.Size(298, 35);
+            this.DescriptionLabel.TabIndex = 100;
+            this.DescriptionLabel.Text = "パスワードを設定して下さい。";
+            this.DescriptionLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // IconPictureBox
+            // 
+            this.IconPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.IconPictureBox.Location = new System.Drawing.Point(3, 4);
+            this.IconPictureBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 30);
+            this.IconPictureBox.Name = "IconPictureBox";
+            this.RootPanel.SetRowSpan(this.IconPictureBox, 4);
+            this.IconPictureBox.Size = new System.Drawing.Size(74, 90);
+            this.IconPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.IconPictureBox.TabIndex = 1;
+            this.IconPictureBox.TabStop = false;
+            // 
             // PasswordConfirmForm
             // 
             this.AcceptButton = this.ExecButton;
@@ -170,8 +170,8 @@
             this.Text = "パスワードの設定 - CubeICE";
             this.RootPanel.ResumeLayout(false);
             this.RootPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.IconPictureBox)).EndInit();
             this.ButtonsPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.IconPictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }

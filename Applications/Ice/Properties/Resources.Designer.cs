@@ -280,7 +280,7 @@ namespace Cube.FileSystem.App.Ice.Properties {
         }
         
         /// <summary>
-        ///   残り時間 約 に類似しているローカライズされた文字列を検索します。
+        ///   残り時間 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MessageRemainTime {
             get {
