@@ -88,7 +88,7 @@ namespace Cube.FileSystem.App.Ice
                 SuspendButton.Enabled = value > 0;
 
                 UpdateTitle();
-                UpdateRemainLabel();
+                UpdateRemainTime();
             }
         }
 
@@ -206,6 +206,30 @@ namespace Cube.FileSystem.App.Ice
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public TimeSpan Elapsed => _watch.Elapsed;
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Remain
+        ///
+        /// <summary>
+        /// 残り時間の目安を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public TimeSpan Remain
+        {
+            get { return _remain; }
+            private set
+            {
+                if (_remain == value) return;
+                _remain = value;
+
+                RemainLabel.Visible = value > TimeSpan.Zero;
+                RemainLabel.Text = $"{Properties.Resources.MessageRemainTime} : {GetTimeString(value)}";
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -311,23 +335,29 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// UpdateRemainLabel
+        /// UpdateRemainTime
         ///
         /// <summary>
-        /// RemainLabel の表示内容を更新します。
+        /// Remain の容を更新します。
         /// </summary>
-        ///
+        /// 
+        /// <remarks>
+        /// 表示上のバタつきを抑えるために、残り時間の 10 秒以内の増加に
+        /// ついては反映しないようにしています。
+        /// </remarks>
+        /// 
         /* ----------------------------------------------------------------- */
-        private void UpdateRemainLabel()
+        private void UpdateRemainTime()
         {
             if (Value <= 1 || Elapsed <= TimeSpan.Zero) return;
 
             var elapse = Elapsed.TotalMilliseconds;
             var ratio  = Math.Max(Unit / (double)Value - 1.0, 0.0);
-            var remain = TimeSpan.FromMilliseconds(elapse * ratio);
+            var value  = TimeSpan.FromMilliseconds(elapse * ratio);
+            var delta  = (value - Remain).TotalSeconds;
+            if (delta >= 0.0 && delta < 10.0) return; // hack (see remarks)
 
-            RemainLabel.Visible = remain > TimeSpan.Zero;
-            RemainLabel.Text = $"{Properties.Resources.MessageRemainTime} : {GetTimeString(remain)}";
+            Remain = value;
         }
 
         /* ----------------------------------------------------------------- */
