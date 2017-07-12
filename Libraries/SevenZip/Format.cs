@@ -191,8 +191,9 @@ namespace Cube.FileSystem.SevenZip
             {
                 var bytes = new byte[16];
                 var count = stream.Read(bytes, 0, 16);
-                var src   = BitConverter.ToString(bytes, 0, count);
+                if (count <= 0) return Format.Unknown;
 
+                var src = BitConverter.ToString(bytes, 0, count);
                 foreach (var cmp in _sig)
                 {
                     if (src.StartsWith(cmp.Key, StringComparison.OrdinalIgnoreCase)) return cmp.Value;
