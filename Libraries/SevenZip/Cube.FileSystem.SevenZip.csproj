@@ -52,7 +52,6 @@
     <Compile Include="Details\ArchiveOpenCallback.cs" />
     <Compile Include="Details\ArchiveUpdateCallback.cs" />
     <Compile Include="Details\ArchiveCallbackBase.cs" />
-    <Compile Include="Details\FormatDetector.cs" />
     <Compile Include="Details\PasswordQuery.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="FileItem.cs" />
