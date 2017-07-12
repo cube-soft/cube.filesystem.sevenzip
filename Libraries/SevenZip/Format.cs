@@ -18,6 +18,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -162,39 +163,56 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public static Format FromExtension(string ext)
         {
-            if (_ext == null)
-            {
-                _ext = new Dictionary<string, Format>
-                {
-                    { ".7z",  Format.SevenZip },
-                    { ".bz",  Format.BZip2    },
-                    { ".bz2", Format.BZip2    },
-                    { ".tbz", Format.BZip2    },
-                    { ".gz",  Format.GZip     },
-                    { ".tgz", Format.GZip     },
-                    { ".xz",  Format.XZ       },
-                    { ".txz", Format.XZ       },
-                    { ".z",   Format.Lzw      },
-                };
-            }
-
+            if (_ext == null) _ext = CreateExtensionMap();
             var cvt = ext.ToLower();
-            if (_ext.ContainsKey(cvt)) return _ext[cvt];
-
-            foreach (Format item in Enum.GetValues(typeof(Format)))
-            {
-                var s = $".{item.ToString().ToLower()}";
-                if (s == cvt) return item;
-            }
             return _ext.ContainsKey(cvt) ? _ext[cvt] : Format.Unknown;
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// FromFileName
+        /// FromStream
         ///
         /// <summary>
-        /// ファイル名に対応する Format を取得します。
+        /// ストリームの内容に対応する Format を取得します。
+        /// </summary>
+        /// 
+        /// <param name="stream">ストリーム</param>
+        /// 
+        /// <returns>Format オブジェクト</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static Format FromStream(Stream stream)
+        {
+            if (!stream.CanRead) return Format.Unknown;
+            if (_sig == null) _sig = CreateSignatureMap();
+
+            var preserve = stream.Position;
+            try
+            {
+                var bytes = new byte[16];
+                var count = stream.Read(bytes, 0, 16);
+                var src   = BitConverter.ToString(bytes, 0, count);
+
+                foreach (var cmp in _sig)
+                {
+                    if (src.StartsWith(cmp.Key, StringComparison.OrdinalIgnoreCase)) return cmp.Value;
+                }
+
+                // for special signature
+                if (Match(stream, 0x101, 5, "75-73-74-61-72")) return Format.Tar;
+                if (Match(stream, 0x002, 3, "2D-6C-68"))       return Format.Lzh;
+
+                return Format.Unknown;
+            }
+            finally { stream.Seek(preserve, SeekOrigin.Begin); }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// FromFile
+        ///
+        /// <summary>
+        /// ファイルに対応する Format を取得します。
         /// </summary>
         /// 
         /// <param name="path">ファイル名</param>
@@ -202,13 +220,119 @@ namespace Cube.FileSystem.SevenZip
         /// <returns>Format オブジェクト</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static Format FromFileName(string path)
-            => FromExtension(System.IO.Path.GetExtension(path));
+        public static Format FromFile(string path)
+        {
+            if (File.Exists(path))
+            {
+                using (var stream = File.OpenRead(path))
+                {
+                    var dest = FromStream(stream);
+                    if (dest != Format.Unknown) return dest;
+                }
+            }
+            return FromExtension(Path.GetExtension(path));
+        }
 
         #endregion
 
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Match
+        ///
+        /// <summary>
+        /// ストリームの特定の内容が一致するかどうか判別します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private static bool Match(Stream stream, int offset, int count, string compared)
+        {
+            var bytes = new byte[count];
+            stream.Seek(offset, SeekOrigin.Begin);
+            if (stream.Read(bytes, 0, count) < count) return false;
+            return BitConverter.ToString(bytes).StartsWith(compared, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CreateExtensionMap
+        ///
+        /// <summary>
+        /// Format と拡張子の対応関係を示すオブジェクトを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private static IDictionary<string, Format> CreateExtensionMap()
+        {
+            var dest = new Dictionary<string, Format>
+            {
+                { ".7z",  Format.SevenZip },
+                { ".bz",  Format.BZip2    },
+                { ".bz2", Format.BZip2    },
+                { ".tbz", Format.BZip2    },
+                { ".gz",  Format.GZip     },
+                { ".tgz", Format.GZip     },
+                { ".xz",  Format.XZ       },
+                { ".txz", Format.XZ       },
+                { ".z",   Format.Lzw      },
+            };
+
+            foreach (Format item in Enum.GetValues(typeof(Format)))
+            {
+                var ext = $".{item.ToString().ToLower()}";
+                if (!dest.ContainsKey(ext)) dest.Add(ext, item);
+            }
+
+            return dest;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CreateSignatureMap
+        ///
+        /// <summary>
+        /// Format と Signature の対応関係を示すオブジェクトを取得します。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// このマップでは、ファイルの先頭に Signature が記載されている
+        /// もののみを対象としています。
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        private static IDictionary<string, Format> CreateSignatureMap()
+            => new Dictionary<string, Format>
+        {
+            { "50-4B-03-04",                Format.Zip      },
+            { "42-5A-68",                   Format.BZip2    },
+            { "52-61-72-21-1A-07-00",       Format.Rar      },
+            { "60-EA",                      Format.Arj      },
+            { "1F-9D-90",                   Format.Lzw      },
+            { "37-7A-BC-AF-27-1C",          Format.SevenZip },
+            { "4D-53-43-46",                Format.Cab      },
+            { "5D-00-00-40-00",             Format.Lzma     },
+            { "FD-37-7A-58-5A",             Format.XZ       },
+            { "52-61-72-21-1A-07-01-00",    Format.Rar5     },
+            { "46-4C-56",                   Format.Flv      },
+            { "46-57-53",                   Format.Swf      },
+            { "63-6F-6E-65-63-74-69-78",    Format.Vhd      },
+            { "4D-5A",                      Format.PE       },
+            { "7F-45-4C-46",                Format.Elf      },
+            { "78-61-72-21",                Format.Xar      },
+            { "78",                         Format.Dmg      },
+            { "4D-53-57-49-4D-00-00-00",    Format.Wim      },
+            { "43-44-30-30-31",             Format.Iso      },
+            { "49-54-53-46",                Format.Chm      },
+            { "ED-AB-EE-DB",                Format.Rpm      },
+            { "1F-8B-08",                   Format.GZip     },
+        };
+
         #region Fields
         private static IDictionary<string, Format> _ext;
+        private static IDictionary<string, Format> _sig;
+        #endregion
+
         #endregion
     }
 }

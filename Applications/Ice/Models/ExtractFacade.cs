@@ -86,6 +86,7 @@ namespace Cube.FileSystem.App.Ice
             var query = new Query<string, string>(x => OnPasswordRequired(x));
             using (var reader = new ArchiveReader(Source, query))
             {
+                this.LogDebug($"Format:{reader.Format}\tPath:{Source}");
                 try
                 {
                     SetDestination(Source);
@@ -117,8 +118,8 @@ namespace Cube.FileSystem.App.Ice
             ProgressReport.FileSize  = reader.Items.Select(x => x.Size)
                                              .Aggregate(0L, (x, y) => x + y);
 
-            this.LogDebug(string.Format("Count:{0:#,0}\tSize:{1:#,0}\tPath:{2}",
-                ProgressReport.FileCount, ProgressReport.FileSize, Source
+            this.LogDebug(string.Format("Count:{0:#,0}\tSize:{1:#,0}",
+                ProgressReport.FileCount, ProgressReport.FileSize
             ));
         }
 

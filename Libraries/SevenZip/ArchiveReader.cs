@@ -100,6 +100,17 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Format
+        ///
+        /// <summary>
+        /// 圧縮ファイルのファイル形式を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public Format Format { get; private set; } = Format.Unknown;
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Items
         ///
         /// <summary>
@@ -183,15 +194,14 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         private void Open(IQuery<string, string> password)
         {
-            var ext = System.IO.Path.GetExtension(Source);
-            var fmt = FormatConversions.FromExtension(ext);
-            if (fmt == Format.Unknown) throw new NotSupportedException();
+            Format = FormatConversions.FromFile(Source);
+            if (Format == Format.Unknown) throw new NotSupportedException();
 
             var pos = 32UL * 1024;
 
             _lib = new NativeLibrary();
             _stream = new ArchiveStreamReader(System.IO.File.OpenRead(Source));
-            _raw = _lib.GetInArchive(fmt);
+            _raw = _lib.GetInArchive(Format);
             _raw.Open(_stream, ref pos, new ArchiveOpenCallback(Source) { Password = password });
 
             Items = new ReadOnlyArchiveCollection(_raw, Source, password);
