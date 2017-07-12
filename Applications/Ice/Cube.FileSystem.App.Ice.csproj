@@ -66,6 +66,7 @@
     <Compile Include="Models\Request.cs" />
     <Compile Include="Models\ProgressFacade.cs" />
     <Compile Include="Models\SuspendableProgress.cs" />
+    <Compile Include="Presenters\ProgressPresenter.cs" />
     <Compile Include="Views\PasswordConfirmForm.cs">
       <SubType>Form</SubType>
     </Compile>

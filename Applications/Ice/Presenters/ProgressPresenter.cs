@@ -16,52 +16,70 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
-using System.Linq;
+using Cube.Tasks;
 
 namespace Cube.FileSystem.App.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ExtractPresenter
+    /// ProgressPresenter
     ///
     /// <summary>
-    /// 展開用の Presenter クラスです。
+    /// 圧縮および解凍処理用の Presenter クラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ExtractPresenter : ProgressPresenter
+    public class ProgressPresenter
+        : Cube.Forms.PresenterBase<IProgressView, ProgressFacade, SettingsFolder>
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ExtractPresenter
+        /// ProgressPresenter
         /// 
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
         /// <param name="view">View オブジェクト</param>
-        /// <param name="model">コマンドライン</param>
+        /// <param name="model">Model オブジェクト</param>
         /// <param name="settings">ユーザ設定</param>
         /// <param name="events">イベント集約用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ExtractPresenter(IProgressView view, Request model,
+        public ProgressPresenter(IProgressView view, ProgressFacade model,
             SettingsFolder settings, IEventAggregator events)
-            : base(view, new ExtractFacade(model), settings, events)
+            : base(view, model, settings, events)
         {
-            // View
-            View.FileName = System.IO.Path.GetFileName(model.Sources.First());
-            View.Icon     = Properties.Resources.Extract;
-            View.Status   = Properties.Resources.MessagePreExtract;
+            View.EventAggregator = EventAggregator;
 
-            // Model
-            Model.DestinationRequired += WhenDestinationRequired;
-            Model.PasswordRequired    += WhenPasswordRequired;
-            Model.OverwriteRequired   += WhenOverwriteRequired;
-            Model.Progress            += WhenProgress;
+            EventAggregator.GetEvents()?.Show.Subscribe(WhenShow);
+            EventAggregator.GetEvents()?.Suspend.Subscribe(WhenSuspend);
         }
+
+        #endregion
+
+        #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowDialog
+        /// 
+        /// <summary>
+        /// 子ウィンドウを開きます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected void ShowDialog(Action callback) => SyncWait(() =>
+        {
+            try
+            {
+                View.Stop();
+                callback();
+            }
+            finally { View.Start(); }
+        });
 
         #endregion
 
@@ -69,57 +87,37 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// WhenDestinationRequired
+        /// WhenShow
         /// 
         /// <summary>
-        /// 保存パス要求時に実行されるハンドラです。
+        /// 画面表示時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenDestinationRequired(object sender, QueryEventArgs<string, string> e)
-            => ShowDialog(() => Views.ShowSaveDirectoryView(e));
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenPasswordRequired
-        /// 
-        /// <summary>
-        /// パスワード要求時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenPasswordRequired(object sender, QueryEventArgs<string, string> e)
-            => ShowDialog(() => Views.ShowPasswordView(e));
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenOverwriteRequired
-        /// 
-        /// <summary>
-        /// 上書き確認時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenOverwriteRequired(object sender, QueryEventArgs<OverwriteInfo, OverwriteMode> e)
-            => ShowDialog(() => Views.ShowOverwriteView(e));
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenProgress
-        /// 
-        /// <summary>
-        /// 進捗状況の更新時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenProgress(object sender, ValueEventArgs<SevenZip.ArchiveReport> e)
-            => Sync(() =>
+        private void WhenShow() => Async(() =>
         {
-            View.FileCount = e.Value.FileCount;
-            View.DoneCount = e.Value.DoneCount;
-            View.Status    = Model.Current;
-            View.Value     = Math.Max(Math.Max((int)(e.Value.Ratio * View.Unit), 1), View.Value);
-        });
+            try
+            {
+                Sync(() => View.Start());
+                Model.Start();
+            }
+            finally { Sync(() => View.Close()); }
+        }).Forget();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenSuspend
+        /// 
+        /// <summary>
+        /// 一時停止または再開時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenSuspend(bool suspend)
+        {
+            if (suspend) Model.Suspend();
+            else Model.Resume();
+        }
 
         #endregion
     }

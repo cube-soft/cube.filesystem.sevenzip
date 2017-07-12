@@ -17,7 +17,6 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using Cube.FileSystem.SevenZip;
-using Cube.Tasks;
 
 namespace Cube.FileSystem.App.Ice
 {
@@ -30,8 +29,7 @@ namespace Cube.FileSystem.App.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchivePresenter
-        : Cube.Forms.PresenterBase<IProgressView, ArchiveFacade, SettingsFolder>
+    public class ArchivePresenter : ProgressPresenter
     {
         #region Constructors
 
@@ -54,57 +52,18 @@ namespace Cube.FileSystem.App.Ice
             : base(view, new ArchiveFacade(args), settings, events)
         {
             // View
-            View.EventAggregator = EventAggregator;
-            View.Icon = Properties.Resources.Archive;
+            View.Icon   = Properties.Resources.Archive;
             View.Status = Properties.Resources.MessagePreArchive;
 
             // Model
             Model.DestinationRequired += WhenDestinationRequired;
-            Model.PasswordRequired += WhenPasswordRequired;
-            Model.Progress += WhenProgress;
-
-            // EventAggregator
-            EventAggregator.GetEvents()?.Show.Subscribe(WhenShow);
-            EventAggregator.GetEvents()?.Suspend.Subscribe(WhenSuspend);
+            Model.PasswordRequired    += WhenPasswordRequired;
+            Model.Progress            += WhenProgress;
         }
 
         #endregion
 
         #region Handlers
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenShow
-        /// 
-        /// <summary>
-        /// 画面表示時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenShow() => Async(() =>
-        {
-            try
-            {
-                Sync(() => View.Start());
-                Model.Start();
-            }
-            finally { Sync(() => View.Close()); }
-        }).Forget();
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenSuspend
-        /// 
-        /// <summary>
-        /// 一時停止または再開時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenSuspend(bool suspend)
-        {
-            if (suspend) Model.Suspend();
-            else Model.Resume();
-        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -116,7 +75,7 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         private void WhenDestinationRequired(object sender, QueryEventArgs<string, string> e)
-            => Execute(() => Views.ShowSaveFileView(e));
+            => ShowDialog(() => Views.ShowSaveFileView(e));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -128,7 +87,7 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         private void WhenPasswordRequired(object sender, QueryEventArgs<string, string> e)
-            => Execute(() => Views.ShowPasswordConfirmView(e));
+            => ShowDialog(() => Views.ShowPasswordConfirmView(e));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -147,29 +106,6 @@ namespace Cube.FileSystem.App.Ice
             View.DoneCount = e.Value.DoneCount;
             View.Status    = string.Format(Properties.Resources.MessageArchive, Model.Destination);
             View.Value     = Math.Max(Math.Max((int)(e.Value.Ratio * View.Unit), 1), View.Value);
-        });
-
-        #endregion
-
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Execute
-        /// 
-        /// <summary>
-        /// View の時計を一時停止して処理を実行します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Execute(Action action) => SyncWait(() =>
-        {
-            try
-            {
-                View.Stop();
-                action();
-            }
-            finally { View.Start(); }
         });
 
         #endregion
