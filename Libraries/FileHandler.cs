@@ -43,10 +43,24 @@ namespace Cube.FileSystem
         /// 
         /// <param name="src">移動前のパス</param>
         /// <param name="dest">移動後のパス</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void Move(string src, string dest) => Move(src, dest, false);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Move
+        ///
+        /// <summary>
+        /// ファイルを移動します。
+        /// </summary>
+        /// 
+        /// <param name="src">移動前のパス</param>
+        /// <param name="dest">移動後のパス</param>
         /// <param name="overwrite">上書きするかどうかを表す値</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public void Move(string src, string dest, bool overwrite = false)
+        public void Move(string src, string dest, bool overwrite)
             => Execute(nameof(Move), () =>
         {
             if (!overwrite || !File.Exists(dest)) File.Move(src, dest);
@@ -56,6 +70,20 @@ namespace Cube.FileSystem
                 File.Delete(src);
             }
         });
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Copy
+        ///
+        /// <summary>
+        /// ファイルをコピーします。
+        /// </summary>
+        /// 
+        /// <param name="src">コピー元のパス</param>
+        /// <param name="dest">コピー先のパス</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void Copy(string src, string dest) => Copy(src, dest, false);
 
         /* ----------------------------------------------------------------- */
         ///
