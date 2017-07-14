@@ -24,6 +24,38 @@ namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
+    /// ISetProperties
+    /// 
+    /// <summary>
+    /// 各種プロパティを設定するためのインターフェースです。
+    /// </summary>
+    /// 
+    /* --------------------------------------------------------------------- */
+    [ComImport]
+    [Guid("23170F69-40C1-278A-0000-000600030000")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    internal interface ISetProperties
+    {
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetProperties
+        /// 
+        /// <summary>
+        /// 圧縮ファイルに対してプロパティを設定します。
+        /// </summary>
+        /// 
+        /// <param name="names">プロパティの名前</param>
+        /// <param name="values">プロパティの値一覧</param>
+        /// <param name="numProperties">プロパティの値の数</param>
+        /// 
+        /// <returns>OperationResult</returns>        
+        ///
+        /* ----------------------------------------------------------------- */
+        int SetProperties(IntPtr names, IntPtr values, int numProperties);
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
     /// ICryptoGetTextPassword
     /// 
     /// <summary>

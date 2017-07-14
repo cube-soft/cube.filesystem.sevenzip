@@ -48,6 +48,7 @@
     <Compile Include="ArchiveReader.cs" />
     <Compile Include="ArchiveItem.cs" />
     <Compile Include="ArchiveWriter.cs" />
+    <Compile Include="CompressionFormat.cs" />
     <Compile Include="Details\ArchiveExtractCallback.cs" />
     <Compile Include="Details\ArchiveOpenCallback.cs" />
     <Compile Include="Details\ArchiveUpdateCallback.cs" />
