@@ -44,10 +44,12 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Details\StandardFS.cs" />
     <Compile Include="Drives\Device.cs" />
     <Compile Include="Drives\DeviceNumber.cs" />
     <Compile Include="Drives\Drive.cs" />
     <Compile Include="Drives\VetoException.cs" />
+    <Compile Include="IFileOperator.cs" />
     <Compile Include="NativeMethods\Structures\SHFileInfo.cs" />
     <Compile Include="NativeMethods\Structures\SpDevice.cs" />
     <Compile Include="NativeMethods\Kernel32.cs" />
