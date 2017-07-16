@@ -15,20 +15,20 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
-using System.IO;
+using Alphaleonis.Win32.Filesystem;
 
 namespace Cube.FileSystem.Details
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// StandardFS
+    /// AlphaFS
     /// 
     /// <summary>
-    /// System.IO を利用した IFileOperator の実装クラスです。
+    /// AlphaFS を利用した IFileOperator の実装クラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal class StandardFS : IFileOperator
+    internal class AlphaFS : IFileOperator
     {
         /* ----------------------------------------------------------------- */
         ///
@@ -60,8 +60,8 @@ namespace Cube.FileSystem.Details
         {
             if (string.IsNullOrEmpty(src)) return false;
             var attr = File.GetAttributes(src);
-            var flag = attr & FileAttributes.Directory;
-            return flag == FileAttributes.Directory;
+            var flag = attr & System.IO.FileAttributes.Directory;
+            return flag == System.IO.FileAttributes.Directory;
         }
 
         /* ----------------------------------------------------------------- */
