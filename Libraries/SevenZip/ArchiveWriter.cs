@@ -264,7 +264,7 @@ namespace Cube.FileSystem.SevenZip
         {
             var raw = _lib.GetOutArchive(Format);
             var stream = new ArchiveStreamWriter(_io.Create(path));
-            var callback = new ArchiveUpdateCallback(_items, path)
+            var callback = new ArchiveUpdateCallback(_items, path, _io)
             {
                 Password = password,
                 Progress = progress,

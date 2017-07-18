@@ -47,10 +47,28 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="dest">保存パス</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public ArchiveUpdateCallback(IList<FileItem> items, string dest) : base()
+        public ArchiveUpdateCallback(IList<FileItem> items, string dest)
+            : this(items, dest, new FileHandler()) { }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ArchiveUpdateCallback
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        /// 
+        /// <param name="items">圧縮するファイル一覧</param>
+        /// <param name="dest">保存パス</param>
+        /// <param name="io">ファイル操作用オブジェクト</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public ArchiveUpdateCallback(IList<FileItem> items, string dest, FileHandler io)
+            : base()
         {
             Items = items;
             ProgressReport.FileCount = items.Count;
+            _io = io;
         }
 
         #endregion
@@ -252,7 +270,9 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int GetStream(uint index, out ISequentialInStream stream)
         {
-            stream = new ArchiveStreamReader(Items[(int)index].GetStream());
+            var path = Items[(int)index].Path;
+            stream = !_io.IsDirectory(path) ? new ArchiveStreamReader(_io.OpenRead(path)) : null;
+
             ProgressReport.DoneCount = index + 1;
             Progress?.Report(ProgressReport);
 
@@ -289,6 +309,10 @@ namespace Cube.FileSystem.SevenZip
 
         #endregion
 
+        #endregion
+
+        #region Fields
+        private FileHandler _io;
         #endregion
     }
 }
