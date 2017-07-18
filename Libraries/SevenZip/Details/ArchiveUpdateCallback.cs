@@ -48,7 +48,7 @@ namespace Cube.FileSystem.SevenZip
         /// 
         /* ----------------------------------------------------------------- */
         public ArchiveUpdateCallback(IList<FileItem> items, string dest)
-            : this(items, dest, new FileHandler()) { }
+            : this(items, dest, new Operator()) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -63,7 +63,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="io">ファイル操作用オブジェクト</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public ArchiveUpdateCallback(IList<FileItem> items, string dest, FileHandler io)
+        public ArchiveUpdateCallback(IList<FileItem> items, string dest, Operator io)
             : base()
         {
             Items = items;
@@ -312,7 +312,7 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Fields
-        private FileHandler _io;
+        private Operator _io;
         #endregion
     }
 }

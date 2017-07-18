@@ -49,12 +49,12 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         protected ArchiveItem(string src, int index,
-            IQuery<string, string> password, FileHandler io)
+            IQuery<string, string> password, Operator io)
         {
             Source   = src;
             Index    = index;
             Password = password;
-            Handler  = io;
+            IO  = io;
         }
 
         #endregion
@@ -96,14 +96,14 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Handler
+        /// IO
         ///
         /// <summary>
         /// ファイル操作用オブジェクトを取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected FileHandler Handler { get; }
+        protected Operator IO { get; }
 
         #region IArchiveItem
 
@@ -127,7 +127,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Extension => Handler.GetExtension(Path);
+        public string Extension => IO.GetExtension(Path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -270,7 +270,7 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public ArchiveItemImpl(IInArchive raw, string src, int index,
-            IQuery<string, string> password, FileHandler io)
+            IQuery<string, string> password, Operator io)
             : base(src, index, password, io)
         {
             _raw = raw;
@@ -305,8 +305,8 @@ namespace Cube.FileSystem.SevenZip
         {
             if (IsDirectory)
             {
-                var dir = Handler.Combine(directory, Path);
-                if (!Handler.Exists(dir)) Handler.CreateDirectory(dir);
+                var dir = IO.Combine(directory, Path);
+                if (!IO.Exists(dir)) IO.CreateDirectory(dir);
             }
             else ExtractFile(directory, progress);
         }
@@ -326,11 +326,11 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         private void ExtractFile(string directory, IProgress<ArchiveReport> progress)
         {
-            var dest = Handler.Combine(directory, Path);
-            var dir  = Handler.GetDirectoryName(dest);
-            if (!Handler.Exists(dir)) Handler.CreateDirectory(dir);
+            var dest = IO.Combine(directory, Path);
+            var dir  = IO.GetDirectoryName(dest);
+            if (!IO.Exists(dir)) IO.CreateDirectory(dir);
 
-            var stream = new ArchiveStreamWriter(Handler.Create(dest));
+            var stream = new ArchiveStreamWriter(IO.Create(dest));
             var callback = new ArchiveExtractCallback(Source, 1, Size, _ => stream)
             {
                 Password = Password,

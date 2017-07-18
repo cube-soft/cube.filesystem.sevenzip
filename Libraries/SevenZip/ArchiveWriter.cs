@@ -46,7 +46,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="format">圧縮フォーマット</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public ArchiveWriter(Format format) : this(format, new FileHandler()) { }
+        public ArchiveWriter(Format format) : this(format, new Operator()) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -60,7 +60,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="io">ファイル操作用オブジェクト</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public ArchiveWriter(Format format, FileHandler io)
+        public ArchiveWriter(Format format, Operator io)
         {
             Format = format;
             _lib = new NativeLibrary();
@@ -303,7 +303,7 @@ namespace Cube.FileSystem.SevenZip
         #region Fields
         private bool _disposed = false;
         private NativeLibrary _lib;
-        private FileHandler _io;
+        private Operator _io;
         private IList<FileItem> _items = new List<FileItem>();
         #endregion
 

@@ -21,42 +21,42 @@ namespace Cube.FileSystem
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// FileHandler
+    /// Operator
     /// 
     /// <summary>
     /// ファイル操作を実行するクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class FileHandler
+    public class Operator
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// FileHandler
+        /// Operator
         ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public FileHandler() : this(new FileOperator()) { }
+        public Operator() : this(new OperatorCore()) { }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// FileHandler
+        /// Operator
         ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
-        /// <param name="op">各種操作を実行するオブジェクト</param>
+        /// <param name="core">各種操作を実行するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public FileHandler(IFileOperator op)
+        public Operator(IOperatorCore core)
         {
-            _op = op;
+            _core = core;
         }
 
         #endregion
@@ -76,7 +76,7 @@ namespace Cube.FileSystem
         /// <param name="path">判別対象となるパス</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public bool Exists(string path) => _op.Exists(path);
+        public bool Exists(string path) => _core.Exists(path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -89,7 +89,7 @@ namespace Cube.FileSystem
         /// <param name="path">判別対象となるパス</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public bool IsDirectory(string path) => _op.IsDirectory(path);
+        public bool IsDirectory(string path) => _core.IsDirectory(path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -103,7 +103,7 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public void Delete(string path)
-            => Action(nameof(Delete), () => _op.Delete(path));
+            => Action(nameof(Delete), () => _core.Delete(path));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -117,7 +117,7 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public void CreateDirectory(string path)
-            => Action(nameof(CreateDirectory), () => _op.CreateDirectory(path));
+            => Action(nameof(CreateDirectory), () => _core.CreateDirectory(path));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -133,7 +133,7 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public System.IO.FileStream Create(string path)
-            => Func(nameof(Create), () => _op.Create(path));
+            => Func(nameof(Create), () => _core.Create(path));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -149,7 +149,7 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public System.IO.FileStream OpenRead(string path)
-            => Func(nameof(OpenRead), () => _op.OpenRead(path));
+            => Func(nameof(OpenRead), () => _core.OpenRead(path));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -165,7 +165,7 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public System.IO.FileStream OpenWrite(string path)
-            => Func(nameof(OpenWrite), () => _op.OpenWrite(path));
+            => Func(nameof(OpenWrite), () => _core.OpenWrite(path));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -196,14 +196,14 @@ namespace Cube.FileSystem
         /* ----------------------------------------------------------------- */
         public void Move(string src, string dest, bool overwrite)
         {
-            if (!overwrite || !_op.Exists(dest)) MoveCore(src, dest);
+            if (!overwrite || !_core.Exists(dest)) MoveCore(src, dest);
             else
             {
-                var dir = _op.GetDirectoryName(src);
-                var tmp = _op.Combine(dir, Guid.NewGuid().ToString("D"));
+                var dir = _core.GetDirectoryName(src);
+                var tmp = _core.Combine(dir, Guid.NewGuid().ToString("D"));
 
                 if (!MoveCore(dest, tmp)) return;
-                if (MoveCore(src, dest)) _op.Delete(tmp);
+                if (MoveCore(src, dest)) _core.Delete(tmp);
                 else MoveCore(tmp, dest); // recover
             }
         }
@@ -236,7 +236,7 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public void Copy(string src, string dest, bool overwrite)
-            => Action(nameof(Copy), () => _op.Copy(src, dest, overwrite));
+            => Action(nameof(Copy), () => _core.Copy(src, dest, overwrite));
 
         #endregion
 
@@ -253,7 +253,7 @@ namespace Cube.FileSystem
         /// <param name="path">パス</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public string GetFileName(string path) => _op.GetFileName(path);
+        public string GetFileName(string path) => _core.GetFileName(path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -267,7 +267,7 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public string GetFileNameWithoutExtension(string path)
-            => _op.GetFileNameWithoutExtension(path);
+            => _core.GetFileNameWithoutExtension(path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -280,7 +280,7 @@ namespace Cube.FileSystem
         /// <param name="path">パス</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public string GetExtension(string path) => _op.GetExtension(path);
+        public string GetExtension(string path) => _core.GetExtension(path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -293,7 +293,7 @@ namespace Cube.FileSystem
         /// <param name="path">パス</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public string GetDirectoryName(string path) => _op.GetDirectoryName(path);
+        public string GetDirectoryName(string path) => _core.GetDirectoryName(path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -306,7 +306,7 @@ namespace Cube.FileSystem
         /// <param name="paths">結合するパス一覧</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public string Combine(params string[] paths) => _op.Combine(paths);
+        public string Combine(params string[] paths) => _core.Combine(paths);
 
         #endregion
 
@@ -365,9 +365,9 @@ namespace Cube.FileSystem
         /* ----------------------------------------------------------------- */
         private bool MoveCore(string src, string dest) => Action(nameof(Move), () =>
         {
-            var dir = _op.GetDirectoryName(dest);
-            if (!_op.Exists(dir)) _op.CreateDirectory(dir);
-            _op.Move(src, dest);
+            var dir = _core.GetDirectoryName(dest);
+            if (!_core.Exists(dir)) _core.CreateDirectory(dir);
+            _core.Move(src, dest);
         });
 
         /* ----------------------------------------------------------------- */
@@ -431,7 +431,7 @@ namespace Cube.FileSystem
         }
 
         #region Fields
-        private IFileOperator _op;
+        private IOperatorCore _core;
         #endregion
 
         #endregion

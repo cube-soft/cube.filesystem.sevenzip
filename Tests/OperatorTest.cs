@@ -15,23 +15,22 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
-using System.IO;
 using NUnit.Framework;
 
 namespace Cube.FileSystem.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// FileHandlerTest
+    /// OperatorTest
     /// 
     /// <summary>
-    /// FileHandler のテスト用クラスです。
+    /// Cube.FileSystem.Operator のテスト用クラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [Parallelizable]
     [TestFixture]
-    class FileHandlerTest : FileResource
+    class OperatorTest : FileResource
     {
         /* ----------------------------------------------------------------- */
         ///
@@ -45,21 +44,21 @@ namespace Cube.FileSystem.Tests
         [TestCase("Sample.txt")]
         public void Move_Overwrite(string filename)
         {
-            var op = new Cube.FileSystem.FileHandler();
-            op.Failed += (s, e) => Assert.Fail($"{e.Key}: {e.Value}");
+            var io = new Cube.FileSystem.Operator();
+            io.Failed += (s, e) => Assert.Fail($"{e.Key}: {e.Value}");
 
-            var name = Path.GetFileNameWithoutExtension(filename);
-            var ext  = Path.GetExtension(filename);
-            var src  = Result(filename);
-            var dest = Result($"{name}-Move{ext}");
+            var name = io.GetFileNameWithoutExtension(filename);
+            var ext  = io.GetExtension(filename);
+            var src  = io.Combine(Results, filename);
+            var dest = io.Combine(Results, $"{name}-Move{ext}");
 
-            op.Copy(Example(filename), src, false);
-            op.Copy(src, dest, false);
-            op.Move(src, dest, true);
-            Assert.That(File.Exists(dest), Is.True);
+            io.Copy(io.Combine(Examples, filename), src, false);
+            io.Copy(src, dest, false);
+            io.Move(src, dest, true);
+            Assert.That(io.Exists(dest), Is.True);
 
-            op.Delete(dest);
-            Assert.That(File.Exists(dest), Is.False);
+            io.Delete(dest);
+            Assert.That(io.Exists(dest), Is.False);
         }
 
         /* ----------------------------------------------------------------- */
@@ -75,16 +74,16 @@ namespace Cube.FileSystem.Tests
         public void Move_Failed()
         {
             var failed = false;
-            var op = new Cube.FileSystem.FileHandler();
-            op.Failed += (s, e) =>
+            var io = new Cube.FileSystem.Operator();
+            io.Failed += (s, e) =>
             {
                 failed   = true;
                 e.Cancel = true;
             };
 
-            var src  = Result("FileNotFound.txt");
-            var dest = Result("Moved.txt");
-            op.Move(src, dest, true);
+            var src  = io.Combine(Results, "FileNotFound.txt");
+            var dest = io.Combine(Results, "Moved.txt");
+            io.Move(src, dest, true);
 
             Assert.That(failed, Is.True);
         }
@@ -107,11 +106,11 @@ namespace Cube.FileSystem.Tests
         public void Move_Throws()
             => Assert.That(() =>
             {
-                var op   = new Cube.FileSystem.FileHandler();
-                var src  = Result("FileNotFound.txt");
-                var dest = Result("Moved.txt");
-                op.Move(src, dest, true);
+                var io   = new Cube.FileSystem.Operator();
+                var src  = io.Combine(Results, "FileNotFound.txt");
+                var dest = io.Combine(Results, "Moved.txt");
+                io.Move(src, dest, true);
             },
-            Throws.TypeOf<FileNotFoundException>());
+            Throws.TypeOf<System.IO.FileNotFoundException>());
     }
 }

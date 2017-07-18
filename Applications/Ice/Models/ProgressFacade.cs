@@ -50,7 +50,7 @@ namespace Cube.FileSystem.App.Ice
         public ProgressFacade(Request request)
         {
             Request = request;
-            IO = new FileHandler(new AlphaFS());
+            IO = new Operator(new Alpha());
             IO.Failed += (s, e) => RaiseFailed(e);
             _timer.Elapsed += (s, e) => OnProgress(ValueEventArgs.Create(ProgressReport));
         }
@@ -155,7 +155,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public FileHandler IO { get; }
+        public Operator IO { get; }
 
         #endregion
 

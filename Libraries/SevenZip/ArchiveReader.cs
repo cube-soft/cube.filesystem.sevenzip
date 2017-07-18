@@ -60,7 +60,7 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public ArchiveReader(string path, string password)
-            : this(path, password, new FileHandler()) { }
+            : this(path, password, new Operator()) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -75,7 +75,7 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public ArchiveReader(string path, IQuery<string, string> password)
-            : this(path, password, new FileHandler()) { }
+            : this(path, password, new Operator()) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -90,7 +90,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="io">ファイル操作用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveReader(string path, string password, FileHandler io)
+        public ArchiveReader(string path, string password, Operator io)
         {
             Source = path;
             _io = io;
@@ -110,7 +110,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="io">ファイル操作用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveReader(string path, IQuery<string, string> password, FileHandler io)
+        public ArchiveReader(string path, IQuery<string, string> password, Operator io)
         {
             Source = path;
             _io = io;
@@ -246,7 +246,7 @@ namespace Cube.FileSystem.SevenZip
         private NativeLibrary _lib;
         private IInArchive _raw;
         private ArchiveStreamReader _stream;
-        private FileHandler _io;
+        private Operator _io;
         #endregion
 
         #endregion

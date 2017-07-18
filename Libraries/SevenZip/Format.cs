@@ -222,7 +222,7 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public static Format FromFile(string path)
-            => FromFile(path, new FileHandler());
+            => FromFile(path, new Operator());
 
         /* ----------------------------------------------------------------- */
         ///
@@ -238,7 +238,7 @@ namespace Cube.FileSystem.SevenZip
         /// <returns>Format オブジェクト</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static Format FromFile(string path, FileHandler io)
+        public static Format FromFile(string path, Operator io)
         {
             if (io.Exists(path))
             {

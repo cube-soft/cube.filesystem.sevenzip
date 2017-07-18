@@ -15,20 +15,238 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
-using Alphaleonis.Win32.Filesystem;
+using System.IO;
 
 namespace Cube.FileSystem
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// AlphaFS
+    /// IOperatorCore
     /// 
     /// <summary>
-    /// AlphaFS を利用した IFileOperator の実装クラスです。
+    /// ファイルまたはディレクトリに対する各種操作を定義した
+    /// インターフェースです。
+    /// </summary>
+    /// 
+    /// <remarks>
+    /// IOperatorCore および実装クラスは、主に Operator の操作で使用する
+    /// ライブラリを動的に変更するために使用されます。
+    /// </remarks>
+    ///
+    /* --------------------------------------------------------------------- */
+    public interface IOperatorCore
+    {
+        #region File or Directory
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Exists
+        ///
+        /// <summary>
+        /// ファイルまたはディレクトリが存在するかどうかを判別します。
+        /// </summary>
+        /// 
+        /// <param name="path">判別対象となるパス</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        bool Exists(string path);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// IsDirectory
+        ///
+        /// <summary>
+        /// ディレクトリかどうか判別します。
+        /// </summary>
+        /// 
+        /// <param name="path">判別対象となるパス</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        bool IsDirectory(string path);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Delete
+        ///
+        /// <summary>
+        /// ファイルまたはディレクトリを削除します。
+        /// </summary>
+        /// 
+        /// <param name="path">削除対象となるパス</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        void Delete(string path);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create
+        ///
+        /// <summary>
+        /// ファイルを新規作成します。
+        /// </summary>
+        /// 
+        /// <param name="path">ファイルのパス</param>
+        /// 
+        /// <returns>書き込み用ストリーム</returns>
+        /// 
+        /* ----------------------------------------------------------------- */
+        FileStream Create(string path);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OpenRead
+        ///
+        /// <summary>
+        /// ファイルを読み込み専用で開きます。
+        /// </summary>
+        /// 
+        /// <param name="path">ファイルのパス</param>
+        /// 
+        /// <returns>読み込み用ストリーム</returns>
+        /// 
+        /* ----------------------------------------------------------------- */
+        FileStream OpenRead(string path);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OpenWrite
+        ///
+        /// <summary>
+        /// ファイルを新規作成、または上書き用で開きます。
+        /// </summary>
+        /// 
+        /// <param name="path">ファイルのパス</param>
+        /// 
+        /// <returns>書き込み用ストリーム</returns>
+        /// 
+        /* ----------------------------------------------------------------- */
+        FileStream OpenWrite(string path);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CreateDirectory
+        ///
+        /// <summary>
+        /// ディレクトリを作成します。
+        /// </summary>
+        /// 
+        /// <param name="path">ディレクトリのパス</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        void CreateDirectory(string path);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Move
+        ///
+        /// <summary>
+        /// ファイルまたはディレクトリを移動します。
+        /// </summary>
+        /// 
+        /// <param name="src">移動前のパス</param>
+        /// <param name="dest">移動後のパス</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        void Move(string src, string dest);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Copy
+        ///
+        /// <summary>
+        /// ファイルまたはディレクトリをコピーします。
+        /// </summary>
+        /// 
+        /// <param name="src">コピー元のパス</param>
+        /// <param name="dest">コピー先のパス</param>
+        /// <param name="overwrite">上書きするかどうかを示す値</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        void Copy(string src, string dest, bool overwrite);
+
+        #endregion
+
+        #region Path
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetFileName
+        ///
+        /// <summary>
+        /// ファイル名を取得します。
+        /// </summary>
+        /// 
+        /// <param name="path">パス</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        string GetFileName(string path);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetFileNameWithoutExtension
+        ///
+        /// <summary>
+        /// 拡張子なしのファイル名を取得します。
+        /// </summary>
+        /// 
+        /// <param name="path">パス</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        string GetFileNameWithoutExtension(string path);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetExtension
+        ///
+        /// <summary>
+        /// 拡張子を取得します。
+        /// </summary>
+        /// 
+        /// <param name="path">パス</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        string GetExtension(string path);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetDirectoryName
+        ///
+        /// <summary>
+        /// ディレクトリ名を取得します。
+        /// </summary>
+        /// 
+        /// <param name="path">パス</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        string GetDirectoryName(string path);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Combine
+        ///
+        /// <summary>
+        /// パスを結合します。
+        /// </summary>
+        /// 
+        /// <param name="directory">ディレクトリを示すパス</param>
+        /// <param name="filename">ファイル名</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        string Combine(params string[] paths);
+
+        #endregion
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// OperatorCore
+    /// 
+    /// <summary>
+    /// 標準ライブラリを利用した IOperatorCore の実装クラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class AlphaFS : IFileOperator
+    public class OperatorCore : IOperatorCore
     {
         #region File or Directory
 
@@ -62,8 +280,8 @@ namespace Cube.FileSystem
         {
             if (string.IsNullOrEmpty(path)) return false;
             var attr = File.GetAttributes(path);
-            var flag = attr & System.IO.FileAttributes.Directory;
-            return flag == System.IO.FileAttributes.Directory;
+            var flag = attr & FileAttributes.Directory;
+            return flag == FileAttributes.Directory;
         }
 
         /* ----------------------------------------------------------------- */
@@ -96,7 +314,7 @@ namespace Cube.FileSystem
         /// <returns>書き込み用ストリーム</returns>
         /// 
         /* ----------------------------------------------------------------- */
-        public System.IO.FileStream Create(string path) => File.Create(path);
+        public FileStream Create(string path) => File.Create(path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -111,7 +329,7 @@ namespace Cube.FileSystem
         /// <returns>読み込み用ストリーム</returns>
         /// 
         /* ----------------------------------------------------------------- */
-        public System.IO.FileStream OpenRead(string path) => File.OpenRead(path);
+        public FileStream OpenRead(string path) => File.OpenRead(path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -126,7 +344,7 @@ namespace Cube.FileSystem
         /// <returns>書き込み用ストリーム</returns>
         /// 
         /* ----------------------------------------------------------------- */
-        public System.IO.FileStream OpenWrite(string path) => File.OpenWrite(path);
+        public FileStream OpenWrite(string path) => File.OpenWrite(path);
 
         /* ----------------------------------------------------------------- */
         ///
