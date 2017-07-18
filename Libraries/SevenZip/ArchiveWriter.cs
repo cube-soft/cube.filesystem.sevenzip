@@ -46,10 +46,25 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="format">圧縮フォーマット</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public ArchiveWriter(Format format)
+        public ArchiveWriter(Format format) : this(format, new FileHandler()) { }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ArchiveWriter
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        /// 
+        /// <param name="format">圧縮フォーマット</param>
+        /// <param name="io">ファイル操作用オブジェクト</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public ArchiveWriter(Format format, FileHandler io)
         {
             Format = format;
             _lib = new NativeLibrary();
+            _io = io;
         }
 
         #endregion
@@ -81,7 +96,7 @@ namespace Cube.FileSystem.SevenZip
         /// 
         /* ----------------------------------------------------------------- */
         public void Add(string path)
-            => Add(path, Path.GetFileName(path));
+            => Add(path, _io.GetFileName(path));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -94,8 +109,11 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void Add(string path, string pathInArchive)
         {
-            if (File.Exists(path)) Add(new FileInfo(path), pathInArchive);
-            else if (Directory.Exists(path)) Add(new DirectoryInfo(path), pathInArchive);
+            if (_io.Exists(path))
+            {
+                if (_io.IsDirectory(path)) Add(new DirectoryInfo(path), pathInArchive);
+                else Add(new FileInfo(path), pathInArchive);
+            }
             else throw new FileNotFoundException(path);
         }
 
@@ -224,12 +242,12 @@ namespace Cube.FileSystem.SevenZip
 
             foreach (var child in info.GetFiles())
             {
-                Add(child, Path.Combine(pathInArchive, child.Name));
+                Add(child, _io.Combine(pathInArchive, child.Name));
             }
 
             foreach (var child in info.GetDirectories())
             {
-                Add(child, Path.Combine(pathInArchive, child.Name));
+                Add(child, _io.Combine(pathInArchive, child.Name));
             }
         }
 
@@ -245,7 +263,7 @@ namespace Cube.FileSystem.SevenZip
         private void SaveCore(string path, IQuery<string, string> password, IProgress<ArchiveReport> progress)
         {
             var raw = _lib.GetOutArchive(Format);
-            var stream = new ArchiveStreamWriter(File.Create(path));
+            var stream = new ArchiveStreamWriter(_io.Create(path));
             var callback = new ArchiveUpdateCallback(_items, path)
             {
                 Password = password,
@@ -285,6 +303,7 @@ namespace Cube.FileSystem.SevenZip
         #region Fields
         private bool _disposed = false;
         private NativeLibrary _lib;
+        private FileHandler _io;
         private IList<FileItem> _items = new List<FileItem>();
         #endregion
 

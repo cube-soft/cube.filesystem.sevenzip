@@ -73,10 +73,23 @@ namespace Cube.FileSystem
         /// ファイルまたはディレクトリが存在するかどうかを判別します。
         /// </summary>
         /// 
-        /// <param name="src">判別対象となるパス</param>
+        /// <param name="path">判別対象となるパス</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public bool Exists(string src) => _op.Exists(src);
+        public bool Exists(string path) => _op.Exists(path);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// IsDirectory
+        ///
+        /// <summary>
+        /// ディレクトリかどうか判別します。
+        /// </summary>
+        /// 
+        /// <param name="path">判別対象となるパス</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public bool IsDirectory(string path) => _op.IsDirectory(path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -86,11 +99,11 @@ namespace Cube.FileSystem
         /// ファイルまたはディレクトリを削除します。
         /// </summary>
         /// 
-        /// <param name="src">削除するファイルのパス</param>
+        /// <param name="path">削除するファイルのパス</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public void Delete(string src)
-            => Action(nameof(Delete), () => _op.Delete(src));
+        public void Delete(string path)
+            => Action(nameof(Delete), () => _op.Delete(path));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -100,11 +113,11 @@ namespace Cube.FileSystem
         /// ディレクトリを作成します。
         /// </summary>
         /// 
-        /// <param name="src">ディレクトリのパス</param>
+        /// <param name="path">ディレクトリのパス</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public void CreateDirectory(string src)
-            => Action(nameof(CreateDirectory), () => _op.CreateDirectory(src));
+        public void CreateDirectory(string path)
+            => Action(nameof(CreateDirectory), () => _op.CreateDirectory(path));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -114,12 +127,13 @@ namespace Cube.FileSystem
         /// ファイルを新規作成します。
         /// </summary>
         /// 
-        /// <param name="src">ファイルのパス</param>
+        /// <param name="path">ファイルのパス</param>
         /// 
         /// <returns>書き込み用ストリーム</returns>
         /// 
         /* ----------------------------------------------------------------- */
-        public System.IO.FileStream Create(string src) => _op.Create(src);
+        public System.IO.FileStream Create(string path)
+            => Func(nameof(Create), () => _op.Create(path));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -129,27 +143,29 @@ namespace Cube.FileSystem
         /// ファイルを読み込み専用で開きます。
         /// </summary>
         /// 
-        /// <param name="src">ファイルのパス</param>
+        /// <param name="path">ファイルのパス</param>
         /// 
         /// <returns>読み込み用ストリーム</returns>
         /// 
         /* ----------------------------------------------------------------- */
-        public System.IO.FileStream OpenRead(string src) => _op.OpenRead(src);
+        public System.IO.FileStream OpenRead(string path)
+            => Func(nameof(OpenRead), () => _op.OpenRead(path));
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OpenRead
+        /// OpenWrite
         ///
         /// <summary>
         /// ファイルを新規作成、または上書き用で開きます。
         /// </summary>
         /// 
-        /// <param name="src">ファイルのパス</param>
+        /// <param name="path">ファイルのパス</param>
         /// 
         /// <returns>書き込み用ストリーム</returns>
         /// 
         /* ----------------------------------------------------------------- */
-        public System.IO.FileStream OpenWrite(string src) => _op.OpenWrite(src);
+        public System.IO.FileStream OpenWrite(string path)
+            => Func(nameof(OpenWrite), () => _op.OpenWrite(path));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -234,10 +250,10 @@ namespace Cube.FileSystem
         /// ファイル名を取得します。
         /// </summary>
         /// 
-        /// <param name="src">パス</param>
+        /// <param name="path">パス</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public string GetFileName(string src) => _op.GetFileName(src);
+        public string GetFileName(string path) => _op.GetFileName(path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -247,11 +263,11 @@ namespace Cube.FileSystem
         /// 拡張子なしのファイル名を取得します。
         /// </summary>
         /// 
-        /// <param name="src">パス</param>
+        /// <param name="path">パス</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public string GetFileNameWithoutExtension(string src)
-            => _op.GetFileNameWithoutExtension(src);
+        public string GetFileNameWithoutExtension(string path)
+            => _op.GetFileNameWithoutExtension(path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -261,10 +277,10 @@ namespace Cube.FileSystem
         /// 拡張子を取得します。
         /// </summary>
         /// 
-        /// <param name="src">パス</param>
+        /// <param name="path">パス</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public string GetExtension(string src) => _op.GetExtension(src);
+        public string GetExtension(string path) => _op.GetExtension(path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -274,10 +290,10 @@ namespace Cube.FileSystem
         /// ディレクトリ名を取得します。
         /// </summary>
         /// 
-        /// <param name="src">パス</param>
+        /// <param name="path">パス</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public string GetDirectoryName(string src) => _op.GetDirectoryName(src);
+        public string GetDirectoryName(string path) => _op.GetDirectoryName(path);
 
         /* ----------------------------------------------------------------- */
         ///

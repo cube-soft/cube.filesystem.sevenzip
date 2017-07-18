@@ -222,16 +222,33 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public static Format FromFile(string path)
+            => FromFile(path, new FileHandler());
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// FromFile
+        ///
+        /// <summary>
+        /// ファイルに対応する Format を取得します。
+        /// </summary>
+        /// 
+        /// <param name="path">ファイル名</param>
+        /// <param name="io">ファイル操作用オブジェクト</param>
+        /// 
+        /// <returns>Format オブジェクト</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static Format FromFile(string path, FileHandler io)
         {
-            if (File.Exists(path))
+            if (io.Exists(path))
             {
-                using (var stream = File.OpenRead(path))
+                using (var stream = io.OpenRead(path))
                 {
                     var dest = FromStream(stream);
                     if (dest != Format.Unknown) return dest;
                 }
             }
-            return FromExtension(Path.GetExtension(path));
+            return FromExtension(io.GetExtension(path));
         }
 
         #endregion

@@ -101,7 +101,7 @@ namespace Cube.FileSystem.App.Ice
         private void WhenProgress(object sender, ValueEventArgs<ArchiveReport> e)
             => Sync(() =>
         {
-            View.FileName  = System.IO.Path.GetFileName(Model.Destination);
+            View.FileName  = Model.IO.GetFileName(Model.Destination);
             View.FileCount = e.Value.FileCount;
             View.DoneCount = e.Value.DoneCount;
             View.Status    = string.Format(Properties.Resources.MessageArchive, Model.Destination);

@@ -15,7 +15,6 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
-using System.IO;
 using Cube.FileSystem.SevenZip;
 using Cube.Log;
 
@@ -69,7 +68,7 @@ namespace Cube.FileSystem.App.Ice
                             new Query<string, string>(x => OnPasswordRequired(x)) :
                             null;
 
-                using (var writer = new ArchiveWriter(GetFormat()))
+                using (var writer = new ArchiveWriter(GetFormat(), IO))
                 {
                     foreach (var item in Request.Sources) writer.Add(item);
                     ProgressStart();
@@ -78,7 +77,7 @@ namespace Cube.FileSystem.App.Ice
 
                 Move();
 
-                var name = Path.GetFileName(Destination);
+                var name = IO.GetFileName(Destination);
                 this.LogDebug($"{name}:{ProgressReport.DoneSize}/{ProgressReport.FileSize}");
                 ProgressReport.DoneSize = ProgressReport.FileSize; // hack
 
@@ -131,8 +130,8 @@ namespace Cube.FileSystem.App.Ice
         private string GetDestination()
         {
             SetDestination(Request.Format.ToString());
-            if (!File.Exists(Destination)) return Destination;
-            SetTmp(Path.GetDirectoryName(Destination));
+            if (!IO.Exists(Destination)) return Destination;
+            SetTmp(IO.GetDirectoryName(Destination));
             return Tmp;
         }
 
@@ -147,11 +146,8 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void Move()
         {
-            if (string.IsNullOrEmpty(Tmp) || !File.Exists(Tmp)) return;
-            if (File.Exists(Destination)) File.Delete(Destination);
-            var dir = Path.GetDirectoryName(Destination);
-            if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
-            File.Move(Tmp, Destination);
+            if (string.IsNullOrEmpty(Tmp) || !IO.Exists(Tmp)) return;
+            IO.Move(Tmp, Destination, true);
         }
 
         #endregion

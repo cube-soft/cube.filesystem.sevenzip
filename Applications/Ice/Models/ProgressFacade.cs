@@ -50,6 +50,8 @@ namespace Cube.FileSystem.App.Ice
         public ProgressFacade(Request request)
         {
             Request = request;
+            IO = new FileHandler(new AlphaFS());
+            IO.Failed += (s, e) => RaiseFailed(e);
             _timer.Elapsed += (s, e) => OnProgress(ValueEventArgs.Create(ProgressReport));
         }
 
@@ -143,6 +145,17 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         public OverwriteMode OverwriteMode { get; protected set; } = OverwriteMode.Query;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// IO
+        /// 
+        /// <summary>
+        /// ファイル操作オブジェクトを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public FileHandler IO { get; }
 
         #endregion
 
@@ -367,7 +380,7 @@ namespace Cube.FileSystem.App.Ice
                     Destination = e.Result;
                     break;
                 case SaveLocation.Source:
-                    Destination = System.IO.Path.GetDirectoryName(Request.Sources.First());
+                    Destination = IO.GetDirectoryName(Request.Sources.First());
                     break;
             }
         }
@@ -382,7 +395,7 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         protected void SetTmp(string directory)
-            => Tmp = System.IO.Path.Combine(directory, Guid.NewGuid().ToString("D"));
+            => Tmp = IO.Combine(directory, Guid.NewGuid().ToString("D"));
 
         #endregion
 
@@ -433,8 +446,7 @@ namespace Cube.FileSystem.App.Ice
             try
             {
                 if (string.IsNullOrEmpty(Tmp)) return;
-                else if (System.IO.File.Exists(Tmp)) System.IO.File.Delete(Tmp);
-                else if (System.IO.Directory.Exists(Tmp)) System.IO.Directory.Delete(Tmp, true);
+                else if (IO.Exists(Tmp)) IO.Delete(Tmp);
             }
             catch (Exception err) { this.LogWarn(err.ToString(), err); }
             finally { _disposed = true; }
@@ -456,6 +468,21 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         private void RaiseUserCancel() => throw new UserCancelException();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// RaiseFailed
+        /// 
+        /// <summary>
+        /// Failed イベントを発生させます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void RaiseFailed(KeyValueCancelEventArgs<string, Exception> e)
+        {
+            this.LogWarn(e.Value.ToString(), e.Value);
+            e.Cancel = true;
+        }
 
         #region Fields
         private bool _disposed = false;

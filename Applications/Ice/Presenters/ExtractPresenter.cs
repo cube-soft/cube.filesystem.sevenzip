@@ -52,7 +52,7 @@ namespace Cube.FileSystem.App.Ice
             : base(view, new ExtractFacade(model), settings, events)
         {
             // View
-            View.FileName = System.IO.Path.GetFileName(model.Sources.First());
+            View.FileName = Model.IO.GetFileName(model.Sources.First());
             View.Icon     = Properties.Resources.Extract;
             View.Status   = Properties.Resources.MessagePreExtract;
 

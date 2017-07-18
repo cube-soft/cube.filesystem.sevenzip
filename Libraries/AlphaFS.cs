@@ -40,12 +40,12 @@ namespace Cube.FileSystem
         /// ファイルまたはディレクトリが存在するかどうかを判別します。
         /// </summary>
         /// 
-        /// <param name="src">判別対象となるパス</param>
+        /// <param name="path">判別対象となるパス</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public bool Exists(string src)
-            => !string.IsNullOrEmpty(src) &&
-               (File.Exists(src) || Directory.Exists(src));
+        public bool Exists(string path)
+            => !string.IsNullOrEmpty(path) &&
+               (File.Exists(path) || Directory.Exists(path));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -55,13 +55,13 @@ namespace Cube.FileSystem
         /// ディレクトリかどうか判別します。
         /// </summary>
         /// 
-        /// <param name="src">判別対象となるパス</param>
+        /// <param name="path">判別対象となるパス</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public bool IsDirectory(string src)
+        public bool IsDirectory(string path)
         {
-            if (string.IsNullOrEmpty(src)) return false;
-            var attr = File.GetAttributes(src);
+            if (string.IsNullOrEmpty(path)) return false;
+            var attr = File.GetAttributes(path);
             var flag = attr & System.IO.FileAttributes.Directory;
             return flag == System.IO.FileAttributes.Directory;
         }
@@ -74,13 +74,13 @@ namespace Cube.FileSystem
         /// ファイルまたはディレクトリを削除します。
         /// </summary>
         /// 
-        /// <param name="src">削除対象となるパス</param>
+        /// <param name="path">削除対象となるパス</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public void Delete(string src)
+        public void Delete(string path)
         {
-            if (IsDirectory(src)) Directory.Delete(src, true);
-            else File.Delete(src);
+            if (IsDirectory(path)) Directory.Delete(path, true);
+            else File.Delete(path);
         }
 
         /* ----------------------------------------------------------------- */
@@ -91,12 +91,12 @@ namespace Cube.FileSystem
         /// ファイルを新規作成します。
         /// </summary>
         /// 
-        /// <param name="src">ファイルのパス</param>
+        /// <param name="path">ファイルのパス</param>
         /// 
         /// <returns>書き込み用ストリーム</returns>
         /// 
         /* ----------------------------------------------------------------- */
-        public System.IO.FileStream Create(string src) => File.Create(src);
+        public System.IO.FileStream Create(string path) => File.Create(path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -106,27 +106,27 @@ namespace Cube.FileSystem
         /// ファイルを読み込み専用で開きます。
         /// </summary>
         /// 
-        /// <param name="src">ファイルのパス</param>
+        /// <param name="path">ファイルのパス</param>
         /// 
         /// <returns>読み込み用ストリーム</returns>
         /// 
         /* ----------------------------------------------------------------- */
-        public System.IO.FileStream OpenRead(string src) => File.OpenRead(src);
+        public System.IO.FileStream OpenRead(string path) => File.OpenRead(path);
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OpenRead
+        /// OpenWrite
         ///
         /// <summary>
         /// ファイルを新規作成、または上書き用で開きます。
         /// </summary>
         /// 
-        /// <param name="src">ファイルのパス</param>
+        /// <param name="path">ファイルのパス</param>
         /// 
         /// <returns>書き込み用ストリーム</returns>
         /// 
         /* ----------------------------------------------------------------- */
-        public System.IO.FileStream OpenWrite(string src) => File.OpenWrite(src);
+        public System.IO.FileStream OpenWrite(string path) => File.OpenWrite(path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -136,10 +136,10 @@ namespace Cube.FileSystem
         /// ディレクトリを作成します。
         /// </summary>
         /// 
-        /// <param name="src">ディレクトリのパス</param>
+        /// <param name="path">ディレクトリのパス</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public void CreateDirectory(string src) => Directory.CreateDirectory(src);
+        public void CreateDirectory(string path) => Directory.CreateDirectory(path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -183,10 +183,10 @@ namespace Cube.FileSystem
         /// ファイル名を取得します。
         /// </summary>
         /// 
-        /// <param name="src">パス</param>
+        /// <param name="path">パス</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public string GetFileName(string src) => Path.GetFileName(src);
+        public string GetFileName(string path) => Path.GetFileName(path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -196,11 +196,11 @@ namespace Cube.FileSystem
         /// 拡張子なしのファイル名を取得します。
         /// </summary>
         /// 
-        /// <param name="src">パス</param>
+        /// <param name="path">パス</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public string GetFileNameWithoutExtension(string src)
-            => Path.GetFileNameWithoutExtension(src);
+        public string GetFileNameWithoutExtension(string path)
+            => Path.GetFileNameWithoutExtension(path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -210,10 +210,10 @@ namespace Cube.FileSystem
         /// 拡張子を取得します。
         /// </summary>
         /// 
-        /// <param name="src">パス</param>
+        /// <param name="path">パス</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public string GetExtension(string src) => Path.GetExtension(src);
+        public string GetExtension(string path) => Path.GetExtension(path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -223,10 +223,10 @@ namespace Cube.FileSystem
         /// ディレクトリ名を取得します。
         /// </summary>
         /// 
-        /// <param name="src">パス</param>
+        /// <param name="path">パス</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public string GetDirectoryName(string src) => Path.GetDirectoryName(src);
+        public string GetDirectoryName(string path) => Path.GetDirectoryName(path);
 
         /* ----------------------------------------------------------------- */
         ///

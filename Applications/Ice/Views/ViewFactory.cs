@@ -85,7 +85,7 @@ namespace Cube.FileSystem.App.Ice
             var view = new FolderBrowserDialog
             {
                 Description  = Properties.Resources.MessageExtractDestination,
-                SelectedPath = System.IO.Path.GetDirectoryName(e.Query),
+                SelectedPath = e.Query,
             };
 
             e.Cancel = view.ShowDialog() == DialogResult.Cancel;

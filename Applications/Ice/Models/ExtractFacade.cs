@@ -50,8 +50,6 @@ namespace Cube.FileSystem.App.Ice
         public ExtractFacade(Request request) : base(request)
         {
             Source = Request.Sources.First();
-            _io = new FileHandler(new AlphaFS());
-            _io.Failed += (s, e) => RaiseFailed(e);
         }
 
         #endregion
@@ -85,7 +83,7 @@ namespace Cube.FileSystem.App.Ice
         public override void Start()
         {
             var query = new Query<string, string>(x => OnPasswordRequired(x));
-            using (var reader = new ArchiveReader(Source, query, _io))
+            using (var reader = new ArchiveReader(Source, query, IO))
             {
                 this.LogDebug($"Format:{reader.Format}\tPath:{Source}");
                 try
@@ -209,9 +207,9 @@ namespace Cube.FileSystem.App.Ice
         {
             if (directory)
             {
-                if (!_io.Exists(dest)) _io.CreateDirectory(dest);
+                if (!IO.Exists(dest)) IO.CreateDirectory(dest);
             }
-            else _io.Move(src, dest, true);
+            else IO.Move(src, dest, true);
         }
 
         /* ----------------------------------------------------------------- */
@@ -248,10 +246,10 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void QueryMove(ArchiveItem item)
         {
-            var src  = _io.Combine(Tmp, item.Path);
-            var dest = _io.Combine(Destination, item.Path);
+            var src  = IO.Combine(Tmp, item.Path);
+            var dest = IO.Combine(Destination, item.Path);
 
-            if (_io.Exists(dest))
+            if (IO.Exists(dest))
             {
                 if (item.IsDirectory) return;
                 var fi = new System.IO.FileInfo(dest);
@@ -278,25 +276,6 @@ namespace Cube.FileSystem.App.Ice
             if (e.Result == OverwriteMode.Cancel) throw new UserCancelException();
             OverwriteMode = e.Result;
         }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// RaiseFailed
-        /// 
-        /// <summary>
-        /// Failed イベントを発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void RaiseFailed(KeyValueCancelEventArgs<string, Exception> e)
-        {
-            this.LogWarn(e.Value.ToString(), e.Value);
-            e.Cancel = true;
-        }
-
-        #region Fields
-        private FileHandler _io;
-        #endregion
 
         #endregion
     }
