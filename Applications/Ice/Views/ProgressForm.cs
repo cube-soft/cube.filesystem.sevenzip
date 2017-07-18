@@ -222,7 +222,7 @@ namespace Cube.FileSystem.App.Ice
             get { return _remain; }
             private set
             {
-                if (_remain == value) return;
+                if (Math.Abs((_remain - value).TotalSeconds) <= 1.0) return;
                 _remain = value;
 
                 RemainLabel.Visible = value > TimeSpan.Zero;
@@ -343,7 +343,8 @@ namespace Cube.FileSystem.App.Ice
         /// 
         /// <remarks>
         /// 表示上のバタつきを抑えるために、残り時間の 10 秒以内の増加に
-        /// ついては反映しないようにしています。
+        /// ついては反映しないようにしています。また、残り時間は 5 秒
+        /// 単位で更新します。
         /// </remarks>
         /// 
         /* ----------------------------------------------------------------- */
@@ -351,13 +352,13 @@ namespace Cube.FileSystem.App.Ice
         {
             if (Value <= 1 || Elapsed <= TimeSpan.Zero) return;
 
-            var elapse = Elapsed.TotalMilliseconds;
-            var ratio  = Math.Max(Unit / (double)Value - 1.0, 0.0);
-            var value  = TimeSpan.FromMilliseconds(elapse * ratio);
-            var delta  = (value - Remain).TotalSeconds;
-            if (delta >= 0.0 && delta < 10.0) return; // hack (see remarks)
+            var unit  = 5L;
+            var ratio = Math.Max(Unit / (double)Value - 1.0, 0.0);
+            var value = Elapsed.TotalSeconds * ratio;
+            var delta = value - Remain.TotalSeconds;
 
-            Remain = value;
+            if (delta >= 0.0 && delta < unit * 2) return; // hack (see remarks)
+            Remain = TimeSpan.FromSeconds(((long)value / unit + 1) * unit);
         }
 
         /* ----------------------------------------------------------------- */
