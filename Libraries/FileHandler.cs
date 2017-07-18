@@ -63,6 +63,8 @@ namespace Cube.FileSystem
 
         #region Methods
 
+        #region File or Directory
+
         /* ----------------------------------------------------------------- */
         ///
         /// Exists
@@ -88,7 +90,7 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public void Delete(string src)
-            => Execute(nameof(Delete), () => _op.Delete(src));
+            => Action(nameof(Delete), () => _op.Delete(src));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -102,7 +104,52 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public void CreateDirectory(string src)
-            => Execute(nameof(CreateDirectory), () => _op.CreateDirectory(src));
+            => Action(nameof(CreateDirectory), () => _op.CreateDirectory(src));
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create
+        ///
+        /// <summary>
+        /// ファイルを新規作成します。
+        /// </summary>
+        /// 
+        /// <param name="src">ファイルのパス</param>
+        /// 
+        /// <returns>書き込み用ストリーム</returns>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public System.IO.FileStream Create(string src) => _op.Create(src);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OpenRead
+        ///
+        /// <summary>
+        /// ファイルを読み込み専用で開きます。
+        /// </summary>
+        /// 
+        /// <param name="src">ファイルのパス</param>
+        /// 
+        /// <returns>読み込み用ストリーム</returns>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public System.IO.FileStream OpenRead(string src) => _op.OpenRead(src);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OpenRead
+        ///
+        /// <summary>
+        /// ファイルを新規作成、または上書き用で開きます。
+        /// </summary>
+        /// 
+        /// <param name="src">ファイルのパス</param>
+        /// 
+        /// <returns>書き込み用ストリーム</returns>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public System.IO.FileStream OpenWrite(string src) => _op.OpenWrite(src);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -173,7 +220,11 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public void Copy(string src, string dest, bool overwrite)
-            => Execute(nameof(Copy), () => _op.Copy(src, dest, overwrite));
+            => Action(nameof(Copy), () => _op.Copy(src, dest, overwrite));
+
+        #endregion
+
+        #region Path
 
         /* ----------------------------------------------------------------- */
         ///
@@ -187,6 +238,33 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public string GetFileName(string src) => _op.GetFileName(src);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetFileNameWithoutExtension
+        ///
+        /// <summary>
+        /// 拡張子なしのファイル名を取得します。
+        /// </summary>
+        /// 
+        /// <param name="src">パス</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public string GetFileNameWithoutExtension(string src)
+            => _op.GetFileNameWithoutExtension(src);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetExtension
+        ///
+        /// <summary>
+        /// 拡張子を取得します。
+        /// </summary>
+        /// 
+        /// <param name="src">パス</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public string GetExtension(string src) => _op.GetExtension(src);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -213,6 +291,8 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public string Combine(params string[] paths) => _op.Combine(paths);
+
+        #endregion
 
         #endregion
 
@@ -267,7 +347,7 @@ namespace Cube.FileSystem
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private bool MoveCore(string src, string dest) => Execute(nameof(Move), () =>
+        private bool MoveCore(string src, string dest) => Action(nameof(Move), () =>
         {
             var dir = _op.GetDirectoryName(dest);
             if (!_op.Exists(dir)) _op.CreateDirectory(dir);
@@ -276,7 +356,7 @@ namespace Cube.FileSystem
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Execute
+        /// Action
         ///
         /// <summary>
         /// 操作を実行します。
@@ -288,7 +368,7 @@ namespace Cube.FileSystem
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        private bool Execute(string name, Action action)
+        private bool Action(string name, Action action)
         {
             while (true)
             {
@@ -302,6 +382,34 @@ namespace Cube.FileSystem
                     var args = KeyValueEventArgs.Create(name, err, false);
                     OnFailed(args);
                     if (args.Cancel) return false;
+                }
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Func
+        ///
+        /// <summary>
+        /// 操作を実行します。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// 操作に失敗した場合、イベントハンドラで Cancel が設定されるまで
+        /// 実行し続けます。
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        private T Func<T>(string name, Func<T> func)
+        {
+            while (true)
+            {
+                try { return func(); }
+                catch (Exception err)
+                {
+                    var args = KeyValueEventArgs.Create(name, err, false);
+                    OnFailed(args);
+                    if (args.Cancel) return default(T);
                 }
             }
         }

@@ -60,10 +60,7 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public ArchiveReader(string path, string password)
-        {
-            Source = path;
-            Open(new PasswordQuery(password));
-        }
+            : this(path, password, new FileHandler()) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -78,8 +75,45 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public ArchiveReader(string path, IQuery<string, string> password)
+            : this(path, password, new FileHandler()) { }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ArchiveReader
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        /// 
+        /// <param name="path">圧縮ファイルのパス</param>
+        /// <param name="password">パスワード</param>
+        /// <param name="io">ファイル操作用オブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ArchiveReader(string path, string password, FileHandler io)
         {
             Source = path;
+            _io = io;
+            Open(new PasswordQuery(password));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ArchiveReader
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        /// 
+        /// <param name="path">圧縮ファイルのパス</param>
+        /// <param name="password">パスワード取得用オブジェクト</param>
+        /// <param name="io">ファイル操作用オブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ArchiveReader(string path, IQuery<string, string> password, FileHandler io)
+        {
+            Source = path;
+            _io = io;
             Open(new PasswordQuery(password));
         }
 
@@ -200,11 +234,11 @@ namespace Cube.FileSystem.SevenZip
             var pos = 32UL * 1024;
 
             _lib = new NativeLibrary();
-            _stream = new ArchiveStreamReader(System.IO.File.OpenRead(Source));
+            _stream = new ArchiveStreamReader(_io.OpenRead(Source));
             _raw = _lib.GetInArchive(Format);
             _raw.Open(_stream, ref pos, new ArchiveOpenCallback(Source) { Password = password });
 
-            Items = new ReadOnlyArchiveCollection(_raw, Source, password);
+            Items = new ReadOnlyArchiveCollection(_raw, Source, password, _io);
         }
 
         #region Fields
@@ -212,6 +246,7 @@ namespace Cube.FileSystem.SevenZip
         private NativeLibrary _lib;
         private IInArchive _raw;
         private ArchiveStreamReader _stream;
+        private FileHandler _io;
         #endregion
 
         #endregion

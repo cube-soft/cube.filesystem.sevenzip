@@ -30,6 +30,8 @@ namespace Cube.FileSystem
     /* --------------------------------------------------------------------- */
     public class AlphaFS : IFileOperator
     {
+        #region File or Directory
+
         /* ----------------------------------------------------------------- */
         ///
         /// Exists
@@ -83,6 +85,51 @@ namespace Cube.FileSystem
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Create
+        ///
+        /// <summary>
+        /// ファイルを新規作成します。
+        /// </summary>
+        /// 
+        /// <param name="src">ファイルのパス</param>
+        /// 
+        /// <returns>書き込み用ストリーム</returns>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public System.IO.FileStream Create(string src) => File.Create(src);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OpenRead
+        ///
+        /// <summary>
+        /// ファイルを読み込み専用で開きます。
+        /// </summary>
+        /// 
+        /// <param name="src">ファイルのパス</param>
+        /// 
+        /// <returns>読み込み用ストリーム</returns>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public System.IO.FileStream OpenRead(string src) => File.OpenRead(src);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OpenRead
+        ///
+        /// <summary>
+        /// ファイルを新規作成、または上書き用で開きます。
+        /// </summary>
+        /// 
+        /// <param name="src">ファイルのパス</param>
+        /// 
+        /// <returns>書き込み用ストリーム</returns>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public System.IO.FileStream OpenWrite(string src) => File.OpenWrite(src);
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// CreateDirectory
         ///
         /// <summary>
@@ -124,6 +171,10 @@ namespace Cube.FileSystem
         public void Copy(string src, string dest, bool overwrite)
             => File.Copy(src, dest, overwrite);
 
+        #endregion
+
+        #region Path
+
         /* ----------------------------------------------------------------- */
         ///
         /// GetFileName
@@ -136,6 +187,33 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public string GetFileName(string src) => Path.GetFileName(src);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetFileNameWithoutExtension
+        ///
+        /// <summary>
+        /// 拡張子なしのファイル名を取得します。
+        /// </summary>
+        /// 
+        /// <param name="src">パス</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public string GetFileNameWithoutExtension(string src)
+            => Path.GetFileNameWithoutExtension(src);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetExtension
+        ///
+        /// <summary>
+        /// 拡張子を取得します。
+        /// </summary>
+        /// 
+        /// <param name="src">パス</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public string GetExtension(string src) => Path.GetExtension(src);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -163,5 +241,7 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public string Combine(params string[] paths) => Path.Combine(paths);
+
+        #endregion
     }
 }

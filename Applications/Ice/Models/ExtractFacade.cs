@@ -16,7 +16,6 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
-using System.IO;
 using System.Linq;
 using Cube.Log;
 using Cube.FileSystem.Files;
@@ -51,6 +50,8 @@ namespace Cube.FileSystem.App.Ice
         public ExtractFacade(Request request) : base(request)
         {
             Source = Request.Sources.First();
+            _io = new FileHandler(new AlphaFS());
+            _io.Failed += (s, e) => RaiseFailed(e);
         }
 
         #endregion
@@ -84,7 +85,7 @@ namespace Cube.FileSystem.App.Ice
         public override void Start()
         {
             var query = new Query<string, string>(x => OnPasswordRequired(x));
-            using (var reader = new ArchiveReader(Source, query))
+            using (var reader = new ArchiveReader(Source, query, _io))
             {
                 this.LogDebug($"Format:{reader.Format}\tPath:{Source}");
                 try
@@ -208,15 +209,9 @@ namespace Cube.FileSystem.App.Ice
         {
             if (directory)
             {
-                if (!Directory.Exists(dest)) Directory.CreateDirectory(dest);
+                if (!_io.Exists(dest)) _io.CreateDirectory(dest);
             }
-            else
-            {
-                if (File.Exists(dest)) File.Delete(dest);
-                var dir = Path.GetDirectoryName(dest);
-                if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
-                File.Move(src, dest);
-            }
+            else _io.Move(src, dest, true);
         }
 
         /* ----------------------------------------------------------------- */
@@ -228,7 +223,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Overwrite(string src, FileInfo dest, bool directory)
+        private void Overwrite(string src, System.IO.FileInfo dest, bool directory)
         {
             switch (OverwriteMode)
             {
@@ -253,14 +248,13 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void QueryMove(ArchiveItem item)
         {
-            var src    = Path.Combine(Tmp, item.Path);
-            var dest   = Path.Combine(Destination, item.Path);
-            var exists = item.IsDirectory ? Directory.Exists(dest) : File.Exists(dest);
+            var src  = _io.Combine(Tmp, item.Path);
+            var dest = _io.Combine(Destination, item.Path);
 
-            if (exists)
+            if (_io.Exists(dest))
             {
                 if (item.IsDirectory) return;
-                var fi = new FileInfo(dest);
+                var fi = new System.IO.FileInfo(dest);
                 if (!OverwriteMode.HasFlag(OverwriteMode.Always)) RaiseOverwriteRequired(item, fi);
                 Overwrite(src, fi, item.IsDirectory);
             }
@@ -276,7 +270,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void RaiseOverwriteRequired(IArchiveItem src, FileInfo dest)
+        private void RaiseOverwriteRequired(IArchiveItem src, System.IO.FileInfo dest)
         {
             var q = new OverwriteInfo(src, dest);
             var e = new QueryEventArgs<OverwriteInfo, OverwriteMode>(q);
@@ -284,6 +278,25 @@ namespace Cube.FileSystem.App.Ice
             if (e.Result == OverwriteMode.Cancel) throw new UserCancelException();
             OverwriteMode = e.Result;
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// RaiseFailed
+        /// 
+        /// <summary>
+        /// Failed イベントを発生させます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void RaiseFailed(KeyValueCancelEventArgs<string, Exception> e)
+        {
+            this.LogWarn(e.Value.ToString(), e.Value);
+            e.Cancel = true;
+        }
+
+        #region Fields
+        private FileHandler _io;
+        #endregion
 
         #endregion
     }

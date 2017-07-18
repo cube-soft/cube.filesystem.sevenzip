@@ -45,13 +45,16 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="src">圧縮ファイルのパス</param>
         /// <param name="index">圧縮ファイル中のインデックス</param>
         /// <param name="password">パスワード取得用オブジェクト</param>
+        /// <param name="io">ファイル操作用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected ArchiveItem(string src, int index, IQuery<string, string> password)
+        protected ArchiveItem(string src, int index,
+            IQuery<string, string> password, FileHandler io)
         {
             Source   = src;
             Index    = index;
             Password = password;
+            Handler  = io;
         }
 
         #endregion
@@ -91,6 +94,17 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         protected IQuery<string, string> Password { get; }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Handler
+        ///
+        /// <summary>
+        /// ファイル操作用オブジェクトを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected FileHandler Handler { get; }
+
         #region IArchiveItem
 
         /* ----------------------------------------------------------------- */
@@ -113,7 +127,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Extension => System.IO.Path.GetExtension(Path);
+        public string Extension => Handler.GetExtension(Path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -255,9 +269,9 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="password">パスワード取得用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveItemImpl(IInArchive raw,
-            string src, int index, IQuery<string, string> password)
-            : base(src, index, password)
+        public ArchiveItemImpl(IInArchive raw, string src, int index,
+            IQuery<string, string> password, FileHandler io)
+            : base(src, index, password, io)
         {
             _raw = raw;
 
@@ -289,7 +303,11 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public override void Extract(string directory, IProgress<ArchiveReport> progress)
         {
-            if (IsDirectory) CreateDirectory(System.IO.Path.Combine(directory, Path));
+            if (IsDirectory)
+            {
+                var dir = Handler.Combine(directory, Path);
+                if (!Handler.Exists(dir)) Handler.CreateDirectory(dir);
+            }
             else ExtractFile(directory, progress);
         }
 
@@ -308,10 +326,11 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         private void ExtractFile(string directory, IProgress<ArchiveReport> progress)
         {
-            var dest = System.IO.Path.Combine(directory, Path);
-            CreateDirectory(System.IO.Path.GetDirectoryName(dest));
+            var dest = Handler.Combine(directory, Path);
+            var dir  = Handler.GetDirectoryName(dest);
+            if (!Handler.Exists(dir)) Handler.CreateDirectory(dir);
 
-            var stream = new ArchiveStreamWriter(System.IO.File.Create(dest));
+            var stream = new ArchiveStreamWriter(Handler.Create(dest));
             var callback = new ArchiveExtractCallback(Source, 1, Size, _ => stream)
             {
                 Password = Password,
@@ -354,21 +373,6 @@ namespace Cube.FileSystem.SevenZip
                 default:
                     throw new System.IO.IOException(result.ToString());
             }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CreateDirectory
-        ///
-        /// <summary>
-        /// ディレクトリを生成します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void CreateDirectory(string path)
-        {
-            if (System.IO.Directory.Exists(path)) return;
-            System.IO.Directory.CreateDirectory(path);
         }
 
         /* ----------------------------------------------------------------- */

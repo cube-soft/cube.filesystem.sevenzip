@@ -73,5 +73,11 @@
   <ItemGroup>
     <None Include="Packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Cube.FileSystem.csproj">
+      <Project>{e89aad2c-5a74-49f6-ad84-65f0016ef1bb}</Project>
+      <Name>Cube.FileSystem</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

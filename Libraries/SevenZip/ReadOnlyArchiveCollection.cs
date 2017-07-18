@@ -48,11 +48,12 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public ReadOnlyArchiveCollection(IInArchive raw, string src,
-            IQuery<string, string> password)
+            IQuery<string, string> password, FileHandler io)
         {
             Source   = src;
             Password = password;
             _raw     = raw;
+            _io      = io;
         }
 
         #endregion
@@ -109,7 +110,7 @@ namespace Cube.FileSystem.SevenZip
         {
             for (var i = 0; i < Count; ++i)
             {
-                yield return new ArchiveItemImpl(_raw, Source, i, Password);
+                yield return new ArchiveItemImpl(_raw, Source, i, Password, _io);
             }
         }
 
@@ -128,6 +129,7 @@ namespace Cube.FileSystem.SevenZip
 
         #region Fields
         private IInArchive _raw;
+        private FileHandler _io;
         #endregion
     }
 }
