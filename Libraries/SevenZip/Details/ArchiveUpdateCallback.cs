@@ -270,7 +270,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int GetStream(uint index, out ISequentialInStream stream)
         {
-            var path = Items[(int)index].Path;
+            var path = Items[(int)index].FullName;
             stream = !_io.IsDirectory(path) ? new ArchiveStreamReader(_io.OpenRead(path)) : null;
 
             ProgressReport.DoneCount = index + 1;
