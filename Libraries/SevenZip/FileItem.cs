@@ -167,21 +167,6 @@ namespace Cube.FileSystem.SevenZip
 
         #endregion
 
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetStream
-        ///
-        /// <summary>
-        /// 読み取り専用ストリームを取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public Stream GetStream() => (_info as FileInfo)?.OpenRead();
-
-        #endregion
-
         #region Fields
         private FileSystemInfo _info;
         #endregion
