@@ -65,6 +65,19 @@ namespace Cube.FileSystem
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Exists
+        ///
+        /// <summary>
+        /// ファイルまたはディレクトリが存在するかどうかを判別します。
+        /// </summary>
+        /// 
+        /// <param name="src">判別対象となるパス</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public bool Exists(string src) => _op.Exists(src);
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Delete
         ///
         /// <summary>
@@ -76,6 +89,20 @@ namespace Cube.FileSystem
         /* ----------------------------------------------------------------- */
         public void Delete(string src)
             => Execute(nameof(Delete), () => _op.Delete(src));
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CreateDirectory
+        ///
+        /// <summary>
+        /// ディレクトリを作成します。
+        /// </summary>
+        /// 
+        /// <param name="src">ディレクトリのパス</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void CreateDirectory(string src)
+            => Execute(nameof(CreateDirectory), () => _op.CreateDirectory(src));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -113,7 +140,8 @@ namespace Cube.FileSystem
                 var tmp = _op.Combine(dir, Guid.NewGuid().ToString("D"));
 
                 if (!MoveCore(dest, tmp)) return;
-                if (!MoveCore(src, dest)) MoveCore(tmp, dest); // recover
+                if (MoveCore(src, dest)) _op.Delete(tmp);
+                else MoveCore(tmp, dest); // recover
             }
         }
 
@@ -144,8 +172,47 @@ namespace Cube.FileSystem
         /// <param name="overwrite">上書きするかどうかを示す値</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public void Copy(string src, string dest, bool overwrite = false)
+        public void Copy(string src, string dest, bool overwrite)
             => Execute(nameof(Copy), () => _op.Copy(src, dest, overwrite));
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetFileName
+        ///
+        /// <summary>
+        /// ファイル名を取得します。
+        /// </summary>
+        /// 
+        /// <param name="src">パス</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public string GetFileName(string src) => _op.GetFileName(src);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetDirectoryName
+        ///
+        /// <summary>
+        /// ディレクトリ名を取得します。
+        /// </summary>
+        /// 
+        /// <param name="src">パス</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public string GetDirectoryName(string src) => _op.GetDirectoryName(src);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Combine
+        ///
+        /// <summary>
+        /// パスを結合します。
+        /// </summary>
+        /// 
+        /// <param name="paths">結合するパス一覧</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public string Combine(params string[] paths) => _op.Combine(paths);
 
         #endregion
 
@@ -189,7 +256,7 @@ namespace Cube.FileSystem
 
         #endregion
 
-        #region Others
+        #region Implementations
 
         /* ----------------------------------------------------------------- */
         ///
@@ -200,8 +267,12 @@ namespace Cube.FileSystem
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private bool MoveCore(string src, string dest)
-            => Execute(nameof(Move), () => _op.Move(src, dest));
+        private bool MoveCore(string src, string dest) => Execute(nameof(Move), () =>
+        {
+            var dir = _op.GetDirectoryName(dest);
+            if (!_op.Exists(dir)) _op.CreateDirectory(dir);
+            _op.Move(src, dest);
+        });
 
         /* ----------------------------------------------------------------- */
         ///

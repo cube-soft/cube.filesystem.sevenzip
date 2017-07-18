@@ -17,7 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using Alphaleonis.Win32.Filesystem;
 
-namespace Cube.FileSystem.Details
+namespace Cube.FileSystem
 {
     /* --------------------------------------------------------------------- */
     ///
@@ -28,7 +28,7 @@ namespace Cube.FileSystem.Details
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal class AlphaFS : IFileOperator
+    public class AlphaFS : IFileOperator
     {
         /* ----------------------------------------------------------------- */
         ///
