@@ -116,6 +116,46 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         void Copy(string src, string dest, bool overwrite);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetFileName
+        ///
+        /// <summary>
+        /// ファイル名を取得します。
+        /// </summary>
+        /// 
+        /// <param name="src">パス</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        string GetFileName(string src);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetDirectoryName
+        ///
+        /// <summary>
+        /// ディレクトリ名を取得します。
+        /// </summary>
+        /// 
+        /// <param name="src">パス</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        string GetDirectoryName(string src);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Combine
+        ///
+        /// <summary>
+        /// パスを結合します。
+        /// </summary>
+        /// 
+        /// <param name="directory">ディレクトリを示すパス</param>
+        /// <param name="filename">ファイル名</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        string Combine(params string[] paths);
     }
 
     /* --------------------------------------------------------------------- */
@@ -222,5 +262,45 @@ namespace Cube.FileSystem
         /* ----------------------------------------------------------------- */
         public void Copy(string src, string dest, bool overwrite)
             => File.Copy(src, dest, overwrite);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetFileName
+        ///
+        /// <summary>
+        /// ファイル名を取得します。
+        /// </summary>
+        /// 
+        /// <param name="src">パス</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public string GetFileName(string src) => Path.GetFileName(src);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetDirectoryName
+        ///
+        /// <summary>
+        /// ディレクトリ名を取得します。
+        /// </summary>
+        /// 
+        /// <param name="src">パス</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public string GetDirectoryName(string src) => Path.GetDirectoryName(src);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Combine
+        ///
+        /// <summary>
+        /// パスを結合します。
+        /// </summary>
+        /// 
+        /// <param name="directory">ディレクトリを示すパス</param>
+        /// <param name="filename">ファイル名</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public string Combine(params string[] paths) => Path.Combine(paths);
     }
 }

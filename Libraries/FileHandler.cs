@@ -16,7 +16,6 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
-using System.IO;
 
 namespace Cube.FileSystem
 {
@@ -31,7 +30,52 @@ namespace Cube.FileSystem
     /* --------------------------------------------------------------------- */
     public class FileHandler
     {
+        #region Constructors
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// FileHandler
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public FileHandler() : this(new FileOperator()) { }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// FileHandler
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        /// 
+        /// <param name="op">各種操作を実行するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public FileHandler(IFileOperator op)
+        {
+            _op = op;
+        }
+
+        #endregion
+
         #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Delete
+        ///
+        /// <summary>
+        /// ファイルまたはディレクトリを削除します。
+        /// </summary>
+        /// 
+        /// <param name="src">削除するファイルのパス</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void Delete(string src)
+            => Execute(nameof(Delete), () => _op.Delete(src));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -61,15 +105,17 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public void Move(string src, string dest, bool overwrite)
-            => Execute(nameof(Move), () =>
         {
-            if (!overwrite || !File.Exists(dest)) File.Move(src, dest);
+            if (!overwrite || !_op.Exists(dest)) MoveCore(src, dest);
             else
             {
-                File.Copy(src, dest, true);
-                File.Delete(src);
+                var dir = _op.GetDirectoryName(src);
+                var tmp = _op.Combine(dir, Guid.NewGuid().ToString("D"));
+
+                if (!MoveCore(dest, tmp)) return;
+                if (!MoveCore(src, dest)) MoveCore(tmp, dest); // recover
             }
-        });
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -99,21 +145,7 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public void Copy(string src, string dest, bool overwrite = false)
-            => Execute(nameof(Copy), () => File.Copy(src, dest, overwrite));
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Delete
-        ///
-        /// <summary>
-        /// ファイルを削除します。
-        /// </summary>
-        /// 
-        /// <param name="src">削除するファイルのパス</param>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public void Delete(string src)
-            => Execute(nameof(Delete), () => File.Delete(src));
+            => Execute(nameof(Copy), () => _op.Copy(src, dest, overwrite));
 
         #endregion
 
@@ -161,36 +193,51 @@ namespace Cube.FileSystem
 
         /* ----------------------------------------------------------------- */
         ///
+        /// MoveCore
+        ///
+        /// <summary>
+        /// 移動操作を実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private bool MoveCore(string src, string dest)
+            => Execute(nameof(Move), () => _op.Move(src, dest));
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Execute
         ///
         /// <summary>
-        /// 各種操作を実行します。
+        /// 操作を実行します。
         /// </summary>
         /// 
         /// <remarks>
-        /// 操作に失敗した場合、イベントハンドラで Cancel が設定されるまで実行
-        /// し続けます。
+        /// 操作に失敗した場合、イベントハンドラで Cancel が設定されるまで
+        /// 実行し続けます。
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        private void Execute(string name, Action action)
+        private bool Execute(string name, Action action)
         {
-            var complete = false;
-            while (!complete)
+            while (true)
             {
                 try
                 {
                     action();
-                    complete = true;
+                    return true;
                 }
                 catch (Exception err)
                 {
                     var args = KeyValueEventArgs.Create(name, err, false);
                     OnFailed(args);
-                    complete = args.Cancel;
+                    if (args.Cancel) return false;
                 }
             }
         }
+
+        #region Fields
+        private IFileOperator _op;
+        #endregion
 
         #endregion
     }
