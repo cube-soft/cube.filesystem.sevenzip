@@ -45,7 +45,7 @@ namespace Cube.FileSystem.Tests
         public void Move_Overwrite(string filename)
         {
             var io = new Cube.FileSystem.Operator();
-            io.Failed += (s, e) => Assert.Fail($"{e.Key}: {e.Value}");
+            io.Failed += (s, e) => Assert.Fail($"{e.Name}: {e.Exception}");
 
             var name = io.GetFileNameWithoutExtension(filename);
             var ext  = io.GetExtension(filename);

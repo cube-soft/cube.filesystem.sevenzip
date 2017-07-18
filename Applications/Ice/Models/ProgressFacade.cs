@@ -478,9 +478,12 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void RaiseFailed(KeyValueCancelEventArgs<string, Exception> e)
+        private void RaiseFailed(FailedEventArgs e)
         {
-            this.LogWarn(e.Value.ToString(), e.Value);
+            this.LogWarn(e.Name);
+            foreach (var path in e.Paths) this.LogWarn(path);
+            this.LogWarn(e.Exception.ToString(), e.Exception);
+
             e.Cancel = true;
         }
 

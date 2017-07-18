@@ -103,7 +103,7 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public void Delete(string path)
-            => Action(nameof(Delete), () => _core.Delete(path));
+            => Action(nameof(Delete), () => _core.Delete(path), path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -117,7 +117,7 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public void CreateDirectory(string path)
-            => Action(nameof(CreateDirectory), () => _core.CreateDirectory(path));
+            => Action(nameof(CreateDirectory), () => _core.CreateDirectory(path), path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -133,7 +133,7 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public System.IO.FileStream Create(string path)
-            => Func(nameof(Create), () => _core.Create(path));
+            => Func(nameof(Create), () => _core.Create(path), path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -149,7 +149,7 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public System.IO.FileStream OpenRead(string path)
-            => Func(nameof(OpenRead), () => _core.OpenRead(path));
+            => Func(nameof(OpenRead), () => _core.OpenRead(path), path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -165,7 +165,7 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public System.IO.FileStream OpenWrite(string path)
-            => Func(nameof(OpenWrite), () => _core.OpenWrite(path));
+            => Func(nameof(OpenWrite), () => _core.OpenWrite(path), path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -236,7 +236,7 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public void Copy(string src, string dest, bool overwrite)
-            => Action(nameof(Copy), () => _core.Copy(src, dest, overwrite));
+            => Action(nameof(Copy), () => _core.Copy(src, dest, overwrite), src, dest);
 
         #endregion
 
@@ -328,7 +328,7 @@ namespace Cube.FileSystem
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public event KeyValueCanelEventHandler<string, Exception> Failed;
+        public event FailedEventHandler Failed;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -344,10 +344,10 @@ namespace Cube.FileSystem
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnFailed(KeyValueCancelEventArgs<string, Exception> e)
+        protected virtual void OnFailed(FailedEventArgs e)
         {
             if (Failed != null) Failed(this, e);
-            else throw e.Value;
+            else throw e.Exception;
         }
 
         #endregion
@@ -368,7 +368,7 @@ namespace Cube.FileSystem
             var dir = _core.GetDirectoryName(dest);
             if (!_core.Exists(dir)) _core.CreateDirectory(dir);
             _core.Move(src, dest);
-        });
+        }, src, dest);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -384,7 +384,7 @@ namespace Cube.FileSystem
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        private bool Action(string name, Action action)
+        private bool Action(string name, Action action, params string[] paths)
         {
             while (true)
             {
@@ -395,7 +395,7 @@ namespace Cube.FileSystem
                 }
                 catch (Exception err)
                 {
-                    var args = KeyValueEventArgs.Create(name, err, false);
+                    var args = new FailedEventArgs(name, paths, err);
                     OnFailed(args);
                     if (args.Cancel) return false;
                 }
@@ -416,14 +416,14 @@ namespace Cube.FileSystem
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        private T Func<T>(string name, Func<T> func)
+        private T Func<T>(string name, Func<T> func, params string[] paths)
         {
             while (true)
             {
                 try { return func(); }
                 catch (Exception err)
                 {
-                    var args = KeyValueEventArgs.Create(name, err, false);
+                    var args = new FailedEventArgs(name, paths, err);
                     OnFailed(args);
                     if (args.Cancel) return default(T);
                 }
