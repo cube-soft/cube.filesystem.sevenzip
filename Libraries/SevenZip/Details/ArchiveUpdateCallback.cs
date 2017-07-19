@@ -217,16 +217,17 @@ namespace Cube.FileSystem.SevenZip
         public int GetProperty(uint index, ItemPropId pid, ref PropVariant value)
         {
             var src = Items[(int)index];
+
             switch (pid)
             {
                 case ItemPropId.Path:
-                    value.Set(src.Path);
+                    value.Set(src.PathInArchive);
                     break;
                 case ItemPropId.Extension:
                     value.Set(src.Extension);
                     break;
                 case ItemPropId.Attributes:
-                    value.Set(src.Attributes);
+                    value.Set((uint)src.Attributes);
                     break;
                 case ItemPropId.IsDirectory:
                     value.Set(src.IsDirectory);
@@ -244,7 +245,7 @@ namespace Cube.FileSystem.SevenZip
                     value.Set(src.LastWriteTime);
                     break;
                 case ItemPropId.Size:
-                    value.Set((ulong)src.Size);
+                    value.Set((ulong)src.Length);
                     break;
                 default:
                     value.SetEmpty();

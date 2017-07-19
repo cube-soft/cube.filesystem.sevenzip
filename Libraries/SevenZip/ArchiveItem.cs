@@ -30,7 +30,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public abstract class ArchiveItem : IArchiveItem
+    public abstract class ArchiveItem : IInformation
     {
         #region Constructors
 
@@ -54,7 +54,7 @@ namespace Cube.FileSystem.SevenZip
             Source   = src;
             Index    = index;
             Password = password;
-            IO  = io;
+            IO       = io;
         }
 
         #endregion
@@ -85,6 +85,17 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Encrypted
+        ///
+        /// <summary>
+        /// 暗号化されているかどうかを示す値を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public bool Encrypted { get; protected set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Password
         ///
         /// <summary>
@@ -105,40 +116,18 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         protected Operator IO { get; }
 
-        #region IArchiveItem
+        #region IInformation
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Path
+        /// Exists
         ///
         /// <summary>
-        /// 圧縮ファイル中の相対パスを取得します。
+        /// 存在するかどうかを示す値を取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Path { get; protected set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extension
-        ///
-        /// <summary>
-        /// 拡張子を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Extension => IO.Get(Path).Extension;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Encrypted
-        ///
-        /// <summary>
-        /// 暗号化されているかどうかを示す値を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public bool Encrypted { get; protected set; }
+        public bool Exists { get; protected set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -153,6 +142,72 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Name
+        ///
+        /// <summary>
+        /// ファイル名を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Name { get; protected set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// NameWithoutExtension
+        ///
+        /// <summary>
+        /// 拡張子を除いたファイル名を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string NameWithoutExtension { get; protected set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extension
+        ///
+        /// <summary>
+        /// 拡張子を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Extension { get; protected set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// DirectoryName
+        ///
+        /// <summary>
+        /// ディレクトリ名を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string DirectoryName { get; protected set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// FullName
+        ///
+        /// <summary>
+        /// 圧縮ファイル中の相対パスを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string FullName { get; protected set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Length
+        ///
+        /// <summary>
+        /// 展開後のファイルサイズを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public long Length { get; protected set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Attributes
         ///
         /// <summary>
@@ -160,18 +215,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public uint Attributes { get; protected set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Size
-        ///
-        /// <summary>
-        /// 展開後のファイルサイズを取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public long Size { get; protected set; }
+        public System.IO.FileAttributes Attributes { get; protected set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -211,6 +255,17 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Refresh
+        ///
+        /// <summary>
+        /// オブジェクトを最新の状態に更新します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public virtual void Refresh() { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -275,14 +330,21 @@ namespace Cube.FileSystem.SevenZip
         {
             _raw = raw;
 
-            Path           = Get<string>(ItemPropId.Path);
+            Exists         = true;
+            FullName       = Get<string>(ItemPropId.Path);
             Encrypted      = Get<bool>(ItemPropId.Encrypted);
             IsDirectory    = Get<bool>(ItemPropId.IsDirectory);
-            Attributes     = Get<uint>(ItemPropId.Attributes);
-            Size           = (long)Get<ulong>(ItemPropId.Size);
+            Attributes     = GetAttributes();
+            Length         = (long)Get<ulong>(ItemPropId.Size);
             CreationTime   = Get<DateTime>(ItemPropId.CreationTime);
             LastWriteTime  = Get<DateTime>(ItemPropId.LastWriteTime);
             LastAccessTime = Get<DateTime>(ItemPropId.LastAccessTime);
+
+            var info = IO.Get(FullName);
+            Name                 = info.Name;
+            NameWithoutExtension = info.NameWithoutExtension;
+            Extension            = info.Extension;
+            DirectoryName        = info.DirectoryName;
         }
 
         #endregion
@@ -305,7 +367,7 @@ namespace Cube.FileSystem.SevenZip
         {
             if (IsDirectory)
             {
-                var dir = IO.Combine(directory, Path);
+                var dir = IO.Combine(directory, FullName);
                 if (!IO.Get(dir).Exists) IO.CreateDirectory(dir);
             }
             else ExtractFile(directory, progress);
@@ -326,12 +388,12 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         private void ExtractFile(string directory, IProgress<ArchiveReport> progress)
         {
-            var dest = IO.Combine(directory, Path);
+            var dest = IO.Combine(directory, FullName);
             var dir  = IO.Get(dest).DirectoryName;
             if (!IO.Get(dir).Exists) IO.CreateDirectory(dir);
 
             var stream = new ArchiveStreamWriter(IO.Create(dest));
-            var callback = new ArchiveExtractCallback(Source, 1, Size, _ => stream)
+            var callback = new ArchiveExtractCallback(Source, 1, Length, _ => stream)
             {
                 Password = Password,
                 Progress = progress,
@@ -399,6 +461,21 @@ namespace Cube.FileSystem.SevenZip
                 this.LogWarn(err.ToString(), err);
                 return default(T);
             }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetAttributes
+        ///
+        /// <summary>
+        /// 属性情報を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private System.IO.FileAttributes GetAttributes()
+        {
+            try { return (System.IO.FileAttributes)Get<uint>(ItemPropId.Attributes); }
+            catch (Exception /* err */) { return System.IO.FileAttributes.Normal; }
         }
 
         /* ----------------------------------------------------------------- */

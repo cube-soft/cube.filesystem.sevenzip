@@ -31,6 +31,8 @@ namespace Cube.FileSystem.Files
     /* --------------------------------------------------------------------- */
     public static class Operations
     {
+        #region Methods
+
         /* ----------------------------------------------------------------- */
         ///
         /// GetTypeName
@@ -39,18 +41,18 @@ namespace Cube.FileSystem.Files
         /// ファイルの種類を表す文字列を取得します。
         /// </summary>
         ///
-        /// <param name="fi">FileInfo オブジェクト</param>
+        /// <param name="info">IInformation オブジェクト</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public static string GetTypeName(this System.IO.FileInfo fi)
+        public static string GetTypeName(this IInformation info)
         {
-            if (fi == null) return null;
+            if (info == null) return null;
 
             var attr   = Shell32.NativeMethods.FILE_ATTRIBUTE_NORMAL;
             var flags  = Shell32.NativeMethods.SHGFI_TYPENAME |
                          Shell32.NativeMethods.SHGFI_USEFILEATTRIBUTES;
             var shfi   = new SHFILEINFO();
-            var result = Shell32.NativeMethods.SHGetFileInfo(fi.FullName,
+            var result = Shell32.NativeMethods.SHGetFileInfo(info.FullName,
                 attr, ref shfi, (uint)Marshal.SizeOf(shfi), flags);
 
             return (result != IntPtr.Zero) ? shfi.szTypeName : null;
@@ -61,26 +63,43 @@ namespace Cube.FileSystem.Files
         /// GetUniqueName
         ///
         /// <summary>
-        /// FileInfo オブジェクトを基にした一意なパスを取得します。
+        /// IInformation オブジェクトを基にした一意なパスを取得します。
         /// </summary>
         /// 
-        /// <param name="fi">FileInfo オブジェクト</param>
+        /// <param name="info">IInformation オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static string GetUniqueName(this System.IO.FileInfo fi)
-        {
-            if (!fi.Exists) return fi.FullName;
+        public static string GetUniqueName(this IInformation info)
+            => GetUniqueName(info, new Operator());
 
-            var path = fi.FullName;
-            var dir  = fi.DirectoryName;
-            var name = System.IO.Path.GetFileNameWithoutExtension(path);
-            var ext  = fi.Extension;
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetUniqueName
+        ///
+        /// <summary>
+        /// IInformation オブジェクトを基にした一意なパスを取得します。
+        /// </summary>
+        /// 
+        /// <param name="info">IInformation オブジェクト</param>
+        /// <param name="io">ファイル操作用オブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static string GetUniqueName(this IInformation info, Operator io)
+        {
+            if (!info.Exists) return info.FullName;
+
+            var path = info.FullName;
+            var dir  = info.DirectoryName;
+            var name = System.IO.Path.GetFileNameWithoutExtension(info.Name);
+            var ext  = info.Extension;
 
             for (var i = 2; ; ++i)
             {
-                var dest = System.IO.Path.Combine(dir, $"{name}({i}){ext}");
+                var dest = io.Combine(dir, $"{name}({i}){ext}");
                 if (!System.IO.File.Exists(dest) && !System.IO.Directory.Exists(dest)) return dest;
             }
         }
+
+        #endregion
     }
 }

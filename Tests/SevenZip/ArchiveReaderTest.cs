@@ -59,9 +59,9 @@ namespace Cube.FileSystem.Tests
                 for (var i = 0; i < expected.Count; ++i)
                 {
                     Assert.That(actual[i].Index,         Is.EqualTo(i));
-                    Assert.That(actual[i].Path,          Is.EqualTo(expected[i].Path));
+                    Assert.That(actual[i].FullName,      Is.EqualTo(expected[i].FullName));
                     Assert.That(actual[i].Extension,     Is.EqualTo(expected[i].Extension));
-                    Assert.That(actual[i].Size,          Is.EqualTo(expected[i].Size));
+                    Assert.That(actual[i].Length,        Is.EqualTo(expected[i].Length));
                     Assert.That(actual[i].Encrypted,     Is.EqualTo(expected[i].Encrypted));
                     Assert.That(actual[i].IsDirectory,   Is.EqualTo(expected[i].IsDirectory));
                     Assert.That(actual[i].CreationTime,  Is.EqualTo(expected[i].CreationTime.ToLocalTime()));
@@ -89,10 +89,10 @@ namespace Cube.FileSystem.Tests
                 for (var i = 0; i < expected.Count; ++i)
                 {
                     actual[i].Extract(Results);
-                    var dest = Result(actual[i].Path);
+                    var dest = Result(actual[i].FullName);
                     var dir  = expected[i].IsDirectory;
                     Assert.That(Exists(dest, dir), Is.True);
-                    Assert.That(Length(dest, dir), Is.EqualTo(expected[i].Size));
+                    Assert.That(Length(dest, dir), Is.EqualTo(expected[i].Length));
                 }
             }
         }
@@ -158,9 +158,9 @@ namespace Cube.FileSystem.Tests
                 {
                     new ExpectedItem
                     {
-                        Path          = "Sample",
+                        FullName      = "Sample",
                         Extension     = string.Empty,
-                        Size          = 0,
+                        Length        = 0,
                         Encrypted     = false,
                         IsDirectory   = true,
                         CreationTime  = new DateTime(636335461672026312L, DateTimeKind.Utc),
@@ -169,9 +169,9 @@ namespace Cube.FileSystem.Tests
 
                     new ExpectedItem
                     {
-                        Path          = @"Sample\Bar.txt",
+                        FullName      = @"Sample\Bar.txt",
                         Extension     = ".txt",
-                        Size          = 7816,
+                        Length        = 7816,
                         Encrypted     = false,
                         IsDirectory   = false,
                         CreationTime  = new DateTime(636329192793637655L, DateTimeKind.Utc),
@@ -180,9 +180,9 @@ namespace Cube.FileSystem.Tests
 
                     new ExpectedItem
                     {
-                        Path          = @"Sample\Bas.txt",
+                        FullName      = @"Sample\Bas.txt",
                         Extension     = ".txt",
-                        Size          = 0,
+                        Length        = 0,
                         Encrypted     = false,
                         IsDirectory   = false,
                         CreationTime  = new DateTime(636329193392193901L, DateTimeKind.Utc),
@@ -191,9 +191,9 @@ namespace Cube.FileSystem.Tests
 
                     new ExpectedItem
                     {
-                        Path          = @"Sample\Foo.txt",
+                        FullName      = @"Sample\Foo.txt",
                         Extension     = ".txt",
-                        Size          = 3,
+                        Length        = 3,
                         Encrypted     = false,
                         IsDirectory   = false,
                         CreationTime  = new DateTime(636329192793637655L, DateTimeKind.Utc),
@@ -205,9 +205,9 @@ namespace Cube.FileSystem.Tests
                 {
                     new ExpectedItem
                     {
-                        Path          = "Password",
+                        FullName      = "Password",
                         Extension     = string.Empty,
-                        Size          = 0,
+                        Length        = 0,
                         Encrypted     = false,
                         IsDirectory   = true,
                         CreationTime  = new DateTime(0L, DateTimeKind.Local),
@@ -216,9 +216,9 @@ namespace Cube.FileSystem.Tests
 
                     new ExpectedItem
                     {
-                        Path          = @"Password\Second.txt",
+                        FullName      = @"Password\Second.txt",
                         Extension     = ".txt",
-                        Size          = 0,
+                        Length        = 0,
                         Encrypted     = false,
                         IsDirectory   = false,
                         CreationTime  = new DateTime(0L, DateTimeKind.Local),
@@ -227,9 +227,9 @@ namespace Cube.FileSystem.Tests
 
                     new ExpectedItem
                     {
-                        Path          = @"Password\First.txt",
+                        FullName      = @"Password\First.txt",
                         Extension     = ".txt",
-                        Size          = 26,
+                        Length        = 26,
                         Encrypted     = true,
                         IsDirectory   = false,
                         CreationTime  = new DateTime(0L, DateTimeKind.Local),
@@ -241,9 +241,9 @@ namespace Cube.FileSystem.Tests
                 {
                     new ExpectedItem
                     {
-                        Path          = @"Symbol1.txt",
+                        FullName      = @"Symbol1.txt",
                         Extension     = ".txt",
-                        Size          = 7816,
+                        Length        = 7816,
                         Encrypted     = true,
                         IsDirectory   = false,
                         CreationTime  = new DateTime(0L, DateTimeKind.Local),
@@ -252,9 +252,9 @@ namespace Cube.FileSystem.Tests
 
                     new ExpectedItem
                     {
-                        Path          = @"Symbol2.txt",
+                        FullName      = @"Symbol2.txt",
                         Extension     = ".txt",
-                        Size          = 6,
+                        Length        = 6,
                         Encrypted     = true,
                         IsDirectory   = false,
                         CreationTime  = new DateTime(0L, DateTimeKind.Local),
@@ -266,9 +266,9 @@ namespace Cube.FileSystem.Tests
                 {
                     new ExpectedItem
                     {
-                        Path          = @"Japanese1.txt",
+                        FullName      = @"Japanese1.txt",
                         Extension     = ".txt",
-                        Size          = 22187,
+                        Length        = 22187,
                         Encrypted     = true,
                         IsDirectory   = false,
                         CreationTime  = new DateTime(0L, DateTimeKind.Local),
@@ -277,9 +277,9 @@ namespace Cube.FileSystem.Tests
 
                     new ExpectedItem
                     {
-                        Path          = @"Japanese2.txt",
+                        FullName      = @"Japanese2.txt",
                         Extension     = ".txt",
-                        Size          = 21,
+                        Length        = 21,
                         Encrypted     = true,
                         IsDirectory   = false,
                         CreationTime  = new DateTime(0L, DateTimeKind.Local),
@@ -330,17 +330,22 @@ namespace Cube.FileSystem.Tests
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public class ExpectedItem : SevenZip.IArchiveItem
+        public class ExpectedItem : IInformation
         {
-            public string Path { get; set; }
-            public string Extension { get; set; }
-            public long Size { get; set; }
-            public uint Attributes { get; set; }
-            public bool Encrypted { get; set; }
+            public bool Exists { get; set; }
             public bool IsDirectory { get; set; }
+            public bool Encrypted { get; set; }
+            public string Name { get; set; }
+            public string NameWithoutExtension { get; set; }
+            public string Extension { get; set; }
+            public string DirectoryName { get; set; }
+            public string FullName { get; set; }
+            public long Length { get; set; }
+            public System.IO.FileAttributes Attributes { get; set; }
             public DateTime CreationTime { get; set; }
             public DateTime LastWriteTime { get; set; }
             public DateTime LastAccessTime { get; set; }
+            public void Refresh() { }
         }
 
         #endregion

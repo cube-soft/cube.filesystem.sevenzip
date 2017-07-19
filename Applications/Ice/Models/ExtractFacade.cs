@@ -114,7 +114,7 @@ namespace Cube.FileSystem.App.Ice
         private void Collect(ArchiveReader reader)
         {
             ProgressReport.FileCount = reader.Items.Count;
-            ProgressReport.FileSize  = reader.Items.Select(x => x.Size)
+            ProgressReport.FileSize  = reader.Items.Select(x => x.Length)
                                              .Aggregate(0L, (x, y) => x + y);
 
             this.LogDebug(string.Format("Count:{0:#,0}\tSize:{1:#,0}",
@@ -156,7 +156,7 @@ namespace Cube.FileSystem.App.Ice
             var done = ProgressReport.DoneSize;
             var progress = CreateInnerProgress(e => ProgressReport.DoneSize = done + e.DoneSize);
 
-            Current = src.Path;
+            Current = src.FullName;
             Extract(src, progress);
             ProgressReport.DoneCount++;
         }
@@ -203,13 +203,13 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Move(string src, string dest, bool directory)
+        private void Move(IInformation src, IInformation dest)
         {
-            if (directory)
+            if (src.IsDirectory)
             {
-                if (!IO.Get(dest).Exists) IO.CreateDirectory(dest);
+                if (!dest.Exists) IO.CreateDirectory(dest.FullName);
             }
-            else IO.Move(src, dest, true);
+            else IO.Move(src.FullName, dest.FullName, true);
         }
 
         /* ----------------------------------------------------------------- */
@@ -221,16 +221,16 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Overwrite(string src, System.IO.FileInfo dest, bool directory)
+        private void Overwrite(IInformation src, IInformation dest)
         {
             switch (OverwriteMode)
             {
                 case OverwriteMode.Yes:
                 case OverwriteMode.AlwaysYes:
-                    Move(src, dest.FullName, directory);
+                    Move(src, dest);
                     break;
                 case OverwriteMode.AlwaysRename:
-                    Move(src, dest.GetUniqueName(), directory);
+                    Move(src, IO.Get(dest.GetUniqueName(IO)));
                     break;
             }
         }
@@ -246,17 +246,16 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void QueryMove(ArchiveItem item)
         {
-            var src  = IO.Combine(Tmp, item.Path);
-            var dest = IO.Combine(Destination, item.Path);
+            var src  = IO.Get(IO.Combine(Tmp, item.FullName));
+            var dest = IO.Get(IO.Combine(Destination, item.FullName));
 
-            if (IO.Get(dest).Exists)
+            if (dest.Exists)
             {
                 if (item.IsDirectory) return;
-                var fi = new System.IO.FileInfo(dest);
-                if (!OverwriteMode.HasFlag(OverwriteMode.Always)) RaiseOverwriteRequired(item, fi);
-                Overwrite(src, fi, item.IsDirectory);
+                if (!OverwriteMode.HasFlag(OverwriteMode.Always)) RaiseOverwriteRequired(src, dest);
+                Overwrite(src, dest);
             }
-            else Move(src, dest, item.IsDirectory);
+            else Move(src, dest);
         }
 
         /* ----------------------------------------------------------------- */
@@ -268,7 +267,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void RaiseOverwriteRequired(IArchiveItem src, System.IO.FileInfo dest)
+        private void RaiseOverwriteRequired(IInformation src, IInformation dest)
         {
             var q = new OverwriteInfo(src, dest);
             var e = new QueryEventArgs<OverwriteInfo, OverwriteMode>(q);

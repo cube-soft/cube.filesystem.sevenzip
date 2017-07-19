@@ -68,7 +68,7 @@ namespace Cube.FileSystem.App.Ice
         /// <param name="dest">上書き先の情報</param>
         ///
         /* ----------------------------------------------------------------- */
-        public OverwriteInfo(SevenZip.IArchiveItem src, System.IO.FileInfo dest)
+        public OverwriteInfo(IInformation src, IInformation dest)
         {
             Source      = src;
             Destination = dest;
@@ -87,7 +87,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public SevenZip.IArchiveItem Source { get; }
+        public IInformation Source { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -98,7 +98,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public System.IO.FileInfo Destination { get; }
+        public IInformation Destination { get; }
 
         #endregion
     }

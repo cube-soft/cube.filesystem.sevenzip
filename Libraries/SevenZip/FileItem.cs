@@ -30,9 +30,42 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class FileItem : IArchiveItem
+    public class FileItem : Information
     {
         #region Constructors
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// FileItem
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        /// 
+        /// <param name="path">ファイルまたはディレクトリのパス</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public FileItem(string path) : base(path)
+        {
+            PathInArchive = Name;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// FileItem
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        /// 
+        /// <param name="path">ファイルまたはディレクトリのパス</param>
+        /// <param name="pathInArchive">圧縮ファイル中の相対パス</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public FileItem(string path, string pathInArchive) : base(path)
+        {
+            PathInArchive = pathInArchive;
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -45,8 +78,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="info">ファイルまたはディレクトリ情報</param>
         ///
         /* ----------------------------------------------------------------- */
-        public FileItem(FileSystemInfo info)
-            : this(info, info.Name) { }
+        public FileItem(FileSystemInfo info) : this(info, info.Name) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -60,10 +92,9 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="pathInArchive">圧縮ファイル中の相対パス</param>
         ///
         /* ----------------------------------------------------------------- */
-        public FileItem(FileSystemInfo info, string pathInArchive)
+        public FileItem(FileSystemInfo info, string pathInArchive) : base(info)
         {
-            _info = info;
-            Path = pathInArchive;
+            PathInArchive = pathInArchive;
         }
 
         #endregion
@@ -72,114 +103,15 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Path
+        /// PathInArchive
         ///
         /// <summary>
         /// 圧縮ファイル中の相対パスを取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Path { get; }
+        public string PathInArchive { get; }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// FullName
-        ///
-        /// <summary>
-        /// 絶対パスを取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string FullName => _info.FullName;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// IsDirectory
-        ///
-        /// <summary>
-        /// ディレクトリかどうかを示す値を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public bool IsDirectory => _info is DirectoryInfo;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extension
-        ///
-        /// <summary>
-        /// 拡張子部分を表す文字列を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Extension => _info.Extension;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Attributes
-        ///
-        /// <summary>
-        /// 属性を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public uint Attributes => (uint)_info.Attributes;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Size
-        ///
-        /// <summary>
-        /// 展開後のファイルサイズを取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public long Size
-        {
-            get
-            {
-                if (_info is FileInfo file) return file.Length;
-                else return 0;
-            }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CreationTime
-        ///
-        /// <summary>
-        /// 作成日時を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public DateTime CreationTime => _info.CreationTime;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// LastWriteTime
-        ///
-        /// <summary>
-        /// 最終更新日時を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public DateTime LastWriteTime => _info.LastWriteTime;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// LastAccessTime
-        ///
-        /// <summary>
-        /// 最終アクセス日時を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public DateTime LastAccessTime => _info.LastAccessTime;
-
-        #endregion
-
-        #region Fields
-        private FileSystemInfo _info;
         #endregion
     }
 }

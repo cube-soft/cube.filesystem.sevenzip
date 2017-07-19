@@ -47,7 +47,8 @@ namespace Cube.FileSystem.Tests
         [TestCase("NotExist.dummy")]
         public void GetTypeName(string filename)
         {
-            var info = new FileInfo(Example(filename));
+            var io   = new Operator();
+            var info = io.Get(Example(filename));
             Assert.That(info.GetTypeName(), Is.Not.Null.And.Not.Empty);
         }
 

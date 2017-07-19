@@ -75,7 +75,7 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public SevenZip.IArchiveItem Source { get; set; }
+        public IInformation Source { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -88,7 +88,7 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public System.IO.FileInfo Destination { get; set; }
+        public IInformation Destination { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -156,10 +156,10 @@ namespace Cube.FileSystem.App.Ice
             ss.AppendLine(Properties.Resources.MessageNewFile);
             if (Source != null)
             {
-                ss.AppendLine(Source.Path);
+                ss.AppendLine(Source.FullName);
                 ss.AppendLine(string.Format("{0} : {1}",
                     Properties.Resources.MessageFileSize,
-                    Source.Size.ToPrettyBytes()
+                    Source.Length.ToPrettyBytes()
                 ));
                 ss.AppendLine(string.Format("{0} : {1}",
                     Properties.Resources.MessageLastWriteTime,

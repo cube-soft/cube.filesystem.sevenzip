@@ -59,7 +59,6 @@
     <Compile Include="Format.cs" />
     <Compile Include="Details\NativeInterfaces.cs" />
     <Compile Include="Details\NativeLibrary.cs" />
-    <Compile Include="IArchiveItem.cs" />
     <Compile Include="NativeMethods\Kernel32.cs" />
     <Compile Include="NativeMethods\Ole32.cs" />
     <Compile Include="NativeMethods\Structures\PropVariant.cs" />
