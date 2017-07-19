@@ -91,6 +91,46 @@ namespace Cube.FileSystem.SevenZip
 
     /* --------------------------------------------------------------------- */
     ///
+    /// CompressionLevel
+    /// 
+    /// <summary>
+    /// 圧縮レベルを表す列挙型です。
+    /// </summary>
+    /// 
+    /* --------------------------------------------------------------------- */
+    public enum CompressionLevel
+    {
+        None,
+        Fast,
+        Low,
+        Normal,
+        High,
+        Ultra,
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// CompressionMethod
+    /// 
+    /// <summary>
+    /// 圧縮アルゴリズムを表す列挙型です。
+    /// </summary>
+    /// 
+    /* --------------------------------------------------------------------- */
+    public enum CompressionMethod
+    {
+        Copy,
+        Deflate,
+        Deflate64,
+        BZip2,
+        Lzma,
+        Lzma2,
+        Ppmd,
+        Default,
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
     /// FormatConversions
     /// 
     /// <summary>
