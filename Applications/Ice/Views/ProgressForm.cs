@@ -18,6 +18,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Cube.FileSystem.App.Ice
@@ -228,6 +229,23 @@ namespace Cube.FileSystem.App.Ice
                 RemainLabel.Visible = value > TimeSpan.Zero;
                 RemainLabel.Text = $"{Properties.Resources.MessageRemainTime} : {GetTimeString(value)}";
             }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Logo
+        ///
+        /// <summary>
+        /// ロゴ画像を取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public Image Logo
+        {
+            get { return HeaderPictureBox.Image; }
+            set { HeaderPictureBox.Image = value; }
         }
 
         #endregion

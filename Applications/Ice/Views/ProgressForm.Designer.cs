@@ -37,7 +37,9 @@
             this.ElapseLabel = new System.Windows.Forms.Label();
             this.StatusLabel = new System.Windows.Forms.Label();
             this.SuspendButton = new System.Windows.Forms.Button();
+            this.HeaderPictureBox = new System.Windows.Forms.PictureBox();
             this.RootPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.HeaderPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // RootPanel
@@ -45,29 +47,31 @@
             this.RootPanel.ColumnCount = 2;
             this.RootPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.RootPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.RootPanel.Controls.Add(this.ExitButton, 1, 4);
-            this.RootPanel.Controls.Add(this.RemainLabel, 1, 2);
-            this.RootPanel.Controls.Add(this.FileCountLabel, 0, 0);
-            this.RootPanel.Controls.Add(this.MainProgressBar, 0, 1);
-            this.RootPanel.Controls.Add(this.ElapseLabel, 0, 2);
-            this.RootPanel.Controls.Add(this.StatusLabel, 0, 3);
-            this.RootPanel.Controls.Add(this.SuspendButton, 0, 4);
+            this.RootPanel.Controls.Add(this.ExitButton, 1, 5);
+            this.RootPanel.Controls.Add(this.RemainLabel, 1, 3);
+            this.RootPanel.Controls.Add(this.FileCountLabel, 0, 1);
+            this.RootPanel.Controls.Add(this.MainProgressBar, 0, 2);
+            this.RootPanel.Controls.Add(this.ElapseLabel, 0, 3);
+            this.RootPanel.Controls.Add(this.StatusLabel, 0, 4);
+            this.RootPanel.Controls.Add(this.SuspendButton, 0, 5);
+            this.RootPanel.Controls.Add(this.HeaderPictureBox, 0, 0);
             this.RootPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RootPanel.Location = new System.Drawing.Point(0, 0);
             this.RootPanel.Name = "RootPanel";
-            this.RootPanel.RowCount = 5;
-            this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.RootPanel.RowCount = 6;
+            this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 48F));
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.RootPanel.Size = new System.Drawing.Size(434, 171);
+            this.RootPanel.Size = new System.Drawing.Size(434, 206);
             this.RootPanel.TabIndex = 0;
             // 
             // ExitButton
             // 
             this.ExitButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.ExitButton.Location = new System.Drawing.Point(275, 129);
+            this.ExitButton.Location = new System.Drawing.Point(275, 163);
             this.ExitButton.Name = "ExitButton";
             this.ExitButton.Size = new System.Drawing.Size(100, 25);
             this.ExitButton.TabIndex = 1;
@@ -78,7 +82,7 @@
             // 
             this.RemainLabel.AutoSize = true;
             this.RemainLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RemainLabel.Location = new System.Drawing.Point(229, 57);
+            this.RemainLabel.Location = new System.Drawing.Point(229, 91);
             this.RemainLabel.Margin = new System.Windows.Forms.Padding(12, 3, 12, 3);
             this.RemainLabel.Name = "RemainLabel";
             this.RemainLabel.Size = new System.Drawing.Size(193, 18);
@@ -92,10 +96,10 @@
             this.FileCountLabel.AutoSize = true;
             this.RootPanel.SetColumnSpan(this.FileCountLabel, 2);
             this.FileCountLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FileCountLabel.Location = new System.Drawing.Point(12, 3);
+            this.FileCountLabel.Location = new System.Drawing.Point(12, 43);
             this.FileCountLabel.Margin = new System.Windows.Forms.Padding(12, 3, 12, 3);
             this.FileCountLabel.Name = "FileCountLabel";
-            this.FileCountLabel.Size = new System.Drawing.Size(410, 24);
+            this.FileCountLabel.Size = new System.Drawing.Size(410, 18);
             this.FileCountLabel.TabIndex = 0;
             this.FileCountLabel.Text = "ファイル数 : 669 / 796";
             this.FileCountLabel.TextAlign = System.Drawing.ContentAlignment.BottomRight;
@@ -104,7 +108,7 @@
             // 
             this.RootPanel.SetColumnSpan(this.MainProgressBar, 2);
             this.MainProgressBar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MainProgressBar.Location = new System.Drawing.Point(14, 33);
+            this.MainProgressBar.Location = new System.Drawing.Point(14, 67);
             this.MainProgressBar.Margin = new System.Windows.Forms.Padding(14, 3, 14, 3);
             this.MainProgressBar.MarqueeAnimationSpeed = 50;
             this.MainProgressBar.Maximum = 1000;
@@ -118,7 +122,7 @@
             // 
             this.ElapseLabel.AutoSize = true;
             this.ElapseLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ElapseLabel.Location = new System.Drawing.Point(12, 57);
+            this.ElapseLabel.Location = new System.Drawing.Point(12, 91);
             this.ElapseLabel.Margin = new System.Windows.Forms.Padding(12, 3, 12, 3);
             this.ElapseLabel.Name = "ElapseLabel";
             this.ElapseLabel.Size = new System.Drawing.Size(193, 18);
@@ -131,10 +135,10 @@
             this.StatusLabel.AutoSize = true;
             this.RootPanel.SetColumnSpan(this.StatusLabel, 2);
             this.StatusLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.StatusLabel.Location = new System.Drawing.Point(12, 84);
-            this.StatusLabel.Margin = new System.Windows.Forms.Padding(12, 6, 12, 6);
+            this.StatusLabel.Location = new System.Drawing.Point(12, 115);
+            this.StatusLabel.Margin = new System.Windows.Forms.Padding(12, 3, 12, 3);
             this.StatusLabel.Name = "StatusLabel";
-            this.StatusLabel.Size = new System.Drawing.Size(410, 36);
+            this.StatusLabel.Size = new System.Drawing.Size(410, 42);
             this.StatusLabel.TabIndex = 4;
             this.StatusLabel.Text = "ファイル圧縮・解凍処理の準備中です...";
             // 
@@ -142,18 +146,31 @@
             // 
             this.SuspendButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.SuspendButton.Enabled = false;
-            this.SuspendButton.Location = new System.Drawing.Point(58, 129);
+            this.SuspendButton.Location = new System.Drawing.Point(58, 163);
             this.SuspendButton.Name = "SuspendButton";
             this.SuspendButton.Size = new System.Drawing.Size(100, 25);
             this.SuspendButton.TabIndex = 0;
             this.SuspendButton.Text = "中断";
             this.SuspendButton.UseVisualStyleBackColor = true;
             // 
+            // HeaderPictureBox
+            // 
+            this.RootPanel.SetColumnSpan(this.HeaderPictureBox, 2);
+            this.HeaderPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.HeaderPictureBox.Image = global::Cube.FileSystem.App.Ice.Properties.Resources.HeaderArchive;
+            this.HeaderPictureBox.Location = new System.Drawing.Point(0, 0);
+            this.HeaderPictureBox.Margin = new System.Windows.Forms.Padding(0);
+            this.HeaderPictureBox.Name = "HeaderPictureBox";
+            this.HeaderPictureBox.Size = new System.Drawing.Size(434, 40);
+            this.HeaderPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.HeaderPictureBox.TabIndex = 5;
+            this.HeaderPictureBox.TabStop = false;
+            // 
             // ProgressForm
             // 
             this.AcceptButton = this.ExitButton;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(434, 171);
+            this.ClientSize = new System.Drawing.Size(434, 206);
             this.Controls.Add(this.RootPanel);
             this.Font = new System.Drawing.Font("Meiryo UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(128)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -163,6 +180,7 @@
             this.Text = "CubeICE";
             this.RootPanel.ResumeLayout(false);
             this.RootPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.HeaderPictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -177,6 +195,7 @@
         private System.Windows.Forms.Label StatusLabel;
         private System.Windows.Forms.Button SuspendButton;
         private System.Windows.Forms.Button ExitButton;
+        private System.Windows.Forms.PictureBox HeaderPictureBox;
     }
 }
 

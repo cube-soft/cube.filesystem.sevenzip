@@ -145,6 +145,26 @@ namespace Cube.FileSystem.App.Ice.Properties {
         }
         
         /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap HeaderArchive {
+            get {
+                object obj = ResourceManager.GetObject("HeaderArchive", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap HeaderExtract {
+            get {
+                object obj = ResourceManager.GetObject("HeaderExtract", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   再開 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MenuResume {

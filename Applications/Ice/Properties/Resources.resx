@@ -145,6 +145,12 @@
   <data name="FilterZip" xml:space="preserve">
     <value>zip ファイル (*.zip)|*.zip;*.ZIP</value>
   </data>
+  <data name="HeaderArchive" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\HeaderArchive.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HeaderExtract" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\HeaderExtract.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="MenuResume" xml:space="preserve">
     <value>再開</value>
   </data>

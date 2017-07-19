@@ -135,6 +135,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.ico" />
+    <None Include="Resources\HeaderExtract.png" />
+    <None Include="Resources\HeaderArchive.png" />
     <None Include="File.ico" />
     <None Include="App.config" />
     <None Include="App.manifest" />

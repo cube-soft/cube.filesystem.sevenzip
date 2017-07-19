@@ -54,6 +54,7 @@ namespace Cube.FileSystem.App.Ice
             // View
             View.FileName = Model.IO.Get(model.Sources.First()).Name;
             View.Icon     = Properties.Resources.Extract;
+            View.Logo     = Properties.Resources.HeaderExtract;
             View.Status   = Properties.Resources.MessagePreExtract;
 
             // Model

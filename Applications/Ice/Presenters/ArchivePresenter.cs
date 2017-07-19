@@ -53,6 +53,7 @@ namespace Cube.FileSystem.App.Ice
         {
             // View
             View.Icon   = Properties.Resources.Archive;
+            View.Logo   = Properties.Resources.HeaderArchive;
             View.Status = Properties.Resources.MessagePreArchive;
 
             // Model
