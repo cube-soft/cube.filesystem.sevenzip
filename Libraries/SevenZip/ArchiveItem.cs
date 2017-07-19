@@ -127,7 +127,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Extension => IO.GetExtension(Path);
+        public string Extension => IO.Get(Path).Extension;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -306,7 +306,7 @@ namespace Cube.FileSystem.SevenZip
             if (IsDirectory)
             {
                 var dir = IO.Combine(directory, Path);
-                if (!IO.Exists(dir)) IO.CreateDirectory(dir);
+                if (!IO.Get(dir).Exists) IO.CreateDirectory(dir);
             }
             else ExtractFile(directory, progress);
         }
@@ -327,8 +327,8 @@ namespace Cube.FileSystem.SevenZip
         private void ExtractFile(string directory, IProgress<ArchiveReport> progress)
         {
             var dest = IO.Combine(directory, Path);
-            var dir  = IO.GetDirectoryName(dest);
-            if (!IO.Exists(dir)) IO.CreateDirectory(dir);
+            var dir  = IO.Get(dest).DirectoryName;
+            if (!IO.Get(dir).Exists) IO.CreateDirectory(dir);
 
             var stream = new ArchiveStreamWriter(IO.Create(dest));
             var callback = new ArchiveExtractCallback(Source, 1, Size, _ => stream)

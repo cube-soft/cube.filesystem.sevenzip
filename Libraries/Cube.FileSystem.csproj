@@ -54,6 +54,8 @@
     <Compile Include="Drives\Drive.cs" />
     <Compile Include="Drives\VetoException.cs" />
     <Compile Include="FailedEventArgs.cs" />
+    <Compile Include="IInformation.cs" />
+    <Compile Include="IOperatorCore.cs" />
     <Compile Include="OperatorCore.cs" />
     <Compile Include="NativeMethods\Structures\SHFileInfo.cs" />
     <Compile Include="NativeMethods\Structures\SpDevice.cs" />

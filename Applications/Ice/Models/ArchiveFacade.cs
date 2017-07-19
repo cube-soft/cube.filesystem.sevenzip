@@ -77,7 +77,7 @@ namespace Cube.FileSystem.App.Ice
 
                 Move();
 
-                var name = IO.GetFileName(Destination);
+                var name = IO.Get(Destination).Name;
                 this.LogDebug($"{name}:{ProgressReport.DoneSize}/{ProgressReport.FileSize}");
                 ProgressReport.DoneSize = ProgressReport.FileSize; // hack
 
@@ -130,8 +130,11 @@ namespace Cube.FileSystem.App.Ice
         private string GetDestination()
         {
             SetDestination(Request.Format.ToString());
-            if (!IO.Exists(Destination)) return Destination;
-            SetTmp(IO.GetDirectoryName(Destination));
+
+            var info = IO.Get(Destination);
+            if (!info.Exists) return Destination;
+
+            SetTmp(info.DirectoryName);
             return Tmp;
         }
 
@@ -146,7 +149,7 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void Move()
         {
-            if (string.IsNullOrEmpty(Tmp) || !IO.Exists(Tmp)) return;
+            if (string.IsNullOrEmpty(Tmp) || !IO.Get(Tmp).Exists) return;
             IO.Move(Tmp, Destination, true);
         }
 

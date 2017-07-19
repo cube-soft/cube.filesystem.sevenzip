@@ -240,7 +240,9 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public static Format FromFile(string path, Operator io)
         {
-            if (io.Exists(path))
+            var info = io.Get(path);
+
+            if (info.Exists)
             {
                 using (var stream = io.OpenRead(path))
                 {
@@ -248,7 +250,7 @@ namespace Cube.FileSystem.SevenZip
                     if (dest != Format.Unknown) return dest;
                 }
             }
-            return FromExtension(io.GetExtension(path));
+            return FromExtension(info.Extension);
         }
 
         #endregion

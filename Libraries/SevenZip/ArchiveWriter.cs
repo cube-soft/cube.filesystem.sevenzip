@@ -96,7 +96,7 @@ namespace Cube.FileSystem.SevenZip
         /// 
         /* ----------------------------------------------------------------- */
         public void Add(string path)
-            => Add(path, _io.GetFileName(path));
+            => Add(path, _io.Get(path).Name);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -109,9 +109,11 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void Add(string path, string pathInArchive)
         {
-            if (_io.Exists(path))
+            var info = _io.Get(path);
+
+            if (info.Exists)
             {
-                if (_io.IsDirectory(path)) Add(new DirectoryInfo(path), pathInArchive);
+                if (info.IsDirectory) Add(new DirectoryInfo(path), pathInArchive);
                 else Add(new FileInfo(path), pathInArchive);
             }
             else throw new FileNotFoundException(path);

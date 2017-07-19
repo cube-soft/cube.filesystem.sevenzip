@@ -380,7 +380,7 @@ namespace Cube.FileSystem.App.Ice
                     Destination = e.Result;
                     break;
                 case SaveLocation.Source:
-                    Destination = IO.GetDirectoryName(Request.Sources.First());
+                    Destination = IO.Get(Request.Sources.First()).DirectoryName;
                     break;
             }
         }
@@ -446,7 +446,7 @@ namespace Cube.FileSystem.App.Ice
             try
             {
                 if (string.IsNullOrEmpty(Tmp)) return;
-                else if (IO.Exists(Tmp)) IO.Delete(Tmp);
+                else if (IO.Get(Tmp).Exists) IO.Delete(Tmp);
             }
             catch (Exception err) { this.LogWarn(err.ToString(), err); }
             finally { _disposed = true; }

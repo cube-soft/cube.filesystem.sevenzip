@@ -47,18 +47,18 @@ namespace Cube.FileSystem.Tests
             var io = new Cube.FileSystem.Operator();
             io.Failed += (s, e) => Assert.Fail($"{e.Name}: {e.Exception}");
 
-            var name = io.GetFileNameWithoutExtension(filename);
-            var ext  = io.GetExtension(filename);
+            var name = System.IO.Path.GetFileNameWithoutExtension(filename);
+            var ext  = System.IO.Path.GetExtension(filename);
             var src  = io.Combine(Results, filename);
             var dest = io.Combine(Results, $"{name}-Move{ext}");
 
             io.Copy(io.Combine(Examples, filename), src, false);
             io.Copy(src, dest, false);
             io.Move(src, dest, true);
-            Assert.That(io.Exists(dest), Is.True);
+            Assert.That(io.Get(dest).Exists, Is.True);
 
             io.Delete(dest);
-            Assert.That(io.Exists(dest), Is.False);
+            Assert.That(io.Get(dest).Exists, Is.False);
         }
 
         /* ----------------------------------------------------------------- */

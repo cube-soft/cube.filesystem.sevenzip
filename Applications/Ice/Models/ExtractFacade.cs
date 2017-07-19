@@ -207,7 +207,7 @@ namespace Cube.FileSystem.App.Ice
         {
             if (directory)
             {
-                if (!IO.Exists(dest)) IO.CreateDirectory(dest);
+                if (!IO.Get(dest).Exists) IO.CreateDirectory(dest);
             }
             else IO.Move(src, dest, true);
         }
@@ -249,7 +249,7 @@ namespace Cube.FileSystem.App.Ice
             var src  = IO.Combine(Tmp, item.Path);
             var dest = IO.Combine(Destination, item.Path);
 
-            if (IO.Exists(dest))
+            if (IO.Get(dest).Exists)
             {
                 if (item.IsDirectory) return;
                 var fi = new System.IO.FileInfo(dest);

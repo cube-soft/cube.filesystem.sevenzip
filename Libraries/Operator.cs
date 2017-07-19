@@ -63,33 +63,21 @@ namespace Cube.FileSystem
 
         #region Methods
 
-        #region File or Directory
-
         /* ----------------------------------------------------------------- */
         ///
-        /// Exists
+        /// Get
         ///
         /// <summary>
-        /// ファイルまたはディレクトリが存在するかどうかを判別します。
+        /// ファイルまたはディレクトリの情報を保持するオブジェクトを
+        /// 取得します。
         /// </summary>
         /// 
-        /// <param name="path">判別対象となるパス</param>
+        /// <param name="path">対象となるパス</param>
+        /// 
+        /// <returns>IInformation オブジェクト</returns>
         /// 
         /* ----------------------------------------------------------------- */
-        public bool Exists(string path) => _core.Exists(path);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// IsDirectory
-        ///
-        /// <summary>
-        /// ディレクトリかどうか判別します。
-        /// </summary>
-        /// 
-        /// <param name="path">判別対象となるパス</param>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public bool IsDirectory(string path) => _core.IsDirectory(path);
+        public IInformation Get(string path) => _core.Get(path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -196,15 +184,18 @@ namespace Cube.FileSystem
         /* ----------------------------------------------------------------- */
         public void Move(string src, string dest, bool overwrite)
         {
-            if (!overwrite || !_core.Exists(dest)) MoveCore(src, dest);
+            var si = _core.Get(src);
+            var di = _core.Get(dest);
+
+            if (!overwrite || !di.Exists) MoveCore(si, di);
             else
             {
-                var dir = _core.GetDirectoryName(src);
-                var tmp = _core.Combine(dir, Guid.NewGuid().ToString("D"));
+                var tmp = _core.Combine(si.DirectoryName, Guid.NewGuid().ToString("D"));
+                var ti  = _core.Get(tmp);
 
-                if (!MoveCore(dest, tmp)) return;
-                if (MoveCore(src, dest)) _core.Delete(tmp);
-                else MoveCore(tmp, dest); // recover
+                if (!MoveCore(di, ti)) return;
+                if ( MoveCore(si, di)) _core.Delete(tmp);
+                else MoveCore(ti, di); // recover
             }
         }
 
@@ -238,63 +229,6 @@ namespace Cube.FileSystem
         public void Copy(string src, string dest, bool overwrite)
             => Action(nameof(Copy), () => _core.Copy(src, dest, overwrite), src, dest);
 
-        #endregion
-
-        #region Path
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetFileName
-        ///
-        /// <summary>
-        /// ファイル名を取得します。
-        /// </summary>
-        /// 
-        /// <param name="path">パス</param>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public string GetFileName(string path) => _core.GetFileName(path);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetFileNameWithoutExtension
-        ///
-        /// <summary>
-        /// 拡張子なしのファイル名を取得します。
-        /// </summary>
-        /// 
-        /// <param name="path">パス</param>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public string GetFileNameWithoutExtension(string path)
-            => _core.GetFileNameWithoutExtension(path);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetExtension
-        ///
-        /// <summary>
-        /// 拡張子を取得します。
-        /// </summary>
-        /// 
-        /// <param name="path">パス</param>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public string GetExtension(string path) => _core.GetExtension(path);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetDirectoryName
-        ///
-        /// <summary>
-        /// ディレクトリ名を取得します。
-        /// </summary>
-        /// 
-        /// <param name="path">パス</param>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public string GetDirectoryName(string path) => _core.GetDirectoryName(path);
-
         /* ----------------------------------------------------------------- */
         ///
         /// Combine
@@ -307,8 +241,6 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public string Combine(params string[] paths) => _core.Combine(paths);
-
-        #endregion
 
         #endregion
 
@@ -363,12 +295,13 @@ namespace Cube.FileSystem
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private bool MoveCore(string src, string dest) => Action(nameof(Move), () =>
+        private bool MoveCore(IInformation src, IInformation dest)
+            => Action(nameof(Move), () =>
         {
-            var dir = _core.GetDirectoryName(dest);
-            if (!_core.Exists(dir)) _core.CreateDirectory(dir);
-            _core.Move(src, dest);
-        }, src, dest);
+            var dir = dest.DirectoryName;
+            if (!_core.Get(dir).Exists) _core.CreateDirectory(dir);
+            _core.Move(src.FullName, dest.FullName);
+        }, src.FullName, dest.FullName);
 
         /* ----------------------------------------------------------------- */
         ///

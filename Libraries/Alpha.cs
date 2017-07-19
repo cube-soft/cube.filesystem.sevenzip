@@ -15,6 +15,7 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System;
 using Alphaleonis.Win32.Filesystem;
 
 namespace Cube.FileSystem
@@ -30,41 +31,21 @@ namespace Cube.FileSystem
     /* --------------------------------------------------------------------- */
     public class Alpha : IOperatorCore
     {
-        #region File or Directory
-
         /* ----------------------------------------------------------------- */
         ///
-        /// Exists
+        /// Get
         ///
         /// <summary>
-        /// ファイルまたはディレクトリが存在するかどうかを判別します。
+        /// ファイルまたはディレクトリの情報を保持するオブジェクトを
+        /// 取得します。
         /// </summary>
         /// 
-        /// <param name="path">判別対象となるパス</param>
+        /// <param name="path">対象となるパス</param>
+        /// 
+        /// <returns>IInformation オブジェクト</returns>
         /// 
         /* ----------------------------------------------------------------- */
-        public bool Exists(string path)
-            => !string.IsNullOrEmpty(path) &&
-               (File.Exists(path) || Directory.Exists(path));
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// IsDirectory
-        ///
-        /// <summary>
-        /// ディレクトリかどうか判別します。
-        /// </summary>
-        /// 
-        /// <param name="path">判別対象となるパス</param>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public bool IsDirectory(string path)
-        {
-            if (string.IsNullOrEmpty(path)) return false;
-            var attr = File.GetAttributes(path);
-            var flag = attr & System.IO.FileAttributes.Directory;
-            return flag == System.IO.FileAttributes.Directory;
-        }
+        public IInformation Get(string path) => new AlphaInformation(path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -79,7 +60,7 @@ namespace Cube.FileSystem
         /* ----------------------------------------------------------------- */
         public void Delete(string path)
         {
-            if (IsDirectory(path)) Directory.Delete(path, true);
+            if (Get(path).IsDirectory) Directory.Delete(path, true);
             else File.Delete(path);
         }
 
@@ -171,63 +152,6 @@ namespace Cube.FileSystem
         public void Copy(string src, string dest, bool overwrite)
             => File.Copy(src, dest, overwrite);
 
-        #endregion
-
-        #region Path
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetFileName
-        ///
-        /// <summary>
-        /// ファイル名を取得します。
-        /// </summary>
-        /// 
-        /// <param name="path">パス</param>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public string GetFileName(string path) => Path.GetFileName(path);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetFileNameWithoutExtension
-        ///
-        /// <summary>
-        /// 拡張子なしのファイル名を取得します。
-        /// </summary>
-        /// 
-        /// <param name="path">パス</param>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public string GetFileNameWithoutExtension(string path)
-            => Path.GetFileNameWithoutExtension(path);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetExtension
-        ///
-        /// <summary>
-        /// 拡張子を取得します。
-        /// </summary>
-        /// 
-        /// <param name="path">パス</param>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public string GetExtension(string path) => Path.GetExtension(path);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetDirectoryName
-        ///
-        /// <summary>
-        /// ディレクトリ名を取得します。
-        /// </summary>
-        /// 
-        /// <param name="path">パス</param>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public string GetDirectoryName(string path) => Path.GetDirectoryName(path);
-
         /* ----------------------------------------------------------------- */
         ///
         /// Combine
@@ -241,6 +165,226 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public string Combine(params string[] paths) => Path.Combine(paths);
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// AlphaInformation
+    /// 
+    /// <summary>
+    /// AlphaFS を利用した IInformation の実装クラスです。
+    /// </summary>
+    /// 
+    /* --------------------------------------------------------------------- */
+    internal class AlphaInformation : IInformation
+    {
+        #region Constructors
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// AlphaInformation
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        /// 
+        /// <param name="path">ファイルまたはディレクトリのパス</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public AlphaInformation(string path) : this(
+            Directory.Exists(path) ?
+            new DirectoryInfo(path) as FileSystemInfo:
+            new FileInfo(path) as FileSystemInfo
+        ) { }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// AlphaInformation
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        /// 
+        /// <param name="raw">実装オブジェクト</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public AlphaInformation(FileSystemInfo raw)
+        {
+            RawObject = raw ?? throw new ArgumentException();
+        }
+
+        #endregion
+
+        #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Exists
+        ///
+        /// <summary>
+        /// ファイルまたはディレクトリが存在するかどうかを示す値を
+        /// 取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public bool Exists => RawObject.Exists;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// IsDirectory
+        ///
+        /// <summary>
+        /// ディレクトリかどうかを示す値を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public bool IsDirectory
+            => (Attributes & System.IO.FileAttributes.Directory) == System.IO.FileAttributes.Directory;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Name
+        ///
+        /// <summary>
+        /// ファイル名の部分を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public string Name => RawObject.Name;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extension
+        ///
+        /// <summary>
+        /// 拡張子を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public string Extension => RawObject.Extension;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// FullName
+        ///
+        /// <summary>
+        /// 完全なパスを取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public string FullName => RawObject.FullName;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// DirectoryName
+        ///
+        /// <summary>
+        /// ファイルまたはディレクトリの親ディレクトリのパスを取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public string DirectoryName
+            => TryCast()?.DirectoryName ?? Path.GetDirectoryName(FullName);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Length
+        ///
+        /// <summary>
+        /// ファイルサイズを取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public long Length => TryCast()?.Length ?? 0;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Attributes
+        ///
+        /// <summary>
+        /// ファイルまたはディレクトリの属性を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public System.IO.FileAttributes Attributes => RawObject.Attributes;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CreationTime
+        ///
+        /// <summary>
+        /// ファイルまたはディレクトリの作成日時を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public DateTime CreationTime => RawObject.CreationTime;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// LastWriteTime
+        ///
+        /// <summary>
+        /// ファイルまたはディレクトリの最終更新日時を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public DateTime LastWriteTime => RawObject.LastWriteTime;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// LastAccessTime
+        ///
+        /// <summary>
+        /// ファイルまたはディレクトリの最終アクセス日時を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public DateTime LastAccessTime => RawObject.LastAccessTime;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// RawObject
+        ///
+        /// <summary>
+        /// 実装オブジェクトを取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public FileSystemInfo RawObject { get; }
+
+        #endregion
+
+        #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Refresh
+        ///
+        /// <summary>
+        /// オブジェクトを最新の状態に更新します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void Refresh()
+        {
+            if (RawObject is FileInfo fi) fi.Refresh();
+            else if (RawObject is DirectoryInfo di) di.Refresh();
+        }
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// FileInfo
+        ///
+        /// <summary>
+        /// FileInfo オブジェクトへのキャストを施行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private FileInfo TryCast() => RawObject as FileInfo;
 
         #endregion
     }
