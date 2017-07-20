@@ -100,12 +100,12 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     public enum CompressionLevel
     {
-        None,
-        Fast,
-        Low,
-        Normal,
-        High,
-        Ultra,
+        None    = 0,
+        Fast    = 1,
+        Low     = 3,
+        Normal  = 5,
+        High    = 7,
+        Ultra   = 9,
     }
 
     /* --------------------------------------------------------------------- */
