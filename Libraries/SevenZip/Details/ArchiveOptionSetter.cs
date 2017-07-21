@@ -91,8 +91,8 @@ namespace Cube.FileSystem.SevenZip
             sp.Demand();
 
             var cl = PropVariant.Create((uint)Option.CompressionLevel);
-            var kh = Create(new[] { ToBstr("x") }.Concat(_dic.Keys.Select(o => ToBstr(o))));
-            var vh = Create(new[] { cl }.Concat(_dic.Values));
+            var kh = Create(new[] { ToBstr("x") }.Concat(_dic.Keys.Select(o => ToBstr(o))).ToArray());
+            var vh = Create(new[] { cl }.Concat(_dic.Values).ToArray());
 
             try
             {
@@ -118,101 +118,11 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="value">値</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected void Add(string name, bool value)
-        {
-            var cvt = new PropVariant();
-            cvt.Set(value);
-            Add(name, cvt);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Add
-        ///
-        /// <summary>
-        /// オプションを追加します。
-        /// </summary>
-        /// 
-        /// <param name="name">名前</param>
-        /// <param name="value">値</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected void Add(string name, uint value)
-        {
-            var cvt = new PropVariant();
-            cvt.Set(value);
-            Add(name, cvt);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Add
-        ///
-        /// <summary>
-        /// オプションを追加します。
-        /// </summary>
-        /// 
-        /// <param name="name">名前</param>
-        /// <param name="value">値</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected void Add(string name, ulong value)
-        {
-            var cvt = new PropVariant();
-            cvt.Set(value);
-            Add(name, cvt);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Add
-        ///
-        /// <summary>
-        /// オプションを追加します。
-        /// </summary>
-        /// 
-        /// <param name="name">名前</param>
-        /// <param name="value">値</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected void Add(string name, string value)
-        {
-            var cvt = new PropVariant();
-            cvt.Set(value);
-            Add(name, cvt);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Add
-        ///
-        /// <summary>
-        /// オプションを追加します。
-        /// </summary>
-        /// 
-        /// <param name="name">名前</param>
-        /// <param name="value">値</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected void Add(string name, DateTime value)
-        {
-            var cvt = new PropVariant();
-            cvt.Set(value);
-            Add(name, cvt);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Add
-        ///
-        /// <summary>
-        /// オプションを追加します。
-        /// </summary>
-        /// 
-        /// <param name="name">名前</param>
-        /// <param name="value">値</param>
-        ///
-        /* ----------------------------------------------------------------- */
+        protected void Add(string name, bool value) => Add(name, PropVariant.Create(value));
+        protected void Add(string name, uint value) => Add(name, PropVariant.Create(value));
+        protected void Add(string name, ulong value) => Add(name, PropVariant.Create(value));
+        protected void Add(string name, string value) => Add(name, PropVariant.Create(value));
+        protected void Add(string name, DateTime value) => Add(name, PropVariant.Create(value));
         protected void Add(string name, PropVariant value) => _dic.Add(name, value);
 
         #endregion
