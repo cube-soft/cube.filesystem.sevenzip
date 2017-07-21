@@ -52,14 +52,14 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// AllowedCompressionMethods
+        /// SupportedMethods
         ///
         /// <summary>
         /// 設定可能な圧縮方法一覧を取得します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public static CompressionMethod[] AllowedCompressionMethods
+        public static CompressionMethod[] SupportedMethods
             => new[]
             {
                 CompressionMethod.Copy,
@@ -89,7 +89,7 @@ namespace Cube.FileSystem.SevenZip
         {
             if (Option is ZipOption zo)
             {
-                var method = AllowedCompressionMethods.Contains(zo.CompressionMethod) ?
+                var method = SupportedMethods.Contains(zo.CompressionMethod) ?
                              zo.CompressionMethod :
                              CompressionMethod.Default;
                 if (method != CompressionMethod.Default) Add("m", method.ToString().ToLower());
