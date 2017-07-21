@@ -96,11 +96,7 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void WhenShow() => Async(() =>
         {
-            try
-            {
-                Sync(() => View.Start());
-                Model.Start();
-            }
+            try { Model.Start(); }
             finally { Sync(() => View.Close()); }
         }).Forget();
 

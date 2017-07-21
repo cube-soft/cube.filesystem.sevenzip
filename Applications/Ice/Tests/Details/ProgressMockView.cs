@@ -171,6 +171,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         public override void Show()
         {
             base.Show();
+            Start();
             EventAggregator.GetEvents()?.Show.Publish();
         }
 

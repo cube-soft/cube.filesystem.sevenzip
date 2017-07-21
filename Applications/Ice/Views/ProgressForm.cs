@@ -288,10 +288,10 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OnLoad
+        /// OnShown
         ///
         /// <summary>
-        /// ロード時に実行されます。
+        /// メイン画面表示時に実行されます。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -301,6 +301,7 @@ namespace Cube.FileSystem.App.Ice
 
             UpdateFileCountLabel();
             UpdateElapseLabel();
+            Start();
 
             EventAggregator.GetEvents()?.Show.Publish();
         }
