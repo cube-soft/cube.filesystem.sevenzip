@@ -93,6 +93,16 @@ namespace Cube.FileSystem.App.Ice.Properties {
         /// <summary>
         ///   (アイコン) に類似した型 System.Drawing.Icon のローカライズされたリソースを検索します。
         /// </summary>
+        internal static System.Drawing.Icon FileAlternate {
+            get {
+                object obj = ResourceManager.GetObject("FileAlternate", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   (アイコン) に類似した型 System.Drawing.Icon のローカライズされたリソースを検索します。
+        /// </summary>
         internal static System.Drawing.Icon FileOld {
             get {
                 object obj = ResourceManager.GetObject("FileOld", resourceCulture);

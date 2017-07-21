@@ -127,6 +127,9 @@
   <data name="File" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icons\File.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="FileAlternate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\FileAlternate.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="FileOld" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icons\FileOld.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
