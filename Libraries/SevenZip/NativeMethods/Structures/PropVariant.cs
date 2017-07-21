@@ -156,7 +156,7 @@ namespace Cube.FileSystem.SevenZip
         public void Set(bool value)
         {
             VarType = VarEnum.VT_BOOL;
-            _v64u = value ? 1UL : 0UL;
+            _v64u   = value ? 1UL : 0UL;
         }
 
         /* ----------------------------------------------------------------- */
@@ -173,7 +173,7 @@ namespace Cube.FileSystem.SevenZip
         public void Set(uint value)
         {
             VarType = VarEnum.VT_UI4;
-            _v32u = value;
+            _v32u   = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -190,7 +190,7 @@ namespace Cube.FileSystem.SevenZip
         public void Set(ulong value)
         {
             VarType = VarEnum.VT_UI8;
-            _v64u = value;
+            _v64u   = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -207,7 +207,7 @@ namespace Cube.FileSystem.SevenZip
         public void Set(string value)
         {
             VarType = VarEnum.VT_BSTR;
-            _value = Marshal.StringToBSTR(value);
+            _value  = Marshal.StringToBSTR(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -224,7 +224,7 @@ namespace Cube.FileSystem.SevenZip
         public void Set(DateTime value)
         {
             VarType = VarEnum.VT_FILETIME;
-            _v64 = value.ToFileTime();
+            _v64    = value.ToFileTime();
         }
 
         #endregion
@@ -232,9 +232,9 @@ namespace Cube.FileSystem.SevenZip
         #region Fields
         [FieldOffset(0)] private ushort _vt;
         [FieldOffset(8)] private IntPtr _value;
-        [FieldOffset(8)] private uint _v32u;
-        [FieldOffset(8)] private long _v64;
-        [FieldOffset(8)] private ulong _v64u;
+        [FieldOffset(8)] private uint   _v32u;
+        [FieldOffset(8)] private long   _v64;
+        [FieldOffset(8)] private ulong  _v64u;
         #endregion
     }
 }
