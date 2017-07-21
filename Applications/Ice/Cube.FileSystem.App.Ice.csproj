@@ -135,14 +135,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.ico" />
-    <None Include="Resources\HeaderExtract.png" />
-    <None Include="Resources\HeaderArchive.png" />
-    <None Include="File.ico" />
     <None Include="App.config" />
     <None Include="App.manifest" />
     <None Include="Packages.config" />
-    <None Include="Extract.ico" />
-    <None Include="Archive.ico" />
+    <None Include="Resources\Icons\Archive.ico" />
+    <None Include="Resources\Icons\Extract.ico" />
+    <None Include="Resources\Icons\File.ico" />
+    <None Include="Resources\Icons\FileOld.ico" />
+    <None Include="Resources\Images\HeaderExtract.png" />
+    <None Include="Resources\Images\HeaderArchive.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\Cube.FileSystem.csproj">
