@@ -18,6 +18,9 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Security.Permissions;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -32,23 +35,18 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     internal abstract class ArchiveOption
     {
-        #region Constructors
+        #region Properties
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveOption
+        /// CompressionLevel
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// 圧縮レベルを取得または設定します。
         /// </summary>
-        /// 
-        /// <param name="archive">設定対象となるオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected ArchiveOption(ISetProperties archive)
-        {
-            _archive = archive ?? throw new ArgumentException();
-        }
+        public CompressionLevel CompressionLevel { get; set; } = CompressionLevel.Normal;
 
         #endregion
 
@@ -66,12 +64,166 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="value">値</param>
         ///
         /* ----------------------------------------------------------------- */
+        public void Add(string name, bool value)
+        {
+            var cvt = new PropVariant();
+            cvt.Set(value);
+            Add(name, cvt);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Add
+        ///
+        /// <summary>
+        /// オプションを追加します。
+        /// </summary>
+        /// 
+        /// <param name="name">名前</param>
+        /// <param name="value">値</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Add(string name, uint value)
+        {
+            var cvt = new PropVariant();
+            cvt.Set(value);
+            Add(name, cvt);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Add
+        ///
+        /// <summary>
+        /// オプションを追加します。
+        /// </summary>
+        /// 
+        /// <param name="name">名前</param>
+        /// <param name="value">値</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Add(string name, ulong value)
+        {
+            var cvt = new PropVariant();
+            cvt.Set(value);
+            Add(name, cvt);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Add
+        ///
+        /// <summary>
+        /// オプションを追加します。
+        /// </summary>
+        /// 
+        /// <param name="name">名前</param>
+        /// <param name="value">値</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Add(string name, string value)
+        {
+            var cvt = new PropVariant();
+            cvt.Set(value);
+            Add(name, cvt);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Add
+        ///
+        /// <summary>
+        /// オプションを追加します。
+        /// </summary>
+        /// 
+        /// <param name="name">名前</param>
+        /// <param name="value">値</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Add(string name, DateTime value)
+        {
+            var cvt = new PropVariant();
+            cvt.Set(value);
+            Add(name, cvt);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Add
+        ///
+        /// <summary>
+        /// オプションを追加します。
+        /// </summary>
+        /// 
+        /// <param name="name">名前</param>
+        /// <param name="value">値</param>
+        ///
+        /* ----------------------------------------------------------------- */
         public void Add(string name, PropVariant value) => _dic.Add(name, value);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Execute
+        ///
+        /// <summary>
+        /// オプションをアーカイブ・オブジェクトに設定します。
+        /// </summary>
+        /// 
+        /// <param name="dest">アーカイブ・オブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public virtual void Execute(ISetProperties dest)
+        {
+            if (dest == null) return;
+
+            var sp = new SecurityPermission(SecurityPermissionFlag.UnmanagedCode);
+            sp.Demand();
+
+            var cl = PropVariant.Create((uint)CompressionLevel);
+            var kh = Create(new[] { ToBstr("x") }.Concat(_dic.Keys.Select(o => ToBstr(o))));
+            var vh = Create(new[] { cl }.Concat(_dic.Values));
+
+            try
+            {
+                var n = _dic.Count + 1;
+                dest.SetProperties(kh.AddrOfPinnedObject(), vh.AddrOfPinnedObject(), n);
+            }
+            finally
+            {
+                kh.Free();
+                vh.Free();
+            }
+        }
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ToBstr
+        ///
+        /// <summary>
+        /// ネイティブな文字列型に変換します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private IntPtr ToBstr(string value) => Marshal.StringToBSTR(value);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create
+        ///
+        /// <summary>
+        /// アンマネージなオブジェクトを生成します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private GCHandle Create(object obj) => GCHandle.Alloc(obj, GCHandleType.Pinned);
 
         #endregion
 
         #region Fields
-        private ISetProperties _archive;
         private IDictionary<string, PropVariant> _dic = new Dictionary<string, PropVariant>();
         #endregion
     }
