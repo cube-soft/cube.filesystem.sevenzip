@@ -18,7 +18,7 @@
 /* ------------------------------------------------------------------------- */
 using System.Linq;
 
-namespace Cube.FileSystem.SevenZip.Details
+namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
@@ -31,6 +31,23 @@ namespace Cube.FileSystem.SevenZip.Details
     /* --------------------------------------------------------------------- */
     internal class ZipOptionSetter : ArchiveOptionSetter
     {
+        #region Constructors
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ZipOptionSetter
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        /// 
+        /// <param name="option">オプション</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ZipOptionSetter(ArchiveOption option) : base(option) { }
+
+        #endregion
+
         #region Properties
 
         /* ----------------------------------------------------------------- */
@@ -53,43 +70,6 @@ namespace Cube.FileSystem.SevenZip.Details
                 CompressionMethod.Ppmd,
             };
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CompressionMethod
-        ///
-        /// <summary>
-        /// 圧縮方法取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public CompressionMethod CompressionMethod { get; set; } = CompressionMethod.Default;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// EncryptionMethod
-        ///
-        /// <summary>
-        /// 暗号化方法を取得または設定します。
-        /// </summary>
-        /// 
-        /// <remarks>
-        /// 設定可能な値は ZipCrypto, Aes128, Aes192, Aes256 です。
-        /// </remarks>
-        ///
-        /* ----------------------------------------------------------------- */
-        public EncryptionMethod EncryptionMethod { get; set; } = EncryptionMethod.ZipCrypto;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// IsEncrypted
-        ///
-        /// <summary>
-        /// 暗号化が有効かどうかを示す値を取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public bool IsEncrypted { get; set; } = false;
-
         #endregion
 
         #region Methods
@@ -107,12 +87,14 @@ namespace Cube.FileSystem.SevenZip.Details
         /* ----------------------------------------------------------------- */
         public override void Execute(ISetProperties dest)
         {
-            var method = AllowedCompressionMethods.Contains(CompressionMethod) ?
-                         CompressionMethod :
-                         CompressionMethod.Default;
-            if (method != CompressionMethod.Default) Add("m", method.ToString().ToLower());
-            if (IsEncrypted) Add("em", EncryptionMethod.ToString().ToLower());
-
+            if (Option is ZipOption zo)
+            {
+                var method = AllowedCompressionMethods.Contains(zo.CompressionMethod) ?
+                             zo.CompressionMethod :
+                             CompressionMethod.Default;
+                if (method != CompressionMethod.Default) Add("m", method.ToString().ToLower());
+                if (zo.IsEncrypted) Add("em", zo.EncryptionMethod.ToString().ToLower());
+            }
             base.Execute(dest);
         }
 

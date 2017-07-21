@@ -35,131 +35,42 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     internal class ArchiveOptionSetter
     {
+        #region Constructors
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ArchiveOptionSetter
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        /// 
+        /// <param name="option">オプション</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ArchiveOptionSetter(ArchiveOption option)
+        {
+            Option = option;
+        }
+
+        #endregion
+
         #region Properties
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CompressionLevel
+        /// Option
         ///
         /// <summary>
-        /// 圧縮レベルを取得または設定します。
+        /// オプション内容を取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressionLevel CompressionLevel { get; set; } = CompressionLevel.Normal;
+        public ArchiveOption Option { get; }
 
         #endregion
 
         #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Add
-        ///
-        /// <summary>
-        /// オプションを追加します。
-        /// </summary>
-        /// 
-        /// <param name="name">名前</param>
-        /// <param name="value">値</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Add(string name, bool value)
-        {
-            var cvt = new PropVariant();
-            cvt.Set(value);
-            Add(name, cvt);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Add
-        ///
-        /// <summary>
-        /// オプションを追加します。
-        /// </summary>
-        /// 
-        /// <param name="name">名前</param>
-        /// <param name="value">値</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Add(string name, uint value)
-        {
-            var cvt = new PropVariant();
-            cvt.Set(value);
-            Add(name, cvt);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Add
-        ///
-        /// <summary>
-        /// オプションを追加します。
-        /// </summary>
-        /// 
-        /// <param name="name">名前</param>
-        /// <param name="value">値</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Add(string name, ulong value)
-        {
-            var cvt = new PropVariant();
-            cvt.Set(value);
-            Add(name, cvt);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Add
-        ///
-        /// <summary>
-        /// オプションを追加します。
-        /// </summary>
-        /// 
-        /// <param name="name">名前</param>
-        /// <param name="value">値</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Add(string name, string value)
-        {
-            var cvt = new PropVariant();
-            cvt.Set(value);
-            Add(name, cvt);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Add
-        ///
-        /// <summary>
-        /// オプションを追加します。
-        /// </summary>
-        /// 
-        /// <param name="name">名前</param>
-        /// <param name="value">値</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Add(string name, DateTime value)
-        {
-            var cvt = new PropVariant();
-            cvt.Set(value);
-            Add(name, cvt);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Add
-        ///
-        /// <summary>
-        /// オプションを追加します。
-        /// </summary>
-        /// 
-        /// <param name="name">名前</param>
-        /// <param name="value">値</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Add(string name, PropVariant value) => _dic.Add(name, value);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -174,12 +85,12 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public virtual void Execute(ISetProperties dest)
         {
-            if (dest == null) return;
+            if (Option == null || dest == null) return;
 
             var sp = new SecurityPermission(SecurityPermissionFlag.UnmanagedCode);
             sp.Demand();
 
-            var cl = PropVariant.Create((uint)CompressionLevel);
+            var cl = PropVariant.Create((uint)Option.CompressionLevel);
             var kh = Create(new[] { ToBstr("x") }.Concat(_dic.Keys.Select(o => ToBstr(o))));
             var vh = Create(new[] { cl }.Concat(_dic.Values));
 
@@ -194,6 +105,115 @@ namespace Cube.FileSystem.SevenZip
                 vh.Free();
             }
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Add
+        ///
+        /// <summary>
+        /// オプションを追加します。
+        /// </summary>
+        /// 
+        /// <param name="name">名前</param>
+        /// <param name="value">値</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected void Add(string name, bool value)
+        {
+            var cvt = new PropVariant();
+            cvt.Set(value);
+            Add(name, cvt);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Add
+        ///
+        /// <summary>
+        /// オプションを追加します。
+        /// </summary>
+        /// 
+        /// <param name="name">名前</param>
+        /// <param name="value">値</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected void Add(string name, uint value)
+        {
+            var cvt = new PropVariant();
+            cvt.Set(value);
+            Add(name, cvt);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Add
+        ///
+        /// <summary>
+        /// オプションを追加します。
+        /// </summary>
+        /// 
+        /// <param name="name">名前</param>
+        /// <param name="value">値</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected void Add(string name, ulong value)
+        {
+            var cvt = new PropVariant();
+            cvt.Set(value);
+            Add(name, cvt);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Add
+        ///
+        /// <summary>
+        /// オプションを追加します。
+        /// </summary>
+        /// 
+        /// <param name="name">名前</param>
+        /// <param name="value">値</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected void Add(string name, string value)
+        {
+            var cvt = new PropVariant();
+            cvt.Set(value);
+            Add(name, cvt);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Add
+        ///
+        /// <summary>
+        /// オプションを追加します。
+        /// </summary>
+        /// 
+        /// <param name="name">名前</param>
+        /// <param name="value">値</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected void Add(string name, DateTime value)
+        {
+            var cvt = new PropVariant();
+            cvt.Set(value);
+            Add(name, cvt);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Add
+        ///
+        /// <summary>
+        /// オプションを追加します。
+        /// </summary>
+        /// 
+        /// <param name="name">名前</param>
+        /// <param name="value">値</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected void Add(string name, PropVariant value) => _dic.Add(name, value);
 
         #endregion
 

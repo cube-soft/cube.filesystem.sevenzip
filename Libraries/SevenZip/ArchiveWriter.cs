@@ -81,6 +81,17 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public Format Format { get; }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Option
+        ///
+        /// <summary>
+        /// 圧縮ファイルのフォーマットを取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public ArchiveOption Option { get; set; }
+
         #endregion
 
         #region Methods
@@ -241,6 +252,26 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
+        /// CreateSetter
+        ///
+        /// <summary>
+        /// ArchiveOptionSetter オブジェクトを生成します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private ArchiveOptionSetter CreateSetter()
+        {
+            switch (Format)
+            {
+                case Format.Zip:
+                    return new ZipOptionSetter(Option);
+                default:
+                    return new ArchiveOptionSetter(Option);
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// SaveCore
         ///
         /// <summary>
@@ -258,7 +289,11 @@ namespace Cube.FileSystem.SevenZip
                 Progress = progress,
             };
 
-            try { raw.UpdateItems(stream, (uint)_items.Count, callback); }
+            try
+            {
+                if (Option != null) CreateSetter().Execute(raw as ISetProperties);
+                raw.UpdateItems(stream, (uint)_items.Count, callback);
+            }
             finally
             {
                 stream.Dispose();
