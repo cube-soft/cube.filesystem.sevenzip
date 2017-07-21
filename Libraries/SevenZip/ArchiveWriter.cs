@@ -18,7 +18,6 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -63,7 +62,7 @@ namespace Cube.FileSystem.SevenZip
         public ArchiveWriter(Format format, Operator io)
         {
             Format = format;
-            _lib = new NativeLibrary();
+            _7z = new SevenZipLibrary();
             _io = io;
         }
 
@@ -110,13 +109,8 @@ namespace Cube.FileSystem.SevenZip
         public void Add(string path, string pathInArchive)
         {
             var info = _io.Get(path);
-
-            if (info.Exists)
-            {
-                if (info.IsDirectory) Add(new DirectoryInfo(path), pathInArchive);
-                else Add(new FileInfo(path), pathInArchive);
-            }
-            else throw new FileNotFoundException(path);
+            if (info.Exists) Add(info, pathInArchive);
+            else throw new System.IO.FileNotFoundException(info.FullName);
         }
 
         /* ----------------------------------------------------------------- */
@@ -206,7 +200,7 @@ namespace Cube.FileSystem.SevenZip
         {
             if (_disposed) return;
 
-            if (disposing) _lib?.Dispose();
+            if (disposing) _7z?.Dispose();
 
             _disposed = true;
         }
@@ -222,34 +216,26 @@ namespace Cube.FileSystem.SevenZip
         /// Add
         ///
         /// <summary>
-        /// ファイルを圧縮ファイルに追加します。
+        /// ファイルまたはディレクトリを圧縮ファイルに追加します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private void Add(FileInfo info, string pathInArchive)
-            => _items.Add(new FileItem(info, pathInArchive));
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Add
-        ///
-        /// <summary>
-        /// ディレクトリを圧縮ファイルに追加します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        private void Add(DirectoryInfo info, string pathInArchive)
+        private void Add(IInformation info, string name)
         {
-            _items.Add(new FileItem(info, pathInArchive));
+            var path = info.FullName;
+            _items.Add(new FileItem(path, name));
+            if (!info.IsDirectory) return;
 
-            foreach (var child in info.GetFiles())
+            foreach (var file in _io.GetFiles(path))
             {
-                Add(child, _io.Combine(pathInArchive, child.Name));
+                var child = _io.Get(file);
+                _items.Add(new FileItem(child.FullName, _io.Combine(name, child.Name)));
             }
 
-            foreach (var child in info.GetDirectories())
+            foreach (var dir in _io.GetDirectories(path))
             {
-                Add(child, _io.Combine(pathInArchive, child.Name));
+                var child = _io.Get(dir);
+                Add(child, _io.Combine(name, child.Name));
             }
         }
 
@@ -264,8 +250,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         private void SaveCore(string path, IQuery<string, string> password, IProgress<ArchiveReport> progress)
         {
-            var raw = _lib.GetOutArchive(Format);
-            var stream = new ArchiveStreamWriter(_io.Create(path));
+            var raw      = _7z.GetOutArchive(Format);
+            var stream   = new ArchiveStreamWriter(_io.Create(path));
             var callback = new ArchiveUpdateCallback(_items, path, _io)
             {
                 Password = password,
@@ -298,13 +284,13 @@ namespace Cube.FileSystem.SevenZip
                 case OperationResult.UserCancel:
                     throw new UserCancelException();
                 default:
-                    throw new IOException(result.ToString());
+                    throw new System.IO.IOException(result.ToString());
             }
         }
 
         #region Fields
         private bool _disposed = false;
-        private NativeLibrary _lib;
+        private SevenZipLibrary _7z;
         private Operator _io;
         private IList<FileItem> _items = new List<FileItem>();
         #endregion

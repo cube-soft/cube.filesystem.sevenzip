@@ -205,7 +205,7 @@ namespace Cube.FileSystem.SevenZip
             {
                 _raw?.Close();
                 _stream?.Dispose();
-                _lib?.Dispose();
+                _7z?.Dispose();
             }
 
             _disposed = true;
@@ -231,11 +231,11 @@ namespace Cube.FileSystem.SevenZip
             Format = FormatConversions.FromFile(Source);
             if (Format == Format.Unknown) throw new NotSupportedException();
 
-            var pos = 32UL * 1024;
-
-            _lib = new NativeLibrary();
             _stream = new ArchiveStreamReader(_io.OpenRead(Source));
-            _raw = _lib.GetInArchive(Format);
+            _7z     = new SevenZipLibrary();
+            _raw    = _7z.GetInArchive(Format);
+
+            var pos = 32UL * 1024;
             _raw.Open(_stream, ref pos, new ArchiveOpenCallback(Source) { Password = password });
 
             Items = new ReadOnlyArchiveCollection(_raw, Source, password, _io);
@@ -243,7 +243,7 @@ namespace Cube.FileSystem.SevenZip
 
         #region Fields
         private bool _disposed = false;
-        private NativeLibrary _lib;
+        private SevenZipLibrary _7z;
         private IInArchive _raw;
         private ArchiveStreamReader _stream;
         private Operator _io;

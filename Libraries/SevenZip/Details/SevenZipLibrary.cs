@@ -26,27 +26,27 @@ namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// NativeLibrary
+    /// SevenZipLibrary
     /// 
     /// <summary>
     /// 7z.dll を扱うためのクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal sealed class NativeLibrary : IDisposable
+    internal sealed class SevenZipLibrary : IDisposable
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// NativeLibrary
+        /// SevenZipLibrary
         ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public NativeLibrary()
+        public SevenZipLibrary()
         {
             var asm = Assembly.GetEntryAssembly() ??
                       Assembly.GetExecutingAssembly();
@@ -57,14 +57,16 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// NativeLibrary
+        /// SevenZipLibrary
         ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
+        /// 
+        /// <param name="path">7z.dll のパス</param>
         ///
         /* ----------------------------------------------------------------- */
-        public NativeLibrary(string path)
+        public SevenZipLibrary(string path)
         {
             Initialize(path);
         }
@@ -168,7 +170,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        ~NativeLibrary()
+        ~SevenZipLibrary()
         {
             Dispose(false);
         }

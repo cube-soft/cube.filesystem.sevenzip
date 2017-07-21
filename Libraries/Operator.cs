@@ -81,6 +81,49 @@ namespace Cube.FileSystem
 
         /* ----------------------------------------------------------------- */
         ///
+        /// GetFiles
+        ///
+        /// <summary>
+        /// ディレクトリ下にあるファイルの一覧を取得します。
+        /// </summary>
+        /// 
+        /// <param name="path">パス</param>
+        /// 
+        /// <returns>ファイル一覧</returns>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public string[] GetFiles(string path) => _core.GetFiles(path);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetDirectories
+        ///
+        /// <summary>
+        /// ディレクトリ下にあるディレクトリの一覧を取得します。
+        /// </summary>
+        /// 
+        /// <param name="path">パス</param>
+        /// 
+        /// <returns>ディレクトリ一覧</returns>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public string[] GetDirectories(string path) => _core.GetDirectories(path);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Combine
+        ///
+        /// <summary>
+        /// パスを結合します。
+        /// </summary>
+        /// 
+        /// <param name="paths">結合するパス一覧</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public string Combine(params string[] paths) => _core.Combine(paths);
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Delete
         ///
         /// <summary>
@@ -228,19 +271,6 @@ namespace Cube.FileSystem
         /* ----------------------------------------------------------------- */
         public void Copy(string src, string dest, bool overwrite)
             => Action(nameof(Copy), () => _core.Copy(src, dest, overwrite), src, dest);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Combine
-        ///
-        /// <summary>
-        /// パスを結合します。
-        /// </summary>
-        /// 
-        /// <param name="paths">結合するパス一覧</param>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public string Combine(params string[] paths) => _core.Combine(paths);
 
         #endregion
 

@@ -57,8 +57,8 @@
     <Compile Include="Exceptions.cs" />
     <Compile Include="FileItem.cs" />
     <Compile Include="Format.cs" />
-    <Compile Include="Details\NativeInterfaces.cs" />
-    <Compile Include="Details\NativeLibrary.cs" />
+    <Compile Include="Details\SevenZipInterfaces.cs" />
+    <Compile Include="Details\SevenZipLibrary.cs" />
     <Compile Include="NativeMethods\Kernel32.cs" />
     <Compile Include="NativeMethods\Ole32.cs" />
     <Compile Include="NativeMethods\Structures\PropVariant.cs" />

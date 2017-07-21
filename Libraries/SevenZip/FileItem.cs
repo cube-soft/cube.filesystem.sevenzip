@@ -16,7 +16,6 @@
 /// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ///
 /* ------------------------------------------------------------------------- */
-using System;
 using System.IO;
 
 namespace Cube.FileSystem.SevenZip
@@ -63,36 +62,6 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public FileItem(string path, string pathInArchive) : base(path)
-        {
-            PathInArchive = pathInArchive;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// FileItem
-        ///
-        /// <summary>
-        /// オブジェクトを初期化します。
-        /// </summary>
-        /// 
-        /// <param name="info">ファイルまたはディレクトリ情報</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public FileItem(FileSystemInfo info) : this(info, info.Name) { }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// FileItem
-        ///
-        /// <summary>
-        /// オブジェクトを初期化します。
-        /// </summary>
-        /// 
-        /// <param name="info">ファイルまたはディレクトリ情報</param>
-        /// <param name="pathInArchive">圧縮ファイル中の相対パス</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public FileItem(FileSystemInfo info, string pathInArchive) : base(info)
         {
             PathInArchive = pathInArchive;
         }
