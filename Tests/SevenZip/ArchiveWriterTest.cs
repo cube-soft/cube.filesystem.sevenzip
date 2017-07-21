@@ -17,6 +17,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System.Collections.Generic;
+using Cube.FileSystem.SevenZip;
 using NUnit.Framework;
 
 namespace Cube.FileSystem.Tests
@@ -46,12 +47,14 @@ namespace Cube.FileSystem.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(Archive_TestCases))]
-        public void Archive(string filename, string password, long size, string[] items)
+        public void Archive(Format format, string filename, string password,
+            string[] items, ArchiveOption option, long size)
         {
             var dest = Result(filename);
 
-            using (var writer = new SevenZip.ArchiveWriter(SevenZip.Format.Zip))
+            using (var writer = new ArchiveWriter(format))
             {
+                writer.Option = option;
                 foreach (var item in items) writer.Add(Example(item));
                 writer.Save(dest, password);
             }
@@ -74,26 +77,81 @@ namespace Cube.FileSystem.Tests
         {
             get
             {
-                yield return new TestCaseData("SingleFile.zip", "", 167L, new[]
-                {
-                    "Sample.txt",
-                });
+                yield return new TestCaseData(Format.Zip,
+                    "ZipSingle.zip",
+                    "",
+                    new[] { "Sample.txt" },
+                    null,
+                    167L
+                );
 
-                yield return new TestCaseData("SingleDirectory.zip", "", 488L, new[]
-                {
-                    "Archive",
-                });
+                yield return new TestCaseData(Format.Zip,
+                    "ZipDirectory.zip",
+                    "",
+                    new[] { "Archive" },
+                    null,
+                    11873L
+                );
 
-                yield return new TestCaseData("FileAndDirectory.zip", "", 633L, new[]
-                {
-                    "Sample.txt",
-                    "Archive",
-                });
+                yield return new TestCaseData(Format.Zip,
+                    "ZipUltra.zip",
+                    "",
+                    new[] { "Sample.txt", "Archive" },
+                    new ZipOption { CompressionLevel = CompressionLevel.Ultra },
+                    11822L
+                );
 
-                yield return new TestCaseData("PasswordFile.zip", "password", 179L, new[]
-                {
-                    "Sample.txt",
-                });
+                yield return new TestCaseData(Format.Zip,
+                    "ZipLzma.zip",
+                    "",
+                    new[] { "Sample.txt", "Archive" },
+                    new ZipOption { CompressionMethod = CompressionMethod.Lzma },
+                    11645L
+                );
+
+                yield return new TestCaseData(Format.Zip,
+                    "ZipPassword.zip",
+                    "password",
+                    new[] { "Sample.txt" },
+                    null,
+                    179L
+                );
+
+                yield return new TestCaseData(Format.Zip,
+                    "ZipAes256.zip",
+                    "password",
+                    new[] { "Sample.txt" },
+                    new ZipOption
+                    {
+                        EncryptionMethod = EncryptionMethod.Aes256,
+                        IsEncrypted = true,
+                    },
+                    217L
+                );
+
+                yield return new TestCaseData(Format.Tar,
+                    "TarTest.tar",
+                    "",
+                    new[] { "Sample.txt", "Archive" },
+                    null,
+                    38400L
+                );
+
+                yield return new TestCaseData(Format.BZip2,
+                    "BZip2Test.bz",
+                    "",
+                    new[] { "Sample.txt" },
+                    null,
+                    51L
+                );
+
+                yield return new TestCaseData(Format.GZip,
+                    "GZipTest.gz",
+                    "",
+                    new[] { "Sample.txt" },
+                    null,
+                    47L
+                );
             }
         }
 
