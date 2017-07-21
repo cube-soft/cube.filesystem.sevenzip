@@ -248,7 +248,7 @@ namespace Cube.FileSystem.SevenZip
                     value.Set((ulong)src.Length);
                     break;
                 default:
-                    value.SetEmpty();
+                    value.Clear();
                     break;
             }
 
