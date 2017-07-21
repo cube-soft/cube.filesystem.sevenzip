@@ -89,12 +89,29 @@ namespace Cube.FileSystem.SevenZip
         {
             if (Option is SevenZipOption so)
             {
-                var method = SupportedMethods.Contains(so.CompressionMethod) ?
-                             so.CompressionMethod :
-                             CompressionMethod.Default;
-                if (method != CompressionMethod.Default) Add("0", method.ToString().ToLower());
+                AddCompressionMethod(so);
             }
             base.Execute(dest);
+        }
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// AddCompressionMethod
+        ///
+        /// <summary>
+        /// 圧縮方式を追加します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void AddCompressionMethod(SevenZipOption so)
+        {
+            var value = so.CompressionMethod;
+            if (!SupportedMethods.Contains(value)) return;
+            Add("0", PropVariant.Create(value.ToString()));
         }
 
         #endregion

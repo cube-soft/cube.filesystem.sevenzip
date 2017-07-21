@@ -89,13 +89,46 @@ namespace Cube.FileSystem.SevenZip
         {
             if (Option is ZipOption zo)
             {
-                var method = SupportedMethods.Contains(zo.CompressionMethod) ?
-                             zo.CompressionMethod :
-                             CompressionMethod.Default;
-                if (method != CompressionMethod.Default) Add("m", method.ToString().ToLower());
-                if (zo.IsEncrypted) Add("em", zo.EncryptionMethod.ToString().ToLower());
+                AddCompressionMethod(zo);
+                AddEncryptionMethod(zo);
             }
             base.Execute(dest);
+        }
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// AddCompressionMethod
+        ///
+        /// <summary>
+        /// 圧縮方式を追加します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void AddCompressionMethod(ZipOption zo)
+        {
+            var value = zo.CompressionMethod;
+            if (!SupportedMethods.Contains(value)) return;
+            Add("m", PropVariant.Create(value.ToString()));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// AddEncryptionMethod
+        ///
+        /// <summary>
+        /// 暗号化方式を追加します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void AddEncryptionMethod(ZipOption zo)
+        {
+            if (!zo.IsEncrypted) return;
+            var value = zo.EncryptionMethod;
+            Add("em", PropVariant.Create(value.ToString()));
         }
 
         #endregion

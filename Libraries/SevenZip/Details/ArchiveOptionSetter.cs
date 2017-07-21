@@ -118,11 +118,6 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="value">値</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected void Add(string name, bool value) => Add(name, PropVariant.Create(value));
-        protected void Add(string name, uint value) => Add(name, PropVariant.Create(value));
-        protected void Add(string name, ulong value) => Add(name, PropVariant.Create(value));
-        protected void Add(string name, string value) => Add(name, PropVariant.Create(value));
-        protected void Add(string name, DateTime value) => Add(name, PropVariant.Create(value));
         protected void Add(string name, PropVariant value) => _dic.Add(name, value);
 
         #endregion
