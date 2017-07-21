@@ -26,14 +26,14 @@ namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveOption
+    /// ArchiveOptionSetter
     /// 
     /// <summary>
     /// 圧縮ファイルのオプション項目を設定するためのクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal abstract class ArchiveOption
+    internal class ArchiveOptionSetter
     {
         #region Properties
 

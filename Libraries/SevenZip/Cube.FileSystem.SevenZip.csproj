@@ -50,10 +50,11 @@
     <Compile Include="ArchiveWriter.cs" />
     <Compile Include="Details\ArchiveExtractCallback.cs" />
     <Compile Include="Details\ArchiveOpenCallback.cs" />
-    <Compile Include="Details\ArchiveOption.cs" />
+    <Compile Include="Details\ArchiveOptionSetter.cs" />
     <Compile Include="Details\ArchiveUpdateCallback.cs" />
     <Compile Include="Details\ArchiveCallbackBase.cs" />
     <Compile Include="Details\PasswordQuery.cs" />
+    <Compile Include="Details\ZipOptionSetter.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="FileItem.cs" />
     <Compile Include="Format.cs" />
@@ -67,7 +68,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Details\ArchiveStream.cs" />
     <Compile Include="Query.cs" />
-    <Compile Include="ReadOnlyArchiveCollection.cs" />
+    <Compile Include="Details\ReadOnlyArchiveCollection.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages.config" />
