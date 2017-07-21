@@ -267,6 +267,8 @@ namespace Cube.FileSystem.SevenZip
                     return new ZipOptionSetter(Option);
                 case Format.SevenZip:
                     return new SevenZipOptionSetter(Option);
+                case Format.Tar:
+                    return null;
                 default:
                     return new ArchiveOptionSetter(Option);
             }
@@ -293,7 +295,7 @@ namespace Cube.FileSystem.SevenZip
 
             try
             {
-                if (Option != null) CreateSetter().Execute(raw as ISetProperties);
+                if (Option != null) CreateSetter()?.Execute(raw as ISetProperties);
                 raw.UpdateItems(stream, (uint)_items.Count, callback);
             }
             finally
