@@ -128,19 +128,7 @@ namespace Cube.FileSystem.SevenZip
             }
         }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SetEmpty
-        ///
-        /// <summary>
-        /// 空の内容を設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void SetEmpty()
-        {
-            VarType = VarEnum.VT_EMPTY;
-        }
+        #region Set
 
         /* ----------------------------------------------------------------- */
         ///
@@ -226,6 +214,102 @@ namespace Cube.FileSystem.SevenZip
             VarType = VarEnum.VT_FILETIME;
             _v64    = value.ToFileTime();
         }
+
+        #endregion
+
+        #region Create
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create
+        ///
+        /// <summary>
+        /// オブジェクトを生成します。
+        /// </summary>
+        /// 
+        /// <param name="value">設定値</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static PropVariant Create(bool value)
+        {
+            var dest = new PropVariant();
+            dest.Set(value);
+            return dest;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create
+        ///
+        /// <summary>
+        /// オブジェクトを生成します。
+        /// </summary>
+        /// 
+        /// <param name="value">設定値</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static PropVariant Create(uint value)
+        {
+            var dest = new PropVariant();
+            dest.Set(value);
+            return dest;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create
+        ///
+        /// <summary>
+        /// オブジェクトを生成します。
+        /// </summary>
+        /// 
+        /// <param name="value">設定値</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static PropVariant Create(ulong value)
+        {
+            var dest = new PropVariant();
+            dest.Set(value);
+            return dest;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create
+        ///
+        /// <summary>
+        /// オブジェクトを生成します。
+        /// </summary>
+        /// 
+        /// <param name="value">設定値</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static PropVariant Create(string value)
+        {
+            var dest = new PropVariant();
+            dest.Set(value);
+            return dest;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create
+        ///
+        /// <summary>
+        /// オブジェクトを生成します。
+        /// </summary>
+        /// 
+        /// <param name="value">設定値</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static PropVariant Create(DateTime value)
+        {
+            var dest = new PropVariant();
+            dest.Set(value);
+            return dest;
+        }
+
+        #endregion
 
         #endregion
 
