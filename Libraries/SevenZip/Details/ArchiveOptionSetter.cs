@@ -93,11 +93,15 @@ namespace Cube.FileSystem.SevenZip
             var cl = PropVariant.Create((uint)Option.CompressionLevel);
             var kh = Create(new[] { ToBstr("x") }.Concat(_dic.Keys.Select(o => ToBstr(o))).ToArray());
             var vh = Create(new[] { cl }.Concat(_dic.Values).ToArray());
+            var n  = _dic.Count + 1;
 
             try
             {
-                var n = _dic.Count + 1;
-                dest.SetProperties(kh.AddrOfPinnedObject(), vh.AddrOfPinnedObject(), n);
+                var result = dest.SetProperties(kh.AddrOfPinnedObject(), vh.AddrOfPinnedObject(), n);
+                if (result != (int)OperationResult.OK)
+                {
+                    throw new System.IO.IOException($"SetProperties:{result}");
+                }
             }
             finally
             {
