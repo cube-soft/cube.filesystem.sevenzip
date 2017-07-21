@@ -22,20 +22,20 @@ namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ZipOptionSetter
+    /// SevenZipOptionSetter
     /// 
     /// <summary>
-    /// ZIP 圧縮ファイルのオプション項目を設定するためのクラスです。
+    /// 7Z 圧縮ファイルのオプション項目を設定するためのクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal class ZipOptionSetter : ArchiveOptionSetter
+    internal class SevenZipOptionSetter : ArchiveOptionSetter
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ZipOptionSetter
+        /// SevenZipOptionSetter
         ///
         /// <summary>
         /// オブジェクトを初期化します。
@@ -44,7 +44,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="option">オプション</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ZipOptionSetter(ArchiveOption option) : base(option) { }
+        public SevenZipOptionSetter(ArchiveOption option) : base(option) { }
 
         #endregion
 
@@ -62,12 +62,12 @@ namespace Cube.FileSystem.SevenZip
         public static CompressionMethod[] AllowedCompressionMethods
             => new[]
             {
-                CompressionMethod.Copy,
-                CompressionMethod.Deflate,
-                CompressionMethod.Deflate64,
-                CompressionMethod.BZip2,
                 CompressionMethod.Lzma,
+                CompressionMethod.Lzma2,
                 CompressionMethod.Ppmd,
+                CompressionMethod.BZip2,
+                CompressionMethod.Deflate,
+                CompressionMethod.Copy,
             };
 
         #endregion
@@ -87,13 +87,12 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public override void Execute(ISetProperties dest)
         {
-            if (Option is ZipOption zo)
+            if (Option is SevenZipOption so)
             {
-                var method = AllowedCompressionMethods.Contains(zo.CompressionMethod) ?
-                             zo.CompressionMethod :
+                var method = AllowedCompressionMethods.Contains(so.CompressionMethod) ?
+                             so.CompressionMethod :
                              CompressionMethod.Default;
-                if (method != CompressionMethod.Default) Add("m", method.ToString().ToLower());
-                if (zo.IsEncrypted) Add("em", zo.EncryptionMethod.ToString().ToLower());
+                if (method != CompressionMethod.Default) Add("0", method.ToString().ToLower());
             }
             base.Execute(dest);
         }

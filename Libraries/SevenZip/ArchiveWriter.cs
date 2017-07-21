@@ -265,6 +265,8 @@ namespace Cube.FileSystem.SevenZip
             {
                 case Format.Zip:
                     return new ZipOptionSetter(Option);
+                case Format.SevenZip:
+                    return new SevenZipOptionSetter(Option);
                 default:
                     return new ArchiveOptionSetter(Option);
             }
