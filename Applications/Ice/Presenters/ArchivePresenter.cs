@@ -52,7 +52,6 @@ namespace Cube.FileSystem.App.Ice
             : base(view, new ArchiveFacade(args), settings, events)
         {
             // View
-            View.Icon   = Properties.Resources.Archive;
             View.Logo   = Properties.Resources.HeaderArchive;
             View.Status = Properties.Resources.MessagePreArchive;
 
