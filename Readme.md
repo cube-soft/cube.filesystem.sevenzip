@@ -5,7 +5,7 @@ Cube.FileSystem is an I/O library, especially for archiving or extracting files.
 
 ## Usage
 
-```csharp:ArchiveSample
+```cs:ArchiveSample
 using Cube.FileSystem.SevenZip;
 
 // Note that the ArchiveWriter class needs to execute in the same thread from constructing to destroying
@@ -22,7 +22,7 @@ Task.Run(() =>
 });
 ```
 
-```csharp:ExtractSample
+```cs:ExtractSample
 using Cube.FileSystem.SevenZip;
 
 // Note that the ArchiveReader class needs to execute in the same thread from constructing to destroying
