@@ -56,14 +56,37 @@ namespace Cube.FileSystem.App.Ice
             View.Status = Properties.Resources.MessagePreArchive;
 
             // Model
-            Model.DestinationRequired += WhenDestinationRequired;
-            Model.PasswordRequired    += WhenPasswordRequired;
-            Model.Progress            += WhenProgress;
+            var model = Model as ArchiveFacade;
+            model.DestinationRequired += WhenDestinationRequired;
+            model.PasswordRequired    += WhenPasswordRequired;
+            model.Progress            += WhenProgress;
+            model.SettingsRequired    += WhenSettingsRequired;
         }
 
         #endregion
 
         #region Handlers
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenSettingsRequired
+        /// 
+        /// <summary>
+        /// 詳細設定要求時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenSettingsRequired(object sender, QueryEventArgs<string, ArchiveSettings> e)
+            => ShowDialog(() =>
+        {
+            var dialog = new SettingsForm();
+            e.Cancel = dialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel;
+            e.Result = new ArchiveSettings
+            {
+                Format = Format.Zip,
+                Path   = e.Query,
+            };
+        });
 
         /* ----------------------------------------------------------------- */
         ///

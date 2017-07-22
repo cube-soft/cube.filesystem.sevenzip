@@ -15,6 +15,7 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System.Linq;
 using Cube.FileSystem.SevenZip;
 using Cube.Log;
 
@@ -48,6 +49,52 @@ namespace Cube.FileSystem.App.Ice
 
         #endregion
 
+        #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Settings
+        /// 
+        /// <summary>
+        /// 圧縮の詳細設定を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ArchiveSettings Settings { get; private set; }
+
+        #endregion
+
+        #region Events
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OverwriteRequired
+        /// 
+        /// <summary>
+        /// ファイルの上書き時に発生するイベントです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public event QueryEventHandler<string, ArchiveSettings> SettingsRequired;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OnOverwriteRequired
+        /// 
+        /// <summary>
+        /// OverwriteRequired イベントを発生させます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected virtual void OnSettingsRequired(QueryEventArgs<string, ArchiveSettings> e)
+        {
+            if (SettingsRequired != null) SettingsRequired(this, e);
+            else e.Cancel = true;
+            if (e.Cancel) throw new UserCancelException();
+        }
+
+        #endregion
+
         #region Methods
 
         /* ----------------------------------------------------------------- */
@@ -63,12 +110,13 @@ namespace Cube.FileSystem.App.Ice
         {
             try
             {
+                var fmt   = GetFormat();
                 var dest  = GetDestination();
                 var query = Request.Password ?
                             new Query<string, string>(x => OnPasswordRequired(x)) :
                             null;
 
-                using (var writer = new ArchiveWriter(GetFormat(), IO))
+                using (var writer = new ArchiveWriter(fmt, IO))
                 {
                     foreach (var item in Request.Sources) writer.Add(item);
                     ProgressStart();
@@ -107,14 +155,15 @@ namespace Cube.FileSystem.App.Ice
                 case Format.BZip2:
                 case Format.GZip:
                 case Format.XZ:
-                    throw new System.NotSupportedException(Request.Format.ToString());
+                    return Format.Tar;
                 case Format.Tar:
                 case Format.Zip:
                 case Format.SevenZip:
                 case Format.Wim:
                     return Request.Format;
                 default:
-                    throw new System.NotSupportedException(Request.Format.ToString());
+                    RaiseSettingsRequired();
+                    return Settings.Format;
             }
         }
 
@@ -129,7 +178,8 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private string GetDestination()
         {
-            SetDestination(Request.Format.ToString());
+            if (Settings != null) Destination = Settings.Path;
+            else SetDestination(Request.Format.ToString());
 
             var info = IO.Get(Destination);
             if (!info.Exists) return Destination;
@@ -151,6 +201,24 @@ namespace Cube.FileSystem.App.Ice
         {
             if (string.IsNullOrEmpty(Tmp) || !IO.Get(Tmp).Exists) return;
             IO.Move(Tmp, Destination, true);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// RaiseSettingsRequired
+        /// 
+        /// <summary>
+        /// SettingsRequired イベントを発生させます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void RaiseSettingsRequired()
+        {
+            var info = IO.Get(Request.Sources.First());
+            var path = IO.Combine(info.DirectoryName, $"{info.NameWithoutExtension}.zip");
+            var args = new QueryEventArgs<string, ArchiveSettings>(path);
+            OnSettingsRequired(args);
+            Settings = args.Result;
         }
 
         #endregion

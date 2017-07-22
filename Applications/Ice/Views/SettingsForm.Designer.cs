@@ -35,36 +35,36 @@
             this.OutputTextBox = new System.Windows.Forms.TextBox();
             this.OutputButton = new System.Windows.Forms.Button();
             this.GeneralGroupBox = new System.Windows.Forms.GroupBox();
-            this.EncryptionGroupBox = new System.Windows.Forms.GroupBox();
-            this.ButtonsPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.ExitButton = new System.Windows.Forms.Button();
-            this.ExecuteButton = new System.Windows.Forms.Button();
             this.GeneralPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.ThreadLabel = new System.Windows.Forms.Label();
+            this.MethodComboBox = new System.Windows.Forms.ComboBox();
+            this.MethodLabel = new System.Windows.Forms.Label();
+            this.LevelComboBox = new System.Windows.Forms.ComboBox();
+            this.LevelLabel = new System.Windows.Forms.Label();
             this.FormatLabel = new System.Windows.Forms.Label();
             this.FormatComboBox = new System.Windows.Forms.ComboBox();
-            this.LevelLabel = new System.Windows.Forms.Label();
-            this.LevelComboBox = new System.Windows.Forms.ComboBox();
-            this.MethodLabel = new System.Windows.Forms.Label();
-            this.MethodComboBox = new System.Windows.Forms.ComboBox();
-            this.ThreadLabel = new System.Windows.Forms.Label();
             this.ThreadNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.EncryptionGroupBox = new System.Windows.Forms.GroupBox();
             this.EncryptionPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.EncryptionComboBox = new System.Windows.Forms.ComboBox();
+            this.EncryptionLabel = new System.Windows.Forms.Label();
+            this.ConfirmTextBox = new System.Windows.Forms.TextBox();
+            this.ConfirmLabel = new System.Windows.Forms.Label();
             this.EncryptionCheckBox = new System.Windows.Forms.CheckBox();
             this.PasswordLabel = new System.Windows.Forms.Label();
             this.PasswordTextBox = new System.Windows.Forms.TextBox();
-            this.ConfirmLabel = new System.Windows.Forms.Label();
-            this.ConfirmTextBox = new System.Windows.Forms.TextBox();
             this.ShowPasswordCheckBox = new System.Windows.Forms.CheckBox();
-            this.EncryptionLabel = new System.Windows.Forms.Label();
-            this.EncryptionComboBox = new System.Windows.Forms.ComboBox();
+            this.ButtonsPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.ExitButton = new System.Windows.Forms.Button();
+            this.ExecuteButton = new System.Windows.Forms.Button();
             this.RootPanel.SuspendLayout();
             this.OutputPanel.SuspendLayout();
             this.GeneralGroupBox.SuspendLayout();
-            this.EncryptionGroupBox.SuspendLayout();
-            this.ButtonsPanel.SuspendLayout();
             this.GeneralPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ThreadNumericUpDown)).BeginInit();
+            this.EncryptionGroupBox.SuspendLayout();
             this.EncryptionPanel.SuspendLayout();
+            this.ButtonsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // RootPanel
@@ -80,10 +80,10 @@
             this.RootPanel.Name = "RootPanel";
             this.RootPanel.RowCount = 4;
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 155F));
-            this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 185F));
+            this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 180F));
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.RootPanel.Size = new System.Drawing.Size(354, 451);
+            this.RootPanel.Size = new System.Drawing.Size(364, 441);
             this.RootPanel.TabIndex = 0;
             // 
             // OutputPanel
@@ -94,7 +94,7 @@
             this.OutputPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.OutputPanel.Location = new System.Drawing.Point(3, 3);
             this.OutputPanel.Name = "OutputPanel";
-            this.OutputPanel.Size = new System.Drawing.Size(348, 44);
+            this.OutputPanel.Size = new System.Drawing.Size(358, 44);
             this.OutputPanel.TabIndex = 0;
             // 
             // OutputLabel
@@ -112,12 +112,12 @@
             this.OutputTextBox.Location = new System.Drawing.Point(73, 11);
             this.OutputTextBox.Margin = new System.Windows.Forms.Padding(3, 11, 3, 3);
             this.OutputTextBox.Name = "OutputTextBox";
-            this.OutputTextBox.Size = new System.Drawing.Size(200, 23);
+            this.OutputTextBox.Size = new System.Drawing.Size(210, 23);
             this.OutputTextBox.TabIndex = 1;
             // 
             // OutputButton
             // 
-            this.OutputButton.Location = new System.Drawing.Point(279, 11);
+            this.OutputButton.Location = new System.Drawing.Point(289, 11);
             this.OutputButton.Margin = new System.Windows.Forms.Padding(3, 11, 3, 3);
             this.OutputButton.Name = "OutputButton";
             this.OutputButton.Size = new System.Drawing.Size(60, 23);
@@ -130,57 +130,13 @@
             this.GeneralGroupBox.Controls.Add(this.GeneralPanel);
             this.GeneralGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.GeneralGroupBox.Location = new System.Drawing.Point(12, 53);
-            this.GeneralGroupBox.Margin = new System.Windows.Forms.Padding(12, 3, 12, 8);
+            this.GeneralGroupBox.Margin = new System.Windows.Forms.Padding(12, 3, 12, 3);
             this.GeneralGroupBox.Name = "GeneralGroupBox";
             this.GeneralGroupBox.Padding = new System.Windows.Forms.Padding(8, 3, 8, 8);
-            this.GeneralGroupBox.Size = new System.Drawing.Size(330, 144);
+            this.GeneralGroupBox.Size = new System.Drawing.Size(340, 144);
             this.GeneralGroupBox.TabIndex = 1;
             this.GeneralGroupBox.TabStop = false;
             this.GeneralGroupBox.Text = "詳細";
-            // 
-            // EncryptionGroupBox
-            // 
-            this.EncryptionGroupBox.Controls.Add(this.EncryptionPanel);
-            this.EncryptionGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.EncryptionGroupBox.Location = new System.Drawing.Point(12, 208);
-            this.EncryptionGroupBox.Margin = new System.Windows.Forms.Padding(12, 3, 12, 8);
-            this.EncryptionGroupBox.Name = "EncryptionGroupBox";
-            this.EncryptionGroupBox.Padding = new System.Windows.Forms.Padding(8, 3, 8, 8);
-            this.EncryptionGroupBox.Size = new System.Drawing.Size(330, 174);
-            this.EncryptionGroupBox.TabIndex = 2;
-            this.EncryptionGroupBox.TabStop = false;
-            this.EncryptionGroupBox.Text = "暗号化";
-            // 
-            // ButtonsPanel
-            // 
-            this.ButtonsPanel.Controls.Add(this.ExitButton);
-            this.ButtonsPanel.Controls.Add(this.ExecuteButton);
-            this.ButtonsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ButtonsPanel.Location = new System.Drawing.Point(3, 393);
-            this.ButtonsPanel.Name = "ButtonsPanel";
-            this.ButtonsPanel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.ButtonsPanel.Size = new System.Drawing.Size(348, 55);
-            this.ButtonsPanel.TabIndex = 3;
-            // 
-            // ExitButton
-            // 
-            this.ExitButton.Location = new System.Drawing.Point(240, 8);
-            this.ExitButton.Margin = new System.Windows.Forms.Padding(8, 8, 8, 4);
-            this.ExitButton.Name = "ExitButton";
-            this.ExitButton.Size = new System.Drawing.Size(100, 30);
-            this.ExitButton.TabIndex = 0;
-            this.ExitButton.Text = "キャンセル";
-            this.ExitButton.UseVisualStyleBackColor = true;
-            // 
-            // ExecuteButton
-            // 
-            this.ExecuteButton.Location = new System.Drawing.Point(124, 8);
-            this.ExecuteButton.Margin = new System.Windows.Forms.Padding(8, 8, 8, 4);
-            this.ExecuteButton.Name = "ExecuteButton";
-            this.ExecuteButton.Size = new System.Drawing.Size(100, 30);
-            this.ExecuteButton.TabIndex = 1;
-            this.ExecuteButton.Text = "OK";
-            this.ExecuteButton.UseVisualStyleBackColor = true;
             // 
             // GeneralPanel
             // 
@@ -203,8 +159,64 @@
             this.GeneralPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
             this.GeneralPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
             this.GeneralPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.GeneralPanel.Size = new System.Drawing.Size(314, 117);
+            this.GeneralPanel.Size = new System.Drawing.Size(324, 117);
             this.GeneralPanel.TabIndex = 0;
+            // 
+            // ThreadLabel
+            // 
+            this.ThreadLabel.AutoSize = true;
+            this.ThreadLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ThreadLabel.Location = new System.Drawing.Point(3, 90);
+            this.ThreadLabel.Margin = new System.Windows.Forms.Padding(3);
+            this.ThreadLabel.Name = "ThreadLabel";
+            this.ThreadLabel.Size = new System.Drawing.Size(94, 24);
+            this.ThreadLabel.TabIndex = 6;
+            this.ThreadLabel.Text = "スレッド数：";
+            this.ThreadLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // MethodComboBox
+            // 
+            this.MethodComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MethodComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.MethodComboBox.FormattingEnabled = true;
+            this.MethodComboBox.Location = new System.Drawing.Point(103, 61);
+            this.MethodComboBox.Name = "MethodComboBox";
+            this.MethodComboBox.Size = new System.Drawing.Size(218, 23);
+            this.MethodComboBox.TabIndex = 5;
+            // 
+            // MethodLabel
+            // 
+            this.MethodLabel.AutoSize = true;
+            this.MethodLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MethodLabel.Location = new System.Drawing.Point(3, 61);
+            this.MethodLabel.Margin = new System.Windows.Forms.Padding(3);
+            this.MethodLabel.Name = "MethodLabel";
+            this.MethodLabel.Size = new System.Drawing.Size(94, 23);
+            this.MethodLabel.TabIndex = 4;
+            this.MethodLabel.Text = "圧縮方法：";
+            this.MethodLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // LevelComboBox
+            // 
+            this.LevelComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LevelComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.LevelComboBox.FormattingEnabled = true;
+            this.LevelComboBox.Location = new System.Drawing.Point(103, 32);
+            this.LevelComboBox.Name = "LevelComboBox";
+            this.LevelComboBox.Size = new System.Drawing.Size(218, 23);
+            this.LevelComboBox.TabIndex = 3;
+            // 
+            // LevelLabel
+            // 
+            this.LevelLabel.AutoSize = true;
+            this.LevelLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LevelLabel.Location = new System.Drawing.Point(3, 32);
+            this.LevelLabel.Margin = new System.Windows.Forms.Padding(3);
+            this.LevelLabel.Name = "LevelLabel";
+            this.LevelLabel.Size = new System.Drawing.Size(94, 23);
+            this.LevelLabel.TabIndex = 2;
+            this.LevelLabel.Text = "圧縮レベル：";
+            this.LevelLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // FormatLabel
             // 
@@ -225,64 +237,8 @@
             this.FormatComboBox.FormattingEnabled = true;
             this.FormatComboBox.Location = new System.Drawing.Point(103, 3);
             this.FormatComboBox.Name = "FormatComboBox";
-            this.FormatComboBox.Size = new System.Drawing.Size(208, 23);
+            this.FormatComboBox.Size = new System.Drawing.Size(218, 23);
             this.FormatComboBox.TabIndex = 1;
-            // 
-            // LevelLabel
-            // 
-            this.LevelLabel.AutoSize = true;
-            this.LevelLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.LevelLabel.Location = new System.Drawing.Point(3, 32);
-            this.LevelLabel.Margin = new System.Windows.Forms.Padding(3);
-            this.LevelLabel.Name = "LevelLabel";
-            this.LevelLabel.Size = new System.Drawing.Size(94, 23);
-            this.LevelLabel.TabIndex = 2;
-            this.LevelLabel.Text = "圧縮レベル：";
-            this.LevelLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // LevelComboBox
-            // 
-            this.LevelComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.LevelComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.LevelComboBox.FormattingEnabled = true;
-            this.LevelComboBox.Location = new System.Drawing.Point(103, 32);
-            this.LevelComboBox.Name = "LevelComboBox";
-            this.LevelComboBox.Size = new System.Drawing.Size(208, 23);
-            this.LevelComboBox.TabIndex = 3;
-            // 
-            // MethodLabel
-            // 
-            this.MethodLabel.AutoSize = true;
-            this.MethodLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MethodLabel.Location = new System.Drawing.Point(3, 61);
-            this.MethodLabel.Margin = new System.Windows.Forms.Padding(3);
-            this.MethodLabel.Name = "MethodLabel";
-            this.MethodLabel.Size = new System.Drawing.Size(94, 23);
-            this.MethodLabel.TabIndex = 4;
-            this.MethodLabel.Text = "圧縮方法：";
-            this.MethodLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // MethodComboBox
-            // 
-            this.MethodComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MethodComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.MethodComboBox.FormattingEnabled = true;
-            this.MethodComboBox.Location = new System.Drawing.Point(103, 61);
-            this.MethodComboBox.Name = "MethodComboBox";
-            this.MethodComboBox.Size = new System.Drawing.Size(208, 23);
-            this.MethodComboBox.TabIndex = 5;
-            // 
-            // ThreadLabel
-            // 
-            this.ThreadLabel.AutoSize = true;
-            this.ThreadLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ThreadLabel.Location = new System.Drawing.Point(3, 90);
-            this.ThreadLabel.Margin = new System.Windows.Forms.Padding(3);
-            this.ThreadLabel.Name = "ThreadLabel";
-            this.ThreadLabel.Size = new System.Drawing.Size(94, 24);
-            this.ThreadLabel.TabIndex = 6;
-            this.ThreadLabel.Text = "スレッド数：";
-            this.ThreadLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // ThreadNumericUpDown
             // 
@@ -294,13 +250,26 @@
             0,
             0});
             this.ThreadNumericUpDown.Name = "ThreadNumericUpDown";
-            this.ThreadNumericUpDown.Size = new System.Drawing.Size(208, 23);
+            this.ThreadNumericUpDown.Size = new System.Drawing.Size(218, 23);
             this.ThreadNumericUpDown.TabIndex = 7;
             this.ThreadNumericUpDown.Value = new decimal(new int[] {
             1,
             0,
             0,
             0});
+            // 
+            // EncryptionGroupBox
+            // 
+            this.EncryptionGroupBox.Controls.Add(this.EncryptionPanel);
+            this.EncryptionGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.EncryptionGroupBox.Location = new System.Drawing.Point(12, 203);
+            this.EncryptionGroupBox.Margin = new System.Windows.Forms.Padding(12, 3, 12, 3);
+            this.EncryptionGroupBox.Name = "EncryptionGroupBox";
+            this.EncryptionGroupBox.Padding = new System.Windows.Forms.Padding(8, 3, 8, 8);
+            this.EncryptionGroupBox.Size = new System.Drawing.Size(340, 174);
+            this.EncryptionGroupBox.TabIndex = 2;
+            this.EncryptionGroupBox.TabStop = false;
+            this.EncryptionGroupBox.Text = "暗号化";
             // 
             // EncryptionPanel
             // 
@@ -324,8 +293,50 @@
             this.EncryptionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
             this.EncryptionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
             this.EncryptionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
-            this.EncryptionPanel.Size = new System.Drawing.Size(314, 147);
+            this.EncryptionPanel.Size = new System.Drawing.Size(324, 147);
             this.EncryptionPanel.TabIndex = 0;
+            // 
+            // EncryptionComboBox
+            // 
+            this.EncryptionComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.EncryptionComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.EncryptionComboBox.FormattingEnabled = true;
+            this.EncryptionComboBox.Location = new System.Drawing.Point(103, 121);
+            this.EncryptionComboBox.Name = "EncryptionComboBox";
+            this.EncryptionComboBox.Size = new System.Drawing.Size(218, 23);
+            this.EncryptionComboBox.TabIndex = 7;
+            // 
+            // EncryptionLabel
+            // 
+            this.EncryptionLabel.AutoSize = true;
+            this.EncryptionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.EncryptionLabel.Location = new System.Drawing.Point(3, 121);
+            this.EncryptionLabel.Margin = new System.Windows.Forms.Padding(3);
+            this.EncryptionLabel.Name = "EncryptionLabel";
+            this.EncryptionLabel.Size = new System.Drawing.Size(94, 23);
+            this.EncryptionLabel.TabIndex = 6;
+            this.EncryptionLabel.Text = "暗号化方法：";
+            this.EncryptionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // ConfirmTextBox
+            // 
+            this.ConfirmTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ConfirmTextBox.Location = new System.Drawing.Point(103, 63);
+            this.ConfirmTextBox.Name = "ConfirmTextBox";
+            this.ConfirmTextBox.Size = new System.Drawing.Size(218, 23);
+            this.ConfirmTextBox.TabIndex = 4;
+            // 
+            // ConfirmLabel
+            // 
+            this.ConfirmLabel.AutoSize = true;
+            this.ConfirmLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ConfirmLabel.Location = new System.Drawing.Point(3, 63);
+            this.ConfirmLabel.Margin = new System.Windows.Forms.Padding(3);
+            this.ConfirmLabel.Name = "ConfirmLabel";
+            this.EncryptionPanel.SetRowSpan(this.ConfirmLabel, 2);
+            this.ConfirmLabel.Size = new System.Drawing.Size(94, 52);
+            this.ConfirmLabel.TabIndex = 3;
+            this.ConfirmLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // EncryptionCheckBox
             // 
@@ -334,7 +345,7 @@
             this.EncryptionCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.EncryptionCheckBox.Location = new System.Drawing.Point(3, 3);
             this.EncryptionCheckBox.Name = "EncryptionCheckBox";
-            this.EncryptionCheckBox.Size = new System.Drawing.Size(308, 25);
+            this.EncryptionCheckBox.Size = new System.Drawing.Size(318, 25);
             this.EncryptionCheckBox.TabIndex = 0;
             this.EncryptionCheckBox.Text = "パスワードを設定する";
             this.EncryptionCheckBox.UseVisualStyleBackColor = true;
@@ -356,28 +367,8 @@
             this.PasswordTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PasswordTextBox.Location = new System.Drawing.Point(103, 34);
             this.PasswordTextBox.Name = "PasswordTextBox";
-            this.PasswordTextBox.Size = new System.Drawing.Size(208, 23);
+            this.PasswordTextBox.Size = new System.Drawing.Size(218, 23);
             this.PasswordTextBox.TabIndex = 2;
-            // 
-            // ConfirmLabel
-            // 
-            this.ConfirmLabel.AutoSize = true;
-            this.ConfirmLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ConfirmLabel.Location = new System.Drawing.Point(3, 63);
-            this.ConfirmLabel.Margin = new System.Windows.Forms.Padding(3);
-            this.ConfirmLabel.Name = "ConfirmLabel";
-            this.EncryptionPanel.SetRowSpan(this.ConfirmLabel, 2);
-            this.ConfirmLabel.Size = new System.Drawing.Size(94, 52);
-            this.ConfirmLabel.TabIndex = 3;
-            this.ConfirmLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // ConfirmTextBox
-            // 
-            this.ConfirmTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ConfirmTextBox.Location = new System.Drawing.Point(103, 63);
-            this.ConfirmTextBox.Name = "ConfirmTextBox";
-            this.ConfirmTextBox.Size = new System.Drawing.Size(208, 23);
-            this.ConfirmTextBox.TabIndex = 4;
             // 
             // ShowPasswordCheckBox
             // 
@@ -385,38 +376,49 @@
             this.ShowPasswordCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ShowPasswordCheckBox.Location = new System.Drawing.Point(103, 92);
             this.ShowPasswordCheckBox.Name = "ShowPasswordCheckBox";
-            this.ShowPasswordCheckBox.Size = new System.Drawing.Size(208, 23);
+            this.ShowPasswordCheckBox.Size = new System.Drawing.Size(218, 23);
             this.ShowPasswordCheckBox.TabIndex = 5;
             this.ShowPasswordCheckBox.Text = "パスワードを表示する";
             this.ShowPasswordCheckBox.UseVisualStyleBackColor = true;
             // 
-            // EncryptionLabel
+            // ButtonsPanel
             // 
-            this.EncryptionLabel.AutoSize = true;
-            this.EncryptionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.EncryptionLabel.Location = new System.Drawing.Point(3, 121);
-            this.EncryptionLabel.Margin = new System.Windows.Forms.Padding(3);
-            this.EncryptionLabel.Name = "EncryptionLabel";
-            this.EncryptionLabel.Size = new System.Drawing.Size(94, 23);
-            this.EncryptionLabel.TabIndex = 6;
-            this.EncryptionLabel.Text = "暗号化方法：";
-            this.EncryptionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.ButtonsPanel.Controls.Add(this.ExitButton);
+            this.ButtonsPanel.Controls.Add(this.ExecuteButton);
+            this.ButtonsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ButtonsPanel.Location = new System.Drawing.Point(3, 383);
+            this.ButtonsPanel.Name = "ButtonsPanel";
+            this.ButtonsPanel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.ButtonsPanel.Size = new System.Drawing.Size(358, 55);
+            this.ButtonsPanel.TabIndex = 3;
             // 
-            // EncryptionComboBox
+            // ExitButton
             // 
-            this.EncryptionComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.EncryptionComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.EncryptionComboBox.FormattingEnabled = true;
-            this.EncryptionComboBox.Location = new System.Drawing.Point(103, 121);
-            this.EncryptionComboBox.Name = "EncryptionComboBox";
-            this.EncryptionComboBox.Size = new System.Drawing.Size(208, 23);
-            this.EncryptionComboBox.TabIndex = 7;
+            this.ExitButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.ExitButton.Location = new System.Drawing.Point(250, 8);
+            this.ExitButton.Margin = new System.Windows.Forms.Padding(8, 8, 8, 4);
+            this.ExitButton.Name = "ExitButton";
+            this.ExitButton.Size = new System.Drawing.Size(100, 30);
+            this.ExitButton.TabIndex = 0;
+            this.ExitButton.Text = "キャンセル";
+            this.ExitButton.UseVisualStyleBackColor = true;
+            // 
+            // ExecuteButton
+            // 
+            this.ExecuteButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.ExecuteButton.Location = new System.Drawing.Point(134, 8);
+            this.ExecuteButton.Margin = new System.Windows.Forms.Padding(8, 8, 8, 4);
+            this.ExecuteButton.Name = "ExecuteButton";
+            this.ExecuteButton.Size = new System.Drawing.Size(100, 30);
+            this.ExecuteButton.TabIndex = 1;
+            this.ExecuteButton.Text = "OK";
+            this.ExecuteButton.UseVisualStyleBackColor = true;
             // 
             // SettingsForm
             // 
             this.AcceptButton = this.ExecuteButton;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(354, 451);
+            this.ClientSize = new System.Drawing.Size(364, 441);
             this.Controls.Add(this.RootPanel);
             this.Font = new System.Drawing.Font("Meiryo UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(128)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -427,13 +429,13 @@
             this.OutputPanel.ResumeLayout(false);
             this.OutputPanel.PerformLayout();
             this.GeneralGroupBox.ResumeLayout(false);
-            this.EncryptionGroupBox.ResumeLayout(false);
-            this.ButtonsPanel.ResumeLayout(false);
             this.GeneralPanel.ResumeLayout(false);
             this.GeneralPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ThreadNumericUpDown)).EndInit();
+            this.EncryptionGroupBox.ResumeLayout(false);
             this.EncryptionPanel.ResumeLayout(false);
             this.EncryptionPanel.PerformLayout();
+            this.ButtonsPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

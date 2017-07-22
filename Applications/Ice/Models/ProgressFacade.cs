@@ -78,14 +78,8 @@ namespace Cube.FileSystem.App.Ice
         /// 圧縮または展開したファイルの保存先パスを取得します。
         /// </summary>
         /// 
-        /// <remarks>
-        /// このプロパティは Request.Location および関連するオブジェクト
-        /// から決定されます。Destination の値を設定する場合は、継承クラス
-        /// にて SetDestination メソッドを実行してください。
-        /// </remarks>
-        ///
         /* ----------------------------------------------------------------- */
-        public string Destination { get; private set; }
+        public string Destination { get; protected set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -96,7 +90,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Tmp { get; private set; }
+        public string Tmp { get; protected set; }
 
         /* ----------------------------------------------------------------- */
         ///
