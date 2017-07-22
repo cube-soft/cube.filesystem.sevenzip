@@ -47,10 +47,6 @@ using (var reader = new ArchiveReader(@"path\to\archive", password))
 * [GNU LGPLv3](https://github.com/cube-soft/Cube.FileSystem/blob/master/Libraries/SevenZip/License.txt) ... Cube.FileSystem.SevenZip
 * [Apache 2.0](https://github.com/cube-soft/Cube.FileSystem/blob/master/License.txt) ... The other projects
 
-## Others
-
-Thanks to 
-
 ## Author
  
 [clown](https://gihub.com/clown) and [CubeSoft, Inc.](http://www.cube-soft.jp/)
