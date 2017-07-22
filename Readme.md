@@ -2,6 +2,7 @@ Cube.FileSystem
 ====
 
 Cube.FileSystem is an I/O library, especially for archiving or extracting files.
+The Cube.FileSystem.SevenZip project is licensed under the GNU LGPLv3 and the other projects are Apache 2.0.
 
 ## Usage
 
@@ -16,15 +17,15 @@ using Cube.FileSystem.SevenZip;
 using (var writer = new ArchiveWriter(Format.Zip))
 {
     writer.Option = new ZipOption(); // optional
-    writer.Add("path\to\file");
-    writer.Add("path\to\directory_including_files");
-    writer.Save("path\to\save.zip", "password");
+    writer.Add(@"path\to\file");
+    writer.Add(@"path\to\directory_including_files");
+    writer.Save(@"path\to\save.zip", "password");
 }
 
 // 2. Example for extracting files.
 // Set password directly or using Query<string, string>
 var password = new Cube.Query<string, string>(e => e.Result = "password");
-using (var reader = new ArchiveReader("path/to/archive", password))
+using (var reader = new ArchiveReader(@"path\to\archive", password))
 {
     foreach (var item in reader.Items)
     {
@@ -36,15 +37,15 @@ using (var reader = new ArchiveReader("path/to/archive", password))
 
 ## Requirement
 
-* [7-Zip](http://www.7-zip.org/) ... for Cube.FileSystem.SevenZip and derived projects
+* [7-Zip](http://www.7-zip.org/) ... For Cube.FileSystem.SevenZip and derived projects
 * [AlphaFS](http://alphafs.alphaleonis.com/)
 * [Apache log4net](https://logging.apache.org/log4net/)
-* [NUnit](http://nunit.org/) ... for unit tests
+* [NUnit](http://nunit.org/) ... For unit tests
 
 ## Licence
 
 * [GNU LGPLv3](https://github.com/cube-soft/Cube.FileSystem/blob/master/Libraries/SevenZip/License.txt) ... Cube.FileSystem.SevenZip
-* [Apache 2.0](https://github.com/cube-soft/Cube.FileSystem/blob/master/License.txt) ... the others
+* [Apache 2.0](https://github.com/cube-soft/Cube.FileSystem/blob/master/License.txt) ... The other projects
 
 ## Author
  
