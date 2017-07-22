@@ -37,10 +37,10 @@ using (var reader = new ArchiveReader(@"path\to\archive", password))
 
 ## Requirement
 
-* [7-Zip](http://www.7-zip.org/) ... For Cube.FileSystem.SevenZip and derived projects
+* [7-Zip](http://www.7-zip.org/)
 * [AlphaFS](http://alphafs.alphaleonis.com/)
 * [Apache log4net](https://logging.apache.org/log4net/)
-* [NUnit](http://nunit.org/) ... For unit tests
+* [NUnit](http://nunit.org/)
 
 ## Licence
 
