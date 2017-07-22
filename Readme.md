@@ -42,10 +42,14 @@ using (var reader = new ArchiveReader(@"path\to\archive", password))
 * [Apache log4net](https://logging.apache.org/log4net/)
 * [NUnit](http://nunit.org/)
 
-## Licence
+## License
 
 * [GNU LGPLv3](https://github.com/cube-soft/Cube.FileSystem/blob/master/Libraries/SevenZip/License.txt) ... Cube.FileSystem.SevenZip
 * [Apache 2.0](https://github.com/cube-soft/Cube.FileSystem/blob/master/License.txt) ... The other projects
+
+## Others
+
+Thanks to 
 
 ## Author
  
