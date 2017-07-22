@@ -5,40 +5,33 @@ Cube.FileSystem is an I/O library, especially for archiving or extracting files.
 
 ## Usage
 
-```cs:ArchiveSample
+Note that ArchiveWriter and ArchiveReader classes (Cube.FileSystem.SevenZip) need to execute in the same thread from constructing to destroying.
+Use Task.Run() in the whole transaction if you need to archive or extract files asynchronously.
+
+```cs
 using Cube.FileSystem.SevenZip;
 
-// Note that the ArchiveWriter class needs to execute in the same thread from constructing to destroying
-Task.Run(() =>
+// 1. Example for archiving files.
+// Supported Format: Zip, SevenZip, BZip2, GZip, XZ
+using (var writer = new ArchiveWriter(Format.Zip))
 {
-    // Supported Format: Zip, SevenZip, BZip2, GZip, XZ
-    using (var writer = new ArchiveWriter(Format.Zip))
-    {
-        writer.Option = new ZipOption(); // optional
-        writer.Add("path\to\file");
-        writer.Add("path\to\directory_including_files");
-        writer.Save("path\to\save.zip", "password");
-    }
-});
-```
+    writer.Option = new ZipOption(); // optional
+    writer.Add("path\to\file");
+    writer.Add("path\to\directory_including_files");
+    writer.Save("path\to\save.zip", "password");
+}
 
-```cs:ExtractSample
-using Cube.FileSystem.SevenZip;
-
-// Note that the ArchiveReader class needs to execute in the same thread from constructing to destroying
-Task.Run(() =>
+// 2. Example for extracting files.
+// Set password directly or using Query<string, string>
+var password = new Cube.Query<string, string>(e => e.Result = "password");
+using (var reader = new ArchiveReader("path/to/archive", password))
 {
-    // Set password directly or using Query<string, string>
-    var password = new Cube.Query<string, string>(e => e.Result = "password");
-    using (var reader = new ArchiveReader("path/to/archive", password))
+    foreach (var item in reader.Items)
     {
-        foreach (var item in reader.Items)
-        {
-            // Save as "path\to\directory\{item.FullName}"
-            item.Extract(@"path\to\directory");
-        }
+        // Save as "path\to\directory\{item.FullName}"
+        item.Extract(@"path\to\directory");
     }
-});
+}
 ```
 
 ## Requirement
