@@ -126,8 +126,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         private void AddEncryptionMethod(ZipOption zo)
         {
-            if (!zo.IsEncrypted) return;
             var value = zo.EncryptionMethod;
+            if (value == EncryptionMethod.Default) return;
             Add("em", PropVariant.Create(value.ToString()));
         }
 

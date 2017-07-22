@@ -109,18 +109,7 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public EncryptionMethod EncryptionMethod { get; set; } = EncryptionMethod.ZipCrypto;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// IsEncrypted
-        ///
-        /// <summary>
-        /// 暗号化が有効かどうかを示す値を取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public bool IsEncrypted { get; set; } = false;
+        public EncryptionMethod EncryptionMethod { get; set; } = EncryptionMethod.Default;
 
         #endregion
     }

@@ -118,11 +118,7 @@ namespace Cube.FileSystem.Tests
                     "ZipAes256.zip",
                     "password",
                     new[] { "Sample.txt" },
-                    new ZipOption
-                    {
-                        EncryptionMethod = EncryptionMethod.Aes256,
-                        IsEncrypted = true,
-                    }
+                    new ZipOption { EncryptionMethod = EncryptionMethod.Aes256 }
                 ).Returns(217L);
 
                 yield return new TestCaseData(Format.Tar,
