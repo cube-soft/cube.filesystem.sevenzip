@@ -13,7 +13,7 @@ Use Task.Run() in the whole transaction if you need to archive or extract files 
 using Cube.FileSystem.SevenZip;
 
 // 1. Example for archiving files.
-// Supported Format: Zip, SevenZip, BZip2, GZip, XZ
+// Supported Format: Zip, SevenZip, TAR, BZip2, GZip, XZ
 using (var writer = new ArchiveWriter(Format.Zip))
 {
     writer.Option = new ZipOption(); // optional
