@@ -238,7 +238,7 @@ namespace Cube.FileSystem.SevenZip
             var pos = 32UL * 1024;
             _raw.Open(_stream, ref pos, new ArchiveOpenCallback(Source) { Password = password });
 
-            Items = new ReadOnlyArchiveCollection(_raw, Source, password, _io);
+            Items = new ReadOnlyArchiveCollection(_raw, Format, Source, password, _io);
         }
 
         #region Fields

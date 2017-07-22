@@ -58,14 +58,15 @@ namespace Cube.FileSystem.Tests
 
                 for (var i = 0; i < expected.Count; ++i)
                 {
-                    Assert.That(actual[i].Index,         Is.EqualTo(i));
-                    Assert.That(actual[i].FullName,      Is.EqualTo(expected[i].FullName));
-                    Assert.That(actual[i].Extension,     Is.EqualTo(expected[i].Extension));
-                    Assert.That(actual[i].Length,        Is.EqualTo(expected[i].Length));
-                    Assert.That(actual[i].Encrypted,     Is.EqualTo(expected[i].Encrypted));
-                    Assert.That(actual[i].IsDirectory,   Is.EqualTo(expected[i].IsDirectory));
-                    Assert.That(actual[i].CreationTime,  Is.EqualTo(expected[i].CreationTime.ToLocalTime()));
-                    Assert.That(actual[i].LastWriteTime, Is.EqualTo(expected[i].LastWriteTime.ToLocalTime()));
+                    Assert.That(actual[i].Index,          Is.EqualTo(i));
+                    Assert.That(actual[i].FullName,       Is.EqualTo(expected[i].FullName));
+                    Assert.That(actual[i].Extension,      Is.EqualTo(expected[i].Extension));
+                    Assert.That(actual[i].Length,         Is.EqualTo(expected[i].Length));
+                    Assert.That(actual[i].Encrypted,      Is.EqualTo(expected[i].Encrypted));
+                    Assert.That(actual[i].IsDirectory,    Is.EqualTo(expected[i].IsDirectory));
+                    Assert.That(actual[i].LastWriteTime,  Is.Not.EqualTo(DateTime.MinValue));
+                    // Assert.That(actual[i].CreationTime,   Is.Not.EqualTo(DateTime.MinValue));
+                    // Assert.That(actual[i].LastAccessTime, Is.Not.EqualTo(DateTime.MinValue));
                 }
             }
         }
@@ -163,8 +164,6 @@ namespace Cube.FileSystem.Tests
                         Length        = 0,
                         Encrypted     = false,
                         IsDirectory   = true,
-                        CreationTime  = new DateTime(636335461672026312L, DateTimeKind.Utc),
-                        LastWriteTime = new DateTime(636335461673382389L, DateTimeKind.Utc),
                     },
 
                     new ExpectedItem
@@ -174,8 +173,6 @@ namespace Cube.FileSystem.Tests
                         Length        = 7816,
                         Encrypted     = false,
                         IsDirectory   = false,
-                        CreationTime  = new DateTime(636329192793637655L, DateTimeKind.Utc),
-                        LastWriteTime = new DateTime(636329193340933256L, DateTimeKind.Utc),
                     },
 
                     new ExpectedItem
@@ -185,8 +182,6 @@ namespace Cube.FileSystem.Tests
                         Length        = 0,
                         Encrypted     = false,
                         IsDirectory   = false,
-                        CreationTime  = new DateTime(636329193392193901L, DateTimeKind.Utc),
-                        LastWriteTime = new DateTime(636329193392193901L, DateTimeKind.Utc),
                     },
 
                     new ExpectedItem
@@ -196,8 +191,6 @@ namespace Cube.FileSystem.Tests
                         Length        = 3,
                         Encrypted     = false,
                         IsDirectory   = false,
-                        CreationTime  = new DateTime(636329192793637655L, DateTimeKind.Utc),
-                        LastWriteTime = new DateTime(636329192889544731L, DateTimeKind.Utc),
                     },
                 });
 
@@ -210,8 +203,6 @@ namespace Cube.FileSystem.Tests
                         Length        = 0,
                         Encrypted     = false,
                         IsDirectory   = true,
-                        CreationTime  = new DateTime(0L, DateTimeKind.Local),
-                        LastWriteTime = new DateTime(636335462377258383L, DateTimeKind.Utc),
                     },
 
                     new ExpectedItem
@@ -221,8 +212,6 @@ namespace Cube.FileSystem.Tests
                         Length        = 0,
                         Encrypted     = false,
                         IsDirectory   = false,
-                        CreationTime  = new DateTime(0L, DateTimeKind.Local),
-                        LastWriteTime = new DateTime(636335460490216213L, DateTimeKind.Utc),
                     },
 
                     new ExpectedItem
@@ -232,8 +221,6 @@ namespace Cube.FileSystem.Tests
                         Length        = 26,
                         Encrypted     = true,
                         IsDirectory   = false,
-                        CreationTime  = new DateTime(0L, DateTimeKind.Local),
-                        LastWriteTime = new DateTime(636335458772834750L, DateTimeKind.Utc),
                     },
                 });
 
@@ -241,24 +228,20 @@ namespace Cube.FileSystem.Tests
                 {
                     new ExpectedItem
                     {
-                        FullName      = @"Symbol1.txt",
+                        FullName      = "Symbol1.txt",
                         Extension     = ".txt",
                         Length        = 7816,
                         Encrypted     = true,
                         IsDirectory   = false,
-                        CreationTime  = new DateTime(0L, DateTimeKind.Local),
-                        LastWriteTime = new DateTime(636353593020000000L, DateTimeKind.Utc),
                     },
 
                     new ExpectedItem
                     {
-                        FullName      = @"Symbol2.txt",
+                        FullName      = "Symbol2.txt",
                         Extension     = ".txt",
                         Length        = 6,
                         Encrypted     = true,
                         IsDirectory   = false,
-                        CreationTime  = new DateTime(0L, DateTimeKind.Local),
-                        LastWriteTime = new DateTime(636353593220000000L, DateTimeKind.Utc),
                     },
                 });
 
@@ -266,25 +249,33 @@ namespace Cube.FileSystem.Tests
                 {
                     new ExpectedItem
                     {
-                        FullName      = @"Japanese1.txt",
+                        FullName      = "Japanese1.txt",
                         Extension     = ".txt",
                         Length        = 22187,
                         Encrypted     = true,
                         IsDirectory   = false,
-                        CreationTime  = new DateTime(0L, DateTimeKind.Local),
-                        LastWriteTime = new DateTime(636353615100000000L, DateTimeKind.Utc),
                     },
 
                     new ExpectedItem
                     {
-                        FullName      = @"Japanese2.txt",
+                        FullName      = "Japanese2.txt",
                         Extension     = ".txt",
                         Length        = 21,
                         Encrypted     = true,
                         IsDirectory   = false,
-                        CreationTime  = new DateTime(0L, DateTimeKind.Local),
-                        LastWriteTime = new DateTime(636353615360000000L, DateTimeKind.Utc),
                     },
+                });
+
+                yield return new TestCaseData("Sample.tar.gz", "", new List<ExpectedItem>
+                {
+                    new ExpectedItem
+                    {
+                        FullName      = "Sample.tar",
+                        Extension     = ".tar",
+                        Length        = 20480,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    }
                 });
             }
         }

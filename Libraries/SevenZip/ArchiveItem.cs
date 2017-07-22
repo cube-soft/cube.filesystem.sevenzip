@@ -42,15 +42,17 @@ namespace Cube.FileSystem.SevenZip
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
+        /// <param name="format">圧縮ファイル形式</param>
         /// <param name="src">圧縮ファイルのパス</param>
         /// <param name="index">圧縮ファイル中のインデックス</param>
         /// <param name="password">パスワード取得用オブジェクト</param>
         /// <param name="io">ファイル操作用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected ArchiveItem(string src, int index,
+        protected ArchiveItem(Format format, string src, int index,
             IQuery<string, string> password, Operator io)
         {
+            Format   = format;
             Source   = src;
             Index    = index;
             Password = password;
@@ -60,6 +62,17 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Format
+        ///
+        /// <summary>
+        /// 圧縮ファイル形式を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public Format Format { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -319,19 +332,20 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /// <param name="raw">実装オブジェクト</param>
+        /// <param name="format">圧縮ファイル形式</param>
         /// <param name="src">圧縮ファイルのパス</param>
         /// <param name="index">圧縮ファイル中のインデックス</param>
         /// <param name="password">パスワード取得用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveItemImpl(IInArchive raw, string src, int index,
+        public ArchiveItemImpl(IInArchive raw, Format format, string src, int index,
             IQuery<string, string> password, Operator io)
-            : base(src, index, password, io)
+            : base(format, src, index, password, io)
         {
             _raw = raw;
 
             Exists         = true;
-            FullName       = Get<string>(ItemPropId.Path);
+            FullName       = GetPath();
             Encrypted      = Get<bool>(ItemPropId.Encrypted);
             IsDirectory    = Get<bool>(ItemPropId.IsDirectory);
             Attributes     = GetAttributes();
@@ -460,6 +474,36 @@ namespace Cube.FileSystem.SevenZip
             {
                 this.LogWarn(err.ToString(), err);
                 return default(T);
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetPath
+        ///
+        /// <summary>
+        /// パスを取得します。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// BZIP2, GZIP, XZ に関してはパスの情報を取得する事ができない
+        /// ため、元のファイル名の拡張子を .tar に変更したものをパス
+        /// にする事としています。主要形式以外に関しては未調査なため、
+        /// 必要であればそれ以外の形式も同様の対応を行う必要があります。
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        private string GetPath()
+        {
+            switch (Format)
+            {
+                case Format.BZip2:
+                case Format.GZip:
+                case Format.XZ:
+                    var info = IO.Get(IO.Get(Source).NameWithoutExtension);
+                    return info.Extension.ToLower() == ".tar" ? info.Name : $"{info.Name}.tar";
+                default:
+                    return Get<string>(ItemPropId.Path);
             }
         }
 

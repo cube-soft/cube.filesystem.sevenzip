@@ -47,9 +47,10 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="password">パスワード取得用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ReadOnlyArchiveCollection(IInArchive raw, string src,
-            IQuery<string, string> password, Operator io)
+        public ReadOnlyArchiveCollection(IInArchive raw, Format format,
+            string src, IQuery<string, string> password, Operator io)
         {
+            Format   = format;
             Source   = src;
             Password = password;
             _raw     = raw;
@@ -62,6 +63,17 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Format
+        ///
+        /// <summary>
+        /// Format オブジェクトを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public Format Format { get; }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Count
         ///
         /// <summary>
@@ -69,7 +81,21 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public int Count => (int)_raw.GetNumberOfItems();
+        public int Count
+        {
+            get
+            {
+                switch (Format)
+                {
+                    case Format.BZip2:
+                    case Format.GZip:
+                    case Format.XZ:
+                        return 1;
+                    default:
+                        return (int)_raw.GetNumberOfItems();
+                }
+            }
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -110,7 +136,7 @@ namespace Cube.FileSystem.SevenZip
         {
             for (var i = 0; i < Count; ++i)
             {
-                yield return new ArchiveItemImpl(_raw, Source, i, Password, _io);
+                yield return new ArchiveItemImpl(_raw, Format, Source, i, Password, _io);
             }
         }
 
