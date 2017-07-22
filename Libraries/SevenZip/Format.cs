@@ -144,6 +144,7 @@ namespace Cube.FileSystem.SevenZip
         Aes192,
         Aes256,
         ZipCrypto,
+        Default,
     }
 
     /* --------------------------------------------------------------------- */
