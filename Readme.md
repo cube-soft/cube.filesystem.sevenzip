@@ -49,4 +49,4 @@ using (var reader = new ArchiveReader(@"path\to\archive", password))
 
 ## Author
  
-[clown](https://gihub.com/clown), [CubeSoft, Inc.](http://www.cube-soft.jp/)
+[clown](https://gihub.com/clown) and [CubeSoft, Inc.](http://www.cube-soft.jp/)
