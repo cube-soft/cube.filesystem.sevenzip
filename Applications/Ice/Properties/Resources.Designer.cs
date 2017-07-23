@@ -185,6 +185,60 @@ namespace Cube.FileSystem.App.Ice.Properties {
         }
         
         /// <summary>
+        ///   最速 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string LevelFast {
+            get {
+                return ResourceManager.GetString("LevelFast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   高圧縮 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string LevelHigh {
+            get {
+                return ResourceManager.GetString("LevelHigh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   高速 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string LevelLow {
+            get {
+                return ResourceManager.GetString("LevelLow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   無圧縮 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string LevelNone {
+            get {
+                return ResourceManager.GetString("LevelNone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   標準 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string LevelNormal {
+            get {
+                return ResourceManager.GetString("LevelNormal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   最高圧縮 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string LevelUltra {
+            get {
+                return ResourceManager.GetString("LevelUltra", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   再開 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MenuResume {
