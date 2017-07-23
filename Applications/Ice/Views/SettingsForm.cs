@@ -15,7 +15,9 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System.Collections.Generic;
 using System.Windows.Forms;
+using Cube.FileSystem.SevenZip;
 
 namespace Cube.FileSystem.App.Ice
 {
@@ -44,10 +46,83 @@ namespace Cube.FileSystem.App.Ice
         public SettingsForm()
         {
             InitializeComponent();
+            InitializeFormat();
+            InitializeCompressionLevel();
 
             ExecuteButton.Click += (s, e) => Close();
             ExitButton.Click    += (s, e) => Close();
         }
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// InitializeFormat
+        /// 
+        /// <summary>
+        /// Format を初期化します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void InitializeFormat()
+        {
+            var data = new List<KeyValuePair<string, Format>>
+            {
+                Pair("zip",   Format.Zip),
+                Pair("7z",    Format.SevenZip),
+                Pair("tar",   Format.Tar),
+                Pair("gzip",  Format.GZip),
+                Pair("bzip2", Format.BZip2),
+                Pair("xz",    Format.XZ),
+                // Pair("exe", Format.Executable),
+            };
+
+            FormatComboBox.DataSource    = data;
+            FormatComboBox.DisplayMember = "Key";
+            FormatComboBox.ValueMember   = "Value";
+            FormatComboBox.SelectedValue = Format.Zip;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// InitializeCompressionLevel
+        /// 
+        /// <summary>
+        /// CompressionLevel を初期化します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void InitializeCompressionLevel()
+        {
+            var data = new List<KeyValuePair<string, CompressionLevel>>
+            {
+                Pair(Properties.Resources.LevelNone,   CompressionLevel.None),
+                Pair(Properties.Resources.LevelFast,   CompressionLevel.Fast),
+                Pair(Properties.Resources.LevelLow,    CompressionLevel.Low),
+                Pair(Properties.Resources.LevelNormal, CompressionLevel.Normal),
+                Pair(Properties.Resources.LevelHigh,   CompressionLevel.High),
+                Pair(Properties.Resources.LevelUltra,  CompressionLevel.Ultra)
+            };
+
+            LevelComboBox.DataSource    = data;
+            LevelComboBox.DisplayMember = "Key";
+            LevelComboBox.ValueMember   = "Value";
+            LevelComboBox.SelectedValue = CompressionLevel.Ultra;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Pair(T, U)
+        /// 
+        /// <summary>
+        /// KeyValuePair(T, U) を生成します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private KeyValuePair<T, U> Pair<T, U>(T key, U value)
+            => new KeyValuePair<T, U>(key, value);
 
         #endregion
     }
