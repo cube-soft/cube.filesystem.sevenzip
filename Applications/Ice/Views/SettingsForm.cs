@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using Cube.FileSystem.SevenZip;
@@ -56,10 +57,13 @@ namespace Cube.FileSystem.App.Ice
             UpdateEncryptionMethod();
 
             EncryptionMethodComboBox.Enabled = false;
+            ExecuteButton.Enabled = false;
 
             ExecuteButton.Click += (s, e) => Close();
             ExitButton.Click    += (s, e) => Close();
 
+            OutputButton.Click                  += WhenPathRequired;
+            OutputTextBox.TextChanged           += WhenPathChanged;
             FormatComboBox.SelectedValueChanged += WhenFormatChanged;
             EncryptionCheckBox.CheckedChanged   += WhenEncryptionChanged;
             PasswordTextBox.TextChanged         += WhenPasswordChanged;
@@ -136,6 +140,25 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Path
+        /// 
+        /// <summary>
+        /// 保存先パスを取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Path
+        {
+            get { return OutputTextBox.Text; }
+            set
+            {
+                if (OutputTextBox.Text == value) return;
+                OutputTextBox.Text = value;
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Password
         /// 
         /// <summary>
@@ -147,6 +170,50 @@ namespace Cube.FileSystem.App.Ice
             => EncryptionCheckBox.Checked ?
                PasswordTextBox.Text :
                null;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// PathIsValid
+        /// 
+        /// <summary>
+        /// パス設定が正しいかどうかを取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        private bool PathIsValid
+        {
+            get { return _path; }
+            set
+            {
+                if (_path == value) return;
+                _path = value;
+                ExecuteButton.Enabled = value & EncryptionIsValid;
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// EncryptionIsValid
+        /// 
+        /// <summary>
+        /// 暗号化設定が正しいかどうかを取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        private bool EncryptionIsValid
+        {
+            get { return _encryption; }
+            set
+            {
+                if (_encryption == value) return;
+                _encryption = value;
+                ExecuteButton.Enabled = value & PathIsValid;
+            }
+        }
 
         #endregion
 
@@ -252,6 +319,35 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// WhenPathRequired
+        /// 
+        /// <summary>
+        /// 保存パスの要求時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenPathRequired(object sender, EventArgs e)
+        {
+            var args = new QueryEventArgs<string, string>(Format.ToString());
+            Views.ShowSaveFileView(args);
+            if (args.Cancel) return;
+            Path = args.Result;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenPathChanged
+        /// 
+        /// <summary>
+        /// 保存パスの変更時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenPathChanged(object sender, EventArgs e)
+            => PathIsValid = OutputTextBox.TextLength > 0;
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// WhenFormatChanged
         /// 
         /// <summary>
@@ -300,7 +396,7 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void WhenPasswordChanged(object sender, EventArgs e)
         {
-            if (ShowPasswordCheckBox.Checked) ExecuteButton.Enabled = PasswordTextBox.TextLength > 0;
+            if (ShowPasswordCheckBox.Checked) EncryptionIsValid = PasswordTextBox.TextLength > 0;
             else ConfirmTextBox.Text = string.Empty;
         }
 
@@ -318,7 +414,7 @@ namespace Cube.FileSystem.App.Ice
             if (!ConfirmTextBox.Enabled) return;
 
             var eq = PasswordTextBox.Text.Equals(ConfirmTextBox.Text);
-            ExecuteButton.Enabled    = eq && PasswordTextBox.TextLength > 0;
+            EncryptionIsValid        = eq && PasswordTextBox.TextLength > 0;
             ConfirmTextBox.BackColor = eq || ConfirmTextBox.TextLength <= 0 ?
                                        SystemColors.Window :
                                        Color.FromArgb(255, 102, 102);
@@ -354,8 +450,13 @@ namespace Cube.FileSystem.App.Ice
             PasswordTextBox.UseSystemPasswordChar = !show;
             ConfirmTextBox.Enabled = !show;
             ConfirmTextBox.Text = string.Empty;
-            ExecuteButton.Enabled = show & (PasswordTextBox.TextLength > 0);
+            EncryptionIsValid = show & (PasswordTextBox.TextLength > 0);
         }
+
+        #region Fields
+        private bool _path = false;
+        private bool _encryption = true;
+        #endregion
 
         #endregion
 

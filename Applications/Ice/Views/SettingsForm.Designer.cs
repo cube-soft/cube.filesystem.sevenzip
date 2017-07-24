@@ -104,7 +104,7 @@
             this.OutputLabel.Name = "OutputLabel";
             this.OutputLabel.Size = new System.Drawing.Size(55, 38);
             this.OutputLabel.TabIndex = 100;
-            this.OutputLabel.Text = "出力先：";
+            this.OutputLabel.Text = "保存先：";
             this.OutputLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // OutputTextBox

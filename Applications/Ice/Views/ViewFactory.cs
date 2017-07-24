@@ -174,6 +174,7 @@ namespace Cube.FileSystem.App.Ice
             var cvt  = format.ToLower();
             var dest = cvt == "zip"   ? Properties.Resources.FilterZip      :
                        cvt == "7z"    ? Properties.Resources.FilterSevenZip :
+                       cvt == "tar"   ? Properties.Resources.FilterTar      :
                        cvt == "gzip"  ? Properties.Resources.FilterGzip     :
                        cvt == "bzip2" ? Properties.Resources.FilterBzip2    :
                        cvt == "xz"    ? Properties.Resources.FilterXZ       : string.Empty;
