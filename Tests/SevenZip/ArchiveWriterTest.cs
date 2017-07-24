@@ -121,13 +121,6 @@ namespace Cube.FileSystem.Tests
                     new ZipOption { EncryptionMethod = EncryptionMethod.Aes256 }
                 ).Returns(217L);
 
-                yield return new TestCaseData(Format.Tar,
-                    "TarTest.tar",
-                    "",
-                    new[] { "Sample.txt", "Archive" },
-                    null
-                ).Returns(38912L);
-
                 yield return new TestCaseData(Format.BZip2,
                     "BZip2Test.bz",
                     "",
@@ -141,6 +134,35 @@ namespace Cube.FileSystem.Tests
                     new[] { "Sample.txt" },
                     null
                 ).Returns(47L);
+
+                yield return new TestCaseData(Format.Tar,
+                    "TarTest.tar",
+                    "",
+                    new[] { "Sample.txt", "Archive" },
+                    null
+                ).Returns(38912L);
+
+                yield return new TestCaseData(Format.Tar,
+                    "TarTest.tar.gz",
+                    "",
+                    new[] { "Sample.txt", "Archive" },
+                    new TarOption
+                    {
+                        CompressionMethod = CompressionMethod.GZip,
+                        CompressionLevel  = CompressionLevel.Ultra,
+                    }
+                ).Returns(11810L);
+
+                yield return new TestCaseData(Format.Tar,
+                    "TarTest.tar.bz",
+                    "",
+                    new[] { "Sample.txt", "Archive" },
+                    new TarOption
+                    {
+                        CompressionMethod = CompressionMethod.BZip2,
+                        CompressionLevel  = CompressionLevel.Ultra,
+                    }
+                ).Returns(10556L);
             }
         }
 

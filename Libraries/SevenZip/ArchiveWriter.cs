@@ -150,7 +150,10 @@ namespace Cube.FileSystem.SevenZip
         /// 
         /* ----------------------------------------------------------------- */
         public void Save(string path, string password)
-            => SaveCore(path, new PasswordQuery(password), null);
+        {
+            if (Format == Format.Tar) SaveCoreTar(path, new PasswordQuery(password), null, _items);
+            else SaveCore(Format, path, new PasswordQuery(password), null, _items);
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -166,7 +169,10 @@ namespace Cube.FileSystem.SevenZip
         /// 
         /* ----------------------------------------------------------------- */
         public void Save(string path, IQuery<string, string> password, IProgress<ArchiveReport> progress)
-            => SaveCore(path, new PasswordQuery(password), progress);
+        {
+            if (Format == Format.Tar) SaveCoreTar(path, new PasswordQuery(password), progress, _items);
+            else SaveCore(Format, path, new PasswordQuery(password), progress, _items);
+        }
 
         #region IDisposable
 
@@ -252,14 +258,14 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CreateSetter
+        /// GetSetter
         ///
         /// <summary>
-        /// ArchiveOptionSetter オブジェクトを生成します。
+        /// ArchiveOptionSetter オブジェクトを取得します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private ArchiveOptionSetter CreateSetter()
+        private ArchiveOptionSetter GetSetter()
         {
             switch (Format)
             {
@@ -276,6 +282,74 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
+        /// GetFormat
+        ///
+        /// <summary>
+        /// CompressionMethod に対応する Format オブジェクトを取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private Format GetFormat(CompressionMethod method)
+        {
+            switch (method)
+            {
+                case CompressionMethod.BZip2: return Format.BZip2;
+                case CompressionMethod.GZip:  return Format.GZip;
+                case CompressionMethod.XZ:    return Format.XZ;
+                default: break;
+            }
+            return Format.Unknown;
+        }
+
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SaveCoreTar
+        ///
+        /// <summary>
+        /// Tar ファイルを作成し保存します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void SaveCoreTar(string path,
+            IQuery<string, string> password,
+            IProgress<ArchiveReport> progress,
+            IList<FileItem> items
+        ) {
+            var dest = _io.Get(path);
+            var mid  = _io.Get(dest.NameWithoutExtension);
+            var name = (mid.Extension == ".tar") ? mid.Name : $"{mid.Name}.tar";
+            var dir  = _io.Combine(dest.DirectoryName, Guid.NewGuid().ToString("D"));
+            var tmp  = _io.Combine(dir, name);
+
+            try
+            {
+                SaveCore(Format.Tar, tmp, password, progress, items);
+
+                var f = new List<FileItem> { new FileItem(tmp) };
+                var m = (Option as TarOption)?.CompressionMethod ?? CompressionMethod.Copy;
+
+                switch (m)
+                {
+                    case CompressionMethod.BZip2:
+                    case CompressionMethod.GZip:
+                    case CompressionMethod.XZ:
+                        SaveCore(GetFormat(m), path, password, progress, f);
+                        break;
+                    case CompressionMethod.Copy:
+                    case CompressionMethod.Default:
+                        _io.Move(tmp, path, true);
+                        break;
+                    default:
+                        _io.Move(tmp, path, true);
+                        break;
+                }
+            }
+            finally { if (_io.Get(dir).Exists) _io.Delete(dir); }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// SaveCore
         ///
         /// <summary>
@@ -283,11 +357,17 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private void SaveCore(string path, IQuery<string, string> password, IProgress<ArchiveReport> progress)
-        {
-            var raw      = _7z.GetOutArchive(Format);
+        private void SaveCore(Format format, string path,
+            IQuery<string, string> password,
+            IProgress<ArchiveReport> progress,
+            IList<FileItem> items
+        ) {
+            var dir = _io.Get(_io.Get(path).DirectoryName);
+            if (!dir.Exists) _io.CreateDirectory(dir.FullName);
+
+            var raw      = _7z.GetOutArchive(format);
             var stream   = new ArchiveStreamWriter(_io.Create(path));
-            var callback = new ArchiveUpdateCallback(_items, path, _io)
+            var callback = new ArchiveUpdateCallback(items, path, _io)
             {
                 Password = password,
                 Progress = progress,
@@ -295,13 +375,15 @@ namespace Cube.FileSystem.SevenZip
 
             try
             {
-                if (Option != null) CreateSetter()?.Execute(raw as ISetProperties);
-                raw.UpdateItems(stream, (uint)_items.Count, callback);
+                if (Option != null) GetSetter()?.Execute(raw as ISetProperties);
+                raw.UpdateItems(stream, (uint)items.Count, callback);
             }
             finally
             {
+                var result = callback.Result;
                 stream.Dispose();
-                SaveResult(path, callback.Result);
+                callback.Dispose();
+                SaveResult(path, result);
             }
         }
 

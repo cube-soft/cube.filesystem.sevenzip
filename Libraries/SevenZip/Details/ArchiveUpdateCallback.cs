@@ -31,7 +31,7 @@ namespace Cube.FileSystem.SevenZip
     ///
     /* --------------------------------------------------------------------- */
     internal sealed class ArchiveUpdateCallback
-        : ArchiveCallbackBase, IArchiveUpdateCallback, ICryptoGetTextPassword2
+        : ArchiveCallbackBase, IArchiveUpdateCallback, ICryptoGetTextPassword2, IDisposable
     {
         #region Constructors
 
@@ -271,8 +271,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int GetStream(uint index, out ISequentialInStream stream)
         {
-            var path = Items[(int)index].FullName;
-            stream = !_io.Get(path).IsDirectory ? new ArchiveStreamReader(_io.OpenRead(path)) : null;
+            stream = CreateStream(index);
 
             ProgressReport.DoneCount = index + 1;
             Progress?.Report(ProgressReport);
@@ -310,10 +309,107 @@ namespace Cube.FileSystem.SevenZip
 
         #endregion
 
+        #region IDisposable
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ~ArchiveUpdateCallback
+        ///
+        /// <summary>
+        /// オブジェクトを破棄します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        // ~ArchiveUpdateCallback() {
+        //   Dispose(false);
+        // }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Dispose
+        ///
+        /// <summary>
+        /// リソースを開放します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void Dispose()
+        {
+            Dispose(true);
+            // GC.SuppressFinalize(this);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Dispose
+        ///
+        /// <summary>
+        /// リソースを開放します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void Dispose(bool disposing)
+        {
+            if (_disposed) return;
+
+            if (disposing)
+            {
+                foreach (var stream in _streams)
+                {
+                    stream.Disposed -= WhenDisposed;
+                    stream.Dispose();
+                }
+                _streams.Clear();
+            }
+
+            _disposed = true;
+        }
+
         #endregion
 
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CreateStream
+        ///
+        /// <summary>
+        /// ストリームを生成します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private ArchiveStreamReader CreateStream(uint index)
+        {
+            var path = Items[(int)index].FullName;
+            var info = _io.Get(path);
+            if (info.IsDirectory) return null;
+
+            var dest = new ArchiveStreamReader(_io.OpenRead(path));
+            dest.Disposed += WhenDisposed;
+            _streams.Add(dest);
+            return dest;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenDisposed
+        ///
+        /// <summary>
+        /// Dispose 時に実行されるハンドラです。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void WhenDisposed(object sender, EventArgs e)
+            => _streams.Remove(sender as ArchiveStreamReader);
+
         #region Fields
+        private bool _disposed = false;
         private Operator _io;
+        private IList<ArchiveStreamReader> _streams = new List<ArchiveStreamReader>();
+        #endregion
+
         #endregion
     }
 }
