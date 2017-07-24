@@ -15,6 +15,8 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 
@@ -43,20 +45,17 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [Test]
-        public async Task Archive()
+        [TestCaseSource(nameof(Archive_TestCases))]
+        public async Task Archive(string filename, string[] args)
         {
-            var filename = "Archive.zip";
             var settings = new SettingsFolder();
             var events   = new EventAggregator();
             var view     = Views.CreateProgressView();
-            var model    = new Request(new[]
+            var model    = new Request(args.Concat(new[]
             {
-                "/c:zip",
-                "/o:runtime",
                 Example("Sample.txt"),
                 Example("Archive"),
-            });
+            }).ToArray());
 
             MockViewFactory.Destination = Result(filename);
 
@@ -72,6 +71,28 @@ namespace Cube.FileSystem.App.Ice.Tests
                 Assert.That(view.FileCount,    Is.EqualTo(4));
                 Assert.That(view.DoneCount,    Is.EqualTo(view.FileCount));
                 Assert.That(view.Value,        Is.EqualTo(100));
+            }
+        }
+
+        #endregion
+
+        #region TestCases
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Archive_TestCases
+        /// 
+        /// <summary>
+        /// 圧縮処理のテスト用データを取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private static IEnumerable<TestCaseData> Archive_TestCases
+        {
+            get
+            {
+                yield return new TestCaseData("Archive.7z", new[] { "/c:7z", "/o:runtime" });
+                yield return new TestCaseData("ArchiveDetail.zip", new[] { "/c:detail" });
             }
         }
 

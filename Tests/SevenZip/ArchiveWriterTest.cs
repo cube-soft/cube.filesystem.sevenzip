@@ -91,21 +91,21 @@ namespace Cube.FileSystem.Tests
                     "",
                     new[] { "Archive" },
                     null
-                ).Returns(11873L);
+                ).Returns(12014L);
 
                 yield return new TestCaseData(Format.Zip,
                     "ZipUltra.zip",
                     "",
                     new[] { "Sample.txt", "Archive" },
                     new ZipOption { CompressionLevel = CompressionLevel.Ultra }
-                ).Returns(11822L);
+                ).Returns(11960L);
 
                 yield return new TestCaseData(Format.Zip,
                     "ZipLzma.zip",
                     "",
                     new[] { "Sample.txt", "Archive" },
                     new ZipOption { CompressionMethod = CompressionMethod.Lzma }
-                ).Returns(11645L);
+                ).Returns(11815L);
 
                 yield return new TestCaseData(Format.Zip,
                     "ZipPassword.zip",
@@ -126,7 +126,7 @@ namespace Cube.FileSystem.Tests
                     "",
                     new[] { "Sample.txt", "Archive" },
                     null
-                ).Returns(38400L);
+                ).Returns(38912L);
 
                 yield return new TestCaseData(Format.BZip2,
                     "BZip2Test.bz",

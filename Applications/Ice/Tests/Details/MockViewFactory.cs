@@ -193,6 +193,31 @@ namespace Cube.FileSystem.App.Ice.Tests
             e.Result = OverwriteMode.AlwaysYes;
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowArchiveSettingsView
+        /// 
+        /// <summary>
+        /// 圧縮の詳細設定用画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">詳細設定を保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public override void ShowArchiveSettingsView(QueryEventArgs<string, ArchiveSettings> e)
+        {
+            e.Cancel = false;
+            e.Result = new ArchiveSettings
+            {
+                Path              = Destination,
+                Password          = Password,
+                Format            = SevenZip.Format.Zip,
+                CompressionLevel  = SevenZip.CompressionLevel.Ultra,
+                CompressionMethod = SevenZip.CompressionMethod.Lzma,
+                EncryptionMethod  = SevenZip.EncryptionMethod.Aes256,
+            };
+        }
+
         #endregion
     }
 }
