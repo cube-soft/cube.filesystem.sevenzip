@@ -327,6 +327,7 @@
             this.ConfirmTextBox.Name = "ConfirmTextBox";
             this.ConfirmTextBox.Size = new System.Drawing.Size(218, 23);
             this.ConfirmTextBox.TabIndex = 2;
+            this.ConfirmTextBox.UseSystemPasswordChar = true;
             // 
             // ConfirmLabel
             // 

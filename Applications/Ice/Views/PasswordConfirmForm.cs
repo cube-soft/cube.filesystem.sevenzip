@@ -50,12 +50,13 @@ namespace Cube.FileSystem.App.Ice
 
             IconPictureBox.Image = StockIcons.Warning.GetIcon(IconSize.Large).ToBitmap();
 
-            ExecButton.Click += (s, e) => Close();
+            ExecuteButton.Click += (s, e) => Close();
             ExitButton.Click += (s, e) => Close();
-            PasswordTextBox.TextChanged    += WhenPasswordChanged;
-            ConfirmTextBox.TextChanged     += WhenConfirmChanged;
-            ConfirmTextBox.EnabledChanged  += WhenEnabledChanged;
-            VisibleCheckBox.CheckedChanged += WhenCheckedChanged;
+
+            PasswordTextBox.TextChanged         += WhenPasswordChanged;
+            ConfirmTextBox.TextChanged          += WhenConfirmChanged;
+            ConfirmTextBox.EnabledChanged       += WhenConfirmEnabledChanged;
+            ShowPasswordCheckBox.CheckedChanged += WhenShowPasswordChanged;
         }
 
         #endregion
@@ -88,7 +89,7 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void WhenPasswordChanged(object sender, EventArgs e)
         {
-            if (VisibleCheckBox.Checked) ExecButton.Enabled = PasswordTextBox.TextLength > 0;
+            if (ShowPasswordCheckBox.Checked) ExecuteButton.Enabled = PasswordTextBox.TextLength > 0;
             else ConfirmTextBox.Text = string.Empty;
         }
 
@@ -105,9 +106,9 @@ namespace Cube.FileSystem.App.Ice
         {
             if (!ConfirmTextBox.Enabled) return;
 
-            var equals = PasswordTextBox.Text.Equals(ConfirmTextBox.Text);
-            ExecButton.Enabled       = equals && PasswordTextBox.TextLength > 0;
-            ConfirmTextBox.BackColor = equals || ConfirmTextBox.TextLength <= 0 ?
+            var eq = PasswordTextBox.Text.Equals(ConfirmTextBox.Text);
+            ExecuteButton.Enabled    = eq && PasswordTextBox.TextLength > 0;
+            ConfirmTextBox.BackColor = eq || ConfirmTextBox.TextLength <= 0 ?
                                        SystemColors.Window :
                                        Color.FromArgb(255, 102, 102);
         }
@@ -121,35 +122,28 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenEnabledChanged(object sender, EventArgs e)
+        private void WhenConfirmEnabledChanged(object sender, EventArgs e)
             => ConfirmTextBox.BackColor = ConfirmTextBox.Enabled ?
                                           SystemColors.Window :
                                           SystemColors.Control;
 
         /* ----------------------------------------------------------------- */
         ///
-        /// WhenCheckedChanged
+        /// WhenShowPasswordChanged
         ///
         /// <summary>
-        /// チェックボックスの状態が変更された時に実行されるハンドラです。
+        /// パスワードを表示の状態が変更された時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenCheckedChanged(object sender, EventArgs e)
+        private void WhenShowPasswordChanged(object sender, EventArgs e)
         {
-            if (VisibleCheckBox.Checked)
-            {
-                PasswordTextBox.UseSystemPasswordChar = false;
-                ConfirmTextBox.Enabled = false;
-                ConfirmTextBox.Text = string.Empty;
-                ExecButton.Enabled = PasswordTextBox.TextLength > 0;
-            }
-            else
-            {
-                PasswordTextBox.UseSystemPasswordChar = true;
-                ConfirmTextBox.Enabled = true;
-                ExecButton.Enabled = false;
-            }
+            var show = ShowPasswordCheckBox.Checked;
+
+            PasswordTextBox.UseSystemPasswordChar = !show;
+            ConfirmTextBox.Enabled = !show;
+            ConfirmTextBox.Text = string.Empty;
+            ExecuteButton.Enabled = show & (PasswordTextBox.TextLength > 0);
         }
 
         #endregion

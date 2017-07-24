@@ -32,8 +32,8 @@
             this.RootPanel = new System.Windows.Forms.TableLayoutPanel();
             this.ButtonsPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.ExitButton = new System.Windows.Forms.Button();
-            this.ExecButton = new System.Windows.Forms.Button();
-            this.VisibleCheckBox = new System.Windows.Forms.CheckBox();
+            this.ExecuteButton = new System.Windows.Forms.Button();
+            this.ShowPasswordCheckBox = new System.Windows.Forms.CheckBox();
             this.ConfirmTextBox = new System.Windows.Forms.TextBox();
             this.PasswordTextBox = new System.Windows.Forms.TextBox();
             this.DescriptionLabel = new System.Windows.Forms.Label();
@@ -49,7 +49,7 @@
             this.RootPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
             this.RootPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.RootPanel.Controls.Add(this.ButtonsPanel, 0, 4);
-            this.RootPanel.Controls.Add(this.VisibleCheckBox, 1, 3);
+            this.RootPanel.Controls.Add(this.ShowPasswordCheckBox, 1, 3);
             this.RootPanel.Controls.Add(this.ConfirmTextBox, 1, 2);
             this.RootPanel.Controls.Add(this.PasswordTextBox, 1, 1);
             this.RootPanel.Controls.Add(this.DescriptionLabel, 1, 0);
@@ -71,7 +71,7 @@
             // 
             this.RootPanel.SetColumnSpan(this.ButtonsPanel, 2);
             this.ButtonsPanel.Controls.Add(this.ExitButton);
-            this.ButtonsPanel.Controls.Add(this.ExecButton);
+            this.ButtonsPanel.Controls.Add(this.ExecuteButton);
             this.ButtonsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ButtonsPanel.Location = new System.Drawing.Point(3, 127);
             this.ButtonsPanel.Name = "ButtonsPanel";
@@ -90,28 +90,28 @@
             this.ExitButton.Text = "キャンセル";
             this.ExitButton.UseVisualStyleBackColor = true;
             // 
-            // ExecButton
+            // ExecuteButton
             // 
-            this.ExecButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.ExecButton.Enabled = false;
-            this.ExecButton.Location = new System.Drawing.Point(146, 12);
-            this.ExecButton.Margin = new System.Windows.Forms.Padding(6, 12, 3, 0);
-            this.ExecButton.Name = "ExecButton";
-            this.ExecButton.Size = new System.Drawing.Size(100, 25);
-            this.ExecButton.TabIndex = 0;
-            this.ExecButton.Text = "OK";
-            this.ExecButton.UseVisualStyleBackColor = true;
+            this.ExecuteButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.ExecuteButton.Enabled = false;
+            this.ExecuteButton.Location = new System.Drawing.Point(146, 12);
+            this.ExecuteButton.Margin = new System.Windows.Forms.Padding(6, 12, 3, 0);
+            this.ExecuteButton.Name = "ExecuteButton";
+            this.ExecuteButton.Size = new System.Drawing.Size(100, 25);
+            this.ExecuteButton.TabIndex = 0;
+            this.ExecuteButton.Text = "OK";
+            this.ExecuteButton.UseVisualStyleBackColor = true;
             // 
-            // VisibleCheckBox
+            // ShowPasswordCheckBox
             // 
-            this.VisibleCheckBox.AutoSize = true;
-            this.VisibleCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.VisibleCheckBox.Location = new System.Drawing.Point(83, 101);
-            this.VisibleCheckBox.Name = "VisibleCheckBox";
-            this.VisibleCheckBox.Size = new System.Drawing.Size(298, 20);
-            this.VisibleCheckBox.TabIndex = 4;
-            this.VisibleCheckBox.Text = "パスワードを表示する";
-            this.VisibleCheckBox.UseVisualStyleBackColor = true;
+            this.ShowPasswordCheckBox.AutoSize = true;
+            this.ShowPasswordCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ShowPasswordCheckBox.Location = new System.Drawing.Point(83, 101);
+            this.ShowPasswordCheckBox.Name = "ShowPasswordCheckBox";
+            this.ShowPasswordCheckBox.Size = new System.Drawing.Size(298, 20);
+            this.ShowPasswordCheckBox.TabIndex = 4;
+            this.ShowPasswordCheckBox.Text = "パスワードを表示する";
+            this.ShowPasswordCheckBox.UseVisualStyleBackColor = true;
             // 
             // ConfirmTextBox
             // 
@@ -159,14 +159,17 @@
             // 
             // PasswordConfirmForm
             // 
-            this.AcceptButton = this.ExecButton;
+            this.AcceptButton = this.ExecuteButton;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(384, 181);
             this.Controls.Add(this.RootPanel);
             this.Font = new System.Drawing.Font("Meiryo UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(128)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "PasswordConfirmForm";
+            this.ShowInTaskbar = false;
             this.Text = "パスワードの設定 - CubeICE";
             this.RootPanel.ResumeLayout(false);
             this.RootPanel.PerformLayout();
@@ -183,9 +186,9 @@
         private System.Windows.Forms.Label DescriptionLabel;
         private System.Windows.Forms.TextBox PasswordTextBox;
         private System.Windows.Forms.TextBox ConfirmTextBox;
-        private System.Windows.Forms.CheckBox VisibleCheckBox;
+        private System.Windows.Forms.CheckBox ShowPasswordCheckBox;
         private System.Windows.Forms.FlowLayoutPanel ButtonsPanel;
         private System.Windows.Forms.Button ExitButton;
-        private System.Windows.Forms.Button ExecButton;
+        private System.Windows.Forms.Button ExecuteButton;
     }
 }
