@@ -76,8 +76,8 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenSettingsRequired(object sender, QueryEventArgs<string, ArchiveSettings> e)
-            => ShowDialog(() => Views.ShowArchiveSettingsView(e));
+        private void WhenSettingsRequired(object sender, QueryEventArgs<string, ArchiveDetails> e)
+            => ShowDialog(() => Views.ShowDetailsView(e));
 
         /* ----------------------------------------------------------------- */
         ///

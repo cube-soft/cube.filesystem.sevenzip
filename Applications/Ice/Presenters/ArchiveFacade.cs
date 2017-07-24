@@ -53,14 +53,14 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Settings
+        /// Details
         /// 
         /// <summary>
         /// 圧縮の詳細設定を取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveSettings Settings { get; private set; }
+        public ArchiveDetails Details { get; private set; }
 
         #endregion
 
@@ -75,7 +75,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public event QueryEventHandler<string, ArchiveSettings> SettingsRequired;
+        public event QueryEventHandler<string, ArchiveDetails> SettingsRequired;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -86,7 +86,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnSettingsRequired(QueryEventArgs<string, ArchiveSettings> e)
+        protected virtual void OnSettingsRequired(QueryEventArgs<string, ArchiveDetails> e)
         {
             if (SettingsRequired != null) SettingsRequired(this, e);
             else e.Cancel = true;
@@ -112,13 +112,13 @@ namespace Cube.FileSystem.App.Ice
             {
                 var fmt   = GetFormat();
                 var dest  = GetDestination();
-                var query = !string.IsNullOrEmpty(Settings?.Password) || Request.Password ?
+                var query = !string.IsNullOrEmpty(Details?.Password) || Request.Password ?
                             new Query<string, string>(x => RaisePasswordRequired(x)) :
                             null;
 
                 using (var writer = new ArchiveWriter(fmt, IO))
                 {
-                    writer.Option = Settings?.ToOption();
+                    writer.Option = Details?.ToOption();
                     foreach (var item in Request.Sources) writer.Add(item);
                     ProgressStart();
                     writer.Save(dest, query, CreateInnerProgress(x => ProgressReport = x));
@@ -164,7 +164,7 @@ namespace Cube.FileSystem.App.Ice
                     return Request.Format;
                 default:
                     RaiseSettingsRequired();
-                    return Settings.Format;
+                    return Details.Format;
             }
         }
 
@@ -179,7 +179,7 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private string GetDestination()
         {
-            if (Settings != null) Destination = Settings.Path;
+            if (Details != null) Destination = Details.Path;
             else SetDestination(Request.Format.ToString());
 
             var info = IO.Get(Destination);
@@ -236,9 +236,9 @@ namespace Cube.FileSystem.App.Ice
         {
             var info = IO.Get(Request.Sources.First());
             var path = IO.Combine(info.DirectoryName, $"{info.NameWithoutExtension}.zip");
-            var args = new QueryEventArgs<string, ArchiveSettings>(path);
+            var args = new QueryEventArgs<string, ArchiveDetails>(path);
             OnSettingsRequired(args);
-            Settings = args.Result;
+            Details = args.Result;
         }
 
         /* ----------------------------------------------------------------- */
@@ -252,9 +252,9 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void RaisePasswordRequired(QueryEventArgs<string, string> e)
         {
-            if (!string.IsNullOrEmpty(Settings?.Password))
+            if (!string.IsNullOrEmpty(Details?.Password))
             {
-                e.Result = Settings.Password;
+                e.Result = Details.Password;
                 e.Cancel = false;
             }
             else OnPasswordRequired(e);

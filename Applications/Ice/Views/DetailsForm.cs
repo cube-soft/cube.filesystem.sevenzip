@@ -26,27 +26,27 @@ namespace Cube.FileSystem.App.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// SettingsForm
+    /// DetailsForm
     ///
     /// <summary>
     /// 圧縮処理の詳細画面を表示するクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class SettingsForm : Form
+    public partial class DetailsForm : Form
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SettingsForm
+        /// DetailsForm
         /// 
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public SettingsForm()
+        public DetailsForm()
         {
             InitializeComponent();
 

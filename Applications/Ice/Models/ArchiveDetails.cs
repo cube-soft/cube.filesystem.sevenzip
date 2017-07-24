@@ -21,14 +21,14 @@ namespace Cube.FileSystem.App.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveSettings
+    /// ArchiveDetails
     ///
     /// <summary>
     /// 圧縮処理の詳細設定を保持するクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveSettings
+    public class ArchiveDetails
     {
         #region Properties
 

@@ -1,6 +1,6 @@
 ﻿namespace Cube.FileSystem.App.Ice
 {
-    partial class SettingsForm
+    partial class DetailsForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DetailsForm));
             this.RootPanel = new System.Windows.Forms.TableLayoutPanel();
             this.OutputPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.OutputLabel = new System.Windows.Forms.Label();
@@ -419,7 +419,7 @@
             this.ExecuteButton.Text = "OK";
             this.ExecuteButton.UseVisualStyleBackColor = true;
             // 
-            // SettingsForm
+            // DetailsForm
             // 
             this.AcceptButton = this.ExecuteButton;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -427,7 +427,7 @@
             this.Controls.Add(this.RootPanel);
             this.Font = new System.Drawing.Font("Meiryo UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(128)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "SettingsForm";
+            this.Name = "DetailsForm";
             this.ShowInTaskbar = false;
             this.Text = "CubeICE 圧縮詳細設定";
             this.RootPanel.ResumeLayout(false);

@@ -195,7 +195,7 @@ namespace Cube.FileSystem.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ShowArchiveSettingsView
+        /// ShowDetailsView
         /// 
         /// <summary>
         /// 圧縮の詳細設定用画面を表示します。
@@ -204,10 +204,10 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// <param name="e">詳細設定を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public override void ShowArchiveSettingsView(QueryEventArgs<string, ArchiveSettings> e)
+        public override void ShowDetailsView(QueryEventArgs<string, ArchiveDetails> e)
         {
             e.Cancel = false;
-            e.Result = new ArchiveSettings
+            e.Result = new ArchiveDetails
             {
                 Path              = Destination,
                 Password          = Password,

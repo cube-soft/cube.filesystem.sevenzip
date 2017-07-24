@@ -158,7 +158,7 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ShowArchiveSettingsView
+        /// ShowDetailsView
         /// 
         /// <summary>
         /// 圧縮の詳細設定用画面を表示します。
@@ -167,13 +167,13 @@ namespace Cube.FileSystem.App.Ice
         /// <param name="e">詳細設定を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public virtual void ShowArchiveSettingsView(QueryEventArgs<string, ArchiveSettings> e)
+        public virtual void ShowDetailsView(QueryEventArgs<string, ArchiveDetails> e)
         {
-            using (var view = new SettingsForm { Path = e.Query })
+            using (var view = new DetailsForm { Path = e.Query })
             {
                 e.Cancel = view.ShowDialog() == DialogResult.Cancel;
                 if (e.Cancel) return;
-                e.Result = new ArchiveSettings
+                e.Result = new ArchiveDetails
                 {
                     Path              = view.Path,
                     Password          = view.Password,
@@ -267,8 +267,8 @@ namespace Cube.FileSystem.App.Ice
         public static void ShowOverwriteView(QueryEventArgs<OverwriteInfo, OverwriteMode> e)
             => _factory?.ShowOverwriteView(e);
 
-        public static void ShowArchiveSettingsView(QueryEventArgs<string, ArchiveSettings> e)
-            => _factory?.ShowArchiveSettingsView(e);
+        public static void ShowDetailsView(QueryEventArgs<string, ArchiveDetails> e)
+            => _factory?.ShowDetailsView(e);
 
         #endregion
 
