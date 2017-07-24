@@ -141,6 +141,38 @@ namespace Cube.FileSystem.App.Ice
             set { SetProperty(ref _toolTipCount, value); }
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Archive
+        /// 
+        /// <summary>
+        /// 圧縮に関する設定を取得または設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [DataMember(Name = "Compression")]
+        public ArchiveSettings Archive
+        {
+            get { return _archive; }
+            set { SetProperty(ref _archive, value); }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract
+        /// 
+        /// <summary>
+        /// 展開に関する設定を取得または設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [DataMember(Name = "Decompression")]
+        public ExtractSettings Extract
+        {
+            get { return _extract; }
+            set { SetProperty(ref _extract, value); }
+        }
+
         #endregion
 
         #region Fields
@@ -150,6 +182,8 @@ namespace Cube.FileSystem.App.Ice
         private string _filtering = ".DS_Store|Thumbs.db|__MACOSX|desktop.ini";
         private bool _toolTip = true;
         private int _toolTipCount = 5;
+        private ArchiveSettings _archive = new ArchiveSettings();
+        private ExtractSettings _extract = new ExtractSettings();
         #endregion
     }
 }

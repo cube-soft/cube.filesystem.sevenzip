@@ -17,7 +17,6 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Cube.FileSystem.SevenZip;
 
 namespace Cube.FileSystem.App.Ice
@@ -29,6 +28,10 @@ namespace Cube.FileSystem.App.Ice
     /// <summary>
     /// CubeICE へのリクエスト内容を表すオブジェクトです。
     /// </summary>
+    /// 
+    /// <remarks>
+    /// リクエストはコマンドライン経由で指定されます。
+    /// </remarks>
     ///
     /* --------------------------------------------------------------------- */
     public class Request
@@ -186,40 +189,5 @@ namespace Cube.FileSystem.App.Ice
         }
 
         #endregion
-    }
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// Mode
-    ///
-    /// <summary>
-    /// 実行モードを表す列挙型です。
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    public enum Mode
-    {
-        None,
-        Archive,
-        Extract,
-    }
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// SaveLocation
-    ///
-    /// <summary>
-    /// 保存場所を表す列挙型です。
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    public enum SaveLocation
-    {
-        Specific    =  0,
-        Source      =  1,
-        Runtime     =  2,
-        Desktop     =  3,
-        MyDocuments =  4,
-        Unknown     = -1,
     }
 }

@@ -61,10 +61,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Settings\ArchiveSettings.cs" />
+    <Compile Include="Models\Settings\ExtractSettings.cs" />
+    <Compile Include="Models\Parameters.cs" />
     <Compile Include="Presenters\ArchiveFacade.cs" />
     <Compile Include="Models\Settings\ArchiveDetails.cs" />
     <Compile Include="Models\OverwriteMode.cs" />
-    <Compile Include="Models\Request.cs" />
+    <Compile Include="Models\Settings\Request.cs" />
     <Compile Include="Presenters\ProgressFacade.cs" />
     <Compile Include="Models\SuspendableProgress.cs" />
     <Compile Include="Presenters\ProgressPresenter.cs" />
