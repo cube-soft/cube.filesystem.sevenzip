@@ -125,11 +125,11 @@ namespace Cube.FileSystem.App.Ice
                 }
 
                 Move();
+                LogResult();
 
-                var name = IO.Get(Destination).Name;
-                this.LogDebug($"{name}:{ProgressReport.DoneSize}/{ProgressReport.FileSize}");
-                ProgressReport.DoneSize = ProgressReport.FileSize; // hack
-
+                // hack
+                ProgressReport.DoneCount = ProgressReport.FileCount;
+                ProgressReport.DoneSize  = ProgressReport.FileSize;
                 OnProgress(ValueEventArgs.Create(ProgressReport));
             }
             catch (UserCancelException /* err */) { /* user cancel */ }
@@ -203,6 +203,25 @@ namespace Cube.FileSystem.App.Ice
             if (string.IsNullOrEmpty(Tmp) || !IO.Get(Tmp).Exists) return;
             IO.Move(Tmp, Destination, true);
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// LogResult
+        /// 
+        /// <summary>
+        /// 結果をログに出力します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void LogResult()
+            => this.LogDebug(string.Format(
+                "{0}\tCount:{1}/{2}\tSize:{3}/{4}",
+                IO.Get(Destination).Name,
+                ProgressReport.DoneCount,
+                ProgressReport.FileCount,
+                ProgressReport.DoneSize,
+                ProgressReport.FileSize
+            ));
 
         /* ----------------------------------------------------------------- */
         ///
