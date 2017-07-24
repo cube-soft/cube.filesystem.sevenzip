@@ -98,10 +98,7 @@ namespace Cube.FileSystem.SevenZip
             try
             {
                 var result = dest.SetProperties(kh.AddrOfPinnedObject(), vh.AddrOfPinnedObject(), n);
-                if (result != (int)OperationResult.OK)
-                {
-                    throw new System.IO.IOException($"SetProperties:{result}");
-                }
+                if (result != 0) throw new System.IO.IOException($"SetProperties:{result}");
             }
             finally
             {
