@@ -61,11 +61,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\ArchiveFacade.cs" />
+    <Compile Include="Presenters\ArchiveFacade.cs" />
     <Compile Include="Models\ArchiveSettings.cs" />
     <Compile Include="Models\OverwriteMode.cs" />
     <Compile Include="Models\Request.cs" />
-    <Compile Include="Models\ProgressFacade.cs" />
+    <Compile Include="Presenters\ProgressFacade.cs" />
     <Compile Include="Models\SuspendableProgress.cs" />
     <Compile Include="Presenters\ProgressPresenter.cs" />
     <Compile Include="Views\SettingsForm.cs">
@@ -96,7 +96,7 @@
     <Compile Include="Models\EventAggregator.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\SettingsFolder.cs" />
-    <Compile Include="Models\ExtractFacade.cs" />
+    <Compile Include="Presenters\ExtractFacade.cs" />
     <Compile Include="Presenters\ExtractPresenter.cs" />
     <Compile Include="Views\IProgressView.cs" />
     <Compile Include="Views\ProgressForm.cs">

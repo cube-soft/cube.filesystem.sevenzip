@@ -175,14 +175,14 @@ namespace Cube.FileSystem.App.Ice
         private SaveLocation GetLocation(string s)
         {
             var index = s.IndexOf(':');
-            if (index < 0 || index >= s.Length - 1) return SaveLocation.Runtime;
+            if (index < 0 || index >= s.Length - 1) return SaveLocation.Unknown;
 
             var query = s.Substring(index + 1).ToLower();
             foreach (SaveLocation item in Enum.GetValues(typeof(SaveLocation)))
             {
                 if (item.ToString().ToLower() == query) return item;
             }
-            return SaveLocation.Runtime;
+            return SaveLocation.Unknown;
         }
 
         #endregion
@@ -215,9 +215,11 @@ namespace Cube.FileSystem.App.Ice
     /* --------------------------------------------------------------------- */
     public enum SaveLocation
     {
-        Source,
-        Desktop,
-        MyDocuments,
-        Runtime,
+        Specific    =  0,
+        Source      =  1,
+        Runtime     =  2,
+        Desktop     =  3,
+        MyDocuments =  4,
+        Unknown     = -1,
     }
 }
