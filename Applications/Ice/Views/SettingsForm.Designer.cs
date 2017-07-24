@@ -37,16 +37,16 @@
             this.GeneralGroupBox = new System.Windows.Forms.GroupBox();
             this.GeneralPanel = new System.Windows.Forms.TableLayoutPanel();
             this.ThreadLabel = new System.Windows.Forms.Label();
-            this.MethodComboBox = new System.Windows.Forms.ComboBox();
+            this.CompressionMethodComboBox = new System.Windows.Forms.ComboBox();
             this.MethodLabel = new System.Windows.Forms.Label();
-            this.LevelComboBox = new System.Windows.Forms.ComboBox();
+            this.CompressionLevelComboBox = new System.Windows.Forms.ComboBox();
             this.LevelLabel = new System.Windows.Forms.Label();
             this.FormatLabel = new System.Windows.Forms.Label();
             this.FormatComboBox = new System.Windows.Forms.ComboBox();
             this.ThreadNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.EncryptionGroupBox = new System.Windows.Forms.GroupBox();
             this.EncryptionPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.EncryptionComboBox = new System.Windows.Forms.ComboBox();
+            this.EncryptionMethodComboBox = new System.Windows.Forms.ComboBox();
             this.EncryptionLabel = new System.Windows.Forms.Label();
             this.ConfirmTextBox = new System.Windows.Forms.TextBox();
             this.ConfirmLabel = new System.Windows.Forms.Label();
@@ -103,7 +103,7 @@
             this.OutputLabel.Margin = new System.Windows.Forms.Padding(12, 3, 3, 3);
             this.OutputLabel.Name = "OutputLabel";
             this.OutputLabel.Size = new System.Drawing.Size(55, 38);
-            this.OutputLabel.TabIndex = 0;
+            this.OutputLabel.TabIndex = 100;
             this.OutputLabel.Text = "出力先：";
             this.OutputLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -113,7 +113,7 @@
             this.OutputTextBox.Margin = new System.Windows.Forms.Padding(3, 11, 3, 3);
             this.OutputTextBox.Name = "OutputTextBox";
             this.OutputTextBox.Size = new System.Drawing.Size(210, 23);
-            this.OutputTextBox.TabIndex = 1;
+            this.OutputTextBox.TabIndex = 2;
             // 
             // OutputButton
             // 
@@ -121,7 +121,7 @@
             this.OutputButton.Margin = new System.Windows.Forms.Padding(3, 11, 3, 3);
             this.OutputButton.Name = "OutputButton";
             this.OutputButton.Size = new System.Drawing.Size(60, 23);
-            this.OutputButton.TabIndex = 2;
+            this.OutputButton.TabIndex = 3;
             this.OutputButton.Text = "...";
             this.OutputButton.UseVisualStyleBackColor = true;
             // 
@@ -134,7 +134,7 @@
             this.GeneralGroupBox.Name = "GeneralGroupBox";
             this.GeneralGroupBox.Padding = new System.Windows.Forms.Padding(8, 3, 8, 8);
             this.GeneralGroupBox.Size = new System.Drawing.Size(340, 144);
-            this.GeneralGroupBox.TabIndex = 1;
+            this.GeneralGroupBox.TabIndex = 4;
             this.GeneralGroupBox.TabStop = false;
             this.GeneralGroupBox.Text = "詳細";
             // 
@@ -144,9 +144,9 @@
             this.GeneralPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.GeneralPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.GeneralPanel.Controls.Add(this.ThreadLabel, 0, 3);
-            this.GeneralPanel.Controls.Add(this.MethodComboBox, 1, 2);
+            this.GeneralPanel.Controls.Add(this.CompressionMethodComboBox, 1, 2);
             this.GeneralPanel.Controls.Add(this.MethodLabel, 0, 2);
-            this.GeneralPanel.Controls.Add(this.LevelComboBox, 1, 1);
+            this.GeneralPanel.Controls.Add(this.CompressionLevelComboBox, 1, 1);
             this.GeneralPanel.Controls.Add(this.LevelLabel, 0, 1);
             this.GeneralPanel.Controls.Add(this.FormatLabel, 0, 0);
             this.GeneralPanel.Controls.Add(this.FormatComboBox, 1, 0);
@@ -170,19 +170,19 @@
             this.ThreadLabel.Margin = new System.Windows.Forms.Padding(3);
             this.ThreadLabel.Name = "ThreadLabel";
             this.ThreadLabel.Size = new System.Drawing.Size(94, 24);
-            this.ThreadLabel.TabIndex = 6;
+            this.ThreadLabel.TabIndex = 104;
             this.ThreadLabel.Text = "スレッド数：";
             this.ThreadLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // MethodComboBox
+            // CompressionMethodComboBox
             // 
-            this.MethodComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MethodComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.MethodComboBox.FormattingEnabled = true;
-            this.MethodComboBox.Location = new System.Drawing.Point(103, 61);
-            this.MethodComboBox.Name = "MethodComboBox";
-            this.MethodComboBox.Size = new System.Drawing.Size(218, 23);
-            this.MethodComboBox.TabIndex = 5;
+            this.CompressionMethodComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CompressionMethodComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CompressionMethodComboBox.FormattingEnabled = true;
+            this.CompressionMethodComboBox.Location = new System.Drawing.Point(103, 61);
+            this.CompressionMethodComboBox.Name = "CompressionMethodComboBox";
+            this.CompressionMethodComboBox.Size = new System.Drawing.Size(218, 23);
+            this.CompressionMethodComboBox.TabIndex = 2;
             // 
             // MethodLabel
             // 
@@ -192,19 +192,19 @@
             this.MethodLabel.Margin = new System.Windows.Forms.Padding(3);
             this.MethodLabel.Name = "MethodLabel";
             this.MethodLabel.Size = new System.Drawing.Size(94, 23);
-            this.MethodLabel.TabIndex = 4;
+            this.MethodLabel.TabIndex = 103;
             this.MethodLabel.Text = "圧縮方法：";
             this.MethodLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // LevelComboBox
+            // CompressionLevelComboBox
             // 
-            this.LevelComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.LevelComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.LevelComboBox.FormattingEnabled = true;
-            this.LevelComboBox.Location = new System.Drawing.Point(103, 32);
-            this.LevelComboBox.Name = "LevelComboBox";
-            this.LevelComboBox.Size = new System.Drawing.Size(218, 23);
-            this.LevelComboBox.TabIndex = 3;
+            this.CompressionLevelComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CompressionLevelComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CompressionLevelComboBox.FormattingEnabled = true;
+            this.CompressionLevelComboBox.Location = new System.Drawing.Point(103, 32);
+            this.CompressionLevelComboBox.Name = "CompressionLevelComboBox";
+            this.CompressionLevelComboBox.Size = new System.Drawing.Size(218, 23);
+            this.CompressionLevelComboBox.TabIndex = 1;
             // 
             // LevelLabel
             // 
@@ -214,7 +214,7 @@
             this.LevelLabel.Margin = new System.Windows.Forms.Padding(3);
             this.LevelLabel.Name = "LevelLabel";
             this.LevelLabel.Size = new System.Drawing.Size(94, 23);
-            this.LevelLabel.TabIndex = 2;
+            this.LevelLabel.TabIndex = 102;
             this.LevelLabel.Text = "圧縮レベル：";
             this.LevelLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -226,7 +226,7 @@
             this.FormatLabel.Margin = new System.Windows.Forms.Padding(3);
             this.FormatLabel.Name = "FormatLabel";
             this.FormatLabel.Size = new System.Drawing.Size(94, 23);
-            this.FormatLabel.TabIndex = 0;
+            this.FormatLabel.TabIndex = 101;
             this.FormatLabel.Text = "ファイル形式：";
             this.FormatLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -238,7 +238,7 @@
             this.FormatComboBox.Location = new System.Drawing.Point(103, 3);
             this.FormatComboBox.Name = "FormatComboBox";
             this.FormatComboBox.Size = new System.Drawing.Size(218, 23);
-            this.FormatComboBox.TabIndex = 1;
+            this.FormatComboBox.TabIndex = 0;
             // 
             // ThreadNumericUpDown
             // 
@@ -251,7 +251,7 @@
             0});
             this.ThreadNumericUpDown.Name = "ThreadNumericUpDown";
             this.ThreadNumericUpDown.Size = new System.Drawing.Size(218, 23);
-            this.ThreadNumericUpDown.TabIndex = 7;
+            this.ThreadNumericUpDown.TabIndex = 3;
             this.ThreadNumericUpDown.Value = new decimal(new int[] {
             1,
             0,
@@ -267,7 +267,7 @@
             this.EncryptionGroupBox.Name = "EncryptionGroupBox";
             this.EncryptionGroupBox.Padding = new System.Windows.Forms.Padding(8, 3, 8, 8);
             this.EncryptionGroupBox.Size = new System.Drawing.Size(340, 174);
-            this.EncryptionGroupBox.TabIndex = 2;
+            this.EncryptionGroupBox.TabIndex = 5;
             this.EncryptionGroupBox.TabStop = false;
             this.EncryptionGroupBox.Text = "暗号化";
             // 
@@ -276,7 +276,7 @@
             this.EncryptionPanel.ColumnCount = 2;
             this.EncryptionPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.EncryptionPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.EncryptionPanel.Controls.Add(this.EncryptionComboBox, 1, 4);
+            this.EncryptionPanel.Controls.Add(this.EncryptionMethodComboBox, 1, 4);
             this.EncryptionPanel.Controls.Add(this.EncryptionLabel, 0, 4);
             this.EncryptionPanel.Controls.Add(this.ConfirmTextBox, 1, 2);
             this.EncryptionPanel.Controls.Add(this.ConfirmLabel, 0, 2);
@@ -296,15 +296,16 @@
             this.EncryptionPanel.Size = new System.Drawing.Size(324, 147);
             this.EncryptionPanel.TabIndex = 0;
             // 
-            // EncryptionComboBox
+            // EncryptionMethodComboBox
             // 
-            this.EncryptionComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.EncryptionComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.EncryptionComboBox.FormattingEnabled = true;
-            this.EncryptionComboBox.Location = new System.Drawing.Point(103, 121);
-            this.EncryptionComboBox.Name = "EncryptionComboBox";
-            this.EncryptionComboBox.Size = new System.Drawing.Size(218, 23);
-            this.EncryptionComboBox.TabIndex = 7;
+            this.EncryptionMethodComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.EncryptionMethodComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.EncryptionMethodComboBox.Enabled = false;
+            this.EncryptionMethodComboBox.FormattingEnabled = true;
+            this.EncryptionMethodComboBox.Location = new System.Drawing.Point(103, 121);
+            this.EncryptionMethodComboBox.Name = "EncryptionMethodComboBox";
+            this.EncryptionMethodComboBox.Size = new System.Drawing.Size(218, 23);
+            this.EncryptionMethodComboBox.TabIndex = 4;
             // 
             // EncryptionLabel
             // 
@@ -314,17 +315,18 @@
             this.EncryptionLabel.Margin = new System.Windows.Forms.Padding(3);
             this.EncryptionLabel.Name = "EncryptionLabel";
             this.EncryptionLabel.Size = new System.Drawing.Size(94, 23);
-            this.EncryptionLabel.TabIndex = 6;
+            this.EncryptionLabel.TabIndex = 107;
             this.EncryptionLabel.Text = "暗号化方法：";
             this.EncryptionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // ConfirmTextBox
             // 
             this.ConfirmTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ConfirmTextBox.Enabled = false;
             this.ConfirmTextBox.Location = new System.Drawing.Point(103, 63);
             this.ConfirmTextBox.Name = "ConfirmTextBox";
             this.ConfirmTextBox.Size = new System.Drawing.Size(218, 23);
-            this.ConfirmTextBox.TabIndex = 4;
+            this.ConfirmTextBox.TabIndex = 2;
             // 
             // ConfirmLabel
             // 
@@ -335,7 +337,7 @@
             this.ConfirmLabel.Name = "ConfirmLabel";
             this.EncryptionPanel.SetRowSpan(this.ConfirmLabel, 2);
             this.ConfirmLabel.Size = new System.Drawing.Size(94, 52);
-            this.ConfirmLabel.TabIndex = 3;
+            this.ConfirmLabel.TabIndex = 106;
             this.ConfirmLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // EncryptionCheckBox
@@ -358,26 +360,28 @@
             this.PasswordLabel.Margin = new System.Windows.Forms.Padding(3);
             this.PasswordLabel.Name = "PasswordLabel";
             this.PasswordLabel.Size = new System.Drawing.Size(94, 23);
-            this.PasswordLabel.TabIndex = 1;
+            this.PasswordLabel.TabIndex = 105;
             this.PasswordLabel.Text = "パスワード：";
             this.PasswordLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // PasswordTextBox
             // 
             this.PasswordTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PasswordTextBox.Enabled = false;
             this.PasswordTextBox.Location = new System.Drawing.Point(103, 34);
             this.PasswordTextBox.Name = "PasswordTextBox";
             this.PasswordTextBox.Size = new System.Drawing.Size(218, 23);
-            this.PasswordTextBox.TabIndex = 2;
+            this.PasswordTextBox.TabIndex = 1;
             // 
             // ShowPasswordCheckBox
             // 
             this.ShowPasswordCheckBox.AutoSize = true;
             this.ShowPasswordCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ShowPasswordCheckBox.Enabled = false;
             this.ShowPasswordCheckBox.Location = new System.Drawing.Point(103, 92);
             this.ShowPasswordCheckBox.Name = "ShowPasswordCheckBox";
             this.ShowPasswordCheckBox.Size = new System.Drawing.Size(218, 23);
-            this.ShowPasswordCheckBox.TabIndex = 5;
+            this.ShowPasswordCheckBox.TabIndex = 3;
             this.ShowPasswordCheckBox.Text = "パスワードを表示する";
             this.ShowPasswordCheckBox.UseVisualStyleBackColor = true;
             // 
@@ -399,7 +403,7 @@
             this.ExitButton.Margin = new System.Windows.Forms.Padding(8, 8, 8, 4);
             this.ExitButton.Name = "ExitButton";
             this.ExitButton.Size = new System.Drawing.Size(100, 30);
-            this.ExitButton.TabIndex = 0;
+            this.ExitButton.TabIndex = 1;
             this.ExitButton.Text = "キャンセル";
             this.ExitButton.UseVisualStyleBackColor = true;
             // 
@@ -410,7 +414,7 @@
             this.ExecuteButton.Margin = new System.Windows.Forms.Padding(8, 8, 8, 4);
             this.ExecuteButton.Name = "ExecuteButton";
             this.ExecuteButton.Size = new System.Drawing.Size(100, 30);
-            this.ExecuteButton.TabIndex = 1;
+            this.ExecuteButton.TabIndex = 0;
             this.ExecuteButton.Text = "OK";
             this.ExecuteButton.UseVisualStyleBackColor = true;
             // 
@@ -456,8 +460,8 @@
         private System.Windows.Forms.Label FormatLabel;
         private System.Windows.Forms.ComboBox FormatComboBox;
         private System.Windows.Forms.Label LevelLabel;
-        private System.Windows.Forms.ComboBox LevelComboBox;
-        private System.Windows.Forms.ComboBox MethodComboBox;
+        private System.Windows.Forms.ComboBox CompressionLevelComboBox;
+        private System.Windows.Forms.ComboBox CompressionMethodComboBox;
         private System.Windows.Forms.Label MethodLabel;
         private System.Windows.Forms.Label ThreadLabel;
         private System.Windows.Forms.NumericUpDown ThreadNumericUpDown;
@@ -468,7 +472,7 @@
         private System.Windows.Forms.TextBox PasswordTextBox;
         private System.Windows.Forms.TextBox ConfirmTextBox;
         private System.Windows.Forms.CheckBox ShowPasswordCheckBox;
-        private System.Windows.Forms.ComboBox EncryptionComboBox;
+        private System.Windows.Forms.ComboBox EncryptionMethodComboBox;
         private System.Windows.Forms.Label EncryptionLabel;
     }
 }

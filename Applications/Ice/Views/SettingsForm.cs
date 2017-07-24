@@ -15,7 +15,9 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using Cube.FileSystem.SevenZip;
 
@@ -46,12 +48,101 @@ namespace Cube.FileSystem.App.Ice
         public SettingsForm()
         {
             InitializeComponent();
-            InitializeFormat();
-            InitializeCompressionLevel();
+
+            UpdateThreadCount();
+            UpdateFormat();
+            UpdateCompressionLevel();
+            UpdateCompressionMethod();
+            UpdateEncryptionMethod();
+
+            EncryptionMethodComboBox.Enabled = false;
 
             ExecuteButton.Click += (s, e) => Close();
             ExitButton.Click    += (s, e) => Close();
+
+            FormatComboBox.SelectedValueChanged += WhenFormatChanged;
+            EncryptionCheckBox.CheckedChanged   += WhenEncryptionChanged;
         }
+
+        #endregion
+
+        #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Format
+        /// 
+        /// <summary>
+        /// 圧縮ファイル形式を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public Format Format => (Format)FormatComboBox.SelectedValue;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CompressionLevel
+        /// 
+        /// <summary>
+        /// 圧縮レベルを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public CompressionLevel CompressionLevel
+            => (CompressionLevel)CompressionLevelComboBox.SelectedValue;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CompressionMethod
+        /// 
+        /// <summary>
+        /// 圧縮方法を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public CompressionMethod CompressionMethod
+            => CompressionMethodComboBox.Enabled ?
+               (CompressionMethod)CompressionMethodComboBox.SelectedValue :
+               CompressionMethod.Default;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// EncryptionMethod
+        /// 
+        /// <summary>
+        /// 暗号化方法を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public EncryptionMethod EncryptionMethod
+            => EncryptionMethodComboBox.Enabled ?
+               (EncryptionMethod)EncryptionMethodComboBox.SelectedValue :
+               EncryptionMethod.Default;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ThreadCount
+        /// 
+        /// <summary>
+        /// 圧縮方法を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public int ThreadCount => (int)ThreadNumericUpDown.Value;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Password
+        /// 
+        /// <summary>
+        /// パスワードを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Password
+            => EncryptionCheckBox.Checked ?
+               PasswordTextBox.Text :
+               null;
 
         #endregion
 
@@ -59,70 +150,135 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// InitializeFormat
+        /// UpdateFormat
         /// 
         /// <summary>
-        /// Format を初期化します。
+        /// Format を更新します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void InitializeFormat()
+        private void UpdateFormat()
         {
-            var data = new List<KeyValuePair<string, Format>>
-            {
-                Pair("zip",   Format.Zip),
-                Pair("7z",    Format.SevenZip),
-                Pair("tar",   Format.Tar),
-                Pair("gzip",  Format.GZip),
-                Pair("bzip2", Format.BZip2),
-                Pair("xz",    Format.XZ),
-                // Pair("exe", Format.Executable),
-            };
-
-            FormatComboBox.DataSource    = data;
-            FormatComboBox.DisplayMember = "Key";
-            FormatComboBox.ValueMember   = "Value";
+            Update(FormatComboBox, SettingsViewDataSource.Format);
+            if (!FormatComboBox.Enabled) return;
             FormatComboBox.SelectedValue = Format.Zip;
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// InitializeCompressionLevel
+        /// UpdateCompressionLevel
         /// 
         /// <summary>
-        /// CompressionLevel を初期化します。
+        /// CompressionLevel を更新します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void InitializeCompressionLevel()
+        private void UpdateCompressionLevel()
         {
-            var data = new List<KeyValuePair<string, CompressionLevel>>
-            {
-                Pair(Properties.Resources.LevelNone,   CompressionLevel.None),
-                Pair(Properties.Resources.LevelFast,   CompressionLevel.Fast),
-                Pair(Properties.Resources.LevelLow,    CompressionLevel.Low),
-                Pair(Properties.Resources.LevelNormal, CompressionLevel.Normal),
-                Pair(Properties.Resources.LevelHigh,   CompressionLevel.High),
-                Pair(Properties.Resources.LevelUltra,  CompressionLevel.Ultra)
-            };
-
-            LevelComboBox.DataSource    = data;
-            LevelComboBox.DisplayMember = "Key";
-            LevelComboBox.ValueMember   = "Value";
-            LevelComboBox.SelectedValue = CompressionLevel.Ultra;
+            Update(CompressionLevelComboBox, SettingsViewDataSource.CompressionLevel);
+            if (!CompressionLevelComboBox.Enabled) return;
+            CompressionLevelComboBox.SelectedValue = CompressionLevel.Ultra;
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Pair(T, U)
+        /// UpdateCompressionMethod
         /// 
         /// <summary>
-        /// KeyValuePair(T, U) を生成します。
+        /// CompressionMethod を更新します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private KeyValuePair<T, U> Pair<T, U>(T key, U value)
-            => new KeyValuePair<T, U>(key, value);
+        private void UpdateCompressionMethod()
+        {
+            Update(CompressionMethodComboBox, SettingsViewDataSource.GetCompressionMethod(Format));
+            if (!CompressionMethodComboBox.Enabled) return;
+            CompressionMethodComboBox.SelectedIndex = 0;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// UpdateEncryptionMethod
+        /// 
+        /// <summary>
+        /// EncryptionMethod を更新します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void UpdateEncryptionMethod()
+        {
+            Update(EncryptionMethodComboBox, SettingsViewDataSource.EncryptionMethod);
+            if (!EncryptionMethodComboBox.Enabled) return;
+            EncryptionMethodComboBox.SelectedIndex = 0;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// UpdateThreadCount
+        /// 
+        /// <summary>
+        /// スレッド数に関する設定を更新します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void UpdateThreadCount()
+        {
+            var count = Environment.ProcessorCount;
+            ThreadNumericUpDown.Maximum =
+            ThreadNumericUpDown.Value   = count;
+            ThreadNumericUpDown.Enabled = count > 1;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Update
+        /// 
+        /// <summary>
+        /// ComboBox.DataSource オブジェクトを更新します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Update<T>(ComboBox src, IList<KeyValuePair<string, T>> data)
+        {
+            src.Enabled       = (data != null);
+            src.DataSource    = data;
+            src.DisplayMember = "Key";
+            src.ValueMember   = "Value";
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenFormatChanged
+        /// 
+        /// <summary>
+        /// Format 変更時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenFormatChanged(object sender, EventArgs e)
+        {
+            UpdateCompressionMethod();
+            EncryptionMethodComboBox.Enabled &= (Format == Format.Zip);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenEncryptionChanged
+        /// 
+        /// <summary>
+        /// 暗号化の有効/無効状態が変化した時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenEncryptionChanged(object sender, EventArgs e)
+        {
+            var enabled = EncryptionCheckBox.Checked;
+
+            PasswordTextBox.Enabled          =
+            ConfirmTextBox.Enabled           =
+            ShowPasswordCheckBox.Enabled     = enabled;
+            EncryptionMethodComboBox.Enabled = enabled & (Format == Format.Zip);
+        }
 
         #endregion
     }
