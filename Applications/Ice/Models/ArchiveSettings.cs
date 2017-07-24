@@ -141,6 +141,13 @@ namespace Cube.FileSystem.App.Ice
                         CompressionMethod = CompressionMethod,
                         ThreadCount       = ThreadCount,
                     };
+                case Format.Tar:
+                    return new TarOption
+                    {
+                        CompressionLevel  = CompressionLevel,
+                        CompressionMethod = CompressionMethod,
+                        ThreadCount       = ThreadCount,
+                    };
                 default:
                     return new ArchiveOption
                     {

@@ -53,9 +53,9 @@ namespace Cube.FileSystem.App.Ice
                         Pair("Zip",   SevenZip.Format.Zip),
                         Pair("7z",    SevenZip.Format.SevenZip),
                         Pair("Tar",   SevenZip.Format.Tar),
-                        Pair("GZip",  SevenZip.Format.GZip),
-                        Pair("BZip2", SevenZip.Format.BZip2),
-                        Pair("XZ",    SevenZip.Format.XZ),
+                        // Pair("GZip",  SevenZip.Format.GZip),
+                        // Pair("BZip2", SevenZip.Format.BZip2),
+                        // Pair("XZ",    SevenZip.Format.XZ),
                         // Pair("exe", SevenZip.Format.Executable),
                     };
                 }
@@ -130,6 +130,15 @@ namespace Cube.FileSystem.App.Ice
                                 Pair("PPMd",      CompressionMethod.Ppmd),
                                 Pair("BZip2",     CompressionMethod.BZip2),
                                 Pair("Deflate",   CompressionMethod.Deflate),
+                                Pair("Copy",      CompressionMethod.Copy),
+                            }
+                        },
+                        {
+                            SevenZip.Format.Tar, new List<KeyValuePair<string, CompressionMethod>>
+                            {
+                                Pair("GZip",      CompressionMethod.GZip),
+                                Pair("BZip2",     CompressionMethod.BZip2),
+                                // Pair("XZ",        CompressionMethod.XZ),
                                 Pair("Copy",      CompressionMethod.Copy),
                             }
                         }

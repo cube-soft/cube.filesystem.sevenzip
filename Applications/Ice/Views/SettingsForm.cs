@@ -328,10 +328,18 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void WhenPathRequired(object sender, EventArgs e)
         {
-            var args = new QueryEventArgs<string, string>(Format.ToString());
-            Views.ShowSaveFileView(args);
-            if (args.Cancel) return;
-            Path = args.Result;
+            var dialog = new SaveFileDialog
+            {
+                AddExtension                 = true,
+                InitialDirectory             = System.IO.Path.GetDirectoryName(Path),
+                FileName                     = System.IO.Path.GetFileName(Path),
+                Filter                       = Properties.Resources.FilterAll,
+                OverwritePrompt              = true,
+                SupportMultiDottedExtensions = true,
+            };
+
+            if (dialog.ShowDialog() == DialogResult.Cancel) return;
+            Path = dialog.FileName;
         }
 
         /* ----------------------------------------------------------------- */
@@ -359,6 +367,8 @@ namespace Cube.FileSystem.App.Ice
         {
             UpdateCompressionMethod();
             EncryptionMethodComboBox.Enabled &= (Format == Format.Zip);
+            EncryptionGroupBox.Enabled = Format == Format.Zip ||
+                                         Format == Format.SevenZip;
         }
 
         /* ----------------------------------------------------------------- */
