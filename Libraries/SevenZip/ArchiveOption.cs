@@ -42,6 +42,17 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public CompressionLevel CompressionLevel { get; set; } = CompressionLevel.Normal;
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ThreadCount
+        ///
+        /// <summary>
+        /// 圧縮処理時の最大スレッド数を取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public int ThreadCount { get; set; } = 1;
+
         #endregion
     }
 

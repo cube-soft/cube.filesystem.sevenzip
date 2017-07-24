@@ -112,12 +112,13 @@ namespace Cube.FileSystem.App.Ice
             {
                 var fmt   = GetFormat();
                 var dest  = GetDestination();
-                var query = Request.Password ?
-                            new Query<string, string>(x => OnPasswordRequired(x)) :
+                var query = !string.IsNullOrEmpty(Settings?.Password) || Request.Password ?
+                            new Query<string, string>(x => RaisePasswordRequired(x)) :
                             null;
 
                 using (var writer = new ArchiveWriter(fmt, IO))
                 {
+                    writer.Option = Settings?.ToOption();
                     foreach (var item in Request.Sources) writer.Add(item);
                     ProgressStart();
                     writer.Save(dest, query, CreateInnerProgress(x => ProgressReport = x));
@@ -219,6 +220,25 @@ namespace Cube.FileSystem.App.Ice
             var args = new QueryEventArgs<string, ArchiveSettings>(path);
             OnSettingsRequired(args);
             Settings = args.Result;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// RaisePasswordRequired
+        /// 
+        /// <summary>
+        /// 必要に応じて PasswordRequired イベントを発生させます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void RaisePasswordRequired(QueryEventArgs<string, string> e)
+        {
+            if (!string.IsNullOrEmpty(Settings?.Password))
+            {
+                e.Result = Settings.Password;
+                e.Cancel = false;
+            }
+            else OnPasswordRequired(e);
         }
 
         #endregion

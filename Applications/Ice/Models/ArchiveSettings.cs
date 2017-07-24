@@ -30,6 +30,8 @@ namespace Cube.FileSystem.App.Ice
     /* --------------------------------------------------------------------- */
     public class ArchiveSettings
     {
+        #region Properties
+
         /* ----------------------------------------------------------------- */
         ///
         /// Path
@@ -61,7 +63,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Format Format { get; set; }
+        public Format Format { get; set; } = Format.Unknown;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -72,7 +74,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressionLevel CompressionLevel { get; set; }
+        public CompressionLevel CompressionLevel { get; set; } = CompressionLevel.Normal;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -83,7 +85,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressionMethod CompressionMethod { get; set; }
+        public CompressionMethod CompressionMethod { get; set; } = CompressionMethod.Default;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -94,7 +96,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public EncryptionMethod EncryptionMethod { get; set; }
+        public EncryptionMethod EncryptionMethod { get; set; } = EncryptionMethod.Default;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -105,6 +107,49 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public int ThreadCount { get; set; }
+        public int ThreadCount { get; set; } = 1;
+
+        #endregion
+
+        #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ToOption
+        /// 
+        /// <summary>
+        /// ArchiveOption オブジェクトに変換します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ArchiveOption ToOption()
+        {
+            switch (Format)
+            {
+                case Format.Zip:
+                    return new ZipOption
+                    {
+                        CompressionLevel  = CompressionLevel,
+                        CompressionMethod = CompressionMethod,
+                        EncryptionMethod  = EncryptionMethod,
+                        ThreadCount       = ThreadCount,
+                    };
+                case Format.SevenZip:
+                    return new SevenZipOption
+                    {
+                        CompressionLevel  = CompressionLevel,
+                        CompressionMethod = CompressionMethod,
+                        ThreadCount       = ThreadCount,
+                    };
+                default:
+                    return new ArchiveOption
+                    {
+                        CompressionLevel = CompressionLevel,
+                        ThreadCount      = ThreadCount,
+                    };
+            }
+        }
+
+        #endregion
     }
 }

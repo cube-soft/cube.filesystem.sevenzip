@@ -77,16 +77,7 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         private void WhenSettingsRequired(object sender, QueryEventArgs<string, ArchiveSettings> e)
-            => ShowDialog(() =>
-        {
-            var dialog = new SettingsForm();
-            e.Cancel = dialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel;
-            e.Result = new ArchiveSettings
-            {
-                Format = Format.Zip,
-                Path   = e.Query,
-            };
-        });
+            => ShowDialog(() => Views.ShowArchiveSettingsView(e));
 
         /* ----------------------------------------------------------------- */
         ///
