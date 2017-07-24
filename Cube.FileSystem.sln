@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.Tests", "Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.App.Ice", "Applications\Ice\Cube.FileSystem.App.Ice.csproj", "{E14092D2-266A-4CC7-B1CE-2ADD0CB8E65B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.App.Ice.Tests", "Applications\Ice\Tests\Cube.FileSystem.App.Ice.Tests.csproj", "{7CBF700C-6F9D-49B5-A905-E5C37302DA93}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.App.Ice.Tests", "Applications\Ice.Tests\Cube.FileSystem.App.Ice.Tests.csproj", "{7CBF700C-6F9D-49B5-A905-E5C37302DA93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
