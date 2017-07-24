@@ -62,7 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Presenters\ArchiveFacade.cs" />
-    <Compile Include="Models\ArchiveDetails.cs" />
+    <Compile Include="Models\Settings\ArchiveDetails.cs" />
     <Compile Include="Models\OverwriteMode.cs" />
     <Compile Include="Models\Request.cs" />
     <Compile Include="Presenters\ProgressFacade.cs" />
@@ -94,8 +94,8 @@
       <DependentUpon>PasswordForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\EventAggregator.cs" />
-    <Compile Include="Models\Settings.cs" />
-    <Compile Include="Models\SettingsFolder.cs" />
+    <Compile Include="Models\Settings\Settings.cs" />
+    <Compile Include="Models\Settings\SettingsFolder.cs" />
     <Compile Include="Presenters\ExtractFacade.cs" />
     <Compile Include="Presenters\ExtractPresenter.cs" />
     <Compile Include="Views\IProgressView.cs" />
