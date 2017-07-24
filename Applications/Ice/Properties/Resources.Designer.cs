@@ -120,7 +120,7 @@ namespace Cube.FileSystem.App.Ice.Properties {
         }
         
         /// <summary>
-        ///   bzip2 ファイル (*.bz2)|*.bz2;*.BZ2;*.tbz;*.TBZ に類似しているローカライズされた文字列を検索します。
+        ///   BZip2 ファイル (*.bz, *.bz2)|*.bz;*.BZ;*.bz2;*.BZ2;*.tbz;*.TBZ に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string FilterBzip2 {
             get {
@@ -129,7 +129,7 @@ namespace Cube.FileSystem.App.Ice.Properties {
         }
         
         /// <summary>
-        ///   gzip ファイル (*.gz)|*.gz;*.GZ;*.tgz;*.TGZ に類似しているローカライズされた文字列を検索します。
+        ///   GZip ファイル (*.gz)|*.gz;*.GZ;*.tgz;*.TGZ に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string FilterGzip {
             get {
@@ -147,7 +147,16 @@ namespace Cube.FileSystem.App.Ice.Properties {
         }
         
         /// <summary>
-        ///   xz ファイル (*.xz)|*.xz;*.XZ;*.txz;*.TXZ に類似しているローカライズされた文字列を検索します。
+        ///   Tar ファイル (*.tar)|*.tar;*.TAR;*.tar.gz;*.TAR.GZ;*.tar.bz;*.TAR.BZ;*.tar.bz2;*.TAR.BZ2;*.tar.xz;*.TAR.XZ;*.tgz;*.TGZ;*.tbz;*.TBZ;*.txz;*.TXZ に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string FilterTar {
+            get {
+                return ResourceManager.GetString("FilterTar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   XZ ファイル (*.xz)|*.xz;*.XZ;*.txz;*.TXZ に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string FilterXZ {
             get {
@@ -156,7 +165,7 @@ namespace Cube.FileSystem.App.Ice.Properties {
         }
         
         /// <summary>
-        ///   zip ファイル (*.zip)|*.zip;*.ZIP に類似しているローカライズされた文字列を検索します。
+        ///   Zip ファイル (*.zip)|*.zip;*.ZIP に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string FilterZip {
             get {
