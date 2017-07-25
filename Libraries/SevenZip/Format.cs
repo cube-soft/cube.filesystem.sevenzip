@@ -152,14 +152,14 @@ namespace Cube.FileSystem.SevenZip
 
     /* --------------------------------------------------------------------- */
     ///
-    /// FormatConversions
+    /// Formats
     /// 
     /// <summary>
     /// Format に対する拡張メソッドを定義したクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public static class FormatConversions
+    public static class Formats
     {
         #region Methods
 

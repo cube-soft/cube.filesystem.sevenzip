@@ -57,7 +57,7 @@ namespace Cube.FileSystem.Tests
             var src  = Example(filename);
             var dest = Result(Guid.NewGuid().ToString("D"));
             System.IO.File.Copy(src, dest);
-            return FormatConversions.FromFile(dest);
+            return Formats.FromFile(dest);
         }
 
         #endregion

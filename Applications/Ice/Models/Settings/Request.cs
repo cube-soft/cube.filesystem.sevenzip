@@ -163,7 +163,7 @@ namespace Cube.FileSystem.App.Ice
             if (index < 0 || index >= s.Length - 1) return Format.Zip;
 
             var query = s.Substring(index + 1).ToLower();
-            return FormatConversions.FromString(query);
+            return Formats.FromString(query);
         }
 
         /* ----------------------------------------------------------------- */

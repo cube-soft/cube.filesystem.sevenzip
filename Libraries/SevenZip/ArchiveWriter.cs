@@ -298,7 +298,7 @@ namespace Cube.FileSystem.SevenZip
                     case CompressionMethod.BZip2:
                     case CompressionMethod.GZip:
                     case CompressionMethod.XZ:
-                        SaveCore(FormatConversions.FromMethod(m), path, password, progress, f);
+                        SaveCore(Formats.FromMethod(m), path, password, progress, f);
                         break;
                     default: // Copy
                         _io.Move(tmp, path, true);

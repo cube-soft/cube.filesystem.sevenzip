@@ -62,7 +62,7 @@ namespace Cube.FileSystem.Tests
 
             using (var stream = System.IO.File.OpenRead(dest))
             {
-                return FormatConversions.FromStream(stream);
+                return Formats.FromStream(stream);
             }
         }
 
