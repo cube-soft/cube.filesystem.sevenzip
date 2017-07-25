@@ -77,7 +77,7 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         private void WhenDestinationRequired(object sender, QueryEventArgs<string, string> e)
-            => ShowDialog(() => Views.ShowSaveDirectoryView(e));
+            => ShowDialog(() => Views.ShowSaveView(e, true));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -89,7 +89,7 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         private void WhenPasswordRequired(object sender, QueryEventArgs<string, string> e)
-            => ShowDialog(() => Views.ShowPasswordView(e));
+            => ShowDialog(() => Views.ShowPasswordView(e, false));
 
         /* ----------------------------------------------------------------- */
         ///

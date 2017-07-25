@@ -89,7 +89,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         public static void Reset()
         {
             Destination = string.Empty;
-            Password = string.Empty;
+            Password    = string.Empty;
         }
 
         #endregion
@@ -110,33 +110,19 @@ namespace Cube.FileSystem.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ShowSaveFileView
+        /// ShowSaveView
         /// 
         /// <summary>
-        /// 保存ファイル名を選択する画面を表示します。
+        /// 保存パス名を選択する画面を表示します。
         /// </summary>
         /// 
         /// <param name="e">パスを保持するオブジェクト</param>
+        /// <param name="directory">
+        /// ディレクトリ用画面を使用するかどうかを示す値
+        /// </param>
         ///
         /* ----------------------------------------------------------------- */
-        public override void ShowSaveFileView(QueryEventArgs<string, string> e)
-        {
-            e.Cancel = string.IsNullOrEmpty(Destination);
-            e.Result = Destination;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ShowSaveDirectoryView
-        /// 
-        /// <summary>
-        /// 保存ディレクトリ名を選択する画面を表示します。
-        /// </summary>
-        /// 
-        /// <param name="e">パスを保持するオブジェクト</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public override void ShowSaveDirectoryView(QueryEventArgs<string, string> e)
+        public override void ShowSaveView(QueryEventArgs<string, string> e, bool directory)
         {
             e.Cancel = string.IsNullOrEmpty(Destination);
             e.Result = Destination;
@@ -147,30 +133,14 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// ShowPasswordView
         /// 
         /// <summary>
-        /// パスワードを設定します。
+        /// パスワード入力画面を表示します。
         /// </summary>
         /// 
-        /// <param name="e">パスワード設定用オブジェクト</param>
+        /// <param name="e">パスワード情報を保持するオブジェクト</param>
+        /// <param name="confirm">確認用入力項目の有無</param>
         ///
         /* ----------------------------------------------------------------- */
-        public override void ShowPasswordView(QueryEventArgs<string, string> e)
-        {
-            e.Cancel = string.IsNullOrEmpty(Password);
-            e.Result = Password;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ShowPasswordView
-        /// 
-        /// <summary>
-        /// パスワードを設定します。
-        /// </summary>
-        /// 
-        /// <param name="e">パスワード設定用オブジェクト</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public override void ShowPasswordConfirmView(QueryEventArgs<string, string> e)
+        public override void ShowPasswordView(QueryEventArgs<string, string> e, bool confirm)
         {
             e.Cancel = string.IsNullOrEmpty(Password);
             e.Result = Password;

@@ -47,49 +47,22 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ShowSaveFileView
+        /// ShowSaveView
         /// 
         /// <summary>
-        /// 保存ファイル名を選択する画面を表示します。
+        /// 保存パス名を選択する画面を表示します。
         /// </summary>
         /// 
         /// <param name="e">パスを保持するオブジェクト</param>
+        /// <param name="directory">
+        /// ディレクトリ用画面を使用するかどうかを示す値
+        /// </param>
         ///
         /* ----------------------------------------------------------------- */
-        public virtual void ShowSaveFileView(QueryEventArgs<string, string> e)
+        public virtual void ShowSaveView(QueryEventArgs<string, string> e, bool directory)
         {
-            var view = new SaveFileDialog
-            {
-                AddExtension    = true,
-                Filter          = GetFilter(e.Query),
-                OverwritePrompt = true,
-            };
-
-            e.Cancel = view.ShowDialog() == DialogResult.Cancel;
-            e.Result = view.FileName;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ShowSaveDirectoryView
-        /// 
-        /// <summary>
-        /// 保存ディレクトリ名を選択する画面を表示します。
-        /// </summary>
-        /// 
-        /// <param name="e">パスを保持するオブジェクト</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public virtual void ShowSaveDirectoryView(QueryEventArgs<string, string> e)
-        {
-            var view = new FolderBrowserDialog
-            {
-                Description  = Properties.Resources.MessageExtractDestination,
-                SelectedPath = e.Query,
-            };
-
-            e.Cancel = view.ShowDialog() == DialogResult.Cancel;
-            e.Result = view.SelectedPath;
+            if (directory) ShowSaveDirectoryView(e);
+            else ShowSaveFileView(e);
         }
 
         /* ----------------------------------------------------------------- */
@@ -101,37 +74,13 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         /// 
         /// <param name="e">パスワード情報を保持するオブジェクト</param>
+        /// <param name="confirm">確認用入力項目の有無</param>
         ///
         /* ----------------------------------------------------------------- */
-        public virtual void ShowPasswordView(QueryEventArgs<string, string> e)
+        public virtual void ShowPasswordView(QueryEventArgs<string, string> e, bool confirm)
         {
-            using (var view = new PasswordForm())
-            {
-                view.StartPosition = FormStartPosition.CenterParent;
-                e.Cancel = view.ShowDialog() == DialogResult.Cancel;
-                if (!e.Cancel) e.Result = view.Password;
-            }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ShowPasswordConfirmView
-        /// 
-        /// <summary>
-        /// 確認項目付パスワード入力画面を表示します。
-        /// </summary>
-        /// 
-        /// <param name="e">パスワード情報を保持するオブジェクト</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public virtual void ShowPasswordConfirmView(QueryEventArgs<string, string> e)
-        {
-            using (var view = new PasswordConfirmForm())
-            {
-                view.StartPosition = FormStartPosition.CenterParent;
-                e.Cancel = view.ShowDialog() == DialogResult.Cancel;
-                if (!e.Cancel) e.Result = view.Password;
-            }
+            if (confirm) ShowPasswordConfirmView(e);
+            else ShowPasswordView(e);
         }
 
         /* ----------------------------------------------------------------- */
@@ -188,6 +137,95 @@ namespace Cube.FileSystem.App.Ice
         #endregion
 
         #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowSaveFileView
+        /// 
+        /// <summary>
+        /// 保存ファイル名を選択する画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">パスを保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void ShowSaveFileView(QueryEventArgs<string, string> e)
+        {
+            var view = new SaveFileDialog
+            {
+                AddExtension    = true,
+                Filter          = GetFilter(e.Query),
+                OverwritePrompt = true,
+            };
+
+            e.Cancel = view.ShowDialog() == DialogResult.Cancel;
+            e.Result = view.FileName;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowSaveDirectoryView
+        /// 
+        /// <summary>
+        /// 保存ディレクトリ名を選択する画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">パスを保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void ShowSaveDirectoryView(QueryEventArgs<string, string> e)
+        {
+            var view = new FolderBrowserDialog
+            {
+                Description = Properties.Resources.MessageExtractDestination,
+                SelectedPath = e.Query,
+            };
+
+            e.Cancel = view.ShowDialog() == DialogResult.Cancel;
+            e.Result = view.SelectedPath;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowPasswordView
+        /// 
+        /// <summary>
+        /// パスワード入力画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">パスワード情報を保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void ShowPasswordView(QueryEventArgs<string, string> e)
+        {
+            using (var view = new PasswordForm())
+            {
+                view.StartPosition = FormStartPosition.CenterParent;
+                e.Cancel = view.ShowDialog() == DialogResult.Cancel;
+                if (!e.Cancel) e.Result = view.Password;
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowPasswordConfirmView
+        /// 
+        /// <summary>
+        /// 確認項目付パスワード入力画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">パスワード情報を保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void ShowPasswordConfirmView(QueryEventArgs<string, string> e)
+        {
+            using (var view = new PasswordConfirmForm())
+            {
+                view.StartPosition = FormStartPosition.CenterParent;
+                e.Cancel = view.ShowDialog() == DialogResult.Cancel;
+                if (!e.Cancel) e.Result = view.Password;
+            }
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -251,17 +289,11 @@ namespace Cube.FileSystem.App.Ice
         public static IProgressView CreateProgressView()
             => _factory?.CreateProgressView();
 
-        public static void ShowSaveFileView(QueryEventArgs<string, string> e)
-            => _factory?.ShowSaveFileView(e);
+        public static void ShowSaveView(QueryEventArgs<string, string> e, bool directory)
+            => _factory?.ShowSaveView(e, directory);
 
-        public static void ShowSaveDirectoryView(QueryEventArgs<string, string> e)
-            => _factory?.ShowSaveDirectoryView(e);
-
-        public static void ShowPasswordView(QueryEventArgs<string, string> e)
-            => _factory?.ShowPasswordView(e);
-
-        public static void ShowPasswordConfirmView(QueryEventArgs<string, string> e)
-            => _factory?.ShowPasswordConfirmView(e);
+        public static void ShowPasswordView(QueryEventArgs<string, string> e, bool confirm)
+            => _factory?.ShowPasswordView(e, confirm);
 
         public static void ShowOverwriteView(OverwriteEventArgs e)
             => _factory?.ShowOverwriteView(e);
