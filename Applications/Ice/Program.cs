@@ -62,6 +62,8 @@ namespace Cube.FileSystem.App.Ice
                 var view     = new ProgressForm();
                 var model    = new Request(args);
 
+                settings.Load();
+
                 switch (model.Mode)
                 {
                     case Mode.Archive:
