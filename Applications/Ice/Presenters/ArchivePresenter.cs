@@ -115,11 +115,11 @@ namespace Cube.FileSystem.App.Ice
         private void WhenProgress(object sender, ValueEventArgs<ArchiveReport> e)
             => Sync(() =>
         {
-            View.FileName  = Model.IO.Get(Model.Destination).Name;
-            View.FileCount = e.Value.FileCount;
-            View.DoneCount = e.Value.DoneCount;
-            View.Status    = string.Format(Properties.Resources.MessageArchive, Model.Destination);
-            View.Value     = Math.Max(Math.Max((int)(e.Value.Ratio * View.Unit), 1), View.Value);
+            View.FileName   = Model.IO.Get(Model.Destination).Name;
+            View.TotalCount = e.Value.TotalCount;
+            View.Count      = e.Value.Count;
+            View.Status     = string.Format(Properties.Resources.MessageArchive, Model.Destination);
+            View.Value      = Math.Max(Math.Max((int)(e.Value.Ratio * View.Unit), 1), View.Value);
         });
 
         #endregion

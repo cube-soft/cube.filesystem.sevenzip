@@ -115,10 +115,10 @@ namespace Cube.FileSystem.App.Ice
         private void WhenProgress(object sender, ValueEventArgs<SevenZip.ArchiveReport> e)
             => Sync(() =>
         {
-            View.FileCount = e.Value.FileCount;
-            View.DoneCount = e.Value.DoneCount;
-            View.Status    = Model.Current;
-            View.Value     = Math.Max(Math.Max((int)(e.Value.Ratio * View.Unit), 1), View.Value);
+            View.TotalCount = e.Value.TotalCount;
+            View.Count      = e.Value.Count;
+            View.Status     = Model.Current;
+            View.Value      = Math.Max(Math.Max((int)(e.Value.Ratio * View.Unit), 1), View.Value);
         });
 
         #endregion

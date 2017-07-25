@@ -196,14 +196,17 @@
   <data name="MessageArchive" xml:space="preserve">
     <value>{0} を作成しています...</value>
   </data>
-  <data name="MessageCurrentFile" xml:space="preserve">
-    <value>現在のファイル</value>
-  </data>
-  <data name="MessageDoneArchive" xml:space="preserve">
+  <data name="MessageArchiveSuccess" xml:space="preserve">
     <value>{0} に保存しました。</value>
   </data>
-  <data name="MessageDoneExtract" xml:space="preserve">
-    <value>{0} に解凍しました。</value>
+  <data name="MessageBytes" xml:space="preserve">
+    <value>サイズ</value>
+  </data>
+  <data name="MessageCount" xml:space="preserve">
+    <value>ファイル数</value>
+  </data>
+  <data name="MessageCurrent" xml:space="preserve">
+    <value>現在のファイル</value>
   </data>
   <data name="MessageElapsedTime" xml:space="preserve">
     <value>経過時間</value>
@@ -211,11 +214,8 @@
   <data name="MessageExtractDestination" xml:space="preserve">
     <value>解凍したファイルを保存するフォルダを選択してください。</value>
   </data>
-  <data name="MessageFileCount" xml:space="preserve">
-    <value>ファイル数</value>
-  </data>
-  <data name="MessageFileSize" xml:space="preserve">
-    <value>サイズ</value>
+  <data name="MessageExtractSuccess" xml:space="preserve">
+    <value>{0} に解凍しました。</value>
   </data>
   <data name="MessageLastWriteTime" xml:space="preserve">
     <value>更新日時</value>

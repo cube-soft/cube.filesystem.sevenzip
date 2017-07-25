@@ -114,46 +114,6 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Status
-        ///
-        /// <summary>
-        /// 現在の状況を表す文字列を取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Status
-        {
-            get { return StatusLabel.Text; }
-            set
-            {
-                if (StatusLabel.Text == value) return;
-                StatusLabel.Text = value;
-            }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// DoneCount
-        ///
-        /// <summary>
-        /// 処理を終了したファイル数を取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public long DoneCount
-        {
-            get { return _doneCount; }
-            set
-            {
-                if (_doneCount == value) return;
-                _doneCount = value;
-
-                UpdateFileCountLabel();
-            }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// FileName
         ///
         /// <summary>
@@ -175,23 +135,63 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// FileCount
+        /// Status
+        ///
+        /// <summary>
+        /// 現在の状況を表す文字列を取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Status
+        {
+            get { return StatusLabel.Text; }
+            set
+            {
+                if (StatusLabel.Text == value) return;
+                StatusLabel.Text = value;
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Count
+        ///
+        /// <summary>
+        /// 処理を終了したファイル数を取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public long Count
+        {
+            get { return _count; }
+            set
+            {
+                if (_count == value) return;
+                _count = value;
+
+                UpdateCountLabel();
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// TotalCount
         ///
         /// <summary>
         /// 処理対象ファイル数の合計を取得または設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public long FileCount
+        public long TotalCount
         {
-            get { return _fileCount; }
+            get { return _totalCount; }
             set
             {
-                if (_fileCount == value) return;
-                _fileCount = value;
+                if (_totalCount == value) return;
+                _totalCount = value;
 
                 Value = 0;
-                UpdateFileCountLabel();
+                UpdateCountLabel();
             }
         }
 
@@ -300,7 +300,7 @@ namespace Cube.FileSystem.App.Ice
         {
             base.OnShown(e);
 
-            UpdateFileCountLabel();
+            UpdateCountLabel();
             UpdateElapseLabel();
             Start();
 
@@ -328,17 +328,17 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// UpdateFileCountLabel
+        /// UpdateCountLabel
         ///
         /// <summary>
         /// FileCountLabel の表示内容を更新します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void UpdateFileCountLabel()
+        private void UpdateCountLabel()
         {
-            FileCountLabel.Visible = FileCount > 0;
-            FileCountLabel.Text = $"{Properties.Resources.MessageFileCount} : {DoneCount:#,0} / {FileCount:#,0}";
+            CountLabel.Visible = TotalCount > 0;
+            CountLabel.Text = $"{Properties.Resources.MessageCount} : {Count:#,0} / {TotalCount:#,0}";
         }
 
         /* ----------------------------------------------------------------- */
@@ -418,8 +418,8 @@ namespace Cube.FileSystem.App.Ice
 
         #region Fields
         private string _fileName = string.Empty;
-        private long _doneCount = 0;
-        private long _fileCount = 0;
+        private long _count = 0;
+        private long _totalCount = 0;
         private Stopwatch _watch = new Stopwatch();
         private Timer _timer = new Timer();
         private TimeSpan _remain = TimeSpan.Zero;

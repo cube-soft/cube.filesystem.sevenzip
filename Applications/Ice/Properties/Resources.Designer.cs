@@ -304,29 +304,38 @@ namespace Cube.FileSystem.App.Ice.Properties {
         }
         
         /// <summary>
-        ///   現在のファイル に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        internal static string MessageCurrentFile {
-            get {
-                return ResourceManager.GetString("MessageCurrentFile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   {0} に保存しました。 に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        internal static string MessageDoneArchive {
+        internal static string MessageArchiveSuccess {
             get {
-                return ResourceManager.GetString("MessageDoneArchive", resourceCulture);
+                return ResourceManager.GetString("MessageArchiveSuccess", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   {0} に解凍しました。 に類似しているローカライズされた文字列を検索します。
+        ///   サイズ に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        internal static string MessageDoneExtract {
+        internal static string MessageBytes {
             get {
-                return ResourceManager.GetString("MessageDoneExtract", resourceCulture);
+                return ResourceManager.GetString("MessageBytes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   ファイル数 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MessageCount {
+            get {
+                return ResourceManager.GetString("MessageCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   現在のファイル に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MessageCurrent {
+            get {
+                return ResourceManager.GetString("MessageCurrent", resourceCulture);
             }
         }
         
@@ -349,20 +358,11 @@ namespace Cube.FileSystem.App.Ice.Properties {
         }
         
         /// <summary>
-        ///   ファイル数 に類似しているローカライズされた文字列を検索します。
+        ///   {0} に解凍しました。 に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        internal static string MessageFileCount {
+        internal static string MessageExtractSuccess {
             get {
-                return ResourceManager.GetString("MessageFileCount", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   サイズ に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        internal static string MessageFileSize {
-            get {
-                return ResourceManager.GetString("MessageFileSize", resourceCulture);
+                return ResourceManager.GetString("MessageExtractSuccess", resourceCulture);
             }
         }
         

@@ -32,7 +32,7 @@
             this.RootPanel = new System.Windows.Forms.TableLayoutPanel();
             this.ExitButton = new System.Windows.Forms.Button();
             this.RemainLabel = new System.Windows.Forms.Label();
-            this.FileCountLabel = new System.Windows.Forms.Label();
+            this.CountLabel = new System.Windows.Forms.Label();
             this.MainProgressBar = new System.Windows.Forms.ProgressBar();
             this.ElapseLabel = new System.Windows.Forms.Label();
             this.StatusLabel = new System.Windows.Forms.Label();
@@ -49,7 +49,7 @@
             this.RootPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.RootPanel.Controls.Add(this.ExitButton, 1, 5);
             this.RootPanel.Controls.Add(this.RemainLabel, 1, 3);
-            this.RootPanel.Controls.Add(this.FileCountLabel, 0, 1);
+            this.RootPanel.Controls.Add(this.CountLabel, 0, 1);
             this.RootPanel.Controls.Add(this.MainProgressBar, 0, 2);
             this.RootPanel.Controls.Add(this.ElapseLabel, 0, 3);
             this.RootPanel.Controls.Add(this.StatusLabel, 0, 4);
@@ -91,18 +91,18 @@
             this.RemainLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.RemainLabel.Visible = false;
             // 
-            // FileCountLabel
+            // CountLabel
             // 
-            this.FileCountLabel.AutoSize = true;
-            this.RootPanel.SetColumnSpan(this.FileCountLabel, 2);
-            this.FileCountLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FileCountLabel.Location = new System.Drawing.Point(12, 43);
-            this.FileCountLabel.Margin = new System.Windows.Forms.Padding(12, 3, 12, 3);
-            this.FileCountLabel.Name = "FileCountLabel";
-            this.FileCountLabel.Size = new System.Drawing.Size(410, 18);
-            this.FileCountLabel.TabIndex = 0;
-            this.FileCountLabel.Text = "ファイル数 : 669 / 796";
-            this.FileCountLabel.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.CountLabel.AutoSize = true;
+            this.RootPanel.SetColumnSpan(this.CountLabel, 2);
+            this.CountLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CountLabel.Location = new System.Drawing.Point(12, 43);
+            this.CountLabel.Margin = new System.Windows.Forms.Padding(12, 3, 12, 3);
+            this.CountLabel.Name = "CountLabel";
+            this.CountLabel.Size = new System.Drawing.Size(410, 18);
+            this.CountLabel.TabIndex = 0;
+            this.CountLabel.Text = "ファイル数 : 669 / 796";
+            this.CountLabel.TextAlign = System.Drawing.ContentAlignment.BottomRight;
             // 
             // MainProgressBar
             // 
@@ -175,6 +175,7 @@
             this.Font = new System.Drawing.Font("Meiryo UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(128)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Location = new System.Drawing.Point(0, 0);
             this.MaximizeBox = false;
             this.Name = "ProgressForm";
             this.Text = "CubeICE";
@@ -188,7 +189,7 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel RootPanel;
-        private System.Windows.Forms.Label FileCountLabel;
+        private System.Windows.Forms.Label CountLabel;
         private System.Windows.Forms.ProgressBar MainProgressBar;
         private System.Windows.Forms.Label ElapseLabel;
         private System.Windows.Forms.Label RemainLabel;

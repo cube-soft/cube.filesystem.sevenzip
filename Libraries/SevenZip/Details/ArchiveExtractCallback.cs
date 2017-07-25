@@ -43,12 +43,12 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public ArchiveExtractCallback(string src, long count, long size,
+        public ArchiveExtractCallback(string src, long count, long bytes,
             Func<uint, ISequentialOutStream> dest)
         {
             Destination = dest;
-            ProgressReport.FileCount = count;
-            ProgressReport.FileSize  = size;
+            ProgressReport.TotalCount = count;
+            ProgressReport.TotalBytes = bytes;
         }
 
         #endregion
@@ -128,12 +128,12 @@ namespace Cube.FileSystem.SevenZip
         /// 展開後のバイト数を通知します。
         /// </summary>
         /// 
-        /// <param name="size">バイト数</param>
+        /// <param name="bytes">バイト数</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public void SetTotal(ulong size)
+        public void SetTotal(ulong bytes)
         {
-            _hack = Math.Max((long)size - ProgressReport.FileSize, 0);
+            _hack = Math.Max((long)bytes - ProgressReport.TotalBytes, 0);
             Progress?.Report(ProgressReport);
         }
 
@@ -145,7 +145,7 @@ namespace Cube.FileSystem.SevenZip
         /// 展開の完了したバイトサイズを通知します。
         /// </summary>
         /// 
-        /// <param name="size">展開の完了したバイト数</param>
+        /// <param name="bytes">展開の完了したバイト数</param>
         /// 
         /// <remarks>
         /// IInArchive.Extract を複数回実行する場合、SetTotal および
@@ -157,10 +157,10 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         /// 
         /* ----------------------------------------------------------------- */
-        public void SetCompleted(ref ulong size)
+        public void SetCompleted(ref ulong bytes)
         {
-            var cvt = Math.Max((long)size - _hack, 0);
-            ProgressReport.DoneSize = cvt;
+            var cvt = Math.Max((long)bytes - _hack, 0);
+            ProgressReport.Bytes = cvt;
             Progress?.Report(ProgressReport);
         }
 
@@ -215,7 +215,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void SetOperationResult(OperationResult result)
         {
-            ProgressReport.DoneCount = ProgressReport.FileCount;
+            ProgressReport.Count = ProgressReport.TotalCount;
             Progress?.Report(ProgressReport);
             Result = result;
         }

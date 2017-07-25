@@ -147,7 +147,7 @@ namespace Cube.FileSystem.SevenZip
         /// 圧縮ファイルの展開時の合計サイズを取得します。
         /// </summary>
         /// 
-        /// <param name="files">ファイル数</param>
+        /// <param name="count">ファイル数</param>
         /// <param name="bytes">バイト数</param>
         ///
         /// <remarks>
@@ -157,7 +157,7 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        void SetTotal(IntPtr /* ref ulong */ files, IntPtr /* ref ulong */ bytes);
+        void SetTotal(IntPtr /* ref ulong */ count, IntPtr /* ref ulong */ bytes);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -167,11 +167,11 @@ namespace Cube.FileSystem.SevenZip
         /// 展開の完了したサイズを取得します。
         /// </summary>
         /// 
-        /// <param name="files">ファイル数</param>
+        /// <param name="count">ファイル数</param>
         /// <param name="bytes">バイト数</param>
         /// 
         /* ----------------------------------------------------------------- */
-        void SetCompleted(IntPtr /* ref ulong */ files, IntPtr /* ref ulong */ bytes);
+        void SetCompleted(IntPtr /* ref ulong */ count, IntPtr /* ref ulong */ bytes);
     }
 
     /* --------------------------------------------------------------------- */
@@ -250,7 +250,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="size">バイト数</param>
         /// 
         /* ----------------------------------------------------------------- */
-        void SetTotal(ulong total);
+        void SetTotal(ulong bytes);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -260,10 +260,10 @@ namespace Cube.FileSystem.SevenZip
         /// 展開の完了したバイト数を通知します。
         /// </summary>
         /// 
-        /// <param name="value">バイト数</param>
+        /// <param name="bytes">バイト数</param>
         /// 
         /* ----------------------------------------------------------------- */
-        void SetCompleted(ref ulong value);
+        void SetCompleted(ref ulong bytes);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -354,10 +354,10 @@ namespace Cube.FileSystem.SevenZip
         /// 圧縮処理の終了したバイト数を通知します。
         /// </summary>
         /// 
-        /// <param name="size">バイト数</param>
+        /// <param name="bytes">バイト数</param>
         /// 
         /* ----------------------------------------------------------------- */
-        void SetCompleted(ref ulong size);
+        void SetCompleted(ref ulong bytes);
 
         /* ----------------------------------------------------------------- */
         ///

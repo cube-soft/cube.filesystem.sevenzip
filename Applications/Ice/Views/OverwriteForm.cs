@@ -137,12 +137,12 @@ namespace Cube.FileSystem.App.Ice
             ss.AppendLine(Properties.Resources.MessageOverwrite);
             ss.AppendLine();
 
-            ss.AppendLine(Properties.Resources.MessageCurrentFile);
+            ss.AppendLine(Properties.Resources.MessageCurrent);
             if (Destination != null)
             {
                 ss.AppendLine(Destination.FullName);
                 ss.AppendLine(string.Format("{0} : {1}",
-                    Properties.Resources.MessageFileSize,
+                    Properties.Resources.MessageBytes,
                     Destination.Length.ToPrettyBytes()
                 ));
                 ss.AppendLine(string.Format("{0} : {1}",
@@ -158,7 +158,7 @@ namespace Cube.FileSystem.App.Ice
             {
                 ss.AppendLine(Source.FullName);
                 ss.AppendLine(string.Format("{0} : {1}",
-                    Properties.Resources.MessageFileSize,
+                    Properties.Resources.MessageBytes,
                     Source.Length.ToPrettyBytes()
                 ));
                 ss.AppendLine(string.Format("{0} : {1}",

@@ -67,7 +67,7 @@ namespace Cube.FileSystem.SevenZip
             : base()
         {
             Items = items;
-            ProgressReport.FileCount = items.Count;
+            ProgressReport.TotalCount = items.Count;
             _io = io;
         }
 
@@ -142,14 +142,14 @@ namespace Cube.FileSystem.SevenZip
         /// 圧縮するファイルの合計バイト数を通知します。
         /// </summary>
         /// 
-        /// <param name="size">
+        /// <param name="bytes">
         /// 圧縮するファイルの合計バイト数
         /// </param>
         /// 
         /* ----------------------------------------------------------------- */
-        public void SetTotal(ulong size)
+        public void SetTotal(ulong bytes)
         {
-            ProgressReport.FileSize = (long)size;
+            ProgressReport.TotalBytes = (long)bytes;
             Progress?.Report(ProgressReport);
         }
 
@@ -161,12 +161,12 @@ namespace Cube.FileSystem.SevenZip
         /// 圧縮処理の終了したバイト数を通知します。
         /// </summary>
         /// 
-        /// <param name="size">処理の終了したバイト数</param>
+        /// <param name="bytes">処理の終了したバイト数</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public void SetCompleted(ref ulong size)
+        public void SetCompleted(ref ulong bytes)
         {
-            ProgressReport.DoneSize = (long)size;
+            ProgressReport.Bytes = (long)bytes;
             Progress?.Report(ProgressReport);
         }
 
@@ -273,7 +273,7 @@ namespace Cube.FileSystem.SevenZip
         {
             stream = CreateStream(index);
 
-            ProgressReport.DoneCount = index + 1;
+            ProgressReport.Count = index + 1;
             Progress?.Report(ProgressReport);
 
             return (int)OperationResult.OK;

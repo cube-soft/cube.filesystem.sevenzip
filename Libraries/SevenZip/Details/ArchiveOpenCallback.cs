@@ -115,7 +115,7 @@ namespace Cube.FileSystem.SevenZip
         /// 圧縮ファイルの展開時の合計サイズを取得します。
         /// </summary>
         /// 
-        /// <param name="files">ファイル数</param>
+        /// <param name="count">ファイル数</param>
         /// <param name="bytes">バイト数</param>
         ///
         /// <remarks>
@@ -125,10 +125,10 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public void SetTotal(IntPtr files, IntPtr bytes)
+        public void SetTotal(IntPtr count, IntPtr bytes)
         {
-            if (files != IntPtr.Zero) ProgressReport.FileCount = Marshal.ReadInt64(files);
-            if (bytes != IntPtr.Zero) ProgressReport.FileSize  = Marshal.ReadInt64(bytes);
+            if (count != IntPtr.Zero) ProgressReport.TotalCount = Marshal.ReadInt64(count);
+            if (bytes != IntPtr.Zero) ProgressReport.TotalBytes = Marshal.ReadInt64(bytes);
         }
 
         /* ----------------------------------------------------------------- */
@@ -139,14 +139,14 @@ namespace Cube.FileSystem.SevenZip
         /// ストリームの読み込み準備が完了したサイズを取得します。
         /// </summary>
         /// 
-        /// <param name="files">ファイル数</param>
+        /// <param name="count">ファイル数</param>
         /// <param name="bytes">バイト数</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public void SetCompleted(IntPtr files, IntPtr bytes)
+        public void SetCompleted(IntPtr count, IntPtr bytes)
         {
-            if (files != IntPtr.Zero) ProgressReport.DoneCount = Marshal.ReadInt64(files);
-            if (bytes != IntPtr.Zero) ProgressReport.DoneSize  = Marshal.ReadInt64(bytes);
+            if (count != IntPtr.Zero) ProgressReport.Count = Marshal.ReadInt64(count);
+            if (bytes != IntPtr.Zero) ProgressReport.Bytes = Marshal.ReadInt64(bytes);
             Progress?.Report(ProgressReport);
             Result = OperationResult.OK;
         }

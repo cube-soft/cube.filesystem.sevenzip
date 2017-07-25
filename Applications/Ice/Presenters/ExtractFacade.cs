@@ -88,6 +88,7 @@ namespace Cube.FileSystem.App.Ice
             using (var reader = new ArchiveReader(Source, query, IO))
             {
                 this.LogDebug($"Format:{reader.Format}\tPath:{Source}");
+
                 try
                 {
                     SetDestination(Source);
@@ -116,30 +117,30 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void PreExtract(ArchiveReader reader)
         {
-            var dummy = "*";
+            var file  = "*";
             var count = reader.Items.Count;
-            var size  = 0L;
+            var bytes = 0L;
             var check = new Dictionary<string, string>();
 
             foreach (var item in reader.Items)
             {
-                size += item.Length;
+                bytes += item.Length;
                 if (check.Count > 2) continue;
 
-                // ファイルは全て "*" としてカウント
-                var value = GetRoot(item, dummy);
+                // Count all files as "*"
+                var value = GetRoot(item, file);
                 var key   = value.ToLower();
                 if (!check.ContainsKey(key)) check.Add(key, value);
             }
 
-            ProgressReport.FileCount = count;
-            ProgressReport.FileSize  = size;
+            ProgressReport.TotalCount = count;
+            ProgressReport.TotalBytes = bytes;
 
-            var root = GetRoot(check.Values.Where(x => x != dummy), count);
+            var root = GetRoot(check.Values.Where(x => x != file), count);
             if (!string.IsNullOrEmpty(root)) Destination = IO.Combine(Destination, root);
 
-            this.LogDebug(string.Format("Count:{0:#,0}\tSize:{1:#,0}\tDestination:{2}",
-                ProgressReport.FileCount, ProgressReport.FileSize, Destination
+            this.LogDebug(string.Format("Count:{0:#,0}\tBytes:{1:#,0}\tDestination:{2}",
+                ProgressReport.TotalCount, ProgressReport.TotalBytes, Destination
             ));
         }
 
@@ -174,12 +175,12 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void Extract(ArchiveItem src)
         {
-            var done = ProgressReport.DoneSize;
-            var progress = CreateInnerProgress(e => ProgressReport.DoneSize = done + e.DoneSize);
+            var done = ProgressReport.Bytes;
+            var progress = CreateInnerProgress(e => ProgressReport.Bytes = done + e.Bytes);
 
             Current = src.FullName;
             Extract(src, progress);
-            ProgressReport.DoneCount++;
+            ProgressReport.Count++;
         }
 
         /* ----------------------------------------------------------------- */
@@ -288,14 +289,14 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetRoot(IInformation info, string alt)
+        private string GetRoot(IInformation info, string alternate)
         {
             var root = info.FullName.Split(
                 System.IO.Path.DirectorySeparatorChar,
                 System.IO.Path.AltDirectorySeparatorChar
             )[0];
 
-            return info.IsDirectory || root != info.Name ? root : alt;
+            return info.IsDirectory || root != info.Name ? root : alternate;
         }
 
         /* ----------------------------------------------------------------- */

@@ -171,18 +171,12 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void SetResult()
         {
-            this.LogDebug(string.Format(
-                "{0}\tCount:{1}/{2}\tSize:{3}/{4}",
-                IO.Get(Destination).Name,
-                ProgressReport.DoneCount,
-                ProgressReport.FileCount,
-                ProgressReport.DoneSize,
-                ProgressReport.FileSize
-            ));
+            this.LogDebug(string.Format("Count:{0:#,0}\tBytes:{1:#,0}\tDestination:{2}",
+                ProgressReport.TotalCount, ProgressReport.TotalBytes, Destination));
 
             // hack (see remarks)
-            ProgressReport.DoneCount = ProgressReport.FileCount;
-            ProgressReport.DoneSize  = ProgressReport.FileSize;
+            ProgressReport.Count = ProgressReport.TotalCount;
+            ProgressReport.Bytes = ProgressReport.TotalBytes;
         }
 
         /* ----------------------------------------------------------------- */

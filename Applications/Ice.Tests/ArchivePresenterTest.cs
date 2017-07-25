@@ -73,11 +73,11 @@ namespace Cube.FileSystem.App.Ice.Tests
                 for (var i = 0; view.Visible && i < 50; ++i) await Task.Delay(100);
                 Assert.That(view.Visible, Is.False, "Timeout");
 
-                Assert.That(view.FileName,  Is.EqualTo(filename));
-                Assert.That(view.DoneCount, Is.EqualTo(view.FileCount));
-                Assert.That(view.Value,     Is.EqualTo(100));
+                Assert.That(view.FileName, Is.EqualTo(filename));
+                Assert.That(view.Count,    Is.EqualTo(view.TotalCount));
+                Assert.That(view.Value,    Is.EqualTo(100));
 
-                return view.FileCount;
+                return view.Count;
             }
         }
 
