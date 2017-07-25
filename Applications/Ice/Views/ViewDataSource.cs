@@ -50,13 +50,10 @@ namespace Cube.FileSystem.App.Ice
                 {
                     _format = new List<KeyValuePair<string, Format>>
                     {
-                        Pair("Zip",   SevenZip.Format.Zip),
-                        Pair("7z",    SevenZip.Format.SevenZip),
-                        Pair("Tar",   SevenZip.Format.Tar),
-                        // Pair("GZip",  SevenZip.Format.GZip),
-                        // Pair("BZip2", SevenZip.Format.BZip2),
-                        // Pair("XZ",    SevenZip.Format.XZ),
-                        // Pair("exe", SevenZip.Format.Executable),
+                        Pair("Zip", SevenZip.Format.Zip),
+                        Pair("7z",  SevenZip.Format.SevenZip),
+                        Pair("Tar", SevenZip.Format.Tar),
+                        Pair(Properties.Resources.FormatExecutable, SevenZip.Format.Executable),
                     };
                 }
                 return _format;
@@ -138,7 +135,18 @@ namespace Cube.FileSystem.App.Ice
                             {
                                 Pair("GZip",      CompressionMethod.GZip),
                                 Pair("BZip2",     CompressionMethod.BZip2),
-                                // Pair("XZ",        CompressionMethod.XZ),
+                                Pair("XZ",        CompressionMethod.XZ),
+                                Pair("Copy",      CompressionMethod.Copy),
+                            }
+                        },
+                        {
+                            SevenZip.Format.Executable, new List<KeyValuePair<string, CompressionMethod>>
+                            {
+                                Pair("LZMA",      CompressionMethod.Lzma),
+                                Pair("LZMA2",     CompressionMethod.Lzma2),
+                                Pair("PPMd",      CompressionMethod.Ppmd),
+                                Pair("BZip2",     CompressionMethod.BZip2),
+                                Pair("Deflate",   CompressionMethod.Deflate),
                                 Pair("Copy",      CompressionMethod.Copy),
                             }
                         }

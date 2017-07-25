@@ -368,7 +368,8 @@ namespace Cube.FileSystem.App.Ice
             UpdateCompressionMethod();
             EncryptionMethodComboBox.Enabled &= (Format == Format.Zip);
             EncryptionGroupBox.Enabled = Format == Format.Zip ||
-                                         Format == Format.SevenZip;
+                                         Format == Format.SevenZip ||
+                                         Format == Format.Executable;
         }
 
         /* ----------------------------------------------------------------- */

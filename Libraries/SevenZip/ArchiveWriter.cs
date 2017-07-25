@@ -246,14 +246,18 @@ namespace Cube.FileSystem.SevenZip
         private void SaveCoreExe(string path, IQuery<string, string> password,
             IProgress<ArchiveReport> progress, IList<FileItem> items)
         {
-            var tmp  = _io.Combine(_io.Get(path).DirectoryName, Guid.NewGuid().ToString("D"));
+            var sfx = (Option as ExecutableOption)?.Module;
+            if (string.IsNullOrEmpty(sfx) || !_io.Get(sfx).Exists)
+            {
+                throw new System.IO.FileNotFoundException("SFX");
+            }
+
+            var tmp = _io.Combine(_io.Get(path).DirectoryName, Guid.NewGuid().ToString("D"));
 
             try
             {
-                SaveCore(Format.SevenZip, tmp, password, progress, items);
 
-                var sfx = (Option as ExecutableOption)?.Module;
-                if (string.IsNullOrEmpty(sfx)) throw new System.IO.FileNotFoundException();
+                SaveCore(Format.SevenZip, tmp, password, progress, items);
 
                 using (var dest = _io.Create(path))
                 {

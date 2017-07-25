@@ -160,6 +160,9 @@
   <data name="FilterZip" xml:space="preserve">
     <value>Zip ファイル (*.zip)|*.zip;*.ZIP</value>
   </data>
+  <data name="FormatExecutable" xml:space="preserve">
+    <value>自己解凍形式</value>
+  </data>
   <data name="HeaderArchive" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Images\HeaderArchive.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

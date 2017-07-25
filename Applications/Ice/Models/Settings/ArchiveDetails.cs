@@ -16,6 +16,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Reflection;
 using Cube.FileSystem.SevenZip;
 
 namespace Cube.FileSystem.App.Ice
@@ -31,6 +32,26 @@ namespace Cube.FileSystem.App.Ice
     /* --------------------------------------------------------------------- */
     public class ArchiveDetails
     {
+        #region Constructors
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ArchiveDetails
+        /// 
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ArchiveDetails()
+        {
+            var asm = Assembly.GetExecutingAssembly();
+            var dir = System.IO.Path.GetDirectoryName(asm.Location);
+            Module = System.IO.Path.Combine(dir, "7z.sfx");
+        }
+
+        #endregion
+
         #region Properties
 
         /* ----------------------------------------------------------------- */
@@ -54,6 +75,17 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         public string Password { get; set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Module
+        /// 
+        /// <summary>
+        /// 自己解凍形式モジュールのパスを取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Module { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -136,11 +168,13 @@ namespace Cube.FileSystem.App.Ice
                         ThreadCount       = ThreadCount,
                     };
                 case Format.SevenZip:
-                    return new SevenZipOption
+                case Format.Executable:
+                    return new ExecutableOption
                     {
                         CompressionLevel  = CompressionLevel,
                         CompressionMethod = CompressionMethod,
                         ThreadCount       = ThreadCount,
+                        Module            = Module,
                     };
                 case Format.Tar:
                     return new TarOption

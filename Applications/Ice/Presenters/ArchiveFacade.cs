@@ -200,6 +200,16 @@ namespace Cube.FileSystem.App.Ice
 
             switch (f)
             {
+                case Format.Tar:
+                case Format.Zip:
+                case Format.SevenZip:
+                    return Request.Format;
+                case Format.Executable:
+                    Details = new ArchiveDetails
+                    {
+                        Format = Format.Executable,
+                    };
+                    return Details.Format;
                 case Format.BZip2:
                 case Format.GZip:
                 case Format.XZ:
@@ -209,10 +219,6 @@ namespace Cube.FileSystem.App.Ice
                         CompressionMethod = f.ToMethod(),
                     };
                     return Details.Format;
-                case Format.Tar:
-                case Format.Zip:
-                case Format.SevenZip:
-                    return Request.Format;
                 default:
                     RaiseSettingsRequired();
                     return Details.Format;

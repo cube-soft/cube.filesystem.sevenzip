@@ -254,7 +254,8 @@ namespace Cube.FileSystem.SevenZip
         public static Format FromString(string format)
         {
             var cvt = format.ToLower();
-            if (cvt == "7z") return Format.SevenZip;
+            if (cvt == "7z")  return Format.SevenZip;
+            if (cvt == "exe") return Format.Executable;
             foreach (Format item in Enum.GetValues(typeof(Format)))
             {
                 if (item.ToString().ToLower() == cvt) return item;
