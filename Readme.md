@@ -21,7 +21,7 @@ using (var writer = new ArchiveWriter(Format.Zip))
     writer.Save(@"path\to\save.zip", "password");
 }
 
-// 1-2. Example for archiving files in *.tar.*
+// 1-2. Example for archiving files to *.tar.*
 using (var writer = new ArchiveWriter(Format.Tar))
 {
     writer.Option = new TarOption
