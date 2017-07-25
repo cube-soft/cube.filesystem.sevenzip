@@ -46,7 +46,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(Archive_TestCases))]
-        public async Task Archive(string filename, string[] args)
+        public async Task<long> Archive(string filename, string[] args)
         {
             var settings = new SettingsFolder();
             var events   = new EventAggregator();
@@ -67,10 +67,11 @@ namespace Cube.FileSystem.App.Ice.Tests
                 for (var i = 0; view.Visible && i < 20; ++i) await Task.Delay(100);
                 Assert.That(view.Visible, Is.False, "Timeout");
 
-                Assert.That(view.FileName,     Is.EqualTo(filename));
-                Assert.That(view.FileCount,    Is.EqualTo(4));
-                Assert.That(view.DoneCount,    Is.EqualTo(view.FileCount));
-                Assert.That(view.Value,        Is.EqualTo(100));
+                Assert.That(view.FileName,  Is.EqualTo(filename));
+                Assert.That(view.DoneCount, Is.EqualTo(view.FileCount));
+                Assert.That(view.Value,     Is.EqualTo(100));
+
+                return view.FileCount;
             }
         }
 
@@ -91,8 +92,9 @@ namespace Cube.FileSystem.App.Ice.Tests
         {
             get
             {
-                yield return new TestCaseData("Archive.7z", new[] { "/c:7z", "/o:runtime" });
-                yield return new TestCaseData("ArchiveDetail.zip", new[] { "/c:detail" });
+                yield return new TestCaseData("7zTest.7z", new[] { "/c:7z", "/o:runtime" }).Returns(4L);
+                yield return new TestCaseData("TarTest.tar.bz", new[] { "/c:bzip2", "/o:runtime" }).Returns(1L);
+                yield return new TestCaseData("ZipDetail.zip", new[] { "/c:detail" }).Returns(4L);
             }
         }
 

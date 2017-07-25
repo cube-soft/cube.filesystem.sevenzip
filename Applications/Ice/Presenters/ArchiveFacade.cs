@@ -151,12 +151,19 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private Format GetFormat()
         {
-            switch (Request.Format)
+            var f = Request.Format;
+
+            switch (f)
             {
                 case Format.BZip2:
                 case Format.GZip:
                 case Format.XZ:
-                    return Format.Tar;
+                    Details = new ArchiveDetails
+                    {
+                        Format            = Format.Tar,
+                        CompressionMethod = f.ToMethod(),
+                    };
+                    return Details.Format;
                 case Format.Tar:
                 case Format.Zip:
                 case Format.SevenZip:
@@ -179,7 +186,7 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private string GetDestination()
         {
-            if (Details != null) Destination = Details.Path;
+            if (!string.IsNullOrEmpty(Details?.Path)) Destination = Details.Path;
             else SetDestination(Request.Format.ToString());
 
             var info = IO.Get(Destination);

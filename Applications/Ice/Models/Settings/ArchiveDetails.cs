@@ -15,6 +15,7 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System;
 using Cube.FileSystem.SevenZip;
 
 namespace Cube.FileSystem.App.Ice
@@ -74,7 +75,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressionLevel CompressionLevel { get; set; } = CompressionLevel.Normal;
+        public CompressionLevel CompressionLevel { get; set; } = CompressionLevel.Ultra;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -107,7 +108,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public int ThreadCount { get; set; } = 1;
+        public int ThreadCount { get; set; } = Environment.ProcessorCount;
 
         #endregion
 
