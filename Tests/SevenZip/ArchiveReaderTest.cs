@@ -142,6 +142,10 @@ namespace Cube.FileSystem.Tests
             },
             Throws.TypeOf<SevenZip.UserCancelException>());
 
+        #endregion
+
+        #region TestCases
+
         /* ----------------------------------------------------------------- */
         ///
         /// Extract_TestCases
@@ -195,6 +199,36 @@ namespace Cube.FileSystem.Tests
                 });
 
                 yield return new TestCaseData("Password.7z", "password", new List<ExpectedItem>
+                {
+                    new ExpectedItem
+                    {
+                        FullName      = "Password",
+                        Extension     = string.Empty,
+                        Length        = 0,
+                        Encrypted     = false,
+                        IsDirectory   = true,
+                    },
+
+                    new ExpectedItem
+                    {
+                        FullName      = @"Password\Second.txt",
+                        Extension     = ".txt",
+                        Length        = 0,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+
+                    new ExpectedItem
+                    {
+                        FullName      = @"Password\First.txt",
+                        Extension     = ".txt",
+                        Length        = 26,
+                        Encrypted     = true,
+                        IsDirectory   = false,
+                    },
+                });
+
+                yield return new TestCaseData("PasswordHeader.7z", "password", new List<ExpectedItem>
                 {
                     new ExpectedItem
                     {
