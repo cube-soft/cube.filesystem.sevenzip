@@ -93,6 +93,7 @@ namespace Cube.FileSystem.App.Ice
                     SetTmp(Destination);
                     Collect(reader);
                     Extract(reader);
+                    Execute(Settings.Value.Extract.PostProcess, Destination);
                 }
                 catch (UserCancelException /* err */) { /* user cancel */ }
                 catch (Exception err) { this.LogWarn(err.ToString(), err); }

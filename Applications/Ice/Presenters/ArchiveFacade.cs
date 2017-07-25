@@ -127,6 +127,7 @@ namespace Cube.FileSystem.App.Ice
                 }
 
                 Move();
+                Execute(Settings.Value.Archive.PostProcess, dest);
                 LogResult();
 
                 // hack

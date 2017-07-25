@@ -364,6 +364,31 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Execute
+        /// 
+        /// <summary>
+        /// ポストプロセスを実行します。
+        /// </summary>
+        /// 
+        /// <param name="mode">ポストプロセスの種類</param>
+        /// <param name="path">圧縮・展開先のパス</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected void Execute(PostProcess mode, string path)
+        {
+            switch (mode)
+            {
+                case PostProcess.Open:
+                case PostProcess.OpenNotDesktop:
+                    OpenDirectory(mode, IO.Get(path));
+                    break;
+                case PostProcess.None:
+                    break;
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// SetDestination
         /// 
         /// <summary>
@@ -464,6 +489,26 @@ namespace Cube.FileSystem.App.Ice
         #endregion
 
         #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OpenDirectory
+        /// 
+        /// <summary>
+        /// ディレクトリを開きます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void OpenDirectory(PostProcess mode, IInformation info)
+        {
+            var src = info.IsDirectory ? info.FullName : info.DirectoryName;
+            var cmp = Environment.GetFolderPath(Environment.SpecialFolder.Desktop).ToLower();
+            if (mode == PostProcess.OpenNotDesktop && src.ToLower().CompareTo(cmp) == 0) return;
+
+            var exec = Settings.Value.Explorer;
+            var path = string.IsNullOrEmpty(exec) ? "explorer.exe" : exec;
+            System.Diagnostics.Process.Start(path, $"\"{src}\"");
+        }
 
         /* ----------------------------------------------------------------- */
         ///

@@ -57,6 +57,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                 Example("Archive"),
             }).ToArray());
 
+            settings.Value.Archive.PostProcess = PostProcess.None;
             MockViewFactory.Destination = Result(filename);
             MockViewFactory.Password = "password"; // used by "/p" option
 

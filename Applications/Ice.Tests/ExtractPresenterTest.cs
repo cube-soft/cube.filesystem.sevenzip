@@ -53,6 +53,7 @@ namespace Cube.FileSystem.App.Ice.Tests
             var events   = new EventAggregator();
             var view     = Views.CreateProgressView();
 
+            settings.Value.Extract.PostProcess = PostProcess.None;
             MockViewFactory.Destination = Results;
             MockViewFactory.Password = password;
 
