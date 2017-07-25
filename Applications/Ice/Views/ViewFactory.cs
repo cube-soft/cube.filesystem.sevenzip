@@ -145,12 +145,12 @@ namespace Cube.FileSystem.App.Ice
         /// <param name="e">ファイル情報を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public virtual void ShowOverwriteView(QueryEventArgs<OverwriteInfo, OverwriteMode> e)
+        public virtual void ShowOverwriteView(OverwriteEventArgs e)
         {
             using (var view = new OverwriteForm())
             {
-                view.Source = e.Query.Source;
-                view.Destination = e.Query.Destination;
+                view.Source = e.Source;
+                view.Destination = e.Destination;
                 view.ShowDialog();
                 e.Result = view.OverwriteMode;
             }
@@ -264,7 +264,7 @@ namespace Cube.FileSystem.App.Ice
         public static void ShowPasswordConfirmView(QueryEventArgs<string, string> e)
             => _factory?.ShowPasswordConfirmView(e);
 
-        public static void ShowOverwriteView(QueryEventArgs<OverwriteInfo, OverwriteMode> e)
+        public static void ShowOverwriteView(OverwriteEventArgs e)
             => _factory?.ShowOverwriteView(e);
 
         public static void ShowDetailsView(QueryEventArgs<string, ArchiveDetails> e)

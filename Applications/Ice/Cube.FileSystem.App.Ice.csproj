@@ -66,7 +66,7 @@
     <Compile Include="Models\Parameters.cs" />
     <Compile Include="Presenters\ArchiveFacade.cs" />
     <Compile Include="Models\Settings\ArchiveDetails.cs" />
-    <Compile Include="Models\OverwriteMode.cs" />
+    <Compile Include="Models\OverwriteEventArgs.cs" />
     <Compile Include="Models\Settings\Request.cs" />
     <Compile Include="Presenters\ProgressFacade.cs" />
     <Compile Include="Models\SuspendableProgress.cs" />

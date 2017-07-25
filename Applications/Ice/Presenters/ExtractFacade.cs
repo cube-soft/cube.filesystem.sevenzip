@@ -270,8 +270,7 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void RaiseOverwriteRequired(IInformation src, IInformation dest)
         {
-            var q = new OverwriteInfo(src, dest);
-            var e = new QueryEventArgs<OverwriteInfo, OverwriteMode>(q);
+            var e = new OverwriteEventArgs(src, dest);
             OnOverwriteRequired(e);
             if (e.Result == OverwriteMode.Cancel) throw new UserCancelException();
             OverwriteMode = e.Result;

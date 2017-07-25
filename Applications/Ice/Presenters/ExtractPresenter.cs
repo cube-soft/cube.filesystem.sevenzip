@@ -100,7 +100,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenOverwriteRequired(object sender, QueryEventArgs<OverwriteInfo, OverwriteMode> e)
+        private void WhenOverwriteRequired(object sender, OverwriteEventArgs e)
             => ShowDialog(() => Views.ShowOverwriteView(e));
 
         /* ----------------------------------------------------------------- */

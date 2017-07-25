@@ -52,13 +52,13 @@ namespace Cube.FileSystem.App.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class OverwriteInfo
+    public class OverwriteEventArgs : EventArgs
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OverwriteInfo
+        /// OverwriteEventArgs
         /// 
         /// <summary>
         /// オブジェクトを初期化します。
@@ -68,7 +68,7 @@ namespace Cube.FileSystem.App.Ice
         /// <param name="dest">上書き先の情報</param>
         ///
         /* ----------------------------------------------------------------- */
-        public OverwriteInfo(IInformation src, IInformation dest)
+        public OverwriteEventArgs(IInformation src, IInformation dest)
         {
             Source      = src;
             Destination = dest;
@@ -100,6 +100,29 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         public IInformation Destination { get; }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Result
+        /// 
+        /// <summary>
+        /// 上書き方法を取得または設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public OverwriteMode Result { get; set; } = OverwriteMode.Cancel;
+
         #endregion
     }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// QueryEventHandler(TValue)
+    /// 
+    /// <summary>
+    /// イベントを処理するメソッドを表します。
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    [Serializable]
+    public delegate void OverwriteEventHandler(object sender, OverwriteEventArgs e);
 }

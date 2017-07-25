@@ -187,9 +187,8 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// <param name="e">情報を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public override void ShowOverwriteView(QueryEventArgs<OverwriteInfo, OverwriteMode> e)
+        public override void ShowOverwriteView(OverwriteEventArgs e)
         {
-            e.Cancel = false;
             e.Result = OverwriteMode.AlwaysYes;
         }
 
