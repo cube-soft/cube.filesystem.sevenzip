@@ -190,6 +190,7 @@ namespace Cube.FileSystem.App.Ice
                 if (_fileCount == value) return;
                 _fileCount = value;
 
+                Value = 0;
                 UpdateFileCountLabel();
             }
         }
