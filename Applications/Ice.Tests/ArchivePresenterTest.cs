@@ -70,7 +70,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                 view.Show();
 
                 Assert.That(view.Visible, Is.True);
-                for (var i = 0; view.Visible && i < 20; ++i) await Task.Delay(100);
+                for (var i = 0; view.Visible && i < 50; ++i) await Task.Delay(100);
                 Assert.That(view.Visible, Is.False, "Timeout");
 
                 Assert.That(view.FileName,  Is.EqualTo(filename));
@@ -101,7 +101,8 @@ namespace Cube.FileSystem.App.Ice.Tests
                 yield return new TestCaseData("7zTest.7z", new[] { "/c:7z", "/o:runtime" }).Returns(4L);
                 yield return new TestCaseData("TarTest.tar.bz", new[] { "/c:bzip2", "/o:runtime" }).Returns(1L);
                 yield return new TestCaseData("ZipDetail.zip", new[] { "/c:detail" }).Returns(4L);
-                yield return new TestCaseData("ZipPassword.zip", new[] { "/c:zip", "/p" }).Returns(4L);
+                yield return new TestCaseData("ZipPassword.zip", new[] { "/c:zip", "/o:runtime", "/p" }).Returns(4L);
+                yield return new TestCaseData("ExecutableTest.exe", new[] { "/c:exe", "/o:runtime" }).Returns(4L);
             }
         }
 
