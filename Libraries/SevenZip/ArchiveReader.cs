@@ -228,7 +228,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         private void Open(IQuery<string, string> password)
         {
-            Format = Formats.FromFile(Source);
+            Format = Formats.FromFile(Source, _io);
             if (Format == Format.Unknown) throw new NotSupportedException();
 
             _stream = new ArchiveStreamReader(_io.OpenRead(Source));
