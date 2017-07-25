@@ -112,27 +112,9 @@ namespace Cube.FileSystem.App.Ice
         {
             try
             {
-                var fmt   = GetFormat();
-                var dest  = GetDestination();
-                var query = !string.IsNullOrEmpty(Details?.Password) || Request.Password ?
-                            new Query<string, string>(x => RaisePasswordRequired(x)) :
-                            null;
-
-                using (var writer = new ArchiveWriter(fmt, IO))
-                {
-                    writer.Option = Details?.ToOption();
-                    foreach (var item in Request.Sources) writer.Add(item);
-                    ProgressStart();
-                    writer.Save(dest, query, CreateInnerProgress(x => ProgressReport = x));
-                }
-
-                Move();
-                Execute(Settings.Value.Archive.PostProcess, dest);
-                LogResult();
-
-                // hack
-                ProgressReport.DoneCount = ProgressReport.FileCount;
-                ProgressReport.DoneSize  = ProgressReport.FileSize;
+                Archive();
+                Execute(Settings.Value.Archive.PostProcess, Destination);
+                SetResult();
                 OnProgress(ValueEventArgs.Create(ProgressReport));
             }
             catch (UserCancelException /* err */) { /* user cancel */ }
@@ -142,6 +124,66 @@ namespace Cube.FileSystem.App.Ice
         #endregion
 
         #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Archive
+        /// 
+        /// <summary>
+        /// 圧縮処理を実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Archive()
+        {
+            var fmt   = GetFormat();
+            var dest  = GetDestination();
+            var query = !string.IsNullOrEmpty(Details?.Password) || Request.Password ?
+                        new Query<string, string>(x => RaisePasswordRequired(x)) :
+                        null;
+
+            using (var writer = new ArchiveWriter(fmt, IO))
+            {
+                writer.Option = Details?.ToOption();
+                foreach (var item in Request.Sources) writer.Add(item);
+                ProgressStart();
+                writer.Save(dest, query, CreateInnerProgress(x => ProgressReport = x));
+            }
+
+            // Move
+            if (string.IsNullOrEmpty(Tmp) || !IO.Get(Tmp).Exists) return;
+            IO.Move(Tmp, Destination, true);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetResult
+        /// 
+        /// <summary>
+        /// 結果を設定します。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// タイミングの関係で全ての結果が取り切れていない事があるので、
+        /// 完了した結果を手動で設定しています。
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void SetResult()
+        {
+            this.LogDebug(string.Format(
+                "{0}\tCount:{1}/{2}\tSize:{3}/{4}",
+                IO.Get(Destination).Name,
+                ProgressReport.DoneCount,
+                ProgressReport.FileCount,
+                ProgressReport.DoneSize,
+                ProgressReport.FileSize
+            ));
+
+            // hack (see remarks)
+            ProgressReport.DoneCount = ProgressReport.FileCount;
+            ProgressReport.DoneSize  = ProgressReport.FileSize;
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -163,14 +205,13 @@ namespace Cube.FileSystem.App.Ice
                 case Format.XZ:
                     Details = new ArchiveDetails
                     {
-                        Format            = Format.Tar,
+                        Format = Format.Tar,
                         CompressionMethod = f.ToMethod(),
                     };
                     return Details.Format;
                 case Format.Tar:
                 case Format.Zip:
                 case Format.SevenZip:
-                case Format.Wim:
                     return Request.Format;
                 default:
                     RaiseSettingsRequired();
@@ -198,40 +239,6 @@ namespace Cube.FileSystem.App.Ice
             SetTmp(info.DirectoryName);
             return Tmp;
         }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Move
-        /// 
-        /// <summary>
-        /// ファイルを移動します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Move()
-        {
-            if (string.IsNullOrEmpty(Tmp) || !IO.Get(Tmp).Exists) return;
-            IO.Move(Tmp, Destination, true);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// LogResult
-        /// 
-        /// <summary>
-        /// 結果をログに出力します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void LogResult()
-            => this.LogDebug(string.Format(
-                "{0}\tCount:{1}/{2}\tSize:{3}/{4}",
-                IO.Get(Destination).Name,
-                ProgressReport.DoneCount,
-                ProgressReport.FileCount,
-                ProgressReport.DoneSize,
-                ProgressReport.FileSize
-            ));
 
         /* ----------------------------------------------------------------- */
         ///
