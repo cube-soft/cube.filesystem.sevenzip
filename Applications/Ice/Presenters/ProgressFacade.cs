@@ -47,10 +47,12 @@ namespace Cube.FileSystem.App.Ice
         /// <param name="request">リクエストオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ProgressFacade(Request request)
+        public ProgressFacade(Request request, SettingsFolder settings)
         {
-            Request = request;
-            IO = new Operator(new Alpha());
+            Request  = request;
+            Settings = settings;
+            IO       = new Operator(new Alpha());
+
             IO.Failed += (s, e) => RaiseFailed(e);
             _timer.Elapsed += (s, e) => OnProgress(ValueEventArgs.Create(ProgressReport));
         }
@@ -69,6 +71,17 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         public Request Request { get; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Settings
+        /// 
+        /// <summary>
+        /// ユーザ設定を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public SettingsFolder Settings { get; }
 
         /* ----------------------------------------------------------------- */
         ///

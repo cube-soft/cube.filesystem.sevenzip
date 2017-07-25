@@ -58,6 +58,7 @@ namespace Cube.FileSystem.App.Ice.Tests
             }).ToArray());
 
             MockViewFactory.Destination = Result(filename);
+            MockViewFactory.Password = "password"; // used by "/p" option
 
             using (var ap = new ArchivePresenter(view, model, settings, events))
             {
@@ -95,6 +96,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                 yield return new TestCaseData("7zTest.7z", new[] { "/c:7z", "/o:runtime" }).Returns(4L);
                 yield return new TestCaseData("TarTest.tar.bz", new[] { "/c:bzip2", "/o:runtime" }).Returns(1L);
                 yield return new TestCaseData("ZipDetail.zip", new[] { "/c:detail" }).Returns(4L);
+                yield return new TestCaseData("ZipPassword.zip", new[] { "/c:zip", "/p" }).Returns(4L);
             }
         }
 

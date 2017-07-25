@@ -43,9 +43,11 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         /// 
         /// <param name="request">コマンドライン</param>
+        /// <param name="settings">ユーザ設定</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveFacade(Request request) : base(request) { }
+        public ArchiveFacade(Request request, SettingsFolder settings)
+            : base(request, settings) { }
 
         #endregion
 

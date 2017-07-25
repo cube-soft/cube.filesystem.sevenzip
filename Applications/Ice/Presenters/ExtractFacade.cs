@@ -47,7 +47,8 @@ namespace Cube.FileSystem.App.Ice
         /// <param name="request">コマンドライン</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ExtractFacade(Request request) : base(request)
+        public ExtractFacade(Request request, SettingsFolder settings)
+            : base(request, settings)
         {
             Source = Request.Sources.First();
         }

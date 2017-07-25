@@ -49,7 +49,7 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         public ArchivePresenter(IProgressView view, Request args,
             SettingsFolder settings, IEventAggregator events)
-            : base(view, new ArchiveFacade(args), settings, events)
+            : base(view, new ArchiveFacade(args, settings), settings, events)
         {
             // View
             View.Logo   = Properties.Resources.HeaderArchive;
