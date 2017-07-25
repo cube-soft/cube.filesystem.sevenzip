@@ -57,10 +57,14 @@ namespace Cube.FileSystem.App.Ice.Tests
                 Example("Archive"),
             }).ToArray());
 
-            settings.Value.Archive.PostProcess = PostProcess.None;
+            // Preset
             MockViewFactory.Destination = Result(filename);
-            MockViewFactory.Password = "password"; // used by "/p" option
+            MockViewFactory.Password    = "password"; // used by "/p" option
 
+            settings.Value.Archive.SaveLocation = SaveLocation.Runtime;
+            settings.Value.Archive.PostProcess  = PostProcess.None;
+
+            // Main
             using (var ap = new ArchivePresenter(view, model, settings, events))
             {
                 view.Show();

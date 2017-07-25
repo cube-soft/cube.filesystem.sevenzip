@@ -43,9 +43,9 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [TestCase("Sample.zip",  "",         4, 7819)]
-        [TestCase("Password.7z", "password", 3,   26)]
-        public async Task Extract(string filename, string password, long count, long size)
+        [TestCase("Sample.zip",  "",         ExpectedResult = 4)]
+        [TestCase("Password.7z", "password", ExpectedResult = 3)]
+        public async Task<long> Extract(string filename, string password)
         {
             var source   = Example(filename);
             var model    = new Request(new[] { "/x", "/o:runtime", source });
@@ -53,10 +53,15 @@ namespace Cube.FileSystem.App.Ice.Tests
             var events   = new EventAggregator();
             var view     = Views.CreateProgressView();
 
-            settings.Value.Extract.PostProcess = PostProcess.None;
+            // Preset
             MockViewFactory.Destination = Results;
-            MockViewFactory.Password = password;
+            MockViewFactory.Password    = password;
 
+            settings.Value.Extract.SaveLocation = SaveLocation.Runtime;
+            settings.Value.Extract.PostProcess  = PostProcess.None;
+            settings.Value.Extract.DeleteSource = false;
+
+            // Main
             using (var ep = new ExtractPresenter(view, model, settings, events))
             {
                 view.Show();
@@ -65,10 +70,11 @@ namespace Cube.FileSystem.App.Ice.Tests
                 for (var i = 0; view.Visible && i < 20; ++i) await Task.Delay(100);
                 Assert.That(view.Visible, Is.False, "Timeout");
 
-                Assert.That(view.FileName,     Is.EqualTo(filename));
-                Assert.That(view.FileCount,    Is.EqualTo(count));
-                Assert.That(view.DoneCount,    Is.EqualTo(view.FileCount));
-                Assert.That(view.Value,        Is.EqualTo(100));
+                Assert.That(view.FileName,  Is.EqualTo(filename));
+                Assert.That(view.DoneCount, Is.EqualTo(view.FileCount));
+                Assert.That(view.Value,     Is.EqualTo(100));
+
+                return view.FileCount;
             }
         }
 
