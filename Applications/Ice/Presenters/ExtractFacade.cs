@@ -16,6 +16,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Cube.Log;
 using Cube.FileSystem.Files;
@@ -91,7 +92,7 @@ namespace Cube.FileSystem.App.Ice
                 {
                     SetDestination(Source);
                     SetTmp(Destination);
-                    Collect(reader);
+                    PreExtract(reader);
                     Extract(reader);
                     Execute(Settings.Value.Extract.PostProcess, Destination);
                 }
@@ -106,21 +107,39 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Collect
+        /// PreExtract
         /// 
         /// <summary>
-        /// 展開処理に関連する各種情報を収集します。
+        /// 展開処理に関連する事前処理を実行します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private void Collect(ArchiveReader reader)
+        private void PreExtract(ArchiveReader reader)
         {
-            ProgressReport.FileCount = reader.Items.Count;
-            ProgressReport.FileSize  = reader.Items.Select(x => x.Length)
-                                             .Aggregate(0L, (x, y) => x + y);
+            var dummy = "*";
+            var count = reader.Items.Count;
+            var size  = 0L;
+            var check = new Dictionary<string, string>();
 
-            this.LogDebug(string.Format("Count:{0:#,0}\tSize:{1:#,0}",
-                ProgressReport.FileCount, ProgressReport.FileSize
+            foreach (var item in reader.Items)
+            {
+                size += item.Length;
+                if (check.Count > 2) continue;
+
+                // ファイルは全て "*" としてカウント
+                var value = GetRoot(item, dummy);
+                var key   = value.ToLower();
+                if (!check.ContainsKey(key)) check.Add(key, value);
+            }
+
+            ProgressReport.FileCount = count;
+            ProgressReport.FileSize  = size;
+
+            var root = GetRoot(check.Values.Where(x => x != dummy), count);
+            if (!string.IsNullOrEmpty(root)) Destination = IO.Combine(Destination, root);
+
+            this.LogDebug(string.Format("Count:{0:#,0}\tSize:{1:#,0}\tDestination:{2}",
+                ProgressReport.FileCount, ProgressReport.FileSize, Destination
             ));
         }
 
@@ -258,6 +277,49 @@ namespace Cube.FileSystem.App.Ice
                 Overwrite(src, dest);
             }
             else Move(src, dest);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetRoot
+        /// 
+        /// <summary>
+        /// パスのルートに相当する文字列を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private string GetRoot(IInformation info, string alt)
+        {
+            var root = info.FullName.Split(
+                System.IO.Path.DirectorySeparatorChar,
+                System.IO.Path.AltDirectorySeparatorChar
+            )[0];
+
+            return info.IsDirectory || root != info.Name ? root : alt;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetRoot
+        /// 
+        /// <summary>
+        /// ルートディレクトリを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private string GetRoot(IEnumerable<string> parts, int count)
+        {
+            var src = IO.Get(Source).NameWithoutExtension;
+            switch (Settings.Value.Extract.RootDirectory)
+            {
+                case DirectoryCondition.Create:
+                    return src;
+                case DirectoryCondition.CreateSmart:
+                    return count <= 1 || parts.Count() == 1 ? string.Empty : src;
+                case DirectoryCondition.None:
+                default:
+                    return string.Empty;
+            }
         }
 
         /* ----------------------------------------------------------------- */

@@ -43,8 +43,11 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [TestCase("Sample.zip",  "",         ExpectedResult = 4)]
-        [TestCase("Password.7z", "password", ExpectedResult = 3)]
+        [TestCase("Single.zip",           "",         ExpectedResult = 1)]
+        [TestCase("SingleDirectory.zip",  "",         ExpectedResult = 4)]
+        [TestCase("MultiDirectory.zip",   "",         ExpectedResult = 7)]
+        [TestCase("Complex.zip",          "",         ExpectedResult = 5)]
+        [TestCase("Password.7z",          "password", ExpectedResult = 3)]
         public async Task<long> Extract(string filename, string password)
         {
             var source   = Example(filename);
@@ -57,9 +60,10 @@ namespace Cube.FileSystem.App.Ice.Tests
             MockViewFactory.Destination = Results;
             MockViewFactory.Password    = password;
 
-            settings.Value.Extract.SaveLocation = SaveLocation.Runtime;
-            settings.Value.Extract.PostProcess  = PostProcess.None;
-            settings.Value.Extract.DeleteSource = false;
+            settings.Value.Extract.SaveLocation  = SaveLocation.Runtime;
+            settings.Value.Extract.RootDirectory = DirectoryCondition.CreateSmart;
+            settings.Value.Extract.PostProcess   = PostProcess.None;
+            settings.Value.Extract.DeleteSource  = false;
 
             // Main
             using (var ep = new ExtractPresenter(view, model, settings, events))

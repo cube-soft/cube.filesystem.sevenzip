@@ -105,7 +105,7 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// DirectoryCondition
+        /// RootDirectory
         /// 
         /// <summary>
         /// ルートディレクトリの扱い方を示す値を取得または設定します。
@@ -113,7 +113,7 @@ namespace Cube.FileSystem.App.Ice
         /// 
         /* ----------------------------------------------------------------- */
         [DataMember(Name = "CreateFolder")]
-        public DirectoryCondition DirectoryCondition
+        public DirectoryCondition RootDirectory
         {
             get { return _directoryCondition; }
             set { SetProperty(ref _directoryCondition, value); }
@@ -142,7 +142,7 @@ namespace Cube.FileSystem.App.Ice
         private string _saveDirectory = string.Empty;
         private bool _filtering = true;
         private bool _deleteOnExtract = false;
-        private DirectoryCondition _directoryCondition = DirectoryCondition.CreateIfNeed;
+        private DirectoryCondition _directoryCondition = DirectoryCondition.CreateSmart;
         private PostProcess _postProcess = PostProcess.OpenNotDesktop;
         #endregion
     }

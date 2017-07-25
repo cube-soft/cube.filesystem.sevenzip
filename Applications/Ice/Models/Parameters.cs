@@ -65,7 +65,7 @@ namespace Cube.FileSystem.App.Ice
     {
         Force           = 0,
         Confirm         = 1,
-        ConfirmIfOld    = 2,
+        ConfirmOld      = 2,
     }
 
     /* --------------------------------------------------------------------- */
@@ -75,13 +75,18 @@ namespace Cube.FileSystem.App.Ice
     /// <summary>
     /// ルートディレクトリの扱いを表す列挙型です。
     /// </summary>
+    /// 
+    /// <remarks>
+    /// CreateSmart が設定された場合、ルートに 2 つ以上のファイルまたは
+    /// ディレクトリが展開される時にのみディレクトリが作成されます。
+    /// </remarks>
     ///
     /* --------------------------------------------------------------------- */
     public enum DirectoryCondition
     {
         None            = 0,
         Create          = 1,
-        CreateIfNeed    = 2,
+        CreateSmart     = 2,
     }
 
     /* --------------------------------------------------------------------- */
