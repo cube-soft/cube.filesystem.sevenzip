@@ -149,7 +149,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.ico" />
-    <None Include="Resources\Icons\FileAlternate.ico" />
+    <None Include="Resources\Icons\FileAlternate03.ico" />
+    <None Include="Resources\Icons\FileAlternate02.ico" />
+    <None Include="Resources\Icons\FileAlternate01.ico" />
     <None Include="App.config" />
     <None Include="App.manifest" />
     <None Include="Packages.config" />
