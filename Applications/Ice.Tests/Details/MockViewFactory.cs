@@ -206,11 +206,10 @@ namespace Cube.FileSystem.App.Ice.Tests
         public override void ShowDetailsView(QueryEventArgs<string, ArchiveDetails> e)
         {
             e.Cancel = false;
-            e.Result = new ArchiveDetails
+            e.Result = new ArchiveDetails(SevenZip.Format.Zip)
             {
                 Path              = Destination,
                 Password          = Password,
-                Format            = SevenZip.Format.Zip,
                 CompressionLevel  = SevenZip.CompressionLevel.Ultra,
                 CompressionMethod = SevenZip.CompressionMethod.Lzma,
                 EncryptionMethod  = SevenZip.EncryptionMethod.Aes256,

@@ -196,9 +196,9 @@ namespace Cube.FileSystem.App.Ice.Properties {
         /// <summary>
         ///   自己解凍形式 に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        internal static string FormatExecutable {
+        internal static string FormatSfx {
             get {
-                return ResourceManager.GetString("FormatExecutable", resourceCulture);
+                return ResourceManager.GetString("FormatSfx", resourceCulture);
             }
         }
         

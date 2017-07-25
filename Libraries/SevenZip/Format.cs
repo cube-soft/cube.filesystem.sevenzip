@@ -34,7 +34,7 @@ namespace Cube.FileSystem.SevenZip
     public enum Format
     {
         Unknown     = -1,
-        Executable  = -2,   // 7z with SFX module
+        Sfx         = -2,   // 7z with SFX module
         Zip         = 0x01, // Open Zip archive format.
         BZip2       = 0x02, // Open Bzip2 archive format.
         Rar         = 0x03, // RarLab Rar archive format.
@@ -255,7 +255,7 @@ namespace Cube.FileSystem.SevenZip
         {
             var cvt = format.ToLower();
             if (cvt == "7z")  return Format.SevenZip;
-            if (cvt == "exe") return Format.Executable;
+            if (cvt == "exe") return Format.Sfx;
             foreach (Format item in Enum.GetValues(typeof(Format)))
             {
                 if (item.ToString().ToLower() == cvt) return item;

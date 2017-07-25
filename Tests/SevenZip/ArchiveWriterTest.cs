@@ -48,7 +48,7 @@ namespace Cube.FileSystem.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(Archive_TestCases))]
-        public long Archive(Format format, string filename, string password,
+        public Format Archive(Format format, string filename, string password,
             string[] items, ArchiveOption option)
         {
             var dest = Result(filename);
@@ -60,7 +60,10 @@ namespace Cube.FileSystem.Tests
                 writer.Save(dest, password);
             }
 
-            return new System.IO.FileInfo(dest).Length;
+            using (var stream = System.IO.File.OpenRead(dest))
+            {
+                return FormatConversions.FromStream(stream);
+            }
         }
 
         #endregion
@@ -85,63 +88,63 @@ namespace Cube.FileSystem.Tests
                     "",
                     new[] { "Sample.txt" },
                     null
-                ).Returns(167L);
+                ).Returns(Format.Zip);
 
                 yield return new TestCaseData(Format.Zip,
                     "ZipDirectory.zip",
                     "",
                     new[] { "Archive" },
                     null
-                ).Returns(12014L);
+                ).Returns(Format.Zip);
 
                 yield return new TestCaseData(Format.Zip,
                     "ZipUltra.zip",
                     "",
                     new[] { "Sample.txt", "Archive" },
                     new ZipOption { CompressionLevel = CompressionLevel.Ultra }
-                ).Returns(11960L);
+                ).Returns(Format.Zip);
 
                 yield return new TestCaseData(Format.Zip,
                     "ZipLzma.zip",
                     "",
                     new[] { "Sample.txt", "Archive" },
                     new ZipOption { CompressionMethod = CompressionMethod.Lzma }
-                ).Returns(11809L);
+                ).Returns(Format.Zip);
 
                 yield return new TestCaseData(Format.Zip,
                     "ZipPassword.zip",
                     "password",
                     new[] { "Sample.txt" },
                     null
-                ).Returns(179L);
+                ).Returns(Format.Zip);
 
                 yield return new TestCaseData(Format.Zip,
                     "ZipAes256.zip",
                     "password",
                     new[] { "Sample.txt" },
                     new ZipOption { EncryptionMethod = EncryptionMethod.Aes256 }
-                ).Returns(217L);
+                ).Returns(Format.Zip);
 
                 yield return new TestCaseData(Format.BZip2,
                     "BZip2Test.bz",
                     "",
                     new[] { "Sample.txt" },
                     null
-                ).Returns(51L);
+                ).Returns(Format.BZip2);
 
                 yield return new TestCaseData(Format.GZip,
                     "GZipTest.gz",
                     "",
                     new[] { "Sample.txt" },
                     null
-                ).Returns(47L);
+                ).Returns(Format.GZip);
 
                 yield return new TestCaseData(Format.Tar,
                     "TarTest.tar",
                     "",
                     new[] { "Sample.txt", "Archive" },
                     null
-                ).Returns(38912L);
+                ).Returns(Format.Tar);
 
                 yield return new TestCaseData(Format.Tar,
                     "TarTest.tar.gz",
@@ -152,7 +155,7 @@ namespace Cube.FileSystem.Tests
                         CompressionMethod = CompressionMethod.GZip,
                         CompressionLevel  = CompressionLevel.Ultra,
                     }
-                ).Returns(11810L);
+                ).Returns(Format.GZip);
 
                 yield return new TestCaseData(Format.Tar,
                     "TarTest.tar.bz",
@@ -163,9 +166,9 @@ namespace Cube.FileSystem.Tests
                         CompressionMethod = CompressionMethod.BZip2,
                         CompressionLevel  = CompressionLevel.Ultra,
                     }
-                ).Returns(10556L);
+                ).Returns(Format.BZip2);
 
-                yield return new TestCaseData(Format.Executable,
+                yield return new TestCaseData(Format.Sfx,
                     "ExecutableTest.exe",
                     "",
                     new[] { "Sample.txt", "Archive" },
@@ -175,7 +178,7 @@ namespace Cube.FileSystem.Tests
                         CompressionLevel  = CompressionLevel.Ultra,
                         Module            = Current("7z.sfx"),
                     }
-                ).Returns(1627824L);
+                ).Returns(Format.PE);
             }
         }
 

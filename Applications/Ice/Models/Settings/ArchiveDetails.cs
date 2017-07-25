@@ -43,16 +43,29 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveDetails()
+        public ArchiveDetails(Format format)
         {
             var asm = Assembly.GetExecutingAssembly();
             var dir = System.IO.Path.GetDirectoryName(asm.Location);
+
+            Format = format;
             Module = System.IO.Path.Combine(dir, "7z.sfx");
         }
 
         #endregion
 
         #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Format
+        /// 
+        /// <summary>
+        /// ファイル形式を取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public Format Format { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -86,17 +99,6 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         public string Module { get; set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Format
-        /// 
-        /// <summary>
-        /// ファイル形式を取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public Format Format { get; set; } = Format.Unknown;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -168,7 +170,7 @@ namespace Cube.FileSystem.App.Ice
                         ThreadCount       = ThreadCount,
                     };
                 case Format.SevenZip:
-                case Format.Executable:
+                case Format.Sfx:
                     return new ExecutableOption
                     {
                         CompressionLevel  = CompressionLevel,

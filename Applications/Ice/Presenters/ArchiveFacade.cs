@@ -204,18 +204,14 @@ namespace Cube.FileSystem.App.Ice
                 case Format.Zip:
                 case Format.SevenZip:
                     return Request.Format;
-                case Format.Executable:
-                    Details = new ArchiveDetails
-                    {
-                        Format = Format.Executable,
-                    };
+                case Format.Sfx:
+                    Details = new ArchiveDetails(f);
                     return Details.Format;
                 case Format.BZip2:
                 case Format.GZip:
                 case Format.XZ:
-                    Details = new ArchiveDetails
+                    Details = new ArchiveDetails(Format.Tar)
                     {
-                        Format = Format.Tar,
                         CompressionMethod = f.ToMethod(),
                     };
                     return Details.Format;

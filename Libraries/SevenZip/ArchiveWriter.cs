@@ -153,7 +153,7 @@ namespace Cube.FileSystem.SevenZip
         {
             var query = new PasswordQuery(password);
 
-            if (Format == Format.Executable) SaveCoreExe(path, query, null, _items);
+            if (Format == Format.Sfx) SaveCoreExe(path, query, null, _items);
             else if (Format == Format.Tar) SaveCoreTar(path, query, null, _items);
             else SaveCore(Format, path, query, null, _items);
         }
@@ -175,7 +175,7 @@ namespace Cube.FileSystem.SevenZip
         {
             var query = new PasswordQuery(password);
 
-            if (Format == Format.Executable) SaveCoreExe(path, query, progress, _items);
+            if (Format == Format.Sfx) SaveCoreExe(path, query, progress, _items);
             else if (Format == Format.Tar) SaveCoreTar(path, query, progress, _items);
             else SaveCore(Format, path, query, progress, _items);
         }
@@ -411,7 +411,7 @@ namespace Cube.FileSystem.SevenZip
                 case Format.Zip:
                     return new ZipOptionSetter(Option);
                 case Format.SevenZip:
-                case Format.Executable:
+                case Format.Sfx:
                     return new SevenZipOptionSetter(Option);
                 case Format.Tar:
                     return null;

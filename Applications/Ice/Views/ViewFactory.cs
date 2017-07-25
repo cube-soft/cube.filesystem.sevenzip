@@ -173,11 +173,10 @@ namespace Cube.FileSystem.App.Ice
             {
                 e.Cancel = view.ShowDialog() == DialogResult.Cancel;
                 if (e.Cancel) return;
-                e.Result = new ArchiveDetails
+                e.Result = new ArchiveDetails(view.Format)
                 {
                     Path              = view.Path,
                     Password          = view.Password,
-                    Format            = view.Format,
                     CompressionLevel  = view.CompressionLevel,
                     CompressionMethod = view.CompressionMethod,
                     EncryptionMethod  = view.EncryptionMethod,

@@ -31,7 +31,7 @@ namespace Cube.FileSystem.App.Ice
     /* --------------------------------------------------------------------- */
     public static class SettingsViewDataSource
     {
-        #region Fields
+        #region Properties
 
         /* ----------------------------------------------------------------- */
         ///
@@ -53,7 +53,7 @@ namespace Cube.FileSystem.App.Ice
                         Pair("Zip", SevenZip.Format.Zip),
                         Pair("7z",  SevenZip.Format.SevenZip),
                         Pair("Tar", SevenZip.Format.Tar),
-                        Pair(Properties.Resources.FormatExecutable, SevenZip.Format.Executable),
+                        Pair(Properties.Resources.FormatSfx, SevenZip.Format.Sfx),
                     };
                 }
                 return _format;
@@ -140,7 +140,7 @@ namespace Cube.FileSystem.App.Ice
                             }
                         },
                         {
-                            SevenZip.Format.Executable, new List<KeyValuePair<string, CompressionMethod>>
+                            SevenZip.Format.Sfx, new List<KeyValuePair<string, CompressionMethod>>
                             {
                                 Pair("LZMA",      CompressionMethod.Lzma),
                                 Pair("LZMA2",     CompressionMethod.Lzma2),
