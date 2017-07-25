@@ -85,33 +85,6 @@ namespace Cube.FileSystem.SevenZip
 
     /* --------------------------------------------------------------------- */
     ///
-    /// SevenZipOption
-    /// 
-    /// <summary>
-    /// 7z 圧縮時に設定可能なオプションを保持するためのクラスです。
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    public class SevenZipOption : ArchiveOption
-    {
-        #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CompressionMethod
-        ///
-        /// <summary>
-        /// 圧縮方法取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public CompressionMethod CompressionMethod { get; set; } = CompressionMethod.Default;
-
-        #endregion
-    }
-
-    /* --------------------------------------------------------------------- */
-    ///
     /// ZipOption
     /// 
     /// <summary>
@@ -148,6 +121,61 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public EncryptionMethod EncryptionMethod { get; set; } = EncryptionMethod.Default;
+
+        #endregion
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// SevenZipOption
+    /// 
+    /// <summary>
+    /// 7z 圧縮時に設定可能なオプションを保持するためのクラスです。
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public class SevenZipOption : ArchiveOption
+    {
+        #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CompressionMethod
+        ///
+        /// <summary>
+        /// 圧縮方法取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public CompressionMethod CompressionMethod { get; set; } = CompressionMethod.Default;
+
+        #endregion
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// ExecutableOption
+    /// 
+    /// <summary>
+    /// 自己解凍形式の圧縮ファイル作成時に設定可能なオプションを保持する
+    /// ためのクラスです。
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public class ExecutableOption : SevenZipOption
+    {
+        #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Module
+        ///
+        /// <summary>
+        /// 自己解凍形式用モジュールのパスを取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Module { get; set; }
 
         #endregion
     }

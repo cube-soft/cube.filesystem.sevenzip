@@ -34,6 +34,7 @@ namespace Cube.FileSystem.SevenZip
     public enum Format
     {
         Unknown     = -1,
+        Executable  = -2,   // 7z with SFX module
         Zip         = 0x01, // Open Zip archive format.
         BZip2       = 0x02, // Open Bzip2 archive format.
         Rar         = 0x03, // RarLab Rar archive format.
