@@ -255,10 +255,10 @@ namespace Cube.FileSystem.SevenZip
                 var sfx = (Option as ExecutableOption)?.Module;
                 if (string.IsNullOrEmpty(sfx)) throw new System.IO.FileNotFoundException();
 
-                using (var stream = _io.Create(path))
+                using (var dest = _io.Create(path))
                 {
-                    Copy(stream, sfx);
-                    Copy(stream, tmp);
+                    using (var src = _io.OpenRead(sfx)) src.CopyTo(dest);
+                    using (var src = _io.OpenRead(tmp)) src.CopyTo(dest);
                 }
             }
             finally { if (_io.Get(tmp).Exists) _io.Delete(tmp); }
@@ -276,11 +276,11 @@ namespace Cube.FileSystem.SevenZip
         private void SaveCoreTar(string path, IQuery<string, string> password,
             IProgress<ArchiveReport> progress, IList<FileItem> items)
         {
-            var dest = _io.Get(path);
-            var name = _io.Get(dest.NameWithoutExtension);
-            var file = (name.Extension == ".tar") ? name.Name : $"{name.Name}.tar";
-            var dir  = _io.Combine(dest.DirectoryName, Guid.NewGuid().ToString("D"));
-            var tmp  = _io.Combine(dir, file);
+            var info = _io.Get(path);
+            var nwe  = _io.Get(info.NameWithoutExtension);
+            var name = (nwe.Extension == ".tar") ? nwe.Name : $"{nwe.Name}.tar";
+            var dir  = _io.Combine(info.DirectoryName, Guid.NewGuid().ToString("D"));
+            var tmp  = _io.Combine(dir, name);
 
             try
             {
@@ -296,11 +296,7 @@ namespace Cube.FileSystem.SevenZip
                     case CompressionMethod.XZ:
                         SaveCore(FormatConversions.FromMethod(m), path, password, progress, f);
                         break;
-                    case CompressionMethod.Copy:
-                    case CompressionMethod.Default:
-                        _io.Move(tmp, path, true);
-                        break;
-                    default:
+                    default: // Copy
                         _io.Move(tmp, path, true);
                         break;
                 }
@@ -392,28 +388,6 @@ namespace Cube.FileSystem.SevenZip
             {
                 var child = _io.Get(dir);
                 Add(child, _io.Combine(name, child.Name));
-            }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Copy
-        ///
-        /// <summary>
-        /// ストリームにファイルの内容をコピーします。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        private void Copy(System.IO.FileStream dest, string src)
-        {
-            using (var stream = _io.OpenRead(src))
-            {
-                var buffer = new byte[1024 * 1024];
-                var read = 0;
-                while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
-                {
-                    dest.Write(buffer, 0, read);
-                }
             }
         }
 
