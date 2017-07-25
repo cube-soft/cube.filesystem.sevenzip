@@ -151,8 +151,11 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void Save(string path, string password)
         {
-            if (Format == Format.Tar) SaveCoreTar(path, new PasswordQuery(password), null, _items);
-            else SaveCore(Format, path, new PasswordQuery(password), null, _items);
+            var query = new PasswordQuery(password);
+
+            if (Format == Format.Executable) SaveCoreExe(path, query, null, _items);
+            else if (Format == Format.Tar) SaveCoreTar(path, query, null, _items);
+            else SaveCore(Format, path, query, null, _items);
         }
 
         /* ----------------------------------------------------------------- */
@@ -170,8 +173,11 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void Save(string path, IQuery<string, string> password, IProgress<ArchiveReport> progress)
         {
-            if (Format == Format.Tar) SaveCoreTar(path, new PasswordQuery(password), progress, _items);
-            else SaveCore(Format, path, new PasswordQuery(password), progress, _items);
+            var query = new PasswordQuery(password);
+
+            if (Format == Format.Executable) SaveCoreExe(path, query, progress, _items);
+            else if (Format == Format.Tar) SaveCoreTar(path, query, progress, _items);
+            else SaveCore(Format, path, query, progress, _items);
         }
 
         #region IDisposable
@@ -230,54 +236,32 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Add
+        /// SaveCoreExe
         ///
         /// <summary>
-        /// ファイルまたはディレクトリを圧縮ファイルに追加します。
+        /// 自己解凍形式ファイルを作成し保存します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private void Add(IInformation info, string name)
+        private void SaveCoreExe(string path, IQuery<string, string> password,
+            IProgress<ArchiveReport> progress, IList<FileItem> items)
         {
-            var path = info.FullName;
-            _items.Add(new FileItem(path, name));
-            if (!info.IsDirectory) return;
+            var tmp  = _io.Combine(_io.Get(path).DirectoryName, Guid.NewGuid().ToString("D"));
 
-            foreach (var file in _io.GetFiles(path))
+            try
             {
-                var child = _io.Get(file);
-                _items.Add(new FileItem(child.FullName, _io.Combine(name, child.Name)));
-            }
+                SaveCore(Format.SevenZip, tmp, password, progress, items);
 
-            foreach (var dir in _io.GetDirectories(path))
-            {
-                var child = _io.Get(dir);
-                Add(child, _io.Combine(name, child.Name));
-            }
-        }
+                var sfx = (Option as ExecutableOption)?.Module;
+                if (string.IsNullOrEmpty(sfx)) throw new System.IO.FileNotFoundException();
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetSetter
-        ///
-        /// <summary>
-        /// ArchiveOptionSetter オブジェクトを取得します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        private ArchiveOptionSetter GetSetter()
-        {
-            switch (Format)
-            {
-                case Format.Zip:
-                    return new ZipOptionSetter(Option);
-                case Format.SevenZip:
-                    return new SevenZipOptionSetter(Option);
-                case Format.Tar:
-                    return null;
-                default:
-                    return new ArchiveOptionSetter(Option);
+                using (var stream = _io.Create(path))
+                {
+                    Copy(stream, sfx);
+                    Copy(stream, tmp);
+                }
             }
+            finally { if (_io.Get(tmp).Exists) _io.Delete(tmp); }
         }
 
         /* ----------------------------------------------------------------- */
@@ -289,16 +273,14 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private void SaveCoreTar(string path,
-            IQuery<string, string> password,
-            IProgress<ArchiveReport> progress,
-            IList<FileItem> items
-        ) {
+        private void SaveCoreTar(string path, IQuery<string, string> password,
+            IProgress<ArchiveReport> progress, IList<FileItem> items)
+        {
             var dest = _io.Get(path);
-            var mid  = _io.Get(dest.NameWithoutExtension);
-            var name = (mid.Extension == ".tar") ? mid.Name : $"{mid.Name}.tar";
+            var name = _io.Get(dest.NameWithoutExtension);
+            var file = (name.Extension == ".tar") ? name.Name : $"{name.Name}.tar";
             var dir  = _io.Combine(dest.DirectoryName, Guid.NewGuid().ToString("D"));
-            var tmp  = _io.Combine(dir, name);
+            var tmp  = _io.Combine(dir, file);
 
             try
             {
@@ -335,11 +317,9 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private void SaveCore(Format format, string path,
-            IQuery<string, string> password,
-            IProgress<ArchiveReport> progress,
-            IList<FileItem> items
-        ) {
+        private void SaveCore(Format format, string path, IQuery<string, string> password,
+            IProgress<ArchiveReport> progress, IList<FileItem> items)
+        {
             var dir = _io.Get(_io.Get(path).DirectoryName);
             if (!dir.Exists) _io.CreateDirectory(dir.FullName);
 
@@ -384,6 +364,81 @@ namespace Cube.FileSystem.SevenZip
                     throw new UserCancelException();
                 default:
                     throw new System.IO.IOException(result.ToString());
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Add
+        ///
+        /// <summary>
+        /// ファイルまたはディレクトリを圧縮ファイルに追加します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void Add(IInformation info, string name)
+        {
+            var path = info.FullName;
+            _items.Add(new FileItem(path, name));
+            if (!info.IsDirectory) return;
+
+            foreach (var file in _io.GetFiles(path))
+            {
+                var child = _io.Get(file);
+                _items.Add(new FileItem(child.FullName, _io.Combine(name, child.Name)));
+            }
+
+            foreach (var dir in _io.GetDirectories(path))
+            {
+                var child = _io.Get(dir);
+                Add(child, _io.Combine(name, child.Name));
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Copy
+        ///
+        /// <summary>
+        /// ストリームにファイルの内容をコピーします。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void Copy(System.IO.FileStream dest, string src)
+        {
+            using (var stream = _io.OpenRead(src))
+            {
+                var buffer = new byte[1024 * 1024];
+                var read = 0;
+                while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    dest.Write(buffer, 0, read);
+                }
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetSetter
+        ///
+        /// <summary>
+        /// ArchiveOptionSetter オブジェクトを取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private ArchiveOptionSetter GetSetter()
+        {
+            switch (Format)
+            {
+                case Format.Zip:
+                    return new ZipOptionSetter(Option);
+                case Format.SevenZip:
+                case Format.Executable:
+                    return new SevenZipOptionSetter(Option);
+                case Format.Tar:
+                    return null;
+                default:
+                    return new ArchiveOptionSetter(Option);
             }
         }
 

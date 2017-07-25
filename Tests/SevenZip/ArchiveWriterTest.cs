@@ -17,6 +17,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System.Collections.Generic;
+using System.Reflection;
 using Cube.FileSystem.SevenZip;
 using NUnit.Framework;
 
@@ -163,7 +164,30 @@ namespace Cube.FileSystem.Tests
                         CompressionLevel  = CompressionLevel.Ultra,
                     }
                 ).Returns(10556L);
+
+                yield return new TestCaseData(Format.Executable,
+                    "ExecutableTest.exe",
+                    "",
+                    new[] { "Sample.txt", "Archive" },
+                    new ExecutableOption
+                    {
+                        CompressionMethod = CompressionMethod.Lzma,
+                        CompressionLevel  = CompressionLevel.Ultra,
+                        Module            = Current("7z.sfx"),
+                    }
+                ).Returns(1627824L);
             }
+        }
+
+        #endregion
+
+        #region Helper methods
+
+        private static string Current(string filename)
+        {
+            var asm = Assembly.GetExecutingAssembly().Location;
+            var dir = System.IO.Path.GetDirectoryName(asm);
+            return System.IO.Path.Combine(dir, filename);
         }
 
         #endregion
