@@ -88,7 +88,7 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// DeleteOnExtract
+        /// DeleteSource
         /// 
         /// <summary>
         /// 展開後に元ファイルを削除するかどうかを示す値を取得または
@@ -96,8 +96,8 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [DataMember]
-        public bool DeleteOnExtract
+        [DataMember(Name = "DeleteOnExtract")]
+        public bool DeleteSource
         {
             get { return _deleteOnExtract; }
             set { SetProperty(ref _deleteOnExtract, value); }
