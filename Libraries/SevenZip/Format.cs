@@ -170,7 +170,7 @@ namespace Cube.FileSystem.SevenZip
         /// Format に対応する Class ID を取得します。
         /// </summary>
         /// 
-        /// <param name="fmt">Format オブジェクト</param>
+        /// <param name="format">Format オブジェクト</param>
         /// 
         /// <returns>Class ID</returns>
         ///
@@ -179,10 +179,63 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public static Guid ToClassId(this Format fmt)
-            => fmt != Format.Unknown ?
-               new Guid($"23170f69-40c1-278a-1000-000110{((int)fmt):x2}0000") :
+        public static Guid ToClassId(this Format format)
+            => format != Format.Unknown ?
+               new Guid($"23170f69-40c1-278a-1000-000110{((int)format):x2}0000") :
                Guid.Empty;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ToMethod
+        ///
+        /// <summary>
+        /// Format に対応する CompressionMethod を取得します。
+        /// </summary>
+        /// 
+        /// <param name="format">Format オブジェクト</param>
+        /// 
+        /// <returns>CompressionMethod オブジェクト</returns>
+        ///
+        /// <remarks>
+        /// 一部の Format は CompressionMethod に指定可能なため、
+        /// その対応関係をこのメソッドに記述しています。
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static CompressionMethod ToMethod(this Format format)
+        {
+            switch (format)
+            {
+                case Format.BZip2: return CompressionMethod.BZip2;
+                case Format.GZip:  return CompressionMethod.GZip;
+                case Format.XZ:    return CompressionMethod.XZ;
+                default: return CompressionMethod.Default;
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// FromMethod
+        ///
+        /// <summary>
+        /// CompressionMethod に対応する Format を取得します。
+        /// </summary>
+        /// 
+        /// <param name="method">CompressionMethod</param>
+        /// 
+        /// <returns>Format オブジェクト</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static Format FromMethod(CompressionMethod method)
+        {
+            switch (method)
+            {
+                case CompressionMethod.GZip:  return Format.GZip;
+                case CompressionMethod.BZip2: return Format.BZip2;
+                case CompressionMethod.XZ:    return Format.XZ;
+                default: return Format.Unknown;
+            }
+        }
 
         /* ----------------------------------------------------------------- */
         ///

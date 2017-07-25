@@ -282,28 +282,6 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetFormat
-        ///
-        /// <summary>
-        /// CompressionMethod に対応する Format オブジェクトを取得します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        private Format GetFormat(CompressionMethod method)
-        {
-            switch (method)
-            {
-                case CompressionMethod.BZip2: return Format.BZip2;
-                case CompressionMethod.GZip:  return Format.GZip;
-                case CompressionMethod.XZ:    return Format.XZ;
-                default: break;
-            }
-            return Format.Unknown;
-        }
-
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// SaveCoreTar
         ///
         /// <summary>
@@ -334,7 +312,7 @@ namespace Cube.FileSystem.SevenZip
                     case CompressionMethod.BZip2:
                     case CompressionMethod.GZip:
                     case CompressionMethod.XZ:
-                        SaveCore(GetFormat(m), path, password, progress, f);
+                        SaveCore(FormatConversions.FromMethod(m), path, password, progress, f);
                         break;
                     case CompressionMethod.Copy:
                     case CompressionMethod.Default:
