@@ -224,46 +224,76 @@ namespace Cube.FileSystem.Tests
                     },
                 });
 
-                yield return new TestCaseData("PasswordSymbol.zip", "!\"#$%&'()-=^~\\|@`[]{}+*<>,./?_", new List<ExpectedItem>
+                yield return new TestCaseData("PasswordSymbol01.zip", "()[]{}<>", new List<ExpectedItem>
                 {
                     new ExpectedItem
                     {
-                        FullName      = "Symbol1.txt",
+                        FullName      = "Symbol.txt",
                         Extension     = ".txt",
-                        Length        = 7816,
+                        Length        = 22,
                         Encrypted     = true,
                         IsDirectory   = false,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = "Symbol2.txt",
-                        Extension     = ".txt",
-                        Length        = 6,
-                        Encrypted     = true,
-                        IsDirectory   = false,
-                    },
+                    }
                 });
 
-                yield return new TestCaseData("PasswordJapanese.zip", "日本語パスワード", new List<ExpectedItem>
+                yield return new TestCaseData("PasswordSymbol02.zip", "\\#$%@?", new List<ExpectedItem>
                 {
                     new ExpectedItem
                     {
-                        FullName      = "Japanese1.txt",
+                        FullName      = "Symbol.txt",
                         Extension     = ".txt",
-                        Length        = 22187,
+                        Length        = 22,
                         Encrypted     = true,
                         IsDirectory   = false,
-                    },
+                    }
+                });
 
+                yield return new TestCaseData("PasswordSymbol03.zip", "!&|+-*/=", new List<ExpectedItem>
+                {
                     new ExpectedItem
                     {
-                        FullName      = "Japanese2.txt",
+                        FullName      = "Symbol.txt",
                         Extension     = ".txt",
-                        Length        = 21,
+                        Length        = 22,
                         Encrypted     = true,
                         IsDirectory   = false,
-                    },
+                    }
+                });
+
+                yield return new TestCaseData("PasswordSymbol04.zip", "\"'^~`,._", new List<ExpectedItem>
+                {
+                    new ExpectedItem
+                    {
+                        FullName      = "Symbol.txt",
+                        Extension     = ".txt",
+                        Length        = 22,
+                        Encrypted     = true,
+                        IsDirectory   = false,
+                    }
+                });
+
+                yield return new TestCaseData("PasswordJapanese01.zip", "日本語パスワード", new List<ExpectedItem>
+                {
+                    new ExpectedItem
+                    {
+                        FullName      = "Japanese.txt",
+                        Extension     = ".txt",
+                        Length        = 39,
+                        Encrypted     = true,
+                        IsDirectory   = false,
+                    }
+                });
+
+                yield return new TestCaseData("PasswordJapanese02.zip", "ｶﾞｷﾞｸﾞｹﾞｺﾞﾊﾟﾋﾟﾌﾟﾍﾟﾎﾟ", new List<ExpectedItem>
+                {
+                    new ExpectedItem
+                    {
+                        FullName      = "Japanese.txt",
+                        Extension     = ".txt",
+                        Length        = 39,
+                        Encrypted     = true,
+                        IsDirectory   = false,
+                    }
                 });
 
                 yield return new TestCaseData("Sample.tar.gz", "", new List<ExpectedItem>

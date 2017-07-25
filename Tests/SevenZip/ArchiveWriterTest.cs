@@ -105,7 +105,7 @@ namespace Cube.FileSystem.Tests
                     "",
                     new[] { "Sample.txt", "Archive" },
                     new ZipOption { CompressionMethod = CompressionMethod.Lzma }
-                ).Returns(11815L);
+                ).Returns(11809L);
 
                 yield return new TestCaseData(Format.Zip,
                     "ZipPassword.zip",
