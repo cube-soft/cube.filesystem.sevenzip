@@ -64,9 +64,6 @@ namespace Cube.FileSystem.Tests
                     Assert.That(actual[i].Length,         Is.EqualTo(expected[i].Length));
                     Assert.That(actual[i].Encrypted,      Is.EqualTo(expected[i].Encrypted));
                     Assert.That(actual[i].IsDirectory,    Is.EqualTo(expected[i].IsDirectory));
-                    Assert.That(actual[i].LastWriteTime,  Is.Not.EqualTo(DateTime.MinValue));
-                    // Assert.That(actual[i].CreationTime,   Is.Not.EqualTo(DateTime.MinValue));
-                    // Assert.That(actual[i].LastAccessTime, Is.Not.EqualTo(DateTime.MinValue));
                 }
             }
         }
@@ -331,6 +328,18 @@ namespace Cube.FileSystem.Tests
                 });
 
                 yield return new TestCaseData("Sample.tar.gz", "", new List<ExpectedItem>
+                {
+                    new ExpectedItem
+                    {
+                        FullName      = "Sample.tar",
+                        Extension     = ".tar",
+                        Length        = 20480,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    }
+                });
+
+                yield return new TestCaseData("Sample.tar.xz", "", new List<ExpectedItem>
                 {
                     new ExpectedItem
                     {
