@@ -62,7 +62,7 @@ namespace Cube.FileSystem.Tests
             _directory = GetType().FullName.Replace($"{reader.Product}.", "");
 
             if (!IO.Get(Results).Exists) IO.CreateDirectory(Results);
-            else Clean(Results);
+            Delete(Results);
         }
 
         #endregion
@@ -156,7 +156,7 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Clean
+        /// Delete
         /// 
         /// <summary>
         /// 指定されたフォルダ内に存在する全てのファイルおよびフォルダを
@@ -164,18 +164,13 @@ namespace Cube.FileSystem.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Clean(string directory)
+        private void Delete(string directory)
         {
-            foreach (string file in IO.GetFiles(directory))
+            foreach (string f in IO.GetFiles(directory)) IO.Delete(f);
+            foreach (string d in IO.GetDirectories(directory))
             {
-                IO.SetAttributes(file, System.IO.FileAttributes.Normal);
-                IO.Delete(file);
-            }
-
-            foreach (string sub in IO.GetDirectories(directory))
-            {
-                Clean(sub);
-                IO.Delete(sub);
+                Delete(d);
+                IO.Delete(d);
             }
         }
 

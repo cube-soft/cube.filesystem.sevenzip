@@ -369,22 +369,22 @@ namespace Cube.FileSystem.Tests
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public class ExpectedItem : IInformation
+        public class ExpectedItem // : IInformation
         {
-            public bool Exists { get; set; }
             public bool IsDirectory { get; set; }
             public bool Encrypted { get; set; }
-            public string Name { get; set; }
-            public string NameWithoutExtension { get; set; }
             public string Extension { get; set; }
-            public string DirectoryName { get; set; }
             public string FullName { get; set; }
             public long Length { get; set; }
-            public System.IO.FileAttributes Attributes { get; set; }
-            public DateTime CreationTime { get; set; }
-            public DateTime LastWriteTime { get; set; }
-            public DateTime LastAccessTime { get; set; }
-            public void Refresh() { }
+            // public bool Exists { get; set; }
+            // public string Name { get; set; }
+            // public string NameWithoutExtension { get; set; }
+            // public string DirectoryName { get; set; }
+            // public System.IO.FileAttributes Attributes { get; set; }
+            // public DateTime CreationTime { get; set; }
+            // public DateTime LastWriteTime { get; set; }
+            // public DateTime LastAccessTime { get; set; }
+            // public void Refresh() { }
         }
 
         #endregion
