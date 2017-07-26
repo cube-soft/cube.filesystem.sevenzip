@@ -111,6 +111,66 @@ namespace Cube.FileSystem
 
         /* ----------------------------------------------------------------- */
         ///
+        /// SetAttributes
+        ///
+        /// <summary>
+        /// ファイルまたはディレクトリに属性を設定します。
+        /// </summary>
+        /// 
+        /// <param name="path">対象となるパス</param>
+        /// <param name="attr">属性</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void SetAttributes(string path, System.IO.FileAttributes attr)
+            => _core.SetAttributes(path, attr);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetCreationTime
+        ///
+        /// <summary>
+        /// ファイルまたはディレクトリに作成日時を設定します。
+        /// </summary>
+        /// 
+        /// <param name="path">対象となるパス</param>
+        /// <param name="time">作成日時</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void SetCreationTime(string path, DateTime time)
+            => _core.SetCreationTime(path, time);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetLastWriteTime
+        ///
+        /// <summary>
+        /// ファイルまたはディレクトリに最終更新日時を設定します。
+        /// </summary>
+        /// 
+        /// <param name="path">対象となるパス</param>
+        /// <param name="time">最終更新日時</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void SetLastWriteTime(string path, DateTime time)
+            => _core.SetLastWriteTime(path, time);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetLastAccessTime
+        ///
+        /// <summary>
+        /// ファイルまたはディレクトリに最終アクセス日時を設定します。
+        /// </summary>
+        /// 
+        /// <param name="path">対象となるパス</param>
+        /// <param name="time">最終アクセス日時</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void SetLastAccessTime(string path, DateTime time)
+            => _core.SetLastAccessTime(path, time);
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Combine
         ///
         /// <summary>

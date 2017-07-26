@@ -81,6 +81,77 @@ namespace Cube.FileSystem
 
         /* ----------------------------------------------------------------- */
         ///
+        /// SetAttributes
+        ///
+        /// <summary>
+        /// ファイルまたはディレクトリに属性を設定します。
+        /// </summary>
+        /// 
+        /// <param name="path">対象となるパス</param>
+        /// <param name="attr">属性</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void SetAttributes(string path, System.IO.FileAttributes attr)
+        {
+            if (File.Exists(path)) File.SetAttributes(path, attr);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetCreationTime
+        ///
+        /// <summary>
+        /// ファイルまたはディレクトリに作成日時を設定します。
+        /// </summary>
+        /// 
+        /// <param name="path">対象となるパス</param>
+        /// <param name="time">作成日時</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void SetCreationTime(string path, DateTime time)
+        {
+            if (Directory.Exists(path)) Directory.SetCreationTime(path, time);
+            else if (File.Exists(path)) File.SetCreationTime(path, time);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetLastWriteTime
+        ///
+        /// <summary>
+        /// ファイルまたはディレクトリに最終更新日時を設定します。
+        /// </summary>
+        /// 
+        /// <param name="path">対象となるパス</param>
+        /// <param name="time">最終更新日時</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void SetLastWriteTime(string path, DateTime time)
+        {
+            if (Directory.Exists(path)) Directory.SetLastWriteTime(path, time);
+            else if (File.Exists(path)) File.SetLastWriteTime(path, time);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetLastAccessTime
+        ///
+        /// <summary>
+        /// ファイルまたはディレクトリに最終アクセス日時を設定します。
+        /// </summary>
+        /// 
+        /// <param name="path">対象となるパス</param>
+        /// <param name="time">最終アクセス日時</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void SetLastAccessTime(string path, DateTime time)
+        {
+            if (Directory.Exists(path)) Directory.SetLastAccessTime(path, time);
+            else if (File.Exists(path)) File.SetLastAccessTime(path, time);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Combine
         ///
         /// <summary>
