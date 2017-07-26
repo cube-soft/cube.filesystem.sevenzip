@@ -379,12 +379,15 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public override void Extract(string directory, IProgress<ArchiveReport> progress)
         {
-            if (IsDirectory)
-            {
-                var dir = IO.Combine(directory, FullName);
-                if (!IO.Get(dir).Exists) IO.CreateDirectory(dir);
-            }
-            else ExtractFile(directory, progress);
+            var path = IO.Combine(directory, FullName);
+
+            if (!IsDirectory) ExtractFile(path, progress);
+            else if (!IO.Get(path).Exists) IO.CreateDirectory(path);
+
+            IO.SetAttributes(path, Attributes);
+            SetCreationTime(path);
+            SetLastWriteTime(path);
+            SetLastAccessTime(path);
         }
 
         #endregion
@@ -400,9 +403,8 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private void ExtractFile(string directory, IProgress<ArchiveReport> progress)
+        private void ExtractFile(string dest, IProgress<ArchiveReport> progress)
         {
-            var dest = IO.Combine(directory, FullName);
             var dir  = IO.Get(dest).DirectoryName;
             if (!IO.Get(dir).Exists) IO.CreateDirectory(dir);
 
@@ -417,7 +419,7 @@ namespace Cube.FileSystem.SevenZip
             finally
             {
                 stream.Dispose();
-                ExtractFileResult(directory, callback.Result);
+                ExtractFileResult(callback.Result);
             }
         }
 
@@ -430,7 +432,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void ExtractFileResult(string directory, OperationResult result)
+        private void ExtractFileResult(OperationResult result)
         {
             switch (result)
             {
@@ -520,6 +522,57 @@ namespace Cube.FileSystem.SevenZip
         {
             try { return (System.IO.FileAttributes)Get<uint>(ItemPropId.Attributes); }
             catch (Exception /* err */) { return System.IO.FileAttributes.Normal; }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetCreationTime
+        ///
+        /// <summary>
+        /// 作成日時を設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void SetCreationTime(string path)
+        {
+            var time = CreationTime  != DateTime.MinValue ? CreationTime  :
+                       LastWriteTime != DateTime.MinValue ? LastWriteTime :
+                       LastAccessTime;
+            if (time != DateTime.MinValue) IO.SetCreationTime(path, time);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetLastWriteTime
+        ///
+        /// <summary>
+        /// 最終更新日時を設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void SetLastWriteTime(string path)
+        {
+            var time = LastWriteTime  != DateTime.MinValue ? LastWriteTime  :
+                       LastAccessTime != DateTime.MinValue ? LastAccessTime :
+                       CreationTime;
+            if (time != DateTime.MinValue) IO.SetLastWriteTime(path, time);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetLastAccessTime
+        ///
+        /// <summary>
+        /// 最終アクセス日時を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void SetLastAccessTime(string path)
+        {
+            var time = LastAccessTime != DateTime.MinValue ? LastAccessTime :
+                       LastWriteTime  != DateTime.MinValue ? LastWriteTime  :
+                       CreationTime;
+            if (time != DateTime.MinValue) IO.SetLastAccessTime(path, time);
         }
 
         /* ----------------------------------------------------------------- */
