@@ -87,10 +87,13 @@ namespace Cube.FileSystem.Tests
                 for (var i = 0; i < expected.Count; ++i)
                 {
                     actual[i].Extract(Results);
-                    var dest = Result(actual[i].FullName);
-                    var dir  = expected[i].IsDirectory;
-                    Assert.That(Exists(dest, dir), Is.True);
-                    Assert.That(Length(dest, dir), Is.EqualTo(expected[i].Length));
+
+                    var info = IO.Get(Result(actual[i].FullName));
+                    Assert.That(info.Exists,         Is.True);
+                    Assert.That(info.Length,         Is.EqualTo(expected[i].Length));
+                    Assert.That(info.CreationTime,   Is.Not.EqualTo(DateTime.MinValue));
+                    Assert.That(info.LastWriteTime,  Is.Not.EqualTo(DateTime.MinValue));
+                    Assert.That(info.LastAccessTime, Is.Not.EqualTo(DateTime.MinValue));
                 }
             }
         }
@@ -355,35 +358,7 @@ namespace Cube.FileSystem.Tests
 
         #endregion
 
-        #region Helper classes and methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Exists
-        ///
-        /// <summary>
-        /// ファイルまたはディレクトリが存在するかどうかを判別します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        private bool Exists(string path, bool directory)
-            => directory ?
-               System.IO.Directory.Exists(path) :
-               System.IO.File.Exists(path);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Length
-        ///
-        /// <summary>
-        /// ファイルサイズを取得します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        private long Length(string path, bool directory)
-            => directory ?
-               0 :
-               new System.IO.FileInfo(path).Length;
+        #region Helper class
 
         /* ----------------------------------------------------------------- */
         ///
