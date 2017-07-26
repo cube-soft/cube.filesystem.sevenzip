@@ -50,7 +50,7 @@
     <Compile Include="Details\FileResource.cs" />
     <Compile Include="DriveTest.cs" />
     <Compile Include="OperatorTest.cs" />
-    <Compile Include="FileInfoTest.cs" />
+    <Compile Include="FilesTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SevenZip\ArchiveReaderTest.cs" />
     <Compile Include="SevenZip\ArchiveWriterTest.cs" />
