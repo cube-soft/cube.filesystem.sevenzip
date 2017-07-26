@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.Tests", "Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.App.Ice", "Applications\Ice\Cube.FileSystem.App.Ice.csproj", "{E14092D2-266A-4CC7-B1CE-2ADD0CB8E65B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.App.Ice.Settings", "Applications\Ice.Settings\Cube.FileSystem.App.Ice.Settings.csproj", "{42B72A9A-C752-4D99-97D0-D341F1BD2A45}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.App.Ice.Tests", "Applications\Ice.Tests\Cube.FileSystem.App.Ice.Tests.csproj", "{7CBF700C-6F9D-49B5-A905-E5C37302DA93}"
 EndProject
 Global
@@ -71,6 +73,10 @@ Global
 		{E14092D2-266A-4CC7-B1CE-2ADD0CB8E65B}.Release|x64.Build.0 = Release|x64
 		{E14092D2-266A-4CC7-B1CE-2ADD0CB8E65B}.Release|x86.ActiveCfg = Release|x86
 		{E14092D2-266A-4CC7-B1CE-2ADD0CB8E65B}.Release|x86.Build.0 = Release|x86
+		{42B72A9A-C752-4D99-97D0-D341F1BD2A45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42B72A9A-C752-4D99-97D0-D341F1BD2A45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42B72A9A-C752-4D99-97D0-D341F1BD2A45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42B72A9A-C752-4D99-97D0-D341F1BD2A45}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7CBF700C-6F9D-49B5-A905-E5C37302DA93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7CBF700C-6F9D-49B5-A905-E5C37302DA93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7CBF700C-6F9D-49B5-A905-E5C37302DA93}.Debug|x64.ActiveCfg = Debug|x64
