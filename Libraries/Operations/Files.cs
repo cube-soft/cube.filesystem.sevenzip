@@ -25,13 +25,26 @@ namespace Cube.FileSystem.Files
     /// Files.Operations
     /// 
     /// <summary>
-    /// FileInfo に対する拡張メソッドを定義するためのクラスです。
+    /// FileSystem.Operator に対する拡張メソッドを定義したクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     public static class Operations
     {
-        #region Methods
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetTypeName
+        ///
+        /// <summary>
+        /// ファイルの種類を表す文字列を取得します。
+        /// </summary>
+        ///
+        /// <param name="io">ファイル操作用オブジェクト</param>
+        /// <param name="info">ファイル情報</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public static string GetTypeName(this Operator io, IInformation info)
+            => GetTypeName(io, info?.FullName);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -41,21 +54,25 @@ namespace Cube.FileSystem.Files
         /// ファイルの種類を表す文字列を取得します。
         /// </summary>
         ///
-        /// <param name="info">IInformation オブジェクト</param>
+        /// <param name="io">ファイル操作用オブジェクト</param>
+        /// <param name="path">対象となるパス</param>
+        /// 
+        /// <remarks>
+        /// 現在は Operator オブジェクトは使用していません。
+        /// </remarks>
         /// 
         /* ----------------------------------------------------------------- */
-        public static string GetTypeName(this IInformation info)
+        public static string GetTypeName(this Operator io, string path)
         {
-            if (info == null) return null;
+            if (string.IsNullOrEmpty(path)) return null;
 
-            var attr   = Shell32.NativeMethods.FILE_ATTRIBUTE_NORMAL;
-            var flags  = Shell32.NativeMethods.SHGFI_TYPENAME |
-                         Shell32.NativeMethods.SHGFI_USEFILEATTRIBUTES;
-            var shfi   = new SHFILEINFO();
-            var result = Shell32.NativeMethods.SHGetFileInfo(info.FullName,
-                attr, ref shfi, (uint)Marshal.SizeOf(shfi), flags);
-
-            return (result != IntPtr.Zero) ? shfi.szTypeName : null;
+            var dest = new SHFILEINFO();
+            return Shell32.NativeMethods.SHGetFileInfo(path,
+                0x0080, // FILE_ATTRIBUTE_NORMAL
+                ref dest,
+                (uint)Marshal.SizeOf(dest),
+                0x0410 // SHGFI_TYPENAME | SHGFI_USEFILEATTRIBUTES
+            ) != IntPtr.Zero ? dest.szTypeName : null;
         }
 
         /* ----------------------------------------------------------------- */
@@ -63,14 +80,15 @@ namespace Cube.FileSystem.Files
         /// GetUniqueName
         ///
         /// <summary>
-        /// IInformation オブジェクトを基にした一意なパスを取得します。
+        /// 指定されたパスを基にした一意なパスを取得します。
         /// </summary>
         /// 
-        /// <param name="info">IInformation オブジェクト</param>
+        /// <param name="io">ファイル操作用オブジェクト</param>
+        /// <param name="path">対象となるパス</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static string GetUniqueName(this IInformation info)
-            => GetUniqueName(info, new Operator());
+        public static string GetUniqueName(this Operator io, string path)
+            => GetUniqueName(io, io?.Get(path));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -80,26 +98,22 @@ namespace Cube.FileSystem.Files
         /// IInformation オブジェクトを基にした一意なパスを取得します。
         /// </summary>
         /// 
-        /// <param name="info">IInformation オブジェクト</param>
         /// <param name="io">ファイル操作用オブジェクト</param>
+        /// <param name="info">ファイル情報</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static string GetUniqueName(this IInformation info, Operator io)
+        public static string GetUniqueName(this Operator io, IInformation info)
         {
+            if (info == null) return null;
             if (!info.Exists) return info.FullName;
-
-            var path = info.FullName;
-            var dir  = info.DirectoryName;
-            var name = System.IO.Path.GetFileNameWithoutExtension(info.Name);
-            var ext  = info.Extension;
+            if (io == null) return null;
 
             for (var i = 2; ; ++i)
             {
-                var dest = io.Combine(dir, $"{name}({i}){ext}");
-                if (!System.IO.File.Exists(dest) && !System.IO.Directory.Exists(dest)) return dest;
+                var name = $"{info.NameWithoutExtension}({i}){info.Extension}";
+                var dest = io.Combine(info.DirectoryName, name);
+                if (!io.Get(dest).Exists) return dest;
             }
         }
-
-        #endregion
     }
 }

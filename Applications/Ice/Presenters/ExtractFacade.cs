@@ -252,7 +252,7 @@ namespace Cube.FileSystem.App.Ice
                     Move(src, dest);
                     break;
                 case OverwriteMode.AlwaysRename:
-                    Move(src, IO.Get(dest.GetUniqueName(IO)));
+                    Move(src, IO.Get(IO.GetUniqueName(dest)));
                     break;
             }
         }
