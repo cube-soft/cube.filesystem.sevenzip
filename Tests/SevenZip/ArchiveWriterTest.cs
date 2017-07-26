@@ -66,6 +66,37 @@ namespace Cube.FileSystem.Tests
             }
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Archive_Japanese
+        ///
+        /// <summary>
+        /// 日本語のファイル名を含むファイルを圧縮するテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Archive_Japanese()
+        {
+            var fmt  = Format.Zip;
+            var src  = Result("日本語のファイル名.txt");
+            var dest = Result("ZipJapanese.zip");
+
+            System.IO.File.Copy(Example("Sample.txt"), src);
+            Assert.That(System.IO.File.Exists(src), Is.True);
+
+            using (var writer = new ArchiveWriter(fmt))
+            {
+                writer.Add(src);
+                writer.Save(dest);
+            }
+
+            using (var stream = System.IO.File.OpenRead(dest))
+            {
+                Assert.That(Formats.FromStream(stream), Is.EqualTo(fmt));
+            }
+        }
+
         #endregion
 
         #region TestCases
@@ -119,7 +150,21 @@ namespace Cube.FileSystem.Tests
                 ).Returns(Format.Zip);
 
                 yield return new TestCaseData(Format.Zip,
-                    "ZipAes256.zip",
+                    "ZipPasswordJapanese01.zip",
+                    "日本語パスワード",
+                    new[] { "Sample.txt" },
+                    null
+                ).Returns(Format.Zip);
+
+                yield return new TestCaseData(Format.Zip,
+                    "ZipPasswordJapanese02.zip",
+                    "ｶﾞｷﾞｸﾞｹﾞｺﾞﾊﾟﾋﾟﾌﾟﾍﾟﾎﾟ",
+                    new[] { "Sample.txt" },
+                    null
+                ).Returns(Format.Zip);
+
+                yield return new TestCaseData(Format.Zip,
+                    "ZipPasswordAes256.zip",
                     "password",
                     new[] { "Sample.txt" },
                     new ZipOption { EncryptionMethod = EncryptionMethod.Aes256 }
