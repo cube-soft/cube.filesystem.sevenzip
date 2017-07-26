@@ -51,9 +51,6 @@ namespace Cube.FileSystem.Shell32
 
         #region Fields
         private const string LibName = "shell32.dll";
-        public  const uint SHGFI_USEFILEATTRIBUTES = 0x00000010;
-        public  const uint SHGFI_TYPENAME          = 0x00000400;
-        public  const uint FILE_ATTRIBUTE_NORMAL   = 0x00000080;
         #endregion
     }
 }
