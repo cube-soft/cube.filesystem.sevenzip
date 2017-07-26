@@ -279,7 +279,7 @@ namespace Cube.FileSystem
         /// <returns>IInformation オブジェクト</returns>
         /// 
         /* ----------------------------------------------------------------- */
-        public IInformation Get(string path) => new AlphaInformation(path);
+        public IInformation Get(string path) => new Information(path);
 
         /* ----------------------------------------------------------------- */
         ///
