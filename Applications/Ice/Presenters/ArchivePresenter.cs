@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using Cube.FileSystem.SevenZip;
+using Cube.FileSystem.Ice;
 
 namespace Cube.FileSystem.App.Ice
 {

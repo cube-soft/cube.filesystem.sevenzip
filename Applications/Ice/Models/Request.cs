@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using Cube.FileSystem.SevenZip;
+using Cube.FileSystem.Ice;
 
 namespace Cube.FileSystem.App.Ice
 {

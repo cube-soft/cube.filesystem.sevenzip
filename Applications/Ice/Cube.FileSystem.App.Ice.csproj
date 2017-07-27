@@ -101,13 +101,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Settings\ArchiveSettings.cs" />
-    <Compile Include="Models\Settings\ExtractSettings.cs" />
-    <Compile Include="Models\Parameters.cs" />
+    <Compile Include="Settings\ArchiveSettings.cs" />
+    <Compile Include="Settings\ExtractSettings.cs" />
+    <Compile Include="Settings\Parameters.cs" />
     <Compile Include="Presenters\ArchiveFacade.cs" />
-    <Compile Include="Models\Settings\ArchiveDetails.cs" />
+    <Compile Include="Settings\ArchiveDetails.cs" />
     <Compile Include="Models\OverwriteEventArgs.cs" />
-    <Compile Include="Models\Settings\Request.cs" />
+    <Compile Include="Models\Request.cs" />
     <Compile Include="Presenters\ProgressFacade.cs" />
     <Compile Include="Models\SuspendableProgress.cs" />
     <Compile Include="Presenters\ProgressPresenter.cs" />
@@ -137,8 +137,8 @@
       <DependentUpon>PasswordForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\EventAggregator.cs" />
-    <Compile Include="Models\Settings\Settings.cs" />
-    <Compile Include="Models\Settings\SettingsFolder.cs" />
+    <Compile Include="Settings\Settings.cs" />
+    <Compile Include="Settings\SettingsFolder.cs" />
     <Compile Include="Presenters\ExtractFacade.cs" />
     <Compile Include="Presenters\ExtractPresenter.cs" />
     <Compile Include="Views\IProgressView.cs" />

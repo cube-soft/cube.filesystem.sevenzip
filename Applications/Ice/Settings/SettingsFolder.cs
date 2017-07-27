@@ -15,7 +15,7 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
-namespace Cube.FileSystem.App.Ice
+namespace Cube.FileSystem.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
@@ -42,8 +42,8 @@ namespace Cube.FileSystem.App.Ice
         public SettingsFolder() : base("CubeSoft", @"CubeICE\v2")
         {
             AutoSave = false;
-            Version.Digit  = 3;
-            Version.Suffix = Properties.Resources.VersionSuffix;
+            Version.Digit = 3;
+            Version.Suffix = Cube.FileSystem.App.Ice.Properties.Resources.VersionSuffix;
         }
 
         #endregion

@@ -17,7 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using System.Runtime.Serialization;
 
-namespace Cube.FileSystem.App.Ice
+namespace Cube.FileSystem.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
