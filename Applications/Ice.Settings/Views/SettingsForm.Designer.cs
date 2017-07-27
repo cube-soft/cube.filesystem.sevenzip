@@ -46,29 +46,11 @@
             this.ContextResetButton = new System.Windows.Forms.Button();
             this.ContextCustomizeButton = new System.Windows.Forms.Button();
             this.ContextMailPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.checkBox28 = new System.Windows.Forms.CheckBox();
-            this.checkBox29 = new System.Windows.Forms.CheckBox();
-            this.checkBox30 = new System.Windows.Forms.CheckBox();
-            this.checkBox31 = new System.Windows.Forms.CheckBox();
-            this.checkBox32 = new System.Windows.Forms.CheckBox();
-            this.checkBox33 = new System.Windows.Forms.CheckBox();
-            this.checkBox34 = new System.Windows.Forms.CheckBox();
             this.ContextExtractPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.checkBox24 = new System.Windows.Forms.CheckBox();
-            this.checkBox25 = new System.Windows.Forms.CheckBox();
-            this.checkBox26 = new System.Windows.Forms.CheckBox();
-            this.checkBox27 = new System.Windows.Forms.CheckBox();
             this.ContextMailCheckBox = new System.Windows.Forms.CheckBox();
             this.ContextExtractCheckBox = new System.Windows.Forms.CheckBox();
             this.ContextArchiveCheckBox = new System.Windows.Forms.CheckBox();
             this.ContextArchivePanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.ContextArchiveZipCheckBox = new System.Windows.Forms.CheckBox();
-            this.checkBox18 = new System.Windows.Forms.CheckBox();
-            this.checkBox19 = new System.Windows.Forms.CheckBox();
-            this.checkBox20 = new System.Windows.Forms.CheckBox();
-            this.checkBox21 = new System.Windows.Forms.CheckBox();
-            this.checkBox22 = new System.Windows.Forms.CheckBox();
-            this.checkBox23 = new System.Windows.Forms.CheckBox();
             this.DesktopGroupBox = new System.Windows.Forms.GroupBox();
             this.DesktopPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.DesktopArchiveCheckBox = new System.Windows.Forms.CheckBox();
@@ -76,8 +58,11 @@
             this.DesktopExtractCheckBox = new System.Windows.Forms.CheckBox();
             this.DesktopSettingsCheckBox = new System.Windows.Forms.CheckBox();
             this.ArchiveTabPage = new System.Windows.Forms.TabPage();
+            this.ArchivePanel = new System.Windows.Forms.FlowLayoutPanel();
             this.ExtractTabPage = new System.Windows.Forms.TabPage();
+            this.ExtractPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.DetailsTabPage = new System.Windows.Forms.TabPage();
+            this.DetailsPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.VersionTabPage = new System.Windows.Forms.TabPage();
             this.ButtonsPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.ApplyButton = new System.Windows.Forms.Button();
@@ -94,11 +79,11 @@
             this.ContextGroupBox.SuspendLayout();
             this.ContextPanel.SuspendLayout();
             this.ContextButtonsPanel.SuspendLayout();
-            this.ContextMailPanel.SuspendLayout();
-            this.ContextExtractPanel.SuspendLayout();
-            this.ContextArchivePanel.SuspendLayout();
             this.DesktopGroupBox.SuspendLayout();
             this.DesktopPanel.SuspendLayout();
+            this.ArchiveTabPage.SuspendLayout();
+            this.ExtractTabPage.SuspendLayout();
+            this.DetailsTabPage.SuspendLayout();
             this.ButtonsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -297,13 +282,6 @@
             // 
             // ContextMailPanel
             // 
-            this.ContextMailPanel.Controls.Add(this.checkBox28);
-            this.ContextMailPanel.Controls.Add(this.checkBox29);
-            this.ContextMailPanel.Controls.Add(this.checkBox30);
-            this.ContextMailPanel.Controls.Add(this.checkBox31);
-            this.ContextMailPanel.Controls.Add(this.checkBox32);
-            this.ContextMailPanel.Controls.Add(this.checkBox33);
-            this.ContextMailPanel.Controls.Add(this.checkBox34);
             this.ContextMailPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ContextMailPanel.Enabled = false;
             this.ContextMailPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
@@ -313,82 +291,8 @@
             this.ContextMailPanel.Size = new System.Drawing.Size(144, 178);
             this.ContextMailPanel.TabIndex = 5;
             // 
-            // checkBox28
-            // 
-            this.checkBox28.AutoSize = true;
-            this.checkBox28.Location = new System.Drawing.Point(3, 3);
-            this.checkBox28.Name = "checkBox28";
-            this.checkBox28.Size = new System.Drawing.Size(44, 19);
-            this.checkBox28.TabIndex = 0;
-            this.checkBox28.Text = "Zip";
-            this.checkBox28.UseVisualStyleBackColor = true;
-            // 
-            // checkBox29
-            // 
-            this.checkBox29.AutoSize = true;
-            this.checkBox29.Location = new System.Drawing.Point(3, 28);
-            this.checkBox29.Name = "checkBox29";
-            this.checkBox29.Size = new System.Drawing.Size(114, 19);
-            this.checkBox29.TabIndex = 1;
-            this.checkBox29.Text = "Zip（パスワード）";
-            this.checkBox29.UseVisualStyleBackColor = true;
-            // 
-            // checkBox30
-            // 
-            this.checkBox30.AutoSize = true;
-            this.checkBox30.Location = new System.Drawing.Point(3, 53);
-            this.checkBox30.Name = "checkBox30";
-            this.checkBox30.Size = new System.Drawing.Size(56, 19);
-            this.checkBox30.TabIndex = 2;
-            this.checkBox30.Text = "7-Zip";
-            this.checkBox30.UseVisualStyleBackColor = true;
-            // 
-            // checkBox31
-            // 
-            this.checkBox31.AutoSize = true;
-            this.checkBox31.Location = new System.Drawing.Point(3, 78);
-            this.checkBox31.Name = "checkBox31";
-            this.checkBox31.Size = new System.Drawing.Size(59, 19);
-            this.checkBox31.TabIndex = 3;
-            this.checkBox31.Text = "BZip2";
-            this.checkBox31.UseVisualStyleBackColor = true;
-            // 
-            // checkBox32
-            // 
-            this.checkBox32.AutoSize = true;
-            this.checkBox32.Location = new System.Drawing.Point(3, 103);
-            this.checkBox32.Name = "checkBox32";
-            this.checkBox32.Size = new System.Drawing.Size(53, 19);
-            this.checkBox32.TabIndex = 4;
-            this.checkBox32.Text = "GZip";
-            this.checkBox32.UseVisualStyleBackColor = true;
-            // 
-            // checkBox33
-            // 
-            this.checkBox33.AutoSize = true;
-            this.checkBox33.Location = new System.Drawing.Point(3, 128);
-            this.checkBox33.Name = "checkBox33";
-            this.checkBox33.Size = new System.Drawing.Size(98, 19);
-            this.checkBox33.TabIndex = 5;
-            this.checkBox33.Text = "自己解凍形式";
-            this.checkBox33.UseVisualStyleBackColor = true;
-            // 
-            // checkBox34
-            // 
-            this.checkBox34.AutoSize = true;
-            this.checkBox34.Location = new System.Drawing.Point(3, 153);
-            this.checkBox34.Name = "checkBox34";
-            this.checkBox34.Size = new System.Drawing.Size(74, 19);
-            this.checkBox34.TabIndex = 6;
-            this.checkBox34.Text = "詳細設定";
-            this.checkBox34.UseVisualStyleBackColor = true;
-            // 
             // ContextExtractPanel
             // 
-            this.ContextExtractPanel.Controls.Add(this.checkBox24);
-            this.ContextExtractPanel.Controls.Add(this.checkBox25);
-            this.ContextExtractPanel.Controls.Add(this.checkBox26);
-            this.ContextExtractPanel.Controls.Add(this.checkBox27);
             this.ContextExtractPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ContextExtractPanel.Enabled = false;
             this.ContextExtractPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
@@ -397,46 +301,6 @@
             this.ContextExtractPanel.Name = "ContextExtractPanel";
             this.ContextExtractPanel.Size = new System.Drawing.Size(139, 178);
             this.ContextExtractPanel.TabIndex = 4;
-            // 
-            // checkBox24
-            // 
-            this.checkBox24.AutoSize = true;
-            this.checkBox24.Location = new System.Drawing.Point(3, 3);
-            this.checkBox24.Name = "checkBox24";
-            this.checkBox24.Size = new System.Drawing.Size(75, 19);
-            this.checkBox24.TabIndex = 0;
-            this.checkBox24.Text = "ここに解凍";
-            this.checkBox24.UseVisualStyleBackColor = true;
-            // 
-            // checkBox25
-            // 
-            this.checkBox25.AutoSize = true;
-            this.checkBox25.Location = new System.Drawing.Point(3, 28);
-            this.checkBox25.Name = "checkBox25";
-            this.checkBox25.Size = new System.Drawing.Size(110, 19);
-            this.checkBox25.TabIndex = 1;
-            this.checkBox25.Text = "デスクトップに解凍";
-            this.checkBox25.UseVisualStyleBackColor = true;
-            // 
-            // checkBox26
-            // 
-            this.checkBox26.AutoSize = true;
-            this.checkBox26.Location = new System.Drawing.Point(3, 53);
-            this.checkBox26.Name = "checkBox26";
-            this.checkBox26.Size = new System.Drawing.Size(128, 19);
-            this.checkBox26.TabIndex = 2;
-            this.checkBox26.Text = "マイドキュメントに解凍";
-            this.checkBox26.UseVisualStyleBackColor = true;
-            // 
-            // checkBox27
-            // 
-            this.checkBox27.AutoSize = true;
-            this.checkBox27.Location = new System.Drawing.Point(3, 78);
-            this.checkBox27.Name = "checkBox27";
-            this.checkBox27.Size = new System.Drawing.Size(125, 19);
-            this.checkBox27.TabIndex = 3;
-            this.checkBox27.Text = "場所を指定して解凍";
-            this.checkBox27.UseVisualStyleBackColor = true;
             // 
             // ContextMailCheckBox
             // 
@@ -473,13 +337,6 @@
             // 
             // ContextArchivePanel
             // 
-            this.ContextArchivePanel.Controls.Add(this.ContextArchiveZipCheckBox);
-            this.ContextArchivePanel.Controls.Add(this.checkBox18);
-            this.ContextArchivePanel.Controls.Add(this.checkBox19);
-            this.ContextArchivePanel.Controls.Add(this.checkBox20);
-            this.ContextArchivePanel.Controls.Add(this.checkBox21);
-            this.ContextArchivePanel.Controls.Add(this.checkBox22);
-            this.ContextArchivePanel.Controls.Add(this.checkBox23);
             this.ContextArchivePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ContextArchivePanel.Enabled = false;
             this.ContextArchivePanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
@@ -488,76 +345,6 @@
             this.ContextArchivePanel.Name = "ContextArchivePanel";
             this.ContextArchivePanel.Size = new System.Drawing.Size(139, 178);
             this.ContextArchivePanel.TabIndex = 3;
-            // 
-            // ContextArchiveZipCheckBox
-            // 
-            this.ContextArchiveZipCheckBox.AutoSize = true;
-            this.ContextArchiveZipCheckBox.Location = new System.Drawing.Point(3, 3);
-            this.ContextArchiveZipCheckBox.Name = "ContextArchiveZipCheckBox";
-            this.ContextArchiveZipCheckBox.Size = new System.Drawing.Size(44, 19);
-            this.ContextArchiveZipCheckBox.TabIndex = 0;
-            this.ContextArchiveZipCheckBox.Text = "Zip";
-            this.ContextArchiveZipCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // checkBox18
-            // 
-            this.checkBox18.AutoSize = true;
-            this.checkBox18.Location = new System.Drawing.Point(3, 28);
-            this.checkBox18.Name = "checkBox18";
-            this.checkBox18.Size = new System.Drawing.Size(114, 19);
-            this.checkBox18.TabIndex = 1;
-            this.checkBox18.Text = "Zip（パスワード）";
-            this.checkBox18.UseVisualStyleBackColor = true;
-            // 
-            // checkBox19
-            // 
-            this.checkBox19.AutoSize = true;
-            this.checkBox19.Location = new System.Drawing.Point(3, 53);
-            this.checkBox19.Name = "checkBox19";
-            this.checkBox19.Size = new System.Drawing.Size(56, 19);
-            this.checkBox19.TabIndex = 2;
-            this.checkBox19.Text = "7-Zip";
-            this.checkBox19.UseVisualStyleBackColor = true;
-            // 
-            // checkBox20
-            // 
-            this.checkBox20.AutoSize = true;
-            this.checkBox20.Location = new System.Drawing.Point(3, 78);
-            this.checkBox20.Name = "checkBox20";
-            this.checkBox20.Size = new System.Drawing.Size(59, 19);
-            this.checkBox20.TabIndex = 3;
-            this.checkBox20.Text = "BZip2";
-            this.checkBox20.UseVisualStyleBackColor = true;
-            // 
-            // checkBox21
-            // 
-            this.checkBox21.AutoSize = true;
-            this.checkBox21.Location = new System.Drawing.Point(3, 103);
-            this.checkBox21.Name = "checkBox21";
-            this.checkBox21.Size = new System.Drawing.Size(53, 19);
-            this.checkBox21.TabIndex = 4;
-            this.checkBox21.Text = "GZip";
-            this.checkBox21.UseVisualStyleBackColor = true;
-            // 
-            // checkBox22
-            // 
-            this.checkBox22.AutoSize = true;
-            this.checkBox22.Location = new System.Drawing.Point(3, 128);
-            this.checkBox22.Name = "checkBox22";
-            this.checkBox22.Size = new System.Drawing.Size(98, 19);
-            this.checkBox22.TabIndex = 5;
-            this.checkBox22.Text = "自己解凍形式";
-            this.checkBox22.UseVisualStyleBackColor = true;
-            // 
-            // checkBox23
-            // 
-            this.checkBox23.AutoSize = true;
-            this.checkBox23.Location = new System.Drawing.Point(3, 153);
-            this.checkBox23.Name = "checkBox23";
-            this.checkBox23.Size = new System.Drawing.Size(74, 19);
-            this.checkBox23.TabIndex = 6;
-            this.checkBox23.Text = "詳細設定";
-            this.checkBox23.UseVisualStyleBackColor = true;
             // 
             // DesktopGroupBox
             // 
@@ -622,33 +409,63 @@
             // 
             // ArchiveTabPage
             // 
+            this.ArchiveTabPage.Controls.Add(this.ArchivePanel);
             this.ArchiveTabPage.Location = new System.Drawing.Point(4, 24);
             this.ArchiveTabPage.Name = "ArchiveTabPage";
-            this.ArchiveTabPage.Padding = new System.Windows.Forms.Padding(12);
+            this.ArchiveTabPage.Padding = new System.Windows.Forms.Padding(12, 8, 12, 8);
             this.ArchiveTabPage.Size = new System.Drawing.Size(504, 531);
             this.ArchiveTabPage.TabIndex = 1;
             this.ArchiveTabPage.Text = "圧縮";
             this.ArchiveTabPage.UseVisualStyleBackColor = true;
             // 
+            // ArchivePanel
+            // 
+            this.ArchivePanel.AutoScroll = true;
+            this.ArchivePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ArchivePanel.Location = new System.Drawing.Point(12, 8);
+            this.ArchivePanel.Name = "ArchivePanel";
+            this.ArchivePanel.Size = new System.Drawing.Size(480, 515);
+            this.ArchivePanel.TabIndex = 0;
+            // 
             // ExtractTabPage
             // 
+            this.ExtractTabPage.Controls.Add(this.ExtractPanel);
             this.ExtractTabPage.Location = new System.Drawing.Point(4, 24);
             this.ExtractTabPage.Name = "ExtractTabPage";
-            this.ExtractTabPage.Padding = new System.Windows.Forms.Padding(12);
+            this.ExtractTabPage.Padding = new System.Windows.Forms.Padding(12, 8, 12, 8);
             this.ExtractTabPage.Size = new System.Drawing.Size(504, 531);
             this.ExtractTabPage.TabIndex = 2;
             this.ExtractTabPage.Text = "解凍";
             this.ExtractTabPage.UseVisualStyleBackColor = true;
             // 
+            // ExtractPanel
+            // 
+            this.ExtractPanel.AutoScroll = true;
+            this.ExtractPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ExtractPanel.Location = new System.Drawing.Point(12, 8);
+            this.ExtractPanel.Name = "ExtractPanel";
+            this.ExtractPanel.Size = new System.Drawing.Size(480, 515);
+            this.ExtractPanel.TabIndex = 1;
+            // 
             // DetailsTabPage
             // 
+            this.DetailsTabPage.Controls.Add(this.DetailsPanel);
             this.DetailsTabPage.Location = new System.Drawing.Point(4, 24);
             this.DetailsTabPage.Name = "DetailsTabPage";
-            this.DetailsTabPage.Padding = new System.Windows.Forms.Padding(12);
+            this.DetailsTabPage.Padding = new System.Windows.Forms.Padding(12, 8, 12, 8);
             this.DetailsTabPage.Size = new System.Drawing.Size(504, 531);
             this.DetailsTabPage.TabIndex = 3;
             this.DetailsTabPage.Text = "詳細";
             this.DetailsTabPage.UseVisualStyleBackColor = true;
+            // 
+            // DetailsPanel
+            // 
+            this.DetailsPanel.AutoScroll = true;
+            this.DetailsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DetailsPanel.Location = new System.Drawing.Point(12, 8);
+            this.DetailsPanel.Name = "DetailsPanel";
+            this.DetailsPanel.Size = new System.Drawing.Size(480, 515);
+            this.DetailsPanel.TabIndex = 2;
             // 
             // VersionTabPage
             // 
@@ -731,14 +548,11 @@
             this.ContextPanel.ResumeLayout(false);
             this.ContextPanel.PerformLayout();
             this.ContextButtonsPanel.ResumeLayout(false);
-            this.ContextMailPanel.ResumeLayout(false);
-            this.ContextMailPanel.PerformLayout();
-            this.ContextExtractPanel.ResumeLayout(false);
-            this.ContextExtractPanel.PerformLayout();
-            this.ContextArchivePanel.ResumeLayout(false);
-            this.ContextArchivePanel.PerformLayout();
             this.DesktopGroupBox.ResumeLayout(false);
             this.DesktopPanel.ResumeLayout(false);
+            this.ArchiveTabPage.ResumeLayout(false);
+            this.ExtractTabPage.ResumeLayout(false);
+            this.DetailsTabPage.ResumeLayout(false);
             this.ButtonsPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -769,24 +583,6 @@
         private System.Windows.Forms.CheckBox ContextExtractCheckBox;
         private System.Windows.Forms.CheckBox ContextArchiveCheckBox;
         private System.Windows.Forms.FlowLayoutPanel ContextArchivePanel;
-        private System.Windows.Forms.CheckBox checkBox28;
-        private System.Windows.Forms.CheckBox checkBox29;
-        private System.Windows.Forms.CheckBox checkBox30;
-        private System.Windows.Forms.CheckBox checkBox31;
-        private System.Windows.Forms.CheckBox checkBox32;
-        private System.Windows.Forms.CheckBox checkBox33;
-        private System.Windows.Forms.CheckBox checkBox34;
-        private System.Windows.Forms.CheckBox checkBox24;
-        private System.Windows.Forms.CheckBox checkBox25;
-        private System.Windows.Forms.CheckBox checkBox26;
-        private System.Windows.Forms.CheckBox checkBox27;
-        private System.Windows.Forms.CheckBox ContextArchiveZipCheckBox;
-        private System.Windows.Forms.CheckBox checkBox18;
-        private System.Windows.Forms.CheckBox checkBox19;
-        private System.Windows.Forms.CheckBox checkBox20;
-        private System.Windows.Forms.CheckBox checkBox21;
-        private System.Windows.Forms.CheckBox checkBox22;
-        private System.Windows.Forms.CheckBox checkBox23;
         private System.Windows.Forms.FlowLayoutPanel ContextButtonsPanel;
         private System.Windows.Forms.Button ContextResetButton;
         private System.Windows.Forms.Button ContextCustomizeButton;
@@ -800,6 +596,9 @@
         private System.Windows.Forms.Button ApplyButton;
         private System.Windows.Forms.Button ExitButton;
         private System.Windows.Forms.Button ExecuteButton;
+        private System.Windows.Forms.FlowLayoutPanel ArchivePanel;
+        private System.Windows.Forms.FlowLayoutPanel ExtractPanel;
+        private System.Windows.Forms.FlowLayoutPanel DetailsPanel;
     }
 }
 

@@ -121,6 +121,39 @@
   <data name="Logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Logo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="MenuBZip2" xml:space="preserve">
+    <value>BZip2</value>
+  </data>
+  <data name="MenuDesktop" xml:space="preserve">
+    <value>デスクトップに解凍</value>
+  </data>
+  <data name="MenuDetail" xml:space="preserve">
+    <value>詳細設定</value>
+  </data>
+  <data name="MenuGZip" xml:space="preserve">
+    <value>GZip</value>
+  </data>
+  <data name="MenuHere" xml:space="preserve">
+    <value>ここに解凍</value>
+  </data>
+  <data name="MenuMyDocuments" xml:space="preserve">
+    <value>マイドキュメントに解凍</value>
+  </data>
+  <data name="MenuRuntime" xml:space="preserve">
+    <value>場所を指定して解凍</value>
+  </data>
+  <data name="MenuSevenZip" xml:space="preserve">
+    <value>7-Zip</value>
+  </data>
+  <data name="MenuSfx" xml:space="preserve">
+    <value>自己解凍形式</value>
+  </data>
+  <data name="MenuZip" xml:space="preserve">
+    <value>Zip</value>
+  </data>
+  <data name="MenuZipPassword" xml:space="preserve">
+    <value>Zip（パスワード）</value>
+  </data>
   <data name="WebPage" xml:space="preserve">
     <value>http://www.cube-soft.jp/</value>
   </data>

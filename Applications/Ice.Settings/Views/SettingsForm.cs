@@ -19,6 +19,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using Cube.FileSystem.SevenZip;
+using Cube.FileSystem.Ice;
 
 namespace Cube.FileSystem.App.Ice.Settings
 {
@@ -105,6 +106,8 @@ namespace Cube.FileSystem.App.Ice.Settings
             AssociateClearButton.Click += (s, e) => ResetAssociate(false);
 
             // ContextMenu
+            InitializeContext();
+
             ContextArchiveCheckBox.CheckedChanged += (s, e)
                 => ContextArchivePanel.Enabled = ContextArchiveCheckBox.Checked;
             ContextExtractCheckBox.CheckedChanged += (s, e)
@@ -130,6 +133,22 @@ namespace Cube.FileSystem.App.Ice.Settings
             SettingsPanel.ApplyButton  = ApplyButton;
 
             base.OnLoad(ev);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OnShown
+        ///
+        /// <summary>
+        /// 表示時に実行されます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected override void OnShown(EventArgs e)
+        {
+            var area = Screen.FromControl(this).WorkingArea;
+            if (Height > area.Height) Size = new Size(MaximumSize.Width, area.Height);
+            base.OnShown(e);
         }
 
         /* ----------------------------------------------------------------- */
@@ -182,6 +201,53 @@ namespace Cube.FileSystem.App.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
+        /// InitializeContext
+        /// 
+        /// <summary>
+        /// コンテキストメニューの項目を初期化します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void InitializeContext()
+        {
+            var index = 0;
+
+            ContextArchiveCheckBox.Tag = ContextType.Archive;
+            ContextArchivePanel.Controls.AddRange(new[]
+            {
+                Create(ContextType.ArchiveZip,         Properties.Resources.MenuZip,         index++),
+                Create(ContextType.ArchiveZipPassword, Properties.Resources.MenuZipPassword, index++),
+                Create(ContextType.ArchiveSevenZip,    Properties.Resources.MenuSevenZip,    index++),
+                Create(ContextType.ArchiveBZip2,       Properties.Resources.MenuBZip2,       index++),
+                Create(ContextType.ArchiveGZip,        Properties.Resources.MenuGZip,        index++),
+                Create(ContextType.ArchiveSfx,         Properties.Resources.MenuSfx,         index++),
+                Create(ContextType.ArchiveDetail,      Properties.Resources.MenuDetail,      index++),
+            });
+
+            ContextExtractCheckBox.Tag = ContextType.Extract;
+            ContextExtractPanel.Controls.AddRange(new[]
+            {
+                Create(ContextType.ExtractSource,      Properties.Resources.MenuHere,        index++),
+                Create(ContextType.ExtractDesktop,     Properties.Resources.MenuDesktop,     index++),
+                Create(ContextType.ExtractMyDocuments, Properties.Resources.MenuMyDocuments, index++),
+                Create(ContextType.ExtractRuntime,     Properties.Resources.MenuRuntime,     index++),
+            });
+
+            ContextMailCheckBox.Tag = ContextType.Mail;
+            ContextMailPanel.Controls.AddRange(new[]
+            {
+                Create(ContextType.MailZip,            Properties.Resources.MenuZip,         index++),
+                Create(ContextType.MailZipPassword,    Properties.Resources.MenuZipPassword, index++),
+                Create(ContextType.MailSevenZip,       Properties.Resources.MenuSevenZip,    index++),
+                Create(ContextType.MailBZip2,          Properties.Resources.MenuBZip2,       index++),
+                Create(ContextType.MailGZip,           Properties.Resources.MenuGZip,        index++),
+                Create(ContextType.MailSfx,            Properties.Resources.MenuSfx,         index++),
+                Create(ContextType.MailDetail,         Properties.Resources.MenuDetail,      index++),
+            });
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// ResetAssociate
         /// 
         /// <summary>
@@ -210,10 +276,29 @@ namespace Cube.FileSystem.App.Ice.Settings
             => new CheckBox
             {
                 AutoSize = false,
-                Size     = new Size(68, 19),
+                Size     = new Size(70, 19),
                 Text     = text,
                 TabIndex = index,
                 Tag      = format,
+            };
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create
+        /// 
+        /// <summary>
+        /// コンテキストメニュー用のチェックボックスを生成します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private CheckBox Create(ContextType menu, string text, int index)
+            => new CheckBox
+            {
+                AutoSize  = true,
+                Text      = text,
+                TabIndex  = index,
+                Tag       = menu,
+                TextAlign = ContentAlignment.MiddleLeft,
             };
 
         #region Fields

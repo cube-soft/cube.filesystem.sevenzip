@@ -71,6 +71,105 @@ namespace Cube.FileSystem.App.Ice.Settings.Properties {
         }
         
         /// <summary>
+        ///   BZip2 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuBZip2 {
+            get {
+                return ResourceManager.GetString("MenuBZip2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   デスクトップに解凍 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuDesktop {
+            get {
+                return ResourceManager.GetString("MenuDesktop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   詳細設定 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuDetail {
+            get {
+                return ResourceManager.GetString("MenuDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   GZip に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuGZip {
+            get {
+                return ResourceManager.GetString("MenuGZip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   ここに解凍 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuHere {
+            get {
+                return ResourceManager.GetString("MenuHere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   マイドキュメントに解凍 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuMyDocuments {
+            get {
+                return ResourceManager.GetString("MenuMyDocuments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   場所を指定して解凍 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuRuntime {
+            get {
+                return ResourceManager.GetString("MenuRuntime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   7-Zip に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuSevenZip {
+            get {
+                return ResourceManager.GetString("MenuSevenZip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   自己解凍形式 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuSfx {
+            get {
+                return ResourceManager.GetString("MenuSfx", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Zip に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuZip {
+            get {
+                return ResourceManager.GetString("MenuZip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Zip（パスワード） に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuZipPassword {
+            get {
+                return ResourceManager.GetString("MenuZipPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   http://www.cube-soft.jp/ に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string WebPage {
