@@ -48,6 +48,10 @@ namespace Cube.FileSystem.App.Ice.Settings
         public SettingsForm()
         {
             InitializeComponent();
+            InitializeAssociate();
+            InitializeContext();
+
+            VersionTabPage.Controls.Add(VersionPanel);
         }
 
         #endregion
@@ -100,20 +104,17 @@ namespace Cube.FileSystem.App.Ice.Settings
         protected override void OnLoad(EventArgs ev)
         {
             // Association
-            InitializeAssociate();
-
-            AssociateAllButton.Click   += (s, e) => ResetAssociate(true);
-            AssociateClearButton.Click += (s, e) => ResetAssociate(false);
+            AssociateAllButton.Click   += (s, e) => Reset(AssociateMenuPanel, true);
+            AssociateClearButton.Click += (s, e) => Reset(AssociateMenuPanel, false);
 
             // ContextMenu
-            InitializeContext();
-
             ContextArchiveCheckBox.CheckedChanged += (s, e)
                 => ContextArchivePanel.Enabled = ContextArchiveCheckBox.Checked;
             ContextExtractCheckBox.CheckedChanged += (s, e)
                 => ContextExtractPanel.Enabled = ContextExtractCheckBox.Checked;
             ContextMailCheckBox.CheckedChanged += (s, e)
                 => ContextMailPanel.Enabled = ContextMailCheckBox.Checked;
+            ContextResetButton.Click += (s, e) => ResetContext();
 
             // Shortcut
             DesktopArchiveCheckBox.CheckedChanged += (s, e)
@@ -124,8 +125,7 @@ namespace Cube.FileSystem.App.Ice.Settings
             VersionPanel.Image       = Properties.Resources.Logo;
             VersionPanel.Uri         = new Uri(Properties.Resources.WebPage);
             VersionPanel.Location    = new Point(40, 40);
-
-            VersionTabPage.Controls.Add(VersionPanel);
+            VersionPanel.Size        = new Size(400, 300);
 
             // Buttons
             SettingsPanel.OKButton     = ExecuteButton;
@@ -248,19 +248,40 @@ namespace Cube.FileSystem.App.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ResetAssociate
+        /// Reset
         /// 
         /// <summary>
-        /// 全ての関連付け用項目を有効または無効状態に再設定します。
+        /// コントロールが保持している CheckBox オブジェクトの
+        /// チェック状態を再設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void ResetAssociate(bool check)
+        private void Reset(Control container, bool check)
         {
-            foreach (var obj in AssociateMenuPanel.Controls)
+            foreach (var control in container.Controls)
             {
-                if (obj is CheckBox control) control.Checked = check;
+                if (control is CheckBox cb) cb.Checked = check;
             }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ResetContext
+        /// 
+        /// <summary>
+        /// コンテキストメニューの設定状態をリセットします。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void ResetContext()
+        {
+            ContextArchiveCheckBox.Checked = true;
+            ContextExtractCheckBox.Checked = true;
+            ContextMailCheckBox.Checked    = false;
+
+            Reset(ContextArchivePanel,  true);
+            Reset(ContextExtractPanel,  true);
+            Reset(ContextMailPanel,    false);
         }
 
         /* ----------------------------------------------------------------- */
