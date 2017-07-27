@@ -26,8 +26,8 @@ after_build:
     - copy /Y ".\7z.*" ".\Tests\bin\x86\Release"
     - copy /Y ".\7z.*" ".\Applications\Ice.Tests\bin\x86\Release"
 test_script:
-    - ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:"nunit3-console.exe" -targetargs:"Cube.FileSystem.Tests.dll" -targetdir:".\Tests\bin\x86\Release" -hideskipped:All -output:"CoverResult1.xml"
-    - ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:"nunit3-console.exe" -targetargs:"Cube.FileSystem.App.Ice.Tests.dll" -targetdir:".\Applications\Ice.Tests\bin\x86\Release" -hideskipped:All -output:"CoverResult2.xml"
+    - ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:"nunit3-console.exe" -targetargs:"Cube.FileSystem.Tests.dll" -targetdir:".\Tests\bin\x86\Release" -hideskipped:All -filter:"+[*]* -[*]*.NativeMethods.*" -output:"CoverResult1.xml"
+    - ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:"nunit3-console.exe" -targetargs:"Cube.FileSystem.App.Ice.Tests.dll" -targetdir:".\Applications\Ice.Tests\bin\x86\Release" -hideskipped:All -filter:"+[*]* -[*]*.NativeMethods.*" -output:"CoverResult2.xml"
 after_test:
     - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
     - pip install codecov
