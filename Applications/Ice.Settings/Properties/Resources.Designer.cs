@@ -69,5 +69,14 @@ namespace Cube.FileSystem.App.Ice.Settings.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   http://www.cube-soft.jp/ に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string WebPage {
+            get {
+                return ResourceManager.GetString("WebPage", resourceCulture);
+            }
+        }
     }
 }

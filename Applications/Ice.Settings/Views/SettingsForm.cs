@@ -47,23 +47,6 @@ namespace Cube.FileSystem.App.Ice.Settings
         public SettingsForm()
         {
             InitializeComponent();
-            InitializeAssociate();
-
-            AssociateAllButton.Click   += (s, e) => ResetAssociate(true);
-            AssociateClearButton.Click += (s, e) => ResetAssociate(false);
-
-            ContextArchiveCheckBox.CheckedChanged += (s, e)
-                => ContextArchivePanel.Enabled = ContextArchiveCheckBox.Checked;
-            ContextExtractCheckBox.CheckedChanged += (s, e)
-                => ContextExtractPanel.Enabled = ContextExtractCheckBox.Checked;
-            ContextMailCheckBox.CheckedChanged += (s, e)
-                => ContextMailPanel.Enabled = ContextMailCheckBox.Checked;
-            DesktopArchiveCheckBox.CheckedChanged += (s, e)
-                => DesktopArchiveComboBox.Enabled = DesktopArchiveCheckBox.Checked;
-
-            SettingsPanel.OKButton     = ExecuteButton;
-            SettingsPanel.CancelButton = ExitButton;
-            SettingsPanel.ApplyButton  = ApplyButton;
         }
 
         #endregion
@@ -103,6 +86,51 @@ namespace Cube.FileSystem.App.Ice.Settings
         #endregion
 
         #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OnLoad
+        ///
+        /// <summary>
+        /// ロード時に実行されます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected override void OnLoad(EventArgs ev)
+        {
+            // Association
+            InitializeAssociate();
+
+            AssociateAllButton.Click   += (s, e) => ResetAssociate(true);
+            AssociateClearButton.Click += (s, e) => ResetAssociate(false);
+
+            // ContextMenu
+            ContextArchiveCheckBox.CheckedChanged += (s, e)
+                => ContextArchivePanel.Enabled = ContextArchiveCheckBox.Checked;
+            ContextExtractCheckBox.CheckedChanged += (s, e)
+                => ContextExtractPanel.Enabled = ContextExtractCheckBox.Checked;
+            ContextMailCheckBox.CheckedChanged += (s, e)
+                => ContextMailPanel.Enabled = ContextMailCheckBox.Checked;
+
+            // Shortcut
+            DesktopArchiveCheckBox.CheckedChanged += (s, e)
+                => DesktopArchiveComboBox.Enabled = DesktopArchiveCheckBox.Checked;
+
+            // Version
+            VersionPanel.Description = string.Empty;
+            VersionPanel.Image       = Properties.Resources.Logo;
+            VersionPanel.Uri         = new Uri(Properties.Resources.WebPage);
+            VersionPanel.Location    = new Point(40, 40);
+
+            VersionTabPage.Controls.Add(VersionPanel);
+
+            // Buttons
+            SettingsPanel.OKButton     = ExecuteButton;
+            SettingsPanel.CancelButton = ExitButton;
+            SettingsPanel.ApplyButton  = ApplyButton;
+
+            base.OnLoad(ev);
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -187,6 +215,10 @@ namespace Cube.FileSystem.App.Ice.Settings
                 TabIndex = index,
                 Tag      = format,
             };
+
+        #region Fields
+        private Cube.Forms.VersionControl VersionPanel = new Cube.Forms.VersionControl();
+        #endregion
 
         #endregion
     }

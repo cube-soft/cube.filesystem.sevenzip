@@ -715,6 +715,8 @@
             this.Location = new System.Drawing.Point(0, 0);
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(570, 700);
+            this.MinimumSize = new System.Drawing.Size(550, 250);
             this.Name = "SettingsForm";
             this.Text = "CubeICE 設定";
             this.RootPanel.ResumeLayout(false);
