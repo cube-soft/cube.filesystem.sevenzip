@@ -62,15 +62,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SettingsForm.cs">
+    <Compile Include="Views\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SettingsForm.Designer.cs">
+    <Compile Include="Views\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="SettingsForm.resx">
+    <EmbeddedResource Include="Views\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -81,6 +81,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="App.manifest" />
     <None Include="Packages.config" />
@@ -99,6 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.ico" />
+    <None Include="Resources\Logo.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\Cube.FileSystem.csproj">
