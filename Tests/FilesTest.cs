@@ -49,7 +49,7 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetTypeName
+        /// GetTypeName_Null
         ///
         /// <summary>
         /// 引数に null を指定した時の挙動を確認します。
@@ -57,7 +57,7 @@ namespace Cube.FileSystem.Tests
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void GetTypeName()
+        public void GetTypeName_Null()
         {
             Assert.That(IO.GetTypeName(string.Empty), Is.Null);
             Assert.That(IO.GetTypeName(default(string)), Is.Null);
@@ -91,6 +91,25 @@ namespace Cube.FileSystem.Tests
             IO.Copy(Example("Sample.txt"), u3);
             var u4 = IO.GetUniqueName(u3); // Not src
             Assert.That(u4, Is.EqualTo(Result($"UniqueTest(3)(2).txt")));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetUniqueName_Null
+        ///
+        /// <summary>
+        /// 引数に null を指定した時の挙動を確認します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void GetUniqueName_Null()
+        {
+            var dummy = default(Operator);
+            var src   = Example("Sample.txt");
+
+            Assert.That(dummy.GetUniqueName(src), Is.Null);
+            Assert.That(dummy.GetUniqueName(IO.Get(src)), Is.Null);
         }
     }
 }
