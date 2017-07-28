@@ -41,6 +41,7 @@
             this.AssociateButtonsPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.AssociateClearButton = new System.Windows.Forms.Button();
             this.AssociateAllButton = new System.Windows.Forms.Button();
+            this.AssociateSettingsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.ContextGroupBox = new System.Windows.Forms.GroupBox();
             this.ContextPanel = new System.Windows.Forms.TableLayoutPanel();
             this.ContextButtonsPanel = new System.Windows.Forms.FlowLayoutPanel();
@@ -113,7 +114,6 @@
             this.ApplyButton = new System.Windows.Forms.Button();
             this.ExitButton = new System.Windows.Forms.Button();
             this.ExecuteButton = new System.Windows.Forms.Button();
-            this.AssociateSettingsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.RootPanel.SuspendLayout();
             this.SettingsPanel.SuspendLayout();
             this.SettingsTabControl.SuspendLayout();
@@ -122,6 +122,7 @@
             this.AssociateGroupBox.SuspendLayout();
             this.AssociatePanel.SuspendLayout();
             this.AssociateButtonsPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.AssociateSettingsBindingSource)).BeginInit();
             this.ContextGroupBox.SuspendLayout();
             this.ContextPanel.SuspendLayout();
             this.ContextButtonsPanel.SuspendLayout();
@@ -152,7 +153,6 @@
             this.OthersPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ToolTipNumericUpDown)).BeginInit();
             this.ButtonsPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.AssociateSettingsBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // RootPanel
@@ -220,7 +220,6 @@
             // AssociateGroupBox
             // 
             this.AssociateGroupBox.Controls.Add(this.AssociatePanel);
-            this.AssociateGroupBox.DataBindings.Add(new System.Windows.Forms.Binding("Tag", this.AssociateSettingsBindingSource, "Value", true));
             this.AssociateGroupBox.Location = new System.Drawing.Point(3, 3);
             this.AssociateGroupBox.Name = "AssociateGroupBox";
             this.AssociateGroupBox.Padding = new System.Windows.Forms.Padding(8, 3, 8, 3);
@@ -282,6 +281,10 @@
             this.AssociateAllButton.TabIndex = 0;
             this.AssociateAllButton.Text = "すべて選択";
             this.AssociateAllButton.UseVisualStyleBackColor = true;
+            // 
+            // AssociateSettingsBindingSource
+            // 
+            this.AssociateSettingsBindingSource.DataSource = typeof(Cube.FileSystem.Ice.AssociateSettings);
             // 
             // ContextGroupBox
             // 
@@ -511,7 +514,6 @@
             // ArchiveSaveGroupBox
             // 
             this.ArchiveSaveGroupBox.Controls.Add(this.ArchiveSavePanel);
-            this.ArchiveSaveGroupBox.DataBindings.Add(new System.Windows.Forms.Binding("Tag", this.ArchiveSettingsBindingSource, "SaveLocation", true));
             this.ArchiveSaveGroupBox.Location = new System.Drawing.Point(3, 3);
             this.ArchiveSaveGroupBox.Name = "ArchiveSaveGroupBox";
             this.ArchiveSaveGroupBox.Padding = new System.Windows.Forms.Padding(8, 3, 8, 3);
@@ -1070,10 +1072,6 @@
             this.ExecuteButton.Text = "OK";
             this.ExecuteButton.UseVisualStyleBackColor = true;
             // 
-            // AssociateSettingsBindingSource
-            // 
-            this.AssociateSettingsBindingSource.DataSource = typeof(Cube.FileSystem.Ice.AssociateSettings);
-            // 
             // SettingsForm
             // 
             this.AcceptButton = this.ExecuteButton;
@@ -1082,6 +1080,7 @@
             this.Controls.Add(this.RootPanel);
             this.Font = new System.Drawing.Font("Meiryo UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(128)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Location = new System.Drawing.Point(0, 0);
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(560, 700);
@@ -1096,6 +1095,7 @@
             this.AssociateGroupBox.ResumeLayout(false);
             this.AssociatePanel.ResumeLayout(false);
             this.AssociateButtonsPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.AssociateSettingsBindingSource)).EndInit();
             this.ContextGroupBox.ResumeLayout(false);
             this.ContextPanel.ResumeLayout(false);
             this.ContextPanel.PerformLayout();
@@ -1133,7 +1133,6 @@
             this.OthersPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ToolTipNumericUpDown)).EndInit();
             this.ButtonsPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.AssociateSettingsBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }

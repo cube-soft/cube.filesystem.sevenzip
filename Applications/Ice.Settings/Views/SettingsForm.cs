@@ -16,6 +16,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using Cube.FileSystem.SevenZip;
@@ -32,7 +33,7 @@ namespace Cube.FileSystem.App.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class SettingsForm : Cube.Forms.FormBase
+    public partial class SettingsForm : Cube.Forms.FormBase, ISettingsView
     {
         #region Constructors
 
@@ -52,6 +53,42 @@ namespace Cube.FileSystem.App.Ice.Settings
             InitializeContext();
 
             VersionTabPage.Controls.Add(VersionPanel);
+        }
+
+        #endregion
+
+        #region Properties
+
+        /* --------------------------------------------------------------------- */
+        ///
+        /// Product
+        /// 
+        /// <summary>
+        /// アプリケーション名を取得または設定します。
+        /// </summary>
+        ///
+        /* --------------------------------------------------------------------- */
+        [Browsable(true)]
+        public string Product
+        {
+            get { return VersionPanel.Product; }
+            set { VersionPanel.Product = value; }
+        }
+
+        /* --------------------------------------------------------------------- */
+        ///
+        /// Version
+        /// 
+        /// <summary>
+        /// バージョン情報を取得または設定します。
+        /// </summary>
+        ///
+        /* --------------------------------------------------------------------- */
+        [Browsable(true)]
+        public string Version
+        {
+            get { return VersionPanel.Version; }
+            set { VersionPanel.Version = value; }
         }
 
         #endregion
@@ -90,6 +127,33 @@ namespace Cube.FileSystem.App.Ice.Settings
 
         #endregion
 
+        #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Bind
+        ///
+        /// <summary>
+        /// オブジェクトを関連付けます。
+        /// </summary>
+        /// 
+        /// <param name="settings">関連付けるオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Bind(Cube.FileSystem.Ice.Settings settigns)
+        {
+            if (settigns == null) return;
+
+            SettingsBindingSource.DataSource          = settigns;
+            AssociateSettingsBindingSource.DataSource = settigns.Associate;
+            ContextSetttingsBindingSource.DataSource  = settigns.Context;
+            ShortcutSettingsBindingSource.DataSource  = settigns.Shortcut;
+            ArchiveSettingsBindingSource.DataSource   = settigns.Archive;
+            ExtractSettingsBindingSource.DataSource   = settigns.Extract;
+        }
+
+        #endregion
+
         #region Implementations
 
         /* ----------------------------------------------------------------- */
@@ -119,6 +183,9 @@ namespace Cube.FileSystem.App.Ice.Settings
             // Shortcut
             ShortcutArchiveCheckBox.CheckedChanged += (s, e)
                 => ShortcutArchiveComboBox.Enabled = ShortcutArchiveCheckBox.Checked;
+            ShortcutArchiveCheckBox.CheckedChanged += WhenShortcutChanged;
+            ShortcutExtractCheckBox.CheckedChanged += WhenShortcutChanged;
+            ShortcutSettingsCheckBox.CheckedChanged += WhenShortcutChanged;
 
             // Archive
             ArchiveOpenDirectoryCheckBox.CheckedChanged += (s, e)
@@ -187,35 +254,35 @@ namespace Cube.FileSystem.App.Ice.Settings
             AssociateMenuPanel.Controls.AddRange(new[]
             {
                 // well-known
-                Create(Format.Zip,      "*.zip",  index++),
-                Create(Format.Lzh,      "*.lzh",  index++),
-                Create(Format.Rar,      "*.rar",  index++),
-                Create(Format.SevenZip, "*.7z",   index++),
-                Create(Format.Iso,      "*.iso",  index++),
-                Create(Format.Tar,      "*.tar",  index++),
-                Create(Format.GZip,     "*.gz",   index++),
-                Create(Format.GZip,     "*.tgz",  index++),
-                Create(Format.BZip2,    "*.bz2",  index++),
-                Create(Format.BZip2,    "*.tbz",  index++),
-                Create(Format.XZ,       "*.xz",   index++),
-                Create(Format.XZ,       "*.txz",  index++),
+                Create(nameof(AssociateSettings.Zip),      "*.zip",  index++),
+                Create(nameof(AssociateSettings.Lzh),      "*.lzh",  index++),
+                Create(nameof(AssociateSettings.Rar),      "*.rar",  index++),
+                Create(nameof(AssociateSettings.SevenZip), "*.7z",   index++),
+                Create(nameof(AssociateSettings.Iso),      "*.iso",  index++),
+                Create(nameof(AssociateSettings.Tar),      "*.tar",  index++),
+                Create(nameof(AssociateSettings.GZ),       "*.gz",   index++),
+                Create(nameof(AssociateSettings.Tgz),      "*.tgz",  index++),
+                Create(nameof(AssociateSettings.BZ2),      "*.bz2",  index++),
+                Create(nameof(AssociateSettings.Tbz),      "*.tbz",  index++),
+                Create(nameof(AssociateSettings.XZ),       "*.xz",   index++),
+                Create(nameof(AssociateSettings.Txz),      "*.txz",  index++),
 
                 // others
-                Create(Format.Arj,      "*.arj",  index++),
-                Create(Format.Cab,      "*.cab",  index++),
-                Create(Format.Chm,      "*.chm",  index++),
-                Create(Format.Cpio,     "*.cpio", index++),
-                Create(Format.Deb,      "*.deb",  index++),
-                Create(Format.Dmg,      "*.dmg",  index++),
-                Create(Format.Flv,      "*.flv",  index++),
-                Create(Format.Zip,      "*.jar",  index++),
-                Create(Format.Rpm,      "*.rpm",  index++),
-                Create(Format.Swf,      "*.swf",  index++),
-                Create(Format.Vhd,      "*.vhd",  index++),
-                Create(Format.Vmdk,     "*.vmdk", index++),
-                Create(Format.Wim,      "*.wim",  index++),
-                Create(Format.Xar,      "*.xar",  index++),
-                Create(Format.Lzw,      "*.z",    index++),
+                Create(nameof(AssociateSettings.Arj),      "*.arj",  index++),
+                Create(nameof(AssociateSettings.Cab),      "*.cab",  index++),
+                Create(nameof(AssociateSettings.Chm),      "*.chm",  index++),
+                Create(nameof(AssociateSettings.Cpio),     "*.cpio", index++),
+                Create(nameof(AssociateSettings.Deb),      "*.deb",  index++),
+                Create(nameof(AssociateSettings.Dmg),      "*.dmg",  index++),
+                Create(nameof(AssociateSettings.Flv),      "*.flv",  index++),
+                Create(nameof(AssociateSettings.Jar),      "*.jar",  index++),
+                Create(nameof(AssociateSettings.Rpm),      "*.rpm",  index++),
+                Create(nameof(AssociateSettings.Swf),      "*.swf",  index++),
+                Create(nameof(AssociateSettings.Vhd),      "*.vhd",  index++),
+                Create(nameof(AssociateSettings.Vmdk),     "*.vmdk", index++),
+                Create(nameof(AssociateSettings.Wim),      "*.wim",  index++),
+                Create(nameof(AssociateSettings.Xar),      "*.xar",  index++),
+                Create(nameof(AssociateSettings.Z),        "*.z",    index++),
             });
         }
 
@@ -306,6 +373,27 @@ namespace Cube.FileSystem.App.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Update
+        /// 
+        /// <summary>
+        /// GroupBox のデータを更新します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Update(CheckBox src, GroupBox dest)
+        {
+            if (src == null || dest == null) return;
+            if (src.Tag is PresetMenu st)
+            {
+                var dt = dest.Tag is PresetMenu ? (PresetMenu)dest.Tag : PresetMenu.None;
+                if (src.Checked) dt |= st;
+                else dt &= ~st;
+                dest.Tag = dt;
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Create
         /// 
         /// <summary>
@@ -313,15 +401,19 @@ namespace Cube.FileSystem.App.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private CheckBox Create(Format format, string text, int index)
-            => new CheckBox
+        private CheckBox Create(string name, string text, int index)
+        {
+            var dest = new CheckBox
             {
                 AutoSize = false,
                 Size     = new Size(70, 19),
                 Text     = text,
                 TabIndex = index,
-                Tag      = format,
             };
+
+            dest.DataBindings.Add(new Binding(nameof(dest.Checked), AssociateSettingsBindingSource, name, true));
+            return dest;
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -333,7 +425,8 @@ namespace Cube.FileSystem.App.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         private CheckBox Create(PresetMenu menu, string text, int index)
-            => new CheckBox
+        {
+            var dest = new CheckBox
             {
                 AutoSize  = true,
                 Text      = text,
@@ -341,6 +434,24 @@ namespace Cube.FileSystem.App.Ice.Settings
                 Tag       = menu,
                 TextAlign = ContentAlignment.MiddleLeft,
             };
+
+            dest.CheckedChanged += (s, e) => Update(s as CheckBox, ContextGroupBox);
+            return dest;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenShortcutChanged
+        /// 
+        /// <summary>
+        /// ショートカットメニュー変更時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenShortcutChanged(object sender, EventArgs e)
+        {
+            Update(sender as CheckBox, ShortcutGroupBox);
+        }
 
         #region Fields
         private Cube.Forms.VersionControl VersionPanel = new Cube.Forms.VersionControl();

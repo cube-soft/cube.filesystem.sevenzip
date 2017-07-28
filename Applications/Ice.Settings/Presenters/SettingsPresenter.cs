@@ -15,54 +15,45 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
-using System;
-using System.Reflection;
-using System.Windows.Forms;
 using Cube.FileSystem.Ice;
 
 namespace Cube.FileSystem.App.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// Program
+    /// SettingsPresenter
     /// 
     /// <summary>
-    /// メインプログラムを表すクラスです。
+    /// 設定画面の Presenter クラスです。
     /// </summary>
-    ///
+    /// 
     /* --------------------------------------------------------------------- */
-    static class Program
+    public class SettingsPresenter
+        : Cube.Forms.PresenterBase<ISettingsView, SettingsFolder>
     {
+        #region Constructors
+
         /* ----------------------------------------------------------------- */
         ///
-        /// Main
+        /// SettingsPresenter
         /// 
         /// <summary>
-        /// アプリケーションのエントリポイントです。
+        /// オブジェクトを初期化します。
         /// </summary>
         /// 
+        /// <param name="view">View オブジェクト</param>
+        /// <param name="model">設定用オブジェクト</param>
+        ///
         /* ----------------------------------------------------------------- */
-        [STAThread]
-        static void Main()
+        public SettingsPresenter(ISettingsView view, SettingsFolder model)
+            : base(view, model)
         {
-            var type = typeof(Program);
-
-            //try
-            {
-                Cube.Log.Operations.Configure();
-                Cube.Log.Operations.ObserveTaskException();
-                Cube.Log.Operations.Info(type, Assembly.GetExecutingAssembly());
-
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-
-                var view     = new SettingsForm();
-                var settings = new SettingsFolder();
-
-                settings.Load();
-                using (var _ = new SettingsPresenter(view, settings)) Application.Run(view);
-            }
-            //catch (Exception err) { Cube.Log.Operations.Error(type, err.ToString()); }
+            View.Product = "CubeICE";
+            View.Version = $"Version {Model.Version.ToString(true)}";
+            View.Load   += (s, e) => View.Bind(Model.Value);
+            View.Apply  += (s, e) => Model.Save();
         }
+
+        #endregion
     }
 }
