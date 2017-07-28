@@ -119,6 +119,7 @@ namespace Cube.FileSystem.Ice
     [Flags]
     public enum PresetMenu
     {
+        None                = 0x0000000,
         Archive             = 0x00000001,
         Extract             = 0x00000002,
         Settings            = 0x00000004,
