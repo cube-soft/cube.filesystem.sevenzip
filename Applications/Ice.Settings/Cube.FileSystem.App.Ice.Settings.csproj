@@ -125,6 +125,12 @@
     </Compile>
     <None Include="App.manifest" />
     <None Include="Packages.config" />
+    <None Include="Properties\DataSources\Cube.FileSystem.Ice.ArchiveSettings.datasource" />
+    <None Include="Properties\DataSources\Cube.FileSystem.Ice.AssociateSettings.datasource" />
+    <None Include="Properties\DataSources\Cube.FileSystem.Ice.ContextSetttings.datasource" />
+    <None Include="Properties\DataSources\Cube.FileSystem.Ice.ExtractSettings.datasource" />
+    <None Include="Properties\DataSources\Cube.FileSystem.Ice.Settings.datasource" />
+    <None Include="Properties\DataSources\Cube.FileSystem.Ice.ShortcutSettings.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

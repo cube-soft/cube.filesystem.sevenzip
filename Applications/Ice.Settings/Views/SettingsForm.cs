@@ -117,8 +117,8 @@ namespace Cube.FileSystem.App.Ice.Settings
             ContextResetButton.Click += (s, e) => ResetContext();
 
             // Shortcut
-            DesktopArchiveCheckBox.CheckedChanged += (s, e)
-                => DesktopArchiveComboBox.Enabled = DesktopArchiveCheckBox.Checked;
+            ShortcutArchiveCheckBox.CheckedChanged += (s, e)
+                => ShortcutArchiveComboBox.Enabled = ShortcutArchiveCheckBox.Checked;
 
             // Archive
             ArchiveOpenDirectoryCheckBox.CheckedChanged += (s, e)
@@ -232,37 +232,37 @@ namespace Cube.FileSystem.App.Ice.Settings
         {
             var index = 0;
 
-            ContextArchiveCheckBox.Tag = ContextType.Archive;
+            ContextArchiveCheckBox.Tag = PresetMenu.Archive;
             ContextArchivePanel.Controls.AddRange(new[]
             {
-                Create(ContextType.ArchiveZip,         Properties.Resources.MenuZip,         index++),
-                Create(ContextType.ArchiveZipPassword, Properties.Resources.MenuZipPassword, index++),
-                Create(ContextType.ArchiveSevenZip,    Properties.Resources.MenuSevenZip,    index++),
-                Create(ContextType.ArchiveBZip2,       Properties.Resources.MenuBZip2,       index++),
-                Create(ContextType.ArchiveGZip,        Properties.Resources.MenuGZip,        index++),
-                Create(ContextType.ArchiveSfx,         Properties.Resources.MenuSfx,         index++),
-                Create(ContextType.ArchiveDetail,      Properties.Resources.MenuDetail,      index++),
+                Create(PresetMenu.ArchiveZip,         Properties.Resources.MenuZip,         index++),
+                Create(PresetMenu.ArchiveZipPassword, Properties.Resources.MenuZipPassword, index++),
+                Create(PresetMenu.ArchiveSevenZip,    Properties.Resources.MenuSevenZip,    index++),
+                Create(PresetMenu.ArchiveBZip2,       Properties.Resources.MenuBZip2,       index++),
+                Create(PresetMenu.ArchiveGZip,        Properties.Resources.MenuGZip,        index++),
+                Create(PresetMenu.ArchiveSfx,         Properties.Resources.MenuSfx,         index++),
+                Create(PresetMenu.ArchiveDetail,      Properties.Resources.MenuDetail,      index++),
             });
 
-            ContextExtractCheckBox.Tag = ContextType.Extract;
+            ContextExtractCheckBox.Tag = PresetMenu.Extract;
             ContextExtractPanel.Controls.AddRange(new[]
             {
-                Create(ContextType.ExtractSource,      Properties.Resources.MenuHere,        index++),
-                Create(ContextType.ExtractDesktop,     Properties.Resources.MenuDesktop,     index++),
-                Create(ContextType.ExtractMyDocuments, Properties.Resources.MenuMyDocuments, index++),
-                Create(ContextType.ExtractRuntime,     Properties.Resources.MenuRuntime,     index++),
+                Create(PresetMenu.ExtractSource,      Properties.Resources.MenuHere,        index++),
+                Create(PresetMenu.ExtractDesktop,     Properties.Resources.MenuDesktop,     index++),
+                Create(PresetMenu.ExtractMyDocuments, Properties.Resources.MenuMyDocuments, index++),
+                Create(PresetMenu.ExtractRuntime,     Properties.Resources.MenuRuntime,     index++),
             });
 
-            ContextMailCheckBox.Tag = ContextType.Mail;
+            ContextMailCheckBox.Tag = PresetMenu.Mail;
             ContextMailPanel.Controls.AddRange(new[]
             {
-                Create(ContextType.MailZip,            Properties.Resources.MenuZip,         index++),
-                Create(ContextType.MailZipPassword,    Properties.Resources.MenuZipPassword, index++),
-                Create(ContextType.MailSevenZip,       Properties.Resources.MenuSevenZip,    index++),
-                Create(ContextType.MailBZip2,          Properties.Resources.MenuBZip2,       index++),
-                Create(ContextType.MailGZip,           Properties.Resources.MenuGZip,        index++),
-                Create(ContextType.MailSfx,            Properties.Resources.MenuSfx,         index++),
-                Create(ContextType.MailDetail,         Properties.Resources.MenuDetail,      index++),
+                Create(PresetMenu.MailZip,            Properties.Resources.MenuZip,         index++),
+                Create(PresetMenu.MailZipPassword,    Properties.Resources.MenuZipPassword, index++),
+                Create(PresetMenu.MailSevenZip,       Properties.Resources.MenuSevenZip,    index++),
+                Create(PresetMenu.MailBZip2,          Properties.Resources.MenuBZip2,       index++),
+                Create(PresetMenu.MailGZip,           Properties.Resources.MenuGZip,        index++),
+                Create(PresetMenu.MailSfx,            Properties.Resources.MenuSfx,         index++),
+                Create(PresetMenu.MailDetail,         Properties.Resources.MenuDetail,      index++),
             });
         }
 
@@ -332,7 +332,7 @@ namespace Cube.FileSystem.App.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private CheckBox Create(ContextType menu, string text, int index)
+        private CheckBox Create(PresetMenu menu, string text, int index)
             => new CheckBox
             {
                 AutoSize  = true,
