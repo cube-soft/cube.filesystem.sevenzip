@@ -51,6 +51,7 @@ namespace Cube.FileSystem.App.Ice.Settings
             InitializeComponent();
             InitializeAssociate();
             InitializeContext();
+            InitializeShortcut();
 
             VersionTabPage.Controls.Add(VersionPanel);
         }
@@ -183,9 +184,6 @@ namespace Cube.FileSystem.App.Ice.Settings
             // Shortcut
             ShortcutArchiveCheckBox.CheckedChanged += (s, e)
                 => ShortcutArchiveComboBox.Enabled = ShortcutArchiveCheckBox.Checked;
-            ShortcutArchiveCheckBox.CheckedChanged += WhenShortcutChanged;
-            ShortcutExtractCheckBox.CheckedChanged += WhenShortcutChanged;
-            ShortcutSettingsCheckBox.CheckedChanged += WhenShortcutChanged;
 
             // Archive
             ArchiveOpenDirectoryCheckBox.CheckedChanged += (s, e)
@@ -335,6 +333,27 @@ namespace Cube.FileSystem.App.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
+        /// InitializeShortcut
+        /// 
+        /// <summary>
+        /// ショートカットメニューの項目を初期化します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void InitializeShortcut()
+        {
+            ShortcutArchiveCheckBox.Tag = PresetMenu.Archive;
+            ShortcutArchiveCheckBox.CheckedChanged += WhenShortcutChanged;
+
+            ShortcutExtractCheckBox.Tag = PresetMenu.Extract;
+            ShortcutExtractCheckBox.CheckedChanged += WhenShortcutChanged;
+
+            ShortcutSettingsCheckBox.Tag = PresetMenu.Settings;
+            ShortcutSettingsCheckBox.CheckedChanged += WhenShortcutChanged;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Reset
         /// 
         /// <summary>
@@ -411,7 +430,11 @@ namespace Cube.FileSystem.App.Ice.Settings
                 TabIndex = index,
             };
 
-            dest.DataBindings.Add(new Binding(nameof(dest.Checked), AssociateSettingsBindingSource, name, true));
+            dest.DataBindings.Add(new Binding(nameof(dest.Checked),
+                AssociateSettingsBindingSource, name, false,
+                DataSourceUpdateMode.OnPropertyChanged
+            ));
+
             return dest;
         }
 

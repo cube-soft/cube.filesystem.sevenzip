@@ -39,7 +39,7 @@ namespace Cube.FileSystem.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public SettingsFolder() : base("CubeSoft", @"CubeICE\v2")
+        public SettingsFolder() : base("CubeSoft", @"CubeICE\v3")
         {
             AutoSave = false;
             Version.Digit = 3;
