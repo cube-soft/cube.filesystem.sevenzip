@@ -173,6 +173,55 @@ namespace Cube.FileSystem.Ice
             set { SetProperty(ref _extract, value); }
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Associate
+        /// 
+        /// <summary>
+        /// ファイルの関連付けに関する設定を取得または設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [DataMember(Name = "Association")]
+        public AssociateSettings Associate
+        {
+            get { return _associate; }
+            set { SetProperty(ref _associate, value); }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Context
+        /// 
+        /// <summary>
+        /// コンテキストメニューに関する設定を取得または設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [DataMember]
+        public ContextSetttings Context
+        {
+            get { return _context; }
+            set { SetProperty(ref _context, value); }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Shortcut
+        /// 
+        /// <summary>
+        /// デスクトップに作成するショートカットメニューに関する設定を
+        /// 取得または設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [DataMember]
+        public ShortcutSettings Shortcut
+        {
+            get { return _shortcut; }
+            set { SetProperty(ref _shortcut, value); }
+        }
+
         #endregion
 
         #region Fields
@@ -184,6 +233,9 @@ namespace Cube.FileSystem.Ice
         private int _toolTipCount = 5;
         private ArchiveSettings _archive = new ArchiveSettings();
         private ExtractSettings _extract = new ExtractSettings();
+        private AssociateSettings _associate = new AssociateSettings();
+        private ContextSetttings _context = new ContextSetttings();
+        private ShortcutSettings _shortcut = new ShortcutSettings();
         #endregion
     }
 }

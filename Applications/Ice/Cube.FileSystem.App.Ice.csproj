@@ -102,6 +102,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Settings\ArchiveSettings.cs" />
+    <Compile Include="Settings\AssociateSettings.cs" />
+    <Compile Include="Settings\ContextSetttings.cs" />
     <Compile Include="Settings\ExtractSettings.cs" />
     <Compile Include="Settings\Parameters.cs" />
     <Compile Include="Presenters\ArchiveFacade.cs" />
@@ -111,6 +113,7 @@
     <Compile Include="Presenters\ProgressFacade.cs" />
     <Compile Include="Models\SuspendableProgress.cs" />
     <Compile Include="Presenters\ProgressPresenter.cs" />
+    <Compile Include="Settings\ShortcutSettings.cs" />
     <Compile Include="Views\DetailsForm.cs">
       <SubType>Form</SubType>
     </Compile>

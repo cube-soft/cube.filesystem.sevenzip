@@ -109,16 +109,15 @@ namespace Cube.FileSystem.Ice
 
     /* --------------------------------------------------------------------- */
     ///
-    /// ContextType
+    /// PresetMenu
     ///
     /// <summary>
-    /// CubeICE で予め定義されているコンテキストメニューの項目を定義した
-    /// 列挙型です。
+    /// 予め定義されているメニュー項目を表した列挙型です。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [Flags]
-    public enum ContextType
+    public enum PresetMenu
     {
         Archive             = 0x00000001,
         Extract             = 0x00000002,
@@ -142,5 +141,7 @@ namespace Cube.FileSystem.Ice
         MailGZip            = 0x00100000,
         MailDetail          = 0x00200000,
         MailSfx             = 0x00400000,
+        DefaultContext      = 0x00007ff3,
+        DefaultDesktop      = 0x00000107,
     }
 }
