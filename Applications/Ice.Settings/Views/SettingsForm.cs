@@ -120,6 +120,26 @@ namespace Cube.FileSystem.App.Ice.Settings
             DesktopArchiveCheckBox.CheckedChanged += (s, e)
                 => DesktopArchiveComboBox.Enabled = DesktopArchiveCheckBox.Checked;
 
+            // Archive
+            ArchiveOpenDirectoryCheckBox.CheckedChanged += (s, e)
+                => ArchiveOpenSmartCheckBox.Enabled = ArchiveOpenDirectoryCheckBox.Checked;
+            ArchiveSaveOthersRadioButton.CheckedChanged += (s, e)
+                => ArchiveSaveTextBox.Enabled =
+                   ArchiveSaveButton.Enabled = ArchiveSaveOthersRadioButton.Checked;
+
+            // Extract
+            ExtractCreateDirectoryCheckBox.CheckedChanged += (s, e)
+                => ExtractCreateSmartCheckBox.Enabled = ExtractCreateDirectoryCheckBox.Checked;
+            ExtractOpenDirectoryCheckBox.CheckedChanged += (s, e)
+                => ExtractOpenSmartCheckBox.Enabled = ExtractOpenDirectoryCheckBox.Checked;
+            ExtractSaveOthersRadioButton.CheckedChanged += (s, e)
+                => ExtractSaveTextBox.Enabled =
+                   ExtractSaveButton.Enabled = ExtractSaveOthersRadioButton.Checked;
+
+            // Details
+            ToolTipCheckBox.CheckedChanged += (s, e)
+                => ToolTipNumericUpDown.Enabled = ToolTipCheckBox.Checked;
+
             // Version
             VersionPanel.Description = string.Empty;
             VersionPanel.Image       = Properties.Resources.Logo;
