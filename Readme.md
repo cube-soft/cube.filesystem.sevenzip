@@ -50,7 +50,7 @@ using (var reader = new ArchiveReader(@"path\to\archive", password))
 }
 ```
 
-## Requirement
+## Requirements
 
 * [7-Zip](http://www.7-zip.org/) ... [cube-soft/7z](https://github.com/cube-soft/7z) is optimized for Japanese encoding.
 * [AlphaFS](http://alphafs.alphaleonis.com/)
