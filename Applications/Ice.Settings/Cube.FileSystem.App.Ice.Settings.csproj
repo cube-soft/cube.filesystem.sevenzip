@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E14092D2-266A-4CC7-B1CE-2ADD0CB8E65B}</ProjectGuid>
+    <ProjectGuid>{42B72A9A-C752-4D99-97D0-D341F1BD2A45}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Cube.FileSystem.App.Ice</RootNamespace>
-    <AssemblyName>cubeice</AssemblyName>
+    <RootNamespace>Cube.FileSystem.App.Ice.Settings</RootNamespace>
+    <AssemblyName>Cube.FileSystem.App.Ice.Settings</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,10 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationManifest>App.manifest</ApplicationManifest>
+    <ApplicationIcon>App.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>App.ico</ApplicationIcon>
+    <ApplicationManifest>App.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -89,83 +89,29 @@
     <Reference Include="log4net">
       <HintPath>..\..\..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Settings\ArchiveSettings.cs" />
-    <Compile Include="Settings\ExtractSettings.cs" />
-    <Compile Include="Settings\Parameters.cs" />
-    <Compile Include="Presenters\ArchiveFacade.cs" />
-    <Compile Include="Settings\ArchiveDetails.cs" />
-    <Compile Include="Models\OverwriteEventArgs.cs" />
-    <Compile Include="Models\Request.cs" />
-    <Compile Include="Presenters\ProgressFacade.cs" />
-    <Compile Include="Models\SuspendableProgress.cs" />
-    <Compile Include="Presenters\ProgressPresenter.cs" />
-    <Compile Include="Views\DetailsForm.cs">
+    <Compile Include="Views\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\DetailsForm.Designer.cs">
-      <DependentUpon>DetailsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\PasswordConfirmForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\PasswordConfirmForm.Designer.cs">
-      <DependentUpon>PasswordConfirmForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Presenters\ArchivePresenter.cs" />
-    <Compile Include="Views\OverwriteForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\OverwriteForm.Designer.cs">
-      <DependentUpon>OverwriteForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\PasswordForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\PasswordForm.Designer.cs">
-      <DependentUpon>PasswordForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Models\EventAggregator.cs" />
-    <Compile Include="Settings\Settings.cs" />
-    <Compile Include="Settings\SettingsFolder.cs" />
-    <Compile Include="Presenters\ExtractFacade.cs" />
-    <Compile Include="Presenters\ExtractPresenter.cs" />
-    <Compile Include="Views\IProgressView.cs" />
-    <Compile Include="Views\ProgressForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\ProgressForm.Designer.cs">
-      <DependentUpon>ProgressForm.cs</DependentUpon>
+    <Compile Include="Views\SettingsForm.Designer.cs">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\ViewDataSource.cs" />
-    <Compile Include="Views\ViewFactory.cs" />
-    <EmbeddedResource Include="Views\DetailsForm.resx">
-      <DependentUpon>DetailsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\OverwriteForm.resx">
-      <DependentUpon>OverwriteForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\PasswordConfirmForm.resx">
-      <DependentUpon>PasswordConfirmForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\PasswordForm.resx">
-      <DependentUpon>PasswordForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\ProgressForm.resx">
-      <DependentUpon>ProgressForm.cs</DependentUpon>
+    <EmbeddedResource Include="Views\SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -177,6 +123,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="App.manifest" />
+    <None Include="Packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -188,19 +136,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App.ico" />
-    <None Include="Resources\Icons\FileAlternate03.ico" />
-    <None Include="Resources\Icons\FileAlternate02.ico" />
-    <None Include="Resources\Icons\FileAlternate01.ico" />
     <None Include="App.config" />
-    <None Include="App.manifest" />
-    <None Include="Packages.config" />
-    <None Include="Resources\Icons\Archive.ico" />
-    <None Include="Resources\Icons\Extract.ico" />
-    <None Include="Resources\Icons\File.ico" />
-    <None Include="Resources\Icons\FileOld.ico" />
-    <None Include="Resources\Images\HeaderExtract.png" />
-    <None Include="Resources\Images\HeaderArchive.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App.ico" />
+    <None Include="Resources\Logo.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\Cube.FileSystem.csproj">
@@ -210,6 +150,10 @@
     <ProjectReference Include="..\..\Libraries\SevenZip\Cube.FileSystem.SevenZip.csproj">
       <Project>{74c9f388-360e-4c46-a9a6-e131eab2e49c}</Project>
       <Name>Cube.FileSystem.SevenZip</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ice\Cube.FileSystem.App.Ice.csproj">
+      <Project>{e14092d2-266a-4cc7-b1ce-2add0cb8e65b}</Project>
+      <Name>Cube.FileSystem.App.Ice</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

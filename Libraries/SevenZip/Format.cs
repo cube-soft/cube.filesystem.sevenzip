@@ -84,7 +84,7 @@ namespace Cube.FileSystem.SevenZip
         Chm         = 0xe9, // Microsoft Compiled HTML Help file format.
         Split       = 0xea, // Open split file format.
         Rpm         = 0xeb, // Open Rpm software package format.
-        Deb         = 0xec, // Open Gzip archive format.
+        Deb         = 0xec, // Open Debian software package format.
         Cpio        = 0xed, // Open Debian software package format.
         Tar         = 0xee, // Open Tar archive format.
         GZip        = 0xef, // Open Gzip archive format.

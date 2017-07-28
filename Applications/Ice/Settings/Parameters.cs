@@ -15,7 +15,9 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
-namespace Cube.FileSystem.App.Ice
+using System;
+
+namespace Cube.FileSystem.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
@@ -103,5 +105,42 @@ namespace Cube.FileSystem.App.Ice
         None            = 0,
         Open            = 1,
         OpenNotDesktop  = 2,
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// ContextType
+    ///
+    /// <summary>
+    /// CubeICE で予め定義されているコンテキストメニューの項目を定義した
+    /// 列挙型です。
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    [Flags]
+    public enum ContextType
+    {
+        Archive             = 0x00000001,
+        Extract             = 0x00000002,
+        Settings            = 0x00000004,
+        Mail                = 0x00000008,
+        ExtractSource       = 0x00000010,
+        ExtractDesktop      = 0x00000020,
+        ExtractRuntime      = 0x00000040,
+        ExtractMyDocuments  = 0x00000080,
+        ArchiveZip          = 0x00000100,
+        ArchiveZipPassword  = 0x00000200,
+        ArchiveSevenZip     = 0x00000400,
+        ArchiveBZip2        = 0x00000800,
+        ArchiveGZip         = 0x00001000,
+        ArchiveDetail       = 0x00002000,
+        ArchiveSfx          = 0x00004000,
+        MailZip             = 0x00010000,
+        MailZipPassword     = 0x00020000,
+        MailSevenZip        = 0x00040000,
+        MailBZip2           = 0x00080000,
+        MailGZip            = 0x00100000,
+        MailDetail          = 0x00200000,
+        MailSfx             = 0x00400000,
     }
 }

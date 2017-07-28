@@ -16,6 +16,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System.Threading.Tasks;
+using Cube.FileSystem.Ice;
 using NUnit.Framework;
 
 namespace Cube.FileSystem.App.Ice.Tests

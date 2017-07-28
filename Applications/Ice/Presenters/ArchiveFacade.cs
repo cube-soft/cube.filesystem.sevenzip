@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using System.Linq;
 using Cube.FileSystem.SevenZip;
+using Cube.FileSystem.Ice;
 using Cube.Log;
 
 namespace Cube.FileSystem.App.Ice

@@ -18,6 +18,7 @@
 using System;
 using System.Reflection;
 using System.Windows.Forms;
+using Cube.FileSystem.Ice;
 
 namespace Cube.FileSystem.App.Ice
 {
