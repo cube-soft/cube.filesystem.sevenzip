@@ -154,6 +154,9 @@
   <data name="MenuZipPassword" xml:space="preserve">
     <value>Zip（パスワード）</value>
   </data>
+  <data name="MessageSave" xml:space="preserve">
+    <value>圧縮または解凍したファイルを保存するフォルダを選択して下さい。</value>
+  </data>
   <data name="WebPage" xml:space="preserve">
     <value>http://www.cube-soft.jp/</value>
   </data>

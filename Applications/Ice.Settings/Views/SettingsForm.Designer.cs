@@ -560,7 +560,7 @@
             // 
             // ArchiveSaveTextBox
             // 
-            this.ArchiveSaveTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.ArchiveSettingsBindingSource, "SaveDirectory", true));
+            this.ArchiveSaveTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.ArchiveSettingsBindingSource, "SaveDirectory", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ArchiveSaveTextBox.Location = new System.Drawing.Point(15, 28);
             this.ArchiveSaveTextBox.Margin = new System.Windows.Forms.Padding(15, 3, 3, 3);
             this.ArchiveSaveTextBox.Name = "ArchiveSaveTextBox";
@@ -739,7 +739,7 @@
             // 
             // ExtractSaveTextBox
             // 
-            this.ExtractSaveTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.ExtractSettingsBindingSource, "SaveDirectory", true));
+            this.ExtractSaveTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.ExtractSettingsBindingSource, "SaveDirectory", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ExtractSaveTextBox.Location = new System.Drawing.Point(15, 28);
             this.ExtractSaveTextBox.Margin = new System.Windows.Forms.Padding(15, 3, 3, 3);
             this.ExtractSaveTextBox.Name = "ExtractSaveTextBox";

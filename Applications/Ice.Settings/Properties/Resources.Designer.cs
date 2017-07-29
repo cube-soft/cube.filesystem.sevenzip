@@ -170,6 +170,15 @@ namespace Cube.FileSystem.App.Ice.Settings.Properties {
         }
         
         /// <summary>
+        ///   圧縮または解凍したファイルを保存するフォルダを選択して下さい。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MessageSave {
+            get {
+                return ResourceManager.GetString("MessageSave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   http://www.cube-soft.jp/ に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string WebPage {

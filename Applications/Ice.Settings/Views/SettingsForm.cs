@@ -108,10 +108,12 @@ namespace Cube.FileSystem.App.Ice.Settings
             AssociateClearButton.Click += (s, e) => Reset(AssociateMenuPanel, false);
 
             // Archive
+            ArchiveSaveButton.Click += (s, e) => Browse(ArchiveSaveTextBox);
             ArchiveSaveOthersRadioButton.CheckedChanged += (s, e)
                 => Enable(s, ArchiveSaveTextBox, ArchiveSaveButton);
 
             // Extract
+            ExtractSaveButton.Click += (s, e) => Browse(ExtractSaveTextBox);
             ExtractSaveOthersRadioButton.CheckedChanged += (s, e)
                 => Enable(s, ExtractSaveTextBox, ExtractSaveButton);
 
@@ -244,6 +246,28 @@ namespace Cube.FileSystem.App.Ice.Settings
             ));
 
             return dest;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Browse
+        ///
+        /// <summary>
+        /// 保存ディレクトリを選択するためのダイアログを表示します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Browse(TextBox dest)
+        {
+            var dialog = new FolderBrowserDialog
+            {
+                Description         = Properties.Resources.MessageSave,
+                SelectedPath        = dest.Text,
+                ShowNewFolderButton = true,
+            };
+
+            if (dialog.ShowDialog() == DialogResult.Cancel) return;
+            dest.Text = dialog.SelectedPath;
         }
 
         #region Initialize
