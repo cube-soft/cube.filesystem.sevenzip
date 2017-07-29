@@ -104,37 +104,25 @@ namespace Cube.FileSystem.App.Ice.Settings
             AssociateClearButton.Click += (s, e) => Reset(AssociateMenuPanel, false);
 
             // ContextMenu
-            ContextArchiveCheckBox.CheckedChanged += (s, e)
-                => ContextArchivePanel.Enabled = ContextArchiveCheckBox.Checked;
-            ContextExtractCheckBox.CheckedChanged += (s, e)
-                => ContextExtractPanel.Enabled = ContextExtractCheckBox.Checked;
-            ContextMailCheckBox.CheckedChanged += (s, e)
-                => ContextMailPanel.Enabled = ContextMailCheckBox.Checked;
-            ContextResetButton.Click += (s, e) => ResetContext();
+            ContextArchiveCheckBox.CheckedChanged += (s, e) => UpdateContext();
+            ContextExtractCheckBox.CheckedChanged += (s, e) => UpdateContext();
+            ContextMailCheckBox.CheckedChanged    += (s, e) => UpdateContext();
+            ContextResetButton.Click              += (s, e) => ResetContext();
 
             // Shortcut
-            ShortcutArchiveCheckBox.CheckedChanged += (s, e)
-                => ShortcutArchiveComboBox.Enabled = ShortcutArchiveCheckBox.Checked;
+            ShortcutArchiveCheckBox.CheckedChanged += (s, e) => UpdateShortcut();
 
             // Archive
-            ArchiveOpenDirectoryCheckBox.CheckedChanged += (s, e)
-                => ArchiveOpenSmartCheckBox.Enabled = ArchiveOpenDirectoryCheckBox.Checked;
-            ArchiveSaveOthersRadioButton.CheckedChanged += (s, e)
-                => ArchiveSaveTextBox.Enabled =
-                   ArchiveSaveButton.Enabled = ArchiveSaveOthersRadioButton.Checked;
+            ArchiveOpenDirectoryCheckBox.CheckedChanged += (s, e) => UpdateArchive();
+            ArchiveSaveOthersRadioButton.CheckedChanged += (s, e) => UpdateArchive();
 
             // Extract
-            ExtractCreateDirectoryCheckBox.CheckedChanged += (s, e)
-                => ExtractCreateSmartCheckBox.Enabled = ExtractCreateDirectoryCheckBox.Checked;
-            ExtractOpenDirectoryCheckBox.CheckedChanged += (s, e)
-                => ExtractOpenSmartCheckBox.Enabled = ExtractOpenDirectoryCheckBox.Checked;
-            ExtractSaveOthersRadioButton.CheckedChanged += (s, e)
-                => ExtractSaveTextBox.Enabled =
-                   ExtractSaveButton.Enabled = ExtractSaveOthersRadioButton.Checked;
+            ExtractCreateDirectoryCheckBox.CheckedChanged += (s, e) => UpdateExtract();
+            ExtractOpenDirectoryCheckBox.CheckedChanged   += (s, e) => UpdateExtract();
+            ExtractSaveOthersRadioButton.CheckedChanged   += (s, e) => UpdateExtract();
 
             // Details
-            ToolTipCheckBox.CheckedChanged += (s, e)
-                => ToolTipNumericUpDown.Enabled = ToolTipCheckBox.Checked;
+            ToolTipCheckBox.CheckedChanged += (s, e) => UpdateDetails();
 
             // Version
             VersionPanel.Description = string.Empty;
@@ -284,6 +272,87 @@ namespace Cube.FileSystem.App.Ice.Settings
                 Create(Properties.Resources.MenuSfx,         PresetMenu.ArchiveSfx),
                 Create(Properties.Resources.MenuDetail,      PresetMenu.ArchiveDetail),
             };
+        }
+
+        #endregion
+
+        #region Update
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// UpdateContext
+        ///
+        /// <summary>
+        /// コンテキストメニューを更新します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void UpdateContext()
+        {
+            ContextArchivePanel.Enabled = ContextArchiveCheckBox.Checked;
+            ContextExtractPanel.Enabled = ContextExtractCheckBox.Checked;
+            ContextMailPanel.Enabled    = ContextMailCheckBox.Checked;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// UpdateShortcut
+        ///
+        /// <summary>
+        /// ショートカットメニューを更新します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void UpdateShortcut()
+        {
+            ShortcutArchiveComboBox.Enabled = ShortcutArchiveCheckBox.Checked;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// UpdateArchive
+        ///
+        /// <summary>
+        /// 圧縮メニューを更新します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void UpdateArchive()
+        {
+            ArchiveOpenSmartCheckBox.Enabled = ArchiveOpenDirectoryCheckBox.Checked;
+            ArchiveSaveTextBox.Enabled       =
+            ArchiveSaveButton.Enabled        = ArchiveSaveOthersRadioButton.Checked;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// UpdateExtract
+        ///
+        /// <summary>
+        /// 解凍メニューを更新します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void UpdateExtract()
+        {
+            ExtractCreateSmartCheckBox.Enabled = ExtractCreateDirectoryCheckBox.Checked;
+            ExtractOpenSmartCheckBox.Enabled   = ExtractOpenDirectoryCheckBox.Checked;
+            ExtractSaveTextBox.Enabled         =
+            ExtractSaveButton.Enabled          = ExtractSaveOthersRadioButton.Checked;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// UpdateDetails
+        ///
+        /// <summary>
+        /// 詳細メニューを更新します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void UpdateDetails()
+        {
+            ToolTipNumericUpDown.Enabled = ToolTipCheckBox.Checked;
         }
 
         #endregion
