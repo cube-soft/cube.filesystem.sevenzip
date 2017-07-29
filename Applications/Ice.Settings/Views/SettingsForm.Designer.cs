@@ -47,6 +47,7 @@
             this.ContextResetButton = new System.Windows.Forms.Button();
             this.ContextCustomizeButton = new System.Windows.Forms.Button();
             this.ContextMailPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.ContextSettingsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.ContextExtractPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.ContextMailCheckBox = new System.Windows.Forms.CheckBox();
             this.ContextExtractCheckBox = new System.Windows.Forms.CheckBox();
@@ -112,7 +113,6 @@
             this.ApplyButton = new System.Windows.Forms.Button();
             this.ExitButton = new System.Windows.Forms.Button();
             this.ExecuteButton = new System.Windows.Forms.Button();
-            this.ContextSettingsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.AssociateSettingsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.RootPanel.SuspendLayout();
             this.SettingsPanel.SuspendLayout();
@@ -125,6 +125,7 @@
             this.ContextGroupBox.SuspendLayout();
             this.ContextPanel.SuspendLayout();
             this.ContextButtonsPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ContextSettingsBindingSource)).BeginInit();
             this.ShortcutGroupBox.SuspendLayout();
             this.ShortcutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ShortcutSettingsBindingSource)).BeginInit();
@@ -151,7 +152,6 @@
             this.OthersPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ToolTipNumericUpDown)).BeginInit();
             this.ButtonsPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ContextSettingsBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.AssociateSettingsBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -350,6 +350,7 @@
             // 
             // ContextMailPanel
             // 
+            this.ContextMailPanel.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", this.ContextSettingsBindingSource, "Mail", true, System.Windows.Forms.DataSourceUpdateMode.Never));
             this.ContextMailPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ContextMailPanel.Enabled = false;
             this.ContextMailPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
@@ -359,8 +360,13 @@
             this.ContextMailPanel.Size = new System.Drawing.Size(144, 178);
             this.ContextMailPanel.TabIndex = 5;
             // 
+            // ContextSettingsBindingSource
+            // 
+            this.ContextSettingsBindingSource.DataSource = typeof(Cube.FileSystem.App.Ice.Settings.ContextSettingsViewModel);
+            // 
             // ContextExtractPanel
             // 
+            this.ContextExtractPanel.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", this.ContextSettingsBindingSource, "Extract", true, System.Windows.Forms.DataSourceUpdateMode.Never));
             this.ContextExtractPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ContextExtractPanel.Enabled = false;
             this.ContextExtractPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
@@ -373,7 +379,7 @@
             // ContextMailCheckBox
             // 
             this.ContextMailCheckBox.AutoSize = true;
-            this.ContextMailCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ContextSettingsBindingSource, "Mail", true));
+            this.ContextMailCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ContextSettingsBindingSource, "Mail", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ContextMailCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ContextMailCheckBox.Location = new System.Drawing.Point(305, 3);
             this.ContextMailCheckBox.Name = "ContextMailCheckBox";
@@ -385,7 +391,7 @@
             // ContextExtractCheckBox
             // 
             this.ContextExtractCheckBox.AutoSize = true;
-            this.ContextExtractCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ContextSettingsBindingSource, "Extract", true));
+            this.ContextExtractCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ContextSettingsBindingSource, "Extract", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ContextExtractCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ContextExtractCheckBox.Location = new System.Drawing.Point(154, 3);
             this.ContextExtractCheckBox.Name = "ContextExtractCheckBox";
@@ -397,7 +403,7 @@
             // ContextArchiveCheckBox
             // 
             this.ContextArchiveCheckBox.AutoSize = true;
-            this.ContextArchiveCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ContextSettingsBindingSource, "Archive", true));
+            this.ContextArchiveCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ContextSettingsBindingSource, "Archive", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ContextArchiveCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ContextArchiveCheckBox.Location = new System.Drawing.Point(3, 3);
             this.ContextArchiveCheckBox.Name = "ContextArchiveCheckBox";
@@ -408,6 +414,7 @@
             // 
             // ContextArchivePanel
             // 
+            this.ContextArchivePanel.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", this.ContextSettingsBindingSource, "Archive", true, System.Windows.Forms.DataSourceUpdateMode.Never));
             this.ContextArchivePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ContextArchivePanel.Enabled = false;
             this.ContextArchivePanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
@@ -442,7 +449,7 @@
             // 
             // ShortcutArchiveCheckBox
             // 
-            this.ShortcutArchiveCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ShortcutSettingsBindingSource, "Archive", true));
+            this.ShortcutArchiveCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ShortcutSettingsBindingSource, "Archive", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ShortcutArchiveCheckBox.Location = new System.Drawing.Point(3, 3);
             this.ShortcutArchiveCheckBox.Name = "ShortcutArchiveCheckBox";
             this.ShortcutArchiveCheckBox.Size = new System.Drawing.Size(55, 23);
@@ -457,6 +464,7 @@
             // ShortcutArchiveComboBox
             // 
             this.ShortcutArchiveComboBox.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.ShortcutSettingsBindingSource, "ArchiveOption", true));
+            this.ShortcutArchiveComboBox.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", this.ShortcutSettingsBindingSource, "Archive", true, System.Windows.Forms.DataSourceUpdateMode.Never));
             this.ShortcutArchiveComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ShortcutArchiveComboBox.Enabled = false;
             this.ShortcutArchiveComboBox.FormattingEnabled = true;
@@ -468,7 +476,7 @@
             // 
             // ShortcutExtractCheckBox
             // 
-            this.ShortcutExtractCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ShortcutSettingsBindingSource, "Extract", true));
+            this.ShortcutExtractCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ShortcutSettingsBindingSource, "Extract", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ShortcutExtractCheckBox.Location = new System.Drawing.Point(227, 3);
             this.ShortcutExtractCheckBox.Name = "ShortcutExtractCheckBox";
             this.ShortcutExtractCheckBox.Size = new System.Drawing.Size(80, 23);
@@ -478,7 +486,7 @@
             // 
             // ShortcutSettingsCheckBox
             // 
-            this.ShortcutSettingsCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ShortcutSettingsBindingSource, "Settings", true));
+            this.ShortcutSettingsCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ShortcutSettingsBindingSource, "Settings", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ShortcutSettingsCheckBox.Location = new System.Drawing.Point(313, 3);
             this.ShortcutSettingsCheckBox.Name = "ShortcutSettingsCheckBox";
             this.ShortcutSettingsCheckBox.Size = new System.Drawing.Size(80, 23);
@@ -621,7 +629,7 @@
             // ArchiveFilterCheckBox
             // 
             this.ArchiveFilterCheckBox.AutoSize = true;
-            this.ArchiveFilterCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ArchiveSettingsBindingSource, "Filtering", true));
+            this.ArchiveFilterCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ArchiveSettingsBindingSource, "Filtering", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ArchiveFilterCheckBox.Location = new System.Drawing.Point(3, 3);
             this.ArchiveFilterCheckBox.Name = "ArchiveFilterCheckBox";
             this.ArchiveFilterCheckBox.Size = new System.Drawing.Size(307, 19);
@@ -632,7 +640,7 @@
             // ArchiveOpenDirectoryCheckBox
             // 
             this.ArchiveOpenDirectoryCheckBox.AutoSize = true;
-            this.ArchiveOpenDirectoryCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ArchiveSettingsBindingSource, "Open", true));
+            this.ArchiveOpenDirectoryCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ArchiveSettingsBindingSource, "Open", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ArchiveOpenDirectoryCheckBox.Location = new System.Drawing.Point(3, 28);
             this.ArchiveOpenDirectoryCheckBox.Name = "ArchiveOpenDirectoryCheckBox";
             this.ArchiveOpenDirectoryCheckBox.Size = new System.Drawing.Size(169, 19);
@@ -643,7 +651,8 @@
             // ArchiveOpenSmartCheckBox
             // 
             this.ArchiveOpenSmartCheckBox.AutoSize = true;
-            this.ArchiveOpenSmartCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ArchiveSettingsBindingSource, "SkipDesktop", true));
+            this.ArchiveOpenSmartCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ArchiveSettingsBindingSource, "SkipDesktop", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.ArchiveOpenSmartCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", this.ArchiveSettingsBindingSource, "Open", true, System.Windows.Forms.DataSourceUpdateMode.Never));
             this.ArchiveOpenSmartCheckBox.Enabled = false;
             this.ArchiveOpenSmartCheckBox.Location = new System.Drawing.Point(15, 53);
             this.ArchiveOpenSmartCheckBox.Margin = new System.Windows.Forms.Padding(15, 3, 3, 3);
@@ -656,7 +665,7 @@
             // ArchiveDeleteOnMainCheckBox
             // 
             this.ArchiveDeleteOnMainCheckBox.AutoSize = true;
-            this.ArchiveDeleteOnMainCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ArchiveSettingsBindingSource, "DeleteOnMail", true));
+            this.ArchiveDeleteOnMainCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ArchiveSettingsBindingSource, "DeleteOnMail", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ArchiveDeleteOnMainCheckBox.Location = new System.Drawing.Point(3, 78);
             this.ArchiveDeleteOnMainCheckBox.Name = "ArchiveDeleteOnMainCheckBox";
             this.ArchiveDeleteOnMainCheckBox.Size = new System.Drawing.Size(227, 19);
@@ -801,7 +810,7 @@
             // ExtractCreateDirectoryCheckBox
             // 
             this.ExtractCreateDirectoryCheckBox.AutoSize = true;
-            this.ExtractCreateDirectoryCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ExtractSettingsBindingSource, "CreateDirectory", true));
+            this.ExtractCreateDirectoryCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ExtractSettingsBindingSource, "CreateDirectory", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ExtractCreateDirectoryCheckBox.Location = new System.Drawing.Point(3, 3);
             this.ExtractCreateDirectoryCheckBox.Name = "ExtractCreateDirectoryCheckBox";
             this.ExtractCreateDirectoryCheckBox.Size = new System.Drawing.Size(158, 19);
@@ -812,7 +821,8 @@
             // ExtractCreateSmartCheckBox
             // 
             this.ExtractCreateSmartCheckBox.AutoSize = true;
-            this.ExtractCreateSmartCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ExtractSettingsBindingSource, "SkipSingleDirectory", true));
+            this.ExtractCreateSmartCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ExtractSettingsBindingSource, "SkipSingleDirectory", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.ExtractCreateSmartCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", this.ExtractSettingsBindingSource, "CreateDirectory", true, System.Windows.Forms.DataSourceUpdateMode.Never));
             this.ExtractCreateSmartCheckBox.Enabled = false;
             this.ExtractCreateSmartCheckBox.Location = new System.Drawing.Point(15, 28);
             this.ExtractCreateSmartCheckBox.Margin = new System.Windows.Forms.Padding(15, 3, 3, 3);
@@ -825,7 +835,7 @@
             // ExtractFilterCheckBox
             // 
             this.ExtractFilterCheckBox.AutoSize = true;
-            this.ExtractFilterCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ExtractSettingsBindingSource, "Filtering", true));
+            this.ExtractFilterCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ExtractSettingsBindingSource, "Filtering", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ExtractFilterCheckBox.Location = new System.Drawing.Point(3, 53);
             this.ExtractFilterCheckBox.Name = "ExtractFilterCheckBox";
             this.ExtractFilterCheckBox.Size = new System.Drawing.Size(307, 19);
@@ -836,7 +846,7 @@
             // ExtractOpenDirectoryCheckBox
             // 
             this.ExtractOpenDirectoryCheckBox.AutoSize = true;
-            this.ExtractOpenDirectoryCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ExtractSettingsBindingSource, "Open", true));
+            this.ExtractOpenDirectoryCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ExtractSettingsBindingSource, "Open", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ExtractOpenDirectoryCheckBox.Location = new System.Drawing.Point(3, 78);
             this.ExtractOpenDirectoryCheckBox.Name = "ExtractOpenDirectoryCheckBox";
             this.ExtractOpenDirectoryCheckBox.Size = new System.Drawing.Size(169, 19);
@@ -847,7 +857,8 @@
             // ExtractOpenSmartCheckBox
             // 
             this.ExtractOpenSmartCheckBox.AutoSize = true;
-            this.ExtractOpenSmartCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ExtractSettingsBindingSource, "SkipDesktop", true));
+            this.ExtractOpenSmartCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ExtractSettingsBindingSource, "SkipDesktop", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.ExtractOpenSmartCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", this.ExtractSettingsBindingSource, "Open", true, System.Windows.Forms.DataSourceUpdateMode.Never));
             this.ExtractOpenSmartCheckBox.Enabled = false;
             this.ExtractOpenSmartCheckBox.Location = new System.Drawing.Point(15, 103);
             this.ExtractOpenSmartCheckBox.Margin = new System.Windows.Forms.Padding(15, 3, 3, 3);
@@ -860,7 +871,7 @@
             // ExtractDeleteSourceCheckBox
             // 
             this.ExtractDeleteSourceCheckBox.AutoSize = true;
-            this.ExtractDeleteSourceCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ExtractSettingsBindingSource, "DeleteSource", true));
+            this.ExtractDeleteSourceCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ExtractSettingsBindingSource, "DeleteSource", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ExtractDeleteSourceCheckBox.Location = new System.Drawing.Point(3, 128);
             this.ExtractDeleteSourceCheckBox.Name = "ExtractDeleteSourceCheckBox";
             this.ExtractDeleteSourceCheckBox.Size = new System.Drawing.Size(179, 19);
@@ -964,7 +975,7 @@
             // ToolTipCheckBox
             // 
             this.ToolTipCheckBox.AutoSize = true;
-            this.ToolTipCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.SettingsBindingSource, "ToolTip", true));
+            this.ToolTipCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.SettingsBindingSource, "ToolTip", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.OthersPanel.SetFlowBreak(this.ToolTipCheckBox, true);
             this.ToolTipCheckBox.Location = new System.Drawing.Point(3, 3);
             this.ToolTipCheckBox.Name = "ToolTipCheckBox";
@@ -986,6 +997,7 @@
             // ToolTipNumericUpDown
             // 
             this.ToolTipNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.SettingsBindingSource, "ToolTipCount", true));
+            this.ToolTipNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", this.SettingsBindingSource, "ToolTip", true, System.Windows.Forms.DataSourceUpdateMode.Never));
             this.ToolTipNumericUpDown.Enabled = false;
             this.OthersPanel.SetFlowBreak(this.ToolTipNumericUpDown, true);
             this.ToolTipNumericUpDown.Location = new System.Drawing.Point(119, 26);
@@ -1002,7 +1014,7 @@
             // ErrorReportCheckBox
             // 
             this.ErrorReportCheckBox.AutoSize = true;
-            this.ErrorReportCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.SettingsBindingSource, "ErrorReport", true));
+            this.ErrorReportCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.SettingsBindingSource, "ErrorReport", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.OthersPanel.SetFlowBreak(this.ErrorReportCheckBox, true);
             this.ErrorReportCheckBox.Location = new System.Drawing.Point(3, 55);
             this.ErrorReportCheckBox.Name = "ErrorReportCheckBox";
@@ -1014,7 +1026,7 @@
             // UpdateCheckBox
             // 
             this.UpdateCheckBox.AutoSize = true;
-            this.UpdateCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.SettingsBindingSource, "CheckUpdate", true));
+            this.UpdateCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.SettingsBindingSource, "CheckUpdate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.OthersPanel.SetFlowBreak(this.UpdateCheckBox, true);
             this.UpdateCheckBox.Location = new System.Drawing.Point(3, 80);
             this.UpdateCheckBox.Name = "UpdateCheckBox";
@@ -1077,17 +1089,12 @@
             this.ExecuteButton.Text = "OK";
             this.ExecuteButton.UseVisualStyleBackColor = true;
             // 
-            // ContextSettingsBindingSource
-            // 
-            this.ContextSettingsBindingSource.DataSource = typeof(Cube.FileSystem.App.Ice.Settings.ContextSettingsViewModel);
-            // 
             // AssociateSettingsBindingSource
             // 
             this.AssociateSettingsBindingSource.DataSource = typeof(Cube.FileSystem.Ice.AssociateSettings);
             // 
             // SettingsForm
             // 
-            this.AcceptButton = this.ExecuteButton;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(544, 631);
             this.Controls.Add(this.RootPanel);
@@ -1112,6 +1119,7 @@
             this.ContextPanel.ResumeLayout(false);
             this.ContextPanel.PerformLayout();
             this.ContextButtonsPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ContextSettingsBindingSource)).EndInit();
             this.ShortcutGroupBox.ResumeLayout(false);
             this.ShortcutPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ShortcutSettingsBindingSource)).EndInit();
@@ -1144,7 +1152,6 @@
             this.OthersPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ToolTipNumericUpDown)).EndInit();
             this.ButtonsPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.ContextSettingsBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.AssociateSettingsBindingSource)).EndInit();
             this.ResumeLayout(false);
 

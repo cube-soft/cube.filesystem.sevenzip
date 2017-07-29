@@ -81,7 +81,11 @@ namespace Cube.FileSystem.App.Ice.Settings
             ArchiveSettingsBindingSource.DataSource   = vm.Archive;
             ExtractSettingsBindingSource.DataSource   = vm.Extract;
 
+            Enable(ArchiveSaveOthersRadioButton, ArchiveSaveTextBox, ArchiveSaveButton);
+            Enable(ExtractSaveOthersRadioButton, ExtractSaveTextBox, ExtractSaveButton);
+
             SettingsPanel.Apply += (s, e) => vm.Save();
+            ContextResetButton.Click += (s, e) => vm.Context.Reset();
         }
 
         #endregion
@@ -103,26 +107,13 @@ namespace Cube.FileSystem.App.Ice.Settings
             AssociateAllButton.Click   += (s, e) => Reset(AssociateMenuPanel, true);
             AssociateClearButton.Click += (s, e) => Reset(AssociateMenuPanel, false);
 
-            // ContextMenu
-            ContextArchiveCheckBox.CheckedChanged += (s, e) => UpdateContext();
-            ContextExtractCheckBox.CheckedChanged += (s, e) => UpdateContext();
-            ContextMailCheckBox.CheckedChanged    += (s, e) => UpdateContext();
-            ContextResetButton.Click              += (s, e) => ResetContext();
-
-            // Shortcut
-            ShortcutArchiveCheckBox.CheckedChanged += (s, e) => UpdateShortcut();
-
             // Archive
-            ArchiveOpenDirectoryCheckBox.CheckedChanged += (s, e) => UpdateArchive();
-            ArchiveSaveOthersRadioButton.CheckedChanged += (s, e) => UpdateArchive();
+            ArchiveSaveOthersRadioButton.CheckedChanged += (s, e)
+                => Enable(s, ArchiveSaveTextBox, ArchiveSaveButton);
 
             // Extract
-            ExtractCreateDirectoryCheckBox.CheckedChanged += (s, e) => UpdateExtract();
-            ExtractOpenDirectoryCheckBox.CheckedChanged   += (s, e) => UpdateExtract();
-            ExtractSaveOthersRadioButton.CheckedChanged   += (s, e) => UpdateExtract();
-
-            // Details
-            ToolTipCheckBox.CheckedChanged += (s, e) => UpdateDetails();
+            ExtractSaveOthersRadioButton.CheckedChanged += (s, e)
+                => Enable(s, ExtractSaveTextBox, ExtractSaveButton);
 
             // Version
             VersionPanel.Description = string.Empty;
@@ -153,6 +144,106 @@ namespace Cube.FileSystem.App.Ice.Settings
             var area = Screen.FromControl(this).WorkingArea;
             if (Height > area.Height) Size = new Size(MaximumSize.Width, area.Height);
             base.OnShown(e);
+        }
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Enable
+        /// 
+        /// <summary>
+        /// 指定されたコントロールの Enabled を更新します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Enable(object sender, params Control[] controls)
+        {
+            var src = sender as RadioButton;
+            if (src == null) return;
+            foreach (var c in controls) c.Enabled = src.Checked;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Reset
+        /// 
+        /// <summary>
+        /// コントロールが保持している CheckBox オブジェクトの
+        /// チェック状態を再設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Reset(Control container, bool check)
+        {
+            foreach (var control in container.Controls)
+            {
+                if (control is CheckBox cb) cb.Checked = check;
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create
+        /// 
+        /// <summary>
+        /// KeyValuePaier オブジェクトを生成します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private KeyValuePair<string, PresetMenu> Create(string key, PresetMenu value)
+            => new KeyValuePair<string, PresetMenu>(key, value);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create
+        /// 
+        /// <summary>
+        /// 関連付け用のチェックボックスを生成します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private CheckBox Create(string name, string text, int index)
+        {
+            var dest = new CheckBox
+            {
+                AutoSize = false,
+                Size     = new Size(70, 19),
+                Text     = text,
+                TabIndex = index,
+            };
+
+            dest.DataBindings.Add(new Binding(nameof(dest.Checked),
+                AssociateSettingsBindingSource, name, true,
+                DataSourceUpdateMode.OnPropertyChanged
+            ));
+
+            return dest;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create
+        /// 
+        /// <summary>
+        /// コンテキストメニュー用のチェックボックスを生成します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private CheckBox Create(PresetMenu menu, string text, int index)
+        {
+            var dest = new CheckBox
+            {
+                AutoSize  = true,
+                Text      = text,
+                TabIndex  = index,
+                Tag       = menu,
+                TextAlign = ContentAlignment.MiddleLeft,
+            };
+
+            dest.DataBindings.Add(new Binding(nameof(dest.Checked),
+                ContextSettingsBindingSource, menu.ToString(), true,
+                DataSourceUpdateMode.OnPropertyChanged
+            ));
+
+            return dest;
         }
 
         #region Initialize
@@ -272,200 +363,6 @@ namespace Cube.FileSystem.App.Ice.Settings
                 Create(Properties.Resources.MenuSfx,         PresetMenu.ArchiveSfx),
                 Create(Properties.Resources.MenuDetail,      PresetMenu.ArchiveDetail),
             };
-        }
-
-        #endregion
-
-        #region Update
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// UpdateContext
-        ///
-        /// <summary>
-        /// コンテキストメニューを更新します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void UpdateContext()
-        {
-            ContextArchivePanel.Enabled = ContextArchiveCheckBox.Checked;
-            ContextExtractPanel.Enabled = ContextExtractCheckBox.Checked;
-            ContextMailPanel.Enabled    = ContextMailCheckBox.Checked;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// UpdateShortcut
-        ///
-        /// <summary>
-        /// ショートカットメニューを更新します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void UpdateShortcut()
-        {
-            ShortcutArchiveComboBox.Enabled = ShortcutArchiveCheckBox.Checked;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// UpdateArchive
-        ///
-        /// <summary>
-        /// 圧縮メニューを更新します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void UpdateArchive()
-        {
-            ArchiveOpenSmartCheckBox.Enabled = ArchiveOpenDirectoryCheckBox.Checked;
-            ArchiveSaveTextBox.Enabled       =
-            ArchiveSaveButton.Enabled        = ArchiveSaveOthersRadioButton.Checked;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// UpdateExtract
-        ///
-        /// <summary>
-        /// 解凍メニューを更新します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void UpdateExtract()
-        {
-            ExtractCreateSmartCheckBox.Enabled = ExtractCreateDirectoryCheckBox.Checked;
-            ExtractOpenSmartCheckBox.Enabled   = ExtractOpenDirectoryCheckBox.Checked;
-            ExtractSaveTextBox.Enabled         =
-            ExtractSaveButton.Enabled          = ExtractSaveOthersRadioButton.Checked;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// UpdateDetails
-        ///
-        /// <summary>
-        /// 詳細メニューを更新します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void UpdateDetails()
-        {
-            ToolTipNumericUpDown.Enabled = ToolTipCheckBox.Checked;
-        }
-
-        #endregion
-
-        #region Reset
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Reset
-        /// 
-        /// <summary>
-        /// コントロールが保持している CheckBox オブジェクトの
-        /// チェック状態を再設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Reset(Control container, bool check)
-        {
-            foreach (var control in container.Controls)
-            {
-                if (control is CheckBox cb) cb.Checked = check;
-            }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ResetContext
-        /// 
-        /// <summary>
-        /// コンテキストメニューの設定状態をリセットします。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void ResetContext()
-        {
-            ContextArchiveCheckBox.Checked = true;
-            ContextExtractCheckBox.Checked = true;
-            ContextMailCheckBox.Checked    = false;
-
-            Reset(ContextArchivePanel,  true);
-            Reset(ContextExtractPanel,  true);
-            Reset(ContextMailPanel,    false);
-        }
-
-        #endregion
-
-        #region Create
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Create
-        /// 
-        /// <summary>
-        /// KeyValuePaier オブジェクトを生成します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private KeyValuePair<string, PresetMenu> Create(string key, PresetMenu value)
-            => new KeyValuePair<string, PresetMenu>(key, value);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Create
-        /// 
-        /// <summary>
-        /// 関連付け用のチェックボックスを生成します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private CheckBox Create(string name, string text, int index)
-        {
-            var dest = new CheckBox
-            {
-                AutoSize = false,
-                Size     = new Size(70, 19),
-                Text     = text,
-                TabIndex = index,
-            };
-
-            dest.DataBindings.Add(new Binding(nameof(dest.Checked),
-                AssociateSettingsBindingSource, name, false,
-                DataSourceUpdateMode.OnPropertyChanged
-            ));
-
-            return dest;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Create
-        /// 
-        /// <summary>
-        /// コンテキストメニュー用のチェックボックスを生成します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private CheckBox Create(PresetMenu menu, string text, int index)
-        {
-            var dest = new CheckBox
-            {
-                AutoSize  = true,
-                Text      = text,
-                TabIndex  = index,
-                Tag       = menu,
-                TextAlign = ContentAlignment.MiddleLeft,
-            };
-
-            dest.DataBindings.Add(new Binding(nameof(dest.Checked),
-                ContextSettingsBindingSource, menu.ToString(), false,
-                DataSourceUpdateMode.OnPropertyChanged
-            ));
-
-            return dest;
         }
 
         #endregion
