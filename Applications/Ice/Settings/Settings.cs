@@ -199,7 +199,7 @@ namespace Cube.FileSystem.Ice
         /// 
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public ContextSetttings Context
+        public ContextSettings Context
         {
             get { return _context; }
             set { SetProperty(ref _context, value); }
@@ -234,7 +234,7 @@ namespace Cube.FileSystem.Ice
         private ArchiveSettings _archive = new ArchiveSettings();
         private ExtractSettings _extract = new ExtractSettings();
         private AssociateSettings _associate = new AssociateSettings();
-        private ContextSetttings _context = new ContextSetttings();
+        private ContextSettings _context = new ContextSettings();
         private ShortcutSettings _shortcut = new ShortcutSettings();
         #endregion
     }

@@ -21,7 +21,7 @@ namespace Cube.FileSystem.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ContextSetttings
+    /// ContextSettings
     /// 
     /// <summary>
     /// コンテキストメニューに関するユーザ設定を保持するためのクラスです。
@@ -29,13 +29,13 @@ namespace Cube.FileSystem.Ice
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public class ContextSetttings : ObservableProperty
+    public class ContextSettings : ObservableProperty
     {
         #region Properties
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Preset
+        /// PresetMenu
         /// 
         /// <summary>
         /// 予め定義されたコンテキストメニューを示す値を取得または
@@ -44,7 +44,7 @@ namespace Cube.FileSystem.Ice
         /// 
         /* ----------------------------------------------------------------- */
         [DataMember(Name = "Builtin")]
-        public PresetMenu Preset
+        public PresetMenu PresetMenu
         {
             get { return _preset; }
             set { SetProperty(ref _preset, value); }

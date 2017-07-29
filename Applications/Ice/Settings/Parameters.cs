@@ -84,11 +84,14 @@ namespace Cube.FileSystem.Ice
     /// </remarks>
     ///
     /* --------------------------------------------------------------------- */
+    [Flags]
     public enum DirectoryCondition
     {
-        None            = 0,
-        Create          = 1,
-        CreateSmart     = 2,
+        None                = 0x00,
+        SkipSingleDirectory = 0x02,
+        SkipSingleFile      = 0x04,
+        Create              = 0x01,
+        CreateSmart         = Create | SkipSingleDirectory,
     }
 
     /* --------------------------------------------------------------------- */
@@ -100,11 +103,13 @@ namespace Cube.FileSystem.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
+    [Flags]
     public enum PostProcess
     {
-        None            = 0,
-        Open            = 1,
-        OpenNotDesktop  = 2,
+        None            = 0x0000,
+        SkipDesktop     = 0x0002,
+        Open            = 0x0001,
+        OpenNotDesktop  = Open | SkipDesktop,
     }
 
     /* --------------------------------------------------------------------- */
@@ -124,10 +129,13 @@ namespace Cube.FileSystem.Ice
         Extract             = 0x00000002,
         Settings            = 0x00000004,
         Mail                = 0x00000008,
+
         ExtractSource       = 0x00000010,
         ExtractDesktop      = 0x00000020,
         ExtractRuntime      = 0x00000040,
         ExtractMyDocuments  = 0x00000080,
+        ExtractOptions      = 0x000000f0,
+
         ArchiveZip          = 0x00000100,
         ArchiveZipPassword  = 0x00000200,
         ArchiveSevenZip     = 0x00000400,
@@ -135,6 +143,8 @@ namespace Cube.FileSystem.Ice
         ArchiveGZip         = 0x00001000,
         ArchiveDetail       = 0x00002000,
         ArchiveSfx          = 0x00004000,
+        ArchiveOptions      = 0x00007f00,
+
         MailZip             = 0x00010000,
         MailZipPassword     = 0x00020000,
         MailSevenZip        = 0x00040000,
@@ -142,6 +152,8 @@ namespace Cube.FileSystem.Ice
         MailGZip            = 0x00100000,
         MailDetail          = 0x00200000,
         MailSfx             = 0x00400000,
+        MailOptions         = 0x007f0000,
+
         DefaultContext      = 0x00007ff3,
         DefaultDesktop      = 0x00000107,
     }

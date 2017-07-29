@@ -103,7 +103,7 @@
   <ItemGroup>
     <Compile Include="Settings\ArchiveSettings.cs" />
     <Compile Include="Settings\AssociateSettings.cs" />
-    <Compile Include="Settings\ContextSetttings.cs" />
+    <Compile Include="Settings\ContextSettings.cs" />
     <Compile Include="Settings\ExtractSettings.cs" />
     <Compile Include="Settings\Parameters.cs" />
     <Compile Include="Presenters\ArchiveFacade.cs" />
