@@ -183,73 +183,6 @@ namespace Cube.FileSystem.App.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Create
-        /// 
-        /// <summary>
-        /// KeyValuePaier オブジェクトを生成します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private KeyValuePair<string, PresetMenu> Create(string key, PresetMenu value)
-            => new KeyValuePair<string, PresetMenu>(key, value);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Create
-        /// 
-        /// <summary>
-        /// 関連付け用のチェックボックスを生成します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private CheckBox Create(string name, string text, int index)
-        {
-            var dest = new CheckBox
-            {
-                AutoSize = false,
-                Size     = new Size(70, 19),
-                Text     = text,
-                TabIndex = index,
-            };
-
-            dest.DataBindings.Add(new Binding(nameof(dest.Checked),
-                AssociateSettingsBindingSource, name, true,
-                DataSourceUpdateMode.OnPropertyChanged
-            ));
-
-            return dest;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Create
-        /// 
-        /// <summary>
-        /// コンテキストメニュー用のチェックボックスを生成します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private CheckBox Create(PresetMenu menu, string text, int index)
-        {
-            var dest = new CheckBox
-            {
-                AutoSize  = true,
-                Text      = text,
-                TabIndex  = index,
-                Tag       = menu,
-                TextAlign = ContentAlignment.MiddleLeft,
-            };
-
-            dest.DataBindings.Add(new Binding(nameof(dest.Checked),
-                ContextSettingsBindingSource, menu.ToString(), true,
-                DataSourceUpdateMode.OnPropertyChanged
-            ));
-
-            return dest;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// Browse
         ///
         /// <summary>
@@ -388,6 +321,73 @@ namespace Cube.FileSystem.App.Ice.Settings
                 Create(Properties.Resources.MenuDetail,      PresetMenu.ArchiveDetail),
             };
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create
+        /// 
+        /// <summary>
+        /// 関連付け用のチェックボックスを生成します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private CheckBox Create(string name, string text, int index)
+        {
+            var dest = new CheckBox
+            {
+                AutoSize = false,
+                Size     = new Size(70, 19),
+                Text     = text,
+                TabIndex = index,
+            };
+
+            dest.DataBindings.Add(new Binding(nameof(dest.Checked),
+                AssociateSettingsBindingSource, name, true,
+                DataSourceUpdateMode.OnPropertyChanged
+            ));
+
+            return dest;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create
+        /// 
+        /// <summary>
+        /// コンテキストメニュー用のチェックボックスを生成します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private CheckBox Create(PresetMenu menu, string text, int index)
+        {
+            var dest = new CheckBox
+            {
+                AutoSize  = true,
+                Text      = text,
+                TabIndex  = index,
+                Tag       = menu,
+                TextAlign = ContentAlignment.MiddleLeft,
+            };
+
+            dest.DataBindings.Add(new Binding(nameof(dest.Checked),
+                ContextSettingsBindingSource, menu.ToString(), true,
+                DataSourceUpdateMode.OnPropertyChanged
+            ));
+
+            return dest;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create
+        /// 
+        /// <summary>
+        /// KeyValuePaier オブジェクトを生成します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private KeyValuePair<string, PresetMenu> Create(string key, PresetMenu value)
+            => new KeyValuePair<string, PresetMenu>(key, value);
 
         #endregion
 
