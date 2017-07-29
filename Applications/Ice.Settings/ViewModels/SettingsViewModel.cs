@@ -29,7 +29,7 @@ namespace Cube.FileSystem.App.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class SettingsViewModel
+    public class SettingsViewModel : ObservableProperty
     {
         #region Constructors
 
@@ -47,6 +47,7 @@ namespace Cube.FileSystem.App.Ice.Settings
         public SettingsViewModel(SettingsFolder model)
         {
             _model = model;
+            _model.PropertyChanged += (s, e) => OnPropertyChanged(e);
 
             Archive   = new ArchiveSettingsViewModel(model.Value.Archive);
             Extract   = new ExtractSettingsViewModel(model.Value.Extract);

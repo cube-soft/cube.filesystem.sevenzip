@@ -28,7 +28,7 @@ namespace Cube.FileSystem.App.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveSettingsViewModel
+    public class ArchiveSettingsViewModel : ObservableProperty
     {
         #region Constructors
 
@@ -46,6 +46,7 @@ namespace Cube.FileSystem.App.Ice.Settings
         public ArchiveSettingsViewModel(ArchiveSettings model)
         {
             _model = model;
+            _model.PropertyChanged += (s, e) => OnPropertyChanged(e);
         }
 
         #endregion

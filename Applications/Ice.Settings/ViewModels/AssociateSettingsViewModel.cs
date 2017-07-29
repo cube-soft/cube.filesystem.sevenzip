@@ -28,7 +28,7 @@ namespace Cube.FileSystem.App.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class AssociateSettingsViewModel
+    public class AssociateSettingsViewModel : ObservableProperty
     {
         #region Constructors
 
@@ -46,6 +46,7 @@ namespace Cube.FileSystem.App.Ice.Settings
         public AssociateSettingsViewModel(AssociateSettings model)
         {
             _model = model;
+            _model.PropertyChanged += (s, e) => OnPropertyChanged(e);
         }
 
         #endregion

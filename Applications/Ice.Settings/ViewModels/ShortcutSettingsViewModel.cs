@@ -28,7 +28,7 @@ namespace Cube.FileSystem.App.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ShortcutSettingsViewModel
+    public class ShortcutSettingsViewModel : ObservableProperty
     {
         #region Constructors
 
@@ -46,6 +46,7 @@ namespace Cube.FileSystem.App.Ice.Settings
         public ShortcutSettingsViewModel(ShortcutSettings model)
         {
             _model = model;
+            _model.PropertyChanged += (s, e) => OnPropertyChanged(e);
         }
 
         #endregion

@@ -15,6 +15,7 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System.ComponentModel;
 using Cube.FileSystem.Ice;
 
 namespace Cube.FileSystem.App.Ice.Settings
@@ -28,7 +29,7 @@ namespace Cube.FileSystem.App.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ContextSettingsViewModel
+    public class ContextSettingsViewModel : ObservableProperty
     {
         #region Constructors
 
@@ -46,6 +47,7 @@ namespace Cube.FileSystem.App.Ice.Settings
         public ContextSettingsViewModel(ContextSettings model)
         {
             _model = model;
+            _model.PropertyChanged += (s, e) => OnPropertyChanged(e);
         }
 
         #endregion
@@ -261,6 +263,8 @@ namespace Cube.FileSystem.App.Ice.Settings
 
         #endregion
 
+        #region Mail
+
         /* ----------------------------------------------------------------- */
         ///
         /// Mail
@@ -387,6 +391,27 @@ namespace Cube.FileSystem.App.Ice.Settings
         {
             get { return _model.PresetMenu.HasFlag(PresetMenu.MailDetail); }
             set { Set(PresetMenu.MailDetail, value); }
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Reset
+        /// 
+        /// <summary>
+        /// コンテキストメニューを規定値に再設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void Reset()
+        {
+            _model.IsExtended = false;
+            _model.PresetMenu = PresetMenu.DefaultContext;
         }
 
         #endregion
