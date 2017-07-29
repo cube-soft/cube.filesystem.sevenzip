@@ -16,10 +16,9 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
-using System.ComponentModel;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using Cube.FileSystem.SevenZip;
 using Cube.FileSystem.Ice;
 
 namespace Cube.FileSystem.App.Ice.Settings
@@ -33,7 +32,7 @@ namespace Cube.FileSystem.App.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class SettingsForm : Cube.Forms.FormBase, ISettingsView
+    public partial class SettingsForm : Cube.Forms.FormBase
     {
         #region Constructors
 
@@ -58,76 +57,6 @@ namespace Cube.FileSystem.App.Ice.Settings
 
         #endregion
 
-        #region Properties
-
-        /* --------------------------------------------------------------------- */
-        ///
-        /// Product
-        /// 
-        /// <summary>
-        /// アプリケーション名を取得または設定します。
-        /// </summary>
-        ///
-        /* --------------------------------------------------------------------- */
-        [Browsable(true)]
-        public string Product
-        {
-            get { return VersionPanel.Product; }
-            set { VersionPanel.Product = value; }
-        }
-
-        /* --------------------------------------------------------------------- */
-        ///
-        /// Version
-        /// 
-        /// <summary>
-        /// バージョン情報を取得または設定します。
-        /// </summary>
-        ///
-        /* --------------------------------------------------------------------- */
-        [Browsable(true)]
-        public string Version
-        {
-            get { return VersionPanel.Version; }
-            set { VersionPanel.Version = value; }
-        }
-
-        #endregion
-
-        #region Events
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Apply
-        ///
-        /// <summary>
-        /// OK ボタンまたは適用ボタンのクリック時に発生するイベントです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public event EventHandler Apply
-        {
-            add { SettingsPanel.Apply += value; }
-            remove { SettingsPanel.Apply -= value; }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Cancel
-        ///
-        /// <summary>
-        /// キャンセルボタンのクリック時に発生するイベントです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public event EventHandler Cancel
-        {
-            add { SettingsPanel.Cancel += value; }
-            remove { SettingsPanel.Cancel -= value; }
-        }
-
-        #endregion
-
         #region Methods
 
         /* ----------------------------------------------------------------- */
@@ -138,19 +67,21 @@ namespace Cube.FileSystem.App.Ice.Settings
         /// オブジェクトを関連付けます。
         /// </summary>
         /// 
-        /// <param name="settings">関連付けるオブジェクト</param>
+        /// <param name="vm">ViewModel オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Bind(Cube.FileSystem.Ice.Settings settigns)
+        public void Bind(SettingsViewModel vm)
         {
-            if (settigns == null) return;
+            if (vm == null) return;
 
-            SettingsBindingSource.DataSource          = settigns;
-            AssociateSettingsBindingSource.DataSource = settigns.Associate;
-            ContextSetttingsBindingSource.DataSource  = settigns.Context;
-            ShortcutSettingsBindingSource.DataSource  = settigns.Shortcut;
-            ArchiveSettingsBindingSource.DataSource   = settigns.Archive;
-            ExtractSettingsBindingSource.DataSource   = settigns.Extract;
+            SettingsBindingSource.DataSource          = vm;
+            AssociateSettingsBindingSource.DataSource = vm.Associate;
+            ContextSettingsBindingSource.DataSource   = vm.Context;
+            ShortcutSettingsBindingSource.DataSource  = vm.Shortcut;
+            ArchiveSettingsBindingSource.DataSource   = vm.Archive;
+            ExtractSettingsBindingSource.DataSource   = vm.Extract;
+
+            SettingsPanel.Apply += (s, e) => vm.Save();
         }
 
         #endregion
@@ -236,6 +167,8 @@ namespace Cube.FileSystem.App.Ice.Settings
             base.OnShown(e);
         }
 
+        #region Initialize
+
         /* ----------------------------------------------------------------- */
         ///
         /// InitializeAssociate
@@ -297,7 +230,6 @@ namespace Cube.FileSystem.App.Ice.Settings
         {
             var index = 0;
 
-            ContextArchiveCheckBox.Tag = PresetMenu.Archive;
             ContextArchivePanel.Controls.AddRange(new[]
             {
                 Create(PresetMenu.ArchiveZip,         Properties.Resources.MenuZip,         index++),
@@ -309,7 +241,6 @@ namespace Cube.FileSystem.App.Ice.Settings
                 Create(PresetMenu.ArchiveDetail,      Properties.Resources.MenuDetail,      index++),
             });
 
-            ContextExtractCheckBox.Tag = PresetMenu.Extract;
             ContextExtractPanel.Controls.AddRange(new[]
             {
                 Create(PresetMenu.ExtractSource,      Properties.Resources.MenuHere,        index++),
@@ -318,7 +249,6 @@ namespace Cube.FileSystem.App.Ice.Settings
                 Create(PresetMenu.ExtractRuntime,     Properties.Resources.MenuRuntime,     index++),
             });
 
-            ContextMailCheckBox.Tag = PresetMenu.Mail;
             ContextMailPanel.Controls.AddRange(new[]
             {
                 Create(PresetMenu.MailZip,            Properties.Resources.MenuZip,         index++),
@@ -336,21 +266,29 @@ namespace Cube.FileSystem.App.Ice.Settings
         /// InitializeShortcut
         /// 
         /// <summary>
-        /// ショートカットメニューの項目を初期化します。
+        /// ショートカットメニューを初期化します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         private void InitializeShortcut()
         {
-            ShortcutArchiveCheckBox.Tag = PresetMenu.Archive;
-            ShortcutArchiveCheckBox.CheckedChanged += WhenShortcutChanged;
-
-            ShortcutExtractCheckBox.Tag = PresetMenu.Extract;
-            ShortcutExtractCheckBox.CheckedChanged += WhenShortcutChanged;
-
-            ShortcutSettingsCheckBox.Tag = PresetMenu.Settings;
-            ShortcutSettingsCheckBox.CheckedChanged += WhenShortcutChanged;
+            ShortcutArchiveComboBox.DisplayMember = "Key";
+            ShortcutArchiveComboBox.ValueMember   = "Value";
+            ShortcutArchiveComboBox.DataSource    = new List<KeyValuePair<string, PresetMenu>>
+            {
+                Create(Properties.Resources.MenuZip,         PresetMenu.ArchiveZip),
+                Create(Properties.Resources.MenuZipPassword, PresetMenu.ArchiveZipPassword),
+                Create(Properties.Resources.MenuSevenZip,    PresetMenu.ArchiveSevenZip),
+                Create(Properties.Resources.MenuBZip2,       PresetMenu.ArchiveBZip2),
+                Create(Properties.Resources.MenuGZip,        PresetMenu.ArchiveGZip),
+                Create(Properties.Resources.MenuSfx,         PresetMenu.ArchiveSfx),
+                Create(Properties.Resources.MenuDetail,      PresetMenu.ArchiveDetail),
+            };
         }
+
+        #endregion
+
+        #region Reset
 
         /* ----------------------------------------------------------------- */
         ///
@@ -390,26 +328,21 @@ namespace Cube.FileSystem.App.Ice.Settings
             Reset(ContextMailPanel,    false);
         }
 
+        #endregion
+
+        #region Create
+
         /* ----------------------------------------------------------------- */
         ///
-        /// Update
+        /// Create
         /// 
         /// <summary>
-        /// GroupBox のデータを更新します。
+        /// KeyValuePaier オブジェクトを生成します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Update(CheckBox src, GroupBox dest)
-        {
-            if (src == null || dest == null) return;
-            if (src.Tag is PresetMenu st)
-            {
-                var dt = dest.Tag is PresetMenu ? (PresetMenu)dest.Tag : PresetMenu.None;
-                if (src.Checked) dt |= st;
-                else dt &= ~st;
-                dest.Tag = dt;
-            }
-        }
+        private KeyValuePair<string, PresetMenu> Create(string key, PresetMenu value)
+            => new KeyValuePair<string, PresetMenu>(key, value);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -458,23 +391,15 @@ namespace Cube.FileSystem.App.Ice.Settings
                 TextAlign = ContentAlignment.MiddleLeft,
             };
 
-            dest.CheckedChanged += (s, e) => Update(s as CheckBox, ContextGroupBox);
+            dest.DataBindings.Add(new Binding(nameof(dest.Checked),
+                ContextSettingsBindingSource, menu.ToString(), false,
+                DataSourceUpdateMode.OnPropertyChanged
+            ));
+
             return dest;
         }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenShortcutChanged
-        /// 
-        /// <summary>
-        /// ショートカットメニュー変更時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenShortcutChanged(object sender, EventArgs e)
-        {
-            Update(sender as CheckBox, ShortcutGroupBox);
-        }
+        #endregion
 
         #region Fields
         private Cube.Forms.VersionControl VersionPanel = new Cube.Forms.VersionControl();

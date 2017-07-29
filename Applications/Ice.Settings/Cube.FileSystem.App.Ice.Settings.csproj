@@ -102,8 +102,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Presenters\SettingsPresenter.cs" />
-    <Compile Include="Views\ISettingsView.cs" />
+    <Compile Include="ViewModels\ArchiveSettingsViewModel.cs" />
+    <Compile Include="ViewModels\AssociateSettingsViewModel.cs" />
+    <Compile Include="ViewModels\ContextSettingsViewModel.cs" />
+    <Compile Include="ViewModels\ExtractSettingsViewModel.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="ViewModels\ShortcutSettingsViewModel.cs" />
     <Compile Include="Views\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -112,7 +116,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\ViewFactory.cs" />
     <EmbeddedResource Include="Views\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>

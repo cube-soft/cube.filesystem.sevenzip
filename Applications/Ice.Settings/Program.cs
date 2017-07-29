@@ -47,7 +47,7 @@ namespace Cube.FileSystem.App.Ice.Settings
         {
             var type = typeof(Program);
 
-            //try
+            try
             {
                 Cube.Log.Operations.Configure();
                 Cube.Log.Operations.ObserveTaskException();
@@ -56,13 +56,15 @@ namespace Cube.FileSystem.App.Ice.Settings
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
 
-                var view     = new SettingsForm();
-                var settings = new SettingsFolder();
+                var model = new SettingsFolder();
+                model.Load();
 
-                settings.Load();
-                using (var _ = new SettingsPresenter(view, settings)) Application.Run(view);
+                var view = new SettingsForm();
+                view.Bind(new SettingsViewModel(model));
+
+                Application.Run(view);
             }
-            //catch (Exception err) { Cube.Log.Operations.Error(type, err.ToString()); }
+            catch (Exception err) { Cube.Log.Operations.Error(type, err.ToString()); }
         }
     }
 }
