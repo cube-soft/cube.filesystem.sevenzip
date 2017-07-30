@@ -96,7 +96,7 @@ namespace Cube.FileSystem.App.Ice
                     SetTmp(Destination);
                     PreExtract(reader);
                     Extract(reader);
-                    Execute(Settings.Value.Extract.PostProcess, Destination);
+                    Execute(Settings.Value.Extract.OpenDirectory, Destination);
                 }
                 catch (UserCancelException /* err */) { /* user cancel */ }
                 catch (Exception err) { this.LogWarn(err.ToString(), err); }
@@ -314,11 +314,11 @@ namespace Cube.FileSystem.App.Ice
             var src = IO.Get(Source).NameWithoutExtension;
             switch (Settings.Value.Extract.RootDirectory)
             {
-                case DirectoryCondition.Create:
+                case RootDirectoryCondition.Create:
                     return src;
-                case DirectoryCondition.CreateSmart:
+                case RootDirectoryCondition.CreateSmart:
                     return count <= 1 || parts.Count() == 1 ? string.Empty : src;
-                case DirectoryCondition.None:
+                case RootDirectoryCondition.None:
                 default:
                     return string.Empty;
             }

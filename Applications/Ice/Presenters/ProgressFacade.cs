@@ -375,15 +375,15 @@ namespace Cube.FileSystem.App.Ice
         /// <param name="path">圧縮・展開先のパス</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected void Execute(PostProcess mode, string path)
+        protected void Execute(OpenDirectoryCondition mode, string path)
         {
             switch (mode)
             {
-                case PostProcess.Open:
-                case PostProcess.OpenNotDesktop:
+                case OpenDirectoryCondition.Open:
+                case OpenDirectoryCondition.OpenNotDesktop:
                     OpenDirectory(mode, IO.Get(path));
                     break;
-                case PostProcess.None:
+                case OpenDirectoryCondition.None:
                     break;
             }
         }
@@ -500,11 +500,11 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void OpenDirectory(PostProcess mode, IInformation info)
+        private void OpenDirectory(OpenDirectoryCondition mode, IInformation info)
         {
             var src = info.IsDirectory ? info.FullName : info.DirectoryName;
             var cmp = Environment.GetFolderPath(Environment.SpecialFolder.Desktop).ToLower();
-            if (mode == PostProcess.OpenNotDesktop && src.ToLower().CompareTo(cmp) == 0) return;
+            if (mode == OpenDirectoryCondition.OpenNotDesktop && src.ToLower().CompareTo(cmp) == 0) return;
 
             var exec = Settings.Value.Explorer;
             var path = string.IsNullOrEmpty(exec) ? "explorer.exe" : exec;

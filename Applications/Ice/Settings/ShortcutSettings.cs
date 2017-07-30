@@ -36,7 +36,7 @@ namespace Cube.FileSystem.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// PresetMenu
+        /// Preset
         /// 
         /// <summary>
         /// 予め定義されたショートカットメニューを示す値を取得または
@@ -45,7 +45,7 @@ namespace Cube.FileSystem.Ice
         /// 
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public PresetMenu PresetMenu
+        public PresetMenu Preset
         {
             get { return _preset; }
             set { SetProperty(ref _preset, value); }

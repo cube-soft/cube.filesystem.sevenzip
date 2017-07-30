@@ -64,7 +64,7 @@ namespace Cube.FileSystem.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Archive
         {
-            get { return _model.PresetMenu.HasFlag(PresetMenu.Archive); }
+            get { return _model.Preset.HasFlag(PresetMenu.Archive); }
             set { Set(PresetMenu.Archive, value); }
         }
 
@@ -79,7 +79,7 @@ namespace Cube.FileSystem.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Extract
         {
-            get { return _model.PresetMenu.HasFlag(PresetMenu.Extract); }
+            get { return _model.Preset.HasFlag(PresetMenu.Extract); }
             set { Set(PresetMenu.Extract, value); }
         }
 
@@ -94,7 +94,7 @@ namespace Cube.FileSystem.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Settings
         {
-            get { return _model.PresetMenu.HasFlag(PresetMenu.Settings); }
+            get { return _model.Preset.HasFlag(PresetMenu.Settings); }
             set { Set(PresetMenu.Settings, value); }
         }
 
@@ -109,11 +109,11 @@ namespace Cube.FileSystem.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public PresetMenu ArchiveOption
         {
-            get { return _model.PresetMenu & PresetMenu.ArchiveOptions; }
+            get { return _model.Preset & PresetMenu.ArchiveOptions; }
             set
             {
-                var strip = _model.PresetMenu & ~PresetMenu.ArchiveOptions;
-                _model.PresetMenu = strip | value;
+                var strip = _model.Preset & ~PresetMenu.ArchiveOptions;
+                _model.Preset = strip | value;
             }
         }
 
@@ -132,8 +132,8 @@ namespace Cube.FileSystem.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         private void Set(PresetMenu value, bool check)
         {
-            if (check) _model.PresetMenu |= value;
-            else _model.PresetMenu &= ~value;
+            if (check) _model.Preset |= value;
+            else _model.Preset &= ~value;
         }
 
         #region Fields

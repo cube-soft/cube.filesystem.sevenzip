@@ -100,6 +100,7 @@
     <Compile Include="ViewModels\AssociateSettingsViewModel.cs" />
     <Compile Include="ViewModels\ContextSettingsViewModel.cs" />
     <Compile Include="ViewModels\ExtractSettingsViewModel.cs" />
+    <Compile Include="ViewModels\GeneralSettingsViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\ShortcutSettingsViewModel.cs" />
     <Compile Include="Program.cs" />

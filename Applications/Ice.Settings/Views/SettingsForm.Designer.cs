@@ -560,7 +560,7 @@
             // 
             // ArchiveSaveTextBox
             // 
-            this.ArchiveSaveTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.ArchiveSettingsBindingSource, "SaveDirectory", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.ArchiveSaveTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.ArchiveSettingsBindingSource, "SaveDirectoryName", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ArchiveSaveTextBox.Location = new System.Drawing.Point(15, 28);
             this.ArchiveSaveTextBox.Margin = new System.Windows.Forms.Padding(15, 3, 3, 3);
             this.ArchiveSaveTextBox.Name = "ArchiveSaveTextBox";
@@ -640,7 +640,7 @@
             // ArchiveOpenDirectoryCheckBox
             // 
             this.ArchiveOpenDirectoryCheckBox.AutoSize = true;
-            this.ArchiveOpenDirectoryCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ArchiveSettingsBindingSource, "Open", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.ArchiveOpenDirectoryCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ArchiveSettingsBindingSource, "OpenDirectory", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ArchiveOpenDirectoryCheckBox.Location = new System.Drawing.Point(3, 28);
             this.ArchiveOpenDirectoryCheckBox.Name = "ArchiveOpenDirectoryCheckBox";
             this.ArchiveOpenDirectoryCheckBox.Size = new System.Drawing.Size(169, 19);
@@ -652,7 +652,7 @@
             // 
             this.ArchiveOpenSmartCheckBox.AutoSize = true;
             this.ArchiveOpenSmartCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ArchiveSettingsBindingSource, "SkipDesktop", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.ArchiveOpenSmartCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", this.ArchiveSettingsBindingSource, "Open", true, System.Windows.Forms.DataSourceUpdateMode.Never));
+            this.ArchiveOpenSmartCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", this.ArchiveSettingsBindingSource, "OpenDirectory", true, System.Windows.Forms.DataSourceUpdateMode.Never));
             this.ArchiveOpenSmartCheckBox.Enabled = false;
             this.ArchiveOpenSmartCheckBox.Location = new System.Drawing.Point(15, 53);
             this.ArchiveOpenSmartCheckBox.Margin = new System.Windows.Forms.Padding(15, 3, 3, 3);
@@ -739,7 +739,7 @@
             // 
             // ExtractSaveTextBox
             // 
-            this.ExtractSaveTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.ExtractSettingsBindingSource, "SaveDirectory", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.ExtractSaveTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.ExtractSettingsBindingSource, "SaveDirectoryName", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ExtractSaveTextBox.Location = new System.Drawing.Point(15, 28);
             this.ExtractSaveTextBox.Margin = new System.Windows.Forms.Padding(15, 3, 3, 3);
             this.ExtractSaveTextBox.Name = "ExtractSaveTextBox";
@@ -846,7 +846,7 @@
             // ExtractOpenDirectoryCheckBox
             // 
             this.ExtractOpenDirectoryCheckBox.AutoSize = true;
-            this.ExtractOpenDirectoryCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ExtractSettingsBindingSource, "Open", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.ExtractOpenDirectoryCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ExtractSettingsBindingSource, "OpenDirectory", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ExtractOpenDirectoryCheckBox.Location = new System.Drawing.Point(3, 78);
             this.ExtractOpenDirectoryCheckBox.Name = "ExtractOpenDirectoryCheckBox";
             this.ExtractOpenDirectoryCheckBox.Size = new System.Drawing.Size(169, 19);
@@ -858,7 +858,7 @@
             // 
             this.ExtractOpenSmartCheckBox.AutoSize = true;
             this.ExtractOpenSmartCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ExtractSettingsBindingSource, "SkipDesktop", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.ExtractOpenSmartCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", this.ExtractSettingsBindingSource, "Open", true, System.Windows.Forms.DataSourceUpdateMode.Never));
+            this.ExtractOpenSmartCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", this.ExtractSettingsBindingSource, "OpenDirectory", true, System.Windows.Forms.DataSourceUpdateMode.Never));
             this.ExtractOpenSmartCheckBox.Enabled = false;
             this.ExtractOpenSmartCheckBox.Location = new System.Drawing.Point(15, 103);
             this.ExtractOpenSmartCheckBox.Margin = new System.Windows.Forms.Padding(15, 3, 3, 3);

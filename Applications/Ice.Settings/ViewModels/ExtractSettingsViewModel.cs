@@ -28,7 +28,7 @@ namespace Cube.FileSystem.App.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ExtractSettingsViewModel : ObservableProperty
+    public class ExtractSettingsViewModel : GeneralSettingsViewModel
     {
         #region Constructors
 
@@ -43,75 +43,11 @@ namespace Cube.FileSystem.App.Ice.Settings
         /// <param name="model">Model オブジェクト</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public ExtractSettingsViewModel(ExtractSettings model)
-        {
-            _model = model;
-            _model.PropertyChanged += (s, e) => OnPropertyChanged(e);
-        }
+        public ExtractSettingsViewModel(ExtractSettings model) : base(model) { }
 
         #endregion
 
         #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SaveOthers
-        /// 
-        /// <summary>
-        /// SaveLocation.Others かどうかを示す値を取得または設定します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public bool SaveOthers
-        {
-            get { return _model.SaveLocation == SaveLocation.Others; }
-            set { SetSaveLocation(SaveLocation.Others, value); }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SaveSource
-        /// 
-        /// <summary>
-        /// SaveLocation.Source かどうかを示す値を取得または設定します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public bool SaveSource
-        {
-            get { return _model.SaveLocation == SaveLocation.Source; }
-            set { SetSaveLocation(SaveLocation.Source, value); }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SaveRuntime
-        /// 
-        /// <summary>
-        /// SaveLocation.Runtime かどうかを示す値を取得または設定します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public bool SaveRuntime
-        {
-            get { return _model.SaveLocation == SaveLocation.Runtime; }
-            set { SetSaveLocation(SaveLocation.Runtime, value); }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SaveDirectory
-        /// 
-        /// <summary>
-        /// 保存ディレクトリのパスを取得または設定します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public string SaveDirectory
-        {
-            get { return _model.SaveDirectory; }
-            set { _model.SaveDirectory = value; }
-        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -124,8 +60,8 @@ namespace Cube.FileSystem.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool CreateDirectory
         {
-            get { return _model.RootDirectory.HasFlag(DirectoryCondition.Create); }
-            set { SetRootDirectory(DirectoryCondition.Create, value); }
+            get { return HasFlag(RootDirectoryCondition.Create); }
+            set { SetRootDirectory(RootDirectoryCondition.Create, value); }
         }
 
         /* ----------------------------------------------------------------- */
@@ -140,24 +76,8 @@ namespace Cube.FileSystem.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool SkipSingleDirectory
         {
-            get { return _model.RootDirectory.HasFlag(DirectoryCondition.SkipSingleDirectory); }
-            set { SetRootDirectory(DirectoryCondition.SkipSingleDirectory, value); }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Filtering
-        /// 
-        /// <summary>
-        /// 特定のファイルまたはディレクトリをフィルタリングするかどうかを
-        /// 示す値を取得または設定します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public bool Filtering
-        {
-            get { return _model.Filtering; }
-            set { _model.Filtering = value; }
+            get { return HasFlag(RootDirectoryCondition.SkipSingleDirectory); }
+            set { SetRootDirectory(RootDirectoryCondition.SkipSingleDirectory, value); }
         }
 
         /* ----------------------------------------------------------------- */
@@ -172,48 +92,8 @@ namespace Cube.FileSystem.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool DeleteSource
         {
-            get { return _model.DeleteSource; }
-            set { _model.DeleteSource = value; }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Open
-        /// 
-        /// <summary>
-        /// 圧縮処理終了後にフォルダを開くかどうかを示す値を取得
-        /// または設定します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public bool Open
-        {
-            get { return _model.PostProcess.HasFlag(PostProcess.Open); }
-            set
-            {
-                if (value) _model.PostProcess |= PostProcess.Open;
-                else _model.PostProcess &= ~PostProcess.Open;
-            }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SkipDesktop
-        /// 
-        /// <summary>
-        /// 後処理時に対象がデスクトップの場合にスキップするかどうかを
-        /// 示す値を取得または設定します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public bool SkipDesktop
-        {
-            get { return _model.PostProcess.HasFlag(PostProcess.SkipDesktop); }
-            set
-            {
-                if (value) _model.PostProcess |= PostProcess.SkipDesktop;
-                else _model.PostProcess &= ~PostProcess.SkipDesktop;
-            }
+            get { return TryCast()?.DeleteSource ?? false; }
+            set { if (Model is ExtractSettings e) e.DeleteSource = value; }
         }
 
         #endregion
@@ -222,24 +102,27 @@ namespace Cube.FileSystem.App.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SetSaveLocation
+        /// TryCast
         /// 
         /// <summary>
-        /// SaveLocation の値を設定します。
+        /// キャストを試行します。
         /// </summary>
         /// 
-        /// <remarks>
-        /// SaveLocation は GUI 上は RadioButton で表現されています。
-        /// そこで、SetSaveLocation() では Checked = true のタイミングで
-        /// 値の内容を更新する事とします。
-        /// </remarks>
+        /* ----------------------------------------------------------------- */
+        private ExtractSettings TryCast() => Model as ExtractSettings;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// HasFlag
+        /// 
+        /// <summary>
+        /// RootDirectory が指定されたフラグを保持しているかどうかを
+        /// 示す値を取得します。
+        /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private void SetSaveLocation(SaveLocation value, bool check)
-        {
-            if (!check || _model.SaveLocation == value) return;
-            _model.SaveLocation = value;
-        }
+        public bool HasFlag(RootDirectoryCondition value)
+            => TryCast()?.RootDirectory.HasFlag(value) ?? false;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -250,15 +133,14 @@ namespace Cube.FileSystem.App.Ice.Settings
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public void SetRootDirectory(DirectoryCondition value, bool check)
+        public void SetRootDirectory(RootDirectoryCondition value, bool check)
         {
-            if (check) _model.RootDirectory |= value;
-            else _model.RootDirectory &= ~value;
+            if (Model is ExtractSettings e)
+            {
+                if (check) e.RootDirectory |= value;
+                else e.RootDirectory &= ~value;
+            }
         }
-
-        #region Fields
-        private ExtractSettings _model;
-        #endregion
 
         #endregion
     }

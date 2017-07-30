@@ -29,61 +29,24 @@ namespace Cube.FileSystem.Ice
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public class ExtractSettings : ObservableProperty
+    public class ExtractSettings : GeneralSettings
     {
         #region Properties
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SaveLocation
+        /// RootDirectory
         /// 
         /// <summary>
-        /// 保存場所に関する情報を取得します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        [DataMember(Name = "OutputCondition")]
-        public SaveLocation SaveLocation
-        {
-            get { return _saveLocation; }
-            set { SetProperty(ref _saveLocation, value); }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SaveDirectory
-        /// 
-        /// <summary>
-        /// 保存ディレクトリのパスを取得します。
-        /// </summary>
-        /// 
-        /// <remarks>
-        /// このプロパティは SaveLocation.Others の場合に参照されます。
-        /// </remarks>
-        /// 
-        /* ----------------------------------------------------------------- */
-        [DataMember(Name = "OutputPath")]
-        public string SaveDirectory
-        {
-            get { return _saveDirectory; }
-            set { SetProperty(ref _saveDirectory, value); }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Filtering
-        /// 
-        /// <summary>
-        /// 特定のファイルまたはディレクトリをフィルタリングするかどうかを
-        /// 示す値を取得または設定します。
+        /// ルートディレクトリの扱い方を示す値を取得または設定します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public bool Filtering
+        public RootDirectoryCondition RootDirectory
         {
-            get { return _filtering; }
-            set { SetProperty(ref _filtering, value); }
+            get { return _rootDirectory; }
+            set { SetProperty(ref _rootDirectory, value); }
         }
 
         /* ----------------------------------------------------------------- */
@@ -96,54 +59,18 @@ namespace Cube.FileSystem.Ice
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [DataMember(Name = "DeleteOnExtract")]
+        [DataMember]
         public bool DeleteSource
         {
-            get { return _deleteOnExtract; }
-            set { SetProperty(ref _deleteOnExtract, value); }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// RootDirectory
-        /// 
-        /// <summary>
-        /// ルートディレクトリの扱い方を示す値を取得または設定します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        [DataMember(Name = "CreateFolder")]
-        public DirectoryCondition RootDirectory
-        {
-            get { return _directoryCondition; }
-            set { SetProperty(ref _directoryCondition, value); }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// PostProcess
-        /// 
-        /// <summary>
-        /// 展開後の操作を取得または設定します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        [DataMember(Name = "Open")]
-        public PostProcess PostProcess
-        {
-            get { return _postProcess; }
-            set { SetProperty(ref _postProcess, value); }
+            get { return _deleteSource; }
+            set { SetProperty(ref _deleteSource, value); }
         }
 
         #endregion
 
         #region Fields
-        private SaveLocation _saveLocation = SaveLocation.Others;
-        private string _saveDirectory = string.Empty;
-        private bool _filtering = true;
-        private bool _deleteOnExtract = false;
-        private DirectoryCondition _directoryCondition = DirectoryCondition.CreateSmart;
-        private PostProcess _postProcess = PostProcess.OpenNotDesktop;
+        private bool _deleteSource = false;
+        private RootDirectoryCondition _rootDirectory = RootDirectoryCondition.CreateSmart;
         #endregion
     }
 }

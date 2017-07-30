@@ -72,20 +72,15 @@ namespace Cube.FileSystem.Ice
 
     /* --------------------------------------------------------------------- */
     ///
-    /// DirectoryCondition
+    /// RootDirectoryCondition
     ///
     /// <summary>
     /// ルートディレクトリの扱いを表す列挙型です。
     /// </summary>
     /// 
-    /// <remarks>
-    /// CreateSmart が設定された場合、ルートに 2 つ以上のファイルまたは
-    /// ディレクトリが展開される時にのみディレクトリが作成されます。
-    /// </remarks>
-    ///
     /* --------------------------------------------------------------------- */
     [Flags]
-    public enum DirectoryCondition
+    public enum RootDirectoryCondition
     {
         None                = 0x00,
         SkipSingleDirectory = 0x02,
@@ -96,15 +91,15 @@ namespace Cube.FileSystem.Ice
 
     /* --------------------------------------------------------------------- */
     ///
-    /// PostProcess
+    /// OpenDirectoryCondition
     ///
     /// <summary>
-    /// 圧縮・展開後の処理を表す列挙型です。
+    /// 圧縮・展開後にディレクトリを開く処理を表す列挙型です。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [Flags]
-    public enum PostProcess
+    public enum OpenDirectoryCondition
     {
         None            = 0x0000,
         SkipDesktop     = 0x0002,

@@ -114,7 +114,7 @@ namespace Cube.FileSystem.App.Ice
             try
             {
                 Archive();
-                Execute(Settings.Value.Archive.PostProcess, Destination);
+                Execute(Settings.Value.Archive.OpenDirectory, Destination);
                 SetResult();
                 OnProgress(ValueEventArgs.Create(ProgressReport));
             }

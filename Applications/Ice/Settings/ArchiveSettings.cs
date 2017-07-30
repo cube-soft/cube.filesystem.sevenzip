@@ -29,62 +29,9 @@ namespace Cube.FileSystem.Ice
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public class ArchiveSettings : ObservableProperty
+    public class ArchiveSettings : GeneralSettings
     {
         #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SaveLocation
-        /// 
-        /// <summary>
-        /// 保存場所に関する情報を取得します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        [DataMember(Name = "OutputCondition")]
-        public SaveLocation SaveLocation
-        {
-            get { return _saveLocation; }
-            set { SetProperty(ref _saveLocation, value); }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SaveDirectory
-        /// 
-        /// <summary>
-        /// 保存ディレクトリのパスを取得します。
-        /// </summary>
-        /// 
-        /// <remarks>
-        /// このプロパティは SaveLocation.Others の場合に参照されます。
-        /// </remarks>
-        /// 
-        /* ----------------------------------------------------------------- */
-        [DataMember(Name = "OutputPath")]
-        public string SaveDirectory
-        {
-            get { return _saveDirectory; }
-            set { SetProperty(ref _saveDirectory, value); }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Filtering
-        /// 
-        /// <summary>
-        /// 特定のファイルまたはディレクトリをフィルタリングするかどうかを
-        /// 示す値を取得または設定します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        [DataMember]
-        public bool Filtering
-        {
-            get { return _filtering; }
-            set { SetProperty(ref _filtering, value); }
-        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -103,30 +50,10 @@ namespace Cube.FileSystem.Ice
             set { SetProperty(ref _deleteOnMail, value); }
         }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// PostProcess
-        /// 
-        /// <summary>
-        /// 展開後の操作を取得または設定します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        [DataMember(Name = "Open")]
-        public PostProcess PostProcess
-        {
-            get { return _postProcess; }
-            set { SetProperty(ref _postProcess, value); }
-        }
-
         #endregion
 
         #region Fields
-        private SaveLocation _saveLocation = SaveLocation.Others;
-        private string _saveDirectory = string.Empty;
-        private bool _filtering = true;
         private bool _deleteOnMail = false;
-        private PostProcess _postProcess = PostProcess.OpenNotDesktop;
         #endregion
     }
 }
