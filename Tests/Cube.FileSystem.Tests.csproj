@@ -66,14 +66,14 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cube.Core">
+      <HintPath>..\..\packages\Cube.Core.1.4.3\lib\net45\Cube.Core.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\packages\NUnit.3.7.1\lib\net45\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Cube.Core">
-      <HintPath>..\..\packages\Cube.Core.1.4.2\lib\net45\Cube.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -84,16 +84,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Details\FileResource.cs" />
-    <Compile Include="DriveTest.cs" />
-    <Compile Include="OperatorTest.cs" />
-    <Compile Include="FilesTest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SevenZip\ArchiveReaderTest.cs" />
     <Compile Include="SevenZip\ArchiveWriterTest.cs" />
     <Compile Include="SevenZip\FormatTest.cs" />
+    <Compile Include="DriveTest.cs" />
+    <Compile Include="FilesTest.cs" />
+    <Compile Include="OperatorTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages.config" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

@@ -78,7 +78,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Cube.Core">
-      <HintPath>..\..\..\packages\Cube.Core.1.4.2\lib\net45\Cube.Core.dll</HintPath>
+      <HintPath>..\..\..\packages\Cube.Core.1.4.3\lib\net45\Cube.Core.dll</HintPath>
     </Reference>
     <Reference Include="Cube.Forms">
       <HintPath>..\..\..\packages\Cube.Forms.1.4.1\lib\net45\Cube.Forms.dll</HintPath>
@@ -90,16 +90,10 @@
       <HintPath>..\..\..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ViewModels\ArchiveSettingsViewModel.cs" />
@@ -108,14 +102,15 @@
     <Compile Include="ViewModels\ExtractSettingsViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\ShortcutSettingsViewModel.cs" />
+    <Compile Include="Program.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Views\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Views\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Views\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -129,14 +124,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="App.manifest" />
-    <None Include="Packages.config" />
-    <None Include="Properties\DataSources\Cube.FileSystem.Ice.ArchiveSettings.datasource" />
-    <None Include="Properties\DataSources\Cube.FileSystem.Ice.AssociateSettings.datasource" />
-    <None Include="Properties\DataSources\Cube.FileSystem.Ice.ContextSetttings.datasource" />
-    <None Include="Properties\DataSources\Cube.FileSystem.Ice.ExtractSettings.datasource" />
-    <None Include="Properties\DataSources\Cube.FileSystem.Ice.Settings.datasource" />
-    <None Include="Properties\DataSources\Cube.FileSystem.Ice.ShortcutSettings.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -148,10 +135,17 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="App.ico" />
+    <None Include="App.config" />
+    <None Include="App.manifest" />
+    <None Include="Packages.config" />
+    <None Include="Properties\DataSources\Cube.FileSystem.Ice.ArchiveSettings.datasource" />
+    <None Include="Properties\DataSources\Cube.FileSystem.Ice.AssociateSettings.datasource" />
+    <None Include="Properties\DataSources\Cube.FileSystem.Ice.ContextSetttings.datasource" />
+    <None Include="Properties\DataSources\Cube.FileSystem.Ice.ExtractSettings.datasource" />
+    <None Include="Properties\DataSources\Cube.FileSystem.Ice.Settings.datasource" />
+    <None Include="Properties\DataSources\Cube.FileSystem.Ice.ShortcutSettings.datasource" />
     <None Include="Resources\Logo.png" />
   </ItemGroup>
   <ItemGroup>
