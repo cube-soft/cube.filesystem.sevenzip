@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://github.com/cube-soft/Cube.FileSystem/blob/master/License.txt</licenseUrl>
+    <projectUrl>https://github.com/cube-soft/Cube.FileSystem</projectUrl>
+    <iconUrl>https://github.com/cube-soft/Cube.FileSystem/blob/master/Icon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>I/O library for CubeSoft applications.</description>
+    <releaseNotes>Private release.</releaseNotes>
+    <copyright>$copyright$</copyright>
+    <tags>Cube Windows</tags>
+    <dependencies>
+      <dependency id="AlphaFS" version="2.1.3" />
+      <dependency id="Cube.Core" version="1.4.3" />
+      <dependency id="log4net" version="2.0.8" />
+    </dependencies>
+  </metadata>
+</package>
