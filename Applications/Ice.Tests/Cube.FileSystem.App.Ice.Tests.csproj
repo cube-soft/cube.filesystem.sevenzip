@@ -95,6 +95,7 @@
     <Compile Include="Details\ProgressMockView.cs" />
     <Compile Include="ArchivePresenterTest.cs" />
     <Compile Include="ExtractPresenterTest.cs" />
+    <Compile Include="Settings\AssociateSettingsTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

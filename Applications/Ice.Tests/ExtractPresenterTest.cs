@@ -62,8 +62,8 @@ namespace Cube.FileSystem.App.Ice.Tests
             MockViewFactory.Password    = password;
 
             settings.Value.Extract.SaveLocation  = SaveLocation.Runtime;
-            settings.Value.Extract.RootDirectory = DirectoryCondition.CreateSmart;
-            settings.Value.Extract.PostProcess   = PostProcess.None;
+            settings.Value.Extract.RootDirectory = RootDirectoryCondition.CreateSmart;
+            settings.Value.Extract.OpenDirectory   = OpenDirectoryCondition.None;
             settings.Value.Extract.DeleteSource  = false;
 
             // Main

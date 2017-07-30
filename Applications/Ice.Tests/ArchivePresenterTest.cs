@@ -63,7 +63,7 @@ namespace Cube.FileSystem.App.Ice.Tests
             MockViewFactory.Password    = "password"; // used by "/p" option
 
             settings.Value.Archive.SaveLocation = SaveLocation.Runtime;
-            settings.Value.Archive.PostProcess  = PostProcess.None;
+            settings.Value.Archive.OpenDirectory  = OpenDirectoryCondition.None;
 
             // Main
             using (var ap = new ArchivePresenter(view, model, settings, events))

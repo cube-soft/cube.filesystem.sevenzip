@@ -297,8 +297,8 @@ namespace Cube.FileSystem
                 var ti  = _core.Get(tmp);
 
                 if (!MoveCore(di, ti)) return;
-                if ( MoveCore(si, di)) _core.Delete(tmp);
-                else MoveCore(ti, di); // recover
+                if (!MoveCore(si, di)) MoveCore(ti, di); // recover
+                else _core.Delete(tmp);
             }
         }
 

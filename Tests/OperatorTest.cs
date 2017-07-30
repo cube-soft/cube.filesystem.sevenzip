@@ -95,15 +95,40 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Move_Overwrite
+        /// OpenWrite
         ///
         /// <summary>
-        /// 上書き移動のテストを実行します。
+        /// 書き込み用ストリームを生成するテストを実行します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(Operator_TestCases))]
-        public void Move_Overwrite(IOperatorCore core)
+        public void OpenWrite(IOperatorCore core)
+        {
+            var dest = Result("OpenWrite.txt");
+            var io = new Operator(core);
+            io.Copy(Example("Sample.txt"), dest, true);
+
+            var count = io.Get(dest).Length;
+            using (var stream = io.OpenWrite(dest)) stream.WriteByte((byte)'A');
+            Assert.That(io.Get(dest).Length, Is.EqualTo(count));
+
+            var newfile = Result("OpenWrite_Create.txt");
+            using (var stream = io.OpenWrite(newfile)) stream.WriteByte((byte)'A');
+            Assert.That(io.Get(newfile).Length, Is.EqualTo(1));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Move
+        ///
+        /// <summary>
+        /// 移動のテストを実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [TestCaseSource(nameof(Operator_TestCases))]
+        public void Move(IOperatorCore core)
         {
             var io = new Operator(core);
             io.Failed += (s, e) => Assert.Fail($"{e.Name}: {e.Exception}");
@@ -117,11 +142,15 @@ namespace Cube.FileSystem.Tests
 
             io.Copy(src, dest, false);
             io.Move(src, dest, true);
-            Assert.That(io.Get(src).Exists, Is.False);
+            Assert.That(io.Get(src).Exists,  Is.False);
             Assert.That(io.Get(dest).Exists, Is.True);
 
-            io.Delete(dest);
+            io.Move(dest, src);
+            Assert.That(io.Get(src).Exists,  Is.True);
             Assert.That(io.Get(dest).Exists, Is.False);
+
+            io.Delete(src);
+            Assert.That(io.Get(src).Exists,  Is.False);
         }
 
         /* ----------------------------------------------------------------- */
@@ -146,7 +175,7 @@ namespace Cube.FileSystem.Tests
 
             var src  = io.Combine(Results, "FileNotFound.txt");
             var dest = io.Combine(Results, "Moved.txt");
-            io.Move(src, dest, true);
+            io.Move(src, dest);
 
             Assert.That(failed, Is.True);
         }
@@ -172,7 +201,7 @@ namespace Cube.FileSystem.Tests
                 var io   = new Operator(core);
                 var src  = io.Combine(Results, "FileNotFound.txt");
                 var dest = io.Combine(Results, "Moved.txt");
-                io.Move(src, dest, true);
+                io.Move(src, dest);
             },
             Throws.TypeOf<System.IO.FileNotFoundException>());
 
