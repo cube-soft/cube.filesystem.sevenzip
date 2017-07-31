@@ -66,50 +66,6 @@ ContextMenu::~ContextMenu() {
 
 /* ------------------------------------------------------------------------- */
 ///
-/// CurrentDirectory
-/// 
-/// <summary>
-/// 実行中の DLL が存在するディレクトリのパスを取得します。
-/// </summary>
-///
-/// <returns>ディレクトリのパス</returns>
-///
-/* ------------------------------------------------------------------------- */
-ContextMenu::TString ContextMenu::CurrentDirectory() const {
-    TCHAR dest[2048] = {};
-    GetModuleFileName(handle_, dest, sizeof(dest) / sizeof(dest[0]));
-    PathRemoveFileSpec(dest);
-    return TString(dest);
-}
-
-/* ------------------------------------------------------------------------- */
-///
-/// QueryInterface
-/// 
-/// <summary>
-/// 使用するオブジェクトを問い合わせます。
-/// </summary>
-///
-/// <param name="iid">インターフェイスを識別するための GUID</param>
-/// <param name="obj">生成オブジェクト</param>
-///
-/// <returns>HRESULT</returns>
-///
-/// <remarks>IUnknown から継承されます。</remarks>
-///
-/* ------------------------------------------------------------------------- */
-STDMETHODIMP ContextMenu::QueryInterface(REFIID iid, LPVOID * obj) {
-    obj = IsEqualIID(iid, IID_IUnknown) ||
-          IsEqualIID(iid, IID_IContextMenu)  ? (LPVOID*)static_cast<LPCONTEXTMENU>(this)    :
-          IsEqualIID(iid, IID_IShellExtInit) ? (LPVOID*)static_cast<LPSHELLEXTINIT>(this)   :
-          IsEqualIID(iid, IID_IQueryInfo)    ? (LPVOID*)reinterpret_cast<IQueryInfo*>(this) : NULL;
-
-    AddRef();
-    return obj != NULL ? NOERROR : E_NOINTERFACE;
-}
-
-/* ------------------------------------------------------------------------- */
-///
 /// AddRef
 /// 
 /// <summary>
@@ -143,6 +99,32 @@ STDMETHODIMP_(ULONG) ContextMenu::Release() {
     if (count) return count;
     delete this;
     return 0L;
+}
+
+/* ------------------------------------------------------------------------- */
+///
+/// QueryInterface
+/// 
+/// <summary>
+/// 使用するオブジェクトを問い合わせます。
+/// </summary>
+///
+/// <param name="iid">インターフェイスを識別するための GUID</param>
+/// <param name="obj">生成オブジェクト</param>
+///
+/// <returns>HRESULT</returns>
+///
+/// <remarks>IUnknown から継承されます。</remarks>
+///
+/* ------------------------------------------------------------------------- */
+STDMETHODIMP ContextMenu::QueryInterface(REFIID iid, LPVOID * obj) {
+    obj = IsEqualIID(iid, IID_IUnknown) ||
+          IsEqualIID(iid, IID_IContextMenu)  ? (LPVOID*)static_cast<LPCONTEXTMENU>(this)  :
+          IsEqualIID(iid, IID_IShellExtInit) ? (LPVOID*)static_cast<LPSHELLEXTINIT>(this) : NULL;
+
+    if (obj == NULL) return E_NOINTERFACE;
+    AddRef();
+    return NOERROR;
 }
 
 /* ------------------------------------------------------------------------- */
@@ -325,6 +307,24 @@ STDMETHODIMP ContextMenu::InvokeCommand(LPCMINVOKECOMMANDINFO info) {
     delete[] cmd;
 
     return S_OK;
+}
+
+/* ------------------------------------------------------------------------- */
+///
+/// CurrentDirectory
+/// 
+/// <summary>
+/// 実行中の DLL が存在するディレクトリのパスを取得します。
+/// </summary>
+///
+/// <returns>ディレクトリのパス</returns>
+///
+/* ------------------------------------------------------------------------- */
+ContextMenu::TString ContextMenu::CurrentDirectory() const {
+    TCHAR dest[2048] = {};
+    GetModuleFileName(handle_, dest, sizeof(dest) / sizeof(dest[0]));
+    PathRemoveFileSpec(dest);
+    return TString(dest);
 }
 
 /* ------------------------------------------------------------------------- */
