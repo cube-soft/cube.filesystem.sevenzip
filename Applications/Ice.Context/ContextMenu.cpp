@@ -118,11 +118,12 @@ STDMETHODIMP_(ULONG) ContextMenu::Release() {
 ///
 /* ------------------------------------------------------------------------- */
 STDMETHODIMP ContextMenu::QueryInterface(REFIID iid, LPVOID * obj) {
-    obj = IsEqualIID(iid, IID_IUnknown) ||
-          IsEqualIID(iid, IID_IContextMenu)  ? (LPVOID*)static_cast<LPCONTEXTMENU>(this)  :
-          IsEqualIID(iid, IID_IShellExtInit) ? (LPVOID*)static_cast<LPSHELLEXTINIT>(this) : NULL;
+    if (IsEqualIID(iid, IID_IUnknown)) *obj = static_cast<LPCONTEXTMENU>(this);
+    else if(IsEqualIID(iid, IID_IContextMenu)) *obj = static_cast<LPCONTEXTMENU>(this);
+    else if (IsEqualIID(iid, IID_IShellExtInit)) *obj = static_cast<LPSHELLEXTINIT>(this);
+    else *obj = NULL;
 
-    if (obj == NULL) return E_NOINTERFACE;
+    if (*obj == NULL) return E_NOINTERFACE;
     AddRef();
     return NOERROR;
 }

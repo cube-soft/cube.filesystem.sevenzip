@@ -105,14 +105,13 @@ STDMETHODIMP_(ULONG) ContextMenuFactory::Release() {
 ///
 /* ------------------------------------------------------------------------- */
 STDMETHODIMP ContextMenuFactory::QueryInterface(REFIID iid, LPVOID * obj) {
-    if (IsEqualIID(iid, IID_IUnknown) || IsEqualIID(iid, IID_IClassFactory)) {
-        *obj = static_cast<LPCLASSFACTORY>(this);
-        AddRef();
-        return NOERROR;
-    }
+    if (IsEqualIID(iid, IID_IUnknown)) *obj = static_cast<LPCLASSFACTORY>(this);
+    else if (IsEqualIID(iid, IID_IClassFactory)) *obj = static_cast<LPCLASSFACTORY>(this);
     else *obj = NULL;
 
-    return E_NOINTERFACE;
+    if (*obj == NULL) E_NOINTERFACE;
+    AddRef();
+    return NOERROR;
 }
 
 /* ------------------------------------------------------------------------- */
