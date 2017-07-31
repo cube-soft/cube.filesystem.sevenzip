@@ -17,40 +17,68 @@
 /* ------------------------------------------------------------------------- */
 #pragma once
 
+#include <tchar.h>
 #include <shobjidl.h>
+#include <string>
+#include <vector>
+#include <map>
+#include "Resources.h"
+#include "ContextSettings.h"
+#include "ContextMenuItem.h"
 
 namespace Cube {
 namespace FileSystem {
 namespace Ice {
-    /* --------------------------------------------------------------------- */
-    ///
-    /// ContextMenu
-    /// 
-    /// <summary>
-    /// CubeICE に関するコンテキストメニューを表示するためのクラスです。
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    class ContextMenu : public IContextMenu3, IShellExtInit {
-    public:
-        ContextMenu() = delete;
-        ContextMenu(const ContextMenu& cp) = delete;
-        ContextMenu(HINSTANCE handle, ULONG& count);
-        virtual ~ContextMenu();
 
-        STDMETHOD(QueryInterface)(REFIID iid, LPVOID * obj); // IUnknown
-        STDMETHOD_(ULONG, AddRef)(void); // IUnknown
-        STDMETHOD_(ULONG, Release)(void); // IUnknown
-        STDMETHODIMP Initialize(LPCITEMIDLIST, LPDATAOBJECT, HKEY); // IShellExtInit
-        STDMETHODIMP GetCommandString(UINT_PTR, UINT, UINT*, LPSTR, UINT); // IContextMenu
-        STDMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO); // IContextMenu
-        STDMETHODIMP QueryContextMenu(HMENU, UINT, UINT, UINT, UINT); // IContextMenu
-        STDMETHODIMP HandleMenuMsg(UINT, WPARAM, LPARAM) { return S_OK; } // IContextMenu2
-        STDMETHODIMP HandleMenuMsg2(UINT, WPARAM, LPARAM, LRESULT*) { return S_OK; } // IContextMenu3
+/* ------------------------------------------------------------------------- */
+///
+/// ContextMenu
+/// 
+/// <summary>
+/// CubeICE に関するコンテキストメニューを表示するためのクラスです。
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+class ContextMenu : public IContextMenu3, IShellExtInit {
+public:
+    typedef std::basic_string<TCHAR> TString;
 
-    private:
-        HINSTANCE handle_;
-        ULONG& dllCount_;
-        ULONG objCount_;
-    };
+    ContextMenu() = delete;
+    ContextMenu(const ContextMenu& cp) = delete;
+    ContextMenu(HINSTANCE handle, ULONG& count);
+    virtual ~ContextMenu();
+
+    TString CurrentDirectory() const;
+    TString Program() const { return CurrentDirectory() + _T("\\") CUBEICE_PROGRAM; }
+
+    const ContextSettings& Settings() const { return settings_; }
+    const std::map<int, ContextMenuItem>& Items() const { return items_; }
+    const std::vector<TString>& Files() const { return files_; }
+
+    ContextSettings& Settings() { return settings_; }
+    std::map<int, ContextMenuItem>& Items() { return items_; }
+    std::vector<TString>& Files() { return files_; }
+
+    STDMETHOD(QueryInterface)(REFIID iid, LPVOID * obj); // IUnknown
+    STDMETHOD_(ULONG, AddRef)(void); // IUnknown
+    STDMETHOD_(ULONG, Release)(void); // IUnknown
+    STDMETHODIMP Initialize(LPCITEMIDLIST, LPDATAOBJECT, HKEY); // IShellExtInit
+    STDMETHODIMP GetCommandString(UINT_PTR, UINT, UINT*, LPSTR, UINT); // IContextMenu
+    STDMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO); // IContextMenu
+    STDMETHODIMP QueryContextMenu(HMENU, UINT, UINT, UINT, UINT); // IContextMenu
+    STDMETHODIMP HandleMenuMsg(UINT, WPARAM, LPARAM) { return S_OK; } // IContextMenu2
+    STDMETHODIMP HandleMenuMsg2(UINT, WPARAM, LPARAM, LRESULT*) { return S_OK; } // IContextMenu3
+
+private:
+    bool Insert(ContextMenuItem&, HMENU, UINT&, UINT&, UINT);
+    bool Insert(ContextMenuItem::ContextMenuVector&, HMENU, UINT&, UINT&, UINT);
+
+    HINSTANCE handle_;
+    ULONG& dllCount_;
+    ULONG objCount_;
+    ContextSettings settings_;
+    std::map<int, ContextMenuItem> items_;
+    std::vector<TString> files_;
+};
+
 }}} // Cube::FileSystem::Ice

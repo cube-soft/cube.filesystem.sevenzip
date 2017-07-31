@@ -38,12 +38,11 @@ namespace {
 ///
 /// <param name="instance">プロセスハンドラ</param>
 /// <param name="reason">実行された理由を示す値</param>
-/// <param name="reserved">パラメータ</param>
 ///
 /// <returns>TRUE or FALSE</returns>
 ///
 /* ------------------------------------------------------------------------- */
-extern "C" int APIENTRY DllMain(HINSTANCE handle, DWORD reason, LPVOID reserved) {
+extern "C" int APIENTRY DllMain(HINSTANCE handle, DWORD reason, LPVOID /* reserved */) {
     switch (reason)
     {
     case DLL_PROCESS_ATTACH:

@@ -55,7 +55,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
@@ -80,7 +80,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>
       </DebugInformationFormat>
     </ClCompile>
@@ -99,10 +99,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContextMenu.cpp" />
+    <ClCompile Include="ContextMenuItem.cpp" />
+    <ClCompile Include="ContextPresetMenu.cpp" />
+    <ClCompile Include="ContextSettings.cpp" />
     <ClCompile Include="Program.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ContextMenu.h" />
+    <ClInclude Include="ContextPresetMenu.h" />
+    <ClInclude Include="ContextSettings.h" />
+    <ClInclude Include="ContextMenuItem.h" />
+    <ClInclude Include="Encoding.h" />
+    <ClInclude Include="Resources.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>
