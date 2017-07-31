@@ -41,7 +41,7 @@ namespace Encoding {
 /* ------------------------------------------------------------------------- */
 inline std::basic_string<char> UnicodeToMultiByte(const std::basic_string<wchar_t>& src, UINT cp = CP_OEMCP) {
     char dest[2048] = {};
-    auto count = sizeof(dest) / sizeof(dest[0]);
+    auto count  = static_cast<int>(sizeof(dest) / sizeof(dest[0]));
     auto result = WideCharToMultiByte(cp, 0, src.c_str(), -1, dest, count, NULL, NULL);
 
     return result != 0 ?
@@ -65,7 +65,7 @@ inline std::basic_string<char> UnicodeToMultiByte(const std::basic_string<wchar_
 /* ------------------------------------------------------------------------- */
 inline std::basic_string<wchar_t> MultiByteToUnicode(const std::basic_string<char>& src, UINT cp = CP_OEMCP) {
     wchar_t dest[2048] = {};
-    auto count = sizeof(dest) / sizeof(dest[0]);
+    auto count  = static_cast<int>(sizeof(dest) / sizeof(dest[0]));
     auto result = MultiByteToWideChar(cp, 0, src.c_str(), -1, dest, count);
 
     return result != 0 ?

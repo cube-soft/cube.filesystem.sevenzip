@@ -250,7 +250,7 @@ STDMETHODIMP ContextMenu::QueryContextMenu(HMENU menu, UINT index, UINT first, U
 ///
 /* ------------------------------------------------------------------------- */
 STDMETHODIMP ContextMenu::GetCommandString(UINT_PTR index, UINT flags, UINT FAR* /* reserved */, LPSTR buffer, UINT size) {
-    auto pos = Items().find(index);
+    auto pos = Items().find(static_cast<int>(index));
     if (pos == Items().end()) return S_FALSE;
 
     switch (flags)
