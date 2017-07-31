@@ -81,10 +81,10 @@
       <HintPath>..\..\..\packages\Cube.Core.1.4.3\lib\net45\Cube.Core.dll</HintPath>
     </Reference>
     <Reference Include="Cube.Forms">
-      <HintPath>..\..\..\packages\Cube.Forms.1.4.1\lib\net45\Cube.Forms.dll</HintPath>
+      <HintPath>..\..\..\packages\Cube.Forms.1.4.2\lib\net45\Cube.Forms.dll</HintPath>
     </Reference>
     <Reference Include="Cube.Images">
-      <HintPath>..\..\..\packages\Cube.Images.1.4.0\lib\net45\Cube.Images.dll</HintPath>
+      <HintPath>..\..\..\packages\Cube.Images.1.4.1\lib\net45\Cube.Images.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
@@ -110,16 +110,6 @@
     <Compile Include="Presenters\ExtractPresenter.cs" />
     <Compile Include="Presenters\ProgressFacade.cs" />
     <Compile Include="Presenters\ProgressPresenter.cs" />
-    <Compile Include="Settings\ArchiveDetails.cs" />
-    <Compile Include="Settings\ArchiveSettings.cs" />
-    <Compile Include="Settings\AssociateSettings.cs" />
-    <Compile Include="Settings\ContextSettings.cs" />
-    <Compile Include="Settings\ExtractSettings.cs" />
-    <Compile Include="Settings\GeneralSettings.cs" />
-    <Compile Include="Settings\Parameters.cs" />
-    <Compile Include="Settings\Settings.cs" />
-    <Compile Include="Settings\SettingsFolder.cs" />
-    <Compile Include="Settings\ShortcutSettings.cs" />
     <Compile Include="Views\IProgressView.cs" />
     <Compile Include="Views\ViewDataSource.cs" />
     <Compile Include="Views\ViewFactory.cs" />
@@ -215,6 +205,10 @@
     <ProjectReference Include="..\..\Libraries\SevenZip\Cube.FileSystem.SevenZip.csproj">
       <Project>{74c9f388-360e-4c46-a9a6-e131eab2e49c}</Project>
       <Name>Cube.FileSystem.SevenZip</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ice\Cube.FileSystem.Ice.csproj">
+      <Project>{1badab3f-38b5-4acf-addf-036918bfc51c}</Project>
+      <Name>Cube.FileSystem.Ice</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.12
+VisualStudioVersion = 15.0.26403.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem", "Libraries\Cube.FileSystem.csproj", "{E89AAD2C-5A74-49F6-AD84-65F0016EF1BB}"
 EndProject
@@ -9,7 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.SevenZip", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.Tests", "Tests\Cube.FileSystem.Tests.csproj", "{BDBA9B88-28D5-4369-B6AF-ADA67D95AC98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.App.Ice", "Applications\Ice\Cube.FileSystem.App.Ice.csproj", "{E14092D2-266A-4CC7-B1CE-2ADD0CB8E65B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.Ice", "Applications\Ice\Cube.FileSystem.Ice.csproj", "{1BADAB3F-38B5-4ACF-ADDF-036918BFC51C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.App.Ice", "Applications\Ice.Progress\Cube.FileSystem.App.Ice.csproj", "{E14092D2-266A-4CC7-B1CE-2ADD0CB8E65B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.App.Ice.Settings", "Applications\Ice.Settings\Cube.FileSystem.App.Ice.Settings.csproj", "{42B72A9A-C752-4D99-97D0-D341F1BD2A45}"
 EndProject
@@ -61,6 +63,18 @@ Global
 		{BDBA9B88-28D5-4369-B6AF-ADA67D95AC98}.Release|x64.Build.0 = Release|x64
 		{BDBA9B88-28D5-4369-B6AF-ADA67D95AC98}.Release|x86.ActiveCfg = Release|x86
 		{BDBA9B88-28D5-4369-B6AF-ADA67D95AC98}.Release|x86.Build.0 = Release|x86
+		{1BADAB3F-38B5-4ACF-ADDF-036918BFC51C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BADAB3F-38B5-4ACF-ADDF-036918BFC51C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BADAB3F-38B5-4ACF-ADDF-036918BFC51C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1BADAB3F-38B5-4ACF-ADDF-036918BFC51C}.Debug|x64.Build.0 = Debug|Any CPU
+		{1BADAB3F-38B5-4ACF-ADDF-036918BFC51C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1BADAB3F-38B5-4ACF-ADDF-036918BFC51C}.Debug|x86.Build.0 = Debug|Any CPU
+		{1BADAB3F-38B5-4ACF-ADDF-036918BFC51C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BADAB3F-38B5-4ACF-ADDF-036918BFC51C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BADAB3F-38B5-4ACF-ADDF-036918BFC51C}.Release|x64.ActiveCfg = Release|Any CPU
+		{1BADAB3F-38B5-4ACF-ADDF-036918BFC51C}.Release|x64.Build.0 = Release|Any CPU
+		{1BADAB3F-38B5-4ACF-ADDF-036918BFC51C}.Release|x86.ActiveCfg = Release|Any CPU
+		{1BADAB3F-38B5-4ACF-ADDF-036918BFC51C}.Release|x86.Build.0 = Release|Any CPU
 		{E14092D2-266A-4CC7-B1CE-2ADD0CB8E65B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E14092D2-266A-4CC7-B1CE-2ADD0CB8E65B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E14092D2-266A-4CC7-B1CE-2ADD0CB8E65B}.Debug|x64.ActiveCfg = Debug|x64

@@ -16,15 +16,15 @@ before_build:
     - nuget sources add -name Cube.Core -source https://ci.appveyor.com/nuget/cube.core
     - nuget sources add -name Cube.Images -source https://ci.appveyor.com/nuget/cube.images
     - nuget sources add -name Cube.Forms -source https://ci.appveyor.com/nuget/cube.forms
-    - nuget restore Cube.FileSystem.sln
+    - nuget restore Cube.FileSystem.Ice.sln
 build:
     parallel: true
-    project: Cube.FileSystem.sln
+    project: Cube.FileSystem.Ice.sln
     publish_nuget: true
     verbosity: normal
 after_build:
-    - copy /Y 7z.* Tests\bin\x86\Release
-    - copy /Y 7z.* Applications\Ice.Tests\bin\x86\Release
+    - xcopy /Y /I 7z.* Tests\bin\x86\Release
+    - xcopy /Y /I 7z.* Applications\Ice.Tests\bin\x86\Release
 test_script:
     - ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:nunit3-console.exe -targetargs:Cube.FileSystem.Tests.dll -targetdir:Tests\bin\x86\Release -hideskipped:All -output:CoverResult.xml -filter:"+[*]* -[AlphaFS]* -[*]*NativeMethods -[*]*Properties.*"
     - ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:nunit3-console.exe -targetargs:Cube.FileSystem.App.Ice.Tests.dll -targetdir:Applications\Ice.Tests\bin\x86\Release -hideskipped:All -mergeoutput -output:CoverResult.xml -filter:"+[*]* -[AlphaFS]* -[*]*NativeMethods -[*]*Properties.* -[*]*Form -[*]*.Program"

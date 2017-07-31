@@ -43,7 +43,7 @@ namespace Cube.FileSystem.Ice
         {
             AutoSave = false;
             Version.Digit = 3;
-            Version.Suffix = Cube.FileSystem.App.Ice.Properties.Resources.VersionSuffix;
+            Version.Suffix = Properties.Resources.VersionSuffix;
         }
 
         #endregion
