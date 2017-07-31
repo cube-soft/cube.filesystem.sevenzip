@@ -41,7 +41,7 @@ namespace Ice {
 ContextMenu::ContextMenu(HINSTANCE handle, ULONG& count) :
     handle_(handle),
     dllCount_(count),
-    objCount_(0),
+    objCount_(1),
     settings_(),
     items_(),
     files_()
