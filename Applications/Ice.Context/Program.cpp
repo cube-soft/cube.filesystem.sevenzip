@@ -90,7 +90,7 @@ STDAPI DllCanUnloadNow()
 /* ------------------------------------------------------------------------- */
 STDAPI DllGetClassObject(REFCLSID clsid, REFIID iid, LPVOID *obj) {
     if (IsEqualCLSID(clsid, CUBEICE_CTX_CLSID)) {
-        auto menu = new Cube::FileSystem::Ice::ContextMenu(kInstance, kReferenceCount);
+        auto menu = new Cube::FileSystem::Ice::ContextMenuFactory(kInstance, kReferenceCount);
         if (!menu) return E_OUTOFMEMORY;
 
         auto result = menu->QueryInterface(iid, obj);
