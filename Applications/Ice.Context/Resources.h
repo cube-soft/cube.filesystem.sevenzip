@@ -19,6 +19,8 @@
 
 #include <tchar.h>
 
+#define CUBEICE_PROGRAM             _T("cubeice.exe")
+
 #define CUBEICE_MENU_ARCHIVE        _T("圧縮")
 #define CUBEICE_MENU_EXTRACT        _T("解凍")
 #define CUBEICE_MENU_SETTINGS       _T("設定")
