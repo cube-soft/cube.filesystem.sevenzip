@@ -74,6 +74,7 @@ public:
 private:
     bool Insert(ContextMenuItem&, HMENU, UINT&, UINT&, UINT);
     bool Insert(ContextMenuItem::ContextMenuVector&, HMENU, UINT&, UINT&, UINT);
+    void UpdateStyle(HMENU);
 
     HINSTANCE handle_;
     ULONG& dllCount_;

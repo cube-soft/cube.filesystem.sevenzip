@@ -205,14 +205,7 @@ STDMETHODIMP ContextMenu::QueryContextMenu(HMENU menu, UINT index, UINT first, U
 
     if (cmdid - first > 0) InsertMenu(menu, index++, MF_BYPOSITION | MF_SEPARATOR, 0, NULL);
 
-    MENUINFO mi = {};
-    mi.cbSize  = sizeof(mi);
-    mi.fMask   = MIM_STYLE;
-    GetMenuInfo(menu, &mi);
-    mi.dwStyle = (mi.dwStyle & ~MNS_NOCHECK) | MNS_CHECKORBMP;
-    mi.fMask   = MIM_STYLE | MIM_APPLYTOSUBMENUS;
-    SetMenuInfo(menu, &mi);
-
+    UpdateStyle(menu);
     return MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_NULL, cmdid - first);
 }
 
@@ -364,6 +357,7 @@ bool ContextMenu::Insert(ContextMenuItem& src, HMENU dest, UINT& index, UINT& cm
     else ++cmdid;
 
     Items().insert(std::make_pair(current - first, src));
+    if (!src.IconLocation().empty() && icon_) icon_->SetMenuIcon(src.IconLocation(), info);
     InsertMenuItem(dest, index++, TRUE, &info);
 
     return true;
@@ -383,6 +377,27 @@ bool ContextMenu::Insert(ContextMenuItem::ContextMenuVector& src,
     auto current = cmdid;
     for (auto ctx : src) Insert(ctx, dest, index, cmdid, first);
     return cmdid > current;
+}
+
+/* ------------------------------------------------------------------------- */
+///
+/// UpdateStyle
+/// 
+/// <summary>
+/// メニューのスタイルを更新します。
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+void ContextMenu::UpdateStyle(HMENU menu) {
+    MENUINFO mi = {};
+
+    mi.cbSize  = sizeof(mi);
+    mi.fMask   = MIM_STYLE;
+    GetMenuInfo(menu, &mi);
+
+    mi.dwStyle = (mi.dwStyle & ~MNS_NOCHECK) | MNS_CHECKORBMP;
+    mi.fMask   = MIM_STYLE | MIM_APPLYTOSUBMENUS;
+    SetMenuInfo(menu, &mi);
 }
 
 }}} // Cube::FileSystem::Ice
