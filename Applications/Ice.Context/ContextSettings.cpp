@@ -16,6 +16,8 @@
 ///
 /* ------------------------------------------------------------------------- */
 #include "ContextSettings.h"
+#include "ContextPresetMenu.h"
+#include <windows.h>
 
 namespace Cube {
 namespace FileSystem {
@@ -43,7 +45,47 @@ ContextSettings::ContextSettings() :
 ///
 /* ------------------------------------------------------------------------- */
 void ContextSettings::Load() {
-    // TODO: implementations
+    try {
+        auto hkey = Open(_T("Software\\CubeSoft\\CubeICE\\v3"));
+        if (hkey == NULL) return;
+
+        auto ps = GetDword(hkey, _T("Preset"), static_cast<DWORD>(PresetMenu::Unknown));
+        if (ps != PresetMenu::Unknown) preset_ = ps;
+
+        RegCloseKey(hkey);
+    }
+    catch (...) { /* TODO: Logging. */ }
+}
+
+/* ------------------------------------------------------------------------- */
+///
+/// Open
+/// 
+/// <summary>
+/// HKEY_CURRENT_USER 下にあるサブキーを読み込み専用で開きます。
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+HKEY ContextSettings::Open(const ContextSettings::TString& name) {
+    HKEY dest;
+    auto result = RegOpenKeyEx(HKEY_CURRENT_USER, name.c_str(), 0, KEY_READ, &dest);
+    return result == ERROR_SUCCESS ? dest : NULL;
+}
+
+/* ------------------------------------------------------------------------- */
+///
+/// GetDword
+/// 
+/// <summary>
+/// DWORD の値を取得します。
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+DWORD ContextSettings::GetDword(HKEY hkey, const ContextSettings::TString& name, DWORD alternate) {
+    DWORD dest = 0;
+    DWORD size = sizeof(dest);
+    auto result = RegQueryValueEx(hkey, name.c_str(), NULL, NULL, reinterpret_cast<LPBYTE>(&dest), &size);
+    return result == ERROR_SUCCESS ? dest : alternate;
 }
 
 }}} // Cube::FileSystem::Ice

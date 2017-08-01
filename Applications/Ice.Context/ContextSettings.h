@@ -17,6 +17,10 @@
 /* ------------------------------------------------------------------------- */
 #pragma once
 
+#include <tchar.h>
+#include <windows.h>
+#include <string>
+
 namespace Cube {
 namespace FileSystem {
 namespace Ice {
@@ -32,6 +36,8 @@ namespace Ice {
 /* ------------------------------------------------------------------------- */
 class ContextSettings {
 public:
+    typedef std::basic_string<TCHAR> TString;
+
     ContextSettings();
     ContextSettings(const ContextSettings& cp) = delete;
     virtual ~ContextSettings() {}
@@ -40,6 +46,9 @@ public:
     void Load();
 
 private:
+    HKEY Open(const TString&);
+    DWORD GetDword(HKEY, const TString&, DWORD);
+
     int preset_;
 };
 
