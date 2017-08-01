@@ -16,11 +16,11 @@
 ///
 /* ------------------------------------------------------------------------- */
 #include "ContextMenu.h"
-#include <shlwapi.h>
-#include <shlobj.h>
-#include <sstream>
-#include "Encoding.h"
 #include "ContextPresetMenu.h"
+#include "../Encoding.h"
+#include <shlobj.h>
+#include <shlwapi.h>
+#include <sstream>
 
 namespace Cube {
 namespace FileSystem {

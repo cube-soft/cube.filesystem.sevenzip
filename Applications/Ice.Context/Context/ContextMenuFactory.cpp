@@ -15,6 +15,7 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+#include "ContextMenuFactory.h"
 #include "ContextMenu.h"
 
 namespace Cube {

@@ -1,4 +1,4 @@
-#include "ContextMenuIcon.h"
+ï»¿#include "ContextMenuIcon.h"
 
 namespace Cube {
 namespace FileSystem {
@@ -9,7 +9,7 @@ namespace Ice {
 /// ArgbContextMenuIcon
 /// 
 /// <summary>
-/// ƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»‚µ‚Ü‚·B
+/// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ã—ã¾ã™ã€‚
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
@@ -23,7 +23,7 @@ ArgbContextMenuIcon::ArgbContextMenuIcon()
 /// ~ArgbContextMenuIcon
 /// 
 /// <summary>
-/// ƒIƒuƒWƒFƒNƒg‚ğ”jŠü‚µ‚Ü‚·B
+/// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç ´æ£„ã—ã¾ã™ã€‚
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
@@ -41,11 +41,11 @@ ArgbContextMenuIcon::~ArgbContextMenuIcon() {
 /// SetMenuIcon
 /// 
 /// <summary>
-/// ƒAƒCƒRƒ“‚ğİ’è‚µ‚Ü‚·B
+/// ã‚¢ã‚¤ã‚³ãƒ³ã‚’è¨­å®šã—ã¾ã™ã€‚
 /// </summary>
 ///
-/// <param name="src">ƒAƒCƒRƒ“—pƒtƒ@ƒCƒ‹‚ÌƒpƒX</param>
-/// <param name="dest">ƒƒjƒ…[î•ñ</param>
+/// <param name="src">ã‚¢ã‚¤ã‚³ãƒ³ç”¨ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹</param>
+/// <param name="dest">ãƒ¡ãƒ‹ãƒ¥ãƒ¼æƒ…å ±</param>
 ///
 /* ------------------------------------------------------------------------- */
 void ArgbContextMenuIcon::SetMenuIcon(const ArgbContextMenuIcon::TString& src, MENUITEMINFO& dest) {

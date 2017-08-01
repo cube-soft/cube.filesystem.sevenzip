@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Program.cpp" />
+    <ClCompile Include="Context\ContextMenu.cpp">
+      <Filter>Context</Filter>
+    </ClCompile>
+    <ClCompile Include="Context\ContextMenuFactory.cpp">
+      <Filter>Context</Filter>
+    </ClCompile>
+    <ClCompile Include="Context\ContextMenuIcon.cpp">
+      <Filter>Context</Filter>
+    </ClCompile>
+    <ClCompile Include="Context\ContextMenuItem.cpp">
+      <Filter>Context</Filter>
+    </ClCompile>
+    <ClCompile Include="Context\ContextPresetMenu.cpp">
+      <Filter>Context</Filter>
+    </ClCompile>
+    <ClCompile Include="Context\ContextSettings.cpp">
+      <Filter>Context</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Encoding.h" />
+    <ClInclude Include="Resources.h" />
+    <ClInclude Include="Context\ContextMenu.h">
+      <Filter>Context</Filter>
+    </ClInclude>
+    <ClInclude Include="Context\ContextMenuFactory.h">
+      <Filter>Context</Filter>
+    </ClInclude>
+    <ClInclude Include="Context\ContextMenuIcon.h">
+      <Filter>Context</Filter>
+    </ClInclude>
+    <ClInclude Include="Context\ContextMenuItem.h">
+      <Filter>Context</Filter>
+    </ClInclude>
+    <ClInclude Include="Context\ContextPresetMenu.h">
+      <Filter>Context</Filter>
+    </ClInclude>
+    <ClInclude Include="Context\ContextSettings.h">
+      <Filter>Context</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.ico" />
+    <None Include="App.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Context">
+      <UniqueIdentifier>{c84da1d8-a239-4e34-868c-03831b5cbb2c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -20,7 +20,7 @@
 #include "ContextMenuIcon.h"
 #include "ContextMenuItem.h"
 #include "ContextSettings.h"
-#include "Resources.h"
+#include "../Resources.h"
 #include <shobjidl.h>
 #include <tchar.h>
 #include <map>
@@ -83,32 +83,6 @@ private:
     std::unique_ptr<ContextMenuIcon> icon_;
     std::map<int, ContextMenuItem> items_;
     std::vector<TString> files_;
-};
-
-/* ------------------------------------------------------------------------- */
-///
-/// ContextMenuFactory
-/// 
-/// <summary>
-/// ContextMenu の生成用クラスです。
-/// </summary>
-///
-/* ------------------------------------------------------------------------- */
-class ContextMenuFactory : public IClassFactory {
-public:
-    ContextMenuFactory(HINSTANCE, ULONG&);
-    virtual ~ContextMenuFactory();
-
-    STDMETHOD(QueryInterface)(REFIID iid, LPVOID * obj); // IUnknown
-    STDMETHOD_(ULONG, AddRef)(void); // IUnknown
-    STDMETHOD_(ULONG, Release)(void); // IUnknown
-    STDMETHODIMP CreateInstance(LPUNKNOWN, REFIID, LPVOID FAR*); // IClassFactory
-    STDMETHODIMP LockServer(BOOL) { return NOERROR; } // IClassFactory
-
-private:
-    HINSTANCE handle_;
-    ULONG& dllCount_;
-    ULONG objCount_;
 };
 
 }}} // Cube::FileSystem::Ice
