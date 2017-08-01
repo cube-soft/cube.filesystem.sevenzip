@@ -36,13 +36,15 @@ namespace Ice {
 ///
 /// <param name="handle">プロセスハンドラ</param>
 /// <param name="count">DLL の参照カウンタ</param>
+/// <param name="icon">アイコン処理用オブジェクト</param>
 ///
 /* ------------------------------------------------------------------------- */
-ContextMenu::ContextMenu(HINSTANCE handle, ULONG& count) :
+ContextMenu::ContextMenu(HINSTANCE handle, ULONG& count, ContextMenuIcon* icon) :
     handle_(handle),
     dllCount_(count),
     objCount_(1),
     settings_(),
+    icon_(icon),
     items_(),
     files_()
 {

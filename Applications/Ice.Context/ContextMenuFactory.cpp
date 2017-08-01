@@ -136,7 +136,7 @@ STDMETHODIMP ContextMenuFactory::CreateInstance(LPUNKNOWN unknown, REFIID iid, L
 
     if (unknown) return CLASS_E_NOAGGREGATION;
 
-    auto menu = new ContextMenu(handle_, dllCount_);
+    auto menu = new ContextMenu(handle_, dllCount_, new ArgbContextMenuIcon());
     if (!menu) return E_OUTOFMEMORY;
 
     auto result = menu->QueryInterface(iid, obj);

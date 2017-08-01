@@ -102,12 +102,14 @@
   <ItemGroup>
     <ClCompile Include="ContextMenu.cpp" />
     <ClCompile Include="ContextMenuFactory.cpp" />
+    <ClCompile Include="ContextMenuIcon.cpp" />
     <ClCompile Include="ContextMenuItem.cpp" />
     <ClCompile Include="ContextPresetMenu.cpp" />
     <ClCompile Include="ContextSettings.cpp" />
     <ClCompile Include="Program.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ContextMenuIcon.h" />
     <ClInclude Include="ContextMenu.h" />
     <ClInclude Include="ContextPresetMenu.h" />
     <ClInclude Include="ContextSettings.h" />

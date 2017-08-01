@@ -17,14 +17,16 @@
 /* ------------------------------------------------------------------------- */
 #pragma once
 
-#include <tchar.h>
+#include "ContextMenuIcon.h"
+#include "ContextMenuItem.h"
+#include "ContextSettings.h"
+#include "Resources.h"
 #include <shobjidl.h>
+#include <tchar.h>
+#include <map>
+#include <memory>
 #include <string>
 #include <vector>
-#include <map>
-#include "Resources.h"
-#include "ContextSettings.h"
-#include "ContextMenuItem.h"
 
 namespace Cube {
 namespace FileSystem {
@@ -45,7 +47,7 @@ public:
 
     ContextMenu() = delete;
     ContextMenu(const ContextMenu&) = delete;
-    ContextMenu(HINSTANCE, ULONG&);
+    ContextMenu(HINSTANCE, ULONG&, ContextMenuIcon*);
     virtual ~ContextMenu();
 
     TString CurrentDirectory() const;
@@ -77,6 +79,7 @@ private:
     ULONG& dllCount_;
     ULONG objCount_;
     ContextSettings settings_;
+    std::unique_ptr<ContextMenuIcon> icon_;
     std::map<int, ContextMenuItem> items_;
     std::vector<TString> files_;
 };
