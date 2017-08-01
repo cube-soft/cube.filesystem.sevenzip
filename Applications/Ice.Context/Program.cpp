@@ -25,7 +25,7 @@
 DEFINE_GUID(CUBEICE_CTX_CLSID, 0xf3db85f4, 0x4731, 0x4e80, 0xbc, 0x2e, 0x75, 0x4a, 0x73, 0x20, 0xd8, 0x30);
 
 namespace {
-    static HINSTANCE kInstance = NULL;
+    static HINSTANCE kInstance = nullptr;
     static ULONG kReferenceCount = 0;
 }
 
@@ -98,7 +98,7 @@ STDAPI DllGetClassObject(REFCLSID clsid, REFIID iid, LPVOID *obj) {
         menu->Release();
         return result;
     }
-    else obj = NULL;
+    else obj = nullptr;
 
     return CLASS_E_CLASSNOTAVAILABLE;
 }

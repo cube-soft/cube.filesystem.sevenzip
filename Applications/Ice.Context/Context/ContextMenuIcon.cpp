@@ -31,11 +31,11 @@ namespace Ice {
 ///
 /* ------------------------------------------------------------------------- */
 ArgbContextMenuIcon::ArgbContextMenuIcon() :
-    ux_(NULL),
+    ux_(nullptr),
     map_(),
-    fnGet_(NULL),
-    fnBegin_(NULL),
-    fnEnd_(NULL)
+    fnGet_(nullptr),
+    fnBegin_(nullptr),
+    fnEnd_(nullptr)
 {
     try {
         ux_      = LoadLibrary(_T("UXTHEME.DLL"));
@@ -61,11 +61,11 @@ ArgbContextMenuIcon::~ArgbContextMenuIcon() {
     }
     map_.clear();
 
-    if (ux_ != NULL) FreeLibrary(ux_);
-    ux_      = NULL;
-    fnGet_   = NULL;
-    fnBegin_ = NULL;
-    fnEnd_   = NULL;
+    if (ux_ != nullptr) FreeLibrary(ux_);
+    ux_      = nullptr;
+    fnGet_   = nullptr;
+    fnBegin_ = nullptr;
+    fnEnd_   = nullptr;
 }
 
 /* ------------------------------------------------------------------------- */
@@ -84,7 +84,7 @@ void ArgbContextMenuIcon::SetMenuIcon(const TString& src, MENUITEMINFO& dest) {
     if (!ux_ || !fnGet_ || !fnBegin_ || !fnEnd_ || src.empty()) return;
 
     auto bmp = CreateBitmap(src);
-    if (bmp == NULL) return;
+    if (bmp == nullptr) return;
 
     dest.fMask   |= MIIM_BITMAP;
     dest.hbmpItem = bmp;
@@ -106,11 +106,11 @@ HBITMAP ArgbContextMenuIcon::CreateBitmap(const TString& src) {
     auto kv = Split(src);
 
     HICON hicon;
-    if (ExtractIconEx(kv.first.c_str(), kv.second, NULL, &hicon, 1) < 1) return NULL;
+    if (ExtractIconEx(kv.first.c_str(), kv.second, nullptr, &hicon, 1) < 1) return nullptr;
 
-    auto hdc  = CreateCompatibleDC(NULL);
+    auto hdc  = CreateCompatibleDC(nullptr);
     auto dest = CreateBitmap(hdc, hicon, SIZE{ 16, 16 });
-    if (dest != NULL) map_.insert(std::make_pair(src, dest));
+    if (dest != nullptr) map_.insert(std::make_pair(src, dest));
 
     DeleteDC(hdc);
     DestroyIcon(hicon);
@@ -129,8 +129,8 @@ HBITMAP ArgbContextMenuIcon::CreateBitmap(const TString& src) {
 /* ------------------------------------------------------------------------- */
 HBITMAP ArgbContextMenuIcon::CreateBitmap(HDC hsrc, HICON hicon, const SIZE& size) {
     auto bmi  = CreateBitmapInfo(size);
-    auto dest = CreateDIBSection(hsrc, &bmi, DIB_RGB_COLORS, NULL, NULL, 0);
-    if (!dest) return NULL;
+    auto dest = CreateDIBSection(hsrc, &bmi, DIB_RGB_COLORS, nullptr, nullptr, 0);
+    if (!dest) return nullptr;
     auto prev = static_cast<HBITMAP>(SelectObject(hsrc, static_cast<HGDIOBJ>(dest)));
 
     BLENDFUNCTION alpha = { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA };
@@ -143,8 +143,8 @@ HBITMAP ArgbContextMenuIcon::CreateBitmap(HDC hsrc, HICON hicon, const SIZE& siz
     SetRect(&rect, 0, 0, size.cx, size.cy);
     HDC hdc;
     auto pb = fnBegin_(hsrc, &rect, BPBF_DIB, &bpp, &hdc);
-    if (pb != NULL) {
-        auto result = DrawIconEx(hdc, 0, 0, hicon, size.cx, size.cy, 0, NULL, DI_NORMAL);
+    if (pb != nullptr) {
+        auto result = DrawIconEx(hdc, 0, 0, hicon, size.cx, size.cy, 0, nullptr, DI_NORMAL);
         if (result) ConvertToArgb(pb, hsrc, hicon, size);
         fnEnd_(pb, TRUE);
     }
@@ -215,7 +215,7 @@ void ArgbContextMenuIcon::ConvertToArgb(HDC hsrc, HBITMAP hbmp, Argb* colors, co
     auto bmi  = CreateBitmapInfo(size);
     auto heap = GetProcessHeap();
     auto bits = HeapAlloc(heap, 0, size.cx * 4 * size.cy);
-    if (bits == NULL) return;
+    if (bits == nullptr) return;
 
     if (GetDIBits(hsrc, hbmp, 0, size.cy, bits, &bmi, DIB_RGB_COLORS) == size.cy) {
         auto delta = row - size.cx;

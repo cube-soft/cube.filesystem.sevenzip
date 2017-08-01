@@ -123,9 +123,9 @@ STDMETHODIMP ContextMenu::QueryInterface(REFIID iid, LPVOID * obj) {
     if (IsEqualIID(iid, IID_IUnknown)) *obj = static_cast<LPCONTEXTMENU>(this);
     else if(IsEqualIID(iid, IID_IContextMenu)) *obj = static_cast<LPCONTEXTMENU>(this);
     else if (IsEqualIID(iid, IID_IShellExtInit)) *obj = static_cast<LPSHELLEXTINIT>(this);
-    else *obj = NULL;
+    else *obj = nullptr;
 
-    if (*obj == NULL) return E_NOINTERFACE;
+    if (*obj == nullptr) return E_NOINTERFACE;
     AddRef();
     return NOERROR;
 }
@@ -147,17 +147,17 @@ STDMETHODIMP ContextMenu::QueryInterface(REFIID iid, LPVOID * obj) {
 ///
 /* ------------------------------------------------------------------------- */
 STDMETHODIMP ContextMenu::Initialize(LPCITEMIDLIST /* folder */, LPDATAOBJECT data, HKEY /* key */) {
-    FORMATETC fmt = { CF_HDROP, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
+    FORMATETC fmt = { CF_HDROP, nullptr, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
     STGMEDIUM stg = {};
 
     auto result = data->GetData(&fmt, &stg);
     if (FAILED(result)) return result;
 
     auto drop = static_cast<HDROP>(GlobalLock(stg.hGlobal));
-    auto count = DragQueryFile(drop, static_cast<UINT>(-1), NULL, 0);
+    auto count = DragQueryFile(drop, static_cast<UINT>(-1), nullptr, 0);
 
     for (auto i = 0u; i < count; ++i) {
-        auto size = DragQueryFile(drop, i, NULL, 0);
+        auto size = DragQueryFile(drop, i, nullptr, 0);
         auto buffer = new TCHAR[size + 5];
         
         DragQueryFile(drop, i, buffer, size + 3);
@@ -197,13 +197,13 @@ STDMETHODIMP ContextMenu::QueryContextMenu(HMENU menu, UINT index, UINT first, U
     if ((flags & CMF_DEFAULTONLY) != 0) return NO_ERROR;
     if (Settings().Preset() == 0) return NO_ERROR;
 
-    InsertMenu(menu, index++, MF_BYPOSITION | MF_SEPARATOR, 0, NULL);
+    InsertMenu(menu, index++, MF_BYPOSITION | MF_SEPARATOR, 0, nullptr);
 
     auto items = GetContextMenuItems(Settings().Preset(), Program());
     auto cmdid = first;
     Insert(items, menu, index, cmdid, first);
 
-    if (cmdid - first > 0) InsertMenu(menu, index++, MF_BYPOSITION | MF_SEPARATOR, 0, NULL);
+    if (cmdid - first > 0) InsertMenu(menu, index++, MF_BYPOSITION | MF_SEPARATOR, 0, nullptr);
 
     UpdateStyle(menu);
     return MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_NULL, cmdid - first);
@@ -295,7 +295,7 @@ STDMETHODIMP ContextMenu::InvokeCommand(LPCMINVOKECOMMANDINFO info) {
         PROCESS_INFORMATION pi = {};
         STARTUPINFO si = {};
         si.cb = sizeof(si);
-        CreateProcess(NULL, cmd, NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, NULL, &si, &pi);
+        CreateProcess(nullptr, cmd, nullptr, nullptr, FALSE, NORMAL_PRIORITY_CLASS, nullptr, nullptr, &si, &pi);
         CloseHandle(pi.hThread);
         CloseHandle(pi.hProcess);
     }
