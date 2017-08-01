@@ -45,7 +45,7 @@ ContextSettings::ContextSettings() :
 /* ------------------------------------------------------------------------- */
 void ContextSettings::Load() {
     try {
-        auto hkey = Open(_T("Software\\CubeSoft\\CubeICE\\v3"));
+        auto hkey = Open(_T("Software\\CubeSoft\\CubeICE\\v3\\Context"));
         if (hkey == NULL) return;
 
         auto ps = GetDword(hkey, _T("Preset"), static_cast<DWORD>(PresetMenu::Unknown));
