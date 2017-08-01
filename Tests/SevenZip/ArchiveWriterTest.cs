@@ -170,6 +170,17 @@ namespace Cube.FileSystem.Tests
                     new ZipOption { EncryptionMethod = EncryptionMethod.Aes256 }
                 ).Returns(Format.Zip);
 
+                yield return new TestCaseData(Format.SevenZip,
+                    "7zLzma2.zip",
+                    "",
+                    new[] { "Sample.txt", "Archive" },
+                    new SevenZipOption
+                    {
+                        CompressionLevel  = CompressionLevel.High,
+                        CompressionMethod = CompressionMethod.Lzma2,
+                    }
+                ).Returns(Format.SevenZip);
+
                 yield return new TestCaseData(Format.BZip2,
                     "BZip2Test.bz",
                     "",
@@ -229,8 +240,17 @@ namespace Cube.FileSystem.Tests
 
         #endregion
 
-        #region Helper methods
+        #region Helper
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Current
+        ///
+        /// <summary>
+        /// カレントディレクトリとパス結合を実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
         private static string Current(string filename)
         {
             var asm = Assembly.GetExecutingAssembly().Location;
