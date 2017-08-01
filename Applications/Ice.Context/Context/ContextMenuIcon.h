@@ -32,31 +32,18 @@ namespace Ice {
 /// ContextMenuIcon
 /// 
 /// <summary>
-/// コンテキストメニュー・アイコンの基底クラスです。
+/// コンテキストメニューのアイコンを表示するクラスです。
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
 class ContextMenuIcon {
 public:
     typedef std::basic_string<TCHAR> TString;
-    virtual void SetMenuIcon(const TString&, MENUITEMINFO&) = 0;
-};
 
-/* ------------------------------------------------------------------------- */
-///
-/// ArgbContextMenuIcon
-/// 
-/// <summary>
-/// α値を処理可能なアイコンクラスです。
-/// </summary>
-///
-/* ------------------------------------------------------------------------- */
-class ArgbContextMenuIcon : public ContextMenuIcon {
-public:
-    ArgbContextMenuIcon();
-    ArgbContextMenuIcon(const ArgbContextMenuIcon&) = delete;
-    virtual ~ArgbContextMenuIcon();
-    void SetMenuIcon(const TString&, MENUITEMINFO&) override;
+    ContextMenuIcon();
+    ContextMenuIcon(const ContextMenuIcon&) = delete;
+    virtual ~ContextMenuIcon();
+    void SetMenuIcon(const TString&, MENUITEMINFO&);
 
 private:
     typedef DWORD Argb;

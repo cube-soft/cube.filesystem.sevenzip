@@ -23,14 +23,14 @@ namespace Ice {
 
 /* ------------------------------------------------------------------------- */
 ///
-/// ArgbContextMenuIcon
+/// ContextMenuIcon
 /// 
 /// <summary>
 /// オブジェクトを初期化します。
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-ArgbContextMenuIcon::ArgbContextMenuIcon() :
+ContextMenuIcon::ContextMenuIcon() :
     ux_(nullptr),
     map_(),
     fnGet_(nullptr),
@@ -48,14 +48,14 @@ ArgbContextMenuIcon::ArgbContextMenuIcon() :
 
 /* ------------------------------------------------------------------------- */
 ///
-/// ~ArgbContextMenuIcon
+/// ~ContextMenuIcon
 /// 
 /// <summary>
 /// オブジェクトを破棄します。
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-ArgbContextMenuIcon::~ArgbContextMenuIcon() {
+ContextMenuIcon::~ContextMenuIcon() {
     for (auto& kv : map_) {
         if (kv.second) DeleteObject(kv.second);
     }
@@ -80,7 +80,7 @@ ArgbContextMenuIcon::~ArgbContextMenuIcon() {
 /// <param name="dest">メニュー情報</param>
 ///
 /* ------------------------------------------------------------------------- */
-void ArgbContextMenuIcon::SetMenuIcon(const TString& src, MENUITEMINFO& dest) {
+void ContextMenuIcon::SetMenuIcon(const TString& src, MENUITEMINFO& dest) {
     if (!ux_ || !fnGet_ || !fnBegin_ || !fnEnd_ || src.empty()) return;
 
     auto bmp = CreateBitmap(src);
@@ -99,7 +99,7 @@ void ArgbContextMenuIcon::SetMenuIcon(const TString& src, MENUITEMINFO& dest) {
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-HBITMAP ArgbContextMenuIcon::CreateBitmap(const TString& src) {
+HBITMAP ContextMenuIcon::CreateBitmap(const TString& src) {
     auto pos = map_.find(src);
     if (pos != map_.end()) return pos->second;
 
@@ -127,7 +127,7 @@ HBITMAP ArgbContextMenuIcon::CreateBitmap(const TString& src) {
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-HBITMAP ArgbContextMenuIcon::CreateBitmap(HDC hsrc, HICON hicon, const SIZE& size) {
+HBITMAP ContextMenuIcon::CreateBitmap(HDC hsrc, HICON hicon, const SIZE& size) {
     auto bmi  = CreateBitmapInfo(size);
     auto dest = CreateDIBSection(hsrc, &bmi, DIB_RGB_COLORS, nullptr, nullptr, 0);
     if (!dest) return nullptr;
@@ -162,7 +162,7 @@ HBITMAP ArgbContextMenuIcon::CreateBitmap(HDC hsrc, HICON hicon, const SIZE& siz
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-BITMAPINFO ArgbContextMenuIcon::CreateBitmapInfo(const SIZE& size) {
+BITMAPINFO ContextMenuIcon::CreateBitmapInfo(const SIZE& size) {
     BITMAPINFO dest = {};
 
     dest.bmiHeader.biSize        = sizeof(dest);
@@ -184,7 +184,7 @@ BITMAPINFO ArgbContextMenuIcon::CreateBitmapInfo(const SIZE& size) {
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-void ArgbContextMenuIcon::ConvertToArgb(HPAINTBUFFER pb, HDC hsrc, HICON hicon, const SIZE& size)
+void ContextMenuIcon::ConvertToArgb(HPAINTBUFFER pb, HDC hsrc, HICON hicon, const SIZE& size)
 {
     RGBQUAD *quad;
     int row;
@@ -210,7 +210,7 @@ void ArgbContextMenuIcon::ConvertToArgb(HPAINTBUFFER pb, HDC hsrc, HICON hicon, 
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-void ArgbContextMenuIcon::ConvertToArgb(HDC hsrc, HBITMAP hbmp, Argb* colors, const SIZE &size, int row)
+void ContextMenuIcon::ConvertToArgb(HDC hsrc, HBITMAP hbmp, Argb* colors, const SIZE &size, int row)
 {
     auto bmi  = CreateBitmapInfo(size);
     auto heap = GetProcessHeap();
@@ -242,7 +242,7 @@ void ArgbContextMenuIcon::ConvertToArgb(HDC hsrc, HBITMAP hbmp, Argb* colors, co
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-bool ArgbContextMenuIcon::HasAlphaBit(const Argb* colors, const SIZE& size, int row) {
+bool ContextMenuIcon::HasAlphaBit(const Argb* colors, const SIZE& size, int row) {
     auto delta = row - size.cx;
     for (auto y = size.cy; y > 0; --y) {
         for (auto x = size.cx; x > 0; --x) {
@@ -262,10 +262,10 @@ bool ArgbContextMenuIcon::HasAlphaBit(const Argb* colors, const SIZE& size, int 
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-std::pair<ArgbContextMenuIcon::TString, int> ArgbContextMenuIcon::Split(const ArgbContextMenuIcon::TString& src) {
+std::pair<ContextMenuIcon::TString, int> ContextMenuIcon::Split(const TString& src) {
     try {
         auto pos = src.find(_T(","));
-        if (pos != ArgbContextMenuIcon::TString::npos) {
+        if (pos != TString::npos) {
             auto path = src.substr(0, pos);
             auto s = src.substr(pos + 1);
             auto index = _ttoi(s.c_str());

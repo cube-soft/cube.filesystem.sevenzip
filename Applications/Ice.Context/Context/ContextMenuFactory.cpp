@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 #include "ContextMenuFactory.h"
 #include "ContextMenu.h"
+#include <versionhelpers.h>
 
 namespace Cube {
 namespace FileSystem {
@@ -137,7 +138,8 @@ STDMETHODIMP ContextMenuFactory::CreateInstance(LPUNKNOWN unknown, REFIID iid, L
 
     if (unknown) return CLASS_E_NOAGGREGATION;
 
-    auto menu = new ContextMenu(handle_, dllCount_, new ArgbContextMenuIcon());
+    auto icon = IsWindowsVistaOrGreater() ? new ContextMenuIcon() : nullptr;
+    auto menu = new ContextMenu(handle_, dllCount_, icon);
     if (!menu) return E_OUTOFMEMORY;
 
     auto result = menu->QueryInterface(iid, obj);
