@@ -82,7 +82,10 @@ ArgbContextMenuIcon::~ArgbContextMenuIcon() {
 /* ------------------------------------------------------------------------- */
 void ArgbContextMenuIcon::SetMenuIcon(const TString& src, MENUITEMINFO& dest) {
     if (!ux_ || !fnGet_ || !fnBegin_ || !fnEnd_ || src.empty()) return;
+
     auto bmp = CreateBitmap(src);
+    if (bmp == NULL) return;
+
     dest.fMask   |= MIIM_BITMAP;
     dest.hbmpItem = bmp;
 }
@@ -102,9 +105,8 @@ HBITMAP ArgbContextMenuIcon::CreateBitmap(const TString& src) {
 
     auto kv = Split(src);
 
-    HICON hicon, hdummy;
-    if (ExtractIconEx(kv.first.c_str(), kv.second, &hdummy, &hicon, 1) < 1) return NULL;
-    DestroyIcon(hdummy);
+    HICON hicon;
+    if (ExtractIconEx(kv.first.c_str(), kv.second, NULL, &hicon, 1) < 1) return NULL;
 
     auto hdc  = CreateCompatibleDC(NULL);
     auto dest = CreateBitmap(hdc, hicon, SIZE{ 16, 16 });
