@@ -19,6 +19,7 @@
 
 #include <tchar.h>
 #include <windows.h>
+#include <uxtheme.h>
 #include <map>
 #include <string>
 
@@ -58,8 +59,24 @@ public:
     void SetMenuIcon(const TString&, MENUITEMINFO&) override;
 
 private:
+    typedef DWORD Argb;
+    typedef HRESULT(WINAPI *FnGetBufferedPaintBits)(HPAINTBUFFER pb, RGBQUAD **buffer, int *row);
+    typedef HPAINTBUFFER(WINAPI *FnBeginBufferedPaint)(HDC hdc, const RECT *rect, BP_BUFFERFORMAT format, BP_PAINTPARAMS *pp, HDC *dest);
+    typedef HRESULT(WINAPI *FnEndBufferedPaint)(HPAINTBUFFER pb, BOOL update);
+
+    HBITMAP CreateBitmap(const TString&);
+    HBITMAP CreateBitmap(HDC, HICON, const SIZE&);
+    BITMAPINFO CreateBitmapInfo(const SIZE&);
+    void ConvertToArgb(HPAINTBUFFER, HDC, HICON, const SIZE&);
+    void ConvertToArgb(HDC, HBITMAP, Argb*, const SIZE&, int);
+    bool HasAlphaBit(const Argb*, const SIZE&, int);
+    std::pair<TString, int> Split(const TString&);
+
     HMODULE ux_;
     std::map<TString, HBITMAP> map_;
+    FnGetBufferedPaintBits fnGet_;
+    FnBeginBufferedPaint fnBegin_;
+    FnEndBufferedPaint fnEnd_;
 };
 
 }}}
