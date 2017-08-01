@@ -54,6 +54,7 @@ namespace Cube.FileSystem.App.Ice
                 Cube.Log.Operations.Configure();
                 Cube.Log.Operations.ObserveTaskException();
                 Cube.Log.Operations.Info(type, Assembly.GetExecutingAssembly());
+                Cube.Log.Operations.Info(type, $"Arguments:{string.Join(" ", args)}");
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
