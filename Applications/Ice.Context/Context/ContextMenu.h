@@ -20,7 +20,7 @@
 #include "ContextMenuIcon.h"
 #include "ContextMenuItem.h"
 #include "ContextSettings.h"
-#include "../Resources.h"
+#include "Resources.h"
 #include <shobjidl.h>
 #include <tchar.h>
 #include <map>

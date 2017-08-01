@@ -17,7 +17,7 @@
 /* ------------------------------------------------------------------------- */
 #include "ContextMenu.h"
 #include "ContextPresetMenu.h"
-#include "../Encoding.h"
+#include "Encoding.h"
 #include <shlobj.h>
 #include <shlwapi.h>
 #include <sstream>

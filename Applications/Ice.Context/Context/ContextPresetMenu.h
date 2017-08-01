@@ -17,10 +17,10 @@
 /* ------------------------------------------------------------------------- */
 #pragma once
 
+#include "ContextMenuItem.h"
 #include <tchar.h>
 #include <string>
 #include <vector>
-#include "ContextMenuItem.h"
 
 namespace Cube {
 namespace FileSystem {

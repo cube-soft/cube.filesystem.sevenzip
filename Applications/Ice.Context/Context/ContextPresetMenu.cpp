@@ -17,7 +17,7 @@
 /* ------------------------------------------------------------------------- */
 #include "ContextPresetMenu.h"
 #include "ContextMenuItem.h"
-#include "../Resources.h"
+#include "Resources.h"
 
 namespace Cube {
 namespace FileSystem {
