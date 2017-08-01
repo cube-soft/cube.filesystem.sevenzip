@@ -17,7 +17,6 @@
 /* ------------------------------------------------------------------------- */
 #include "ContextSettings.h"
 #include "ContextPresetMenu.h"
-#include <windows.h>
 
 namespace Cube {
 namespace FileSystem {
