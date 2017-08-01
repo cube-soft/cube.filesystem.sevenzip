@@ -62,6 +62,8 @@ namespace PresetMenu {
         MailGZip            = 0x00100000,
         MailDetail          = 0x00200000,
         MailSfx             = 0x00400000,
+
+        Unknown             = 0xf0000000,
     };
 }
 
