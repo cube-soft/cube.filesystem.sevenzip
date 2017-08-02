@@ -16,6 +16,8 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Reflection;
+using Cube.FileSystem.Ice;
 
 namespace Cube.FileSystem.App.Ice.Associate
 {
@@ -42,9 +44,28 @@ namespace Cube.FileSystem.App.Ice.Associate
         [STAThread]
         static void Main()
         {
-            // Application.EnableVisualStyles();
-            // Application.SetCompatibleTextRenderingDefault(false);
-            // Application.Run(new Form1());
+            var type = typeof(Program);
+
+            try
+            {
+                Cube.Log.Operations.Configure();
+                Cube.Log.Operations.Info(type, Assembly.GetExecutingAssembly());
+
+                var asm  = Assembly.GetExecutingAssembly().Location;
+                var dir  = System.IO.Path.GetDirectoryName(asm);
+                var exe  = System.IO.Path.Combine(dir, "cubeice.exe");
+                var icon = $"exe,3";
+
+                Cube.Log.Operations.Info(type, $"FileName:{exe}");
+                Cube.Log.Operations.Info(type, $"IconLocation:{icon}");
+
+                var settings = new SettingsFolder();
+                settings.Load();
+
+                var registrar = new AssociateRegistrar(exe) { IconLocation = icon };
+                registrar.Update(settings.Value.Associate.Value);
+            }
+            catch (Exception err) { Cube.Log.Operations.Error(type, err.ToString()); }
         }
     }
 }
