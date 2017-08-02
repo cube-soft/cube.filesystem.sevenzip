@@ -61,6 +61,15 @@ namespace Cube.FileSystem.Ice.Properties {
         }
         
         /// <summary>
+        ///   ファイル に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string FileSuffix {
+            get {
+                return ResourceManager.GetString("FileSuffix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   β に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string VersionSuffix {
