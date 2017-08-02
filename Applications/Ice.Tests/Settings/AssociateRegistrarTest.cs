@@ -46,9 +46,9 @@ namespace Cube.FileSystem.App.Ice.Tests.Settings
         [TestCaseSource(nameof(TestCases))]
         public string Command(string path, IList<string> args)
         {
-            var reg = new AssociateRegistrar(path) { IconLocation = "" };
-            foreach (var s in args) reg.Arguments.Add(s);
-            return reg.Command;
+            var registrar = new AssociateRegistrar(path) { IconLocation = "" };
+            foreach (var s in args) registrar.Arguments.Add(s);
+            return registrar.Command;
         }
 
         /* --------------------------------------------------------------------- */
