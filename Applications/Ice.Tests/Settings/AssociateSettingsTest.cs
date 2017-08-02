@@ -47,7 +47,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         {
             var src = new SettingsFolder().Value.Associate;
 
-            Assert.That(src.Value.Count, Is.EqualTo(0));
+            Assert.That(src.Value.Count, Is.EqualTo(27));
             Assert.That(src.Arj,         Is.False);
             Assert.That(src.BZ2,         Is.False);
             Assert.That(src.Cab,         Is.False);
@@ -75,31 +75,6 @@ namespace Cube.FileSystem.App.Ice.Tests
             Assert.That(src.XZ,          Is.False);
             Assert.That(src.Z,           Is.False);
             Assert.That(src.Zip,         Is.False);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Update
-        /// 
-        /// <summary>
-        /// ファイル関連付けの値を更新するテストを実行します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        [Test]
-        public void Update()
-        {
-            var src = new SettingsFolder().Value.Associate;
-            Assert.That(src.Value.Count, Is.EqualTo(0));
-
-            src.Zip = true;
-            Assert.That(src.Value.Count, Is.EqualTo(1));
-
-            src.SevenZip = false;
-            Assert.That(src.Value.Count, Is.EqualTo(2));
-
-            src.Zip = false;
-            Assert.That(src.Value.Count, Is.EqualTo(2));
         }
     }
 }
