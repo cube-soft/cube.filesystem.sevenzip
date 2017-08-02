@@ -127,7 +127,6 @@ namespace Cube.FileSystem.Ice
         /* ----------------------------------------------------------------- */
         public void Update(IDictionary<string, bool> extensions)
         {
-            if (string.IsNullOrEmpty(FileName) || !System.IO.File.Exists(FileName)) return;
             foreach (var kv in extensions) Update(kv.Key, kv.Value);
         }
 
@@ -161,16 +160,23 @@ namespace Cube.FileSystem.Ice
         /* ----------------------------------------------------------------- */
         private void Create(string extension)
         {
-            var id   = extension.TrimStart('.');
+            if (string.IsNullOrEmpty(FileName) || !System.IO.File.Exists(FileName)) return;
+
+            var id = extension.TrimStart('.');
             var name = GetSubKeyName(id);
 
-            using (var key = Registry.ClassesRoot.CreateSubKey(id))
+            using (var key = Registry.ClassesRoot.CreateSubKey(name))
             {
                 key.SetValue("", $"{id} {Properties.Resources.FileSuffix}".ToUpper());
                 using (var shell = key.CreateSubKey("shell"))
                 {
                     shell.SetValue("", "open");
-                    using (var cmd = shell.CreateSubKey("open/command")) cmd.SetValue("", Command);
+
+                    using (var open = shell.CreateSubKey("open"))
+                    using (var cmd = open.CreateSubKey("command"))
+                    {
+                        cmd.SetValue("", Command);
+                    }
                 }
                 using (var icon = key.CreateSubKey("DefaultIcon")) icon.SetValue("", IconLocation);
             }

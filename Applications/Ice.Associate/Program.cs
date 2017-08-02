@@ -63,6 +63,7 @@ namespace Cube.FileSystem.App.Ice.Associate
                 settings.Load();
 
                 var registrar = new AssociateRegistrar(exe) { IconLocation = icon };
+                registrar.Arguments.Add("/x");
                 registrar.Update(settings.Value.Associate.Value);
             }
             catch (Exception err) { Cube.Log.Operations.Error(type, err.ToString()); }

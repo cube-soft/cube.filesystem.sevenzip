@@ -55,7 +55,7 @@ namespace Cube.FileSystem.App.Ice.Settings
         public AssociateExec(AssociateSettings settings)
         {
             Settings = settings;
-            foreach (var item in settings.Value) _prev.Add(item);
+            Reset();
         }
 
         #endregion
@@ -98,6 +98,8 @@ namespace Cube.FileSystem.App.Ice.Settings
 
                 var process = System.Diagnostics.Process.Start(exe);
                 process.WaitForExit();
+
+                Reset();
             }
             catch (Exception err) { this.LogWarn(err.ToString(), err); }
         }
@@ -122,6 +124,21 @@ namespace Cube.FileSystem.App.Ice.Settings
                 if (!_prev.ContainsKey(item.Key) || _prev[item.Key] != item.Value) return true;
             }
             return false;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Reset
+        /// 
+        /// <summary>
+        /// 起点となる値を再設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void Reset()
+        {
+            _prev.Clear();
+            foreach (var item in Settings.Value) _prev.Add(item);
         }
 
         #region Fields
