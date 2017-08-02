@@ -34,6 +34,53 @@ namespace Cube.FileSystem.Ice
     [DataContract]
     public class AssociateSettings : ObservableProperty
     {
+        #region Constructors
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// AssociateSettings
+        /// 
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public AssociateSettings()
+        {
+            Value = new Dictionary<string, bool>
+            {
+                { "7z",         false },
+                { nameof(Arj),  false },
+                { nameof(BZ2),  false },
+                { nameof(Cab),  false },
+                { nameof(Chm),  false },
+                { nameof(Cpio), false },
+                { nameof(Deb),  false },
+                { nameof(Dmg),  false },
+                { nameof(Flv),  false },
+                { nameof(GZ),   false },
+                { nameof(Iso),  false },
+                { nameof(Jar),  false },
+                { nameof(Lzh),  false },
+                { nameof(Rar),  false },
+                { nameof(Rpm),  false },
+                { nameof(Swf),  false },
+                { nameof(Tar),  false },
+                { nameof(Tbz),  false },
+                { nameof(Tgz),  false },
+                { nameof(Txz),  false },
+                { nameof(Vhd),  false },
+                { nameof(Vmdk), false },
+                { nameof(Wim),  false },
+                { nameof(Xar),  false },
+                { nameof(XZ),   false },
+                { nameof(Z),    false },
+                { nameof(Zip),  false },
+            };
+        }
+
+        #endregion
+
         #region Properties
 
         /* ----------------------------------------------------------------- */
@@ -45,7 +92,7 @@ namespace Cube.FileSystem.Ice
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public IDictionary<string, bool> Value => _associates;
+        public IDictionary<string, bool> Value { get; }
 
         #region DataMember
 
@@ -61,8 +108,8 @@ namespace Cube.FileSystem.Ice
         [DataMember(Name = "7z")]
         public bool SevenZip
         {
-            get { return GetProperty(); }
-            set { SetProperty(value); }
+            get { return GetProperty("7z"); }
+            set { SetProperty(value, "7z"); }
         }
 
         /* ----------------------------------------------------------------- */
@@ -211,22 +258,6 @@ namespace Cube.FileSystem.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Jar
-        /// 
-        /// <summary>
-        /// *.jar の関連付け状態を取得または設定します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        [DataMember(Name = "jar")]
-        public bool Jar
-        {
-            get { return GetProperty(); }
-            set { SetProperty(value); }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// Iso
         /// 
         /// <summary>
@@ -236,6 +267,22 @@ namespace Cube.FileSystem.Ice
         /* ----------------------------------------------------------------- */
         [DataMember(Name = "iso")]
         public bool Iso
+        {
+            get { return GetProperty(); }
+            set { SetProperty(value); }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Jar
+        /// 
+        /// <summary>
+        /// *.jar の関連付け状態を取得または設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [DataMember(Name = "jar")]
+        public bool Jar
         {
             get { return GetProperty(); }
             set { SetProperty(value); }
@@ -497,7 +544,7 @@ namespace Cube.FileSystem.Ice
         /// 
         /* ----------------------------------------------------------------- */
         private bool GetProperty([CallerMemberName] string name = null)
-            => _associates.ContainsKey(name) ? _associates[name] : false;
+            => Value.ContainsKey(name) ? Value[name] : false;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -510,19 +557,15 @@ namespace Cube.FileSystem.Ice
         /* ----------------------------------------------------------------- */
         private bool SetProperty(bool value, [CallerMemberName] string name = null)
         {
-            if (_associates.ContainsKey(name))
+            if (Value.ContainsKey(name))
             {
-                if (_associates[name] == value) return false;
-                _associates[name] = value;
+                if (Value[name] == value) return false;
+                Value[name] = value;
             }
-            else _associates.Add(name, value);
+            else Value.Add(name, value);
             OnPropertyChanged(new PropertyChangedEventArgs(name));
             return true;
         }
-
-        #region Fields
-        private IDictionary<string, bool> _associates = new Dictionary<string, bool>();
-        #endregion
 
         #endregion
     }
