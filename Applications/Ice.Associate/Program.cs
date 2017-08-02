@@ -54,7 +54,7 @@ namespace Cube.FileSystem.App.Ice.Associate
                 var asm  = Assembly.GetExecutingAssembly().Location;
                 var dir  = System.IO.Path.GetDirectoryName(asm);
                 var exe  = System.IO.Path.Combine(dir, "cubeice.exe");
-                var icon = $"exe,3";
+                var icon = $"{exe},3";
 
                 Cube.Log.Operations.Info(type, $"FileName:{exe}");
                 Cube.Log.Operations.Info(type, $"IconLocation:{icon}");
