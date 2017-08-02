@@ -86,11 +86,24 @@ namespace Cube.FileSystem.App.Ice.Settings
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public void Update()
+        public void Update() => Update(false);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Update
+        /// 
+        /// <summary>
+        /// ファイルの関連付けを強制的に更新します。
+        /// </summary>
+        /// 
+        /// <param name="force">強制的に更新するかどうかを示す値</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void Update(bool force)
         {
             try
             {
-                if (!UpdateIsNeed()) return;
+                if (!force && !UpdateIsNeed()) return;
 
                 var asm = Assembly.GetExecutingAssembly().Location;
                 var dir = System.IO.Path.GetDirectoryName(asm);
