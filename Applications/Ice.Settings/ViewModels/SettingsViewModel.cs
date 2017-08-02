@@ -16,9 +16,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
-using System.Reflection;
 using Cube.FileSystem.Ice;
-using Cube.Log;
 
 namespace Cube.FileSystem.App.Ice.Settings
 {
@@ -217,17 +215,7 @@ namespace Cube.FileSystem.App.Ice.Settings
         public void Save()
         {
             _model.Save();
-
-            try
-            {
-                var asm = Assembly.GetExecutingAssembly().Location;
-                var dir = System.IO.Path.GetDirectoryName(asm);
-                var exe = System.IO.Path.Combine(dir, Properties.Resources.FileAssociate);
-                var proc = System.Diagnostics.Process.Start(exe);
-
-                proc.WaitForExit();
-            }
-            catch (Exception err) { this.LogWarn(err.ToString(), err); }
+            Associate.Update();
         }
 
         #endregion
