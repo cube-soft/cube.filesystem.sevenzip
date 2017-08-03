@@ -43,6 +43,7 @@ ContextMenu::ContextMenu(HINSTANCE handle, ULONG& count, ContextMenuIcon* icon) 
     handle_(handle),
     dllCount_(count),
     objCount_(1),
+    drop_(),
     settings_(),
     icon_(icon),
     items_(),
@@ -138,7 +139,7 @@ STDMETHODIMP ContextMenu::QueryInterface(REFIID iid, LPVOID * obj) {
 /// 拡張シェルの初期化を実行します。
 /// </summary>
 ///
-/// <param name="folder">パスがフォルダかどうかを示す値</param>
+/// <param name="pid">ドロップ先の情報を取得するための値</param>
 /// <param name="data">データオブジェクト</param>
 ///
 /// <returns>HRESULT</returns>
@@ -146,27 +147,28 @@ STDMETHODIMP ContextMenu::QueryInterface(REFIID iid, LPVOID * obj) {
 /// <remarks>IUnknown から継承されます。</remarks>
 ///
 /* ------------------------------------------------------------------------- */
-STDMETHODIMP ContextMenu::Initialize(LPCITEMIDLIST /* folder */, LPDATAOBJECT data, HKEY /* key */) {
+STDMETHODIMP ContextMenu::Initialize(LPCITEMIDLIST pid, LPDATAOBJECT data, HKEY /* key */) {
     FORMATETC fmt = { CF_HDROP, nullptr, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
     STGMEDIUM stg = {};
 
     auto result = data->GetData(&fmt, &stg);
     if (FAILED(result)) return result;
 
-    auto drop = static_cast<HDROP>(GlobalLock(stg.hGlobal));
-    auto count = DragQueryFile(drop, static_cast<UINT>(-1), nullptr, 0);
+    auto handle = static_cast<HDROP>(GlobalLock(stg.hGlobal));
+    auto count  = DragQueryFile(handle, static_cast<UINT>(-1), nullptr, 0);
 
     for (auto i = 0u; i < count; ++i) {
-        auto size = DragQueryFile(drop, i, nullptr, 0);
+        auto size = DragQueryFile(handle, i, nullptr, 0);
         auto buffer = new TCHAR[size + 5];
         
-        DragQueryFile(drop, i, buffer, size + 3);
+        DragQueryFile(handle, i, buffer, size + 3);
         Files().push_back(TString(buffer));
         delete[] buffer;
     }
 
-    GlobalUnlock(drop);
+    GlobalUnlock(handle);
     ReleaseStgMedium(&stg);
+    UpdateDragDrop(pid);
 
     return S_OK;
 }
@@ -197,7 +199,7 @@ STDMETHODIMP ContextMenu::QueryContextMenu(HMENU menu, UINT index, UINT first, U
     if ((flags & CMF_DEFAULTONLY) != 0) return NO_ERROR;
     if (Settings().Preset() == 0) return NO_ERROR;
 
-    InsertMenu(menu, index++, MF_BYPOSITION | MF_SEPARATOR, 0, nullptr);
+    if (!drop_.empty()) InsertMenu(menu, index++, MF_BYPOSITION | MF_SEPARATOR, 0, nullptr);
 
     auto items = GetContextMenuItems(Settings().Preset(), Program());
     auto cmdid = first;
@@ -286,8 +288,9 @@ STDMETHODIMP ContextMenu::InvokeCommand(LPCMINVOKECOMMANDINFO info) {
 
     std::basic_ostringstream<TCHAR> ss;
     ss << _T("\"") << Program() << _T("\"");
-    if (!pos->second.Arguments().empty()) ss << _T(" ") + pos->second.Arguments();
-    for (auto file : Files()) ss << _T(" \"") + file + _T("\"");
+    if (!pos->second.Arguments().empty()) ss << _T(" ") << pos->second.Arguments();
+    if (!drop_.empty()) ss << _T(" \"/drop:") << drop_ << _T("\"");
+    for (auto file : Files()) ss << _T(" \"") << file << _T("\"");
 
     auto cmd = new TCHAR[ss.str().size() + 5];
     try {
@@ -398,6 +401,23 @@ void ContextMenu::UpdateStyle(HMENU menu) {
     mi.dwStyle = (mi.dwStyle & ~MNS_NOCHECK) | MNS_CHECKORBMP;
     mi.fMask   = MIM_STYLE | MIM_APPLYTOSUBMENUS;
     SetMenuInfo(menu, &mi);
+}
+
+/* ------------------------------------------------------------------------- */
+///
+/// UpdateDragDrop
+/// 
+/// <summary>
+/// ドロップ先の情報を更新します。
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+void ContextMenu::UpdateDragDrop(LPCITEMIDLIST pid) {
+    if (pid == nullptr) return;
+
+    TCHAR buffer[2048] = {};
+    if (!SHGetPathFromIDList(pid, buffer)) return;
+    drop_ = buffer;
 }
 
 }}} // Cube::FileSystem::Ice

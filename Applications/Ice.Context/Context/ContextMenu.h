@@ -75,10 +75,12 @@ private:
     bool Insert(ContextMenuItem&, HMENU, UINT&, UINT&, UINT);
     bool Insert(ContextMenuItem::ContextMenuVector&, HMENU, UINT&, UINT&, UINT);
     void UpdateStyle(HMENU);
+    void UpdateDragDrop(LPCITEMIDLIST);
 
     HINSTANCE handle_;
     ULONG& dllCount_;
     ULONG objCount_;
+    TString drop_;
     ContextSettings settings_;
     std::unique_ptr<ContextMenuIcon> icon_;
     std::map<int, ContextMenuItem> items_;
