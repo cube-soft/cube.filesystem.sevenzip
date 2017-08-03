@@ -119,6 +119,21 @@ namespace Cube.FileSystem.App.Ice.Settings
 
         #endregion
 
+        #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Update
+        /// 
+        /// <summary>
+        /// ユーザ設定に関わる処理を実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void Update() => _model.Update();
+
+        #endregion
+
         #region Implementations
 
         /* ----------------------------------------------------------------- */

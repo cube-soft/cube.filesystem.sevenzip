@@ -84,7 +84,7 @@ namespace Cube.FileSystem.App.Ice.Settings
             Enable(ArchiveSaveOthersRadioButton, ArchiveSaveTextBox, ArchiveSaveButton);
             Enable(ExtractSaveOthersRadioButton, ExtractSaveTextBox, ExtractSaveButton);
 
-            SettingsPanel.Apply += (s, e) => vm.Save();
+            SettingsPanel.Apply += (s, e) => vm.Update();
             ContextResetButton.Click += (s, e) => vm.Context.Reset();
         }
 

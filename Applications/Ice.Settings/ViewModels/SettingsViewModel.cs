@@ -205,17 +205,18 @@ namespace Cube.FileSystem.App.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Save
+        /// Update
         /// 
         /// <summary>
-        /// 内容を保存します。
+        /// 現在の内容で更新します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public void Save()
+        public void Update()
         {
             _model.Save();
             Associate.Update();
+            Shortcut.Update();
         }
 
         #endregion
