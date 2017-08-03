@@ -70,6 +70,33 @@ namespace Cube.FileSystem.Ice.Properties {
         }
         
         /// <summary>
+        ///   CubeICE Archive に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string ScArcive {
+            get {
+                return ResourceManager.GetString("ScArcive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   CubeICE Extract に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string ScExtract {
+            get {
+                return ResourceManager.GetString("ScExtract", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   CubeICE Settings に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string ScSettings {
+            get {
+                return ResourceManager.GetString("ScSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   β に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string VersionSuffix {
