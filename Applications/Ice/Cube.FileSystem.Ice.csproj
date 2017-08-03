@@ -43,16 +43,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArchiveDetails.cs" />
-    <Compile Include="ArchiveSettings.cs" />
+    <Compile Include="Settings\ArchiveSettings.cs" />
     <Compile Include="AssociateRegistrar.cs" />
-    <Compile Include="AssociateSettings.cs" />
-    <Compile Include="ContextSettings.cs" />
-    <Compile Include="ExtractSettings.cs" />
-    <Compile Include="GeneralSettings.cs" />
+    <Compile Include="Settings\AssociateSettings.cs" />
+    <Compile Include="Settings\ContextSettings.cs" />
+    <Compile Include="Settings\ExtractSettings.cs" />
+    <Compile Include="Settings\GeneralSettings.cs" />
     <Compile Include="Parameters.cs" />
-    <Compile Include="Settings.cs" />
-    <Compile Include="SettingsFolder.cs" />
-    <Compile Include="ShortcutSettings.cs" />
+    <Compile Include="Settings\Settings.cs" />
+    <Compile Include="Settings\ShortcutSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

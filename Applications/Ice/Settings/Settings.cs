@@ -238,4 +238,36 @@ namespace Cube.FileSystem.Ice
         private ShortcutSettings _shortcut = new ShortcutSettings();
         #endregion
     }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// SettingsFolder
+    /// 
+    /// <summary>
+    /// 各種設定を保持するためのクラスです。
+    /// </summary>
+    /// 
+    /* --------------------------------------------------------------------- */
+    public class SettingsFolder : Cube.Settings.SettingsFolder<Settings>
+    {
+        #region Constructors
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SettingsFolder
+        /// 
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public SettingsFolder() : base("CubeSoft", @"CubeICE\v3")
+        {
+            AutoSave = false;
+            Version.Digit = 3;
+            Version.Suffix = Properties.Resources.VersionSuffix;
+        }
+
+        #endregion
+    }
 }
