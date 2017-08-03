@@ -164,7 +164,9 @@ namespace Cube.FileSystem.Ice
 
             try
             {
-                var args = Arguments?.Aggregate((s, o) => s + $" \"{o}\"").Trim() ?? string.Empty;
+                var args = Arguments != null && Arguments.Count > 0 ?
+                           Arguments.Aggregate((s, o) => s + $" \"{o}\"").Trim() :
+                           string.Empty;
 
                 sc.TargetPath       = Link;
                 sc.Arguments        = args;
