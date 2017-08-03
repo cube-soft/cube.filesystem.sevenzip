@@ -15,6 +15,8 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System;
+using System.Reflection;
 using System.Runtime.Serialization;
 
 namespace Cube.FileSystem.Ice
@@ -51,10 +53,153 @@ namespace Cube.FileSystem.Ice
             set { SetProperty(ref _preset, value); }
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Directory
+        /// 
+        /// <summary>
+        /// ショートカットを作成するディレクトリのパスを取得または
+        /// 設定します。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// 未設定の場合はデスクトップに作成されます。
+        /// </remarks>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public string Directory { get; set; }
+
         #endregion
+
+        #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Update
+        /// 
+        /// <summary>
+        /// ショートカットを生成または削除します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void Update()
+        {
+            UpdateArchive();
+            UpdateExtract();
+            UpdateSettings();
+        }
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// UpdateArchive
+        /// 
+        /// <summary>
+        /// 圧縮用のショートカットを生成または削除します
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void UpdateArchive()
+        {
+            var src  = CreateFileName(Properties.Resources.ScArcive);
+            var dest = CreateLink("cubeice.exe");
+            var sc   = new Shortcut(src)
+            {
+                Link         = dest,
+                IconLocation = $"{dest},1",
+            };
+
+            if ((Preset & PresetMenu.Archive) != 0) sc.Create();
+            else sc.Delete();
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// UpdateExtract
+        /// 
+        /// <summary>
+        /// 解凍用のショートカットを生成または削除します
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void UpdateExtract()
+        {
+            var src  = CreateFileName(Properties.Resources.ScExtract);
+            var dest = CreateLink("cubeice.exe");
+            var sc   = new Shortcut(src)
+            {
+                Link         = dest,
+                Arguments    = new[] { "/x" },
+                IconLocation = $"{dest},2",
+            };
+
+            if ((Preset & PresetMenu.Extract) != 0) sc.Create();
+            else sc.Delete();
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// UpdateSettings
+        /// 
+        /// <summary>
+        /// 設定用のショートカットを生成または削除します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void UpdateSettings()
+        {
+            var src  = CreateFileName(Properties.Resources.ScSettings);
+            var dest = CreateLink("cubeice-setting.exe");
+            var sc   = new Shortcut(src)
+            {
+                Link         = dest,
+                IconLocation = dest,
+            };
+
+            if ((Preset & PresetMenu.Settings) != 0) sc.Create();
+            else sc.Delete();
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CreateFileName
+        /// 
+        /// <summary>
+        /// ショートカットのパスを生成します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private string CreateFileName(string name)
+        {
+            var dir = !string.IsNullOrEmpty(Directory) ?
+                      Directory :
+                      Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            return System.IO.Path.Combine(dir, name);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CreateLink
+        /// 
+        /// <summary>
+        /// リンク先のパスを生成します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private string CreateLink(string filename)
+        {
+            var asm = Assembly.GetExecutingAssembly().Location;
+            var dir = System.IO.Path.GetDirectoryName(asm);
+            return System.IO.Path.Combine(dir, filename);
+        }
 
         #region Fields
         private PresetMenu _preset = PresetMenu.DefaultDesktop;
+        #endregion
+
         #endregion
     }
 }

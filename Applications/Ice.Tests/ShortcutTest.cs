@@ -76,6 +76,15 @@ namespace Cube.FileSystem.App.Ice.Tests
         public void Create_Throw()
             => Assert.That(() => new Shortcut(""), Throws.TypeOf<ArgumentException>());
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Delete
+        ///
+        /// <summary>
+        /// ショートカットを削除するテストを実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
         [Test]
         public void Delete()
         {
@@ -117,8 +126,12 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new List<string> { "/x" }
                 ).Returns(true);
 
-                yield return new TestCaseData("ScNoArgs", "cubeice.exe", 0,
+                yield return new TestCaseData("ScNullArgs", "cubeice.exe", 0,
                     null
+                ).Returns(true);
+
+                yield return new TestCaseData("ScEmptyArgs", "cubeice.exe", 0,
+                    new List<string>()
                 ).Returns(true);
 
                 yield return new TestCaseData("ScWrongIconIndex", "cubeice.exe", 3,
