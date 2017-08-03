@@ -157,8 +157,7 @@ namespace Cube.FileSystem.Ice
         /* ----------------------------------------------------------------- */
         public void Create()
         {
-            if (string.IsNullOrEmpty(FileName) || string.IsNullOrEmpty(Link)) return;
-            if (!_io.Get(Link).Exists) return;
+            if (string.IsNullOrEmpty(Link) || !_io.Get(Link).Exists) return;
 
             var sh = new WshShell();
             var sc = sh.CreateShortcut(FullName) as IWshShortcut;
