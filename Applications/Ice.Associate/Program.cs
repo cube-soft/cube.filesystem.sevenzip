@@ -62,9 +62,21 @@ namespace Cube.FileSystem.App.Ice.Associate
                 var settings = new SettingsFolder();
                 settings.Load();
 
-                var registrar = new AssociateRegistrar(exe) { IconLocation = icon };
+                var registrar = new AssociateRegistrar(exe)
+                {
+                    IconLocation = icon,
+                    ToolTip      = false, // settings.Value.ToolTip
+                };
+
                 registrar.Arguments.Add("/x");
                 registrar.Update(settings.Value.Associate.Value);
+
+                Shell32.NativeMethods.SHChangeNotify(
+                    0x08000000, // SHCNE_ASSOCCHANGED
+                    0x00001000, // SHCNF_FLUSH
+                    IntPtr.Zero,
+                    IntPtr.Zero
+                );
             }
             catch (Exception err) { Cube.Log.Operations.Error(type, err.ToString()); }
         }

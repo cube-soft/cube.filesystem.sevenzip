@@ -15,6 +15,7 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Win32;
@@ -28,6 +29,11 @@ namespace Cube.FileSystem.Ice
     /// <summary>
     /// ファイルの関連付けに関するレジストリの更新を行うクラスです。
     /// </summary>
+    /// 
+    /// <remarks>
+    /// このクラスはレジストリの KEY_CLASSES_ROOT を編集します。
+    /// したがって、実行するためには管理者権限が必要となります。
+    /// </remarks>
     ///
     /* --------------------------------------------------------------------- */
     public class AssociateRegistrar
@@ -95,6 +101,18 @@ namespace Cube.FileSystem.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// ToolTip
+        /// 
+        /// <summary>
+        /// マウスオーバ時のツールチップ表示をカスタマイズするかどうかを
+        /// 示す値を取得または設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public bool ToolTip { get; set; } = false;
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Command
         /// 
         /// <summary>
@@ -145,8 +163,32 @@ namespace Cube.FileSystem.Ice
         /* ----------------------------------------------------------------- */
         private void Update(string extension, bool enabled)
         {
+            if (string.IsNullOrEmpty(extension)) return;
             if (enabled) Create(extension);
             else Delete(extension);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// UpdateToolTip
+        /// 
+        /// <summary>
+        /// マウスオーバ時に表示されるツールチップ表示に関する設定を
+        /// 更新します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void UpdateToolTip(RegistryKey key, bool enabled)
+        {
+            var guid = TooTipKey.ToString("B").ToUpper();
+            var name = $@"shellex\{guid}";
+
+            if (enabled)
+            {
+                var s = ToolTipHandler.ToString("B");
+                using (var k = key.CreateSubKey(name)) k.SetValue("", s);
+            }
+            else key.DeleteSubKeyTree(name, false);
         }
 
         /* ----------------------------------------------------------------- */
@@ -160,25 +202,69 @@ namespace Cube.FileSystem.Ice
         /* ----------------------------------------------------------------- */
         private void Create(string extension)
         {
-            if (string.IsNullOrEmpty(FileName) || !System.IO.File.Exists(FileName)) return;
+            if (string.IsNullOrEmpty(FileName)) return;
 
-            var id = extension.TrimStart('.');
+            var id   = extension.TrimStart('.');
+            var root = Registry.ClassesRoot;
             var name = GetSubKeyName(id);
+            using (var key = root.CreateSubKey(name)) Create(key, id);
 
-            using (var key = Registry.ClassesRoot.CreateSubKey(name))
+            Create(extension, name);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create
+        /// 
+        /// <summary>
+        /// ファイルの関連付け用のレジストリ項目を作成して登録します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void Create(RegistryKey key, string id)
+        {
+            key.SetValue("", $"{id} {Properties.Resources.FileSuffix}".ToUpper());
+
+            using (var k = key.CreateSubKey("shell"))
             {
-                key.SetValue("", $"{id} {Properties.Resources.FileSuffix}".ToUpper());
-                using (var shell = key.CreateSubKey("shell"))
+                k.SetValue("", "open");
+                using (var cmd = k.CreateSubKey(@"open\command"))
                 {
-                    shell.SetValue("", "open");
-
-                    using (var open = shell.CreateSubKey("open"))
-                    using (var cmd = open.CreateSubKey("command"))
-                    {
-                        cmd.SetValue("", Command);
-                    }
+                    cmd.SetValue("", Command);
                 }
-                using (var icon = key.CreateSubKey("DefaultIcon")) icon.SetValue("", IconLocation);
+            }
+
+            using (var k = key.CreateSubKey("DefaultIcon")) k.SetValue("", IconLocation);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create
+        /// 
+        /// <summary>
+        /// 拡張子を表すレジストリ項目と CubeICE を関連付けるための設定を
+        /// 作成します。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// ToolTip の処理が未実装なため、現在は ToolTip に関連する項目は
+        /// 強制的に削除しています。
+        /// </remarks>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void Create(string extension, string name)
+        {
+            var s = (extension[0] == '.') ? extension : $".{extension}";
+            using (var key = Registry.ClassesRoot.CreateSubKey(s.ToLower()))
+            {
+                var prev = key.GetValue("") as string;
+                if (!string.IsNullOrEmpty(prev) && prev != name)
+                {
+                    key.SetValue(nameof(PreArchiver), prev);
+                }
+                key.SetValue("", name);
+
+                UpdateToolTip(key, ToolTip);
             }
         }
 
@@ -193,8 +279,36 @@ namespace Cube.FileSystem.Ice
         /* ----------------------------------------------------------------- */
         private void Delete(string extension)
         {
-            var root = Registry.ClassesRoot;
-            root.DeleteSubKeyTree(GetSubKeyName(extension), false);
+            var name = GetSubKeyName(extension);
+            Delete(extension, name);
+            Registry.ClassesRoot.DeleteSubKeyTree(name, false);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Delete
+        /// 
+        /// <summary>
+        /// 拡張子を表すレジストリ項目と CubeICE を関連付けるための設定を
+        /// 削除します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void Delete(string extension, string name)
+        {
+            var s = (extension[0] == '.') ? extension : $".{extension}";
+            using (var key = Registry.ClassesRoot.CreateSubKey(s.ToLower()))
+            {
+                var prev = key.GetValue(nameof(PreArchiver), "") as string;
+                if (!string.IsNullOrEmpty(prev))
+                {
+                    key.SetValue("", prev);
+                    key.DeleteValue(nameof(PreArchiver), false);
+                }
+                else key.DeleteValue("", false);
+
+                UpdateToolTip(key, false);
+            }
         }
 
         /* ----------------------------------------------------------------- */
@@ -209,6 +323,12 @@ namespace Cube.FileSystem.Ice
         private string GetSubKeyName(string id)
             => $"{System.IO.Path.GetFileNameWithoutExtension(FileName)}_{id}".ToLower();
 
+        #endregion
+
+        #region Fields
+        private static readonly object PreArchiver = null;
+        private static readonly Guid TooTipKey = new Guid("{00021500-0000-0000-c000-000000000046}");
+        private static readonly Guid ToolTipHandler = new Guid("{f3db85f4-4731-4e80-bc2e-754a7320d830}");
         #endregion
     }
 }
