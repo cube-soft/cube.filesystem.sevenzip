@@ -97,6 +97,7 @@
     <Compile Include="ExtractPresenterTest.cs" />
     <Compile Include="Settings\AssociateRegistrarTest.cs" />
     <Compile Include="Settings\AssociateSettingsTest.cs" />
+    <Compile Include="ShortcutTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
