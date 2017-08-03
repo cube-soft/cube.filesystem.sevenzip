@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IWshRuntimeLibrary;
 
-namespace Cube.FileSystem.Ice
+namespace Cube.FileSystem
 {
     /* --------------------------------------------------------------------- */
     ///

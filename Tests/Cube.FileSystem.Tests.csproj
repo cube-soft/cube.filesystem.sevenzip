@@ -90,6 +90,7 @@
     <Compile Include="DriveTest.cs" />
     <Compile Include="FilesTest.cs" />
     <Compile Include="OperatorTest.cs" />
+    <Compile Include="ShortcutTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages.config" />

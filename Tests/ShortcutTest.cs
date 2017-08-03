@@ -18,10 +18,9 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Cube.FileSystem.Ice;
 using NUnit.Framework;
 
-namespace Cube.FileSystem.App.Ice.Tests
+namespace Cube.FileSystem.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
@@ -89,7 +88,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         public void Delete()
         {
             var src  = Result("DeleteTest");
-            var dest = GetLinkPath("cubeice.exe");
+            var dest = GetLinkPath("Cube.FileSystem.dll");
             var sc   = new Shortcut(src)
             {
                 Link         = dest,
@@ -122,24 +121,24 @@ namespace Cube.FileSystem.App.Ice.Tests
         {
             get
             {
-                yield return new TestCaseData("ScNormal", "cubeice.exe", 0,
-                    new List<string> { "/x" }
+                yield return new TestCaseData("ScNormal", "Cube.FileSystem.dll", 0,
+                    new List<string> { "/foo", "bar", "bas" }
                 ).Returns(true);
 
-                yield return new TestCaseData("ScNullArgs", "cubeice.exe", 0,
+                yield return new TestCaseData("ScNullArgs", "Cube.FileSystem.dll", 0,
                     null
                 ).Returns(true);
 
-                yield return new TestCaseData("ScEmptyArgs", "cubeice.exe", 0,
+                yield return new TestCaseData("ScEmptyArgs", "Cube.FileSystem.dll", 0,
                     new List<string>()
                 ).Returns(true);
 
-                yield return new TestCaseData("ScWrongIconIndex", "cubeice.exe", 3,
-                    new List<string> { "/x" }
+                yield return new TestCaseData("ScWrongIconIndex", "Cube.FileSystem.dll", 3,
+                    new List<string> { "/foo" }
                 ).Returns(true);
 
                 yield return new TestCaseData("ScWrongLink", "dummy.exe", 0,
-                    new List<string> { "/x" }
+                    new List<string> { "/foo" }
                 ).Returns(false);
             }
         }
