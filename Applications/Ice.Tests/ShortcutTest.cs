@@ -92,6 +92,7 @@ namespace Cube.FileSystem.App.Ice.Tests
             Assert.That(sc.Exists, Is.True);
 
             sc.Delete();
+            sc.Delete(); // ignore
             Assert.That(sc.Exists, Is.False);
         }
 
