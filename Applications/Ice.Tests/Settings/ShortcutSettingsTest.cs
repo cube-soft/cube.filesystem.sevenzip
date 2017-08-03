@@ -45,9 +45,8 @@ namespace Cube.FileSystem.App.Ice.Tests
         [Test]
         public void Update()
         {
-            var archive  = new Shortcut(Result("CubeICE Archive"));
-            var extract  = new Shortcut(Result("CubeICE Extract"));
-            var settings = new Shortcut(Result("CubeICE Settings"));
+            var archive  = new Shortcut(Result("CubeICE 圧縮"));
+            var extract  = new Shortcut(Result("CubeICE 解凍"));
             var src      = new ShortcutSettings() { Directory = Results };
 
             src.Preset = PresetMenu.Archive       |
@@ -57,13 +56,11 @@ namespace Cube.FileSystem.App.Ice.Tests
             src.Update();
             Assert.That(archive.Exists,  Is.True);
             Assert.That(extract.Exists,  Is.True);
-            //Assert.That(settings.Exists, Is.True);
 
             src.Preset = PresetMenu.None;
             src.Update();
             Assert.That(archive.Exists,  Is.False);
             Assert.That(extract.Exists,  Is.False);
-            //Assert.That(settings.Exists, Is.False);
         }
     }
 }

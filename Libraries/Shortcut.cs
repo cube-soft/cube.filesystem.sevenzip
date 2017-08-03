@@ -18,7 +18,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using IWshRuntimeLibrary;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace Cube.FileSystem
 {
@@ -63,7 +64,10 @@ namespace Cube.FileSystem
         public Shortcut(string file, Operator io)
         {
             if (string.IsNullOrEmpty(file)) throw new ArgumentException();
-            FileName = file;
+
+            FileName = file.EndsWith(Extension) ?
+                       file.Substring(0, file.Length - Extension.Length) :
+                       file;
             _io = io;
         }
 
@@ -73,11 +77,27 @@ namespace Cube.FileSystem
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Extension
+        /// 
+        /// <summary>
+        /// ショートカットを示す拡張子を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public static readonly string Extension = ".lnk";
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// FileName
         /// 
         /// <summary>
         /// ショートカットのパスを取得します。
         /// </summary>
+        /// 
+        /// <remarks>
+        /// このプロパティは末尾の .lnk は除外されます。拡張子を含めた
+        /// パスが必要な場合は FullName を使用して下さい。
+        /// </remarks>
         /// 
         /* ----------------------------------------------------------------- */
         public string FileName { get; }
@@ -159,8 +179,11 @@ namespace Cube.FileSystem
         {
             if (string.IsNullOrEmpty(Link) || !_io.Get(Link).Exists) return;
 
-            var sh = new WshShell();
-            var sc = sh.CreateShortcut(FullName) as IWshShortcut;
+            var guid = new Guid("00021401-0000-0000-C000-000000000046");
+            var type = Type.GetTypeFromCLSID(guid);
+
+            var sh = Activator.CreateInstance(type) as IShellLink;
+            if (sh == null) return;
 
             try
             {
@@ -168,18 +191,14 @@ namespace Cube.FileSystem
                            Arguments.Aggregate((s, o) => s + $" \"{o}\"").Trim() :
                            string.Empty;
 
-                sc.TargetPath       = Link;
-                sc.Arguments        = args;
-                sc.WorkingDirectory = "";
-                sc.WindowStyle      = 1;
-                sc.IconLocation     = IconLocation;
-                sc.Save();
+                sh.SetPath(Link);
+                sh.SetArguments(args);
+                sh.SetShowCmd(1); // SW_SHOWNORMAL
+                sh.SetIconLocation(GetIconFileName(), GetIconIndex());
+
+                (sh as IPersistFile)?.Save(FullName, true);
             }
-            finally
-            {
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(sc);
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(sh);
-            }
+            finally { Marshal.ReleaseComObject(sh); }
         }
 
         /* ----------------------------------------------------------------- */
@@ -198,8 +217,47 @@ namespace Cube.FileSystem
 
         #endregion
 
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetIconFileName
+        /// 
+        /// <summary>
+        /// アイコンのファイル名部分を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private string GetIconFileName()
+        {
+            var index = IconLocation.LastIndexOf(',');
+            return (index > 0) ? IconLocation.Substring(0, index) : IconLocation;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetIconIndex
+        /// 
+        /// <summary>
+        /// アイコンのインデックス部分を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private int GetIconIndex()
+        {
+            var index = IconLocation.LastIndexOf(',');
+            if (index > 0 && index < IconLocation.Length - 1)
+            {
+                int.TryParse(IconLocation.Substring(index + 1), out int dest);
+                return dest;
+            }
+            else return 0;
+        }
+
         #region Fields
         private Operator _io;
+        #endregion
+
         #endregion
     }
 }

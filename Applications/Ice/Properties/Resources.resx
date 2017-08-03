@@ -121,13 +121,13 @@
     <value>ファイル</value>
   </data>
   <data name="ScArcive" xml:space="preserve">
-    <value>CubeICE Archive</value>
+    <value>CubeICE 圧縮</value>
   </data>
   <data name="ScExtract" xml:space="preserve">
-    <value>CubeICE Extract</value>
+    <value>CubeICE 解凍</value>
   </data>
   <data name="ScSettings" xml:space="preserve">
-    <value>CubeICE Settings</value>
+    <value>CubeICE 設定</value>
   </data>
   <data name="VersionSuffix" xml:space="preserve">
     <value>β</value>

@@ -84,6 +84,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Details\IShellLink.cs" />
     <Compile Include="Drives\Device.cs" />
     <Compile Include="Drives\DeviceNumber.cs" />
     <Compile Include="Drives\Drive.cs" />
@@ -117,5 +118,6 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

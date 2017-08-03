@@ -70,7 +70,7 @@ namespace Cube.FileSystem.Ice.Properties {
         }
         
         /// <summary>
-        ///   CubeICE Archive に類似しているローカライズされた文字列を検索します。
+        ///   CubeICE 圧縮 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string ScArcive {
             get {
@@ -79,7 +79,7 @@ namespace Cube.FileSystem.Ice.Properties {
         }
         
         /// <summary>
-        ///   CubeICE Extract に類似しているローカライズされた文字列を検索します。
+        ///   CubeICE 解凍 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string ScExtract {
             get {
@@ -88,7 +88,7 @@ namespace Cube.FileSystem.Ice.Properties {
         }
         
         /// <summary>
-        ///   CubeICE Settings に類似しているローカライズされた文字列を検索します。
+        ///   CubeICE 設定 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string ScSettings {
             get {

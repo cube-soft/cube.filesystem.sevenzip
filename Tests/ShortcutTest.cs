@@ -122,7 +122,7 @@ namespace Cube.FileSystem.Tests
             get
             {
                 yield return new TestCaseData("ScNormal", "Cube.FileSystem.dll", 0,
-                    new List<string> { "/foo", "bar", "bas" }
+                    new List<string> { "/foo", "bar", "/bas" }
                 ).Returns(true);
 
                 yield return new TestCaseData("ScNullArgs", "Cube.FileSystem.dll", 0,
@@ -140,6 +140,14 @@ namespace Cube.FileSystem.Tests
                 yield return new TestCaseData("ScWrongLink", "dummy.exe", 0,
                     new List<string> { "/foo" }
                 ).Returns(false);
+
+                yield return new TestCaseData("ScWithLnk.lnk", "Cube.FileSystem.dll", 0,
+                    new List<string> { "args" }
+                ).Returns(true);
+
+                yield return new TestCaseData("日本語ショートカット", "Cube.FileSystem.dll", 0,
+                    new List<string> { "args" }
+                ).Returns(true);
             }
         }
 
