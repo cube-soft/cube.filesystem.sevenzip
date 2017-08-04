@@ -23,27 +23,27 @@ namespace Cube.FileSystem.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveDetails
+    /// ArchiveRuntimeSettings
     ///
     /// <summary>
-    /// 圧縮処理の詳細設定を保持するクラスです。
+    /// 圧縮処理の実行時詳細設定を保持するクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveDetails
+    public class ArchiveRuntimeSettings
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveDetails
+        /// ArchiveRuntimeSettings
         /// 
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveDetails(Format format)
+        public ArchiveRuntimeSettings(Format format)
         {
             var asm = Assembly.GetExecutingAssembly();
             var dir = System.IO.Path.GetDirectoryName(asm.Location);

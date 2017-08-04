@@ -56,44 +56,44 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Details
+        /// Runtime
         /// 
         /// <summary>
-        /// 圧縮の詳細設定を取得します。
+        /// 圧縮処理の実行時詳細設定を取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveDetails Details { get; private set; }
+        public ArchiveRuntimeSettings Runtime { get; private set; }
 
         #endregion
 
         #region Events
 
-        #region SettingsRequired
+        #region RuntimeSettingsRequired
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OverwriteRequired
+        /// RuntimeSettingsRequired
         /// 
         /// <summary>
-        /// ファイルの上書き時に発生するイベントです。
+        /// 圧縮の詳細設定が要求された時に発生するイベントです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public event QueryEventHandler<string, ArchiveDetails> SettingsRequired;
+        public event QueryEventHandler<string, ArchiveRuntimeSettings> RuntimeSettingsRequired;
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OnOverwriteRequired
+        /// OnRuntimeSettingsRequired
         /// 
         /// <summary>
-        /// OverwriteRequired イベントを発生させます。
+        /// RuntimeSettingsRequired イベントを発生させます。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnSettingsRequired(QueryEventArgs<string, ArchiveDetails> e)
+        protected virtual void OnRuntimeSettingsRequired(QueryEventArgs<string, ArchiveRuntimeSettings> e)
         {
-            if (SettingsRequired != null) SettingsRequired(this, e);
+            if (RuntimeSettingsRequired != null) RuntimeSettingsRequired(this, e);
             else e.Cancel = true;
             if (e.Cancel) throw new UserCancelException();
         }
@@ -142,16 +142,16 @@ namespace Cube.FileSystem.App.Ice
         {
             var fmt   = GetFormat();
             var dest  = GetDestination();
-            var query = !string.IsNullOrEmpty(Details?.Password) || Request.Password ?
+            var query = !string.IsNullOrEmpty(Runtime?.Password) || Request.Password ?
                         new Query<string, string>(x => RaisePasswordRequired(x)) :
                         null;
 
             this.LogDebug(string.Format("Format:{0}\tMethod:{1}",
-                fmt, Details?.CompressionMethod ?? CompressionMethod.Default));
+                fmt, Runtime?.CompressionMethod ?? CompressionMethod.Default));
 
             using (var writer = new ArchiveWriter(fmt, IO))
             {
-                writer.Option = Details?.ToOption();
+                writer.Option = Runtime?.ToOption();
                 foreach (var item in Request.Sources) writer.Add(item);
                 ProgressStart();
                 writer.Save(dest, query, CreateInnerProgress(x => ProgressReport = x));
@@ -208,19 +208,17 @@ namespace Cube.FileSystem.App.Ice
                 case Format.SevenZip:
                     return Request.Format;
                 case Format.Sfx:
-                    Details = new ArchiveDetails(f);
-                    return Details.Format;
+                    Runtime = new ArchiveRuntimeSettings(f);
+                    return Runtime.Format;
                 case Format.BZip2:
                 case Format.GZip:
                 case Format.XZ:
-                    Details = new ArchiveDetails(Format.Tar)
-                    {
-                        CompressionMethod = f.ToMethod(),
-                    };
-                    return Details.Format;
+                    Runtime = new ArchiveRuntimeSettings(Format.Tar);
+                    Runtime.CompressionMethod = f.ToMethod();
+                    return Runtime.Format;
                 default:
-                    RaiseSettingsRequired();
-                    return Details.Format;
+                    RaiseRuntimeSettingsRequired();
+                    return Runtime.Format;
             }
         }
 
@@ -235,7 +233,7 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private string GetDestination()
         {
-            if (!string.IsNullOrEmpty(Details?.Path)) Destination = Details.Path;
+            if (!string.IsNullOrEmpty(Runtime?.Path)) Destination = Runtime.Path;
             else SetDestination(Settings.Value.Archive, Request.Format.ToString());
 
             var info = IO.Get(Destination);
@@ -247,20 +245,20 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// RaiseSettingsRequired
+        /// RaiseRuntimeSettingsRequired
         /// 
         /// <summary>
-        /// SettingsRequired イベントを発生させます。
+        /// RuntimeSettingsRequired イベントを発生させます。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void RaiseSettingsRequired()
+        private void RaiseRuntimeSettingsRequired()
         {
             var info = IO.Get(Request.Sources.First());
             var path = IO.Combine(info.DirectoryName, $"{info.NameWithoutExtension}.zip");
-            var args = new QueryEventArgs<string, ArchiveDetails>(path);
-            OnSettingsRequired(args);
-            Details = args.Result;
+            var args = new QueryEventArgs<string, ArchiveRuntimeSettings>(path);
+            OnRuntimeSettingsRequired(args);
+            Runtime = args.Result;
         }
 
         /* ----------------------------------------------------------------- */
@@ -274,9 +272,9 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void RaisePasswordRequired(QueryEventArgs<string, string> e)
         {
-            if (!string.IsNullOrEmpty(Details?.Password))
+            if (!string.IsNullOrEmpty(Runtime?.Password))
             {
-                e.Result = Details.Password;
+                e.Result = Runtime.Password;
                 e.Cancel = false;
             }
             else OnPasswordRequired(e);

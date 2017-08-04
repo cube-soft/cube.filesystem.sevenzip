@@ -116,14 +116,14 @@
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Views\DetailsForm.cs">
+    <Compile Include="Views\RuntimeSettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\DetailsForm.Designer.cs">
-      <DependentUpon>DetailsForm.cs</DependentUpon>
+    <Compile Include="Views\RuntimeSettingsForm.Designer.cs">
+      <DependentUpon>RuntimeSettingsForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Views\DetailsForm.resx">
-      <DependentUpon>DetailsForm.cs</DependentUpon>
+    <EmbeddedResource Include="Views\RuntimeSettingsForm.resx">
+      <DependentUpon>RuntimeSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <Compile Include="Views\OverwriteForm.cs">
       <SubType>Form</SubType>

@@ -58,10 +58,10 @@ namespace Cube.FileSystem.App.Ice
 
             // Model
             var model = Model as ArchiveFacade;
-            model.DestinationRequired += WhenDestinationRequired;
-            model.PasswordRequired    += WhenPasswordRequired;
-            model.Progress            += WhenProgress;
-            model.SettingsRequired    += WhenSettingsRequired;
+            model.DestinationRequired     += WhenDestinationRequired;
+            model.PasswordRequired        += WhenPasswordRequired;
+            model.Progress                += WhenProgress;
+            model.RuntimeSettingsRequired += WhenSettingsRequired;
         }
 
         #endregion
@@ -77,8 +77,8 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenSettingsRequired(object sender, QueryEventArgs<string, ArchiveDetails> e)
-            => ShowDialog(() => Views.ShowDetailsView(e));
+        private void WhenSettingsRequired(object sender, QueryEventArgs<string, ArchiveRuntimeSettings> e)
+            => ShowDialog(() => Views.ShowRuntimeSettingsView(e));
 
         /* ----------------------------------------------------------------- */
         ///
