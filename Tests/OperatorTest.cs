@@ -55,7 +55,7 @@ namespace Cube.FileSystem.Tests
         public void GetFiles(IOperatorCore core)
         {
             var io = new Operator(core);
-            Assert.That(io.GetFiles(Examples).Count(), Is.EqualTo(15));
+            Assert.That(io.GetFiles(Examples).Count(), Is.EqualTo(20));
             Assert.That(io.GetFiles(Example("Sample.txt")), Is.Null);
 
             var empty = Result("Empty");
