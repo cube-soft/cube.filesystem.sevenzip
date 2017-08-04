@@ -86,19 +86,7 @@ namespace Cube.FileSystem.App.Ice
                     return;
             }
 
-            var sources = new List<string>();
-            for (var i = 1; i < args.Length; ++i)
-            {
-                if (!args[i].StartsWith("/")) sources.Add(args[i]);
-                else if (args[i] == "/p") Password = true;
-                else if (args[i].StartsWith("/o")) Location = GetLocation(args[i]);
-                else if (args[i].StartsWith("/drop")) DropDirectory = GetTail(args[i]);
-            }
-
-            if (!string.IsNullOrEmpty(DropDirectory) &&
-                Location == SaveLocation.Source) Location = SaveLocation.Drop;
-
-            Sources = sources;
+            ParseOptions(args);
         }
 
         #endregion
@@ -156,6 +144,17 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Mail
+        /// 
+        /// <summary>
+        /// 圧縮後にメール送信するかどうかを示す値を取得または設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public bool Mail { get; set; } = false;
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// DropDirectory
         /// 
         /// <summary>
@@ -174,11 +173,39 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public IEnumerable<string> Sources { get; }
+        public IEnumerable<string> Sources { get; private set; }
 
         #endregion
 
         #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ParseOptions
+        /// 
+        /// <summary>
+        /// オプション引数を解析します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void ParseOptions(string[] args)
+        {
+            var sources = new List<string>();
+
+            for (var i = 1; i < args.Length; ++i)
+            {
+                if (!args[i].StartsWith("/")) sources.Add(args[i]);
+                else if (args[i] == "/m") Mail = true;
+                else if (args[i] == "/p") Password = true;
+                else if (args[i].StartsWith("/o")) Location = GetLocation(args[i]);
+                else if (args[i].StartsWith("/drop")) DropDirectory = GetTail(args[i]);
+            }
+
+            if (!string.IsNullOrEmpty(DropDirectory) &&
+                Location == SaveLocation.Source) Location = SaveLocation.Drop;
+
+            Sources = sources;
+        }
 
         /* ----------------------------------------------------------------- */
         ///
