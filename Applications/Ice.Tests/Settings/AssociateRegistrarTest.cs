@@ -45,11 +45,11 @@ namespace Cube.FileSystem.App.Ice.Tests.Settings
         /* --------------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
         public string Command(string path, IList<string> args)
-        {
-            var registrar = new AssociateRegistrar(path) { IconLocation = "" };
-            foreach (var s in args) registrar.Arguments.Add(s);
-            return registrar.Command;
-        }
+            => new AssociateRegistrar(path)
+            {
+                Arguments    = args,
+                IconLocation = "",
+            }.Command;
 
         /* --------------------------------------------------------------------- */
         ///
@@ -59,7 +59,7 @@ namespace Cube.FileSystem.App.Ice.Tests.Settings
         /// Command のテスト用データを取得します。
         /// </summary>
         ///
-        /* --------------------------------------------------------------------- */
+            /* --------------------------------------------------------------------- */
         private static IEnumerable<TestCaseData> TestCases
         {
             get

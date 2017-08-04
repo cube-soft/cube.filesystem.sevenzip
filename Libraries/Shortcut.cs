@@ -137,7 +137,7 @@ namespace Cube.FileSystem
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public IList<string> Arguments { get; set; } = new List<string>();
+        public IEnumerable<string> Arguments { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -187,7 +187,7 @@ namespace Cube.FileSystem
 
             try
             {
-                var args = Arguments != null && Arguments.Count > 0 ?
+                var args = Arguments != null && Arguments.Count() > 0 ?
                            Arguments.Aggregate((s, o) => s + $" \"{o}\"").Trim() :
                            string.Empty;
 

@@ -86,7 +86,7 @@ namespace Cube.FileSystem.Ice
         /// </remarks>
         /// 
         /* ----------------------------------------------------------------- */
-        public IList<string> Arguments { get; } = new List<string>();
+        public IEnumerable<string> Arguments { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
