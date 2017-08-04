@@ -397,9 +397,13 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected void SetDestination(string query)
+        protected void SetDestination(GeneralSettings settings, string query)
         {
-            switch (Request.Location)
+            var value = Request.Location != SaveLocation.Unknown ?
+                        Request.Location :
+                        settings.SaveLocation;
+
+            switch (value)
             {
                 case SaveLocation.Desktop:
                     Destination = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
@@ -414,6 +418,14 @@ namespace Cube.FileSystem.App.Ice
                     break;
                 case SaveLocation.Source:
                     Destination = IO.Get(Request.Sources.First()).DirectoryName;
+                    break;
+                case SaveLocation.Drop:
+                    Destination = Request.DropDirectory;
+                    break;
+                case SaveLocation.Others:
+                    Destination = !string.IsNullOrEmpty(settings.SaveDirectoryName) ?
+                                  settings.SaveDirectoryName :
+                                  Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                     break;
             }
         }

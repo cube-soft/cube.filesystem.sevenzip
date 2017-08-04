@@ -69,6 +69,8 @@ namespace Cube.FileSystem.App.Ice
 
         #region Events
 
+        #region SettingsRequired
+
         /* ----------------------------------------------------------------- */
         ///
         /// OverwriteRequired
@@ -95,6 +97,8 @@ namespace Cube.FileSystem.App.Ice
             else e.Cancel = true;
             if (e.Cancel) throw new UserCancelException();
         }
+
+        #endregion
 
         #endregion
 
@@ -228,7 +232,7 @@ namespace Cube.FileSystem.App.Ice
         private string GetDestination()
         {
             if (!string.IsNullOrEmpty(Details?.Path)) Destination = Details.Path;
-            else SetDestination(Request.Format.ToString());
+            else SetDestination(Settings.Value.Archive, Request.Format.ToString());
 
             var info = IO.Get(Destination);
             if (!info.Exists) return Destination;

@@ -92,7 +92,7 @@ namespace Cube.FileSystem.App.Ice
 
                 try
                 {
-                    SetDestination(Source);
+                    SetDestination(Settings.Value.Extract, Source);
                     SetTmp(Destination);
                     PreExtract(reader);
                     Extract(reader);
