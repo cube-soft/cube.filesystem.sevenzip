@@ -53,7 +53,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         public async Task<long> Extract(string filename, string password)
         {
             var source   = Example(filename);
-            var args     = PresetMenu.ExtractRuntime.ToArguments();
+            var args     = PresetMenu.Extract.ToArguments();
             var model    = new Request(args.Concat(new[] { source }));
             var settings = new SettingsFolder();
             var events   = new EventAggregator();
@@ -63,10 +63,11 @@ namespace Cube.FileSystem.App.Ice.Tests
             MockViewFactory.Destination = Results;
             MockViewFactory.Password    = password;
 
-            settings.Value.Extract.SaveLocation  = SaveLocation.Runtime;
-            settings.Value.Extract.RootDirectory = RootDirectoryCondition.CreateSmart;
-            settings.Value.Extract.OpenDirectory = OpenDirectoryCondition.None;
-            settings.Value.Extract.DeleteSource  = false;
+            settings.Value.Extract.SaveLocation      = SaveLocation.Others;
+            settings.Value.Extract.SaveDirectoryName = Result("SettingsDefault");
+            settings.Value.Extract.RootDirectory     = RootDirectoryCondition.CreateSmart;
+            settings.Value.Extract.OpenDirectory     = OpenDirectoryCondition.None;
+            settings.Value.Extract.DeleteSource      = false;
 
             // Main
             using (var ep = new ExtractPresenter(view, model, settings, events))

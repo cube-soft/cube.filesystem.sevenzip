@@ -129,7 +129,7 @@ namespace Cube.FileSystem.App.Ice
         /// </remarks>
         /// 
         /* ----------------------------------------------------------------- */
-        public Format Format { get; set; } = Format.Zip;
+        public Format Format { get; set; } = Format.Unknown;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -140,7 +140,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public SaveLocation Location { get; set; } = SaveLocation.Runtime;
+        public SaveLocation Location { get; set; } = SaveLocation.Unknown;
 
         /* ----------------------------------------------------------------- */
         ///
