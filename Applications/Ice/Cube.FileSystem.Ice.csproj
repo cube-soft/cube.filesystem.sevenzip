@@ -42,7 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArchiveDetails.cs" />
+    <Compile Include="Settings\ArchiveDetails.cs" />
     <Compile Include="Conversions\PresetMenu.cs" />
     <Compile Include="Settings\ArchiveSettings.cs" />
     <Compile Include="AssociateRegistrar.cs" />
