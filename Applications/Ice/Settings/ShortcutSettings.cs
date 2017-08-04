@@ -109,6 +109,7 @@ namespace Cube.FileSystem.Ice
             var sc   = new Shortcut(src)
             {
                 Link         = dest,
+                Arguments    = Preset.ToArguments(),
                 IconLocation = $"{dest},1",
             };
 
