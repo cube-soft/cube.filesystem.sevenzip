@@ -133,7 +133,7 @@ namespace Cube.FileSystem.Ice
             var sc   = new Shortcut(src)
             {
                 Link         = dest,
-                Arguments    = new[] { "/x" },
+                Arguments    = PresetMenu.Extract.ToArguments(),
                 IconLocation = $"{dest},2",
             };
 

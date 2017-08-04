@@ -68,7 +68,7 @@ namespace Cube.FileSystem.App.Ice.Associate
                     ToolTip      = false, // settings.Value.ToolTip
                 };
 
-                registrar.Arguments = new[] { "/x" };
+                registrar.Arguments = PresetMenu.Extract.ToArguments();
                 registrar.Update(settings.Value.Associate.Value);
 
                 Shell32.NativeMethods.SHChangeNotify(
