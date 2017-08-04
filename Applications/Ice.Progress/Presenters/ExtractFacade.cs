@@ -70,6 +70,21 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         public string Source { get; }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OpenDirectoryName
+        /// 
+        /// <summary>
+        /// 保存後に開くディレクトリ名を取得します。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// 取得できる値は Destination からの相対パスとなります。
+        /// </remarks>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public string OpenDirectoryName { get; private set; }
+
         #endregion
 
         #region Methods
@@ -88,7 +103,7 @@ namespace Cube.FileSystem.App.Ice
             var query = new Query<string, string>(x => OnPasswordRequired(x));
             using (var reader = new ArchiveReader(Source, query, IO))
             {
-                this.LogDebug($"Format:{reader.Format}\tPath:{Source}");
+                this.LogDebug($"Format:{reader.Format}\tSource:{Source}");
 
                 try
                 {
@@ -96,7 +111,7 @@ namespace Cube.FileSystem.App.Ice
                     SetTmp(Destination);
                     PreExtract(reader);
                     Extract(reader);
-                    Execute(Settings.Value.Extract.OpenDirectory, Destination);
+                    Open(IO.Combine(Destination, OpenDirectoryName), Settings.Value.Extract.OpenDirectory);
                 }
                 catch (UserCancelException /* err */) { /* user cancel */ }
                 catch (Exception err) { this.LogWarn(err.ToString(), err); }
@@ -137,12 +152,10 @@ namespace Cube.FileSystem.App.Ice
             ProgressReport.TotalCount = count;
             ProgressReport.TotalBytes = bytes;
 
-            var root = GetRoot(check.Values.Where(x => x != file), count);
-            if (!string.IsNullOrEmpty(root)) Destination = IO.Combine(Destination, root);
+            SetDirectories(check.Values);
 
-            this.LogDebug(string.Format("Count:{0:#,0}\tBytes:{1:#,0}\tDestination:{2}",
-                ProgressReport.TotalCount, ProgressReport.TotalBytes, Destination
-            ));
+            this.LogDebug(string.Format("Destination:{0}\tCount:{1:#,0}\tBytes:{2:#,0}",
+                Destination, ProgressReport.TotalCount, ProgressReport.TotalBytes));
         }
 
         /* ----------------------------------------------------------------- */
@@ -283,6 +296,37 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// SetDirectories
+        /// 
+        /// <summary>
+        /// Destination の更新および OpenDirectoryName の設定を実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void SetDirectories(IEnumerable<string> parts)
+        {
+            var src = IO.Get(Source).NameWithoutExtension;
+            var one = parts.Count() == 1 && parts.First() != "*";
+
+            switch (Settings.Value.Extract.RootDirectory)
+            {
+                case RootDirectoryCondition.Create:
+                    Destination = IO.Combine(Destination, src);
+                    OpenDirectoryName = ".";
+                    break;
+                case RootDirectoryCondition.CreateSmart:
+                    if (!one) Destination = IO.Combine(Destination, src);
+                    OpenDirectoryName = one ? parts.First() : ".";
+                    break;
+                case RootDirectoryCondition.None:
+                default:
+                    OpenDirectoryName = one ? parts.First() : ".";
+                    break;
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// GetRoot
         /// 
         /// <summary>
@@ -298,30 +342,6 @@ namespace Cube.FileSystem.App.Ice
             )[0];
 
             return info.IsDirectory || root != info.Name ? root : alternate;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SetRoot
-        /// 
-        /// <summary>
-        /// ルートディレクトリを取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private string GetRoot(IEnumerable<string> parts, int count)
-        {
-            var src = IO.Get(Source).NameWithoutExtension;
-            switch (Settings.Value.Extract.RootDirectory)
-            {
-                case RootDirectoryCondition.Create:
-                    return src;
-                case RootDirectoryCondition.CreateSmart:
-                    return count <= 1 || parts.Count() == 1 ? string.Empty : src;
-                case RootDirectoryCondition.None:
-                default:
-                    return string.Empty;
-            }
         }
 
         /* ----------------------------------------------------------------- */

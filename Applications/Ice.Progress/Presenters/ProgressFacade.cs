@@ -93,7 +93,16 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public string Destination { get; protected set; }
+        public string Destination
+        {
+            get { return _dest; }
+            protected set
+            {
+                if (_dest == value) return;
+                _dest = value;
+                this.LogDebug($"Destination:{value}");
+            }
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -104,7 +113,16 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Tmp { get; protected set; }
+        public string Tmp
+        {
+            get { return _tmp; }
+            protected set
+            {
+                if (_tmp == value) return;
+                _tmp = value;
+                this.LogDebug($"Tmp:{value}");
+            }
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -365,27 +383,31 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Execute
+        /// Open
         /// 
         /// <summary>
-        /// ポストプロセスを実行します。
+        /// ディレクトリを開きます。
         /// </summary>
         /// 
-        /// <param name="mode">ポストプロセスの種類</param>
         /// <param name="path">圧縮・展開先のパス</param>
+        /// <param name="mode">ポストプロセスの種類</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected void Execute(OpenDirectoryCondition mode, string path)
+        protected void Open(string path, OpenDirectoryCondition mode)
         {
-            switch (mode)
-            {
-                case OpenDirectoryCondition.Open:
-                case OpenDirectoryCondition.OpenNotDesktop:
-                    OpenDirectory(mode, IO.Get(path));
-                    break;
-                case OpenDirectoryCondition.None:
-                    break;
-            }
+            if (mode == OpenDirectoryCondition.None) return;
+
+            var info = IO.Get(path);
+            var src  = info.IsDirectory ? info.FullName : info.DirectoryName;
+            var cmp  = Environment.GetFolderPath(Environment.SpecialFolder.Desktop).ToLower();
+            if (mode == OpenDirectoryCondition.OpenNotDesktop && src.ToLower().CompareTo(cmp) == 0) return;
+
+            var exec = !string.IsNullOrEmpty(Settings.Value.Explorer) ?
+                       Settings.Value.Explorer :
+                       "explorer.exe";
+
+            this.LogDebug($"Open:{src}\tExplorer:{exec}");
+            System.Diagnostics.Process.Start(exec, $"\"{src}\"");
         }
 
         /* ----------------------------------------------------------------- */
@@ -402,6 +424,9 @@ namespace Cube.FileSystem.App.Ice
             var value = Request.Location != SaveLocation.Unknown ?
                         Request.Location :
                         settings.SaveLocation;
+
+            this.LogDebug(string.Format("SaveLocation:({0},{1})->{2}",
+                Request.Location, settings.SaveLocation, value));
 
             switch (value)
             {
@@ -505,26 +530,6 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OpenDirectory
-        /// 
-        /// <summary>
-        /// ディレクトリを開きます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void OpenDirectory(OpenDirectoryCondition mode, IInformation info)
-        {
-            var src = info.IsDirectory ? info.FullName : info.DirectoryName;
-            var cmp = Environment.GetFolderPath(Environment.SpecialFolder.Desktop).ToLower();
-            if (mode == OpenDirectoryCondition.OpenNotDesktop && src.ToLower().CompareTo(cmp) == 0) return;
-
-            var exec = Settings.Value.Explorer;
-            var path = string.IsNullOrEmpty(exec) ? "explorer.exe" : exec;
-            System.Diagnostics.Process.Start(path, $"\"{src}\"");
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// RaiseUserCancel
         /// 
         /// <summary>
@@ -554,6 +559,8 @@ namespace Cube.FileSystem.App.Ice
 
         #region Fields
         private bool _disposed = false;
+        private string _dest;
+        private string _tmp;
         private System.Timers.Timer _timer = new System.Timers.Timer(100.0);
         private ManualResetEvent _wait = new ManualResetEvent(true);
         #endregion
