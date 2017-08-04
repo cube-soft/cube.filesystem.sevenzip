@@ -46,17 +46,18 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [TestCaseSource(nameof(Archive_TestCases))]
-        public async Task<long> Archive(string filename, string[] args)
+        [TestCaseSource(nameof(TestCases))]
+        public async Task<long> Archive(string filename, PresetMenu menu)
         {
             var settings = new SettingsFolder();
             var events   = new EventAggregator();
             var view     = Views.CreateProgressView();
-            var model    = new Request(args.Concat(new[]
+            var model    = new Request(menu.ToArguments().Concat(new[]
             {
+                "/out:runtime",
                 Example("Sample.txt"),
                 Example("Archive"),
-            }).ToArray());
+            }));
 
             // Preset
             MockViewFactory.Destination = Result(filename);
@@ -88,28 +89,30 @@ namespace Cube.FileSystem.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Archive_TestCases
+        /// TestCases
         /// 
         /// <summary>
         /// 圧縮処理のテスト用データを取得します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private static IEnumerable<TestCaseData> Archive_TestCases
+        private static IEnumerable<TestCaseData> TestCases
         {
             get
             {
-                yield return new TestCaseData("7zTest.7z", new[] { "/c:7z", "/o:runtime" }).Returns(4L);
-                yield return new TestCaseData("TarTest.tar.bz", new[] { "/c:bzip2", "/o:runtime" }).Returns(1L);
-                yield return new TestCaseData("ZipDetail.zip", new[] { "/c:detail" }).Returns(4L);
-                yield return new TestCaseData("ZipPassword.zip", new[] { "/c:zip", "/o:runtime", "/p" }).Returns(4L);
-                yield return new TestCaseData("ExecutableTest.exe", new[] { "/c:exe", "/o:runtime" }).Returns(4L);
+                yield return new TestCaseData("ZipTest.zip", PresetMenu.Archive).Returns(4L);
+                yield return new TestCaseData("ZipDetail.zip", PresetMenu.ArchiveDetail).Returns(4L);
+                yield return new TestCaseData("ZipPassword.zip", PresetMenu.ArchiveZipPassword).Returns(4L);
+                yield return new TestCaseData("7zTest.7z", PresetMenu.ArchiveSevenZip).Returns(4L);
+                yield return new TestCaseData("TarTest.tar.bz", PresetMenu.ArchiveBZip2).Returns(1L);
+                yield return new TestCaseData("TarTest.tar.gz", PresetMenu.ArchiveGZip).Returns(1L);
+                yield return new TestCaseData("ExecutableTest.exe", PresetMenu.ArchiveSfx).Returns(4L);
             }
         }
 
         #endregion
 
-        #region Helper methods
+        #region Helper
 
         /* ----------------------------------------------------------------- */
         ///

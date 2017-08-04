@@ -15,6 +15,7 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System.Linq;
 using System.Threading.Tasks;
 using Cube.FileSystem.Ice;
 using NUnit.Framework;
@@ -52,7 +53,8 @@ namespace Cube.FileSystem.App.Ice.Tests
         public async Task<long> Extract(string filename, string password)
         {
             var source   = Example(filename);
-            var model    = new Request(new[] { "/x", "/o:runtime", source });
+            var args     = PresetMenu.ExtractRuntime.ToArguments();
+            var model    = new Request(args.Concat(new[] { source }));
             var settings = new SettingsFolder();
             var events   = new EventAggregator();
             var view     = Views.CreateProgressView();
@@ -63,7 +65,7 @@ namespace Cube.FileSystem.App.Ice.Tests
 
             settings.Value.Extract.SaveLocation  = SaveLocation.Runtime;
             settings.Value.Extract.RootDirectory = RootDirectoryCondition.CreateSmart;
-            settings.Value.Extract.OpenDirectory   = OpenDirectoryCondition.None;
+            settings.Value.Extract.OpenDirectory = OpenDirectoryCondition.None;
             settings.Value.Extract.DeleteSource  = false;
 
             // Main
@@ -85,7 +87,7 @@ namespace Cube.FileSystem.App.Ice.Tests
 
         #endregion
 
-        #region Helper methods
+        #region Helper
 
         /* ----------------------------------------------------------------- */
         ///
