@@ -118,9 +118,8 @@ namespace Cube.FileSystem.App.Ice
             try
             {
                 Archive();
-                Execute(Settings.Value.Archive.OpenDirectory, Destination);
                 SetResult();
-                OnProgress(ValueEventArgs.Create(ProgressReport));
+                Open(Destination, Settings.Value.Archive.OpenDirectory);
             }
             catch (UserCancelException /* err */) { /* user cancel */ }
             finally { ProgressStop(); }
@@ -146,6 +145,9 @@ namespace Cube.FileSystem.App.Ice
             var query = !string.IsNullOrEmpty(Details?.Password) || Request.Password ?
                         new Query<string, string>(x => RaisePasswordRequired(x)) :
                         null;
+
+            this.LogDebug(string.Format("Format:{0}\tMethod:{1}",
+                fmt, Details?.CompressionMethod ?? CompressionMethod.Default));
 
             using (var writer = new ArchiveWriter(fmt, IO))
             {
@@ -176,12 +178,14 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void SetResult()
         {
-            this.LogDebug(string.Format("Count:{0:#,0}\tBytes:{1:#,0}\tDestination:{2}",
-                ProgressReport.TotalCount, ProgressReport.TotalBytes, Destination));
+            this.LogDebug(string.Format("Destination:{0}\tCount:{1:#,0}\tBytes:{2:#,0}",
+                Destination, ProgressReport.TotalCount, ProgressReport.TotalBytes));
 
             // hack (see remarks)
             ProgressReport.Count = ProgressReport.TotalCount;
             ProgressReport.Bytes = ProgressReport.TotalBytes;
+
+            OnProgress(ValueEventArgs.Create(ProgressReport));
         }
 
         /* ----------------------------------------------------------------- */
