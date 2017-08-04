@@ -112,11 +112,11 @@
       <Project>{74c9f388-360e-4c46-a9a6-e131eab2e49c}</Project>
       <Name>Cube.FileSystem.SevenZip</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ice\Cube.FileSystem.Ice.csproj">
+    <ProjectReference Include="..\Ice.Shared\Cube.FileSystem.Ice.csproj">
       <Project>{1badab3f-38b5-4acf-addf-036918bfc51c}</Project>
       <Name>Cube.FileSystem.Ice</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ice.Progress\Cube.FileSystem.App.Ice.csproj">
+    <ProjectReference Include="..\Ice\Cube.FileSystem.App.Ice.csproj">
       <Project>{e14092d2-266a-4cc7-b1ce-2add0cb8e65b}</Project>
       <Name>Cube.FileSystem.App.Ice</Name>
     </ProjectReference>

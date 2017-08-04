@@ -94,7 +94,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Ice\Cube.FileSystem.Ice.csproj">
+    <ProjectReference Include="..\Ice.Shared\Cube.FileSystem.Ice.csproj">
       <Project>{1badab3f-38b5-4acf-addf-036918bfc51c}</Project>
       <Name>Cube.FileSystem.Ice</Name>
     </ProjectReference>
