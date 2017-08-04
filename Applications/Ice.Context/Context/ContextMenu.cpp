@@ -199,7 +199,7 @@ STDMETHODIMP ContextMenu::QueryContextMenu(HMENU menu, UINT index, UINT first, U
     if ((flags & CMF_DEFAULTONLY) != 0) return NO_ERROR;
     if (Settings().Preset() == 0) return NO_ERROR;
 
-    if (!drop_.empty()) InsertMenu(menu, index++, MF_BYPOSITION | MF_SEPARATOR, 0, nullptr);
+    if (drop_.empty()) InsertMenu(menu, index++, MF_BYPOSITION | MF_SEPARATOR, 0, nullptr);
 
     auto items = GetContextMenuItems(Settings().Preset(), Program());
     auto cmdid = first;
