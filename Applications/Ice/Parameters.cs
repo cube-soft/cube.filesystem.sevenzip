@@ -51,6 +51,7 @@ namespace Cube.FileSystem.Ice
         Runtime         =  2,
         Desktop         =  3,
         MyDocuments     =  4,
+        Drop            = 10,
         Unknown         = -1,
     }
 

@@ -90,9 +90,14 @@ namespace Cube.FileSystem.App.Ice
             for (var i = 1; i < args.Length; ++i)
             {
                 if (!args[i].StartsWith("/")) sources.Add(args[i]);
-                else if (args[i].StartsWith("/o")) Location = GetLocation(args[i]);
                 else if (args[i] == "/p") Password = true;
+                else if (args[i].StartsWith("/o")) Location = GetLocation(args[i]);
+                else if (args[i].StartsWith("/drop")) DropDirectory = GetTail(args[i]);
             }
+
+            if (!string.IsNullOrEmpty(DropDirectory) &&
+                Location == SaveLocation.Source) Location = SaveLocation.Drop;
+
             Sources = sources;
         }
 
@@ -151,6 +156,17 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// DropDirectory
+        /// 
+        /// <summary>
+        /// ドロップ先のディレクトリのパスを取得または設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public string DropDirectory { get; set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Sources
         /// 
         /// <summary>
@@ -193,15 +209,31 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private SaveLocation GetLocation(string s)
         {
-            var index = s.IndexOf(':');
-            if (index < 0 || index >= s.Length - 1) return SaveLocation.Unknown;
+            var query = GetTail(s).ToLower();
+            if (string.IsNullOrEmpty(query)) return SaveLocation.Unknown;
 
-            var query = s.Substring(index + 1).ToLower();
             foreach (SaveLocation item in Enum.GetValues(typeof(SaveLocation)))
             {
                 if (item.ToString().ToLower() == query) return item;
             }
             return SaveLocation.Unknown;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetTail
+        /// 
+        /// <summary>
+        /// ':' 以降の文字列を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private string GetTail(string s)
+        {
+            var index = s.IndexOf(':');
+            return index >= 0 && index < s.Length - 1 ?
+                   s.Substring(index + 1) :
+                   string.Empty;
         }
 
         #endregion
