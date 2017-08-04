@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cube.FileSystem.SevenZip;
 using Cube.FileSystem.Ice;
 
@@ -38,6 +39,20 @@ namespace Cube.FileSystem.App.Ice
     public class Request
     {
         #region Constructors
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Request
+        /// 
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        /// 
+        /// <param name="args">プログラムオプション</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public Request(IEnumerable<string> args)
+            : this(args.ToArray()) { }
 
         /* ----------------------------------------------------------------- */
         ///
