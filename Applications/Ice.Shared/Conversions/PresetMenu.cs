@@ -93,10 +93,10 @@ namespace Cube.FileSystem.Ice
         /* --------------------------------------------------------------------- */
         private static IEnumerable<string> ToExtract(PresetMenu m)
         {
-            if (m.HasFlag(PresetMenu.ExtractDesktop)) return new[] { "/x /out:desktop" };
-            if (m.HasFlag(PresetMenu.ExtractMyDocuments)) return new[] { "/x /out:mydocuments" };
-            if (m.HasFlag(PresetMenu.ExtractRuntime)) return new[] { "/x /out:runtime" };
-            if (m.HasFlag(PresetMenu.ExtractSource)) return new[] { "/x /out:source" };
+            if (m.HasFlag(PresetMenu.ExtractDesktop)) return new[] { "/x", "/out:desktop" };
+            if (m.HasFlag(PresetMenu.ExtractMyDocuments)) return new[] { "/x", "/out:mydocuments" };
+            if (m.HasFlag(PresetMenu.ExtractRuntime)) return new[] { "/x", "/out:runtime" };
+            if (m.HasFlag(PresetMenu.ExtractSource)) return new[] { "/x", "/out:source" };
             return new string[0];
         }
 
@@ -112,13 +112,13 @@ namespace Cube.FileSystem.Ice
         /* --------------------------------------------------------------------- */
         private static IEnumerable<string> ToMail(PresetMenu m)
         {
-            if (m.HasFlag(PresetMenu.MailZip)) return new[] { "/c:zip /m" };
-            if (m.HasFlag(PresetMenu.MailZipPassword)) return new[] { "/c:zip", "/p /m" };
-            if (m.HasFlag(PresetMenu.MailSevenZip)) return new[] { "/c:7z /m" };
-            if (m.HasFlag(PresetMenu.MailBZip2)) return new[] { "/c:bzip2 /m" };
-            if (m.HasFlag(PresetMenu.MailGZip)) return new[] { "/c:gzip /m" };
-            if (m.HasFlag(PresetMenu.MailSfx)) return new[] { "/c:exe /m" };
-            if (m.HasFlag(PresetMenu.MailDetail)) return new[] { "/c:detail /m" };
+            if (m.HasFlag(PresetMenu.MailZip)) return new[] { "/c:zip", "/m" };
+            if (m.HasFlag(PresetMenu.MailZipPassword)) return new[] { "/c:zip", "/p", "/m" };
+            if (m.HasFlag(PresetMenu.MailSevenZip)) return new[] { "/c:7z", "/m" };
+            if (m.HasFlag(PresetMenu.MailBZip2)) return new[] { "/c:bzip2", "/m" };
+            if (m.HasFlag(PresetMenu.MailGZip)) return new[] { "/c:gzip", "/m" };
+            if (m.HasFlag(PresetMenu.MailSfx)) return new[] { "/c:exe", "/m" };
+            if (m.HasFlag(PresetMenu.MailDetail)) return new[] { "/c:detail", "/m" };
             return new string[0];
         }
 
