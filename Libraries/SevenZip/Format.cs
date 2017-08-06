@@ -187,6 +187,32 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
+        /// ToExtension
+        ///
+        /// <summary>
+        /// Format に対応する拡張子を取得します。
+        /// </summary>
+        /// 
+        /// <param name="format">Format オブジェクト</param>
+        /// 
+        /// <returns>拡張子</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static string ToExtension(this Format format)
+        {
+            switch (format)
+            {
+                case Format.SevenZip: return ".7z";
+                case Format.BZip2:    return ".bz2";
+                case Format.GZip:     return ".gz";
+                case Format.Lzw:      return ".z";
+                case Format.Sfx:      return ".exe";
+                default: return $".{format.ToString().ToLower()}";
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// ToMethod
         ///
         /// <summary>
@@ -403,7 +429,6 @@ namespace Cube.FileSystem.SevenZip
             var dest = new Dictionary<string, Format>
             {
                 { ".7z",  Format.SevenZip },
-                { ".bz",  Format.BZip2    },
                 { ".bz2", Format.BZip2    },
                 { ".tbz", Format.BZip2    },
                 { ".gz",  Format.GZip     },
