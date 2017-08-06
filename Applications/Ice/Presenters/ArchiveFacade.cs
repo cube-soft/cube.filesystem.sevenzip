@@ -141,7 +141,7 @@ namespace Cube.FileSystem.App.Ice
         private void Archive()
         {
             var fmt   = GetFormat();
-            var dest  = GetDestination();
+            var dest  = GetDestination(fmt);
             var query = !string.IsNullOrEmpty(Runtime?.Password) || Request.Password ?
                         new Query<string, string>(x => RaisePasswordRequired(x)) :
                         null;
@@ -231,10 +231,15 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetDestination()
+        private string GetDestination(Format format)
         {
             if (!string.IsNullOrEmpty(Runtime?.Path)) Destination = Runtime.Path;
-            else SetDestination(Settings.Value.Archive, Request.Format.ToString());
+            else
+            {
+                SetDestination(Settings.Value.Archive, Request.Format.ToString());
+                var name = IO.Get(Request.Sources.First()).NameWithoutExtension;
+                Destination = IO.Combine(Destination, $"{name}{format.ToExtension()}");
+            }
 
             var info = IO.Get(Destination);
             if (!info.Exists) return Destination;
