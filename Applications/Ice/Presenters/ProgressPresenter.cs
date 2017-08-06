@@ -16,6 +16,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Diagnostics;
 using Cube.Tasks;
 using Cube.FileSystem.Ice;
 
@@ -55,8 +56,9 @@ namespace Cube.FileSystem.App.Ice
         {
             View.EventAggregator = EventAggregator;
 
-            EventAggregator.GetEvents()?.Show.Subscribe(WhenShow);
-            EventAggregator.GetEvents()?.Suspend.Subscribe(WhenSuspend);
+            Debug.Assert(EventAggregator.GetEvents() != null);
+            EventAggregator.GetEvents().Show.Subscribe(WhenShow);
+            EventAggregator.GetEvents().Suspend.Subscribe(WhenSuspend);
         }
 
         #endregion
