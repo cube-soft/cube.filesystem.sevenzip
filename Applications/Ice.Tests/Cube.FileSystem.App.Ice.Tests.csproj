@@ -99,6 +99,7 @@
     <Compile Include="Settings\AssociateRegistrarTest.cs" />
     <Compile Include="Settings\AssociateSettingsTest.cs" />
     <Compile Include="Settings\ShortcutSettingsTest.cs" />
+    <Compile Include="ViewDataSourceTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
