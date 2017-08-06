@@ -176,10 +176,12 @@ namespace Cube.FileSystem.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         public override void ShowRuntimeSettingsView(QueryEventArgs<string, ArchiveRuntimeSettings> e)
         {
+            var format = SevenZip.Formats.FromExtension(System.IO.Path.GetExtension(e.Query));
+
             e.Cancel = false;
-            e.Result = new ArchiveRuntimeSettings(SevenZip.Format.Zip)
+            e.Result = new ArchiveRuntimeSettings(format)
             {
-                Path              = Destination,
+                Path              = e.Query,
                 Password          = Password,
                 CompressionLevel  = SevenZip.CompressionLevel.Ultra,
                 CompressionMethod = SevenZip.CompressionMethod.Lzma,

@@ -47,27 +47,26 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
-        public async Task<long> Archive(string filename, PresetMenu menu)
+        public async Task<long> Archive(IEnumerable<string> args, ArchiveSettings archive)
         {
             var settings = new SettingsFolder();
             var events   = new EventAggregator();
             var view     = Views.CreateProgressView();
-            var model    = new Request(menu.ToArguments().Concat(new[]
+            var request  = new Request(args.Concat(new[]
             {
-                "/out:runtime",
                 Example("Sample.txt"),
                 Example("Archive"),
             }));
 
             // Preset
-            MockViewFactory.Destination = Result(filename);
-            MockViewFactory.Password    = "password"; // used by "/p" option
-
-            settings.Value.Archive.SaveLocation = SaveLocation.Runtime;
-            settings.Value.Archive.OpenDirectory  = OpenDirectoryCondition.None;
+            settings.Value.Archive = archive;
+            settings.Value.Archive.SaveDirectoryName = Results;
+            request.DropDirectory = Result(request.DropDirectory);
+            MockViewFactory.Destination = Result("Runtime");
+            MockViewFactory.Password = "password"; // used by "/p" option
 
             // Main
-            using (var ap = new ArchivePresenter(view, model, settings, events))
+            using (var ap = new ArchivePresenter(view, request, settings, events))
             {
                 view.Show();
 
@@ -75,9 +74,14 @@ namespace Cube.FileSystem.App.Ice.Tests
                 for (var i = 0; view.Visible && i < 50; ++i) await Task.Delay(100);
                 Assert.That(view.Visible, Is.False, "Timeout");
 
-                Assert.That(view.FileName, Is.EqualTo(filename));
-                Assert.That(view.Count,    Is.EqualTo(view.TotalCount));
-                Assert.That(view.Value,    Is.EqualTo(100));
+                Assert.That(view.Count, Is.EqualTo(view.TotalCount));
+                Assert.That(view.Value, Is.EqualTo(100));
+
+                var name = IO.Get(view.FileName).NameWithoutExtension;
+                Assert.That(name, Is.EqualTo("Sample"));
+
+                var facade = ap.Model as ArchiveFacade;
+                Assert.That(IO.Get(facade.Destination).Exists, Is.True);
 
                 return view.Count;
             }
@@ -100,13 +104,89 @@ namespace Cube.FileSystem.App.Ice.Tests
         {
             get
             {
-                yield return new TestCaseData("ZipTest.zip", PresetMenu.Archive).Returns(4L);
-                yield return new TestCaseData("ZipDetail.zip", PresetMenu.ArchiveDetail).Returns(4L);
-                yield return new TestCaseData("ZipPassword.zip", PresetMenu.ArchiveZipPassword).Returns(4L);
-                yield return new TestCaseData("7zTest.7z", PresetMenu.ArchiveSevenZip).Returns(4L);
-                yield return new TestCaseData("TarTest.tar.bz", PresetMenu.ArchiveBZip2).Returns(1L);
-                yield return new TestCaseData("TarTest.tar.gz", PresetMenu.ArchiveGZip).Returns(1L);
-                yield return new TestCaseData("ExecutableTest.exe", PresetMenu.ArchiveSfx).Returns(4L);
+                yield return new TestCaseData(
+                    PresetMenu.Archive.ToArguments(),
+                    new ArchiveSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        OpenDirectory = OpenDirectoryCondition.None,
+                        DeleteOnMail  = false,
+                    }
+                ).Returns(4L);
+
+                yield return new TestCaseData(
+                    PresetMenu.ArchiveDetail.ToArguments(),
+                    new ArchiveSettings
+                    {
+                        SaveLocation = SaveLocation.Others,
+                        OpenDirectory = OpenDirectoryCondition.None,
+                        DeleteOnMail = false,
+                    }
+                ).Returns(4L);
+
+                yield return new TestCaseData(
+                    PresetMenu.ArchiveSevenZip.ToArguments(),
+                    new ArchiveSettings
+                    {
+                        SaveLocation = SaveLocation.Others,
+                        OpenDirectory = OpenDirectoryCondition.None,
+                        DeleteOnMail = false,
+                    }
+                ).Returns(4L);
+
+                yield return new TestCaseData(
+                    PresetMenu.ArchiveBZip2.ToArguments(),
+                    new ArchiveSettings
+                    {
+                        SaveLocation = SaveLocation.Others,
+                        OpenDirectory = OpenDirectoryCondition.None,
+                        DeleteOnMail = false,
+                    }
+                ).Returns(1L);
+
+                yield return new TestCaseData(
+                    PresetMenu.ArchiveSfx.ToArguments(),
+                    new ArchiveSettings
+                    {
+                        SaveLocation = SaveLocation.Others,
+                        OpenDirectory = OpenDirectoryCondition.None,
+                        DeleteOnMail = false,
+                    }
+                ).Returns(4L);
+
+                yield return new TestCaseData(
+                    PresetMenu.ArchiveZipPassword.ToArguments().Concat(new[] { "/o:runtime" }),
+                    new ArchiveSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        OpenDirectory = OpenDirectoryCondition.None,
+                        DeleteOnMail  = false,
+                    }
+                ).Returns(4L);
+
+                yield return new TestCaseData(
+                    PresetMenu.ArchiveSevenZip.ToArguments().Concat(new[] { "/p" }),
+                    new ArchiveSettings
+                    {
+                        SaveLocation  = SaveLocation.Runtime,
+                        OpenDirectory = OpenDirectoryCondition.None,
+                        DeleteOnMail  = false,
+                    }
+                ).Returns(4L);
+
+                yield return new TestCaseData(
+                    PresetMenu.ArchiveGZip.ToArguments().Concat(new[]
+                    {
+                        "/o:source",
+                        "/drop:Drop",
+                    }),
+                    new ArchiveSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        OpenDirectory = OpenDirectoryCondition.None,
+                        DeleteOnMail  = false,
+                    }
+                ).Returns(1L);
             }
         }
 

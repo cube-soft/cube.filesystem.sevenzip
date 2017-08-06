@@ -148,7 +148,9 @@ namespace Cube.FileSystem.App.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         protected string Result(string filename)
-            => IO.Combine(Results, filename);
+            => !string.IsNullOrEmpty(filename)
+               ? IO.Combine(Results, filename) :
+               string.Empty;
 
         #endregion
 
