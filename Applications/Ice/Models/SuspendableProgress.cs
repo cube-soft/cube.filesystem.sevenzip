@@ -40,30 +40,6 @@ namespace Cube.FileSystem.App.Ice
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public SuspendableProgress() : this(null) { }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SuspendableProgress
-        /// 
-        /// <summary>
-        /// オブジェクトを初期化します。
-        /// </summary>
-        /// 
-        /// <param name="wait">一時停止用オブジェクト</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public SuspendableProgress(WaitHandle wait) : this(wait, null) { }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SuspendableProgress
-        /// 
-        /// <summary>
-        /// オブジェクトを初期化します。
-        /// </summary>
         /// 
         /// <param name="wait">一時停止用オブジェクト</param>
         /// <param name="action">コールバック</param>
