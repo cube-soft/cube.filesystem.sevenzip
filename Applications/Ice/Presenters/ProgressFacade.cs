@@ -395,7 +395,7 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         protected void Open(string path, OpenDirectoryCondition mode)
         {
-            if (mode == OpenDirectoryCondition.None) return;
+            if (!mode.HasFlag(OpenDirectoryCondition.Open)) return;
 
             var info = IO.Get(path);
             var src  = info.IsDirectory ? info.FullName : info.DirectoryName;
