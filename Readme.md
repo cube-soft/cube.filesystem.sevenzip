@@ -33,20 +33,28 @@ using (var writer = new ArchiveWriter(Format.Tar))
         CompressionLevel  = CompressionLevel.Ultra,
     };
 
+    writer.Add(@"path\to\file");
     writer.Add(@"path\to\directory_including_files");
     writer.Save(@"path\to\save.tar.gz");
 }
 
-// 2. Example for extracting files.
+// 2-1. Example for extracting all files.
 // Set password directly or using Query<string, string>
 var password = new Cube.Query<string, string>(e => e.Result = "password");
 using (var reader = new ArchiveReader(@"path\to\archive", password))
 {
-    foreach (var item in reader.Items)
-    {
-        // Save as "path\to\directory\{item.FullName}"
-        item.Extract(@"path\to\directory");
-    }
+    reader.Extract(@"path\to\directory");
+}
+
+// 2-2. Example for extracting some files.
+using (var reader = new ArchiveReader(@"path\to\archive", "password"))
+{
+    var directory = @"path\to\directory";
+    var items = reader.Items.ToList();
+
+    // Save as "path\to\directory\{item.FullName}"
+    items[0].Extract(directory);
+    items[3].Extract(directory);
 }
 ```
 
