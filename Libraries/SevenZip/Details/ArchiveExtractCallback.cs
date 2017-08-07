@@ -17,6 +17,8 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Collections.Generic;
+using Cube.FileSystem.SevenZip.Archives;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -30,7 +32,7 @@ namespace Cube.FileSystem.SevenZip
     ///
     /* --------------------------------------------------------------------- */
     internal sealed class ArchiveExtractCallback
-        : ArchiveCallbackBase, IArchiveExtractCallback, ICryptoGetTextPassword
+        : ArchiveCallbackBase, IArchiveExtractCallback, ICryptoGetTextPassword, IDisposable
     {
         #region Constructors
 
@@ -42,11 +44,29 @@ namespace Cube.FileSystem.SevenZip
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
+        /// <param name="src">圧縮ファイルのパス</param>
+        /// <param name="dest">展開先ディレクトリ</param>
+        /// <param name="items">展開項目一覧</param>
+        /// <param name="io">ファイル操作用オブジェクト</param>
+        /// <param name="count">展開項目数</param>
+        /// <param name="bytes">展開後の総バイト数</param>
+        /// 
+        /// <remarks>
+        /// bytes に -1 が設定された場合、SetTotal で取得される値を使用
+        /// します。
+        /// </remarks>
+        /// 
         /* ----------------------------------------------------------------- */
-        public ArchiveExtractCallback(string src, long count, long bytes,
-            Func<uint, ISequentialOutStream> dest)
+        public ArchiveExtractCallback(string src, string dest,
+            IEnumerable<ArchiveItem> items, Operator io,
+            long count, long bytes = -1)
         {
+            Source      = src;
             Destination = dest;
+            Items       = items;
+            _io         = io;
+            _inner      = Items.GetEnumerator();
+
             ProgressReport.TotalCount = count;
             ProgressReport.TotalBytes = bytes;
         }
@@ -71,11 +91,22 @@ namespace Cube.FileSystem.SevenZip
         /// Destination
         ///
         /// <summary>
-        /// 出力ストリームを取得するオブジェクトを取得します。
+        /// 解凍先ディレクトリのパスを取得します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public Func<uint, ISequentialOutStream> Destination { get; }
+        public string Destination { get; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Items
+        ///
+        /// <summary>
+        /// 解凍する項目一覧を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public IEnumerable<ArchiveItem> Items { get; }
 
         #endregion
 
@@ -98,6 +129,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int CryptoGetTextPassword(out string password)
         {
+            _encrypted = true;
+
             if (Password != null)
             {
                 var e = new QueryEventArgs<string, string>(Source);
@@ -133,6 +166,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void SetTotal(ulong bytes)
         {
+            if (ProgressReport.TotalBytes < 0) ProgressReport.TotalBytes = (long)bytes;
             _hack = Math.Max((long)bytes - ProgressReport.TotalBytes, 0);
             Progress?.Report(ProgressReport);
         }
@@ -185,7 +219,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int GetStream(uint index, out ISequentialOutStream stream, AskMode mode)
         {
-            stream = (mode == AskMode.Extract) ? Destination(index) : null;
+            stream = (mode == AskMode.Extract) ? CreateStream(index) : null;
             return (int)OperationResult.OK;
         }
 
@@ -222,10 +256,175 @@ namespace Cube.FileSystem.SevenZip
 
         #endregion
 
+        #region IDisposable
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ~ArchiveExtractCallback
+        ///
+        /// <summary>
+        /// オブジェクトを破棄します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        // ~ArchiveExtractCallback() {
+        //   Dispose(false);
+        // }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Dispose
+        ///
+        /// <summary>
+        /// リソースを開放します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void Dispose()
+        {
+            Dispose(true);
+            // GC.SuppressFinalize(this);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Dispose
+        ///
+        /// <summary>
+        /// リソースを開放します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void Dispose(bool disposing)
+        {
+            if (_disposed) return;
+            _disposed = true;
+
+            if (disposing)
+            {
+                foreach (var kv in _streams)
+                {
+                    kv.Key.Disposed -= WhenDisposed;
+                    kv.Key.Dispose();
+                    kv.Value.SetAttributes(Destination, _io);
+                }
+                _streams.Clear();
+                PostExtract();
+            }
+        }
+
         #endregion
 
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CreateStream
+        ///
+        /// <summary>
+        /// ストリームを生成します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private ArchiveStreamWriter CreateStream(uint index)
+        {
+            while (_inner.MoveNext())
+            {
+                if (_inner.Current.Index != index) continue;
+                if (_inner.Current.IsDirectory)
+                {
+                    _inner.Current.CreateDirectory(Destination, _io);
+                    return null;
+                }
+
+                var path = _io.Combine(Destination, _inner.Current.FullName);
+                var dir  = _io.Get(path).DirectoryName;
+                if (!_io.Get(dir).Exists) _io.CreateDirectory(dir);
+
+                var dest = new ArchiveStreamWriter(_io.Create(path));
+                dest.Disposed += WhenDisposed;
+                _streams.Add(dest, _inner.Current);
+
+                return dest;
+            }
+            return null;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// PostExtract
+        ///
+        /// <summary>
+        /// 展開後の処理を実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void PostExtract()
+        {
+            switch (Result)
+            {
+                case OperationResult.OK:
+                case OperationResult.Unknown:
+                    break;
+                case OperationResult.DataError:
+                    if (_encrypted) EncryptionError();
+                    else throw new System.IO.IOException(Result.ToString());
+                    break;
+                case OperationResult.WrongPassword:
+                    EncryptionError();
+                    break;
+                case OperationResult.UserCancel:
+                    throw new UserCancelException();
+                default:
+                    throw new System.IO.IOException(Result.ToString());
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// EncryptionError
+        ///
+        /// <summary>
+        /// パスワードエラーに関する処理を実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void EncryptionError()
+        {
+            if (Password is PasswordQuery query) query.Reset();
+            throw new EncryptionException();
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenDisposed
+        ///
+        /// <summary>
+        /// Dispose 時に実行されるハンドラです。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void WhenDisposed(object sender, EventArgs e)
+        {
+            if (sender is ArchiveStreamWriter key)
+            {
+                if (!_streams.ContainsKey(key)) return;
+                _streams[key].SetAttributes(Destination, _io);
+                _streams.Remove(key);
+            }
+        }
+
         #region Fields
+        private bool _disposed = false;
+        private Operator _io;
+        private IDictionary<ArchiveStreamWriter, ArchiveItem> _streams = new Dictionary<ArchiveStreamWriter, ArchiveItem>();
+        private IEnumerator<ArchiveItem> _inner;
+        private bool _encrypted = false;
         private long _hack = 0;
+        #endregion
+
         #endregion
     }
 }

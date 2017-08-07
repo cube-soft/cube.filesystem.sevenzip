@@ -18,6 +18,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using Cube.Log;
+using Cube.FileSystem.SevenZip.Archives;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -379,79 +380,18 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public override void Extract(string directory, IProgress<ArchiveReport> progress)
         {
-            var path = IO.Combine(directory, FullName);
-
-            if (!IsDirectory) ExtractFile(path, progress);
-            else if (!IO.Get(path).Exists) IO.CreateDirectory(path);
-
-            IO.SetAttributes(path, Attributes);
-            SetCreationTime(path);
-            SetLastWriteTime(path);
-            SetLastAccessTime(path);
+            if (IsDirectory) this.CreateDirectory(directory, IO);
+            else using (var cb = new ArchiveExtractCallback(Source, directory, new[] { this }, IO, 1, Length))
+            {
+                cb.Password = Password;
+                cb.Progress = progress;
+                _raw.Extract(new[] { (uint)Index }, 1, 0, cb);
+            }
         }
 
         #endregion
 
         #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ExtractFile
-        ///
-        /// <summary>
-        /// ファイルを展開します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        private void ExtractFile(string dest, IProgress<ArchiveReport> progress)
-        {
-            var dir  = IO.Get(dest).DirectoryName;
-            if (!IO.Get(dir).Exists) IO.CreateDirectory(dir);
-
-            var stream = new ArchiveStreamWriter(IO.Create(dest));
-            var callback = new ArchiveExtractCallback(Source, 1, Length, _ => stream)
-            {
-                Password = Password,
-                Progress = progress,
-            };
-
-            try { _raw.Extract(new[] { (uint)Index }, 1, 0, callback); }
-            finally
-            {
-                stream.Dispose();
-                ExtractFileResult(callback.Result);
-            }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ExtractFileResult
-        ///
-        /// <summary>
-        /// 展開後の処理を実行します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void ExtractFileResult(OperationResult result)
-        {
-            switch (result)
-            {
-                case OperationResult.OK:
-                case OperationResult.Unknown:
-                    break;
-                case OperationResult.DataError:
-                    if (Encrypted) EncryptionError();
-                    else throw new System.IO.IOException(result.ToString());
-                    break;
-                case OperationResult.WrongPassword:
-                    EncryptionError();
-                    break;
-                case OperationResult.UserCancel:
-                    throw new UserCancelException();
-                default:
-                    throw new System.IO.IOException(result.ToString());
-            }
-        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -522,72 +462,6 @@ namespace Cube.FileSystem.SevenZip
         {
             try { return (System.IO.FileAttributes)Get<uint>(ItemPropId.Attributes); }
             catch (Exception /* err */) { return System.IO.FileAttributes.Normal; }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SetCreationTime
-        ///
-        /// <summary>
-        /// 作成日時を設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void SetCreationTime(string path)
-        {
-            var time = CreationTime  != DateTime.MinValue ? CreationTime  :
-                       LastWriteTime != DateTime.MinValue ? LastWriteTime :
-                       LastAccessTime;
-            if (time != DateTime.MinValue) IO.SetCreationTime(path, time);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SetLastWriteTime
-        ///
-        /// <summary>
-        /// 最終更新日時を設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void SetLastWriteTime(string path)
-        {
-            var time = LastWriteTime  != DateTime.MinValue ? LastWriteTime  :
-                       LastAccessTime != DateTime.MinValue ? LastAccessTime :
-                       CreationTime;
-            if (time != DateTime.MinValue) IO.SetLastWriteTime(path, time);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SetLastAccessTime
-        ///
-        /// <summary>
-        /// 最終アクセス日時を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void SetLastAccessTime(string path)
-        {
-            var time = LastAccessTime != DateTime.MinValue ? LastAccessTime :
-                       LastWriteTime  != DateTime.MinValue ? LastWriteTime  :
-                       CreationTime;
-            if (time != DateTime.MinValue) IO.SetLastAccessTime(path, time);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// EncryptionError
-        ///
-        /// <summary>
-        /// パスワードエラーに関する処理を実行します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void EncryptionError()
-        {
-            if (Password is PasswordQuery query) query.Reset();
-            throw new EncryptionException();
         }
 
         #region Fields

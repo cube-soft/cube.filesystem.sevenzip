@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages.config" />
+    <Compile Include="Operations\Archives.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

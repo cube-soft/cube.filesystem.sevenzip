@@ -18,6 +18,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
+using Cube.FileSystem.SevenZip.Archives;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -93,8 +94,9 @@ namespace Cube.FileSystem.SevenZip
         public ArchiveReader(string path, string password, Operator io)
         {
             Source = path;
+            _password = new PasswordQuery(password);
             _io = io;
-            Open(new PasswordQuery(password));
+            Open();
         }
 
         /* ----------------------------------------------------------------- */
@@ -113,8 +115,9 @@ namespace Cube.FileSystem.SevenZip
         public ArchiveReader(string path, IQuery<string, string> password, Operator io)
         {
             Source = path;
+            _password = new PasswordQuery(password);
             _io = io;
-            Open(new PasswordQuery(password));
+            Open();
         }
 
         #endregion
@@ -152,11 +155,46 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public IReadOnlyCollection<ArchiveItem> Items { get; private set; }
+        public IReadOnlyCollection<ArchiveItem> Items => _items;
 
         #endregion
 
         #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract
+        ///
+        /// <summary>
+        /// 展開した内容を保存します。
+        /// </summary>
+        /// 
+        /// <param name="directory">保存ディレクトリ</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Extract(string directory) => Extract(directory, null);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract
+        ///
+        /// <summary>
+        /// 展開した内容を保存します。
+        /// </summary>
+        /// 
+        /// <param name="directory">保存ディレクトリ</param>
+        /// <param name="progress">進捗報告用オブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Extract(string directory, IProgress<ArchiveReport> progress)
+        {
+            using (var cb = new ArchiveExtractCallback(Source, directory, _items, _io, _items.Count, -1))
+            {
+                cb.Password = _password;
+                cb.Progress = progress;
+                _raw.Extract(null, uint.MaxValue, 0, cb);
+            }
+        }
 
         #region IDisposable
 
@@ -226,7 +264,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private void Open(IQuery<string, string> password)
+        private void Open()
         {
             Format = Formats.FromFile(Source, _io);
             if (Format == Format.Unknown) throw new NotSupportedException();
@@ -236,9 +274,9 @@ namespace Cube.FileSystem.SevenZip
             _raw    = _7z.GetInArchive(Format);
 
             var pos = 32UL * 1024;
-            _raw.Open(_stream, ref pos, new ArchiveOpenCallback(Source) { Password = password });
+            _raw.Open(_stream, ref pos, new ArchiveOpenCallback(Source) { Password = _password });
 
-            Items = new ReadOnlyArchiveCollection(_raw, Format, Source, password, _io);
+            _items = new ReadOnlyArchiveList(_raw, Format, Source, _password, _io);
         }
 
         #region Fields
@@ -246,7 +284,9 @@ namespace Cube.FileSystem.SevenZip
         private SevenZipLibrary _7z;
         private IInArchive _raw;
         private ArchiveStreamReader _stream;
+        private IQuery<string, string> _password;
         private Operator _io;
+        private ReadOnlyArchiveList _items;
         #endregion
 
         #endregion

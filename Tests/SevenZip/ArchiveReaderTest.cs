@@ -47,7 +47,7 @@ namespace Cube.FileSystem.Tests
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [TestCaseSource(nameof(Extract_TestCases))]
+        [TestCaseSource(nameof(TestCases))]
         public void Items(string filename, string password, IList<ExpectedItem> expected)
         {
             var src = Example(filename);
@@ -77,18 +77,49 @@ namespace Cube.FileSystem.Tests
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [TestCaseSource(nameof(Extract_TestCases))]
+        [TestCaseSource(nameof(TestCases))]
         public void Extract(string filename, string password, IList<ExpectedItem> expected)
         {
             var src = Example(filename);
             using (var archive = new SevenZip.ArchiveReader(src, password))
             {
+                var dest = Result("Extract");
+                archive.Extract(dest);
+
+                foreach (var item in expected)
+                {
+                    var info = IO.Get(IO.Combine(dest, item.FullName));
+                    Assert.That(info.Exists,         Is.True);
+                    Assert.That(info.Length,         Is.EqualTo(item.Length));
+                    Assert.That(info.CreationTime,   Is.Not.EqualTo(DateTime.MinValue));
+                    Assert.That(info.LastWriteTime,  Is.Not.EqualTo(DateTime.MinValue));
+                    Assert.That(info.LastAccessTime, Is.Not.EqualTo(DateTime.MinValue));
+                }
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract_Each
+        ///
+        /// <summary>
+        /// 圧縮ファイルの項目毎に展開するテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [TestCaseSource(nameof(TestCases))]
+        public void Extract_Each(string filename, string password, IList<ExpectedItem> expected)
+        {
+            var src = Example(filename);
+            using (var archive = new SevenZip.ArchiveReader(src, password))
+            {
+                var dest = Result("Extract_Each");
                 var actual = archive.Items.ToList();
                 for (var i = 0; i < expected.Count; ++i)
                 {
-                    actual[i].Extract(Results);
+                    actual[i].Extract(dest);
 
-                    var info = IO.Get(Result(actual[i].FullName));
+                    var info = IO.Get(IO.Combine(dest, actual[i].FullName));
                     Assert.That(info.Exists,         Is.True);
                     Assert.That(info.Length,         Is.EqualTo(expected[i].Length));
                     Assert.That(info.CreationTime,   Is.Not.EqualTo(DateTime.MinValue));
@@ -115,7 +146,7 @@ namespace Cube.FileSystem.Tests
                 var src = Example("Password.7z");
                 using (var archive = new SevenZip.ArchiveReader(src, password))
                 {
-                    foreach (var item in archive.Items) item.Extract(Results);
+                    archive.Extract(Results);
                 }
             },
             Throws.TypeOf<SevenZip.EncryptionException>());
@@ -137,7 +168,7 @@ namespace Cube.FileSystem.Tests
                 var query = new Query<string, string>(e => e.Cancel = true);
                 using (var archive = new SevenZip.ArchiveReader(src, query))
                 {
-                    foreach (var item in archive.Items) item.Extract(Results);
+                    archive.Extract(Results);
                 }
             },
             Throws.TypeOf<SevenZip.UserCancelException>());
@@ -148,14 +179,14 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract_TestCases
+        /// TestCases
         ///
         /// <summary>
         /// Items および Extract のテスト用データを取得します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public static IEnumerable<TestCaseData> Extract_TestCases
+        public static IEnumerable<TestCaseData> TestCases
         {
             get
             {

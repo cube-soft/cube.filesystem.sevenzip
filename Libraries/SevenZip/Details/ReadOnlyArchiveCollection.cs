@@ -23,14 +23,14 @@ namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ReadOnlyArchiveCollection
+    /// ReadOnlyArchiveList
     /// 
     /// <summary>
     /// 圧縮ファイルの読み取り専用コレクションクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal class ReadOnlyArchiveCollection : IReadOnlyCollection<ArchiveItem>
+    internal class ReadOnlyArchiveList: IReadOnlyList<ArchiveItem>
     {
         #region Constructors
 
@@ -47,7 +47,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="password">パスワード取得用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ReadOnlyArchiveCollection(IInArchive raw, Format format,
+        public ReadOnlyArchiveList(IInArchive raw, Format format,
             string src, IQuery<string, string> password, Operator io)
         {
             Format   = format;
@@ -99,6 +99,24 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Item
+        ///
+        /// <summary>
+        /// 指定したインデックスに対応するオブジェクトを取得します。
+        /// </summary>
+        /// 
+        /// <param name="index">インデックス</param>
+        /// 
+        /// <returns>ArchiveItem オブジェクト</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ArchiveItem this[int index]
+        {
+            get { return new ArchiveItemImpl(_raw, Format, Source, index, Password, _io); }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Source
         ///
         /// <summary>
@@ -134,10 +152,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public IEnumerator<ArchiveItem> GetEnumerator()
         {
-            for (var i = 0; i < Count; ++i)
-            {
-                yield return new ArchiveItemImpl(_raw, Format, Source, i, Password, _io);
-            }
+            for (var i = 0; i < Count; ++i) yield return this[i];
         }
 
         /* ----------------------------------------------------------------- */
