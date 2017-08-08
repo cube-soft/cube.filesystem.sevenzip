@@ -60,8 +60,8 @@ namespace Cube.FileSystem.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool CreateDirectory
         {
-            get { return HasFlag(CreateDirectoryCondition.Create); }
-            set { SetRootDirectory(CreateDirectoryCondition.Create, value); }
+            get { return HasFlag(CreateDirectoryMethod.Create); }
+            set { SetRootDirectory(CreateDirectoryMethod.Create, value); }
         }
 
         /* ----------------------------------------------------------------- */
@@ -76,8 +76,8 @@ namespace Cube.FileSystem.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool SkipSingleDirectory
         {
-            get { return HasFlag(CreateDirectoryCondition.SkipSingleDirectory); }
-            set { SetRootDirectory(CreateDirectoryCondition.SkipSingleDirectory, value); }
+            get { return HasFlag(CreateDirectoryMethod.SkipSingleDirectory); }
+            set { SetRootDirectory(CreateDirectoryMethod.SkipSingleDirectory, value); }
         }
 
         /* ----------------------------------------------------------------- */
@@ -121,7 +121,7 @@ namespace Cube.FileSystem.App.Ice.Settings
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public bool HasFlag(CreateDirectoryCondition value)
+        public bool HasFlag(CreateDirectoryMethod value)
             => TryCast()?.RootDirectory.HasFlag(value) ?? false;
 
         /* ----------------------------------------------------------------- */
@@ -133,7 +133,7 @@ namespace Cube.FileSystem.App.Ice.Settings
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public void SetRootDirectory(CreateDirectoryCondition value, bool check)
+        public void SetRootDirectory(CreateDirectoryMethod value, bool check)
         {
             if (Model is ExtractSettings e)
             {

@@ -57,14 +57,14 @@ namespace Cube.FileSystem.Ice
 
     /* --------------------------------------------------------------------- */
     ///
-    /// OverwriteCondition
+    /// OverwriteMethod
     ///
     /// <summary>
     /// 上書き方法を表す列挙型です。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public enum OverwriteCondition
+    public enum OverwriteMethod
     {
         Force           = 0,
         Confirm         = 1,
@@ -73,7 +73,7 @@ namespace Cube.FileSystem.Ice
 
     /* --------------------------------------------------------------------- */
     ///
-    /// CreateDirectoryCondition
+    /// CreateDirectoryMethod
     ///
     /// <summary>
     /// ディレクトリの生成方法を表す列挙型です。
@@ -81,7 +81,7 @@ namespace Cube.FileSystem.Ice
     /// 
     /* --------------------------------------------------------------------- */
     [Flags]
-    public enum CreateDirectoryCondition
+    public enum CreateDirectoryMethod
     {
         None                = 0x00,
         SkipSingleDirectory = 0x02,
@@ -93,7 +93,7 @@ namespace Cube.FileSystem.Ice
 
     /* --------------------------------------------------------------------- */
     ///
-    /// OpenDirectoryCondition
+    /// OpenDirectoryMethod
     ///
     /// <summary>
     /// 圧縮・展開後にディレクトリを開く処理を表す列挙型です。
@@ -101,7 +101,7 @@ namespace Cube.FileSystem.Ice
     ///
     /* --------------------------------------------------------------------- */
     [Flags]
-    public enum OpenDirectoryCondition
+    public enum OpenDirectoryMethod
     {
         None            = 0x0000,
         SkipDesktop     = 0x0002,

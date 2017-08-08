@@ -109,7 +109,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ArchiveSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        OpenDirectory = OpenDirectoryCondition.None,
+                        OpenDirectory = OpenDirectoryMethod.None,
                         DeleteOnMail  = false,
                     }
                 ).Returns(4L);
@@ -119,7 +119,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ArchiveSettings
                     {
                         SaveLocation = SaveLocation.Others,
-                        OpenDirectory = OpenDirectoryCondition.None,
+                        OpenDirectory = OpenDirectoryMethod.None,
                         DeleteOnMail = false,
                     }
                 ).Returns(4L);
@@ -129,7 +129,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ArchiveSettings
                     {
                         SaveLocation = SaveLocation.Others,
-                        OpenDirectory = OpenDirectoryCondition.None,
+                        OpenDirectory = OpenDirectoryMethod.None,
                         DeleteOnMail = false,
                     }
                 ).Returns(4L);
@@ -139,7 +139,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ArchiveSettings
                     {
                         SaveLocation = SaveLocation.Others,
-                        OpenDirectory = OpenDirectoryCondition.None,
+                        OpenDirectory = OpenDirectoryMethod.None,
                         DeleteOnMail = false,
                     }
                 ).Returns(1L);
@@ -149,7 +149,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ArchiveSettings
                     {
                         SaveLocation = SaveLocation.Others,
-                        OpenDirectory = OpenDirectoryCondition.None,
+                        OpenDirectory = OpenDirectoryMethod.None,
                         DeleteOnMail = false,
                     }
                 ).Returns(4L);
@@ -159,7 +159,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ArchiveSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        OpenDirectory = OpenDirectoryCondition.None,
+                        OpenDirectory = OpenDirectoryMethod.None,
                         DeleteOnMail  = false,
                     }
                 ).Returns(4L);
@@ -169,7 +169,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ArchiveSettings
                     {
                         SaveLocation  = SaveLocation.Runtime,
-                        OpenDirectory = OpenDirectoryCondition.None,
+                        OpenDirectory = OpenDirectoryMethod.None,
                         DeleteOnMail  = false,
                     }
                 ).Returns(4L);
@@ -183,7 +183,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ArchiveSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        OpenDirectory = OpenDirectoryCondition.None,
+                        OpenDirectory = OpenDirectoryMethod.None,
                         DeleteOnMail  = false,
                     }
                 ).Returns(1L);

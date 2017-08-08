@@ -141,11 +141,11 @@ namespace Cube.FileSystem.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool OpenDirectory
         {
-            get { return Model.OpenDirectory.HasFlag(OpenDirectoryCondition.Open); }
+            get { return Model.OpenDirectory.HasFlag(OpenDirectoryMethod.Open); }
             set
             {
-                if (value) Model.OpenDirectory |= OpenDirectoryCondition.Open;
-                else Model.OpenDirectory &= ~OpenDirectoryCondition.Open;
+                if (value) Model.OpenDirectory |= OpenDirectoryMethod.Open;
+                else Model.OpenDirectory &= ~OpenDirectoryMethod.Open;
             }
         }
 
@@ -161,11 +161,11 @@ namespace Cube.FileSystem.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool SkipDesktop
         {
-            get { return Model.OpenDirectory.HasFlag(OpenDirectoryCondition.SkipDesktop); }
+            get { return Model.OpenDirectory.HasFlag(OpenDirectoryMethod.SkipDesktop); }
             set
             {
-                if (value) Model.OpenDirectory |= OpenDirectoryCondition.SkipDesktop;
-                else Model.OpenDirectory &= ~OpenDirectoryCondition.SkipDesktop;
+                if (value) Model.OpenDirectory |= OpenDirectoryMethod.SkipDesktop;
+                else Model.OpenDirectory &= ~OpenDirectoryMethod.SkipDesktop;
             }
         }
 

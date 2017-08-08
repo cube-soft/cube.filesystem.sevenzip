@@ -97,7 +97,7 @@ namespace Cube.FileSystem.Ice
         /// 
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public OpenDirectoryCondition OpenDirectory
+        public OpenDirectoryMethod OpenDirectory
         {
             get { return _openDirectory; }
             set { SetProperty(ref _openDirectory, value); }
@@ -109,7 +109,7 @@ namespace Cube.FileSystem.Ice
         private SaveLocation _saveLocation = SaveLocation.Others;
         private string _saveDirectoryName = string.Empty;
         private bool _filtering = true;
-        private OpenDirectoryCondition _openDirectory = OpenDirectoryCondition.OpenNotDesktop;
+        private OpenDirectoryMethod _openDirectory = OpenDirectoryMethod.OpenNotDesktop;
         #endregion
     }
 }

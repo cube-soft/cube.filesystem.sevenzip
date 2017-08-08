@@ -421,14 +421,14 @@ namespace Cube.FileSystem.App.Ice
         /// <param name="mode">ポストプロセスの種類</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected void Open(string path, OpenDirectoryCondition mode)
+        protected void Open(string path, OpenDirectoryMethod mode)
         {
-            if (!mode.HasFlag(OpenDirectoryCondition.Open)) return;
+            if (!mode.HasFlag(OpenDirectoryMethod.Open)) return;
 
             var info = IO.Get(path);
             var src  = info.IsDirectory ? info.FullName : info.DirectoryName;
             var cmp  = Environment.GetFolderPath(Environment.SpecialFolder.Desktop).ToLower();
-            if (mode == OpenDirectoryCondition.OpenNotDesktop && src.ToLower().CompareTo(cmp) == 0) return;
+            if (mode == OpenDirectoryMethod.OpenNotDesktop && src.ToLower().CompareTo(cmp) == 0) return;
 
             var exec = !string.IsNullOrEmpty(Settings.Value.Explorer) ?
                        Settings.Value.Explorer :

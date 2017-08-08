@@ -193,18 +193,18 @@ namespace Cube.FileSystem.App.Ice
             SetDestination(Settings.Value.Extract, Source);
             SetTmp(Destination);
 
-            var src   = IO.Get(Source).NameWithoutExtension;
-            var flags = Settings.Value.Extract.RootDirectory;
+            var src = IO.Get(Source).NameWithoutExtension;
+            var method = Settings.Value.Extract.RootDirectory;
 
-            if (flags.HasFlag(CreateDirectoryCondition.Create))
+            if (method.HasFlag(CreateDirectoryMethod.Create))
             {
-                if ((flags & CreateDirectoryCondition.SkipOptions) != 0)
+                if ((method & CreateDirectoryMethod.SkipOptions) != 0)
                 {
-                    var dirs = SeekRootDirectory(reader);
-                    var one = IsSingleFileOrDirectory(flags, dirs);
+                    var ds  = SeekRootDirectory(reader);
+                    var one = IsSingleFileOrDirectory(method, ds);
 
                     if (!one) Destination = IO.Combine(Destination, src);
-                    SetOpenDirectoryName(dirs);
+                    SetOpenDirectoryName(ds);
                 }
                 else
                 {
@@ -331,13 +331,13 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private bool IsSingleFileOrDirectory(CreateDirectoryCondition flags, IEnumerable<string> directories)
+        private bool IsSingleFileOrDirectory(CreateDirectoryMethod method, IEnumerable<string> directories)
         {
             if (directories.Count() > 1) return false;
 
-            var file = flags.HasFlag(CreateDirectoryCondition.SkipSingleFile) &&
+            var file = method.HasFlag(CreateDirectoryMethod.SkipSingleFile) &&
                        directories.First() == "*";
-            var dir  = flags.HasFlag(CreateDirectoryCondition.SkipSingleDirectory) &&
+            var dir  = method.HasFlag(CreateDirectoryMethod.SkipSingleDirectory) &&
                        directories.First() != "*";
 
             return file || dir;
@@ -370,9 +370,7 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         private void WhenExtracting(object sender, ValueCancelEventArgs<ArchiveItem> e)
-        {
-            Current = e.Value.FullName;
-        }
+            => Current = e.Value.FullName;
 
         /* ----------------------------------------------------------------- */
         ///
