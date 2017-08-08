@@ -111,7 +111,6 @@ namespace Cube.FileSystem.App.Ice
                     SetTmp(Destination);
                     PreExtract(reader);
                     Extract(reader);
-                    DeleteSource();
                     Open(IO.Combine(Destination, OpenDirectoryName), Settings.Value.Extract.OpenDirectory);
                 }
                 catch (UserCancelException /* err */) { /* user cancel */ }
@@ -293,21 +292,6 @@ namespace Cube.FileSystem.App.Ice
                 Overwrite(src, dest);
             }
             else Move(src, dest);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// DeleteSource
-        /// 
-        /// <summary>
-        /// 圧縮ファイルを削除します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void DeleteSource()
-        {
-            if (!Settings.Value.Extract.DeleteSource) return;
-            IO.Delete(Source);
         }
 
         /* ----------------------------------------------------------------- */
