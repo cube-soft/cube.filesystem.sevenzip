@@ -320,9 +320,10 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        // ~ArchiveUpdateCallback() {
-        //   Dispose(false);
-        // }
+        ~ArchiveUpdateCallback()
+        {
+            Dispose(false);
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -336,7 +337,7 @@ namespace Cube.FileSystem.SevenZip
         public void Dispose()
         {
             Dispose(true);
-            // GC.SuppressFinalize(this);
+            GC.SuppressFinalize(this);
         }
 
         /* ----------------------------------------------------------------- */
@@ -354,11 +355,7 @@ namespace Cube.FileSystem.SevenZip
 
             if (disposing)
             {
-                foreach (var stream in _streams)
-                {
-                    stream.Disposed -= WhenDisposed;
-                    stream.Dispose();
-                }
+                foreach (var stream in _streams) stream.Dispose();
                 _streams.Clear();
             }
 
@@ -387,7 +384,6 @@ namespace Cube.FileSystem.SevenZip
             if (info.IsDirectory) return null;
 
             var dest = new ArchiveStreamReader(_io.OpenRead(path));
-            dest.Disposed += WhenDisposed;
             _streams.Add(dest);
             return dest;
         }

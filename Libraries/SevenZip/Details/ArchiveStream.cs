@@ -75,33 +75,6 @@ namespace Cube.FileSystem.SevenZip
 
         #endregion
 
-        #region Events
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Disposed
-        ///
-        /// <summary>
-        /// Dispose 実行時に発生するイベントです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public event EventHandler Disposed;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnDisposed
-        ///
-        /// <summary>
-        /// Disposed イベントを発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected virtual void OnDisposed(EventArgs e)
-            => Disposed?.Invoke(this, e);
-
-        #endregion
-
         #region Methods
 
         /* ----------------------------------------------------------------- */
@@ -143,10 +116,10 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        // ~ArchiveStreamBase()
-        // {
-        //   Dispose(false);
-        // }
+        ~ArchiveStreamBase()
+        {
+            Dispose(false);
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -160,7 +133,7 @@ namespace Cube.FileSystem.SevenZip
         public void Dispose()
         {
             Dispose(true);
-            // GC.SuppressFinalize(this);
+            GC.SuppressFinalize(this);
         }
 
         /* ----------------------------------------------------------------- */
