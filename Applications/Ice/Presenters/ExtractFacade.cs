@@ -198,7 +198,7 @@ namespace Cube.FileSystem.App.Ice
 
             if (flags.HasFlag(RootDirectoryCondition.Create))
             {
-                if (flags.HasFlag(RootDirectoryCondition.SkipOptions))
+                if ((flags & RootDirectoryCondition.SkipOptions) != 0)
                 {
                     var dirs = SeekRootDirectory(reader);
                     var one = IsSingleFileOrDirectory(flags, dirs);
