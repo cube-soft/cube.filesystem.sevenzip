@@ -43,7 +43,7 @@ namespace Cube.FileSystem.App.Ice.Settings
         /// 
         /* ----------------------------------------------------------------- */
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             var type = typeof(Program);
 
@@ -59,8 +59,11 @@ namespace Cube.FileSystem.App.Ice.Settings
                 var model = new SettingsFolder();
                 model.Load();
 
-                var view = new SettingsForm();
-                view.Bind(new SettingsViewModel(model));
+                var install = args.Length > 0 && args[0] == "install";
+                if (install) Cube.Log.Operations.Info(type, "InstallMode");
+
+                var view = new SettingsForm(install);
+                view.Bind(new SettingsViewModel(model) { InstallMode = install });
 
                 Application.Run(view);
             }

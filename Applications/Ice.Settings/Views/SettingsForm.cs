@@ -55,6 +55,27 @@ namespace Cube.FileSystem.App.Ice.Settings
             VersionTabPage.Controls.Add(VersionPanel);
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SettingsForm
+        /// 
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        /// 
+        /// <param name="install">
+        /// インストールモードかどうかを示す値
+        /// </param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public SettingsForm(bool install) : this()
+        {
+            if (!install) return;
+
+            ExitButton.Enabled  = false;
+            ApplyButton.Enabled = true;
+        }
+
         #endregion
 
         #region Methods

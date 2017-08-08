@@ -470,8 +470,10 @@ namespace Cube.FileSystem.App.Ice.Settings
         /// ファイルの関連付けを更新します。
         /// </summary>
         /// 
+        /// <param name="force">強制モード</param>
+        /// 
         /* ----------------------------------------------------------------- */
-        public void Update() => _model.Update();
+        public void Update(bool force) => _model.Update(force);
 
         #endregion
 

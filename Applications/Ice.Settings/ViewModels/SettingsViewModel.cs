@@ -139,6 +139,17 @@ namespace Cube.FileSystem.App.Ice.Settings
             set { _model.Value.ToolTipCount = value; }
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// InstallMode
+        /// 
+        /// <summary>
+        /// インストールモードかどうかを示す値を取得または設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public bool InstallMode { get; set; } = false;
+
         #region ViewModels
 
         /* ----------------------------------------------------------------- */
@@ -215,7 +226,7 @@ namespace Cube.FileSystem.App.Ice.Settings
         public void Update()
         {
             _model.Save();
-            Associate.Update();
+            Associate.Update(InstallMode);
             Shortcut.Update();
         }
 
