@@ -49,32 +49,32 @@ namespace Cube.FileSystem.App.Ice.Tests
 
             Assert.That(src.Value.Count, Is.EqualTo(27));
             Assert.That(src.Arj,         Is.False);
-            Assert.That(src.BZ2,         Is.False);
+            Assert.That(src.BZ2,         Is.True );
             Assert.That(src.Cab,         Is.False);
             Assert.That(src.Chm,         Is.False);
             Assert.That(src.Cpio,        Is.False);
             Assert.That(src.Deb,         Is.False);
             Assert.That(src.Dmg,         Is.False);
             Assert.That(src.Flv,         Is.False);
-            Assert.That(src.GZ,          Is.False);
+            Assert.That(src.GZ,          Is.True );
             Assert.That(src.Iso,         Is.False);
             Assert.That(src.Jar,         Is.False);
-            Assert.That(src.Lzh,         Is.False);
-            Assert.That(src.Rar,         Is.False);
+            Assert.That(src.Lzh,         Is.True );
+            Assert.That(src.Rar,         Is.True );
             Assert.That(src.Rpm,         Is.False);
-            Assert.That(src.SevenZip,    Is.False);
+            Assert.That(src.SevenZip,    Is.True );
             Assert.That(src.Swf,         Is.False);
-            Assert.That(src.Tar,         Is.False);
-            Assert.That(src.Tbz,         Is.False);
-            Assert.That(src.Tgz,         Is.False);
-            Assert.That(src.Txz,         Is.False);
+            Assert.That(src.Tar,         Is.True );
+            Assert.That(src.Tbz,         Is.True );
+            Assert.That(src.Tgz,         Is.True );
+            Assert.That(src.Txz,         Is.True );
             Assert.That(src.Vhd,         Is.False);
             Assert.That(src.Vmdk,        Is.False);
             Assert.That(src.Wim,         Is.False);
             Assert.That(src.Xar,         Is.False);
-            Assert.That(src.XZ,          Is.False);
+            Assert.That(src.XZ,          Is.True );
             Assert.That(src.Z,           Is.False);
-            Assert.That(src.Zip,         Is.False);
+            Assert.That(src.Zip,         Is.True );
         }
     }
 }
