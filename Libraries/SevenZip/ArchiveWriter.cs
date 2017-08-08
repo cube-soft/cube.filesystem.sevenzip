@@ -153,7 +153,7 @@ namespace Cube.FileSystem.SevenZip
         {
             var query = new PasswordQuery(password);
 
-            if (Format == Format.Sfx) SaveCoreExe(path, query, null, _items);
+            if (Format == Format.Sfx) SaveCoreSfx(path, query, null, _items);
             else if (Format == Format.Tar) SaveCoreTar(path, query, null, _items);
             else SaveCore(Format, path, query, null, _items);
         }
@@ -175,7 +175,7 @@ namespace Cube.FileSystem.SevenZip
         {
             var query = new PasswordQuery(password);
 
-            if (Format == Format.Sfx) SaveCoreExe(path, query, progress, _items);
+            if (Format == Format.Sfx) SaveCoreSfx(path, query, progress, _items);
             else if (Format == Format.Tar) SaveCoreTar(path, query, progress, _items);
             else SaveCore(Format, path, query, progress, _items);
         }
@@ -236,14 +236,14 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SaveCoreExe
+        /// SaveCoreSfx
         ///
         /// <summary>
         /// 自己解凍形式ファイルを作成し保存します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private void SaveCoreExe(string path, IQuery<string, string> password,
+        private void SaveCoreSfx(string path, IQuery<string, string> password,
             IProgress<ArchiveReport> progress, IList<FileItem> items)
         {
             var sfx = (Option as ExecutableOption)?.Module;
@@ -323,9 +323,9 @@ namespace Cube.FileSystem.SevenZip
             var dir = _io.Get(_io.Get(path).DirectoryName);
             if (!dir.Exists) _io.CreateDirectory(dir.FullName);
 
-            var raw      = _7z.GetOutArchive(format);
-            var stream   = new ArchiveStreamWriter(_io.Create(path));
-            var callback = new ArchiveUpdateCallback(items, path, _io)
+            var raw    = _7z.GetOutArchive(format);
+            var stream = new ArchiveStreamWriter(_io.Create(path));
+            var cb     = new ArchiveUpdateCallback(items, path, _io)
             {
                 Password = password,
                 Progress = progress,
@@ -334,36 +334,14 @@ namespace Cube.FileSystem.SevenZip
             try
             {
                 if (Option != null) GetSetter()?.Execute(raw as ISetProperties);
-                raw.UpdateItems(stream, (uint)items.Count, callback);
+                raw.UpdateItems(stream, (uint)items.Count, cb);
             }
             finally
             {
-                var result = callback.Result;
+                var result = cb.Result;
                 stream.Dispose();
-                callback.Dispose();
-                SaveResult(path, result);
-            }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SaveResult
-        ///
-        /// <summary>
-        /// 圧縮後の処理を実行します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void SaveResult(string path, OperationResult result)
-        {
-            switch (result)
-            {
-                case OperationResult.OK:
-                    break;
-                case OperationResult.UserCancel:
-                    throw new UserCancelException();
-                default:
-                    throw new System.IO.IOException(result.ToString());
+                cb.Dispose();
+                ThrowIfError(result);
             }
         }
 
@@ -417,6 +395,29 @@ namespace Cube.FileSystem.SevenZip
                     return null;
                 default:
                     return new ArchiveOptionSetter(Option);
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ThrowIfError
+        ///
+        /// <summary>
+        /// エラーが発生していた場合に例外を送出します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void ThrowIfError(OperationResult result)
+        {
+            switch (result)
+            {
+                case OperationResult.OK:
+                case OperationResult.Unknown:
+                    break;
+                case OperationResult.UserCancel:
+                    throw new UserCancelException();
+                default:
+                    throw new System.IO.IOException($"{result}");
             }
         }
 
