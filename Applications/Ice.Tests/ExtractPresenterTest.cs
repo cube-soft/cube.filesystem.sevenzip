@@ -100,6 +100,7 @@ namespace Cube.FileSystem.App.Ice.Tests
             using (var reader = new SevenZip.ArchiveReader(src)) reader.Extract(dest);
             using (var ep = Create(src, dest))
             {
+                ep.Settings.Value.Extract.RootDirectory = CreateDirectoryCondition.None;
                 ep.View.Show();
                 for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
@@ -118,20 +119,15 @@ namespace Cube.FileSystem.App.Ice.Tests
         [Test]
         public async Task Extract_UserCancel()
         {
-            try
-            {
-                var src  = Example("Password.7z");
-                var dest = Result("UserCancel");
+            var src  = Example("Password.7z");
+            var dest = Result("UserCancel");
 
-                using (var ep = Create(src, dest))
-                {
-                    ep.View.Show();
-                    for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
-                    Assert.That(ep.View.Visible, Is.False, "Timeout");
-                }
+            using (var ep = Create(src, dest))
+            {
+                ep.View.Show();
+                for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
+                Assert.That(ep.View.Visible, Is.False, "Timeout");
             }
-            catch (SevenZip.UserCancelException /* err */) { Assert.Pass(); }
-            catch (Exception err) { Assert.Fail(err.ToString()); }
         }
 
         #endregion
@@ -156,7 +152,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ExtractSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.CreateSmart,
+                        RootDirectory = CreateDirectoryCondition.CreateSmart,
                         OpenDirectory = OpenDirectoryCondition.None,
                         DeleteSource  = false,
                     }
@@ -167,7 +163,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ExtractSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.CreateSmart,
+                        RootDirectory = CreateDirectoryCondition.CreateSmart,
                         OpenDirectory = OpenDirectoryCondition.None,
                         DeleteSource  = false,
                     }
@@ -178,7 +174,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ExtractSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.CreateSmart,
+                        RootDirectory = CreateDirectoryCondition.CreateSmart,
                         OpenDirectory = OpenDirectoryCondition.None,
                         DeleteSource  = false,
                     }
@@ -192,7 +188,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ExtractSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.None,
+                        RootDirectory = CreateDirectoryCondition.None,
                         OpenDirectory = OpenDirectoryCondition.None,
                         DeleteSource  = false,
                     }
@@ -206,7 +202,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ExtractSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.Create,
+                        RootDirectory = CreateDirectoryCondition.Create,
                         OpenDirectory = OpenDirectoryCondition.None,
                         DeleteSource  = false,
                     }
@@ -220,7 +216,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ExtractSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.CreateSmart,
+                        RootDirectory = CreateDirectoryCondition.CreateSmart,
                         OpenDirectory = OpenDirectoryCondition.None,
                         DeleteSource  = false,
                     }
@@ -234,8 +230,8 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ExtractSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.Create |
-                                        RootDirectoryCondition.SkipSingleFile,
+                        RootDirectory = CreateDirectoryCondition.Create |
+                                        CreateDirectoryCondition.SkipSingleFile,
                         OpenDirectory = OpenDirectoryCondition.None,
                         DeleteSource  = false,
                     }
@@ -249,9 +245,9 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ExtractSettings
                     {
                         SaveLocation = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.Create |
-                                        RootDirectoryCondition.SkipSingleFile |
-                                        RootDirectoryCondition.SkipSingleDirectory,
+                        RootDirectory = CreateDirectoryCondition.Create |
+                                        CreateDirectoryCondition.SkipSingleFile |
+                                        CreateDirectoryCondition.SkipSingleDirectory,
                         OpenDirectory = OpenDirectoryCondition.None,
                         DeleteSource = false,
                     }
@@ -265,7 +261,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ExtractSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.None,
+                        RootDirectory = CreateDirectoryCondition.None,
                         OpenDirectory = OpenDirectoryCondition.None,
                         DeleteSource  = false,
                     }
@@ -279,7 +275,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ExtractSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.Create,
+                        RootDirectory = CreateDirectoryCondition.Create,
                         OpenDirectory = OpenDirectoryCondition.None,
                         DeleteSource  = false,
                     }
@@ -293,7 +289,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ExtractSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.CreateSmart,
+                        RootDirectory = CreateDirectoryCondition.CreateSmart,
                         OpenDirectory = OpenDirectoryCondition.None,
                         DeleteSource  = false,
                     }
@@ -307,8 +303,8 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ExtractSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.Create |
-                                        RootDirectoryCondition.SkipSingleFile,
+                        RootDirectory = CreateDirectoryCondition.Create |
+                                        CreateDirectoryCondition.SkipSingleFile,
                         OpenDirectory = OpenDirectoryCondition.None,
                         DeleteSource  = false,
                     }
@@ -322,9 +318,9 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ExtractSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.Create |
-                                        RootDirectoryCondition.SkipSingleFile |
-                                        RootDirectoryCondition.SkipSingleDirectory,
+                        RootDirectory = CreateDirectoryCondition.Create |
+                                        CreateDirectoryCondition.SkipSingleFile |
+                                        CreateDirectoryCondition.SkipSingleDirectory,
                         OpenDirectory = OpenDirectoryCondition.None,
                         DeleteSource  = false,
                     }
@@ -338,7 +334,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ExtractSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.None,
+                        RootDirectory = CreateDirectoryCondition.None,
                         OpenDirectory = OpenDirectoryCondition.None,
                         DeleteSource  = false,
                     }
@@ -352,7 +348,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ExtractSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.Create,
+                        RootDirectory = CreateDirectoryCondition.Create,
                         OpenDirectory = OpenDirectoryCondition.None,
                         DeleteSource  = false,
                     }
@@ -366,7 +362,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ExtractSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.CreateSmart,
+                        RootDirectory = CreateDirectoryCondition.CreateSmart,
                         OpenDirectory = OpenDirectoryCondition.None,
                         DeleteSource  = false,
                     }
@@ -380,8 +376,8 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ExtractSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.Create |
-                                        RootDirectoryCondition.SkipSingleFile,
+                        RootDirectory = CreateDirectoryCondition.Create |
+                                        CreateDirectoryCondition.SkipSingleFile,
                         OpenDirectory = OpenDirectoryCondition.None,
                         DeleteSource  = false,
                     }
@@ -395,9 +391,9 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ExtractSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.Create |
-                                        RootDirectoryCondition.SkipSingleFile |
-                                        RootDirectoryCondition.SkipSingleDirectory,
+                        RootDirectory = CreateDirectoryCondition.Create |
+                                        CreateDirectoryCondition.SkipSingleFile |
+                                        CreateDirectoryCondition.SkipSingleDirectory,
                         OpenDirectory = OpenDirectoryCondition.None,
                         DeleteSource  = false,
                     }
@@ -412,7 +408,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ExtractSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.None,
+                        RootDirectory = CreateDirectoryCondition.None,
                         OpenDirectory = OpenDirectoryCondition.None,
                         DeleteSource  = false,
                     }
@@ -427,7 +423,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ExtractSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.Create,
+                        RootDirectory = CreateDirectoryCondition.Create,
                         OpenDirectory = OpenDirectoryCondition.None,
                         DeleteSource  = false,
                     }
@@ -442,7 +438,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ExtractSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.CreateSmart,
+                        RootDirectory = CreateDirectoryCondition.CreateSmart,
                         OpenDirectory = OpenDirectoryCondition.None,
                         DeleteSource  = false,
                     }
@@ -457,8 +453,8 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ExtractSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.Create |
-                                        RootDirectoryCondition.SkipSingleFile,
+                        RootDirectory = CreateDirectoryCondition.Create |
+                                        CreateDirectoryCondition.SkipSingleFile,
                         OpenDirectory = OpenDirectoryCondition.None,
                         DeleteSource  = false,
                     }
@@ -473,9 +469,9 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ExtractSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.Create |
-                                        RootDirectoryCondition.SkipSingleFile |
-                                        RootDirectoryCondition.SkipSingleDirectory,
+                        RootDirectory = CreateDirectoryCondition.Create |
+                                        CreateDirectoryCondition.SkipSingleFile |
+                                        CreateDirectoryCondition.SkipSingleDirectory,
                         OpenDirectory = OpenDirectoryCondition.None,
                         DeleteSource  = false,
                     }

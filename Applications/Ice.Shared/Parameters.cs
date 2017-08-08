@@ -73,15 +73,15 @@ namespace Cube.FileSystem.Ice
 
     /* --------------------------------------------------------------------- */
     ///
-    /// RootDirectoryCondition
+    /// CreateDirectoryCondition
     ///
     /// <summary>
-    /// ルートディレクトリの扱いを表す列挙型です。
+    /// ディレクトリの生成方法を表す列挙型です。
     /// </summary>
     /// 
     /* --------------------------------------------------------------------- */
     [Flags]
-    public enum RootDirectoryCondition
+    public enum CreateDirectoryCondition
     {
         None                = 0x00,
         SkipSingleDirectory = 0x02,

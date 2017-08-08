@@ -196,9 +196,9 @@ namespace Cube.FileSystem.App.Ice
             var src   = IO.Get(Source).NameWithoutExtension;
             var flags = Settings.Value.Extract.RootDirectory;
 
-            if (flags.HasFlag(RootDirectoryCondition.Create))
+            if (flags.HasFlag(CreateDirectoryCondition.Create))
             {
-                if ((flags & RootDirectoryCondition.SkipOptions) != 0)
+                if ((flags & CreateDirectoryCondition.SkipOptions) != 0)
                 {
                     var dirs = SeekRootDirectory(reader);
                     var one = IsSingleFileOrDirectory(flags, dirs);
@@ -331,13 +331,13 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private bool IsSingleFileOrDirectory(RootDirectoryCondition flags, IEnumerable<string> directories)
+        private bool IsSingleFileOrDirectory(CreateDirectoryCondition flags, IEnumerable<string> directories)
         {
             if (directories.Count() > 1) return false;
 
-            var file = flags.HasFlag(RootDirectoryCondition.SkipSingleFile) &&
+            var file = flags.HasFlag(CreateDirectoryCondition.SkipSingleFile) &&
                        directories.First() == "*";
-            var dir  = flags.HasFlag(RootDirectoryCondition.SkipSingleDirectory) &&
+            var dir  = flags.HasFlag(CreateDirectoryCondition.SkipSingleDirectory) &&
                        directories.First() != "*";
 
             return file || dir;

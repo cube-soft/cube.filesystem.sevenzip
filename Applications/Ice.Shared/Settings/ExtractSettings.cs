@@ -43,7 +43,7 @@ namespace Cube.FileSystem.Ice
         /// 
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public RootDirectoryCondition RootDirectory
+        public CreateDirectoryCondition RootDirectory
         {
             get { return _rootDirectory; }
             set { SetProperty(ref _rootDirectory, value); }
@@ -70,7 +70,7 @@ namespace Cube.FileSystem.Ice
 
         #region Fields
         private bool _deleteSource = false;
-        private RootDirectoryCondition _rootDirectory = RootDirectoryCondition.CreateSmart;
+        private CreateDirectoryCondition _rootDirectory = CreateDirectoryCondition.CreateSmart;
         #endregion
     }
 }
