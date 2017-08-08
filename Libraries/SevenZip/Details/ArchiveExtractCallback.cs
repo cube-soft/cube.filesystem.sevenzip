@@ -19,7 +19,6 @@
 using System;
 using System.Collections.Generic;
 using Cube.FileSystem.SevenZip.Archives;
-using Cube.Log;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -117,10 +116,21 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Extracting
+        /// 
+        /// <summary>
+        /// 圧縮ファイル各項目の展開開始時に発生するイベントです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public event ValueCancelEventHandler<ArchiveItem> Extracting;
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Extracted
         /// 
         /// <summary>
-        /// 圧縮ファイルの項目が展開完了した時に発生するイベントです。
+        /// 圧縮ファイル各項目の展開完了時に発生するイベントです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -147,23 +157,23 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int CryptoGetTextPassword(out string password)
         {
-            _encrypted = true;
-
             if (Password != null)
             {
                 var e = new QueryEventArgs<string, string>(Source);
                 Password.Request(e);
-                var valid = !e.Cancel && !string.IsNullOrEmpty(e.Result);
-                password = valid ? e.Result : string.Empty;
+
+                var ok = !e.Cancel && !string.IsNullOrEmpty(e.Result);
                 Result = e.Cancel ? OperationResult.UserCancel :
-                         valid    ? OperationResult.OK :
+                         ok       ? OperationResult.OK :
                                     OperationResult.WrongPassword;
+                password = ok ? e.Result : string.Empty;
             }
             else
             {
-                password = string.Empty;
                 Result = OperationResult.WrongPassword;
+                password = string.Empty;
             }
+
             return (int)Result;
         }
 
@@ -252,7 +262,15 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="mode">展開モード</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void PrepareOperation(AskMode mode) { }
+        public void PrepareOperation(AskMode mode)
+        {
+            var item = _inner.Current;
+            if (item == null || !_streams.ContainsKey(item)) return;
+
+            var e = ValueEventArgs.Create(item, false);
+            Extracting?.Invoke(this, e);
+            if (e.Cancel) throw new UserCancelException();
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -267,6 +285,9 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void SetOperationResult(OperationResult result)
         {
+            Result = result;
+            ProgressReport.Count++;
+
             var item = _inner.Current;
             if (item == null || !_streams.ContainsKey(item)) return;
 
@@ -333,7 +354,6 @@ namespace Cube.FileSystem.SevenZip
                     RaiseExtracted(kv.Key);
                 }
                 _streams.Clear();
-                PostExtract();
             }
         }
 
@@ -356,8 +376,6 @@ namespace Cube.FileSystem.SevenZip
         {
             while (_inner.MoveNext())
             {
-                ProgressReport.Count++;
-
                 if (_inner.Current.Index != index) continue;
                 if (_inner.Current.IsDirectory)
                 {
@@ -379,36 +397,6 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// PostExtract
-        ///
-        /// <summary>
-        /// 展開後の処理を実行します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void PostExtract()
-        {
-            switch (Result)
-            {
-                case OperationResult.OK:
-                case OperationResult.Unknown:
-                    break;
-                case OperationResult.DataError:
-                    if (_encrypted) RaiseEncryptionError();
-                    else throw new System.IO.IOException(Result.ToString());
-                    break;
-                case OperationResult.WrongPassword:
-                    RaiseEncryptionError();
-                    break;
-                case OperationResult.UserCancel:
-                    throw new UserCancelException();
-                default:
-                    throw new System.IO.IOException(Result.ToString());
-            }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// RaiseExtracted
         ///
         /// <summary>
@@ -422,27 +410,11 @@ namespace Cube.FileSystem.SevenZip
             Extracted?.Invoke(this, ValueEventArgs.Create(item));
         }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// RaiseEncryptionError
-        ///
-        /// <summary>
-        /// パスワードエラーに関する処理を実行します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void RaiseEncryptionError()
-        {
-            if (Password is PasswordQuery query) query.Reset();
-            throw new EncryptionException();
-        }
-
         #region Fields
         private bool _disposed = false;
         private Operator _io;
-        private IDictionary<ArchiveItem, ArchiveStreamWriter> _streams = new Dictionary<ArchiveItem, ArchiveStreamWriter>();
         private IEnumerator<ArchiveItem> _inner;
-        private bool _encrypted = false;
+        private IDictionary<ArchiveItem, ArchiveStreamWriter> _streams = new Dictionary<ArchiveItem, ArchiveStreamWriter>();
         private long _hack = 0;
         #endregion
 

@@ -18,7 +18,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
-using Cube.FileSystem.SevenZip.Archives;
+using System.Linq;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -161,12 +161,41 @@ namespace Cube.FileSystem.SevenZip
 
         #region Events
 
+        #region Extracting
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extracting
+        /// 
+        /// <summary>
+        /// 圧縮ファイル各項目の展開開始時に発生するイベントです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public event ValueCancelEventHandler<ArchiveItem> Extracting;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OnExtracted
+        /// 
+        /// <summary>
+        /// Extracting イベントを発生させます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected virtual void OnExtracting(ValueCancelEventArgs<ArchiveItem> e)
+            => Extracting?.Invoke(this, e);
+
+        #endregion
+
+        #region Extracted
+
         /* ----------------------------------------------------------------- */
         ///
         /// Extracted
         /// 
         /// <summary>
-        /// 圧縮ファイルの項目が展開完了した時に発生するイベントです。
+        /// 圧縮ファイル各項目の展開完了時に発生するイベントです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -183,6 +212,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         protected virtual void OnExtracted(ValueEventArgs<ArchiveItem> e)
             => Extracted?.Invoke(this, e);
+
+        #endregion
 
         #endregion
 
@@ -219,8 +250,11 @@ namespace Cube.FileSystem.SevenZip
             {
                 cb.Password = _password;
                 cb.Progress = progress;
-                cb.Extracted += (s, e) => OnExtracted(e);
+                cb.Extracting += (s, e) => OnExtracting(e);
+                cb.Extracted  += (s, e) => OnExtracted(e);
+
                 _raw.Extract(null, uint.MaxValue, 0, cb);
+                ThrowIfError(cb.Result);
             }
         }
 
@@ -306,6 +340,51 @@ namespace Cube.FileSystem.SevenZip
             _raw.Open(_stream, ref pos, new ArchiveOpenCallback(Source) { Password = _password });
 
             _items = new ReadOnlyArchiveList(_raw, Format, Source, _password, _io);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ThrowIfError
+        ///
+        /// <summary>
+        /// エラーが発生していた場合に例外を送出します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void ThrowIfError(OperationResult result)
+        {
+            switch (result)
+            {
+                case OperationResult.OK:
+                case OperationResult.Unknown:
+                    break;
+                case OperationResult.DataError:
+                    if (Items.Any(x => x.Encrypted)) ThrowEncryption();
+                    else throw new System.IO.IOException($"{result}");
+                    break;
+                case OperationResult.WrongPassword:
+                    ThrowEncryption();
+                    break;
+                case OperationResult.UserCancel:
+                    throw new UserCancelException();
+                default:
+                    throw new System.IO.IOException($"{result}");
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ThrowEncryption
+        ///
+        /// <summary>
+        /// パスワードエラーに関する処理を実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void ThrowEncryption()
+        {
+            if (_password is PasswordQuery query) query.Reset();
+            throw new EncryptionException();
         }
 
         #region Fields
