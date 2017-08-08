@@ -178,8 +178,8 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void SetResult()
         {
-            this.LogDebug(string.Format("Destination:{0}\tCount:{1:#,0}\tBytes:{2:#,0}",
-                Destination, ProgressReport.TotalCount, ProgressReport.TotalBytes));
+            this.LogDebug(string.Format("Count:{1:#,0}\tBytes:{2:#,0}",
+                ProgressReport.TotalCount, ProgressReport.TotalBytes));
 
             // hack (see remarks)
             ProgressReport.Count = ProgressReport.TotalCount;

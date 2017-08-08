@@ -267,9 +267,6 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void SetOperationResult(OperationResult result)
         {
-            Progress?.Report(ProgressReport);
-            Result = result;
-
             var item = _inner.Current;
             if (item == null || !_streams.ContainsKey(item)) return;
 
@@ -277,6 +274,8 @@ namespace Cube.FileSystem.SevenZip
             _streams.Remove(item);
 
             RaiseExtracted(item);
+            Progress?.Report(ProgressReport);
+            Result = result;
         }
 
         #endregion

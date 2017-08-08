@@ -154,8 +154,8 @@ namespace Cube.FileSystem.App.Ice
 
             SetDirectories(check.Values);
 
-            this.LogDebug(string.Format("Destination:{0}\tCount:{1:#,0}\tBytes:{2:#,0}",
-                Destination, ProgressReport.TotalCount, ProgressReport.TotalBytes));
+            this.LogDebug(string.Format("Count:{0:#,0}\tBytes:{2:#,0}",
+                ProgressReport.TotalCount, ProgressReport.TotalBytes));
         }
 
         /* ----------------------------------------------------------------- */
