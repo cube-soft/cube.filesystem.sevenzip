@@ -369,7 +369,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenExtracting(object sender, ValueCancelEventArgs<ArchiveItem> e)
+        private void WhenExtracting(object sender, ValueEventArgs<ArchiveItem> e)
             => Current = e.Value.FullName;
 
         /* ----------------------------------------------------------------- */

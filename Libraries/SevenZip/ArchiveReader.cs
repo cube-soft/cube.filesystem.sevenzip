@@ -172,7 +172,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public event ValueCancelEventHandler<ArchiveItem> Extracting;
+        public event ValueEventHandler<ArchiveItem> Extracting;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -183,7 +183,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnExtracting(ValueCancelEventArgs<ArchiveItem> e)
+        protected virtual void OnExtracting(ValueEventArgs<ArchiveItem> e)
             => Extracting?.Invoke(this, e);
 
         #endregion

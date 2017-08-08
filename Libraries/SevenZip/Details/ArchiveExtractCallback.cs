@@ -160,7 +160,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public event ValueCancelEventHandler<ArchiveItem> Extracting;
+        public event ValueEventHandler<ArchiveItem> Extracting;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -305,10 +305,7 @@ namespace Cube.FileSystem.SevenZip
         {
             var item = _inner.Current;
             if (item == null || !_streams.ContainsKey(item)) return;
-
-            var e = ValueEventArgs.Create(item, false);
-            Extracting?.Invoke(this, e);
-            if (e.Cancel) throw new UserCancelException();
+            Extracting?.Invoke(this, ValueEventArgs.Create(item));
         }
 
         /* ----------------------------------------------------------------- */
