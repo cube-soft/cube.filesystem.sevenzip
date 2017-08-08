@@ -86,7 +86,7 @@ namespace Cube.FileSystem.Ice
         None                = 0x00,
         SkipSingleDirectory = 0x02,
         SkipSingleFile      = 0x04,
-        SkipOptions         = 0x06,
+        SkipOptions         = SkipSingleDirectory | SkipSingleFile,
         Create              = 0x01,
         CreateSmart         = Create | SkipSingleDirectory,
     }
