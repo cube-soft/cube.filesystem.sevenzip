@@ -246,10 +246,11 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void Extract(string directory, IProgress<ArchiveReport> progress)
         {
-            using (var cb = new ArchiveExtractCallback(Source, directory, _items, _io, _items.Count, -1))
+            using (var cb = new ArchiveExtractCallback(Source, directory, _items, _io))
             {
-                cb.Password = _password;
-                cb.Progress = progress;
+                cb.TotalCount  = _items.Count;
+                cb.Password    = _password;
+                cb.Progress    = progress;
                 cb.Extracting += (s, e) => OnExtracting(e);
                 cb.Extracted  += (s, e) => OnExtracted(e);
 

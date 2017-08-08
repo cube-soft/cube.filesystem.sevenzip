@@ -18,6 +18,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cube.FileSystem.SevenZip.Archives;
 
 namespace Cube.FileSystem.SevenZip
@@ -48,8 +49,6 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="dest">展開先ディレクトリ</param>
         /// <param name="items">展開項目一覧</param>
         /// <param name="io">ファイル操作用オブジェクト</param>
-        /// <param name="count">展開項目数</param>
-        /// <param name="bytes">展開後の総バイト数</param>
         /// 
         /// <remarks>
         /// bytes に -1 が設定された場合、SetTotal で取得される値を使用
@@ -58,19 +57,18 @@ namespace Cube.FileSystem.SevenZip
         /// 
         /* ----------------------------------------------------------------- */
         public ArchiveExtractCallback(string src, string dest,
-            IEnumerable<ArchiveItem> items, Operator io,
-            long count, long bytes = -1)
+            IEnumerable<ArchiveItem> items, Operator io)
         {
             Source      = src;
             Destination = dest;
             Items       = items;
+            TotalCount  = -1;
+            TotalBytes  = -1;
             _io         = io;
             _inner      = Items.GetEnumerator();
 
-            ProgressReport.Count      = 0;
-            ProgressReport.TotalCount = count;
-            ProgressReport.Bytes      = 0;
-            ProgressReport.TotalBytes = bytes;
+            ProgressReport.Count = 0;
+            ProgressReport.Bytes = 0;
         }
 
         #endregion
@@ -109,6 +107,45 @@ namespace Cube.FileSystem.SevenZip
         /// 
         /* ----------------------------------------------------------------- */
         public IEnumerable<ArchiveItem> Items { get; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// TotalCount
+        ///
+        /// <summary>
+        /// 展開後のファイルおよびディレクトリの合計を取得または
+        /// 設定します。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// 設定値が負の値の場合、Items.Count() の結果で上書きします。
+        /// </remarks>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public long TotalCount
+        {
+            get { return ProgressReport.TotalCount; }
+            set { ProgressReport.TotalCount = value; }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// TotalBytes
+        ///
+        /// <summary>
+        /// 展開後の総バイト数を取得または設定します。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// 設定値が負の値の場合、SetTotal の結果で上書きします。
+        /// </remarks>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public long TotalBytes
+        {
+            get { return ProgressReport.TotalBytes; }
+            set { ProgressReport.TotalBytes = value; }
+        }
 
         #endregion
 
@@ -194,7 +231,9 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void SetTotal(ulong bytes)
         {
-            if (ProgressReport.TotalBytes < 0) ProgressReport.TotalBytes = (long)bytes;
+            if (TotalCount < 0) TotalCount = Items.Count();
+            if (TotalBytes < 0) TotalBytes = (long)bytes;
+
             _hack = Math.Max((long)bytes - ProgressReport.TotalBytes, 0);
             Progress?.Report(ProgressReport);
         }
