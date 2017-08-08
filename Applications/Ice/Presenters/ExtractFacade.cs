@@ -297,7 +297,7 @@ namespace Cube.FileSystem.App.Ice
                 var key = root.ToLower();
                 if (!dest.ContainsKey(key)) dest.Add(key, root);
 
-                if (dest.Count > 2) break;
+                if (dest.Count >= 2) break;
             }
 
             return dest.Values;
