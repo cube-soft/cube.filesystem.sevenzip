@@ -153,6 +153,27 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Extract_Each_Throws
+        ///
+        /// <summary>
+        /// 暗号化されたファイルの展開に失敗するテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [TestCase("")]
+        public void Extract_Each_Throws(string password)
+            => Assert.That(() =>
+            {
+                var src = Example("Password.7z");
+                using (var archive = new SevenZip.ArchiveReader(src, password))
+                {
+                    foreach (var item in archive.Items) item.Extract(Results);
+                }
+            },
+            Throws.TypeOf<SevenZip.EncryptionException>());
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Extract_UserCancel
         ///
         /// <summary>
@@ -169,6 +190,28 @@ namespace Cube.FileSystem.Tests
                 using (var archive = new SevenZip.ArchiveReader(src, query))
                 {
                     archive.Extract(Results);
+                }
+            },
+            Throws.TypeOf<SevenZip.UserCancelException>());
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract_Each_UserCancel
+        ///
+        /// <summary>
+        /// パスワード要求時にキャンセルするテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Extract_Each_UserCancel()
+            => Assert.That(() =>
+            {
+                var src = Example("Password.7z");
+                var query = new Query<string, string>(e => e.Cancel = true);
+                using (var archive = new SevenZip.ArchiveReader(src, query))
+                {
+                    foreach (var item in archive.Items) item.Extract(Results);
                 }
             },
             Throws.TypeOf<SevenZip.UserCancelException>());
