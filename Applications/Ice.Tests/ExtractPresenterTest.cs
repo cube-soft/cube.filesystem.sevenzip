@@ -58,7 +58,7 @@ namespace Cube.FileSystem.App.Ice.Tests
 
             // Preset
             settings.Value.Extract = extract;
-            settings.Value.Extract.SaveDirectoryName = Results;
+            settings.Value.Extract.SaveDirectoryName = Result("Others");
             request.DropDirectory = Result(request.DropDirectory);
             MockViewFactory.Destination = Result("Runtime");
             MockViewFactory.Password = password;
@@ -102,36 +102,8 @@ namespace Cube.FileSystem.App.Ice.Tests
         {
             get
             {
-                yield return new TestCaseData("Single.zip", "",
+                yield return new TestCaseData("Complex.zip", "",
                     PresetMenu.Extract.ToArguments(),
-                    new ExtractSettings
-                    {
-                        SaveLocation  = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.None,
-                        OpenDirectory = OpenDirectoryCondition.None,
-                        DeleteSource  = false,
-                    }
-                ).Returns(1L);
-
-                yield return new TestCaseData("Single.zip", "",
-                    PresetMenu.Extract.ToArguments().Concat(new[] {
-                        "/o:source",
-                        "/drop:Single-0x01",
-                    }),
-                    new ExtractSettings
-                    {
-                        SaveLocation  = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.Create,
-                        OpenDirectory = OpenDirectoryCondition.None,
-                        DeleteSource  = false,
-                    }
-                ).Returns(1L);
-
-                yield return new TestCaseData("Single.zip", "",
-                    PresetMenu.Extract.ToArguments().Concat(new[] {
-                        "/o:source",
-                        "/drop:Single-0x03",
-                    }),
                     new ExtractSettings
                     {
                         SaveLocation  = SaveLocation.Others,
@@ -139,65 +111,14 @@ namespace Cube.FileSystem.App.Ice.Tests
                         OpenDirectory = OpenDirectoryCondition.None,
                         DeleteSource  = false,
                     }
-                ).Returns(1L);
+                ).Returns(5L);
 
-                yield return new TestCaseData("SingleDirectory.zip", "",
+                yield return new TestCaseData("Complex.zip", "",
                     PresetMenu.ExtractRuntime.ToArguments(),
                     new ExtractSettings
                     {
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = RootDirectoryCondition.CreateSmart,
-                        OpenDirectory = OpenDirectoryCondition.None,
-                        DeleteSource  = false,
-                    }
-                ).Returns(4L);
-
-                yield return new TestCaseData("SingleDirectory.zip", "",
-                    PresetMenu.Extract.ToArguments().Concat(new[] {
-                        "/o:source",
-                        "/drop:SingleDirectory-0x01",
-                    }),
-                    new ExtractSettings
-                    {
-                        SaveLocation  = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.Create,
-                        OpenDirectory = OpenDirectoryCondition.None,
-                        DeleteSource  = false,
-                    }
-                ).Returns(4L);
-
-                yield return new TestCaseData("MultiDirectory.zip", "",
-                    PresetMenu.ExtractSource.ToArguments().Concat(new[] { "/drop:Drop" }),
-                    new ExtractSettings
-                    {
-                        SaveLocation  = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.CreateSmart,
-                        OpenDirectory = OpenDirectoryCondition.None,
-                        DeleteSource  = false,
-                    }
-                ).Returns(7L);
-
-                yield return new TestCaseData("Complex.zip", "",
-                    PresetMenu.ExtractSource.ToArguments().Concat(new[] { "/drop:Drop" }),
-                    new ExtractSettings
-                    {
-                        SaveLocation = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.CreateSmart,
-                        OpenDirectory = OpenDirectoryCondition.None,
-                        DeleteSource = false,
-                    }
-                ).Returns(5L);
-
-                yield return new TestCaseData("Complex.zip", "",
-                    PresetMenu.Extract.ToArguments().Concat(new[]
-                    {
-                        "/o:source",
-                        "/drop:Complex-0x00",
-                    }),
-                    new ExtractSettings
-                    {
-                        SaveLocation  = SaveLocation.Others,
-                        RootDirectory = RootDirectoryCondition.None,
                         OpenDirectory = OpenDirectoryCondition.None,
                         DeleteSource  = false,
                     }
@@ -207,12 +128,309 @@ namespace Cube.FileSystem.App.Ice.Tests
                     PresetMenu.Extract.ToArguments(),
                     new ExtractSettings
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation  = SaveLocation.Others,
                         RootDirectory = RootDirectoryCondition.CreateSmart,
+                        OpenDirectory = OpenDirectoryCondition.None,
+                        DeleteSource  = false,
+                    }
+                ).Returns(3L);
+
+                yield return new TestCaseData("Single.zip", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[] {
+                        "/o:source",
+                        @"/drop:RootDirectory\Single-0x00",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = RootDirectoryCondition.None,
+                        OpenDirectory = OpenDirectoryCondition.None,
+                        DeleteSource  = false,
+                    }
+                ).Returns(1L);
+
+                yield return new TestCaseData("Single.zip", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[] {
+                        "/o:source",
+                        @"/drop:RootDirectory\Single-0x01",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = RootDirectoryCondition.Create,
+                        OpenDirectory = OpenDirectoryCondition.None,
+                        DeleteSource  = false,
+                    }
+                ).Returns(1L);
+
+                yield return new TestCaseData("Single.zip", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[] {
+                        "/o:source",
+                        @"/drop:RootDirectory\Single-0x03",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = RootDirectoryCondition.CreateSmart,
+                        OpenDirectory = OpenDirectoryCondition.None,
+                        DeleteSource  = false,
+                    }
+                ).Returns(1L);
+
+                yield return new TestCaseData("Single.zip", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[] {
+                        "/o:source",
+                        @"/drop:RootDirectory\Single-0x05",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = RootDirectoryCondition.Create |
+                                        RootDirectoryCondition.SkipSingleFile,
+                        OpenDirectory = OpenDirectoryCondition.None,
+                        DeleteSource  = false,
+                    }
+                ).Returns(1L);
+
+                yield return new TestCaseData("Single.zip", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[] {
+                        "/o:source",
+                        @"/drop:RootDirectory\Single-0x07",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation = SaveLocation.Others,
+                        RootDirectory = RootDirectoryCondition.Create |
+                                        RootDirectoryCondition.SkipSingleFile |
+                                        RootDirectoryCondition.SkipSingleDirectory,
                         OpenDirectory = OpenDirectoryCondition.None,
                         DeleteSource = false,
                     }
-                ).Returns(3L);
+                ).Returns(1L);
+
+                yield return new TestCaseData("SingleDirectory.zip", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[] {
+                        "/o:source",
+                        @"/drop:RootDirectory\SingleDirectory-0x00",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = RootDirectoryCondition.None,
+                        OpenDirectory = OpenDirectoryCondition.None,
+                        DeleteSource  = false,
+                    }
+                ).Returns(4L);
+
+                yield return new TestCaseData("SingleDirectory.zip", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[] {
+                        "/o:source",
+                        @"/drop:RootDirectory\SingleDirectory-0x01",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = RootDirectoryCondition.Create,
+                        OpenDirectory = OpenDirectoryCondition.None,
+                        DeleteSource  = false,
+                    }
+                ).Returns(4L);
+
+                yield return new TestCaseData("SingleDirectory.zip", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[] {
+                        "/o:source",
+                        @"/drop:RootDirectory\SingleDirectory-0x03",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = RootDirectoryCondition.CreateSmart,
+                        OpenDirectory = OpenDirectoryCondition.None,
+                        DeleteSource  = false,
+                    }
+                ).Returns(4L);
+
+                yield return new TestCaseData("SingleDirectory.zip", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[] {
+                        "/o:source",
+                        @"/drop:RootDirectory\SingleDirectory-0x05",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = RootDirectoryCondition.Create |
+                                        RootDirectoryCondition.SkipSingleFile,
+                        OpenDirectory = OpenDirectoryCondition.None,
+                        DeleteSource  = false,
+                    }
+                ).Returns(4L);
+
+                yield return new TestCaseData("SingleDirectory.zip", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[] {
+                        "/o:source",
+                        @"/drop:RootDirectory\SingleDirectory-0x07",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = RootDirectoryCondition.Create |
+                                        RootDirectoryCondition.SkipSingleFile |
+                                        RootDirectoryCondition.SkipSingleDirectory,
+                        OpenDirectory = OpenDirectoryCondition.None,
+                        DeleteSource  = false,
+                    }
+                ).Returns(4L);
+
+                yield return new TestCaseData("MultiDirectory.zip", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[] {
+                        "/o:source",
+                        @"/drop:RootDirectory\MultiDirectory-0x00",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = RootDirectoryCondition.None,
+                        OpenDirectory = OpenDirectoryCondition.None,
+                        DeleteSource  = false,
+                    }
+                ).Returns(7L);
+
+                yield return new TestCaseData("MultiDirectory.zip", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[] {
+                        "/o:source",
+                        @"/drop:RootDirectory\MultiDirectory-0x01",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = RootDirectoryCondition.Create,
+                        OpenDirectory = OpenDirectoryCondition.None,
+                        DeleteSource  = false,
+                    }
+                ).Returns(7L);
+
+                yield return new TestCaseData("MultiDirectory.zip", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[] {
+                        "/o:source",
+                        @"/drop:RootDirectory\MultiDirectory-0x03",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = RootDirectoryCondition.CreateSmart,
+                        OpenDirectory = OpenDirectoryCondition.None,
+                        DeleteSource  = false,
+                    }
+                ).Returns(7L);
+
+                yield return new TestCaseData("MultiDirectory.zip", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[] {
+                        "/o:source",
+                        @"/drop:RootDirectory\MultiDirectory-0x05",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = RootDirectoryCondition.Create |
+                                        RootDirectoryCondition.SkipSingleFile,
+                        OpenDirectory = OpenDirectoryCondition.None,
+                        DeleteSource  = false,
+                    }
+                ).Returns(7L);
+
+                yield return new TestCaseData("MultiDirectory.zip", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[] {
+                        "/o:source",
+                        @"/drop:RootDirectory\MultiDirectory-0x07",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = RootDirectoryCondition.Create |
+                                        RootDirectoryCondition.SkipSingleFile |
+                                        RootDirectoryCondition.SkipSingleDirectory,
+                        OpenDirectory = OpenDirectoryCondition.None,
+                        DeleteSource  = false,
+                    }
+                ).Returns(7L);
+
+                yield return new TestCaseData("Complex.zip", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[]
+                    {
+                        "/o:source",
+                        @"/drop:RootDirectory\Complex-0x00",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = RootDirectoryCondition.None,
+                        OpenDirectory = OpenDirectoryCondition.None,
+                        DeleteSource  = false,
+                    }
+                ).Returns(5L);
+
+                yield return new TestCaseData("Complex.zip", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[]
+                    {
+                        "/o:source",
+                        @"/drop:RootDirectory\Complex-0x01",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = RootDirectoryCondition.Create,
+                        OpenDirectory = OpenDirectoryCondition.None,
+                        DeleteSource  = false,
+                    }
+                ).Returns(5L);
+
+                yield return new TestCaseData("Complex.zip", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[]
+                    {
+                        "/o:source",
+                        @"/drop:RootDirectory\Complex-0x03",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = RootDirectoryCondition.CreateSmart,
+                        OpenDirectory = OpenDirectoryCondition.None,
+                        DeleteSource  = false,
+                    }
+                ).Returns(5L);
+
+                yield return new TestCaseData("Complex.zip", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[]
+                    {
+                        "/o:source",
+                        @"/drop:RootDirectory\Complex-0x05",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = RootDirectoryCondition.Create |
+                                        RootDirectoryCondition.SkipSingleFile,
+                        OpenDirectory = OpenDirectoryCondition.None,
+                        DeleteSource  = false,
+                    }
+                ).Returns(5L);
+
+                yield return new TestCaseData("Complex.zip", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[]
+                    {
+                        "/o:source",
+                        @"/drop:RootDirectory\Complex-0x07",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = RootDirectoryCondition.Create |
+                                        RootDirectoryCondition.SkipSingleFile |
+                                        RootDirectoryCondition.SkipSingleDirectory,
+                        OpenDirectory = OpenDirectoryCondition.None,
+                        DeleteSource  = false,
+                    }
+                ).Returns(5L);
             }
         }
 
