@@ -15,6 +15,7 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -50,39 +51,87 @@ namespace Cube.FileSystem.App.Ice.Tests
         public async Task<long> Extract(string filename, string password,
             IEnumerable<string> args, ExtractSettings extract)
         {
-            var source   = Example(filename);
-            var request  = new Request(args.Concat(new[] { source }));
-            var settings = new SettingsFolder();
-            var events   = new EventAggregator();
-            var view     = Views.CreateProgressView();
+            var src = Example(filename);
+            var request = new Request(args.Concat(new[] { src }));
+            request.DropDirectory = Result(request.DropDirectory);
 
             // Preset
-            settings.Value.Extract = extract;
-            settings.Value.Extract.SaveDirectoryName = Result("Others");
-            request.DropDirectory = Result(request.DropDirectory);
             MockViewFactory.Destination = Result("Runtime");
             MockViewFactory.Password = password;
 
-            // Main
-            using (var ep = new ExtractPresenter(view, request, settings, events))
+            using (var ep = Create(request))
             {
-                view.Show();
+                ep.Settings.Value.Extract = extract;
+                ep.Settings.Value.Extract.SaveDirectoryName = Result("Others");
+                ep.View.Show();
 
-                Assert.That(view.Visible, Is.True);
-                for (var i = 0; view.Visible && i < 50; ++i) await Task.Delay(100);
-                Assert.That(view.Visible, Is.False, "Timeout");
+                Assert.That(ep.View.Visible, Is.True);
+                for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
+                Assert.That(ep.View.Visible, Is.False, "Timeout");
 
-                Assert.That(view.FileName, Is.EqualTo(filename));
-                Assert.That(view.Count,    Is.EqualTo(view.TotalCount));
-                Assert.That(view.Value,    Is.EqualTo(100));
+                Assert.That(ep.View.FileName, Is.EqualTo(filename));
+                Assert.That(ep.View.Count,    Is.EqualTo(ep.View.TotalCount));
+                Assert.That(ep.View.Value,    Is.EqualTo(100));
 
                 var facade = ep.Model as ExtractFacade;
                 Assert.That(IO.Get(facade.Destination).Exists, Is.True);
                 var dir = IO.Combine(facade.Destination, facade.OpenDirectoryName);
                 Assert.That(IO.Get(dir).Exists, Is.True);
 
-                return view.Count;
+                return ep.View.Count;
             }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract_Overwrite
+        /// 
+        /// <summary>
+        /// 展開したファイルの上書きテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public async Task Extract_Overwrite()
+        {
+            var src  = Example("Complex.zip");
+            var dest = Result("Overwrite");
+
+            using (var reader = new SevenZip.ArchiveReader(src)) reader.Extract(dest);
+            using (var ep = Create(src, dest))
+            {
+                ep.View.Show();
+                for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
+                Assert.That(ep.View.Visible, Is.False, "Timeout");
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract_UserCancel
+        /// 
+        /// <summary>
+        /// パスワード入力をキャンセルした時の挙動を確認します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public async Task Extract_UserCancel()
+        {
+            try
+            {
+                var src  = Example("Password.7z");
+                var dest = Result("UserCancel");
+
+                using (var ep = Create(src, dest))
+                {
+                    ep.View.Show();
+                    for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
+                    Assert.That(ep.View.Visible, Is.False, "Timeout");
+                }
+            }
+            catch (SevenZip.UserCancelException /* err */) { Assert.Pass(); }
+            catch (Exception err) { Assert.Fail(err.ToString()); }
         }
 
         #endregion
@@ -440,6 +489,44 @@ namespace Cube.FileSystem.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Create
+        /// 
+        /// <summary>
+        /// Presenter オブジェクトを生成します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private ExtractPresenter Create(string src, string dest)
+        {
+            var r = new Request(new[] { "/x", src });
+            var s = new SettingsFolder();
+
+            s.Value.Extract.SaveLocation      = SaveLocation.Others;
+            s.Value.Extract.SaveDirectoryName = dest;
+            s.Value.Extract.OpenDirectory     = OpenDirectoryCondition.None;
+
+            return new ExtractPresenter(Views.CreateProgressView(), r, s, new EventAggregator());
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create
+        /// 
+        /// <summary>
+        /// Presenter オブジェクトを生成します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private ExtractPresenter Create(Request request)
+            => new ExtractPresenter(
+                Views.CreateProgressView(),
+                request,
+                new SettingsFolder(),
+                new EventAggregator()
+            );
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// OneTimeSetUp
         /// 
         /// <summary>
@@ -452,15 +539,15 @@ namespace Cube.FileSystem.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OneTimeTearDown
+        /// TearDown
         /// 
         /// <summary>
-        /// 一度だけ実行される TearDown 処理です。
+        /// テスト後に毎回実行される TearDown 処理です。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [OneTimeTearDown]
-        public void OneTimeTearDown() => MockViewFactory.Reset();
+        [TearDown]
+        public void TearDown() => MockViewFactory.Reset();
 
         #endregion
     }
