@@ -133,29 +133,18 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void PreExtract(ArchiveReader reader)
         {
-            var file  = "*";
-            var count = reader.Items.Count;
-            var bytes = 0L;
+            var file  = "*"; // Count all files as "*"
             var check = new Dictionary<string, string>();
 
             foreach (var item in reader.Items)
             {
-                bytes += item.Length;
-                if (check.Count > 2) continue;
-
-                // Count all files as "*"
                 var value = GetRoot(item, file);
                 var key   = value.ToLower();
                 if (!check.ContainsKey(key)) check.Add(key, value);
+                if (check.Count > 2) break;
             }
 
-            ProgressReport.TotalCount = count;
-            ProgressReport.TotalBytes = bytes;
-
             SetDirectories(check.Values);
-
-            this.LogDebug(string.Format("Count:{0:#,0}\tBytes:{2:#,0}",
-                ProgressReport.TotalCount, ProgressReport.TotalBytes));
         }
 
         /* ----------------------------------------------------------------- */
@@ -175,8 +164,8 @@ namespace Cube.FileSystem.App.Ice
                 reader.Extracted += WhenExtracted;
 
                 ProgressStart();
-                Extract(reader, CreateInnerProgress(e => ProgressReport = e));
-                OnProgress(ValueEventArgs.Create(ProgressReport));
+                ExtractCore(reader, CreateInnerProgress(e => ProgressReport = e));
+                ProgressResult();
             }
             finally
             {
@@ -187,10 +176,10 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract
+        /// ExtractCore
         /// 
         /// <summary>
-        /// 圧縮ファイルの一項目を展開します。
+        /// 展開処理を実行します。
         /// </summary>
         /// 
         /// <remarks>
@@ -202,7 +191,7 @@ namespace Cube.FileSystem.App.Ice
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        private void Extract(ArchiveReader src, IProgress<ArchiveReport> progress)
+        private void ExtractCore(ArchiveReader src, IProgress<ArchiveReport> progress)
         {
             var retry = false;
             do

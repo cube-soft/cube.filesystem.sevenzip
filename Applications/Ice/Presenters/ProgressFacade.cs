@@ -382,6 +382,35 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// ProgressResult
+        /// 
+        /// <summary>
+        /// 結果を設定します。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// タイミングの関係で全ての結果が取り切れていない事があるので、
+        /// 完了した結果を手動で設定しています。
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected void ProgressResult()
+        {
+            this.LogDebug(string.Format(
+                "Count:{0:#,0}\tBytes:{1:#,0}",
+                ProgressReport.TotalCount,
+                ProgressReport.TotalBytes
+            ));
+
+            // hack (see remarks)
+            ProgressReport.Count = ProgressReport.TotalCount;
+            ProgressReport.Bytes = ProgressReport.TotalBytes;
+
+            OnProgress(ValueEventArgs.Create(ProgressReport));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Open
         /// 
         /// <summary>

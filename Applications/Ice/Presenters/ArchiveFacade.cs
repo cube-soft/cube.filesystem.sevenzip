@@ -118,7 +118,7 @@ namespace Cube.FileSystem.App.Ice
             try
             {
                 Archive();
-                SetResult();
+                ProgressResult();
                 Open(Destination, Settings.Value.Archive.OpenDirectory);
             }
             catch (UserCancelException /* err */) { /* user cancel */ }
@@ -160,32 +160,6 @@ namespace Cube.FileSystem.App.Ice
             // Move
             if (string.IsNullOrEmpty(Tmp) || !IO.Get(Tmp).Exists) return;
             IO.Move(Tmp, Destination, true);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SetResult
-        /// 
-        /// <summary>
-        /// 結果を設定します。
-        /// </summary>
-        /// 
-        /// <remarks>
-        /// タイミングの関係で全ての結果が取り切れていない事があるので、
-        /// 完了した結果を手動で設定しています。
-        /// </remarks>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void SetResult()
-        {
-            this.LogDebug(string.Format("Count:{1:#,0}\tBytes:{2:#,0}",
-                ProgressReport.TotalCount, ProgressReport.TotalBytes));
-
-            // hack (see remarks)
-            ProgressReport.Count = ProgressReport.TotalCount;
-            ProgressReport.Bytes = ProgressReport.TotalBytes;
-
-            OnProgress(ValueEventArgs.Create(ProgressReport));
         }
 
         /* ----------------------------------------------------------------- */
