@@ -380,12 +380,21 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public override void Extract(string directory, IProgress<ArchiveReport> progress)
         {
-            if (IsDirectory) this.CreateDirectory(directory, IO);
-            else using (var cb = new ArchiveExtractCallback(Source, directory, new[] { this }, IO, 1, Length))
+            if (IsDirectory)
             {
-                cb.Password = Password;
-                cb.Progress = progress;
+                this.CreateDirectory(directory, IO);
+                return;
+            }
+
+            using (var cb = new ArchiveExtractCallback(Source, directory, new[] { this }, IO))
+            {
+                cb.TotalCount = 1;
+                cb.TotalBytes = Length;
+                cb.Password   = Password;
+                cb.Progress   = progress;
+
                 _raw.Extract(new[] { (uint)Index }, 1, 0, cb);
+                ThrowIfError(cb.Result);
             }
         }
 
@@ -462,6 +471,51 @@ namespace Cube.FileSystem.SevenZip
         {
             try { return (System.IO.FileAttributes)Get<uint>(ItemPropId.Attributes); }
             catch (Exception /* err */) { return System.IO.FileAttributes.Normal; }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ThrowIfError
+        ///
+        /// <summary>
+        /// エラーが発生していた場合に例外を送出します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void ThrowIfError(OperationResult result)
+        {
+            switch (result)
+            {
+                case OperationResult.OK:
+                case OperationResult.Unknown:
+                    break;
+                case OperationResult.DataError:
+                    if (Encrypted) ThrowEncryption();
+                    else throw new System.IO.IOException($"{result}");
+                    break;
+                case OperationResult.WrongPassword:
+                    ThrowEncryption();
+                    break;
+                case OperationResult.UserCancel:
+                    throw new UserCancelException();
+                default:
+                    throw new System.IO.IOException($"{result}");
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ThrowEncryption
+        ///
+        /// <summary>
+        /// パスワードエラーに関する処理を実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void ThrowEncryption()
+        {
+            if (Password is PasswordQuery query) query.Reset();
+            throw new EncryptionException();
         }
 
         #region Fields
