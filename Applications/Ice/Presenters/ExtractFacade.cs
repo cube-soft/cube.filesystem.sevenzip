@@ -171,30 +171,18 @@ namespace Cube.FileSystem.App.Ice
         {
             try
             {
+                reader.Extracted -= WhenExtracted;
+                reader.Extracted += WhenExtracted;
+
                 ProgressStart();
-                foreach (var item in reader.Items) Extract(item);
+                Extract(reader, CreateInnerProgress(e => ProgressReport = e));
                 OnProgress(ValueEventArgs.Create(ProgressReport));
             }
-            finally { ProgressStop(); }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extract
-        /// 
-        /// <summary>
-        /// 圧縮ファイルの一項目を展開します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Extract(ArchiveItem src)
-        {
-            var done = ProgressReport.Bytes;
-            var progress = CreateInnerProgress(e => ProgressReport.Bytes = done + e.Bytes);
-
-            Current = src.FullName;
-            Extract(src, progress);
-            ProgressReport.Count++;
+            finally
+            {
+                ProgressStop();
+                reader.Extracted -= WhenExtracted;
+            }
         }
 
         /* ----------------------------------------------------------------- */
@@ -214,7 +202,7 @@ namespace Cube.FileSystem.App.Ice
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        private void Extract(ArchiveItem src, IProgress<ArchiveReport> progress)
+        private void Extract(ArchiveReader src, IProgress<ArchiveReport> progress)
         {
             var retry = false;
             do
@@ -222,7 +210,6 @@ namespace Cube.FileSystem.App.Ice
                 try
                 {
                     src.Extract(Tmp, progress);
-                    QueryMove(src);
                     retry = false;
                 }
                 catch (EncryptionException /* err */) { retry = true; }
@@ -269,29 +256,6 @@ namespace Cube.FileSystem.App.Ice
                     Move(src, IO.Get(IO.GetUniqueName(dest)));
                     break;
             }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// QueryMove
-        /// 
-        /// <summary>
-        /// 必要に応じてファイルを移動します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void QueryMove(ArchiveItem item)
-        {
-            var src  = IO.Get(IO.Combine(Tmp, item.FullName));
-            var dest = IO.Get(IO.Combine(Destination, item.FullName));
-
-            if (dest.Exists)
-            {
-                if (item.IsDirectory) return;
-                if (!OverwriteMode.HasFlag(OverwriteMode.Always)) RaiseOverwriteRequired(src, dest);
-                Overwrite(src, dest);
-            }
-            else Move(src, dest);
         }
 
         /* ----------------------------------------------------------------- */
@@ -359,6 +323,29 @@ namespace Cube.FileSystem.App.Ice
             OnOverwriteRequired(e);
             if (e.Result == OverwriteMode.Cancel) throw new UserCancelException();
             OverwriteMode = e.Result;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenExtracted
+        /// 
+        /// <summary>
+        /// Extracted イベント発生時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenExtracted(object sender, ValueEventArgs<ArchiveItem> e)
+        {
+            var src  = IO.Get(IO.Combine(Tmp, e.Value.FullName));
+            var dest = IO.Get(IO.Combine(Destination, e.Value.FullName));
+
+            if (dest.Exists)
+            {
+                if (e.Value.IsDirectory) return;
+                if (!OverwriteMode.HasFlag(OverwriteMode.Always)) RaiseOverwriteRequired(src, dest);
+                Overwrite(src, dest);
+            }
+            else Move(src, dest);
         }
 
         #endregion

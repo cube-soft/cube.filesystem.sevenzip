@@ -159,6 +159,33 @@ namespace Cube.FileSystem.SevenZip
 
         #endregion
 
+        #region Events
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extracted
+        /// 
+        /// <summary>
+        /// 圧縮ファイルの項目が展開完了した時に発生するイベントです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public event ValueEventHandler<ArchiveItem> Extracted;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OnExtracted
+        /// 
+        /// <summary>
+        /// Extracted イベントを発生させます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected virtual void OnExtracted(ValueEventArgs<ArchiveItem> e)
+            => Extracted?.Invoke(this, e);
+
+        #endregion
+
         #region Methods
 
         /* ----------------------------------------------------------------- */
@@ -192,6 +219,7 @@ namespace Cube.FileSystem.SevenZip
             {
                 cb.Password = _password;
                 cb.Progress = progress;
+                cb.Extracted += (s, e) => OnExtracted(e);
                 _raw.Extract(null, uint.MaxValue, 0, cb);
             }
         }
@@ -207,9 +235,10 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        // ~ArchiveReader() {
-        //   Dispose(false);
-        // }
+        ~ArchiveReader()
+        {
+            Dispose(false);
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -223,7 +252,7 @@ namespace Cube.FileSystem.SevenZip
         public void Dispose()
         {
             Dispose(true);
-            // GC.SuppressFinalize(this);
+            GC.SuppressFinalize(this);
         }
 
         /* ----------------------------------------------------------------- */

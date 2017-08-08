@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using Cube.FileSystem.SevenZip.Archives;
+using Cube.Log;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -67,7 +68,9 @@ namespace Cube.FileSystem.SevenZip
             _io         = io;
             _inner      = Items.GetEnumerator();
 
+            ProgressReport.Count      = 0;
             ProgressReport.TotalCount = count;
+            ProgressReport.Bytes      = 0;
             ProgressReport.TotalBytes = bytes;
         }
 
@@ -107,6 +110,21 @@ namespace Cube.FileSystem.SevenZip
         /// 
         /* ----------------------------------------------------------------- */
         public IEnumerable<ArchiveItem> Items { get; }
+
+        #endregion
+
+        #region Events
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extracted
+        /// 
+        /// <summary>
+        /// 圧縮ファイルの項目が展開完了した時に発生するイベントです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public event ValueEventHandler<ArchiveItem> Extracted;
 
         #endregion
 
@@ -249,9 +267,16 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void SetOperationResult(OperationResult result)
         {
-            ProgressReport.Count = ProgressReport.TotalCount;
             Progress?.Report(ProgressReport);
             Result = result;
+
+            var item = _inner.Current;
+            if (item == null || !_streams.ContainsKey(item)) return;
+
+            _streams[item].Dispose();
+            _streams.Remove(item);
+
+            RaiseExtracted(item);
         }
 
         #endregion
@@ -267,9 +292,10 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        // ~ArchiveExtractCallback() {
-        //   Dispose(false);
-        // }
+        ~ArchiveExtractCallback()
+        {
+            Dispose(false);
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -283,7 +309,7 @@ namespace Cube.FileSystem.SevenZip
         public void Dispose()
         {
             Dispose(true);
-            // GC.SuppressFinalize(this);
+            GC.SuppressFinalize(this);
         }
 
         /* ----------------------------------------------------------------- */
@@ -304,9 +330,8 @@ namespace Cube.FileSystem.SevenZip
             {
                 foreach (var kv in _streams)
                 {
-                    kv.Key.Disposed -= WhenDisposed;
-                    kv.Key.Dispose();
-                    kv.Value.SetAttributes(Destination, _io);
+                    kv.Value.Dispose();
+                    RaiseExtracted(kv.Key);
                 }
                 _streams.Clear();
                 PostExtract();
@@ -332,6 +357,8 @@ namespace Cube.FileSystem.SevenZip
         {
             while (_inner.MoveNext())
             {
+                ProgressReport.Count++;
+
                 if (_inner.Current.Index != index) continue;
                 if (_inner.Current.IsDirectory)
                 {
@@ -344,8 +371,7 @@ namespace Cube.FileSystem.SevenZip
                 if (!_io.Get(dir).Exists) _io.CreateDirectory(dir);
 
                 var dest = new ArchiveStreamWriter(_io.Create(path));
-                dest.Disposed += WhenDisposed;
-                _streams.Add(dest, _inner.Current);
+                _streams.Add(_inner.Current, dest);
 
                 return dest;
             }
@@ -369,11 +395,11 @@ namespace Cube.FileSystem.SevenZip
                 case OperationResult.Unknown:
                     break;
                 case OperationResult.DataError:
-                    if (_encrypted) EncryptionError();
+                    if (_encrypted) RaiseEncryptionError();
                     else throw new System.IO.IOException(Result.ToString());
                     break;
                 case OperationResult.WrongPassword:
-                    EncryptionError();
+                    RaiseEncryptionError();
                     break;
                 case OperationResult.UserCancel:
                     throw new UserCancelException();
@@ -384,42 +410,38 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// EncryptionError
+        /// RaiseExtracted
+        ///
+        /// <summary>
+        /// Extracted イベントを発生させます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void RaiseExtracted(ArchiveItem item)
+        {
+            item.SetAttributes(Destination, _io);
+            Extracted?.Invoke(this, ValueEventArgs.Create(item));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// RaiseEncryptionError
         ///
         /// <summary>
         /// パスワードエラーに関する処理を実行します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void EncryptionError()
+        private void RaiseEncryptionError()
         {
             if (Password is PasswordQuery query) query.Reset();
             throw new EncryptionException();
         }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenDisposed
-        ///
-        /// <summary>
-        /// Dispose 時に実行されるハンドラです。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        private void WhenDisposed(object sender, EventArgs e)
-        {
-            if (sender is ArchiveStreamWriter key)
-            {
-                if (!_streams.ContainsKey(key)) return;
-                _streams[key].SetAttributes(Destination, _io);
-                _streams.Remove(key);
-            }
-        }
-
         #region Fields
         private bool _disposed = false;
         private Operator _io;
-        private IDictionary<ArchiveStreamWriter, ArchiveItem> _streams = new Dictionary<ArchiveStreamWriter, ArchiveItem>();
+        private IDictionary<ArchiveItem, ArchiveStreamWriter> _streams = new Dictionary<ArchiveItem, ArchiveStreamWriter>();
         private IEnumerator<ArchiveItem> _inner;
         private bool _encrypted = false;
         private long _hack = 0;
