@@ -276,7 +276,6 @@ namespace Cube.FileSystem.App.Ice
         {
             if (PasswordRequired != null) PasswordRequired(this, e);
             else e.Cancel = true;
-            if (e.Cancel) RaiseUserCancel();
         }
 
         #endregion
