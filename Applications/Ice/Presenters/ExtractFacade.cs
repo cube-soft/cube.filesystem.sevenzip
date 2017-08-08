@@ -103,13 +103,11 @@ namespace Cube.FileSystem.App.Ice
             var query = new Query<string, string>(x => OnPasswordRequired(x));
             using (var reader = new ArchiveReader(Source, query, IO))
             {
-                this.LogDebug($"Format:{reader.Format}\tSource:{Source}");
-
                 try
                 {
-                    SetDestination(Settings.Value.Extract, Source);
-                    SetTmp(Destination);
-                    PreExtract(reader);
+                    this.LogDebug($"Format:{reader.Format}\tSource:{Source}");
+
+                    SetDirectories(reader);
                     Extract(reader);
                     Open(IO.Combine(Destination, OpenDirectoryName), Settings.Value.Extract.OpenDirectory);
                 }
@@ -124,31 +122,6 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// PreExtract
-        /// 
-        /// <summary>
-        /// 展開処理に関連する事前処理を実行します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        private void PreExtract(ArchiveReader reader)
-        {
-            var file  = "*"; // Count all files as "*"
-            var check = new Dictionary<string, string>();
-
-            foreach (var item in reader.Items)
-            {
-                var value = GetRoot(item, file);
-                var key   = value.ToLower();
-                if (!check.ContainsKey(key)) check.Add(key, value);
-                if (check.Count > 2) break;
-            }
-
-            SetDirectories(check.Values);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// Extract
         /// 
         /// <summary>
@@ -160,9 +133,8 @@ namespace Cube.FileSystem.App.Ice
         {
             try
             {
-                reader.Extracted -= WhenExtracted;
-                reader.Extracted += WhenExtracted;
-
+                reader.Extracting += WhenExtracting;
+                reader.Extracted  += WhenExtracted;
                 ProgressStart();
                 ExtractCore(reader, CreateInnerProgress(e => ProgressReport = e));
                 ProgressResult();
@@ -170,7 +142,8 @@ namespace Cube.FileSystem.App.Ice
             finally
             {
                 ProgressStop();
-                reader.Extracted -= WhenExtracted;
+                reader.Extracting -= WhenExtracting;
+                reader.Extracted  -= WhenExtracted;
             }
         }
 
@@ -204,6 +177,59 @@ namespace Cube.FileSystem.App.Ice
                 catch (EncryptionException /* err */) { retry = true; }
             }
             while (retry);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetDirectories
+        /// 
+        /// <summary>
+        /// Destination, Tmp および OpenDirectoryName を設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void SetDirectories(ArchiveReader reader)
+        {
+            SetDestination(Settings.Value.Extract, Source);
+            SetTmp(Destination);
+
+            var src   = IO.Get(Source).NameWithoutExtension;
+            var flags = Settings.Value.Extract.RootDirectory;
+
+            if (flags.HasFlag(RootDirectoryCondition.Create))
+            {
+                if (flags.HasFlag(RootDirectoryCondition.SkipOptions))
+                {
+                    var dirs = SeekRootDirectory(reader);
+                    var one = IsSingleFileOrDirectory(flags, dirs);
+
+                    if (!one) Destination = IO.Combine(Destination, src);
+                    SetOpenDirectoryName(dirs);
+                }
+                else
+                {
+                    Destination = IO.Combine(Destination, src);
+                    SetOpenDirectoryName(null);
+                }
+            }
+            else SetOpenDirectoryName(SeekRootDirectory(reader));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetOpenDirectoryName
+        /// 
+        /// <summary>
+        /// OpenDirectoryName を設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void SetOpenDirectoryName(IEnumerable<string> directories)
+        {
+            var one = directories != null &&
+                      directories.Count() == 1 &&
+                      directories.First() != "*";
+            OpenDirectoryName = one ? directories.First() : ".";
         }
 
         /* ----------------------------------------------------------------- */
@@ -249,45 +275,44 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SetDirectories
+        /// SeekRootDirectory
         /// 
         /// <summary>
-        /// Destination の更新および OpenDirectoryName の設定を実行します。
+        /// ルートディレクトリを検索します。
         /// </summary>
-        ///
+        /// 
+        /// <remarks>
+        /// ルートディレクトリの名前が必要となるのは単一フォルダの場合
+        /// なので、複数フォルダが見つかった時点で検索を終了します。
+        /// </remarks>
+        /// 
         /* ----------------------------------------------------------------- */
-        private void SetDirectories(IEnumerable<string> parts)
+        private IEnumerable<string> SeekRootDirectory(ArchiveReader reader)
         {
-            var src = IO.Get(Source).NameWithoutExtension;
-            var one = parts.Count() == 1 && parts.First() != "*";
+            var dest = new Dictionary<string, string>();
 
-            switch (Settings.Value.Extract.RootDirectory)
+            foreach (var item in reader.Items)
             {
-                case RootDirectoryCondition.Create:
-                    Destination = IO.Combine(Destination, src);
-                    OpenDirectoryName = ".";
-                    break;
-                case RootDirectoryCondition.CreateSmart:
-                    if (!one) Destination = IO.Combine(Destination, src);
-                    OpenDirectoryName = one ? parts.First() : ".";
-                    break;
-                case RootDirectoryCondition.None:
-                default:
-                    OpenDirectoryName = one ? parts.First() : ".";
-                    break;
+                var root = GetRootDirectory(item, "*"); // Count all files as "*"
+                var key = root.ToLower();
+                if (!dest.ContainsKey(key)) dest.Add(key, root);
+
+                if (dest.Count > 2) break;
             }
+
+            return dest.Values;
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetRoot
+        /// GetRootDirectory
         /// 
         /// <summary>
-        /// パスのルートに相当する文字列を取得します。
+        /// ルートディレクトリにあたる文字列を取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetRoot(IInformation info, string alternate)
+        private string GetRootDirectory(IInformation info, string alternate)
         {
             var root = info.FullName.Split(
                 System.IO.Path.DirectorySeparatorChar,
@@ -295,6 +320,27 @@ namespace Cube.FileSystem.App.Ice
             )[0];
 
             return info.IsDirectory || root != info.Name ? root : alternate;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// IsSingleFileOrDirectory
+        /// 
+        /// <summary>
+        /// 単一ファイルまたは単一ディレクトリであるかどうかを判別します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private bool IsSingleFileOrDirectory(RootDirectoryCondition flags, IEnumerable<string> directories)
+        {
+            if (directories.Count() > 1) return false;
+
+            var file = flags.HasFlag(RootDirectoryCondition.SkipSingleFile) &&
+                       directories.First() == "*";
+            var dir  = flags.HasFlag(RootDirectoryCondition.SkipSingleDirectory) &&
+                       directories.First() != "*";
+
+            return file || dir;
         }
 
         /* ----------------------------------------------------------------- */
@@ -312,6 +358,20 @@ namespace Cube.FileSystem.App.Ice
             OnOverwriteRequired(e);
             if (e.Result == OverwriteMode.Cancel) throw new UserCancelException();
             OverwriteMode = e.Result;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenExtracting
+        /// 
+        /// <summary>
+        /// Extracting イベント発生時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenExtracting(object sender, ValueCancelEventArgs<ArchiveItem> e)
+        {
+            Current = e.Value.FullName;
         }
 
         /* ----------------------------------------------------------------- */
