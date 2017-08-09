@@ -86,6 +86,21 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// SaveLocation
+        /// 
+        /// <summary>
+        /// 保存場所を表す値を取得します。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// Request や各種 Settings オブジェクトに応じて決定されます。
+        /// </remarks>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public SaveLocation SaveLocation { get; private set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Destination
         /// 
         /// <summary>
@@ -449,14 +464,14 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         protected void SetDestination(GeneralSettings settings, string query)
         {
-            var value = Request.Location != SaveLocation.Unknown ?
-                        Request.Location :
-                        settings.SaveLocation;
+            SaveLocation = Request.Location != SaveLocation.Unknown ?
+                           Request.Location :
+                           settings.SaveLocation;
 
             this.LogDebug(string.Format("SaveLocation:({0},{1})->{2}",
-                Request.Location, settings.SaveLocation, value));
+                Request.Location, settings.SaveLocation, SaveLocation));
 
-            switch (value)
+            switch (SaveLocation)
             {
                 case SaveLocation.Desktop:
                     Destination = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
