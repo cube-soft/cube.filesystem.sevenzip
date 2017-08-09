@@ -279,7 +279,7 @@ namespace Cube.FileSystem
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public static readonly char[] InvalidChars = new[] { '*', '"', '<', '>', '|', '?', ':' };
+        public static char[] InvalidChars => System.IO.Path.GetInvalidFileNameChars();
 
         /* ----------------------------------------------------------------- */
         ///
