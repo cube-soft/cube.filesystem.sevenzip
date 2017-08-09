@@ -58,12 +58,12 @@ namespace Cube.FileSystem.Tests
 
                 for (var i = 0; i < expected.Count; ++i)
                 {
-                    Assert.That(actual[i].Index,          Is.EqualTo(i));
-                    Assert.That(actual[i].FullName,       Is.EqualTo(expected[i].FullName));
-                    Assert.That(actual[i].Extension,      Is.EqualTo(expected[i].Extension));
-                    Assert.That(actual[i].Length,         Is.EqualTo(expected[i].Length));
-                    Assert.That(actual[i].Encrypted,      Is.EqualTo(expected[i].Encrypted));
-                    Assert.That(actual[i].IsDirectory,    Is.EqualTo(expected[i].IsDirectory));
+                    Assert.That(actual[i].Index,       Is.EqualTo(i));
+                    Assert.That(actual[i].FullName,    Is.EqualTo(expected[i].FullName));
+                    Assert.That(actual[i].Extension,   Is.EqualTo(expected[i].Extension));
+                    Assert.That(actual[i].Length,      Is.EqualTo(expected[i].Length));
+                    Assert.That(actual[i].Encrypted,   Is.EqualTo(expected[i].Encrypted));
+                    Assert.That(actual[i].IsDirectory, Is.EqualTo(expected[i].IsDirectory));
                 }
             }
         }
@@ -127,6 +127,48 @@ namespace Cube.FileSystem.Tests
                     Assert.That(info.LastAccessTime, Is.Not.EqualTo(DateTime.MinValue));
                 }
             }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract_Reserved
+        ///
+        /// <summary>
+        /// 圧縮ファイルに予約文字のファイル名およびディレクトリ名が
+        /// 含まれる場合の展開テストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Extract_Reserved()
+        {
+            var src  = Example("InvalidReserved.zip");
+            var dest = Result("Extract_Reserved");
+
+            using (var archive = new SevenZip.ArchiveReader(src))
+            {
+                archive.Extract(dest);
+            }
+
+            Assert.That(IO.Get(IO.Combine(dest, @"NUL")).Exists,                Is.False);
+            Assert.That(IO.Get(IO.Combine(dest, @"_NUL")).Exists,               Is.True);
+            Assert.That(IO.Get(IO.Combine(dest, @"_NUL\_CON\_CON.txt")).Exists, Is.True);
+            Assert.That(IO.Get(IO.Combine(dest, @"_NUL\_CON\_AUX.txt")).Exists, Is.True);
+            Assert.That(IO.Get(IO.Combine(dest, @"_NUL\_CON\_PRN.txt")).Exists, Is.True);
+            Assert.That(IO.Get(IO.Combine(dest, @"_NUL\_CON\abf.txt")).Exists,  Is.True);
+            Assert.That(IO.Get(IO.Combine(dest, @"_NUL\_AUX\_CON.txt")).Exists, Is.True);
+            Assert.That(IO.Get(IO.Combine(dest, @"_NUL\_AUX\_AUX.txt")).Exists, Is.True);
+            Assert.That(IO.Get(IO.Combine(dest, @"_NUL\_AUX\_PRN.txt")).Exists, Is.True);
+            Assert.That(IO.Get(IO.Combine(dest, @"_NUL\_AUX\abf.txt")).Exists,  Is.True);
+            Assert.That(IO.Get(IO.Combine(dest, @"_NUL\abf\_CON.txt")).Exists,  Is.True);
+            Assert.That(IO.Get(IO.Combine(dest, @"_NUL\abf\_AUX.txt")).Exists,  Is.True);
+            Assert.That(IO.Get(IO.Combine(dest, @"_NUL\abf\_PRN.txt")).Exists,  Is.True);
+            Assert.That(IO.Get(IO.Combine(dest, @"_NUL\abf\abf.txt")).Exists,   Is.True);
+            Assert.That(IO.Get(IO.Combine(dest, @"_CON")).Exists,               Is.True);
+            Assert.That(IO.Get(IO.Combine(dest, @"_CON.txt")).Exists,           Is.True);
+            Assert.That(IO.Get(IO.Combine(dest, @"CON.txt")).Exists,            Is.False);
+            Assert.That(IO.Get(IO.Combine(dest, @"abf")).Exists,                Is.True);
+            Assert.That(IO.Get(IO.Combine(dest, @"abf.txt")).Exists,            Is.True);
         }
 
         /* ----------------------------------------------------------------- */

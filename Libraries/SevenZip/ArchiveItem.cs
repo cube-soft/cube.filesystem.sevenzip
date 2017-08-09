@@ -18,7 +18,6 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Cube.Log;
 using Cube.FileSystem.SevenZip.Archives;
 
@@ -98,6 +97,22 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public int Index { get; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// RawName
+        ///
+        /// <summary>
+        /// 圧縮ファイル中の相対パスのオリジナルの文字列を取得します。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// RawName の内容に対して、Windows で使用不可能な文字列に対する
+        /// エスケープ処理を実行した結果が FullName となります。
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string RawName { get; protected set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -224,17 +239,6 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// FullEscapedName
-        ///
-        /// <summary>
-        /// 正規化された圧縮ファイル中の相対パスを取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string FullEscapedName => Filter.EscapedPath;
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// Length
         ///
         /// <summary>
@@ -307,6 +311,28 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Match
+        ///
+        /// <summary>
+        /// 指定されたファイル名またはディレクトリ名のいずれか 1 つでも
+        /// パス中のどこかに存在するかどうかを判別します。
+        /// </summary>
+        /// 
+        /// <param name="names">
+        /// 判別するファイル名またはディレクトリ名一覧
+        /// </param>
+        /// 
+        /// <returns>存在するかどうかを示す値</returns>
+        /// 
+        /// <remarks>
+        /// 大文字・小文字の違いは無視されます。
+        /// </remarks>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public bool Match(IEnumerable<string> names) => Filter.MatchAny(names);
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Extract
         ///
         /// <summary>
@@ -370,7 +396,7 @@ namespace Cube.FileSystem.SevenZip
             _raw = raw;
 
             Exists         = true;
-            FullName       = GetPath();
+            RawName        = GetPath();
             Encrypted      = Get<bool>(ItemPropId.Encrypted);
             IsDirectory    = Get<bool>(ItemPropId.IsDirectory);
             Attributes     = GetAttributes();
@@ -378,18 +404,23 @@ namespace Cube.FileSystem.SevenZip
             CreationTime   = Get<DateTime>(ItemPropId.CreationTime);
             LastWriteTime  = Get<DateTime>(ItemPropId.LastWriteTime);
             LastAccessTime = Get<DateTime>(ItemPropId.LastAccessTime);
-            Filter         = new PathFilter(FullName)
+            Filter         = new PathFilter(RawName)
             {
-                AllowDoubleDot   = false,
-                AllowDriveLetter = false,
-                AllowSingleDot   = false,
+                AllowDoubleDot    = false,
+                AllowDriveLetter  = false,
+                AllowSingleDot    = false,
+                AllowInactivation = false,
+                AllowUnc          = false,
             };
 
             var info = IO.Get(Filter.EscapedPath);
+            FullName             = Filter.EscapedPath;
             Name                 = info.Name;
             NameWithoutExtension = info.NameWithoutExtension;
             Extension            = info.Extension;
             DirectoryName        = info.DirectoryName;
+
+            if (FullName != RawName) this.LogDebug($"Escape:{FullName}\tRaw:{RawName}");
         }
 
         #endregion
