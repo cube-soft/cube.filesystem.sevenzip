@@ -32,6 +32,8 @@ namespace Cube.FileSystem.Tests
     [TestFixture]
     class PathFilterTest
     {
+        #region Tests
+
         /* ----------------------------------------------------------------- */
         ///
         /// Escape
@@ -134,5 +136,59 @@ namespace Cube.FileSystem.Tests
         [TestCase(@"\\domain\dir\allow.txt", true, ExpectedResult = @"\\domain\dir\allow.txt")]
         public string Escape_Unc(string src, bool unc)
             => new PathFilter(src) { AllowUnc = unc }.EscapedPath;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Match
+        ///
+        /// <summary>
+        /// Match メソッドのテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [TestCase(@"C:\windows\dir\file.txt", "file.txt", ExpectedResult = true)]
+        [TestCase(@"C:\windows\dir\FILE.txt", "file.txt", ExpectedResult = true)]
+        [TestCase(@"C:\windows\dir\file.txt", "file",     ExpectedResult = false)]
+        public bool Match(string src, string cmp)
+            => new PathFilter(src).Match(cmp);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// MatchAny
+        ///
+        /// <summary>
+        /// MatchAny メソッドのテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [TestCase(@"C:\windows\dir\Thumbs.db",       ExpectedResult = true)]
+        [TestCase(@"C:\windows\__MACOSX\file.txt",   ExpectedResult = true)]
+        [TestCase(@"C:\windows\__MACOSX__\file.txt", ExpectedResult = false)]
+        [TestCase(@"",                               ExpectedResult = false)]
+        [TestCase(null,                              ExpectedResult = false)]
+        public bool MatchAny(string src)
+            => new PathFilter(src).MatchAny(new[]
+            {
+                ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini"
+            });
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Match_IgnoreCase
+        ///
+        /// <summary>
+        /// 大文字・小文字の区別の有無の違いによる結果を確認します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [TestCase(@"C:\windows\.ds_store\file.txt", true,  ExpectedResult = true)]
+        [TestCase(@"C:\windows\.ds_store\file.txt", false, ExpectedResult = false)]
+        public bool MatchAny_IgnoreCase(string src, bool ignore)
+            => new PathFilter(src).MatchAny(new[]
+            {
+                ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini"
+            }, ignore);
+
+        #endregion
     }
 }

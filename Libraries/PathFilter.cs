@@ -343,6 +343,94 @@ namespace Cube.FileSystem
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Match
+        ///
+        /// <summary>
+        /// 指定されたファイル名またはディレクトリ名がパス中のどこかに
+        /// 存在するかどうかを判別します。
+        /// </summary>
+        /// 
+        /// <param name="name">
+        /// 判別するファイル名またはディレクトリ名
+        /// </param>
+        /// 
+        /// <returns>存在するかどうかを示す値</returns>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public bool Match(string name) => Match(name, true);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Match
+        ///
+        /// <summary>
+        /// 指定されたファイル名またはディレクトリ名がパス中のどこかに
+        /// 存在するかどうかを判別します。
+        /// </summary>
+        /// 
+        /// <param name="name">
+        /// 判別するファイル名またはディレクトリ名
+        /// </param>
+        /// 
+        /// <param name="ignoreCase">
+        /// 大文字・小文字を区別するかどうかを示す値
+        /// </param>
+        /// 
+        /// <returns>存在するかどうかを示す値</returns>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public bool Match(string name, bool ignoreCase)
+            => EspacedPaths.Any(s => string.Compare(s, name, ignoreCase) == 0);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// MatchAny
+        ///
+        /// <summary>
+        /// 指定されたファイル名またはディレクトリ名のいずれか 1 つでも
+        /// パス中のどこかに存在するかどうかを判別します。
+        /// </summary>
+        /// 
+        /// <param name="names">
+        /// 判別するファイル名またはディレクトリ名一覧
+        /// </param>
+        /// 
+        /// <returns>存在するかどうかを示す値</returns>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public bool MatchAny(IEnumerable<string> names) => MatchAny(names, true);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// MatchAny
+        ///
+        /// <summary>
+        /// 指定されたファイル名またはディレクトリ名のいずれか 1 つでも
+        /// パス中のどこかに存在するかどうかを判別します。
+        /// </summary>
+        /// 
+        /// <param name="names">
+        /// 判別するファイル名またはディレクトリ名一覧
+        /// </param>
+        /// 
+        /// <param name="ignoreCase">
+        /// 大文字・小文字を区別するかどうかを示す値
+        /// </param>
+        /// 
+        /// <returns>存在するかどうかを示す値</returns>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public bool MatchAny(IEnumerable<string> names, bool ignoreCase)
+        {
+            foreach (var name in names)
+            {
+                if (Match(name, ignoreCase)) return true;
+            }
+            return false;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Reset
         ///
         /// <summary>
@@ -441,7 +529,8 @@ namespace Cube.FileSystem
         {
             var index = src.IndexOf('.');
             var name  = index < 0 ? src : src.Substring(0, index);
-            return ReservedNames.Contains(name.ToUpper());
+            var cmp   = new GenericEqualityComparer<string>((x, y) => string.Compare(x, y, true) == 0);
+            return ReservedNames.Contains(name, cmp);
         }
 
         /* ----------------------------------------------------------------- */
