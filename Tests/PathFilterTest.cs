@@ -60,10 +60,10 @@ namespace Cube.FileSystem.Tests
         public string Escape(string src, char escape)
             => new PathFilter(src)
             {
-                AllowDriveLetter = true,
-                AllowDoubleDot   = false,
-                AllowSingleDot   = false,
-                EscapeChar       = escape,
+                AllowDriveLetter      = true,
+                AllowParentDirectory  = false,
+                AllowCurrentDirectory = false,
+                EscapeChar            = escape,
             }.EscapedPath;
 
         /* ----------------------------------------------------------------- */
@@ -82,7 +82,7 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Escape_SingleDot
+        /// Escape_CurrentDirectory
         ///
         /// <summary>
         /// "." の許可設定に応じた結果を確認します。
@@ -91,22 +91,22 @@ namespace Cube.FileSystem.Tests
         /* ----------------------------------------------------------------- */
         [TestCase(@"C:\windows\dir\.\allow.txt", true, ExpectedResult = @"C:\windows\dir\.\allow.txt")]
         [TestCase(@"C:\windows\dir\.\deny.txt", false, ExpectedResult = @"C:\windows\dir\deny.txt")]
-        public string Escape_SingleDot(string src, bool dot)
-            => new PathFilter(src) { AllowSingleDot = dot }.EscapedPath;
+        public string Escape_CurrentDirectory(string src, bool allow)
+            => new PathFilter(src) { AllowCurrentDirectory = allow }.EscapedPath;
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Escape_SingleDot
+        /// Escape_ParentDirectory
         ///
         /// <summary>
-        /// "." の許可設定に応じた結果を確認します。
+        /// ".." の許可設定に応じた結果を確認します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
         [TestCase(@"C:\windows\dir\..\allow.txt", true, ExpectedResult = @"C:\windows\dir\..\allow.txt")]
         [TestCase(@"C:\windows\dir\..\deny.txt", false, ExpectedResult = @"C:\windows\dir\deny.txt")]
-        public string Escape_DoubleDot(string src, bool dot)
-            => new PathFilter(src) { AllowDoubleDot = dot }.EscapedPath;
+        public string Escape_ParentDirectory(string src, bool allow)
+            => new PathFilter(src) { AllowParentDirectory = allow }.EscapedPath;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -120,8 +120,8 @@ namespace Cube.FileSystem.Tests
         [TestCase(@"\\?\C:\windows\dir\deny.txt",  false, ExpectedResult = @"C:\windows\dir\deny.txt")]
         [TestCase(@"\\?\C:\windows\dir\allow.txt",  true, ExpectedResult = @"\\?\C:\windows\dir\allow.txt")]
         [TestCase(@"\\?\C:\windows\.\..\allow.txt", true, ExpectedResult = @"\\?\C:\windows\allow.txt")]
-        public string Escape_Inactivation(string src, bool inactivation)
-            => new PathFilter(src) { AllowInactivation = inactivation }.EscapedPath;
+        public string Escape_Inactivation(string src, bool allow)
+            => new PathFilter(src) { AllowInactivation = allow }.EscapedPath;
 
         /* ----------------------------------------------------------------- */
         ///

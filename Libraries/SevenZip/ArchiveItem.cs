@@ -406,11 +406,11 @@ namespace Cube.FileSystem.SevenZip
             LastAccessTime = Get<DateTime>(ItemPropId.LastAccessTime);
             Filter         = new PathFilter(RawName)
             {
-                AllowDoubleDot    = false,
-                AllowDriveLetter  = false,
-                AllowSingleDot    = false,
-                AllowInactivation = false,
-                AllowUnc          = false,
+                AllowParentDirectory  = false,
+                AllowDriveLetter      = false,
+                AllowCurrentDirectory = false,
+                AllowInactivation     = false,
+                AllowUnc              = false,
             };
 
             var info = IO.Get(Filter.EscapedPath);

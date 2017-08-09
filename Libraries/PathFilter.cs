@@ -100,8 +100,8 @@ namespace Cube.FileSystem
                 if (string.IsNullOrEmpty(_cache))
                 {
                     var path = _io.Combine(EspacedPaths.ToArray());
-                    var head = Kind == PathKind.Inactivation && AllowInactivation ? @"\\?\" :
-                               Kind == PathKind.Unc && AllowUnc ? @"\\" :
+                    var head = Kind == PathKind.Inactivation && AllowInactivation ? InactivationStr :
+                               Kind == PathKind.Unc && AllowUnc ? UncStr :
                                string.Empty;
                     _cache = !string.IsNullOrEmpty(head) ? $"{head}{path}" : path;
                 }
@@ -156,7 +156,7 @@ namespace Cube.FileSystem
 
         /* ----------------------------------------------------------------- */
         ///
-        /// AllowSingleDot
+        /// AllowCurrentDirectory
         ///
         /// <summary>
         /// カレントディレクトリを表す "." (single-dot) を許可するか
@@ -164,20 +164,20 @@ namespace Cube.FileSystem
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public bool AllowSingleDot
+        public bool AllowCurrentDirectory
         {
-            get { return _allowSingleDot; }
+            get { return _allowCurrentDirectory; }
             set
             {
-                if (_allowSingleDot == value) return;
-                _allowSingleDot = value;
+                if (_allowCurrentDirectory == value) return;
+                _allowCurrentDirectory = value;
                 Reset();
             }
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// AllowDoubleDot
+        /// AllowParentDirectory
         ///
         /// <summary>
         /// 一階層上のディレクトリを表す ".." (double-dot) を許可するか
@@ -190,13 +190,13 @@ namespace Cube.FileSystem
         /// </remarks>
         /// 
         /* ----------------------------------------------------------------- */
-        public bool AllowDoubleDot
+        public bool AllowParentDirectory
         {
-            get { return _allowDoubleDot; }
+            get { return _allowParentDirectory; }
             set
             {
-                if (_allowDoubleDot == value) return;
-                _allowDoubleDot = value;
+                if (_allowParentDirectory == value) return;
+                _allowParentDirectory = value;
                 Reset();
             }
         }
@@ -226,9 +226,9 @@ namespace Cube.FileSystem
                 _allowInactivation = value;
                 if (value)
                 {
-                    AllowSingleDot = false;
-                    AllowDoubleDot = false;
-                    AllowUnc       = false;
+                    AllowCurrentDirectory = false;
+                    AllowParentDirectory  = false;
+                    AllowUnc              = false;
                 }
                 Reset();
             }
@@ -254,48 +254,6 @@ namespace Cube.FileSystem
                 Reset();
             }
         }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Separator
-        ///
-        /// <summary>
-        /// パスの区切り文字を表す文字を取得します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public static readonly char[] Separator = new[]
-        {
-            System.IO.Path.DirectorySeparatorChar,
-            System.IO.Path.AltDirectorySeparatorChar,
-        };
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// InvalidChars
-        ///
-        /// <summary>
-        /// パスに使用不可能な記号一覧を取得します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public static char[] InvalidChars => System.IO.Path.GetInvalidFileNameChars();
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ReservedNames
-        ///
-        /// <summary>
-        /// Windows で予約済みの名前一覧を取得します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public static readonly string[] ReservedNames = new[]
-        {
-            "CON",  "PRN",  "AUX",  "NUL",
-            "COM0", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9",
-            "LPT0", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9",
-        };
 
         /* ----------------------------------------------------------------- */
         ///
@@ -336,6 +294,96 @@ namespace Cube.FileSystem
                 return _kind;
             }
         }
+
+        #endregion
+
+        #region Constants
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SeparatorChars
+        ///
+        /// <summary>
+        /// パスの区切り文字を表す文字を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public static readonly char[] SeparatorChars = new[]
+        {
+            System.IO.Path.DirectorySeparatorChar,
+            System.IO.Path.AltDirectorySeparatorChar,
+        };
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CurrentDirectoryStr
+        ///
+        /// <summary>
+        /// カレントディレクトリを表す文字列を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public static readonly string CurrentDirectoryStr = ".";
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ParentDirectoryStr
+        ///
+        /// <summary>
+        /// 親ディレクトリを表す文字列を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public static readonly string ParentDirectoryStr = "..";
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// UncStr
+        ///
+        /// <summary>
+        /// UNC パスを表す接頭辞を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public static readonly string UncStr = @"\\";
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// InactivationStr
+        ///
+        /// <summary>
+        /// サービス機能の不活性化を表す接頭辞を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public static readonly string InactivationStr = @"\\?\";
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// InvalidChars
+        ///
+        /// <summary>
+        /// パスに使用不可能な記号一覧を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public static char[] InvalidChars => System.IO.Path.GetInvalidFileNameChars();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ReservedNames
+        ///
+        /// <summary>
+        /// Windows で予約済みの名前一覧を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public static readonly string[] ReservedNames = new[]
+        {
+            "CON",  "PRN",  "AUX",  "NUL",
+            "COM0", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9",
+            "LPT0", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9",
+        };
 
         #endregion
 
@@ -462,11 +510,11 @@ namespace Cube.FileSystem
         {
             if (string.IsNullOrEmpty(RawPath)) return new string[0];
 
-            _kind = RawPath.StartsWith(@"\\?\") ? PathKind.Inactivation :
-                    RawPath.StartsWith(@"\\")   ? PathKind.Unc :
+            _kind = RawPath.StartsWith(InactivationStr) ? PathKind.Inactivation :
+                    RawPath.StartsWith(UncStr) ? PathKind.Unc :
                     PathKind.Normal;
 
-            return RawPath.Split(Separator)
+            return RawPath.Split(SeparatorChars)
                           .SkipWhile(s => string.IsNullOrEmpty(s))
                           .Where((s, i) => !IsRemove(s, i))
                           .Select((s, i) => Escape(s, i));
@@ -485,8 +533,8 @@ namespace Cube.FileSystem
         {
             if (string.IsNullOrEmpty(name)) return true;
             if (index == 0 && name == "?") return true;
-            if (name == "."  && !AllowSingleDot) return true;
-            if (name == ".." && !AllowDoubleDot) return true;
+            if (name == CurrentDirectoryStr && !AllowCurrentDirectory) return true;
+            if (name == ParentDirectoryStr && !AllowParentDirectory) return true;
             return false;
         }
 
@@ -512,7 +560,8 @@ namespace Cube.FileSystem
             }
 
             var s = sb.ToString();
-            var dest = (s == "." || s == "..") ? s : s.TrimEnd(new[] { ' ', '.' });
+            var f = (s == CurrentDirectoryStr || s == ParentDirectoryStr);
+            var dest = f ? s : s.TrimEnd(new[] { ' ', '.' });
             return IsReserved(dest) ? $"_{dest}" : dest;
         }
 
@@ -553,8 +602,8 @@ namespace Cube.FileSystem
         private Operator _io;
         private char _escapeChar = '_';
         private bool _allowDriveLetter = true;
-        private bool _allowSingleDot = true;
-        private bool _allowDoubleDot = true;
+        private bool _allowCurrentDirectory = true;
+        private bool _allowParentDirectory = true;
         private bool _allowInactivation = false;
         private bool _allowUnc = true;
         private IEnumerable<string> _escaped;
