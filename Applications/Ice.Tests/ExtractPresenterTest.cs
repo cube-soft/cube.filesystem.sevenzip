@@ -181,6 +181,18 @@ namespace Cube.FileSystem.App.Ice.Tests
                     }
                 ).Returns(9L);
 
+                yield return new TestCaseData("SampleMac.zip", "",
+                    PresetMenu.Extract.ToArguments(),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = CreateDirectoryMethod.CreateSmart,
+                        OpenDirectory = OpenDirectoryMethod.None,
+                        Filtering     = true,
+                        DeleteSource  = false,
+                    }
+                ).Returns(19L);
+
                 yield return new TestCaseData("Password.7z", "password",
                     PresetMenu.Extract.ToArguments(),
                     new ExtractSettings

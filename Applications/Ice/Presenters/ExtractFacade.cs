@@ -291,9 +291,13 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private IEnumerable<string> SeekRootDirectory(ArchiveReader reader)
         {
-            var dest = new Dictionary<string, string>();
+            var dest    = new Dictionary<string, string>();
+            var filters = Settings.Value.GetFilters();
+            var items   = Settings.Value.Extract.Filtering ?
+                          reader.Items.Where(x => !new PathFilter(x.FullName).MatchAny(filters)) :
+                          reader.Items;
 
-            foreach (var item in reader.Items)
+            foreach (var item in items)
             {
                 var root = GetRootDirectory(item, "*"); // Count all files as "*"
                 var key = root.ToLower();
