@@ -469,6 +469,231 @@ namespace Cube.FileSystem.Tests
                         IsDirectory   = false,
                     }
                 });
+
+                yield return new TestCaseData("SampleComma.zip", "", new List<ExpectedItem>
+                {
+                    new ExpectedItem
+                    {
+                        FullName      = @"カンマ",
+                        Extension     = string.Empty,
+                        Length        = 0,
+                        Encrypted     = false,
+                        IsDirectory   = true,
+                    },
+
+                    new ExpectedItem
+                    {
+                        FullName      = @"カンマ\hello, world.txt",
+                        Extension     = ".txt",
+                        Length        = 4,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+
+                    new ExpectedItem
+                    {
+                        FullName      = @"カンマ\test,テスト,ﾃｽﾄ.txt",
+                        Extension     = ".txt",
+                        Length        = 4,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+                });
+
+                yield return new TestCaseData("SampleMac.zip", "", new List<ExpectedItem>
+                {
+                    new ExpectedItem
+                    {
+                        FullName      = @"名称未設定フォルダ",
+                        Extension     = string.Empty,
+                        Length        = 0,
+                        Encrypted     = false,
+                        IsDirectory   = true,
+                    },
+
+                    new ExpectedItem
+                    {
+                        FullName      = @"名称未設定フォルダ\がぎぐげご.txt",
+                        Extension     = ".txt",
+                        Length        = 6,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+
+                    new ExpectedItem
+                    {
+                        FullName      = @"__MACOSX",
+                        Extension     = string.Empty,
+                        Length        = 0,
+                        Encrypted     = false,
+                        IsDirectory   = true,
+                    },
+
+                    new ExpectedItem
+                    {
+                        FullName      = @"__MACOSX\名称未設定フォルダ",
+                        Extension     = string.Empty,
+                        Length        = 0,
+                        Encrypted     = false,
+                        IsDirectory   = true,
+                    },
+
+                    new ExpectedItem
+                    {
+                        FullName      = @"__MACOSX\名称未設定フォルダ\._がぎぐげご.txt",
+                        Extension     = ".txt",
+                        Length        = 171,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+
+                    new ExpectedItem
+                    {
+                        FullName      = @"名称未設定フォルダ\ぱぴぷぺぽ.txt",
+                        Extension     = ".txt",
+                        Length        = 6,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+
+                    new ExpectedItem
+                    {
+                        FullName      = @"__MACOSX\名称未設定フォルダ\._ぱぴぷぺぽ.txt",
+                        Extension     = ".txt",
+                        Length        = 171,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+
+                    new ExpectedItem
+                    {
+                        FullName      = @"名称未設定フォルダ\ガギグゲゴ.txt",
+                        Extension     = ".txt",
+                        Length        = 6,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+
+                    new ExpectedItem
+                    {
+                        FullName      = @"__MACOSX\名称未設定フォルダ\._ガギグゲゴ.txt",
+                        Extension     = ".txt",
+                        Length        = 171,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+
+                    new ExpectedItem
+                    {
+                        FullName      = @"名称未設定フォルダ\カタログ.txt",
+                        Extension     = ".txt",
+                        Length        = 6,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+
+                    new ExpectedItem
+                    {
+                        FullName      = @"__MACOSX\名称未設定フォルダ\._カタログ.txt",
+                        Extension     = ".txt",
+                        Length        = 171,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+
+                    new ExpectedItem
+                    {
+                        FullName      = @"名称未設定フォルダ\パピプペポ.txt",
+                        Extension     = ".txt",
+                        Length        = 6,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+
+                    new ExpectedItem
+                    {
+                        FullName      = @"__MACOSX\名称未設定フォルダ\._パピプペポ.txt",
+                        Extension     = ".txt",
+                        Length        = 171,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+
+                    new ExpectedItem
+                    {
+                        FullName      = @"名称未設定フォルダ\ｶﾀﾛｸﾞ.txt",
+                        Extension     = ".txt",
+                        Length        = 6,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+
+                    new ExpectedItem
+                    {
+                        FullName      = @"__MACOSX\名称未設定フォルダ\._ｶﾀﾛｸﾞ.txt",
+                        Extension     = ".txt",
+                        Length        = 171,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+
+                    new ExpectedItem
+                    {
+                        FullName      = @"名称未設定フォルダ\ｶﾞｷﾞｸﾞｹﾞｺﾞ.txt",
+                        Extension     = ".txt",
+                        Length        = 6,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+
+                    new ExpectedItem
+                    {
+                        FullName      = @"__MACOSX\名称未設定フォルダ\._ｶﾞｷﾞｸﾞｹﾞｺﾞ.txt",
+                        Extension     = ".txt",
+                        Length        = 171,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+
+                    new ExpectedItem
+                    {
+                        FullName      = @"名称未設定フォルダ\ﾊﾟﾋﾟﾌﾟﾍﾟﾎﾟ.txt",
+                        Extension     = ".txt",
+                        Length        = 6,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+
+                    new ExpectedItem
+                    {
+                        FullName      = @"__MACOSX\名称未設定フォルダ\._ﾊﾟﾋﾟﾌﾟﾍﾟﾎﾟ.txt",
+                        Extension     = ".txt",
+                        Length        = 171,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+               });
+
+                yield return new TestCaseData("InvalidSymbol.zip", "", new List<ExpectedItem>
+                {
+                    new ExpectedItem
+                    {
+                        FullName      = @"test\_foo_bar_buzz_.txt",
+                        Extension     = ".txt",
+                        Length        = 5,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+
+                    new ExpectedItem
+                    {
+                        FullName      = @"test\test(2012_05_07).txt",
+                        Extension     = ".txt",
+                        Length        = 5,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+                });
             }
         }
 
