@@ -95,6 +95,22 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Get_Throws
+        ///
+        /// <summary>
+        /// ファイル情報の取得に失敗するテストを実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [TestCaseSource(nameof(Operator_TestCases))]
+        public void Get_Throws(IOperatorCore core)
+        {
+            var io = new Operator(core);
+            Assert.That(() => io.Get(string.Empty), Throws.TypeOf<ArgumentException>());
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// OpenWrite
         ///
         /// <summary>
@@ -134,23 +150,29 @@ namespace Cube.FileSystem.Tests
             io.Failed += (s, e) => Assert.Fail($"{e.Name}: {e.Exception}");
 
             var info = io.Get("Sample.txt");
-            var src  = io.Combine(Results, info.Name);
-            var dest = io.Combine(Results, $"{info.NameWithoutExtension}-Move{info.Extension}");
+            var src  = io.Get(io.Combine(Results, info.Name));
+            var dest = io.Get(io.Combine(Results, $"{info.NameWithoutExtension}-Move{info.Extension}"));
 
-            io.Copy(io.Combine(Examples, info.Name), src, false);
-            Assert.That(io.Get(src).Exists, Is.True);
+            io.Copy(io.Combine(Examples, info.Name), src.FullName, false);
+            src.Refresh();
+            Assert.That(src.Exists, Is.True);
 
-            io.Copy(src, dest, false);
-            io.Move(src, dest, true);
-            Assert.That(io.Get(src).Exists,  Is.False);
-            Assert.That(io.Get(dest).Exists, Is.True);
+            io.Copy(src.FullName, dest.FullName, false);
+            io.Move(src.FullName, dest.FullName, true);
+            src.Refresh();
+            dest.Refresh();
+            Assert.That(src.Exists,  Is.False);
+            Assert.That(dest.Exists, Is.True);
 
-            io.Move(dest, src);
-            Assert.That(io.Get(src).Exists,  Is.True);
-            Assert.That(io.Get(dest).Exists, Is.False);
+            io.Move(dest.FullName, src.FullName);
+            src.Refresh();
+            dest.Refresh();
+            Assert.That(src.Exists,  Is.True);
+            Assert.That(dest.Exists, Is.False);
 
-            io.Delete(src);
-            Assert.That(io.Get(src).Exists,  Is.False);
+            io.Delete(src.FullName);
+            src.Refresh();
+            Assert.That(src.Exists,  Is.False);
         }
 
         /* ----------------------------------------------------------------- */
@@ -171,6 +193,9 @@ namespace Cube.FileSystem.Tests
             {
                 failed   = true;
                 e.Cancel = true;
+
+                Assert.That(e.Name,          Is.EqualTo("Move"));
+                Assert.That(e.Paths.Count(), Is.EqualTo(2));
             };
 
             var src  = io.Combine(Results, "FileNotFound.txt");
