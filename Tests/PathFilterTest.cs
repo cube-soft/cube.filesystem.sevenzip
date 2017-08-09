@@ -34,15 +34,11 @@ namespace Cube.FileSystem.Tests
     {
         /* ----------------------------------------------------------------- */
         ///
-        /// EspacedPaths
+        /// Escape
         ///
         /// <summary>
-        /// エスケープ処理適用後のパスを取得します。
+        /// エスケープ処理のテストを実行します。
         /// </summary>
-        /// 
-        /// <remarks>
-        /// "\" または "/" で分割した結果となります。
-        /// </remarks>
         /// 
         /* ----------------------------------------------------------------- */
         [TestCase(@"C:\windows\dir\file.txt",       '_', ExpectedResult = @"C:\windows\dir\file.txt")]
