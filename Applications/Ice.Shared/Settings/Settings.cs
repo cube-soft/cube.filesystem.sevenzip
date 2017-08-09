@@ -184,7 +184,7 @@ namespace Cube.FileSystem.Ice
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [DataMember(Name = "Association")]
+        [DataMember]
         public AssociateSettings Associate
         {
             get { return _associate; }
