@@ -131,6 +131,36 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Extract_Filter
+        ///
+        /// <summary>
+        /// フィルタリング設定を行った時の挙動を確認します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Extract_Filter()
+        {
+            var src  = Example("SampleFilter.zip");
+            var dest = Result("Extract_Filter");
+
+            using (var archive = new SevenZip.ArchiveReader(src))
+            {
+                archive.Filters = new[] { ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini" };
+                archive.Extract(dest);
+            }
+
+            Assert.That(IO.Get(IO.Combine(dest, @"フィルタリング テスト用")).Exists,              Is.True);
+            Assert.That(IO.Get(IO.Combine(dest, @"フィルタリング テスト用\.DS_Store")).Exists,    Is.False);
+            Assert.That(IO.Get(IO.Combine(dest, @"フィルタリング テスト用\desktop.ini")).Exists,  Is.False);
+            Assert.That(IO.Get(IO.Combine(dest, @"フィルタリング テスト用\DS_Store.txt")).Exists, Is.True);
+            Assert.That(IO.Get(IO.Combine(dest, @"フィルタリング テスト用\Thumbs.db")).Exists,    Is.False);
+            Assert.That(IO.Get(IO.Combine(dest, @"フィルタリング テスト用\__MACOSX")).Exists,     Is.False);
+            Assert.That(IO.Get(IO.Combine(dest, @"フィルタリング テスト用\フィルタリングされないファイル.txt")).Exists, Is.True);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Extract_Reserved
         ///
         /// <summary>

@@ -18,6 +18,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -92,6 +93,18 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public ArchiveOption Option { get; set; }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Filters
+        ///
+        /// <summary>
+        /// 圧縮ファイルに含めないファイル名またはディレクトリ名一覧を
+        /// 取得または設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public IEnumerable<string> Filters { get; set; }
+
         #endregion
 
         #region Methods
@@ -120,7 +133,7 @@ namespace Cube.FileSystem.SevenZip
         public void Add(string path, string pathInArchive)
         {
             var info = _io.Get(path);
-            if (info.Exists) Add(info, pathInArchive);
+            if (info.Exists) AddItem(info, pathInArchive);
             else throw new System.IO.FileNotFoundException(info.FullName);
         }
 
@@ -153,9 +166,9 @@ namespace Cube.FileSystem.SevenZip
         {
             var query = new PasswordQuery(password);
 
-            if (Format == Format.Sfx) SaveCoreSfx(path, query, null, _items);
-            else if (Format == Format.Tar) SaveCoreTar(path, query, null, _items);
-            else SaveCore(Format, path, query, null, _items);
+            if (Format == Format.Sfx) SaveCoreSfx(path, query, null, GetItems());
+            else if (Format == Format.Tar) SaveCoreTar(path, query, null, GetItems());
+            else SaveCore(Format, path, query, null, GetItems());
         }
 
         /* ----------------------------------------------------------------- */
@@ -175,9 +188,9 @@ namespace Cube.FileSystem.SevenZip
         {
             var query = new PasswordQuery(password);
 
-            if (Format == Format.Sfx) SaveCoreSfx(path, query, progress, _items);
-            else if (Format == Format.Tar) SaveCoreTar(path, query, progress, _items);
-            else SaveCore(Format, path, query, progress, _items);
+            if (Format == Format.Sfx) SaveCoreSfx(path, query, progress, GetItems());
+            else if (Format == Format.Tar) SaveCoreTar(path, query, progress, GetItems());
+            else SaveCore(Format, path, query, progress, GetItems());
         }
 
         #region IDisposable
@@ -347,14 +360,14 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Add
+        /// AddItem
         ///
         /// <summary>
         /// ファイルまたはディレクトリを圧縮ファイルに追加します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private void Add(IInformation info, string name)
+        private void AddItem(IInformation info, string name)
         {
             var path = info.FullName;
             _items.Add(new FileItem(path, name));
@@ -369,9 +382,23 @@ namespace Cube.FileSystem.SevenZip
             foreach (var dir in _io.GetDirectories(path))
             {
                 var child = _io.Get(dir);
-                Add(child, _io.Combine(name, child.Name));
+                AddItem(child, _io.Combine(name, child.Name));
             }
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetItems
+        ///
+        /// <summary>
+        /// 圧縮項目一覧を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private IList<FileItem> GetItems()
+            => Filters == null ?
+               _items :
+               _items.Where(x => !new PathFilter(x.FullName).MatchAny(Filters)).ToList();
 
         /* ----------------------------------------------------------------- */
         ///

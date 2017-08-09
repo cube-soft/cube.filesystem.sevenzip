@@ -68,6 +68,34 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Archive_Filter
+        ///
+        /// <summary>
+        /// フィルタ設定の結果を確認します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [TestCase(true,  ExpectedResult = 4)]
+        [TestCase(false, ExpectedResult = 9)]
+        public int Archive_Filter(bool filter)
+        {
+            var names = new[] { ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini" };
+            var s     = filter ? "True" : "False";
+            var dest  = Result($"Filter{s}.zip");
+
+            using (var writer = new ArchiveWriter(Format.Zip))
+            {
+                if (filter) writer.Filters = names;
+                writer.Add(Example("Sample.txt"));
+                writer.Add(Example("Archive"));
+                writer.Save(dest);
+            }
+
+            using (var reader = new ArchiveReader(dest)) return reader.Items.Count;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Archive_Japanese
         ///
         /// <summary>

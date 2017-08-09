@@ -157,6 +157,18 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public IReadOnlyCollection<ArchiveItem> Items => _items;
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Filters
+        ///
+        /// <summary>
+        /// 展開をスキップするファイル名またはディレクトリ名一覧を
+        /// 取得または設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public IEnumerable<string> Filters { get; set; }
+
         #endregion
 
         #region Events
@@ -251,6 +263,7 @@ namespace Cube.FileSystem.SevenZip
                 cb.TotalCount  = _items.Count;
                 cb.Password    = _password;
                 cb.Progress    = progress;
+                cb.Filters     = Filters;
                 cb.Extracting += (s, e) => OnExtracting(e);
                 cb.Extracted  += (s, e) => OnExtracted(e);
 

@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cube.FileSystem.SevenZip.Archives;
+using Cube.Log;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -91,7 +92,7 @@ namespace Cube.FileSystem.SevenZip
         /// Destination
         ///
         /// <summary>
-        /// 解凍先ディレクトリのパスを取得します。
+        /// 展開先ディレクトリのパスを取得します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
@@ -102,11 +103,23 @@ namespace Cube.FileSystem.SevenZip
         /// Items
         ///
         /// <summary>
-        /// 解凍する項目一覧を取得します。
+        /// 展開する項目一覧を取得します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
         public IEnumerable<ArchiveItem> Items { get; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Filters
+        ///
+        /// <summary>
+        /// 展開をスキップするファイル名またはディレクトリ名一覧を
+        /// 取得または設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public IEnumerable<string> Filters { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -413,11 +426,8 @@ namespace Cube.FileSystem.SevenZip
             while (_inner.MoveNext())
             {
                 if (_inner.Current.Index != index) continue;
-                if (_inner.Current.IsDirectory)
-                {
-                    _inner.Current.CreateDirectory(Destination, _io);
-                    return null;
-                }
+                if (Filters != null && _inner.Current.Match(Filters)) return Skip();
+                if (_inner.Current.IsDirectory) return CreateDirectory();
 
                 var path = _io.Combine(Destination, _inner.Current.FullName);
                 var dir  = _io.Get(path).DirectoryName;
@@ -428,6 +438,39 @@ namespace Cube.FileSystem.SevenZip
 
                 return dest;
             }
+            return null;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CreateDirectory
+        ///
+        /// <summary>
+        /// ディレクトリを生成します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private ArchiveStreamWriter CreateDirectory()
+        {
+            _inner.Current.CreateDirectory(Destination, _io);
+            return null;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Skip
+        ///
+        /// <summary>
+        /// 展開処理をスキップします。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private ArchiveStreamWriter Skip()
+        {
+            ProgressReport.Count++;
+            ProgressReport.Bytes += _inner.Current.Length;
+            this.LogDebug($"Skip:{_inner.Current.FullName}");
+
             return null;
         }
 
