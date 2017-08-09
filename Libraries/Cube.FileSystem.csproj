@@ -101,6 +101,7 @@
     <Compile Include="Information.cs" />
     <Compile Include="Operator.cs" />
     <Compile Include="OperatorCore.cs" />
+    <Compile Include="PathFilter.cs" />
     <Compile Include="Shortcut.cs" />
   </ItemGroup>
   <ItemGroup>

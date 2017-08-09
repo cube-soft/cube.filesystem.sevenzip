@@ -17,6 +17,8 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Cube.Log;
 using Cube.FileSystem.SevenZip.Archives;
 
@@ -130,6 +132,17 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         protected Operator IO { get; }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Filter
+        ///
+        /// <summary>
+        /// パスのフィルター処理用オブジェクトを取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected PathFilter Filter { get; set; }
+
         #region IInformation
 
         /* ----------------------------------------------------------------- */
@@ -208,6 +221,17 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public string FullName { get; protected set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// FullEscapedName
+        ///
+        /// <summary>
+        /// 正規化された圧縮ファイル中の相対パスを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string FullEscapedName => Filter.EscapedPath;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -354,8 +378,14 @@ namespace Cube.FileSystem.SevenZip
             CreationTime   = Get<DateTime>(ItemPropId.CreationTime);
             LastWriteTime  = Get<DateTime>(ItemPropId.LastWriteTime);
             LastAccessTime = Get<DateTime>(ItemPropId.LastAccessTime);
+            Filter         = new PathFilter(FullName)
+            {
+                AllowDoubleDot   = false,
+                AllowDriveLetter = false,
+                AllowSingleDot   = false,
+            };
 
-            var info = IO.Get(FullName);
+            var info = IO.Get(Filter.EscapedPath);
             Name                 = info.Name;
             NameWithoutExtension = info.NameWithoutExtension;
             Extension            = info.Extension;
