@@ -58,12 +58,15 @@ namespace Cube.FileSystem.Tests
 
                 for (var i = 0; i < expected.Count; ++i)
                 {
-                    Assert.That(actual[i].Index,       Is.EqualTo(i));
-                    Assert.That(actual[i].FullName,    Is.EqualTo(expected[i].FullName));
-                    Assert.That(actual[i].Extension,   Is.EqualTo(expected[i].Extension));
-                    Assert.That(actual[i].Length,      Is.EqualTo(expected[i].Length));
-                    Assert.That(actual[i].Encrypted,   Is.EqualTo(expected[i].Encrypted));
-                    Assert.That(actual[i].IsDirectory, Is.EqualTo(expected[i].IsDirectory));
+                    var item = actual[i];
+                    item.Refresh(); // NOP
+
+                    Assert.That(item.Index,       Is.EqualTo(i));
+                    Assert.That(item.FullName,    Is.EqualTo(expected[i].FullName));
+                    Assert.That(item.Extension,   Is.EqualTo(expected[i].Extension));
+                    Assert.That(item.Length,      Is.EqualTo(expected[i].Length));
+                    Assert.That(item.Encrypted,   Is.EqualTo(expected[i].Encrypted));
+                    Assert.That(item.IsDirectory, Is.EqualTo(expected[i].IsDirectory));
                 }
             }
         }
@@ -128,6 +131,22 @@ namespace Cube.FileSystem.Tests
                 }
             }
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract_NotSupported
+        ///
+        /// <summary>
+        /// 未対応のファイルが指定された時の挙動を確認します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Extract_NotSupported()
+            => Assert.That(
+                () => new SevenZip.ArchiveReader(Example("Sample.txt")),
+                Throws.TypeOf<NotSupportedException>()
+            );
 
         /* ----------------------------------------------------------------- */
         ///

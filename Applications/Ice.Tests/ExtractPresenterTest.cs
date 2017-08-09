@@ -62,12 +62,12 @@ namespace Cube.FileSystem.App.Ice.Tests
             {
                 ep.Settings.Value.Extract = extract;
                 ep.Settings.Value.Extract.SaveDirectoryName = Result("Others");
-                ep.View.Show();
 
+                Assert.That(ep.Model.ProgressReport.Ratio, Is.EqualTo(0.0));
+                ep.View.Show();
                 Assert.That(ep.View.Visible, Is.True);
                 for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
-
                 Assert.That(ep.Model.ProgressReport.Ratio, Is.EqualTo(1.0).Within(0.01));
 
                 Assert.That(ep.View.FileName,   Is.EqualTo(filename));
