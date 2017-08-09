@@ -18,7 +18,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Cube.FileSystem.SevenZip;
 using Cube.FileSystem.Ice;
 using NUnit.Framework;
 
@@ -61,17 +60,19 @@ namespace Cube.FileSystem.App.Ice.Tests
             using (var ap = Create(request))
             {
                 ap.Settings.Value.Archive = archive;
-                ap.Settings.Value.Archive.SaveDirectoryName = Result("Settings");
+                ap.Settings.Value.Archive.SaveDirectoryName = Result("Others");
                 ap.View.Show();
 
                 Assert.That(ap.View.Visible, Is.True);
                 for (var i = 0; ap.View.Visible && i < 50; ++i) await Task.Delay(100);
                 Assert.That(ap.View.Visible, Is.False, "Timeout");
 
+                Assert.That(ap.Model.ProgressReport.Ratio, Is.EqualTo(1.0).Within(0.01));
+
+                Assert.That(ap.View.FileName,   Is.EqualTo(filename));
                 Assert.That(ap.View.Count,      Is.EqualTo(count));
                 Assert.That(ap.View.TotalCount, Is.EqualTo(count));
                 Assert.That(ap.View.Value,      Is.EqualTo(100));
-                Assert.That(ap.View.FileName,   Is.EqualTo(filename));
             }
 
             Assert.That(IO.Get(Result(dest)).Exists, Is.True);
@@ -99,7 +100,6 @@ namespace Cube.FileSystem.App.Ice.Tests
             using (var ap = Create(new Request(args)))
             {
                 ap.Settings.Value.Archive.OpenDirectory = OpenDirectoryMethod.None;
-                ap.Settings.Value.Archive.DeleteOnMail = false;
                 ap.View.Show();
 
                 for (var i = 0; ap.View.Visible && i < 50; ++i) await Task.Delay(100);
@@ -107,6 +107,33 @@ namespace Cube.FileSystem.App.Ice.Tests
             }
 
             Assert.That(IO.Get(Result(dest)).Exists, Is.True);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Archive_OpenDirectory
+        /// 
+        /// <summary>
+        /// 圧縮後にディレクトリを開くテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public async Task Archive_OpenDirectory()
+        {
+            var args = PresetMenu.Archive.ToArguments().Concat(new[] { Example("Sample.txt") });
+
+            using (var ap = Create(new Request(args)))
+            {
+                ap.Settings.Value.Explorer = "dummy.exe";
+                ap.Settings.Value.Archive.OpenDirectory = OpenDirectoryMethod.OpenNotDesktop;
+                ap.Settings.Value.Archive.SaveLocation = SaveLocation.Others;
+                ap.Settings.Value.Archive.SaveDirectoryName = Result("OpenDirectory");
+                ap.View.Show();
+
+                for (var i = 0; ap.View.Visible && i < 50; ++i) await Task.Delay(100);
+                Assert.That(ap.View.Visible, Is.False, "Timeout");
+            }
         }
 
         #endregion
@@ -136,7 +163,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                         Filtering     = true,
                         DeleteOnMail  = false,
                     },
-                    @"Settings\Sample.zip",
+                    @"Others\Sample.zip",
                     1L
                 );
 
@@ -150,7 +177,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                         Filtering     = false,
                         DeleteOnMail  = false,
                     },
-                    @"Settings\Sample.7z",
+                    @"Others\Sample.7z",
                     9L
                 );
 
@@ -164,7 +191,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                         Filtering     = true,
                         DeleteOnMail  = false,
                     },
-                    @"Settings\Sample.tar.bz2",
+                    @"Others\Sample.tar.bz2",
                     1L
                 );
 
@@ -178,7 +205,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                         Filtering     = true,
                         DeleteOnMail  = false,
                     },
-                    @"Settings\Sample.exe",
+                    @"Others\Sample.exe",
                     4L
                 );
 

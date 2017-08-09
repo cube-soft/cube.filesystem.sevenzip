@@ -48,14 +48,13 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
-        public async Task<long> Extract(string filename, string password,
-            IEnumerable<string> args, ExtractSettings extract)
+        public async Task Extract(string filename, string password,
+            IEnumerable<string> args, ExtractSettings extract, string check, long count)
         {
             var src = Example(filename);
             var request = new Request(args.Concat(new[] { src }));
             request.DropDirectory = Result(request.DropDirectory);
 
-            // Preset
             MockViewFactory.Destination = Result("Runtime");
             MockViewFactory.Password = password;
 
@@ -69,17 +68,15 @@ namespace Cube.FileSystem.App.Ice.Tests
                 for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
 
-                Assert.That(ep.View.FileName, Is.EqualTo(filename));
-                Assert.That(ep.View.Count,    Is.EqualTo(ep.View.TotalCount));
-                Assert.That(ep.View.Value,    Is.EqualTo(100));
+                Assert.That(ep.Model.ProgressReport.Ratio, Is.EqualTo(1.0).Within(0.01));
 
-                var facade = ep.Model as ExtractFacade;
-                Assert.That(IO.Get(facade.Destination).Exists, Is.True);
-                var dir = IO.Combine(facade.Destination, facade.OpenDirectoryName);
-                Assert.That(IO.Get(dir).Exists, Is.True);
-
-                return ep.View.Count;
+                Assert.That(ep.View.FileName,   Is.EqualTo(filename));
+                Assert.That(ep.View.Count,      Is.EqualTo(count));
+                Assert.That(ep.View.TotalCount, Is.EqualTo(count));
+                Assert.That(ep.View.Value,      Is.EqualTo(100));
             }
+
+            Assert.That(IO.Get(Result(check)).Exists, Is.True);
         }
 
         /* ----------------------------------------------------------------- */
@@ -130,6 +127,32 @@ namespace Cube.FileSystem.App.Ice.Tests
             }
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract_OpenDirectory
+        /// 
+        /// <summary>
+        /// 展開後にディレクトリを開くテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public async Task Extract_OpenDirectory()
+        {
+            var src  = Example("Sample.zip");
+            var dest = Result("OpenDirectory");
+
+            using (var ep = Create(src, dest))
+            {
+                ep.Settings.Value.Explorer = "dummy.exe";
+                ep.Settings.Value.Extract.OpenDirectory = OpenDirectoryMethod.OpenNotDesktop;
+                ep.View.Show();
+
+                for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
+                Assert.That(ep.View.Visible, Is.False, "Timeout");
+            }
+        }
+
         #endregion
 
         #region TestCases
@@ -155,8 +178,10 @@ namespace Cube.FileSystem.App.Ice.Tests
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
                         OpenDirectory = OpenDirectoryMethod.None,
                         DeleteSource  = false,
-                    }
-                ).Returns(5L);
+                    },
+                    @"Others\Complex",
+                    5L
+                );
 
                 yield return new TestCaseData("Complex.zip", "",
                     PresetMenu.ExtractRuntime.ToArguments(),
@@ -166,8 +191,10 @@ namespace Cube.FileSystem.App.Ice.Tests
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
                         OpenDirectory = OpenDirectoryMethod.None,
                         DeleteSource  = false,
-                    }
-                ).Returns(5L);
+                    },
+                    @"Runtime\Complex",
+                    5L
+                );
 
                 yield return new TestCaseData("SampleFilter.zip", "",
                     PresetMenu.Extract.ToArguments(),
@@ -178,8 +205,10 @@ namespace Cube.FileSystem.App.Ice.Tests
                         OpenDirectory = OpenDirectoryMethod.None,
                         Filtering     = true,
                         DeleteSource  = false,
-                    }
-                ).Returns(9L);
+                    },
+                    @"Others\フィルタリング テスト用",
+                    9L
+                );
 
                 yield return new TestCaseData("SampleMac.zip", "",
                     PresetMenu.Extract.ToArguments(),
@@ -190,8 +219,10 @@ namespace Cube.FileSystem.App.Ice.Tests
                         OpenDirectory = OpenDirectoryMethod.None,
                         Filtering     = true,
                         DeleteSource  = false,
-                    }
-                ).Returns(19L);
+                    },
+                    @"Others\名称未設定フォルダ",
+                    19L
+                );
 
                 yield return new TestCaseData("Password.7z", "password",
                     PresetMenu.Extract.ToArguments(),
@@ -201,8 +232,10 @@ namespace Cube.FileSystem.App.Ice.Tests
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
                         OpenDirectory = OpenDirectoryMethod.None,
                         DeleteSource  = false,
-                    }
-                ).Returns(3L);
+                    },
+                    @"Others\Password",
+                    3L
+                );
 
                 yield return new TestCaseData("Single.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
@@ -215,8 +248,10 @@ namespace Cube.FileSystem.App.Ice.Tests
                         RootDirectory = CreateDirectoryMethod.None,
                         OpenDirectory = OpenDirectoryMethod.None,
                         DeleteSource  = false,
-                    }
-                ).Returns(1L);
+                    },
+                    @"RootDirectory\Single-0x00\Sample.txt",
+                    1L
+                );
 
                 yield return new TestCaseData("Single.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
@@ -229,8 +264,10 @@ namespace Cube.FileSystem.App.Ice.Tests
                         RootDirectory = CreateDirectoryMethod.Create,
                         OpenDirectory = OpenDirectoryMethod.None,
                         DeleteSource  = false,
-                    }
-                ).Returns(1L);
+                    },
+                    @"RootDirectory\Single-0x01\Single",
+                    1L
+                );
 
                 yield return new TestCaseData("Single.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
@@ -243,8 +280,10 @@ namespace Cube.FileSystem.App.Ice.Tests
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
                         OpenDirectory = OpenDirectoryMethod.None,
                         DeleteSource  = false,
-                    }
-                ).Returns(1L);
+                    },
+                    @"RootDirectory\Single-0x03\Single",
+                    1L
+                );
 
                 yield return new TestCaseData("Single.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
@@ -258,8 +297,10 @@ namespace Cube.FileSystem.App.Ice.Tests
                                         CreateDirectoryMethod.SkipSingleFile,
                         OpenDirectory = OpenDirectoryMethod.None,
                         DeleteSource  = false,
-                    }
-                ).Returns(1L);
+                    },
+                    @"RootDirectory\Single-0x05\Sample.txt",
+                    1L
+                );
 
                 yield return new TestCaseData("Single.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
@@ -274,8 +315,10 @@ namespace Cube.FileSystem.App.Ice.Tests
                                         CreateDirectoryMethod.SkipSingleDirectory,
                         OpenDirectory = OpenDirectoryMethod.None,
                         DeleteSource = false,
-                    }
-                ).Returns(1L);
+                    },
+                    @"RootDirectory\Single-0x07\Sample.txt",
+                    1L
+                );
 
                 yield return new TestCaseData("SingleDirectory.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
@@ -288,8 +331,10 @@ namespace Cube.FileSystem.App.Ice.Tests
                         RootDirectory = CreateDirectoryMethod.None,
                         OpenDirectory = OpenDirectoryMethod.None,
                         DeleteSource  = false,
-                    }
-                ).Returns(4L);
+                    },
+                    @"RootDirectory\SingleDirectory-0x00\Sample",
+                    4L
+                );
 
                 yield return new TestCaseData("SingleDirectory.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
@@ -302,8 +347,10 @@ namespace Cube.FileSystem.App.Ice.Tests
                         RootDirectory = CreateDirectoryMethod.Create,
                         OpenDirectory = OpenDirectoryMethod.None,
                         DeleteSource  = false,
-                    }
-                ).Returns(4L);
+                    },
+                    @"RootDirectory\SingleDirectory-0x01\SingleDirectory",
+                    4L
+                );
 
                 yield return new TestCaseData("SingleDirectory.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
@@ -316,8 +363,10 @@ namespace Cube.FileSystem.App.Ice.Tests
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
                         OpenDirectory = OpenDirectoryMethod.None,
                         DeleteSource  = false,
-                    }
-                ).Returns(4L);
+                    },
+                    @"RootDirectory\SingleDirectory-0x03\Sample",
+                    4L
+                );
 
                 yield return new TestCaseData("SingleDirectory.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
@@ -331,8 +380,10 @@ namespace Cube.FileSystem.App.Ice.Tests
                                         CreateDirectoryMethod.SkipSingleFile,
                         OpenDirectory = OpenDirectoryMethod.None,
                         DeleteSource  = false,
-                    }
-                ).Returns(4L);
+                    },
+                    @"RootDirectory\SingleDirectory-0x05\SingleDirectory",
+                    4L
+                );
 
                 yield return new TestCaseData("SingleDirectory.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
@@ -347,8 +398,10 @@ namespace Cube.FileSystem.App.Ice.Tests
                                         CreateDirectoryMethod.SkipSingleDirectory,
                         OpenDirectory = OpenDirectoryMethod.None,
                         DeleteSource  = false,
-                    }
-                ).Returns(4L);
+                    },
+                    @"RootDirectory\SingleDirectory-0x07\Sample",
+                    4L
+                );
 
                 yield return new TestCaseData("MultiDirectory.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
@@ -361,8 +414,10 @@ namespace Cube.FileSystem.App.Ice.Tests
                         RootDirectory = CreateDirectoryMethod.None,
                         OpenDirectory = OpenDirectoryMethod.None,
                         DeleteSource  = false,
-                    }
-                ).Returns(7L);
+                    },
+                    @"RootDirectory\MultiDirectory-0x00\Directory",
+                    7L
+                );
 
                 yield return new TestCaseData("MultiDirectory.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
@@ -375,8 +430,10 @@ namespace Cube.FileSystem.App.Ice.Tests
                         RootDirectory = CreateDirectoryMethod.Create,
                         OpenDirectory = OpenDirectoryMethod.None,
                         DeleteSource  = false,
-                    }
-                ).Returns(7L);
+                    },
+                    @"RootDirectory\MultiDirectory-0x01\MultiDirectory",
+                    7L
+                );
 
                 yield return new TestCaseData("MultiDirectory.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
@@ -389,8 +446,10 @@ namespace Cube.FileSystem.App.Ice.Tests
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
                         OpenDirectory = OpenDirectoryMethod.None,
                         DeleteSource  = false,
-                    }
-                ).Returns(7L);
+                    },
+                    @"RootDirectory\MultiDirectory-0x03\MultiDirectory",
+                    7L
+                );
 
                 yield return new TestCaseData("MultiDirectory.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
@@ -404,8 +463,10 @@ namespace Cube.FileSystem.App.Ice.Tests
                                         CreateDirectoryMethod.SkipSingleFile,
                         OpenDirectory = OpenDirectoryMethod.None,
                         DeleteSource  = false,
-                    }
-                ).Returns(7L);
+                    },
+                    @"RootDirectory\MultiDirectory-0x05\MultiDirectory",
+                    7L
+                );
 
                 yield return new TestCaseData("MultiDirectory.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
@@ -420,8 +481,10 @@ namespace Cube.FileSystem.App.Ice.Tests
                                         CreateDirectoryMethod.SkipSingleDirectory,
                         OpenDirectory = OpenDirectoryMethod.None,
                         DeleteSource  = false,
-                    }
-                ).Returns(7L);
+                    },
+                    @"RootDirectory\MultiDirectory-0x07\MultiDirectory",
+                    7L
+                );
 
                 yield return new TestCaseData("Complex.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[]
@@ -435,8 +498,10 @@ namespace Cube.FileSystem.App.Ice.Tests
                         RootDirectory = CreateDirectoryMethod.None,
                         OpenDirectory = OpenDirectoryMethod.None,
                         DeleteSource  = false,
-                    }
-                ).Returns(5L);
+                    },
+                    @"RootDirectory\Complex-0x00\Foo.txt",
+                    5L
+                );
 
                 yield return new TestCaseData("Complex.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[]
@@ -450,8 +515,10 @@ namespace Cube.FileSystem.App.Ice.Tests
                         RootDirectory = CreateDirectoryMethod.Create,
                         OpenDirectory = OpenDirectoryMethod.None,
                         DeleteSource  = false,
-                    }
-                ).Returns(5L);
+                    },
+                    @"RootDirectory\Complex-0x01\Complex",
+                    5L
+                );
 
                 yield return new TestCaseData("Complex.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[]
@@ -465,8 +532,10 @@ namespace Cube.FileSystem.App.Ice.Tests
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
                         OpenDirectory = OpenDirectoryMethod.None,
                         DeleteSource  = false,
-                    }
-                ).Returns(5L);
+                    },
+                    @"RootDirectory\Complex-0x03\Complex",
+                    5L
+                );
 
                 yield return new TestCaseData("Complex.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[]
@@ -481,8 +550,10 @@ namespace Cube.FileSystem.App.Ice.Tests
                                         CreateDirectoryMethod.SkipSingleFile,
                         OpenDirectory = OpenDirectoryMethod.None,
                         DeleteSource  = false,
-                    }
-                ).Returns(5L);
+                    },
+                    @"RootDirectory\Complex-0x05\Complex",
+                    5L
+                );
 
                 yield return new TestCaseData("Complex.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[]
@@ -498,8 +569,10 @@ namespace Cube.FileSystem.App.Ice.Tests
                                         CreateDirectoryMethod.SkipSingleDirectory,
                         OpenDirectory = OpenDirectoryMethod.None,
                         DeleteSource  = false,
-                    }
-                ).Returns(5L);
+                    },
+                    @"RootDirectory\Complex-0x07\Complex",
+                    5L
+                );
             }
         }
 
