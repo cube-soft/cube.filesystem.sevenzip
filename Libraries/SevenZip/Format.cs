@@ -163,6 +163,8 @@ namespace Cube.FileSystem.SevenZip
     {
         #region Methods
 
+        #region ToXxx
+
         /* ----------------------------------------------------------------- */
         ///
         /// ToClassId
@@ -213,6 +215,30 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
+        /// ToExtension
+        ///
+        /// <summary>
+        /// CompressionMethod に対応する拡張子を取得します。
+        /// </summary>
+        /// 
+        /// <param name="method">CompressionMethod オブジェクト</param>
+        /// 
+        /// <returns>拡張子</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static string ToExtension(this CompressionMethod method)
+        {
+            switch (method)
+            {
+                case CompressionMethod.BZip2: return ".bz2";
+                case CompressionMethod.GZip:  return ".gz";
+                case CompressionMethod.XZ:    return ".xz";
+                default: return string.Empty;
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// ToMethod
         ///
         /// <summary>
@@ -239,6 +265,10 @@ namespace Cube.FileSystem.SevenZip
                 default: return CompressionMethod.Default;
             }
         }
+
+        #endregion
+
+        #region FromXxx
 
         /* ----------------------------------------------------------------- */
         ///
@@ -393,6 +423,8 @@ namespace Cube.FileSystem.SevenZip
             }
             return FromExtension(info.Extension);
         }
+
+        #endregion
 
         #endregion
 

@@ -212,8 +212,7 @@ namespace Cube.FileSystem.App.Ice
             else
             {
                 SetDestination(Settings.Value.Archive, Request.Format.ToString());
-                var name = IO.Get(Request.Sources.First()).NameWithoutExtension;
-                Destination = IO.Combine(Destination, $"{name}{format.ToExtension()}");
+                if (SaveLocation != SaveLocation.Runtime) AddFileName(format);
             }
 
             var info = IO.Get(Destination);
@@ -221,6 +220,25 @@ namespace Cube.FileSystem.App.Ice
 
             SetTmp(info.DirectoryName);
             return Tmp;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// AddFileName
+        /// 
+        /// <summary>
+        /// Destination に FileName を追加します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void AddFileName(Format format)
+        {
+            var name = IO.Get(Request.Sources.First()).NameWithoutExtension;
+            var head = format.ToExtension();
+            var tail = Runtime?.CompressionMethod.ToExtension() ?? string.Empty;
+            var ext  = $"{head}{tail}";
+
+            Destination = IO.Combine(Destination, $"{name}{ext}");
         }
 
         /* ----------------------------------------------------------------- */

@@ -49,6 +49,7 @@ namespace Cube.FileSystem.App.Ice.Tests.Settings
             {
                 Arguments    = args,
                 IconLocation = "",
+                ToolTip      = false,
             }.Command;
 
         /* --------------------------------------------------------------------- */
