@@ -110,6 +110,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     {
                         SaveLocation  = SaveLocation.Others,
                         OpenDirectory = OpenDirectoryMethod.None,
+                        Filtering     = true,
                         DeleteOnMail  = false,
                     }
                 ).Returns(4L);
@@ -118,9 +119,10 @@ namespace Cube.FileSystem.App.Ice.Tests
                     PresetMenu.ArchiveDetail.ToArguments(),
                     new ArchiveSettings
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation  = SaveLocation.Others,
                         OpenDirectory = OpenDirectoryMethod.None,
-                        DeleteOnMail = false,
+                        Filtering     = true,
+                        DeleteOnMail  = false,
                     }
                 ).Returns(4L);
 
@@ -128,19 +130,21 @@ namespace Cube.FileSystem.App.Ice.Tests
                     PresetMenu.ArchiveSevenZip.ToArguments(),
                     new ArchiveSettings
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation  = SaveLocation.Others,
                         OpenDirectory = OpenDirectoryMethod.None,
-                        DeleteOnMail = false,
+                        Filtering     = false,
+                        DeleteOnMail  = false,
                     }
-                ).Returns(4L);
+                ).Returns(9L);
 
                 yield return new TestCaseData(
                     PresetMenu.ArchiveBZip2.ToArguments(),
                     new ArchiveSettings
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation  = SaveLocation.Others,
                         OpenDirectory = OpenDirectoryMethod.None,
-                        DeleteOnMail = false,
+                        Filtering     = true,
+                        DeleteOnMail  = false,
                     }
                 ).Returns(1L);
 
@@ -148,9 +152,10 @@ namespace Cube.FileSystem.App.Ice.Tests
                     PresetMenu.ArchiveSfx.ToArguments(),
                     new ArchiveSettings
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation  = SaveLocation.Others,
                         OpenDirectory = OpenDirectoryMethod.None,
-                        DeleteOnMail = false,
+                        Filtering     = true,
+                        DeleteOnMail  = false,
                     }
                 ).Returns(4L);
 
@@ -160,6 +165,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     {
                         SaveLocation  = SaveLocation.Others,
                         OpenDirectory = OpenDirectoryMethod.None,
+                        Filtering     = true,
                         DeleteOnMail  = false,
                     }
                 ).Returns(4L);
@@ -170,6 +176,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     {
                         SaveLocation  = SaveLocation.Runtime,
                         OpenDirectory = OpenDirectoryMethod.None,
+                        Filtering     = true,
                         DeleteOnMail  = false,
                     }
                 ).Returns(4L);
@@ -184,6 +191,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     {
                         SaveLocation  = SaveLocation.Others,
                         OpenDirectory = OpenDirectoryMethod.None,
+                        Filtering     = true,
                         DeleteOnMail  = false,
                     }
                 ).Returns(1L);

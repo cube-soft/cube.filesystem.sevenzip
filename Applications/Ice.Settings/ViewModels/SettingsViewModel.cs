@@ -103,8 +103,8 @@ namespace Cube.FileSystem.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public string Filtering
         {
-            get { return Transform(_model.Value.Filtering, "|", Environment.NewLine); }
-            set { _model.Value.Filtering = Transform(value, Environment.NewLine, "|"); }
+            get { return Transform(_model.Value.Filters, "|", Environment.NewLine); }
+            set { _model.Value.Filters = Transform(value, Environment.NewLine, "|"); }
         }
 
         /* ----------------------------------------------------------------- */

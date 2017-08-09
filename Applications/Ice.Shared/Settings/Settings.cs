@@ -15,6 +15,8 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Cube.FileSystem.Ice
@@ -88,7 +90,7 @@ namespace Cube.FileSystem.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Filtering
+        /// Filters
         /// 
         /// <summary>
         /// 圧縮・展開時に除外するファイルまたはディレクトリ名の一覧を
@@ -97,7 +99,7 @@ namespace Cube.FileSystem.Ice
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public string Filtering
+        public string Filters
         {
             get { return _filtering; }
             set { SetProperty(ref _filtering, value); }
@@ -150,7 +152,7 @@ namespace Cube.FileSystem.Ice
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [DataMember(Name = "Compression")]
+        [DataMember]
         public ArchiveSettings Archive
         {
             get { return _archive; }
@@ -166,7 +168,7 @@ namespace Cube.FileSystem.Ice
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [DataMember(Name = "Decompression")]
+        [DataMember]
         public ExtractSettings Extract
         {
             get { return _extract; }
@@ -221,6 +223,29 @@ namespace Cube.FileSystem.Ice
             get { return _shortcut; }
             set { SetProperty(ref _shortcut, value); }
         }
+
+        #endregion
+
+        #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetFilters
+        /// 
+        /// <summary>
+        /// 圧縮・展開時に除外するファイルまたはディレクトリ名の一覧を
+        /// 取得します。
+        /// </summary>
+        /// 
+        /// <returns>
+        /// 除外するファイルまたはディレクトリ名一覧
+        /// </returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public IEnumerable<string> GetFilters()
+            => string.IsNullOrEmpty(Filters) ?
+               new string[0] :
+               Filters.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
 
         #endregion
 

@@ -133,6 +133,8 @@ namespace Cube.FileSystem.App.Ice
         {
             try
             {
+                if (Settings.Value.Extract.Filtering) reader.Filters = Settings.Value.GetFilters();
+
                 reader.Extracting += WhenExtracting;
                 reader.Extracted  += WhenExtracted;
                 ProgressStart();

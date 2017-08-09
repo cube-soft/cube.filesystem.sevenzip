@@ -152,6 +152,7 @@ namespace Cube.FileSystem.App.Ice
             using (var writer = new ArchiveWriter(fmt, IO))
             {
                 writer.Option = Runtime?.ToOption();
+                if (Settings.Value.Archive.Filtering) writer.Filters = Settings.Value.GetFilters();
                 foreach (var item in Request.Sources) writer.Add(item);
                 ProgressStart();
                 writer.Save(dest, query, CreateInnerProgress(x => ProgressReport = x));
