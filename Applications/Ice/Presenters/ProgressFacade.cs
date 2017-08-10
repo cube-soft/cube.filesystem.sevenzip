@@ -16,6 +16,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Cube.FileSystem.SevenZip;
@@ -86,21 +87,6 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SaveLocation
-        /// 
-        /// <summary>
-        /// 保存場所を表す値を取得します。
-        /// </summary>
-        /// 
-        /// <remarks>
-        /// Request や各種 Settings オブジェクトに応じて決定されます。
-        /// </remarks>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public SaveLocation SaveLocation { get; private set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// Destination
         /// 
         /// <summary>
@@ -131,7 +117,7 @@ namespace Cube.FileSystem.App.Ice
         public string Tmp
         {
             get { return _tmp; }
-            protected set
+            private set
             {
                 if (_tmp == value) return;
                 _tmp = value;
@@ -455,47 +441,23 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SetDestination
+        /// GetSaveLocation
         /// 
         /// <summary>
-        /// Destination プロパティを設定します。
+        /// SaveLocation および保存場所を示すパスを取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected void SetDestination(GeneralSettings settings, string query)
+        protected KeyValuePair<SaveLocation, string> GetSaveLocation(GeneralSettings settings, string query)
         {
-            SaveLocation = Request.Location != SaveLocation.Unknown ?
-                           Request.Location :
-                           settings.SaveLocation;
+            var key = Request.Location != SaveLocation.Unknown ?
+                      Request.Location :
+                      settings.SaveLocation;
 
             this.LogDebug(string.Format("SaveLocation:({0},{1})->{2}",
-                Request.Location, settings.SaveLocation, SaveLocation));
+                Request.Location, settings.SaveLocation, key));
 
-            switch (SaveLocation)
-            {
-                case SaveLocation.Desktop:
-                    Destination = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                    break;
-                case SaveLocation.MyDocuments:
-                    Destination = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                    break;
-                case SaveLocation.Runtime:
-                    var e = new QueryEventArgs<string, string>(query);
-                    OnDestinationRequired(e);
-                    Destination = e.Result;
-                    break;
-                case SaveLocation.Source:
-                    Destination = IO.Get(Request.Sources.First()).DirectoryName;
-                    break;
-                case SaveLocation.Drop:
-                    Destination = Request.DropDirectory;
-                    break;
-                case SaveLocation.Others:
-                    Destination = !string.IsNullOrEmpty(settings.SaveDirectoryName) ?
-                                  settings.SaveDirectoryName :
-                                  Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                    break;
-            }
+            return new KeyValuePair<SaveLocation, string>(key, GetSavePath(key, settings, query));
         }
 
         /* ----------------------------------------------------------------- */
@@ -570,6 +532,41 @@ namespace Cube.FileSystem.App.Ice
         #endregion
 
         #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetSavePath
+        /// 
+        /// <summary>
+        /// 保存場所を示すパスを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private string GetSavePath(SaveLocation key, GeneralSettings settings, string query)
+        {
+            switch (key)
+            {
+                case SaveLocation.Desktop:
+                    return Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                case SaveLocation.MyDocuments:
+                    return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                case SaveLocation.Runtime:
+                    var e = new QueryEventArgs<string, string>(query);
+                    OnDestinationRequired(e);
+                    return e.Result;
+                case SaveLocation.Source:
+                    return IO.Get(Request.Sources.First()).DirectoryName;
+                case SaveLocation.Drop:
+                    return Request.DropDirectory;
+                case SaveLocation.Others:
+                default:
+                    break;
+            }
+
+            return !string.IsNullOrEmpty(settings.SaveDirectoryName) ?
+                   settings.SaveDirectoryName :
+                   Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        }
 
         /* ----------------------------------------------------------------- */
         ///

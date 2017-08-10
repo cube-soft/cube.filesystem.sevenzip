@@ -192,29 +192,33 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void SetDirectories(ArchiveReader reader)
         {
-            SetDestination(Settings.Value.Extract, Source);
-            SetTmp(Destination);
+            var src  = IO.Get(Source).NameWithoutExtension;
+            var dest = GetSaveLocation(Settings.Value.Extract, Source);
+            var m    = Settings.Value.Extract.RootDirectory;
 
-            var src = IO.Get(Source).NameWithoutExtension;
-            var method = Settings.Value.Extract.RootDirectory;
-
-            if (method.HasFlag(CreateDirectoryMethod.Create))
+            if (m.HasFlag(CreateDirectoryMethod.Create))
             {
-                if ((method & CreateDirectoryMethod.SkipOptions) != 0)
+                if ((m & CreateDirectoryMethod.SkipOptions) != 0)
                 {
                     var ds  = SeekRootDirectory(reader);
-                    var one = IsSingleFileOrDirectory(method, ds);
+                    var one = IsSingleFileOrDirectory(m, ds);
 
-                    if (!one) Destination = IO.Combine(Destination, src);
+                    Destination = one ? dest.Value : IO.Combine(dest.Value, src);
                     SetOpenDirectoryName(ds);
                 }
                 else
                 {
-                    Destination = IO.Combine(Destination, src);
+                    Destination = IO.Combine(dest.Value, src);
                     SetOpenDirectoryName(null);
                 }
             }
-            else SetOpenDirectoryName(SeekRootDirectory(reader));
+            else
+            {
+                Destination = dest.Value;
+                SetOpenDirectoryName(SeekRootDirectory(reader));
+            }
+
+            SetTmp(dest.Value);
         }
 
         /* ----------------------------------------------------------------- */

@@ -248,8 +248,19 @@ namespace Cube.FileSystem.App.Ice
             if (!string.IsNullOrEmpty(Runtime?.Path)) Destination = Runtime.Path;
             else
             {
-                SetDestination(Settings.Value.Archive, Request.Format.ToString());
-                if (SaveLocation != SaveLocation.Runtime) AddFileName(format);
+                var query   = Request.Format.ToString();
+                var kv      = GetSaveLocation(Settings.Value.Archive, query);
+                var runtime = kv.Key == SaveLocation.Runtime;
+                var path    = runtime ? kv.Value : AddFileName(kv.Value, format);
+
+                if (!runtime && IO.Get(path).Exists)
+                {
+                    var e = new QueryEventArgs<string, string>(query);
+                    OnDestinationRequired(e);
+                    path = e.Result;
+                }
+
+                Destination = path;
             }
 
             var info = IO.Get(Destination);
@@ -264,18 +275,18 @@ namespace Cube.FileSystem.App.Ice
         /// AddFileName
         /// 
         /// <summary>
-        /// Destination に FileName を追加します。
+        /// FileName を結合します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void AddFileName(Format format)
+        private string AddFileName(string src, Format format)
         {
             var name = IO.Get(Request.Sources.First()).NameWithoutExtension;
             var head = format.ToExtension();
             var tail = Runtime?.CompressionMethod.ToExtension() ?? string.Empty;
             var ext  = $"{head}{tail}";
 
-            Destination = IO.Combine(Destination, $"{name}{ext}");
+            return IO.Combine(src, $"{name}{ext}");
         }
 
         /* ----------------------------------------------------------------- */
