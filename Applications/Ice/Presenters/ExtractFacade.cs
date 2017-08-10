@@ -100,10 +100,10 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         public override void Start()
         {
-            var query = new Query<string, string>(x => OnPasswordRequired(x));
-            using (var reader = new ArchiveReader(Source, query, IO))
+            try
             {
-                try
+                var query = new Query<string, string>(x => OnPasswordRequired(x));
+                using (var reader = new ArchiveReader(Source, query, IO))
                 {
                     this.LogDebug($"Format:{reader.Format}\tSource:{Source}");
 
@@ -111,9 +111,10 @@ namespace Cube.FileSystem.App.Ice
                     Extract(reader);
                     Open(IO.Combine(Destination, OpenDirectoryName), Settings.Value.Extract.OpenDirectory);
                 }
-                catch (UserCancelException /* err */) { /* user cancel */ }
-                catch (Exception err) { this.LogWarn(err.ToString(), err); }
+                DeleteSource();
             }
+            catch (UserCancelException /* err */) { /* user cancel */ }
+            catch (Exception err) { this.LogWarn(err.ToString(), err); }
         }
 
         #endregion
@@ -276,6 +277,21 @@ namespace Cube.FileSystem.App.Ice
                     Move(src, IO.Get(IO.GetUniqueName(dest)));
                     break;
             }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// DeleteSource
+        /// 
+        /// <summary>
+        /// 展開対象となった圧縮ファイルを削除します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void DeleteSource()
+        {
+            if (!Settings.Value.Extract.DeleteSource) return;
+            IO.Delete(Source);
         }
 
         /* ----------------------------------------------------------------- */

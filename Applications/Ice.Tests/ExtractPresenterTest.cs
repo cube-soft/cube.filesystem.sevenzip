@@ -168,6 +168,35 @@ namespace Cube.FileSystem.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Extract_DeleteSource
+        /// 
+        /// <summary>
+        /// 展開後に元の圧縮ファイルを削除するテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public async Task Extract_DeleteSource()
+        {
+            var src  = Result("Complex.zip");
+            var dest = Result("DeleteSource");
+
+            IO.Copy(Example("Complex.zip"), src);
+
+            using (var ep = Create(src, dest))
+            {
+                ep.Settings.Value.Extract.DeleteSource = true;
+                ep.View.Show();
+                for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
+                Assert.That(ep.View.Visible, Is.False, "Timeout");
+            }
+
+            Assert.That(IO.Get(Result(@"DeleteSource\Complex")).Exists, Is.True);
+            Assert.That(IO.Get(src).Exists, Is.False);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Extract_UserCancel
         /// 
         /// <summary>
@@ -214,7 +243,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
                         OpenDirectory = OpenDirectoryMethod.None,
                         Filtering     = false,
-                        DeleteSource  = false,
                     },
                     @"Others\Complex",
                     5L
@@ -228,7 +256,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
                         OpenDirectory = OpenDirectoryMethod.Open,
                         Filtering     = false,
-                        DeleteSource  = false,
                     },
                     @"Runtime\Complex",
                     5L
