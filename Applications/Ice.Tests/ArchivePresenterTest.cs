@@ -112,7 +112,43 @@ namespace Cube.FileSystem.App.Ice.Tests
                 Assert.That(ap.View.Visible, Is.False, "Timeout");
             }
 
-            Assert.That(IO.Get(Result(dest)).Exists, Is.True);
+            Assert.That(IO.Get(dest).Exists, Is.True);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Archive_Exists
+        /// 
+        /// <summary>
+        /// 保存パスに指定されたファイルが既に存在する場合の挙動を確認
+        /// します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public async Task Archive_Exists()
+        {
+            var src    = Example("Sample.txt");
+            var exists = Result(@"Exists\Sample.zip");
+            var dest   = Result(@"Exists\SampleRuntime.zip");
+            var args   = PresetMenu.Archive.ToArguments().Concat(new[] { src });
+
+            IO.CreateDirectory(Result("Exists"));
+            IO.Copy(Example("Single.zip"), exists);
+            Mock.Destination = dest;
+
+            using (var ap = Create(new Request(args)))
+            {
+                ap.Settings.Value.Archive.OpenDirectory = OpenDirectoryMethod.None;
+                ap.Settings.Value.Archive.SaveLocation = SaveLocation.Others;
+                ap.Settings.Value.Archive.SaveDirectoryName = Result("Exists");
+                ap.View.Show();
+
+                for (var i = 0; ap.View.Visible && i < 50; ++i) await Task.Delay(100);
+                Assert.That(ap.View.Visible, Is.False, "Timeout");
+            }
+
+            Assert.That(IO.Get(dest).Exists, Is.True);
         }
 
         /* ----------------------------------------------------------------- */
