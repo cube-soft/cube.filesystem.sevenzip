@@ -105,12 +105,13 @@ namespace Cube.FileSystem.Tests
         [TestCaseSource(nameof(Operator_TestCases))]
         public void Get_DateTime(IOperatorCore core)
         {
-            var io = new Operator(core);
+            var io   = new Operator(core);
             var info = io.Get(Example("Sample.txt"));
+            var cmp  = new DateTime(2017, 6, 5);
 
-            Assert.That(info.CreationTime,   Is.GreaterThan(new DateTime(2017, 6, 5)));
-            Assert.That(info.LastWriteTime,  Is.GreaterThan(info.CreationTime));
-            Assert.That(info.LastAccessTime, Is.GreaterThan(info.CreationTime));
+            Assert.That(info.CreationTime,   Is.GreaterThan(cmp));
+            Assert.That(info.LastWriteTime,  Is.GreaterThan(cmp));
+            Assert.That(info.LastAccessTime, Is.GreaterThan(cmp));
         }
 
         /* ----------------------------------------------------------------- */
