@@ -241,7 +241,7 @@ namespace Cube.FileSystem.App.Ice
         {
             if (DestinationRequired != null) DestinationRequired(this, e);
             else e.Cancel = true;
-            if (e.Cancel) RaiseUserCancel();
+            if (e.Cancel) throw new UserCancelException();
         }
 
         #endregion
@@ -595,17 +595,6 @@ namespace Cube.FileSystem.App.Ice
                    settings.SaveDirectoryName :
                    Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// RaiseUserCancel
-        /// 
-        /// <summary>
-        /// UserCancelException を送出します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void RaiseUserCancel() => throw new UserCancelException();
 
         /* ----------------------------------------------------------------- */
         ///
