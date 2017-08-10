@@ -95,6 +95,26 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Get_DateTime
+        ///
+        /// <summary>
+        /// 各種日時情報の内容を確認します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [TestCaseSource(nameof(Operator_TestCases))]
+        public void Get_DateTime(IOperatorCore core)
+        {
+            var io = new Operator(core);
+            var info = io.Get(Example("Sample.txt"));
+
+            Assert.That(info.CreationTime,   Is.GreaterThan(new DateTime(2017, 6, 5)));
+            Assert.That(info.LastWriteTime,  Is.GreaterThan(info.CreationTime));
+            Assert.That(info.LastAccessTime, Is.GreaterThan(info.CreationTime));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Get_Throws
         ///
         /// <summary>
@@ -203,6 +223,36 @@ namespace Cube.FileSystem.Tests
             io.Move(src, dest);
 
             Assert.That(failed, Is.True);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Open_Failed
+        ///
+        /// <summary>
+        /// ファイルを開く操作に失敗するテストを実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [TestCaseSource(nameof(Operator_TestCases))]
+        public void Open_Failed(IOperatorCore core)
+        {
+            var failed = false;
+            var io = new Operator(core);
+            io.Failed += (s, e) =>
+            {
+                failed   = true;
+                e.Cancel = true;
+
+                Assert.That(e.Name, Is.EqualTo("OpenRead"));
+                Assert.That(e.Paths.Count(), Is.EqualTo(1));
+            };
+
+            var src    = io.Combine(Results, "FileNotFound.txt");
+            var stream = io.OpenRead(src);
+
+            Assert.That(failed, Is.True);
+            Assert.That(stream, Is.Null);
         }
 
         /* ----------------------------------------------------------------- */
