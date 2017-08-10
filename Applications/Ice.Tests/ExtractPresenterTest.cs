@@ -591,14 +591,13 @@ namespace Cube.FileSystem.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         private ExtractPresenter Create(string src, string dest)
         {
-            var r = new Request(new[] { "/x", src });
-            var s = new SettingsFolder();
+            var p = Create(new Request(new[] { "/x", src }));
 
-            s.Value.Extract.SaveLocation      = SaveLocation.Others;
-            s.Value.Extract.SaveDirectoryName = dest;
-            s.Value.Extract.OpenDirectory     = OpenDirectoryMethod.None;
+            p.Settings.Value.Extract.SaveLocation      = SaveLocation.Others;
+            p.Settings.Value.Extract.SaveDirectoryName = dest;
+            p.Settings.Value.Extract.OpenDirectory     = OpenDirectoryMethod.None;
 
-            return new ExtractPresenter(Views.CreateProgressView(), r, s, new EventAggregator());
+            return p;
         }
 
         /* ----------------------------------------------------------------- */
@@ -611,12 +610,13 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// 
         /* ----------------------------------------------------------------- */
         private ExtractPresenter Create(Request request)
-            => new ExtractPresenter(
-                Views.CreateProgressView(),
-                request,
-                new SettingsFolder(),
-                new EventAggregator()
-            );
+        {
+            var v = Views.CreateProgressView();
+            var e = new EventAggregator();
+            var s = new SettingsFolder();
+
+            return new ExtractPresenter(v, request, s, e);
+        }
 
         /* ----------------------------------------------------------------- */
         ///

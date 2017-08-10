@@ -178,7 +178,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                         DeleteOnMail  = false,
                     },
                     @"Others\Sample.7z",
-                    9L
+                    8L
                 );
 
                 yield return new TestCaseData(
@@ -271,12 +271,15 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// 
         /* ----------------------------------------------------------------- */
         private ArchivePresenter Create(Request request)
-            => new ArchivePresenter(
-                Views.CreateProgressView(),
-                request,
-                new SettingsFolder(),
-                new EventAggregator()
-            );
+        {
+            var v = Views.CreateProgressView();
+            var e = new EventAggregator();
+            var s = new SettingsFolder();
+
+            s.Value.Filters = "Filter.txt|FilterDirectory";
+
+            return new ArchivePresenter(v, request, s, e);
+        }
 
         /* ----------------------------------------------------------------- */
         ///

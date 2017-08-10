@@ -76,10 +76,10 @@ namespace Cube.FileSystem.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [TestCase(true,  ExpectedResult = 4)]
-        [TestCase(false, ExpectedResult = 9)]
+        [TestCase(false, ExpectedResult = 8)]
         public int Archive_Filter(bool filter)
         {
-            var names = new[] { ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini" };
+            var names = new[] { "Filter.txt", "FilterDirectory" };
             var s     = filter ? "True" : "False";
             var dest  = Result($"Filter{s}.zip");
 
