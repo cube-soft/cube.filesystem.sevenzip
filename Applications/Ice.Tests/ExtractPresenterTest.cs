@@ -15,7 +15,6 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,10 +30,16 @@ namespace Cube.FileSystem.App.Ice.Tests
     /// <summary>
     /// ExtractPresenter のテスト用クラスです。
     /// </summary>
+    /// 
+    /// <remarks>
+    /// Presenter クラスは静的クラス (Views) に対して変更を加えるため、
+    /// Parallelizable 属性を指定すると予期せぬエラーが発生する事が
+    /// あります。
+    /// </remarks>
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ExtractPresenterTest : FileResource
+    class ExtractPresenterTest : MockViewResource
     {
         #region Tests
 
@@ -55,8 +60,8 @@ namespace Cube.FileSystem.App.Ice.Tests
             var request = new Request(args.Concat(new[] { src }));
             request.DropDirectory = Result(request.DropDirectory);
 
-            MockViewFactory.Destination = Result("Runtime");
-            MockViewFactory.Password = password;
+            Mock.Destination = Result("Runtime");
+            Mock.Password = password;
 
             using (var ep = Create(request))
             {
@@ -620,27 +625,15 @@ namespace Cube.FileSystem.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OneTimeSetUp
+        /// SetUp
         /// 
         /// <summary>
-        /// 一度だけ実行される SetUp 処理です。
+        /// テスト毎に実行される SetUp 処理です。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [OneTimeSetUp]
-        public void OneTimeSetUp() => MockViewFactory.Configure();
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// TearDown
-        /// 
-        /// <summary>
-        /// テスト後に毎回実行される TearDown 処理です。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        [TearDown]
-        public void TearDown() => MockViewFactory.Reset();
+        [SetUp]
+        public void SetUp() => Reset();
 
         #endregion
     }

@@ -31,7 +31,7 @@ namespace Cube.FileSystem.App.Ice.Tests
     /* --------------------------------------------------------------------- */
     [TestFixture]
     [Parallelizable]
-    class ShortcutSettingsTest : FileResource
+    class ShortcutSettingsTest : MockViewResource
     {
         /* ----------------------------------------------------------------- */
         ///

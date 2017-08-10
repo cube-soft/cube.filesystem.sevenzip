@@ -17,9 +17,48 @@
 /* ------------------------------------------------------------------------- */
 using System.Threading;
 using Cube.FileSystem.Ice;
+using NUnit.Framework;
 
 namespace Cube.FileSystem.App.Ice.Tests
 {
+    /* --------------------------------------------------------------------- */
+    ///
+    /// MockViewSettings
+    ///
+    /// <summary>
+    /// MockView のテスト時設定を保持するためのクラスです。
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    class MockViewSettings
+    {
+        #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Destination
+        /// 
+        /// <summary>
+        /// 保存場所を示すパスを取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Destination { get; set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Password
+        /// 
+        /// <summary>
+        /// パスワードを取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Password { get; set; }
+
+        #endregion
+    }
+
     /* --------------------------------------------------------------------- */
     ///
     /// MockViewFactory
@@ -31,67 +70,39 @@ namespace Cube.FileSystem.App.Ice.Tests
     /* --------------------------------------------------------------------- */
     class MockViewFactory : ViewFactory
     {
+        #region Constructors
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// MockViewFactory
+        /// 
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public MockViewFactory()
+        {
+            if (SynchronizationContext.Current != null) return;
+
+            var ctx = new SynchronizationContext();
+            SynchronizationContext.SetSynchronizationContext(ctx);
+        }
+
+        #endregion
+
         #region Properties
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Destination
+        /// Settings
         /// 
         /// <summary>
-        /// ShowSaveFileView または ShowSaveDirectoryView で設定するパスを
-        /// 取得または設定します。
+        /// テスト時設定を取得または設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public static string Destination { get; set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Password
-        /// 
-        /// <summary>
-        /// ShowPasswordView で設定するパスワードを取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static string Password { get; set; }
-
-        #endregion
-
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Configure
-        /// 
-        /// <summary>
-        /// テストに必要な設定を実行します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static void Configure()
-        {
-            if (SynchronizationContext.Current == null)
-            {
-                SynchronizationContext.SetSynchronizationContext(new SynchronizationContext());
-            }
-            Views.Configure(new MockViewFactory());
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Reset
-        /// 
-        /// <summary>
-        /// 各種プロパティの値をリセットします。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static void Reset()
-        {
-            Destination = string.Empty;
-            Password    = string.Empty;
-        }
+        public MockViewSettings Settings { get; set; }
 
         #endregion
 
@@ -125,8 +136,8 @@ namespace Cube.FileSystem.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         public override void ShowSaveView(QueryEventArgs<string, string> e, bool directory)
         {
-            e.Cancel = string.IsNullOrEmpty(Destination);
-            e.Result = Destination;
+            e.Cancel = string.IsNullOrEmpty(Settings.Destination);
+            e.Result = Settings.Destination;
         }
 
         /* ----------------------------------------------------------------- */
@@ -143,8 +154,8 @@ namespace Cube.FileSystem.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         public override void ShowPasswordView(QueryEventArgs<string, string> e, bool confirm)
         {
-            e.Cancel = string.IsNullOrEmpty(Password);
-            e.Result = Password;
+            e.Cancel = string.IsNullOrEmpty(Settings.Password);
+            e.Result = Settings.Password;
         }
 
         /* ----------------------------------------------------------------- */
@@ -160,6 +171,9 @@ namespace Cube.FileSystem.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         public override void ShowOverwriteView(OverwriteEventArgs e)
         {
+            Assert.That(e.Source, Is.Not.Null);
+            Assert.That(e.Destination, Is.Not.Null);
+
             e.Result = OverwriteMode.AlwaysYes;
         }
 
@@ -182,7 +196,7 @@ namespace Cube.FileSystem.App.Ice.Tests
             e.Result = new ArchiveRuntimeSettings(format)
             {
                 Path              = e.Query,
-                Password          = Password,
+                Password          = Settings.Password,
                 CompressionLevel  = SevenZip.CompressionLevel.Ultra,
                 CompressionMethod = SevenZip.CompressionMethod.Lzma,
                 EncryptionMethod  = SevenZip.EncryptionMethod.Aes256,

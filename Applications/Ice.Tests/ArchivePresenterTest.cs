@@ -31,9 +31,15 @@ namespace Cube.FileSystem.App.Ice.Tests
     /// ArchivePresenterTest のテスト用クラスです。
     /// </summary>
     ///
+    /// <remarks>
+    /// Presenter クラスは静的クラス (Views) に対して変更を加えるため、
+    /// Parallelizable 属性を指定すると予期せぬエラーが発生する事が
+    /// あります。
+    /// </remarks>
+    ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ArchivePresenterTest : FileResource
+    class ArchivePresenterTest : MockViewResource
     {
         #region Tests
 
@@ -54,8 +60,8 @@ namespace Cube.FileSystem.App.Ice.Tests
             var request = new Request(args.Concat(files.Select(s => Example(s))));
             request.DropDirectory = Result(request.DropDirectory);
 
-            MockViewFactory.Destination = Result($@"Runtime\{filename}");
-            MockViewFactory.Password = "password"; // used by "/p" option
+            Mock.Destination = Result($@"Runtime\{filename}");
+            Mock.Password = "password"; // used by "/p" option
 
             using (var ap = Create(request))
             {
@@ -301,27 +307,15 @@ namespace Cube.FileSystem.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OneTimeSetUp
+        /// SetUp
         /// 
         /// <summary>
-        /// 一度だけ実行される SetUp 処理です。
+        /// テスト毎に実行される SetUp 処理です。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [OneTimeSetUp]
-        public void OneTimeSetUp() => MockViewFactory.Configure();
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// TearDown
-        /// 
-        /// <summary>
-        /// テスト毎に実行される TearDown 処理です。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        [TearDown]
-        public void TearDown() => MockViewFactory.Reset();
+        [SetUp]
+        public void SetUp() => Reset();
 
         #endregion
     }

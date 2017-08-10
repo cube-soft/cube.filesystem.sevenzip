@@ -21,14 +21,14 @@ namespace Cube.FileSystem.App.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// FileResource
+    /// MockViewResource
     /// 
     /// <summary>
-    /// テストでファイルを使用するためのクラスです。
+    /// テストで MockView を使用するためのクラスです。
     /// </summary>
     /// 
     /* --------------------------------------------------------------------- */
-    class FileResource
+    class MockViewResource
     {
         #region Constructors
 
@@ -41,7 +41,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected FileResource() : this(new Operator()) { }
+        protected MockViewResource() : this(new Operator()) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -54,12 +54,14 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// <param name="io">ファイル操作用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected FileResource(Operator io)
+        protected MockViewResource(Operator io)
         {
             var reader = new AssemblyReader(Assembly.GetExecutingAssembly());
             IO = io;
             Root = IO.Get(reader.Location).DirectoryName;
             _directory = GetType().FullName.Replace($"{reader.Product}.", "");
+
+            Views.Configure(_mock);
 
             if (!IO.Get(Results).Exists) IO.CreateDirectory(Results);
             Delete(Results);
@@ -68,6 +70,21 @@ namespace Cube.FileSystem.App.Ice.Tests
         #endregion
 
         #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Mock
+        ///
+        /// <summary>
+        /// MockView のテスト時設定を取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected MockViewSettings Mock
+        {
+            get { return _mock.Settings; }
+            set { _mock.Settings = value; }
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -152,6 +169,18 @@ namespace Cube.FileSystem.App.Ice.Tests
                ? IO.Combine(Results, filename) :
                string.Empty;
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Reset
+        /// 
+        /// <summary>
+        /// 内部状態をリセットします。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected void Reset()
+            => Mock = new MockViewSettings();
+
         #endregion
 
         #region Implementations
@@ -177,6 +206,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         }
 
         #region Fields
+        private MockViewFactory _mock = new MockViewFactory();
         private string _directory = string.Empty;
         #endregion
 
