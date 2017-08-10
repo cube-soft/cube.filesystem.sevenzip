@@ -195,7 +195,7 @@ namespace Cube.FileSystem.App.Ice.Tests
             e.Cancel = false;
             e.Result = new ArchiveRuntimeSettings(format)
             {
-                Path              = e.Query,
+                Path              = Settings.Destination,
                 Password          = Settings.Password,
                 CompressionLevel  = SevenZip.CompressionLevel.Ultra,
                 CompressionMethod = SevenZip.CompressionMethod.Lzma,

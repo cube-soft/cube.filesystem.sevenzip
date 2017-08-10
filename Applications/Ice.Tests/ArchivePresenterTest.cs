@@ -66,7 +66,9 @@ namespace Cube.FileSystem.App.Ice.Tests
 
             using (var ap = Create(request))
             {
+                Assert.That(ap.Model.ProgressInterval.TotalMilliseconds, Is.EqualTo(100).Within(1));
                 ap.Model.ProgressInterval = TimeSpan.FromMilliseconds(10);
+
                 ap.Settings.Value.Archive = archive;
                 ap.Settings.Value.Archive.SaveDirectoryName = Result("Others");
 
@@ -85,35 +87,6 @@ namespace Cube.FileSystem.App.Ice.Tests
             }
 
             Assert.That(IO.Get(Result(dest)).Exists, Is.True);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Archive_Detail
-        /// 
-        /// <summary>
-        /// 実行時設定を反映した圧縮処理のテストを実行します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        [Test]
-        public async Task Archive_Detail()
-        {
-            var src  = Result(@"Detail\Sample.txt");
-            var dest = Result(@"Detail\Sample.zip");
-            var args = PresetMenu.ArchiveDetail.ToArguments().Concat(new[] { src });
-
-            IO.CreateDirectory(Result("Detail"));
-            IO.Copy(Example("Sample.txt"), src);
-
-            using (var ap = Create(new Request(args)))
-            {
-                ap.View.Show();
-                for (var i = 0; ap.View.Visible && i < 50; ++i) await Task.Delay(100);
-                Assert.That(ap.View.Visible, Is.False, "Timeout");
-            }
-
-            Assert.That(IO.Get(dest).Exists, Is.True);
         }
 
         /* ----------------------------------------------------------------- */
@@ -149,6 +122,45 @@ namespace Cube.FileSystem.App.Ice.Tests
             }
 
             Assert.That(IO.Get(dest).Exists, Is.True);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Archive_Overwrite
+        /// 
+        /// <summary>
+        /// 保存パスに指定されたファイルが既に存在する場合の挙動を確認
+        /// します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public async Task Archive_Overwrite()
+        {
+            var src  = Example("Sample.txt");
+            var dest = Result(@"Overwrite\Sample.zip");
+
+            IO.CreateDirectory(Result("Overwrite"));
+            IO.Copy(Example("Single.zip"), dest);
+            Mock.Destination = dest;
+
+            var args = PresetMenu.Archive.ToArguments().Concat(new[] { src });
+            var tmp  = string.Empty;
+
+            using (var ap = Create(new Request(args)))
+            {
+                ap.Settings.Value.Archive.SaveLocation = SaveLocation.Runtime;
+                ap.View.Show();
+
+                for (var i = 0; ap.View.Visible && i < 50; ++i) await Task.Delay(100);
+                Assert.That(ap.View.Visible, Is.False, "Timeout");
+
+                tmp = ap.Model.Tmp;
+                Assert.That(tmp, Is.Not.Null.And.Not.Empty);
+            }
+
+            Assert.That(IO.Get(dest).Exists, Is.True);
+            Assert.That(IO.Get(tmp).Exists, Is.False);
         }
 
         #endregion
@@ -221,7 +233,7 @@ namespace Cube.FileSystem.App.Ice.Tests
 
                 yield return new TestCaseData(
                     new[] { "Sample.txt", "Archive" },
-                    PresetMenu.ArchiveZipPassword.ToArguments().Concat(new[] { "/o:runtime" }),
+                    PresetMenu.ArchiveDetail.ToArguments(),
                     new ArchiveSettings
                     {
                         SaveLocation  = SaveLocation.Others,
@@ -241,6 +253,18 @@ namespace Cube.FileSystem.App.Ice.Tests
                     },
                     @"Runtime\Sample.7z",
                     4L
+                );
+
+                yield return new TestCaseData(
+                    new[] { "Sample.txt", "Archive" },
+                    PresetMenu.ArchiveBZip2.ToArguments().Concat(new[] { "/o:runtime" }),
+                    new ArchiveSettings
+                    {
+                        SaveLocation = SaveLocation.Others,
+                        Filtering = true,
+                    },
+                    @"Runtime\Sample.tar.bz2",
+                    1L
                 );
 
                 yield return new TestCaseData(

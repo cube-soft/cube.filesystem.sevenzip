@@ -64,9 +64,13 @@ namespace Cube.FileSystem.App.Ice.Tests
             Mock.Destination = Result("Runtime");
             Mock.Password = password;
 
+            var tmp = string.Empty;
+
             using (var ep = Create(request))
             {
+                Assert.That(ep.Model.ProgressInterval.TotalMilliseconds, Is.EqualTo(100).Within(1));
                 ep.Model.ProgressInterval = TimeSpan.FromMilliseconds(10);
+
                 ep.Settings.Value.Extract = extract;
                 ep.Settings.Value.Extract.SaveDirectoryName = Result("Others");
 
@@ -82,9 +86,13 @@ namespace Cube.FileSystem.App.Ice.Tests
                 Assert.That(ep.View.Count,      Is.EqualTo(count));
                 Assert.That(ep.View.TotalCount, Is.EqualTo(count));
                 Assert.That(ep.View.Value,      Is.EqualTo(100));
+
+                tmp = ep.Model.Tmp;
+                Assert.That(tmp, Is.Not.Null.And.Not.Empty);
             }
 
             Assert.That(IO.Get(Result(check)).Exists, Is.True);
+            Assert.That(IO.Get(tmp).Exists, Is.False);
         }
 
         /* ----------------------------------------------------------------- */
@@ -127,6 +135,12 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// 処理を一時停止するテストを実行します。
         /// </summary>
         /// 
+        /// <remarks>
+        /// Suspend イベント発行後、実際に展開が一時停止されるまでに
+        /// タイムラグが発生する事があるため、チェックする値に多少の
+        /// 幅を持たせています。
+        /// </remarks>
+        /// 
         /* ----------------------------------------------------------------- */
         [Test]
         public async Task Extract_Suspend()
@@ -136,11 +150,13 @@ namespace Cube.FileSystem.App.Ice.Tests
 
             using (var ep = Create(src, dest))
             {
+                ep.Model.ProgressInterval = TimeSpan.FromMilliseconds(50);
                 ep.View.Show();
+
                 ep.EventAggregator.GetEvents().Suspend.Publish(true);
                 var count = ep.View.Value;
-                await Task.Delay(100);
-                Assert.That(ep.View.Value, Is.EqualTo(count));
+                await Task.Delay(150);
+                Assert.That(ep.View.Value, Is.EqualTo(count).Within(10)); // see remarks
                 ep.EventAggregator.GetEvents().Suspend.Publish(false);
 
                 for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
@@ -197,6 +213,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
                         OpenDirectory = OpenDirectoryMethod.None,
+                        Filtering     = false,
                         DeleteSource  = false,
                     },
                     @"Others\Complex",
@@ -210,6 +227,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
                         OpenDirectory = OpenDirectoryMethod.Open,
+                        Filtering     = false,
                         DeleteSource  = false,
                     },
                     @"Runtime\Complex",
@@ -224,7 +242,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
                         OpenDirectory = OpenDirectoryMethod.OpenNotDesktop,
                         Filtering     = true,
-                        DeleteSource  = false,
                     },
                     @"Others\フィルタリング テスト用",
                     9L
@@ -237,7 +254,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
                         Filtering     = true,
-                        DeleteSource  = false,
                     },
                     @"Others\名称未設定フォルダ",
                     19L
@@ -249,7 +265,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                     {
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
-                        DeleteSource  = false,
                     },
                     @"Others\Password",
                     3L
