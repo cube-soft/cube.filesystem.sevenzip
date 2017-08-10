@@ -108,10 +108,11 @@ namespace Cube.FileSystem.App.Ice.Tests
         [TestCase(SevenZip.Format.SevenZip, 6)]
         [TestCase(SevenZip.Format.Tar,      4)]
         [TestCase(SevenZip.Format.Sfx,      6)]
+        [TestCase(SevenZip.Format.BZip2,    0)]
         public void GetCompressionMethod(SevenZip.Format format, int expected)
         {
-            Assert.That(SettingsViewDataSource.GetCompressionMethod(format).Count, Is.EqualTo(expected));
-            Assert.That(SettingsViewDataSource.GetCompressionMethod(format).Count, Is.EqualTo(expected));
+            Assert.That(SettingsViewDataSource.GetCompressionMethod(format)?.Count ?? 0, Is.EqualTo(expected));
+            Assert.That(SettingsViewDataSource.GetCompressionMethod(format)?.Count ?? 0, Is.EqualTo(expected));
         }
     }
 }
