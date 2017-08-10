@@ -171,10 +171,10 @@ namespace Cube.FileSystem.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         public override void ShowOverwriteView(OverwriteEventArgs e)
         {
-            Assert.That(e.Source, Is.Not.Null);
+            Assert.That(e.Source,      Is.Not.Null);
             Assert.That(e.Destination, Is.Not.Null);
 
-            e.Result = OverwriteMode.AlwaysYes;
+            e.Result = OverwriteMode.Rename;
         }
 
         /* ----------------------------------------------------------------- */

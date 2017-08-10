@@ -15,6 +15,7 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -75,6 +76,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                 Assert.That(ap.View.Visible, Is.False, "Timeout");
                 Assert.That(ap.Model.ProgressReport.Ratio, Is.EqualTo(1.0).Within(0.01));
 
+                Assert.That(ap.View.Elapsed,    Is.GreaterThan(TimeSpan.Zero));
                 Assert.That(ap.View.FileName,   Is.EqualTo(filename));
                 Assert.That(ap.View.Count,      Is.EqualTo(count));
                 Assert.That(ap.View.TotalCount, Is.EqualTo(count));
@@ -254,6 +256,22 @@ namespace Cube.FileSystem.App.Ice.Tests
                     },
                     @"Drop\Sample.tar.gz",
                     1L
+                );
+
+                yield return new TestCaseData(
+                    new[] { "Sample.txt", "Archive" },
+                    PresetMenu.MailZip.ToArguments().Concat(new[]
+                    {
+                        "/o:source",
+                        "/drop:Mail",
+                    }),
+                    new ArchiveSettings
+                    {
+                        SaveLocation = SaveLocation.Others,
+                        Filtering    = true,
+                    },
+                    @"Mail\Sample.zip",
+                    4L
                 );
             }
         }

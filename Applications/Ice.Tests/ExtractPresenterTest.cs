@@ -15,6 +15,7 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -75,6 +76,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
                 Assert.That(ep.Model.ProgressReport.Ratio, Is.EqualTo(1.0).Within(0.01));
 
+                Assert.That(ep.View.Elapsed,    Is.GreaterThan(TimeSpan.Zero));
                 Assert.That(ep.View.FileName,   Is.EqualTo(filename));
                 Assert.That(ep.View.Count,      Is.EqualTo(count));
                 Assert.That(ep.View.TotalCount, Is.EqualTo(count));
@@ -102,10 +104,42 @@ namespace Cube.FileSystem.App.Ice.Tests
             using (var reader = new SevenZip.ArchiveReader(src)) reader.Extract(dest);
             using (var ep = Create(src, dest))
             {
+                ep.Settings.Value.Extract.RootDirectory = CreateDirectoryMethod.None;
                 ep.View.Show();
                 for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
             }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract_Suspend
+        /// 
+        /// <summary>
+        /// 処理を一時停止するテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public async Task Extract_Suspend()
+        {
+            var src  = Example("Complex.zip");
+            var dest = Result("Suspend");
+
+            using (var ep = Create(src, dest))
+            {
+                ep.View.Show();
+                ep.EventAggregator.GetEvents()?.Suspend.Publish(true);
+                var count = ep.View.Value;
+                await Task.Delay(100);
+                Assert.That(ep.View.Value, Is.EqualTo(count));
+                ep.EventAggregator.GetEvents()?.Suspend.Publish(false);
+
+                for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
+                Assert.That(ep.View.Visible, Is.False, "Timeout");
+            }
+
+            Assert.That(IO.Get(Result(@"Suspend\Complex")).Exists, Is.True);
         }
 
         /* ----------------------------------------------------------------- */
