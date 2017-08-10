@@ -66,6 +66,7 @@ namespace Cube.FileSystem.App.Ice.Tests
 
             using (var ap = Create(request))
             {
+                ap.Model.ProgressInterval = TimeSpan.FromMilliseconds(10);
                 ap.Settings.Value.Archive = archive;
                 ap.Settings.Value.Archive.SaveDirectoryName = Result("Others");
 

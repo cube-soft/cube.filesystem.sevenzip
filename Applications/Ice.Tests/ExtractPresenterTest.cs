@@ -66,6 +66,7 @@ namespace Cube.FileSystem.App.Ice.Tests
 
             using (var ep = Create(request))
             {
+                ep.Model.ProgressInterval = TimeSpan.FromMilliseconds(10);
                 ep.Settings.Value.Extract = extract;
                 ep.Settings.Value.Extract.SaveDirectoryName = Result("Others");
 
@@ -88,20 +89,24 @@ namespace Cube.FileSystem.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract_Overwrite
+        /// Extract_Rename
         /// 
         /// <summary>
-        /// 展開したファイルの上書きテストを実行します。
+        /// OverwriteMode (Rename) の挙動を確認します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public async Task Extract_Overwrite()
+        public async Task Extract_Rename()
         {
-            var src  = Example("Complex.zip");
-            var dest = Result("Overwrite");
+            var dummy = Example("Sample.txt");
+            var src   = Example("Complex.zip");
+            var dest  = Result("Overwrite");
 
-            using (var reader = new SevenZip.ArchiveReader(src)) reader.Extract(dest);
+            IO.CreateDirectory(Result(@"Overwrite\Directory"));
+            IO.Copy(dummy, Result(@"Overwrite\Foo.txt"));
+            IO.Copy(dummy, Result(@"Overwrite\Directory\Empty.txt"));
+
             using (var ep = Create(src, dest))
             {
                 ep.Settings.Value.Extract.RootDirectory = CreateDirectoryMethod.None;
@@ -109,6 +114,9 @@ namespace Cube.FileSystem.App.Ice.Tests
                 for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
             }
+
+            Assert.That(IO.Get(Result(@"Overwrite\Foo(2).txt")).Exists, Is.True);
+            Assert.That(IO.Get(Result(@"Overwrite\Directory\Empty(2).txt")).Exists, Is.True);
         }
 
         /* ----------------------------------------------------------------- */
@@ -129,11 +137,11 @@ namespace Cube.FileSystem.App.Ice.Tests
             using (var ep = Create(src, dest))
             {
                 ep.View.Show();
-                ep.EventAggregator.GetEvents()?.Suspend.Publish(true);
+                ep.EventAggregator.GetEvents().Suspend.Publish(true);
                 var count = ep.View.Value;
                 await Task.Delay(100);
                 Assert.That(ep.View.Value, Is.EqualTo(count));
-                ep.EventAggregator.GetEvents()?.Suspend.Publish(false);
+                ep.EventAggregator.GetEvents().Suspend.Publish(false);
 
                 for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
