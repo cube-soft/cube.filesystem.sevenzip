@@ -267,13 +267,12 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void Overwrite(IInformation src, IInformation dest)
         {
-            switch (OverwriteMode)
+            switch (OverwriteMode & OverwriteMode.Operations)
             {
                 case OverwriteMode.Yes:
-                case OverwriteMode.AlwaysYes:
                     Move(src, dest);
                     break;
-                case OverwriteMode.AlwaysRename:
+                case OverwriteMode.Rename:
                     Move(src, IO.Get(IO.GetUniqueName(dest)));
                     break;
             }

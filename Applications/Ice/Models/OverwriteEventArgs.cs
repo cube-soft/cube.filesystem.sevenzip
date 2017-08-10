@@ -36,6 +36,7 @@ namespace Cube.FileSystem.App.Ice
         Yes          = 0x006,
         No           = 0x007,
         Rename       = 0x010,
+        Operations   = 0x01f,
 
         Always       = 0x100,
         AlwaysYes    = Always | Yes,
