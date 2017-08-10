@@ -388,18 +388,6 @@ namespace Cube.FileSystem.SevenZip
             return dest;
         }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenDisposed
-        ///
-        /// <summary>
-        /// Dispose 時に実行されるハンドラです。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        private void WhenDisposed(object sender, EventArgs e)
-            => _streams.Remove(sender as ArchiveStreamReader);
-
         #region Fields
         private bool _disposed = false;
         private Operator _io;
