@@ -84,18 +84,54 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OnRuntimeSettingsRequired
+        /// RaiseRuntimeSettingsRequired
         /// 
         /// <summary>
         /// RuntimeSettingsRequired イベントを発生させます。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnRuntimeSettingsRequired(QueryEventArgs<string, ArchiveRuntimeSettings> e)
+        private void RaiseRuntimeSettingsRequired()
         {
+            var info = IO.Get(Request.Sources.First());
+            var path = IO.Combine(info.DirectoryName, $"{info.NameWithoutExtension}.zip");
+
+            var e = new QueryEventArgs<string, ArchiveRuntimeSettings>(path);
             if (RuntimeSettingsRequired != null) RuntimeSettingsRequired(this, e);
             else e.Cancel = true;
             if (e.Cancel) throw new UserCancelException();
+
+            Runtime = e.Result;
+        }
+
+        #endregion
+
+        #region MailRequired
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// MailRequired
+        /// 
+        /// <summary>
+        /// メール画面の表示が要求された時に発生するイベントです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public event ValueEventHandler<string> MailRequired;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// RaiseMailRequired
+        /// 
+        /// <summary>
+        /// MailRequired イベントを発生させます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void RaiseMailRequired()
+        {
+            if (!Request.Mail) return;
+            MailRequired?.Invoke(this, ValueEventArgs.Create(Destination));
         }
 
         #endregion
@@ -119,6 +155,7 @@ namespace Cube.FileSystem.App.Ice
             {
                 Archive();
                 ProgressResult();
+                RaiseMailRequired();
                 Open(Destination, Settings.Value.Archive.OpenDirectory);
             }
             catch (UserCancelException /* err */) { /* user cancel */ }
@@ -239,24 +276,6 @@ namespace Cube.FileSystem.App.Ice
             var ext  = $"{head}{tail}";
 
             Destination = IO.Combine(Destination, $"{name}{ext}");
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// RaiseRuntimeSettingsRequired
-        /// 
-        /// <summary>
-        /// RuntimeSettingsRequired イベントを発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void RaiseRuntimeSettingsRequired()
-        {
-            var info = IO.Get(Request.Sources.First());
-            var path = IO.Combine(info.DirectoryName, $"{info.NameWithoutExtension}.zip");
-            var args = new QueryEventArgs<string, ArchiveRuntimeSettings>(path);
-            OnRuntimeSettingsRequired(args);
-            Runtime = args.Result;
         }
 
         /* ----------------------------------------------------------------- */

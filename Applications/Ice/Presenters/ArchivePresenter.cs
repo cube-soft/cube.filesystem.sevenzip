@@ -62,6 +62,7 @@ namespace Cube.FileSystem.App.Ice
             model.PasswordRequired        += WhenPasswordRequired;
             model.Progress                += WhenProgress;
             model.RuntimeSettingsRequired += WhenSettingsRequired;
+            model.MailRequired            += WhenMailRequired;
         }
 
         #endregion
@@ -103,6 +104,18 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void WhenPasswordRequired(object sender, QueryEventArgs<string, string> e)
             => ShowDialog(() => Views.ShowPasswordView(e, true));
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenMailRequired
+        /// 
+        /// <summary>
+        /// メール画面表示要求時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenMailRequired(object sender, ValueEventArgs<string> e)
+            => Views.ShowMailView(e);
 
         /* ----------------------------------------------------------------- */
         ///

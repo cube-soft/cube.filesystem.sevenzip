@@ -100,10 +100,12 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Views\MailForm.cs" />
     <Compile Include="Models\OverwriteEventArgs.cs" />
     <Compile Include="Models\EventAggregator.cs" />
     <Compile Include="Models\Request.cs" />
     <Compile Include="Models\SuspendableProgress.cs" />
+    <Compile Include="NativeMethods\Mapi32.cs" />
     <Compile Include="Presenters\ArchiveFacade.cs" />
     <Compile Include="Presenters\ArchivePresenter.cs" />
     <Compile Include="Presenters\ExtractFacade.cs" />

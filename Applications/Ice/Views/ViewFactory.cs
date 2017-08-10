@@ -135,6 +135,24 @@ namespace Cube.FileSystem.App.Ice
             }
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowMailView
+        /// 
+        /// <summary>
+        /// メール送信用画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">添付情報を保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public virtual void ShowMailView(ValueEventArgs<string> e) => new MailForm
+        {
+            Subject = "CubeICE",
+            Body    = "Attached by CubeICE",
+            Attach  = e.Value,
+        }.Show();
+
         #endregion
 
         #region Implementations
@@ -301,6 +319,9 @@ namespace Cube.FileSystem.App.Ice
 
         public static void ShowRuntimeSettingsView(QueryEventArgs<string, ArchiveRuntimeSettings> e)
             => _factory?.ShowRuntimeSettingsView(e);
+
+        public static void ShowMailView(ValueEventArgs<string> e)
+            => _factory?.ShowMailView(e);
 
         #endregion
 
