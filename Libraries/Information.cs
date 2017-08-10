@@ -229,7 +229,7 @@ namespace Cube.FileSystem
         /* ----------------------------------------------------------------- */
         public Information(FileSystemInfo raw)
         {
-            RawObject = raw ?? throw new ArgumentException();
+            RawObject = raw;
         }
 
         #endregion

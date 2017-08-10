@@ -313,7 +313,7 @@ namespace Cube.FileSystem
         /* ----------------------------------------------------------------- */
         public AlphaInformation(FileSystemInfo raw)
         {
-            RawObject = raw ?? throw new ArgumentException();
+            RawObject = raw;
         }
 
         #endregion
