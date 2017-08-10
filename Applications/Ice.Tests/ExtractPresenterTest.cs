@@ -102,7 +102,6 @@ namespace Cube.FileSystem.App.Ice.Tests
             using (var reader = new SevenZip.ArchiveReader(src)) reader.Extract(dest);
             using (var ep = Create(src, dest))
             {
-                ep.Settings.Value.Extract.RootDirectory = CreateDirectoryMethod.None;
                 ep.View.Show();
                 for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
@@ -127,32 +126,6 @@ namespace Cube.FileSystem.App.Ice.Tests
             using (var ep = Create(src, dest))
             {
                 ep.View.Show();
-                for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
-                Assert.That(ep.View.Visible, Is.False, "Timeout");
-            }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extract_OpenDirectory
-        /// 
-        /// <summary>
-        /// 展開後にディレクトリを開くテストを実行します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        [Test]
-        public async Task Extract_OpenDirectory()
-        {
-            var src  = Example("Sample.zip");
-            var dest = Result("OpenDirectory");
-
-            using (var ep = Create(src, dest))
-            {
-                ep.Settings.Value.Explorer = "dummy.exe";
-                ep.Settings.Value.Extract.OpenDirectory = OpenDirectoryMethod.OpenNotDesktop;
-                ep.View.Show();
-
                 for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
             }
@@ -194,7 +167,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     {
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
-                        OpenDirectory = OpenDirectoryMethod.None,
+                        OpenDirectory = OpenDirectoryMethod.Open,
                         DeleteSource  = false,
                     },
                     @"Runtime\Complex",
@@ -207,7 +180,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     {
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
-                        OpenDirectory = OpenDirectoryMethod.None,
+                        OpenDirectory = OpenDirectoryMethod.OpenNotDesktop,
                         Filtering     = true,
                         DeleteSource  = false,
                     },
@@ -221,7 +194,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                     {
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
-                        OpenDirectory = OpenDirectoryMethod.None,
                         Filtering     = true,
                         DeleteSource  = false,
                     },
@@ -235,7 +207,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                     {
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
-                        OpenDirectory = OpenDirectoryMethod.None,
                         DeleteSource  = false,
                     },
                     @"Others\Password",
@@ -251,8 +222,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                     {
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.None,
-                        OpenDirectory = OpenDirectoryMethod.None,
-                        DeleteSource  = false,
                     },
                     @"RootDirectory\Single-0x00\Sample.txt",
                     1L
@@ -267,8 +236,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                     {
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.Create,
-                        OpenDirectory = OpenDirectoryMethod.None,
-                        DeleteSource  = false,
                     },
                     @"RootDirectory\Single-0x01\Single",
                     1L
@@ -283,8 +250,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                     {
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
-                        OpenDirectory = OpenDirectoryMethod.None,
-                        DeleteSource  = false,
                     },
                     @"RootDirectory\Single-0x03\Single",
                     1L
@@ -300,8 +265,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.Create |
                                         CreateDirectoryMethod.SkipSingleFile,
-                        OpenDirectory = OpenDirectoryMethod.None,
-                        DeleteSource  = false,
                     },
                     @"RootDirectory\Single-0x05\Sample.txt",
                     1L
@@ -318,8 +281,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                         RootDirectory = CreateDirectoryMethod.Create |
                                         CreateDirectoryMethod.SkipSingleFile |
                                         CreateDirectoryMethod.SkipSingleDirectory,
-                        OpenDirectory = OpenDirectoryMethod.None,
-                        DeleteSource = false,
                     },
                     @"RootDirectory\Single-0x07\Sample.txt",
                     1L
@@ -334,8 +295,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                     {
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.None,
-                        OpenDirectory = OpenDirectoryMethod.None,
-                        DeleteSource  = false,
                     },
                     @"RootDirectory\SingleDirectory-0x00\Sample",
                     4L
@@ -350,8 +309,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                     {
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.Create,
-                        OpenDirectory = OpenDirectoryMethod.None,
-                        DeleteSource  = false,
                     },
                     @"RootDirectory\SingleDirectory-0x01\SingleDirectory",
                     4L
@@ -366,8 +323,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                     {
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
-                        OpenDirectory = OpenDirectoryMethod.None,
-                        DeleteSource  = false,
                     },
                     @"RootDirectory\SingleDirectory-0x03\Sample",
                     4L
@@ -383,8 +338,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.Create |
                                         CreateDirectoryMethod.SkipSingleFile,
-                        OpenDirectory = OpenDirectoryMethod.None,
-                        DeleteSource  = false,
                     },
                     @"RootDirectory\SingleDirectory-0x05\SingleDirectory",
                     4L
@@ -401,8 +354,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                         RootDirectory = CreateDirectoryMethod.Create |
                                         CreateDirectoryMethod.SkipSingleFile |
                                         CreateDirectoryMethod.SkipSingleDirectory,
-                        OpenDirectory = OpenDirectoryMethod.None,
-                        DeleteSource  = false,
                     },
                     @"RootDirectory\SingleDirectory-0x07\Sample",
                     4L
@@ -417,8 +368,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                     {
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.None,
-                        OpenDirectory = OpenDirectoryMethod.None,
-                        DeleteSource  = false,
                     },
                     @"RootDirectory\MultiDirectory-0x00\Directory",
                     7L
@@ -433,8 +382,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                     {
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.Create,
-                        OpenDirectory = OpenDirectoryMethod.None,
-                        DeleteSource  = false,
                     },
                     @"RootDirectory\MultiDirectory-0x01\MultiDirectory",
                     7L
@@ -449,8 +396,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                     {
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
-                        OpenDirectory = OpenDirectoryMethod.None,
-                        DeleteSource  = false,
                     },
                     @"RootDirectory\MultiDirectory-0x03\MultiDirectory",
                     7L
@@ -466,8 +411,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.Create |
                                         CreateDirectoryMethod.SkipSingleFile,
-                        OpenDirectory = OpenDirectoryMethod.None,
-                        DeleteSource  = false,
                     },
                     @"RootDirectory\MultiDirectory-0x05\MultiDirectory",
                     7L
@@ -484,8 +427,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                         RootDirectory = CreateDirectoryMethod.Create |
                                         CreateDirectoryMethod.SkipSingleFile |
                                         CreateDirectoryMethod.SkipSingleDirectory,
-                        OpenDirectory = OpenDirectoryMethod.None,
-                        DeleteSource  = false,
                     },
                     @"RootDirectory\MultiDirectory-0x07\MultiDirectory",
                     7L
@@ -501,8 +442,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                     {
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.None,
-                        OpenDirectory = OpenDirectoryMethod.None,
-                        DeleteSource  = false,
                     },
                     @"RootDirectory\Complex-0x00\Foo.txt",
                     5L
@@ -518,8 +457,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                     {
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.Create,
-                        OpenDirectory = OpenDirectoryMethod.None,
-                        DeleteSource  = false,
                     },
                     @"RootDirectory\Complex-0x01\Complex",
                     5L
@@ -535,8 +472,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                     {
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
-                        OpenDirectory = OpenDirectoryMethod.None,
-                        DeleteSource  = false,
                     },
                     @"RootDirectory\Complex-0x03\Complex",
                     5L
@@ -553,8 +488,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.Create |
                                         CreateDirectoryMethod.SkipSingleFile,
-                        OpenDirectory = OpenDirectoryMethod.None,
-                        DeleteSource  = false,
                     },
                     @"RootDirectory\Complex-0x05\Complex",
                     5L
@@ -572,8 +505,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                         RootDirectory = CreateDirectoryMethod.Create |
                                         CreateDirectoryMethod.SkipSingleFile |
                                         CreateDirectoryMethod.SkipSingleDirectory,
-                        OpenDirectory = OpenDirectoryMethod.None,
-                        DeleteSource  = false,
                     },
                     @"RootDirectory\Complex-0x07\Complex",
                     5L

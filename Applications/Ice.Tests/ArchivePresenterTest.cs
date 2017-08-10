@@ -105,9 +105,7 @@ namespace Cube.FileSystem.App.Ice.Tests
 
             using (var ap = Create(new Request(args)))
             {
-                ap.Settings.Value.Archive.OpenDirectory = OpenDirectoryMethod.None;
                 ap.View.Show();
-
                 for (var i = 0; ap.View.Visible && i < 50; ++i) await Task.Delay(100);
                 Assert.That(ap.View.Visible, Is.False, "Timeout");
             }
@@ -139,7 +137,6 @@ namespace Cube.FileSystem.App.Ice.Tests
 
             using (var ap = Create(new Request(args)))
             {
-                ap.Settings.Value.Archive.OpenDirectory = OpenDirectoryMethod.None;
                 ap.Settings.Value.Archive.SaveLocation = SaveLocation.Others;
                 ap.Settings.Value.Archive.SaveDirectoryName = Result("Exists");
                 ap.View.Show();
@@ -149,33 +146,6 @@ namespace Cube.FileSystem.App.Ice.Tests
             }
 
             Assert.That(IO.Get(dest).Exists, Is.True);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Archive_OpenDirectory
-        /// 
-        /// <summary>
-        /// 圧縮後にディレクトリを開くテストを実行します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        [Test]
-        public async Task Archive_OpenDirectory()
-        {
-            var args = PresetMenu.Archive.ToArguments().Concat(new[] { Example("Sample.txt") });
-
-            using (var ap = Create(new Request(args)))
-            {
-                ap.Settings.Value.Explorer = "dummy.exe";
-                ap.Settings.Value.Archive.OpenDirectory = OpenDirectoryMethod.OpenNotDesktop;
-                ap.Settings.Value.Archive.SaveLocation = SaveLocation.Others;
-                ap.Settings.Value.Archive.SaveDirectoryName = Result("OpenDirectory");
-                ap.View.Show();
-
-                for (var i = 0; ap.View.Visible && i < 50; ++i) await Task.Delay(100);
-                Assert.That(ap.View.Visible, Is.False, "Timeout");
-            }
         }
 
         #endregion
@@ -201,7 +171,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ArchiveSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        OpenDirectory = OpenDirectoryMethod.None,
+                        OpenDirectory = OpenDirectoryMethod.Open,
                         Filtering     = true,
                     },
                     @"Others\Sample.zip",
@@ -214,7 +184,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ArchiveSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        OpenDirectory = OpenDirectoryMethod.None,
+                        OpenDirectory = OpenDirectoryMethod.OpenNotDesktop,
                         Filtering     = false,
                     },
                     @"Others\Sample.7z",
@@ -240,7 +210,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ArchiveSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        OpenDirectory = OpenDirectoryMethod.None,
                         Filtering     = true,
                     },
                     @"Others\Sample.exe",
@@ -253,7 +222,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ArchiveSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        OpenDirectory = OpenDirectoryMethod.None,
                         Filtering     = true,
                     },
                     @"Runtime\Sample.zip",
@@ -266,7 +234,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ArchiveSettings
                     {
                         SaveLocation  = SaveLocation.Runtime,
-                        OpenDirectory = OpenDirectoryMethod.None,
                         Filtering     = true,
                     },
                     @"Runtime\Sample.7z",
@@ -283,7 +250,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ArchiveSettings
                     {
                         SaveLocation  = SaveLocation.Others,
-                        OpenDirectory = OpenDirectoryMethod.None,
                         Filtering     = true,
                     },
                     @"Drop\Sample.tar.gz",

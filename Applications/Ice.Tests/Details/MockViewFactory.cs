@@ -203,6 +203,39 @@ namespace Cube.FileSystem.App.Ice.Tests
             };
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowExplorerView
+        /// 
+        /// <summary>
+        /// エクスプローラ画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">情報を保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public override void ShowExplorerView(KeyValueEventArgs<string, string> e)
+        {
+            Assert.That(e.Key, Is.EqualTo("explorer.exe"));
+            Assert.That(System.IO.Directory.Exists(e.Value), Is.True);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowMailView
+        /// 
+        /// <summary>
+        /// メール送信用画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">添付情報を保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public override void ShowMailView(ValueEventArgs<string> e)
+        {
+            Assert.That(System.IO.File.Exists(e.Value), Is.True);
+        }
+
         #endregion
     }
 }
