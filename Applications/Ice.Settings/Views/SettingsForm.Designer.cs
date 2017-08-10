@@ -75,7 +75,6 @@
             this.ArchiveFilterCheckBox = new System.Windows.Forms.CheckBox();
             this.ArchiveOpenDirectoryCheckBox = new System.Windows.Forms.CheckBox();
             this.ArchiveOpenSmartCheckBox = new System.Windows.Forms.CheckBox();
-            this.ArchiveDeleteOnMainCheckBox = new System.Windows.Forms.CheckBox();
             this.ExtractTabPage = new System.Windows.Forms.TabPage();
             this.ExtractPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.ExtractSaveGroupBox = new System.Windows.Forms.GroupBox();
@@ -608,7 +607,7 @@
             this.ArchiveOptionGroupBox.Location = new System.Drawing.Point(3, 144);
             this.ArchiveOptionGroupBox.Name = "ArchiveOptionGroupBox";
             this.ArchiveOptionGroupBox.Padding = new System.Windows.Forms.Padding(8, 3, 8, 3);
-            this.ArchiveOptionGroupBox.Size = new System.Drawing.Size(474, 130);
+            this.ArchiveOptionGroupBox.Size = new System.Drawing.Size(474, 105);
             this.ArchiveOptionGroupBox.TabIndex = 1;
             this.ArchiveOptionGroupBox.TabStop = false;
             this.ArchiveOptionGroupBox.Text = "オプション";
@@ -618,12 +617,11 @@
             this.ArchiveOptionPanel.Controls.Add(this.ArchiveFilterCheckBox);
             this.ArchiveOptionPanel.Controls.Add(this.ArchiveOpenDirectoryCheckBox);
             this.ArchiveOptionPanel.Controls.Add(this.ArchiveOpenSmartCheckBox);
-            this.ArchiveOptionPanel.Controls.Add(this.ArchiveDeleteOnMainCheckBox);
             this.ArchiveOptionPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ArchiveOptionPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.ArchiveOptionPanel.Location = new System.Drawing.Point(8, 19);
             this.ArchiveOptionPanel.Name = "ArchiveOptionPanel";
-            this.ArchiveOptionPanel.Size = new System.Drawing.Size(458, 108);
+            this.ArchiveOptionPanel.Size = new System.Drawing.Size(458, 83);
             this.ArchiveOptionPanel.TabIndex = 0;
             // 
             // ArchiveFilterCheckBox
@@ -661,17 +659,6 @@
             this.ArchiveOpenSmartCheckBox.TabIndex = 2;
             this.ArchiveOpenSmartCheckBox.Text = "デスクトップの場合は開かない";
             this.ArchiveOpenSmartCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // ArchiveDeleteOnMainCheckBox
-            // 
-            this.ArchiveDeleteOnMainCheckBox.AutoSize = true;
-            this.ArchiveDeleteOnMainCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ArchiveSettingsBindingSource, "DeleteOnMail", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.ArchiveDeleteOnMainCheckBox.Location = new System.Drawing.Point(3, 78);
-            this.ArchiveDeleteOnMainCheckBox.Name = "ArchiveDeleteOnMainCheckBox";
-            this.ArchiveDeleteOnMainCheckBox.Size = new System.Drawing.Size(227, 19);
-            this.ArchiveDeleteOnMainCheckBox.TabIndex = 3;
-            this.ArchiveDeleteOnMainCheckBox.Text = "メール送信後に圧縮したファイルを削除する";
-            this.ArchiveDeleteOnMainCheckBox.UseVisualStyleBackColor = true;
             // 
             // ExtractTabPage
             // 
@@ -1219,7 +1206,6 @@
         private System.Windows.Forms.CheckBox ArchiveFilterCheckBox;
         private System.Windows.Forms.CheckBox ArchiveOpenDirectoryCheckBox;
         private System.Windows.Forms.CheckBox ArchiveOpenSmartCheckBox;
-        private System.Windows.Forms.CheckBox ArchiveDeleteOnMainCheckBox;
         private System.Windows.Forms.FlowLayoutPanel ExtractOptionPanel;
         private System.Windows.Forms.CheckBox ExtractCreateDirectoryCheckBox;
         private System.Windows.Forms.CheckBox ExtractCreateSmartCheckBox;

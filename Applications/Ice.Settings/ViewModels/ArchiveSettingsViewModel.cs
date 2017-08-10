@@ -30,8 +30,6 @@ namespace Cube.FileSystem.App.Ice.Settings
     /* --------------------------------------------------------------------- */
     public class ArchiveSettingsViewModel : GeneralSettingsViewModel
     {
-        #region Constructors
-
         /* ----------------------------------------------------------------- */
         ///
         /// ArchiveSettingsViewModel
@@ -44,27 +42,5 @@ namespace Cube.FileSystem.App.Ice.Settings
         /// 
         /* ----------------------------------------------------------------- */
         public ArchiveSettingsViewModel(ArchiveSettings model) : base(model) { }
-
-        #endregion
-
-        #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// DeleteOnMail
-        /// 
-        /// <summary>
-        /// メール添付後に圧縮ファイルを削除するかどうかを示す値を取得
-        /// または設定します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public bool DeleteOnMail
-        {
-            get { return (Model as ArchiveSettings)?.DeleteOnMail ?? false; }
-            set { if (Model is ArchiveSettings a) a.DeleteOnMail = value; }
-        }
-
-        #endregion
     }
 }

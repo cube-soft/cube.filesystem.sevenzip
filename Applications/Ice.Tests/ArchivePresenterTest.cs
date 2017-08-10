@@ -167,7 +167,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         OpenDirectory = OpenDirectoryMethod.None,
                         Filtering     = true,
-                        DeleteOnMail  = false,
                     },
                     @"Others\Sample.zip",
                     1L
@@ -181,7 +180,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         OpenDirectory = OpenDirectoryMethod.None,
                         Filtering     = false,
-                        DeleteOnMail  = false,
                     },
                     @"Others\Sample.7z",
                     8L
@@ -195,7 +193,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         OpenDirectory = OpenDirectoryMethod.None,
                         Filtering     = true,
-                        DeleteOnMail  = false,
                     },
                     @"Others\Sample.tar.bz2",
                     1L
@@ -209,7 +206,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         OpenDirectory = OpenDirectoryMethod.None,
                         Filtering     = true,
-                        DeleteOnMail  = false,
                     },
                     @"Others\Sample.exe",
                     4L
@@ -223,7 +219,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         OpenDirectory = OpenDirectoryMethod.None,
                         Filtering     = true,
-                        DeleteOnMail  = false,
                     },
                     @"Runtime\Sample.zip",
                     4L
@@ -237,7 +232,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                         SaveLocation  = SaveLocation.Runtime,
                         OpenDirectory = OpenDirectoryMethod.None,
                         Filtering     = true,
-                        DeleteOnMail  = false,
                     },
                     @"Runtime\Sample.7z",
                     4L
@@ -255,7 +249,6 @@ namespace Cube.FileSystem.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         OpenDirectory = OpenDirectoryMethod.None,
                         Filtering     = true,
-                        DeleteOnMail  = false,
                     },
                     @"Drop\Sample.tar.gz",
                     1L

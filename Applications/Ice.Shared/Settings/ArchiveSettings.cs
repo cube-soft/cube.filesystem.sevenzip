@@ -31,29 +31,15 @@ namespace Cube.FileSystem.Ice
     [DataContract]
     public class ArchiveSettings : GeneralSettings
     {
-        #region Properties
-
         /* ----------------------------------------------------------------- */
         ///
-        /// DeleteOnMail
+        /// ArchiveSettings
         /// 
         /// <summary>
-        /// メール添付後に圧縮ファイルを削除するかどうかを示す値を取得
-        /// または設定します。
+        /// オブジェクトを初期化します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [DataMember]
-        public bool DeleteOnMail
-        {
-            get { return _deleteOnMail; }
-            set { SetProperty(ref _deleteOnMail, value); }
-        }
-
-        #endregion
-
-        #region Fields
-        private bool _deleteOnMail = false;
-        #endregion
+        public ArchiveSettings() : base() { }
     }
 }
