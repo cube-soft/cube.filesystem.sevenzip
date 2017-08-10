@@ -60,7 +60,7 @@ namespace Cube.FileSystem.App.Ice.Tests
             {
                 if (_enabled == value) return;
                 _enabled = value;
-                OnEnabledChanged(EventArgs.Empty);
+                EnabledChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -81,7 +81,7 @@ namespace Cube.FileSystem.App.Ice.Tests
             {
                 if (_visible == value) return;
                 _visible = value;
-                OnVisibleChanged(EventArgs.Empty);
+                VisibleChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -101,7 +101,7 @@ namespace Cube.FileSystem.App.Ice.Tests
             {
                 if (_location == value) return;
                 _location = value;
-                OnMove(EventArgs.Empty);
+                Move?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -121,15 +121,13 @@ namespace Cube.FileSystem.App.Ice.Tests
             {
                 if (_size == value) return;
                 _size = value;
-                OnResize(EventArgs.Empty);
+                Resize?.Invoke(this, EventArgs.Empty);
             }
         }
 
         #endregion
 
         #region Events
-
-        #region Load
 
         /* ----------------------------------------------------------------- */
         ///
@@ -144,22 +142,6 @@ namespace Cube.FileSystem.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OnLoad
-        /// 
-        /// <summary>
-        /// Load イベントを発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected virtual void OnLoad(EventArgs e)
-            => Load?.Invoke(this, e);
-
-        #endregion
-
-        #region Activated
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// Activated
         /// 
         /// <summary>
@@ -168,22 +150,6 @@ namespace Cube.FileSystem.App.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         public event EventHandler Activated;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnActivated
-        /// 
-        /// <summary>
-        /// Activated イベントを発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected virtual void OnActivated(EventArgs e)
-            => Activated?.Invoke(this, e);
-
-        #endregion
-
-        #region Deactivate
 
         /* ----------------------------------------------------------------- */
         ///
@@ -198,34 +164,6 @@ namespace Cube.FileSystem.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OnDeactivate
-        /// 
-        /// <summary>
-        /// Deactivate イベントを発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected virtual void OnDeactivate(EventArgs e)
-            => Deactivate?.Invoke(this, e);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// RaiseDeactivate
-        /// 
-        /// <summary>
-        /// Deactivate イベントを発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public virtual void RaiseDeactivate()
-            => OnDeactivate(EventArgs.Empty);
-
-        #endregion
-
-        #region Click
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// Click
         /// 
         /// <summary>
@@ -234,34 +172,6 @@ namespace Cube.FileSystem.App.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         public event EventHandler Click;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnClick
-        /// 
-        /// <summary>
-        /// Click イベントを発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected virtual void OnClick(EventArgs e)
-            => Click?.Invoke(this, e);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// RaiseClick
-        /// 
-        /// <summary>
-        /// Click イベントを発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public virtual void RaiseClick()
-            => OnClick(EventArgs.Empty);
-
-        #endregion
-
-        #region EnabledChanged
 
         /* ----------------------------------------------------------------- */
         ///
@@ -276,22 +186,6 @@ namespace Cube.FileSystem.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OnEnabledChanged
-        /// 
-        /// <summary>
-        /// EnabledChanged イベントを発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected virtual void OnEnabledChanged(EventArgs e)
-            => EnabledChanged?.Invoke(this, e);
-
-        #endregion
-
-        #region VisibleChanged
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// VisibleChanged
         /// 
         /// <summary>
@@ -300,22 +194,6 @@ namespace Cube.FileSystem.App.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         public event EventHandler VisibleChanged;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnVisibleChanged
-        /// 
-        /// <summary>
-        /// VisibleChanged イベントを発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected virtual void OnVisibleChanged(EventArgs e)
-            => VisibleChanged?.Invoke(this, e);
-
-        #endregion
-
-        #region Move
 
         /* ----------------------------------------------------------------- */
         ///
@@ -330,22 +208,6 @@ namespace Cube.FileSystem.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OnMove
-        /// 
-        /// <summary>
-        /// Move イベントを発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected virtual void OnMove(EventArgs e)
-            => Move?.Invoke(this, e);
-
-        #endregion
-
-        #region Resize
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// Resize
         /// 
         /// <summary>
@@ -354,20 +216,6 @@ namespace Cube.FileSystem.App.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         public event EventHandler Resize;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnResize
-        /// 
-        /// <summary>
-        /// Move イベントを発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected virtual void OnResize(EventArgs e)
-            => Resize?.Invoke(this, e);
-
-        #endregion
 
         #endregion
 
@@ -382,7 +230,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public virtual void Activate() => OnActivated(EventArgs.Empty);
+        public virtual void Activate() => Activated?.Invoke(this, EventArgs.Empty);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -397,7 +245,11 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public virtual void Close() => Visible = false;
+        public virtual void Close()
+        {
+            Deactivate?.Invoke(this, EventArgs.Empty);
+            Visible = false;
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -415,9 +267,22 @@ namespace Cube.FileSystem.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         public virtual void Show()
         {
-            OnLoad(EventArgs.Empty);
+            Load?.Invoke(this, EventArgs.Empty);
             Visible = true;
+            Activate();
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OnClick
+        /// 
+        /// <summary>
+        /// Click イベントを発生させます。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        protected virtual void OnClick(EventArgs e)
+            => Click.Invoke(this, e);
 
         #endregion
 
