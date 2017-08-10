@@ -18,6 +18,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Cube.FileSystem.SevenZip
@@ -318,9 +319,9 @@ namespace Cube.FileSystem.SevenZip
 
             if (disposing)
             {
-                _raw?.Close();
-                _stream?.Dispose();
-                _7z?.Dispose();
+                _raw.Close();
+                _stream.Dispose();
+                _7z.Dispose();
             }
 
             _disposed = true;
@@ -347,12 +348,16 @@ namespace Cube.FileSystem.SevenZip
             if (Format == Format.Unknown) throw new NotSupportedException();
 
             _stream = new ArchiveStreamReader(_io.OpenRead(Source));
-            _7z     = new SevenZipLibrary();
-            _raw    = _7z.GetInArchive(Format);
+            Debug.Assert(_stream != null);
+
+            _7z = new SevenZipLibrary();
+            Debug.Assert(_7z != null);
+
+            _raw = _7z.GetInArchive(Format);
+            Debug.Assert(_raw != null);
 
             var pos = 32UL * 1024;
             _raw.Open(_stream, ref pos, new ArchiveOpenCallback(Source) { Password = _password });
-
             _items = new ReadOnlyArchiveList(_raw, Format, Source, _password, _io);
         }
 

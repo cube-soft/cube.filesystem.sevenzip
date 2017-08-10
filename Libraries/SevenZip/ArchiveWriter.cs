@@ -18,6 +18,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Cube.FileSystem.SevenZip
@@ -63,8 +64,9 @@ namespace Cube.FileSystem.SevenZip
         public ArchiveWriter(Format format, Operator io)
         {
             Format = format;
-            _7z = new SevenZipLibrary();
             _io = io;
+            _7z = new SevenZipLibrary();
+            Debug.Assert(_7z != null);
         }
 
         #endregion
@@ -204,9 +206,10 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        // ~ArchiveWriter() {
-        //   Dispose(false);
-        // }
+        //~ArchiveWriter()
+        //{
+        //    Dispose(false);
+        //}
 
         /* ----------------------------------------------------------------- */
         ///
@@ -235,9 +238,7 @@ namespace Cube.FileSystem.SevenZip
         protected virtual void Dispose(bool disposing)
         {
             if (_disposed) return;
-
-            if (disposing) _7z?.Dispose();
-
+            if (disposing) _7z.Dispose();
             _disposed = true;
         }
 
