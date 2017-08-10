@@ -89,7 +89,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Details\MockViewResource.cs" />
+    <Compile Include="Details\MockViewHandler.cs" />
     <Compile Include="Details\MockView.cs" />
     <Compile Include="Details\MockViewFactory.cs" />
     <Compile Include="Details\ProgressMockView.cs" />

@@ -21,14 +21,14 @@ namespace Cube.FileSystem.App.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// MockViewResource
+    /// MockViewHandler
     /// 
     /// <summary>
     /// テストで MockView を使用するためのクラスです。
     /// </summary>
     /// 
     /* --------------------------------------------------------------------- */
-    class MockViewResource
+    class MockViewHandler
     {
         #region Constructors
 
@@ -41,7 +41,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected MockViewResource() : this(new Operator()) { }
+        protected MockViewHandler() : this(new Operator()) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -54,7 +54,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// <param name="io">ファイル操作用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected MockViewResource(Operator io)
+        protected MockViewHandler(Operator io)
         {
             var reader = new AssemblyReader(Assembly.GetExecutingAssembly());
             IO = io;

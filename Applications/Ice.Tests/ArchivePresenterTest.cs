@@ -39,7 +39,7 @@ namespace Cube.FileSystem.App.Ice.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ArchivePresenterTest : MockViewResource
+    class ArchivePresenterTest : MockViewHandler
     {
         #region Tests
 
