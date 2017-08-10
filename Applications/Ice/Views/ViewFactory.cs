@@ -137,6 +137,20 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// ShowExplorerView
+        /// 
+        /// <summary>
+        /// エクスプローラ画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">情報を保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public virtual void ShowExplorerView(KeyValueEventArgs<string, string> e)
+            => System.Diagnostics.Process.Start(e.Key, $"\"{e.Value}\"");
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// ShowMailView
         /// 
         /// <summary>
@@ -319,6 +333,9 @@ namespace Cube.FileSystem.App.Ice
 
         public static void ShowRuntimeSettingsView(QueryEventArgs<string, ArchiveRuntimeSettings> e)
             => _factory?.ShowRuntimeSettingsView(e);
+
+        public static void ShowExplorerView(KeyValueEventArgs<string, string> e)
+            => _factory?.ShowExplorerView(e);
 
         public static void ShowMailView(ValueEventArgs<string> e)
             => _factory?.ShowMailView(e);

@@ -281,6 +281,33 @@ namespace Cube.FileSystem.App.Ice
 
         #endregion
 
+        #region OpenDirectoryRequired
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OpenDirectoryRequired
+        /// 
+        /// <summary>
+        /// ディレクトリを開く時に発生するイベントです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public event KeyValueEventHandler<string, string> OpenDirectoryRequired;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OnOpenDirectoryRequired
+        /// 
+        /// <summary>
+        /// OpenDirectoryRequired を発生させます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected virtual void OnOpenDirectoryRequired(KeyValueEventArgs<string, string> e)
+            => OpenDirectoryRequired?.Invoke(this, e);
+
+        #endregion
+
         #region OverwriteRequired
 
         /* ----------------------------------------------------------------- */
@@ -436,7 +463,8 @@ namespace Cube.FileSystem.App.Ice
                        "explorer.exe";
 
             this.LogDebug($"Open:{src}\tExplorer:{exec}");
-            System.Diagnostics.Process.Start(exec, $"\"{src}\"");
+
+            OnOpenDirectoryRequired(KeyValueEventArgs.Create(exec, src));
         }
 
         /* ----------------------------------------------------------------- */
