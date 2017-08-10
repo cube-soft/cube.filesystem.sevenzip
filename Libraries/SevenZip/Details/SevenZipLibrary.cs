@@ -48,27 +48,10 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public SevenZipLibrary()
         {
-            var asm = Assembly.GetEntryAssembly() ??
-                      Assembly.GetExecutingAssembly();
+            var asm = Assembly.GetExecutingAssembly();
             var dir = Path.GetDirectoryName(asm.Location);
 
             Initialize(Path.Combine(dir, "7z.dll"));
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SevenZipLibrary
-        ///
-        /// <summary>
-        /// オブジェクトを初期化します。
-        /// </summary>
-        /// 
-        /// <param name="path">7z.dll のパス</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public SevenZipLibrary(string path)
-        {
-            Initialize(path);
         }
 
         #endregion
