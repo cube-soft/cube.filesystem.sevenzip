@@ -16,6 +16,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Diagnostics;
 using System.Threading;
 
 namespace Cube.FileSystem.App.Ice
@@ -47,6 +48,7 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         public SuspendableProgress(WaitHandle wait, Action<T> action)
         {
+            Debug.Assert(wait != null);
             _wait = wait;
             if (action != null) ProgressChanged += (s, e) => action(e);
         }
@@ -81,7 +83,7 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         public void Report(T value)
         {
-            _wait?.WaitOne();
+            _wait.WaitOne();
             OnReport(value);
         }
 
@@ -98,8 +100,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnReport(T value)
-            => ProgressChanged?.Invoke(this, value);
+        protected virtual void OnReport(T value) => ProgressChanged?.Invoke(this, value);
 
         #endregion
 
