@@ -88,6 +88,30 @@ namespace Cube.FileSystem.App.Ice
 
         #endregion
 
+        #region IDisposable
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Dispose
+        /// 
+        /// <summary>
+        /// リソースを開放します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected override void Dispose(bool disposing)
+        {
+            try
+            {
+                if (_disposed) return;
+                if (disposing) Model.Dispose();
+                _disposed = true;
+            }
+            finally { base.Dispose(disposing); }
+        }
+
+        #endregion
+
         #region Handlers
 
         /* ----------------------------------------------------------------- */
@@ -132,6 +156,10 @@ namespace Cube.FileSystem.App.Ice
         private void WhenOpenDirectoryRequired(object sender, KeyValueEventArgs<string, string> e)
             => Views.ShowExplorerView(e);
 
+        #endregion
+
+        #region Fields
+        private bool _disposed = false;
         #endregion
     }
 }
