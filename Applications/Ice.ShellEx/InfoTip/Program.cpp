@@ -15,6 +15,7 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+#include "QueryInfo/QueryInfoFactory.h"
 #include <initguid.h>
 #include <shlguid.h>
 #include <shlobj.h>
@@ -87,9 +88,14 @@ STDAPI DllCanUnloadNow()
 /// <returns>S_OK or S_FALSE</returns>
 ///
 /* ------------------------------------------------------------------------- */
-STDAPI DllGetClassObject(REFCLSID clsid, REFIID /* iid */, LPVOID *obj) {
+STDAPI DllGetClassObject(REFCLSID clsid, REFIID iid, LPVOID *obj) {
     if (IsEqualCLSID(clsid, CUBEICE_INFOTIP_CLSID)) {
-        obj = nullptr;
+        auto info = new Cube::FileSystem::Ice::QueryInfoFactory(kInstance, kReferenceCount);
+        if (!info) return E_OUTOFMEMORY;
+
+        auto result = info->QueryInterface(iid, obj);
+        info->Release();
+        return result;
     }
     else obj = nullptr;
 
