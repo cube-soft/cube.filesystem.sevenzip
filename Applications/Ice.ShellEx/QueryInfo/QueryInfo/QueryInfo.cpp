@@ -16,6 +16,9 @@
 ///
 /* ------------------------------------------------------------------------- */
 #include "QueryInfo.h"
+#include "Resources.h"
+#include "Format.h"
+#include <sstream>
 
 namespace Cube {
 namespace FileSystem {
@@ -185,7 +188,62 @@ STDMETHODIMP QueryInfo::GetInfoTip(DWORD /* flags */, LPWSTR* dest) {
 /* ------------------------------------------------------------------------- */
 QueryInfo::TString QueryInfo::CreateInfoTip() {
     if (!Settings().ToolTip()) return TString();
-    return _T("TEST");
+
+    std::basic_ostringstream<TCHAR> ss;
+    PutFileInfoTip(ss);
+    return ss.str();
+}
+
+/* ------------------------------------------------------------------------- */
+///
+/// PutFileInfoTip
+///
+/// <summary>
+/// ファイルの基本情報を出力します。
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+void QueryInfo::PutFileInfoTip(TStream& ss) {
+    auto kind = PathFindExtension(FileName().c_str());
+    if (kind != nullptr) {
+        ss << CUBEICE_TIP_KIND << _T(": ") << &kind[1] << _T(" ")
+           << CUBEICE_TIP_FILE << std::endl;
+    }
+
+    auto handle = CreateFile(FileName().c_str(), 0,
+        FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (handle == INVALID_HANDLE_VALUE) return;
+
+    try { PutFileInfoTip(ss, handle); }
+    catch (...) { OutputDebugString(_T("QueryInfo::SetFileInfoTip")); }
+
+    CloseHandle(handle);
+}
+
+/* ------------------------------------------------------------------------- */
+///
+/// PutFileInfoTip
+///
+/// <summary>
+/// ファイルサイズおよび更新日時を出力します。
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+void QueryInfo::PutFileInfoTip(TStream& ss, HANDLE file) {
+    LARGE_INTEGER size = {};
+    GetFileSizeEx(file, &size);
+    ss << CUBEICE_TIP_SIZE << _T(": ") << PrettyByte(size.QuadPart) << std::endl;
+
+    FILETIME utc, local;
+    GetFileTime(file, NULL, NULL, &utc);
+    FileTimeToLocalFileTime(&utc, &local);
+
+    SYSTEMTIME tm = {};
+    FileTimeToSystemTime(&local, &tm);
+
+    TCHAR stime[32] = {};
+    _stprintf_s(stime, _T("%d/%02d/%02d %d:%02d"), tm.wYear, tm.wMonth, tm.wDay, tm.wHour, tm.wMinute);
+    ss << CUBEICE_TIP_LASTWRITETIME << _T(": ") << stime;
 }
 
 }}}

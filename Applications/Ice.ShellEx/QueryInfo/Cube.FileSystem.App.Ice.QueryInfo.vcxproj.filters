@@ -33,5 +33,6 @@
     <ClInclude Include="QueryInfo\QueryInfoSettings.h">
       <Filter>QueryInfo</Filter>
     </ClInclude>
+    <ClInclude Include="Resources.h" />
   </ItemGroup>
 </Project>

@@ -19,8 +19,10 @@
 
 #include "QueryInfoSettings.h"
 #include <shlobj.h>
+#include <shlwapi.h>
 #include <tchar.h>
 #include <string>
+#include <sstream>
 
 namespace Cube {
 namespace FileSystem {
@@ -64,7 +66,11 @@ public:
     STDMETHODIMP GetCurFile(LPOLESTR*) { return E_NOTIMPL; } // IPersistFile
 
 private:
+    typedef std::basic_ostringstream<TCHAR> TStream;
+
     TString CreateInfoTip();
+    void PutFileInfoTip(TStream&);
+    void PutFileInfoTip(TStream&, HANDLE);
 
     HINSTANCE handle_;
     ULONG& dllCount_;
