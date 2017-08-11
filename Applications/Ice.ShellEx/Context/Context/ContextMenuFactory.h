@@ -17,7 +17,7 @@
 /* ------------------------------------------------------------------------- */
 #pragma once
 
-#include <shobjidl.h>
+#include <shlobj.h>
 
 namespace Cube {
 namespace FileSystem {
@@ -34,7 +34,10 @@ namespace Ice {
 /* ------------------------------------------------------------------------- */
 class ContextMenuFactory : public IClassFactory {
 public:
+    ContextMenuFactory() = delete;
     ContextMenuFactory(HINSTANCE, ULONG&);
+    ContextMenuFactory(const ContextMenuFactory&) = delete;
+    ContextMenuFactory& operator=(const ContextMenuFactory&) = delete;
     virtual ~ContextMenuFactory();
 
     STDMETHOD(QueryInterface)(REFIID iid, LPVOID * obj); // IUnknown

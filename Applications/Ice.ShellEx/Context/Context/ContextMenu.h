@@ -21,7 +21,7 @@
 #include "ContextMenuItem.h"
 #include "ContextSettings.h"
 #include "Resources.h"
-#include <shobjidl.h>
+#include <shlobj.h>
 #include <tchar.h>
 #include <map>
 #include <memory>
@@ -41,13 +41,14 @@ namespace Ice {
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-class ContextMenu : public IContextMenu3, IShellExtInit {
+class ContextMenu : public IContextMenu, IShellExtInit {
 public:
     typedef std::basic_string<TCHAR> TString;
 
     ContextMenu() = delete;
     ContextMenu(const ContextMenu&) = delete;
     ContextMenu(HINSTANCE, ULONG&, ContextMenuIcon*);
+    ContextMenu& operator=(const ContextMenu&) = delete;
     virtual ~ContextMenu();
 
     TString CurrentDirectory() const;
@@ -68,8 +69,6 @@ public:
     STDMETHODIMP GetCommandString(UINT_PTR, UINT, UINT*, LPSTR, UINT); // IContextMenu
     STDMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO); // IContextMenu
     STDMETHODIMP QueryContextMenu(HMENU, UINT, UINT, UINT, UINT); // IContextMenu
-    STDMETHODIMP HandleMenuMsg(UINT, WPARAM, LPARAM) { return S_OK; } // IContextMenu2
-    STDMETHODIMP HandleMenuMsg2(UINT, WPARAM, LPARAM, LRESULT*) { return S_OK; } // IContextMenu3
 
 private:
     bool Insert(ContextMenuItem&, HMENU, UINT&, UINT&, UINT);
