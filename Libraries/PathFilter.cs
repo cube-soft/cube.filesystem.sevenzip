@@ -101,7 +101,7 @@ namespace Cube.FileSystem
                 {
                     var path = _io.Combine(EspacedPaths.ToArray());
                     var head = Kind == PathKind.Inactivation && AllowInactivation ? InactivationStr :
-                               Kind == PathKind.Unc && AllowUnc ? UncStr :
+                               Kind == PathKind.Unc && AllowUncCore() ? UncStr :
                                string.Empty;
                     _cache = !string.IsNullOrEmpty(head) ? $"{head}{path}" : path;
                 }
@@ -163,6 +163,13 @@ namespace Cube.FileSystem
         /// どうかを示す値を取得または設定します。
         /// </summary>
         /// 
+        /// <remarks>
+        /// false に設定した場合、"." 部分のディレクトリを取り除きます。
+        /// 例えば、"foo\.\bar" は "foo\bar" となります。
+        /// </remarks>
+        /// 
+        /// <see cref="AllowInactivation"/>
+        /// 
         /* ----------------------------------------------------------------- */
         public bool AllowCurrentDirectory
         {
@@ -189,6 +196,8 @@ namespace Cube.FileSystem
         /// 例えば、"foo\..\bar" は "foo\bar" となります。
         /// </remarks>
         /// 
+        /// <see cref="AllowInactivation"/>
+        /// 
         /* ----------------------------------------------------------------- */
         public bool AllowParentDirectory
         {
@@ -212,8 +221,9 @@ namespace Cube.FileSystem
         /// 
         /// <remarks>
         /// サービス機能の不活性化では "." および ".." は禁止されるため、
-        /// true 設定時には AllowSingleDot および AllowDoubleDot は
-        /// 自動的に false に設定されます。
+        /// true 設定時には AllowCurrentDirectory, AllowParentDirectory の
+        /// 設定に関わらず、これらの文字列は除去されます。また、実装上の
+        /// 都合で、true 設定時には AllowUnc の設定も無視されます。
         /// </remarks>
         /// 
         /* ----------------------------------------------------------------- */
@@ -224,12 +234,6 @@ namespace Cube.FileSystem
             {
                 if (_allowInactivation == value) return;
                 _allowInactivation = value;
-                if (value)
-                {
-                    AllowCurrentDirectory = false;
-                    AllowParentDirectory  = false;
-                    AllowUnc              = false;
-                }
                 Reset();
             }
         }
@@ -242,6 +246,8 @@ namespace Cube.FileSystem
         /// UNC パスを表す接頭辞 "\\" を許可するかどうかを示す値を取得
         /// または設定します。
         /// </summary>
+        /// 
+        /// <see cref="AllowInactivation"/>
         /// 
         /* ----------------------------------------------------------------- */
         public bool AllowUnc
@@ -533,8 +539,8 @@ namespace Cube.FileSystem
         {
             if (string.IsNullOrEmpty(name)) return true;
             if (index == 0 && name == "?") return true;
-            if (name == CurrentDirectoryStr && !AllowCurrentDirectory) return true;
-            if (name == ParentDirectoryStr && !AllowParentDirectory) return true;
+            if (name == CurrentDirectoryStr && !AllowCurrentDirectoryCore()) return true;
+            if (name == ParentDirectoryStr && !AllowParentDirectoryCore()) return true;
             return false;
         }
 
@@ -581,6 +587,57 @@ namespace Cube.FileSystem
             var cmp   = new GenericEqualityComparer<string>((x, y) => string.Compare(x, y, true) == 0);
             return ReservedNames.Contains(name, cmp);
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// AllowCurrentDirectoryCore
+        ///
+        /// <summary>
+        /// カレントディレクトリを表す "." (single-dot) を許可するか
+        /// どうかを示す値を取得します。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// AllowInactivation 有効時は無効化されます。
+        /// </remarks>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private bool AllowCurrentDirectoryCore()
+            => !AllowInactivation && AllowCurrentDirectory;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// AllowParentDirectoryCore
+        ///
+        /// <summary>
+        /// 一階層上のディレクトリを表す ".." (double-dot) を許可するか
+        /// どうかを示す値を取得または設定します。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// AllowInactivation 有効時は無効化されます。
+        /// </remarks>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private bool AllowParentDirectoryCore()
+            => !AllowInactivation && AllowParentDirectory;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// AllowUncCore
+        ///
+        /// <summary>
+        /// UNC パスを表す接頭辞 "\\" を許可するかどうかを示す値を取得
+        /// または設定します。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// AllowInactivation 有効時は無効化されます。
+        /// </remarks>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private bool AllowUncCore()
+            => !AllowInactivation && AllowUnc;
 
         /* ----------------------------------------------------------------- */
         ///
