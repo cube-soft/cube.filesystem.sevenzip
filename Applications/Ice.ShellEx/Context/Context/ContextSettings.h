@@ -39,7 +39,8 @@ public:
     typedef std::basic_string<TCHAR> TString;
 
     ContextSettings();
-    ContextSettings(const ContextSettings& cp) = delete;
+    ContextSettings(const ContextSettings&) = delete;
+    ContextSettings& operator=(const ContextSettings&) = delete;
     virtual ~ContextSettings() {}
 
     const int& Preset() const { return preset_; }

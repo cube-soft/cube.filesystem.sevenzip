@@ -65,7 +65,7 @@ void ContextSettings::Load() {
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-HKEY ContextSettings::Open(const ContextSettings::TString& name) {
+HKEY ContextSettings::Open(const TString& name) {
     HKEY dest;
     auto result = RegOpenKeyEx(HKEY_CURRENT_USER, name.c_str(), 0, KEY_READ, &dest);
     return result == ERROR_SUCCESS ? dest : nullptr;
@@ -80,7 +80,7 @@ HKEY ContextSettings::Open(const ContextSettings::TString& name) {
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-DWORD ContextSettings::GetDword(HKEY hkey, const ContextSettings::TString& name, DWORD alternate) {
+DWORD ContextSettings::GetDword(HKEY hkey, const TString& name, DWORD alternate) {
     DWORD dest = 0;
     DWORD size = sizeof(dest);
     auto result = RegQueryValueEx(hkey, name.c_str(), nullptr, nullptr, reinterpret_cast<LPBYTE>(&dest), &size);
