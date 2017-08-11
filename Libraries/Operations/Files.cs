@@ -66,13 +66,15 @@ namespace Cube.FileSystem.Files
         {
             if (string.IsNullOrEmpty(path)) return null;
 
-            var dest = new SHFILEINFO();
-            return Shell32.NativeMethods.SHGetFileInfo(path,
+            var dest   = new SHFILEINFO();
+            var result = Shell32.NativeMethods.SHGetFileInfo(path,
                 0x0080, // FILE_ATTRIBUTE_NORMAL
                 ref dest,
                 (uint)Marshal.SizeOf(dest),
                 0x0410 // SHGFI_TYPENAME | SHGFI_USEFILEATTRIBUTES
-            ) != IntPtr.Zero ? dest.szTypeName : null;
+            );
+
+            return result != IntPtr.Zero ? dest.szTypeName : null;
         }
 
         /* ----------------------------------------------------------------- */

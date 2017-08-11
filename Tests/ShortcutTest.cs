@@ -64,6 +64,29 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Create_Empty
+        ///
+        /// <summary>
+        /// リンク先パスに空文字を指定した時の挙動を確認します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Create_Empty()
+        {
+            var sc = new Shortcut(Result("ScEmpty"))
+            {
+                Link         = string.Empty,
+                Arguments    = null,
+                IconLocation = string.Empty,
+            };
+
+            sc.Create();
+            Assert.That(sc.Exists, Is.False);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Create_Throw
         ///
         /// <summary>

@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
@@ -181,9 +182,9 @@ namespace Cube.FileSystem
 
             var guid = new Guid("00021401-0000-0000-C000-000000000046");
             var type = Type.GetTypeFromCLSID(guid);
+            var sh   = Activator.CreateInstance(type) as IShellLink;
 
-            var sh = Activator.CreateInstance(type) as IShellLink;
-            if (sh == null) return;
+            Debug.Assert(sh != null);
 
             try
             {
@@ -196,7 +197,8 @@ namespace Cube.FileSystem
                 sh.SetShowCmd(1); // SW_SHOWNORMAL
                 sh.SetIconLocation(GetIconFileName(), GetIconIndex());
 
-                (sh as IPersistFile)?.Save(FullName, true);
+                Debug.Assert(sh is IPersistFile);
+                ((IPersistFile)sh).Save(FullName, true);
             }
             finally { Marshal.ReleaseComObject(sh); }
         }

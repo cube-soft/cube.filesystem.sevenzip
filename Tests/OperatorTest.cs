@@ -95,23 +95,31 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Get_DateTime
+        /// Get_Properties
         ///
         /// <summary>
-        /// 各種日時情報の内容を確認します。
+        /// Get で取得できるオブジェクトのプロパティを確認します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(Operator_TestCases))]
-        public void Get_DateTime(IOperatorCore core)
+        public void Get_Properties(IOperatorCore core)
         {
             var io   = new Operator(core);
-            var info = io.Get(Example("Sample.txt"));
+            var file = io.Get(Example("Sample.txt"));
+            var dir  = io.Get(file.DirectoryName);
             var cmp  = new DateTime(2017, 6, 5);
 
-            Assert.That(info.CreationTime,   Is.GreaterThan(cmp));
-            Assert.That(info.LastWriteTime,  Is.GreaterThan(cmp));
-            Assert.That(info.LastAccessTime, Is.GreaterThan(cmp));
+            Assert.That(file.DirectoryName,  Is.EqualTo(Examples));
+            Assert.That(dir.DirectoryName,   Is.Not.Null.And.Not.Empty);
+            Assert.That(file.CreationTime,   Is.GreaterThan(cmp));
+            Assert.That(file.LastWriteTime,  Is.GreaterThan(cmp));
+            Assert.That(file.LastAccessTime, Is.GreaterThan(cmp));
+            Assert.DoesNotThrow(() =>
+            {
+                file.Refresh();
+                dir.Refresh();
+            });
         }
 
         /* ----------------------------------------------------------------- */
@@ -212,8 +220,9 @@ namespace Cube.FileSystem.Tests
             var io = new Operator(core);
             io.Failed += (s, e) =>
             {
+                // try twice
+                e.Cancel = failed;
                 failed   = true;
-                e.Cancel = true;
 
                 Assert.That(e.Name,          Is.EqualTo("Move"));
                 Assert.That(e.Paths.Count(), Is.EqualTo(2));
@@ -242,8 +251,9 @@ namespace Cube.FileSystem.Tests
             var io = new Operator(core);
             io.Failed += (s, e) =>
             {
+                // try twice
+                e.Cancel = failed;
                 failed   = true;
-                e.Cancel = true;
 
                 Assert.That(e.Name, Is.EqualTo("OpenRead"));
                 Assert.That(e.Paths.Count(), Is.EqualTo(1));
