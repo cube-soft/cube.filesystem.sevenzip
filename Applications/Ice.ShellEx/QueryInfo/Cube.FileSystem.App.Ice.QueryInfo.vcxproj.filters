@@ -8,6 +8,9 @@
     <ClCompile Include="QueryInfo\QueryInfoFactory.cpp">
       <Filter>QueryInfo</Filter>
     </ClCompile>
+    <ClCompile Include="QueryInfo\QueryInfoSettings.cpp">
+      <Filter>QueryInfo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.def" />
@@ -25,6 +28,9 @@
       <Filter>QueryInfo</Filter>
     </ClInclude>
     <ClInclude Include="QueryInfo\QueryInfoFactory.h">
+      <Filter>QueryInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryInfo\QueryInfoSettings.h">
       <Filter>QueryInfo</Filter>
     </ClInclude>
   </ItemGroup>

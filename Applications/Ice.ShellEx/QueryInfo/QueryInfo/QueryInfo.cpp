@@ -36,8 +36,12 @@ namespace Ice {
 QueryInfo::QueryInfo(HINSTANCE handle, ULONG& count) :
     handle_(handle),
     dllCount_(count),
-    objCount_(1)
+    objCount_(1),
+    settings_(),
+    filename_()
 {
+    try { Settings().Load(); }
+    catch (...) { /* TODO: Logging. */ }
     InterlockedIncrement(reinterpret_cast<LONG*>(&dllCount_));
 }
 
@@ -108,7 +112,8 @@ STDMETHODIMP_(ULONG) QueryInfo::Release() {
 ///
 /* ------------------------------------------------------------------------- */
 STDMETHODIMP QueryInfo::QueryInterface(REFIID iid, LPVOID * obj) {
-    if (IsEqualIID(iid, IID_IUnknown)) *obj = static_cast<IQueryInfo*>(this);
+    if (!Settings().ToolTip()) *obj = nullptr;
+    else if (IsEqualIID(iid, IID_IUnknown)) *obj = static_cast<IQueryInfo*>(this);
     else if (IsEqualIID(iid, IID_IQueryInfo)) *obj = static_cast<IQueryInfo*>(this);
     else if (IsEqualIID(iid, IID_IPersistFile)) *obj = static_cast<LPPERSISTFILE>(this);
     else *obj = nullptr;
@@ -116,6 +121,25 @@ STDMETHODIMP QueryInfo::QueryInterface(REFIID iid, LPVOID * obj) {
     if (*obj == nullptr) return E_NOINTERFACE;
     AddRef();
     return NOERROR;
+}
+
+/* ------------------------------------------------------------------------- */
+///
+/// Load
+///
+/// <summary>
+/// ファイルが選択された場合に、そのファイルに関する情報を読み込むために
+/// 実行されます。
+/// </summary>
+///
+/// <returns>HRESULT</returns>
+///
+/// <remarks>IPersistFile から継承されます。</remarks>
+///
+/* ------------------------------------------------------------------------- */
+STDMETHODIMP QueryInfo::Load(LPCOLESTR filename, DWORD /* mode */) {
+    FileName() = filename;
+    return S_OK;
 }
 
 /* ------------------------------------------------------------------------- */
@@ -136,30 +160,32 @@ STDMETHODIMP QueryInfo::QueryInterface(REFIID iid, LPVOID * obj) {
 ///
 /* ------------------------------------------------------------------------- */
 STDMETHODIMP QueryInfo::GetInfoTip(DWORD /* flags */, LPWSTR* dest) {
-    TString dummy(_T("TEST"));
+    *dest = nullptr;
 
-    *dest = static_cast<LPWSTR>(CoTaskMemAlloc((dummy.size() + 1) * sizeof(WCHAR)));
-    wcscpy_s(*dest, dummy.size() + 1, dummy.c_str());
+    try {
+        auto result = CreateInfoTip();
+        if (!result.empty()) {
+            *dest = static_cast<LPWSTR>(CoTaskMemAlloc((result.size() + 1) * sizeof(WCHAR)));
+            wcscpy_s(*dest, result.size() + 1, result.c_str());
+        }
+    }
+    catch(...) { /* TODO: Logging */ }
 
-    return S_OK;
+    return (*dest != nullptr) ? S_OK : E_NOT_SET;
 }
 
 /* ------------------------------------------------------------------------- */
 ///
-/// Load
+/// CreateInfoTip
 ///
 /// <summary>
-/// ファイルが選択された場合に、そのファイルに関する情報を読み込むために
-/// 実行されます。
+/// ツールチップ用文字列を取得します。
 /// </summary>
 ///
-/// <returns>HRESULT</returns>
-///
-/// <remarks>IPersistFile から継承されます。</remarks>
-///
 /* ------------------------------------------------------------------------- */
-STDMETHODIMP QueryInfo::Load(LPCOLESTR /* filename */, DWORD /* mode */) {
-    return S_OK;
+QueryInfo::TString QueryInfo::CreateInfoTip() {
+    if (!Settings().ToolTip()) return TString();
+    return _T("TEST");
 }
 
 }}}

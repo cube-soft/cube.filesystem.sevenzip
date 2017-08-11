@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 #pragma once
 
+#include "QueryInfoSettings.h"
 #include <shlobj.h>
 #include <tchar.h>
 #include <string>
@@ -44,6 +45,12 @@ public:
     QueryInfo& operator=(const QueryInfo&) = delete;
     virtual ~QueryInfo();
 
+    const QueryInfoSettings& Settings() const { return settings_; }
+    const TString& FileName() const { return filename_; }
+
+    QueryInfoSettings& Settings() { return settings_; }
+    TString& FileName() { return filename_; }
+
     STDMETHOD(QueryInterface)(REFIID iid, LPVOID * obj); // IUnknown
     STDMETHOD_(ULONG, AddRef)(void); // IUnknown
     STDMETHOD_(ULONG, Release)(void); // IUnknown
@@ -57,9 +64,13 @@ public:
     STDMETHODIMP GetCurFile(LPOLESTR*) { return E_NOTIMPL; } // IPersistFile
 
 private:
+    TString CreateInfoTip();
+
     HINSTANCE handle_;
     ULONG& dllCount_;
     ULONG objCount_;
+    QueryInfoSettings settings_;
+    TString filename_;
 };
 
 }}}
