@@ -16,34 +16,52 @@
 /// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ///
 /* ------------------------------------------------------------------------- */
-using System;
-using System.Runtime.InteropServices;
-
 namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveOpenCallback
+    /// ArchivePasswordCallback
     /// 
     /// <summary>
-    /// 圧縮ファイルを開く際のコールバック関数群を定義したクラスです。
+    /// 展開時にパスワードを問い合わせる際のコールバック関数群を定義した
+    /// クラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal sealed class ArchiveOpenCallback : ArchivePasswordCallback, IArchiveOpenCallback
+    internal abstract class ArchivePasswordCallback : ArchiveCallbackBase, ICryptoGetTextPassword
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveOpenCallback
+        /// ArchivePasswordCallback
         ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
+        /// <param name="src">圧縮ファイルのパス</param>
+        /// 
         /* ----------------------------------------------------------------- */
-        public ArchiveOpenCallback(string src) : base(src) { }
+        protected ArchivePasswordCallback(string src) : base()
+        {
+            Source = src;
+        }
+
+        #endregion
+
+        #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Source
+        ///
+        /// <summary>
+        /// 圧縮ファイルのパスを取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public string Source { get; }
 
         #endregion
 
@@ -51,46 +69,37 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SetTotal
+        /// CryptoGetTextPassword
         /// 
         /// <summary>
-        /// 圧縮ファイルの展開時の合計サイズを取得します。
+        /// 圧縮ファイルのパスワードを取得します。
         /// </summary>
         /// 
-        /// <param name="count">ファイル数</param>
-        /// <param name="bytes">バイト数</param>
-        ///
-        /// <remarks>
-        /// 7z.dll で null が設定される事が多いため、ref ulong の代わりに
-        /// IntPtr を使用しています。非 null 時に値を取得する場合、
-        /// Marshal.ReadInt64 を使用して下さい。
-        /// </remarks>
+        /// <param name="password">パスワード</param>
+        /// 
+        /// <returns>OperationResult</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public void SetTotal(IntPtr count, IntPtr bytes)
+        public int CryptoGetTextPassword(out string password)
         {
-            if (count != IntPtr.Zero) ProgressReport.TotalCount = Marshal.ReadInt64(count);
-            if (bytes != IntPtr.Zero) ProgressReport.TotalBytes = Marshal.ReadInt64(bytes);
-        }
+            if (Password != null)
+            {
+                var e = new QueryEventArgs<string, string>(Source);
+                Password.Request(e);
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SetCompleted
-        ///
-        /// <summary>
-        /// ストリームの読み込み準備が完了したサイズを取得します。
-        /// </summary>
-        /// 
-        /// <param name="count">ファイル数</param>
-        /// <param name="bytes">バイト数</param>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public void SetCompleted(IntPtr count, IntPtr bytes)
-        {
-            if (count != IntPtr.Zero) ProgressReport.Count = Marshal.ReadInt64(count);
-            if (bytes != IntPtr.Zero) ProgressReport.Bytes = Marshal.ReadInt64(bytes);
-            Progress?.Report(ProgressReport);
-            Result = OperationResult.OK;
+                var ok = !e.Cancel && !string.IsNullOrEmpty(e.Result);
+                Result = e.Cancel ? OperationResult.UserCancel :
+                         ok       ? OperationResult.OK :
+                                    OperationResult.WrongPassword;
+                password = ok ? e.Result : string.Empty;
+            }
+            else
+            {
+                Result = OperationResult.WrongPassword;
+                password = string.Empty;
+            }
+
+            return (int)Result;
         }
 
         #endregion

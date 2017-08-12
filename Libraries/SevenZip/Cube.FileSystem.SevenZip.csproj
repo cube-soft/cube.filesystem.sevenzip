@@ -84,6 +84,7 @@
     <Compile Include="Details\ArchiveExtractCallback.cs" />
     <Compile Include="Details\ArchiveOpenCallback.cs" />
     <Compile Include="Details\ArchiveOptionSetter.cs" />
+    <Compile Include="Details\ArchivePasswordCallback.cs" />
     <Compile Include="Details\ArchiveStream.cs" />
     <Compile Include="Details\ArchiveUpdateCallback.cs" />
     <Compile Include="Details\Parameters.cs" />

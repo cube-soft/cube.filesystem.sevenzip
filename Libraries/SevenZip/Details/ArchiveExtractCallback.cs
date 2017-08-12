@@ -34,7 +34,7 @@ namespace Cube.FileSystem.SevenZip
     ///
     /* --------------------------------------------------------------------- */
     internal sealed class ArchiveExtractCallback
-        : ArchiveCallbackBase, IArchiveExtractCallback, ICryptoGetTextPassword, IDisposable
+        : ArchivePasswordCallback, IArchiveExtractCallback, IDisposable
     {
         #region Constructors
 
@@ -51,16 +51,10 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="items">展開項目一覧</param>
         /// <param name="io">ファイル操作用オブジェクト</param>
         /// 
-        /// <remarks>
-        /// bytes に -1 が設定された場合、SetTotal で取得される値を使用
-        /// します。
-        /// </remarks>
-        /// 
         /* ----------------------------------------------------------------- */
-        public ArchiveExtractCallback(string src, string dest,
-            IEnumerable<ArchiveItem> items, Operator io)
+        public ArchiveExtractCallback(string src, string dest, IEnumerable<ArchiveItem> items, Operator io)
+            : base(src)
         {
-            Source      = src;
             Destination = dest;
             Items       = items;
             TotalCount  = -1;
@@ -75,17 +69,6 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Source
-        ///
-        /// <summary>
-        /// 圧縮ファイルのパスを取得します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public string Source { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -189,45 +172,6 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Methods
-
-        #region ICryptoGetTextPassword
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CryptoGetTextPassword
-        /// 
-        /// <summary>
-        /// 圧縮ファイルのパスワードを取得します。
-        /// </summary>
-        /// 
-        /// <param name="password">パスワード</param>
-        /// 
-        /// <returns>OperationResult</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public int CryptoGetTextPassword(out string password)
-        {
-            if (Password != null)
-            {
-                var e = new QueryEventArgs<string, string>(Source);
-                Password.Request(e);
-
-                var ok = !e.Cancel && !string.IsNullOrEmpty(e.Result);
-                Result = e.Cancel ? OperationResult.UserCancel :
-                         ok       ? OperationResult.OK :
-                                    OperationResult.WrongPassword;
-                password = ok ? e.Result : string.Empty;
-            }
-            else
-            {
-                Result = OperationResult.WrongPassword;
-                password = string.Empty;
-            }
-
-            return (int)Result;
-        }
-
-        #endregion
 
         #region IArchiveExtractCallback
 
