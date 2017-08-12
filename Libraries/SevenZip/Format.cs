@@ -209,6 +209,7 @@ namespace Cube.FileSystem.SevenZip
                 case Format.GZip:     return ".gz";
                 case Format.Lzw:      return ".z";
                 case Format.Sfx:      return ".exe";
+                case Format.Unknown:  return string.Empty;
                 default: return $".{format.ToString().ToLower()}";
             }
         }

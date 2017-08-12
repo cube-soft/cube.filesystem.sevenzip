@@ -185,6 +185,11 @@
       <Name>Cube.FileSystem.SevenZip</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Examples\Empty.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

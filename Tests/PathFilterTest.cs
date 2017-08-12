@@ -63,6 +63,8 @@ namespace Cube.FileSystem.Tests
                 AllowDriveLetter      = true,
                 AllowParentDirectory  = false,
                 AllowCurrentDirectory = false,
+                AllowInactivation     = false,
+                AllowUnc              = false,
                 EscapeChar            = escape,
             }.EscapedPath;
 
@@ -92,7 +94,11 @@ namespace Cube.FileSystem.Tests
         [TestCase(@"C:\windows\dir\.\allow.txt", true, ExpectedResult = @"C:\windows\dir\.\allow.txt")]
         [TestCase(@"C:\windows\dir\.\deny.txt", false, ExpectedResult = @"C:\windows\dir\deny.txt")]
         public string Escape_CurrentDirectory(string src, bool allow)
-            => new PathFilter(src) { AllowCurrentDirectory = allow }.EscapedPath;
+            => new PathFilter(src)
+            {
+                AllowInactivation     = false,
+                AllowCurrentDirectory = allow,
+            }.EscapedPath;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -106,7 +112,11 @@ namespace Cube.FileSystem.Tests
         [TestCase(@"C:\windows\dir\..\allow.txt", true, ExpectedResult = @"C:\windows\dir\..\allow.txt")]
         [TestCase(@"C:\windows\dir\..\deny.txt", false, ExpectedResult = @"C:\windows\dir\deny.txt")]
         public string Escape_ParentDirectory(string src, bool allow)
-            => new PathFilter(src) { AllowParentDirectory = allow }.EscapedPath;
+            => new PathFilter(src)
+            {
+                AllowInactivation    = false,
+                AllowParentDirectory = allow,
+            }.EscapedPath;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -121,7 +131,14 @@ namespace Cube.FileSystem.Tests
         [TestCase(@"\\?\C:\windows\dir\allow.txt",  true, ExpectedResult = @"\\?\C:\windows\dir\allow.txt")]
         [TestCase(@"\\?\C:\windows\.\..\allow.txt", true, ExpectedResult = @"\\?\C:\windows\allow.txt")]
         public string Escape_Inactivation(string src, bool allow)
-            => new PathFilter(src) { AllowInactivation = allow }.EscapedPath;
+            => new PathFilter(src)
+            {
+                AllowInactivation     = allow,
+                AllowDriveLetter      = true,
+                AllowCurrentDirectory = true,
+                AllowParentDirectory  = true,
+                AllowUnc              = true,
+            }.EscapedPath;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -135,7 +152,11 @@ namespace Cube.FileSystem.Tests
         [TestCase(@"\\domain\dir\deny.txt", false, ExpectedResult = @"domain\dir\deny.txt")]
         [TestCase(@"\\domain\dir\allow.txt", true, ExpectedResult = @"\\domain\dir\allow.txt")]
         public string Escape_Unc(string src, bool unc)
-            => new PathFilter(src) { AllowUnc = unc }.EscapedPath;
+            => new PathFilter(src)
+            {
+                AllowInactivation = false,
+                AllowUnc          = unc
+            }.EscapedPath;
 
         /* ----------------------------------------------------------------- */
         ///

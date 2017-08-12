@@ -125,6 +125,27 @@ namespace Cube.FileSystem.Tests
             }
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Add_Throws
+        ///
+        /// <summary>
+        /// 存在しないファイルを指定した時の挙動を確認します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Add_Throws()
+            => Assert.That(() =>
+            {
+                using (var writer = new ArchiveWriter(Format.Zip))
+                {
+                    writer.Add(Example("NotFound.txt"));
+                    Assert.Fail("never reached");
+                }
+            },
+            Throws.TypeOf<System.IO.FileNotFoundException>());
+
         #endregion
 
         #region TestCases
