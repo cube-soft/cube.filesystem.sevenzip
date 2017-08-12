@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 #include "ContextSettings.h"
 #include "ContextPresetMenu.h"
+#include "Log.h"
 
 namespace Cube {
 namespace FileSystem {
@@ -53,7 +54,7 @@ void ContextSettings::Load() {
 
         RegCloseKey(hkey);
     }
-    catch (...) { /* TODO: Logging. */ }
+    catch (...) { CUBE_LOG << _T("Registry error"); }
 }
 
 /* ------------------------------------------------------------------------- */

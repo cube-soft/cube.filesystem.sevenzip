@@ -18,6 +18,7 @@
 #include "QueryInfo.h"
 #include "Resources.h"
 #include "Format.h"
+#include "Log.h"
 #include <sstream>
 
 namespace Cube {
@@ -44,7 +45,7 @@ QueryInfo::QueryInfo(HINSTANCE handle, ULONG& count) :
     filename_()
 {
     try { Settings().Load(); }
-    catch (...) { /* TODO: Logging. */ }
+    catch (...) { CUBE_LOG << _T("LoadSettings error"); }
     InterlockedIncrement(reinterpret_cast<LONG*>(&dllCount_));
 }
 
@@ -172,7 +173,7 @@ STDMETHODIMP QueryInfo::GetInfoTip(DWORD /* flags */, LPWSTR* dest) {
             wcscpy_s(*dest, result.size() + 1, result.c_str());
         }
     }
-    catch(...) { /* TODO: Logging */ }
+    catch (...) { CUBE_LOG << _T("CreateInfoTip error"); }
 
     return (*dest != nullptr) ? S_OK : E_NOT_SET;
 }
@@ -215,7 +216,7 @@ void QueryInfo::PutFileInfoTip(TStream& ss) {
     if (handle == INVALID_HANDLE_VALUE) return;
 
     try { PutFileInfoTip(ss, handle); }
-    catch (...) { OutputDebugString(_T("QueryInfo::SetFileInfoTip")); }
+    catch (...) { CUBE_LOG << _T("PutFileInfoTip error"); }
 
     CloseHandle(handle);
 }

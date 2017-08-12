@@ -16,6 +16,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 #include "QueryInfoSettings.h"
+#include "Log.h"
 
 namespace Cube {
 namespace FileSystem {
@@ -54,7 +55,7 @@ void QueryInfoSettings::Load() {
 
         RegCloseKey(hkey);
     }
-    catch (...) { /* TODO: Logging. */ }
+    catch (...) { CUBE_LOG << _T("Registry error"); }
 }
 
 /* ------------------------------------------------------------------------- */
