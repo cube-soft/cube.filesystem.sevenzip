@@ -17,7 +17,12 @@
 /* ------------------------------------------------------------------------- */
 #pragma once
 
-#include <shobjidl.h>
+#include "Com/ComPtr.h"
+#include "Com/DynamicLinkLibrary.h"
+#include "SevenZipInterface.h"
+#include <tchar.h>
+#include <windows.h>
+#include <string>
 
 namespace Cube {
 namespace FileSystem {
@@ -25,28 +30,30 @@ namespace Ice {
 
 /* ------------------------------------------------------------------------- */
 ///
-/// ContextMenuFactory
+/// SevenZipLibrary
 /// 
 /// <summary>
-/// ContextMenu の生成用クラスです。
+/// 7z.dll をロードするためのクラスです。
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-class ContextMenuFactory : public IClassFactory {
+class SevenZipLibrary {
 public:
-    ContextMenuFactory(HINSTANCE, ULONG&);
-    virtual ~ContextMenuFactory();
+    typedef std::basic_string<TCHAR> TString;
 
-    STDMETHOD(QueryInterface)(REFIID iid, LPVOID * obj); // IUnknown
-    STDMETHOD_(ULONG, AddRef)(void); // IUnknown
-    STDMETHOD_(ULONG, Release)(void); // IUnknown
-    STDMETHODIMP CreateInstance(LPUNKNOWN, REFIID, LPVOID FAR*); // IClassFactory
-    STDMETHODIMP LockServer(BOOL) { return NOERROR; } // IClassFactory
+    SevenZipLibrary() = delete;
+    SevenZipLibrary(HINSTANCE);
+    SevenZipLibrary(const SevenZipLibrary&) = delete;
+    SevenZipLibrary& operator=(const SevenZipLibrary&) = delete;
+    ~SevenZipLibrary() = default;
+
+    ComPtr<IInArchive> GetInArchive(const CLSID*) const;
 
 private:
-    HINSTANCE handle_;
-    ULONG& dllCount_;
-    ULONG objCount_;
+    typedef HRESULT(WINAPI *CreateObjectFunc)(const GUID *clsID, const GUID *iid, void **outObject);
+
+    DynamicLinkLibrary dll_;
+    CreateObjectFunc create_;
 };
 
-}}} // Cube::FileSystem::Ice
+}}}

@@ -17,39 +17,19 @@
 /* ------------------------------------------------------------------------- */
 #pragma once
 
-#include <tchar.h>
 #include <windows.h>
-#include <string>
 
-namespace Cube {
-namespace FileSystem {
-namespace Ice {
+#define DEFINE_FORMAT_GUID(name, id) \
+DEFINE_GUID(FORMAT_ ## name, \
+0x23170F69, 0x40C1, 0x278A, 0x10, 0x00, 0x00, 0x01, 0x10, (id), 0x00, 0x00);
 
 /* ------------------------------------------------------------------------- */
 ///
-/// ContextSettings
+/// FORMAT_XXX
 /// 
 /// <summary>
-/// コンテキストメニューに関するユーザ設定を読み込むためのクラスです。
+/// 各種ファイル形式に対応する GUID を定義します。
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-class ContextSettings {
-public:
-    typedef std::basic_string<TCHAR> TString;
-
-    ContextSettings();
-    ContextSettings(const ContextSettings& cp) = delete;
-    virtual ~ContextSettings() {}
-
-    const int& Preset() const { return preset_; }
-    void Load();
-
-private:
-    HKEY Open(const TString&);
-    DWORD GetDword(HKEY, const TString&, DWORD);
-
-    int preset_;
-};
-
-}}} // Cube::FileSystem::Ice
+DEFINE_FORMAT_GUID(ZIP, 0x01)

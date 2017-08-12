@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.12
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cube.FileSystem.App.Ice.Context", "Cube.FileSystem.App.Ice.Context.vcxproj", "{C580D316-6704-483D-9930-CC063D3E0800}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cube.FileSystem.App.Ice.Context", "Context\Cube.FileSystem.App.Ice.Context.vcxproj", "{C580D316-6704-483D-9930-CC063D3E0800}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cube.FileSystem.App.Ice.QueryInfo", "QueryInfo\Cube.FileSystem.App.Ice.QueryInfo.vcxproj", "{4E6E949D-ECC5-42B1-BF66-2838947D397C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{C580D316-6704-483D-9930-CC063D3E0800}.Release|Win32.Build.0 = Release|Win32
 		{C580D316-6704-483D-9930-CC063D3E0800}.Release|x64.ActiveCfg = Release|x64
 		{C580D316-6704-483D-9930-CC063D3E0800}.Release|x64.Build.0 = Release|x64
+		{4E6E949D-ECC5-42B1-BF66-2838947D397C}.Release|Win32.ActiveCfg = Release|Win32
+		{4E6E949D-ECC5-42B1-BF66-2838947D397C}.Release|Win32.Build.0 = Release|Win32
+		{4E6E949D-ECC5-42B1-BF66-2838947D397C}.Release|x64.ActiveCfg = Release|x64
+		{4E6E949D-ECC5-42B1-BF66-2838947D397C}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

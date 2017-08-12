@@ -18,6 +18,7 @@
 #include "ContextMenu.h"
 #include "ContextPresetMenu.h"
 #include "Encoding.h"
+#include "Log.h"
 #include <shlobj.h>
 #include <shlwapi.h>
 #include <sstream>
@@ -50,7 +51,7 @@ ContextMenu::ContextMenu(HINSTANCE handle, ULONG& count, ContextMenuIcon* icon) 
     files_()
 {
     try { Settings().Load(); }
-    catch (...) { /* TODO: Logging. */ }
+    catch (...) { CUBE_LOG << _T("LoadSettings error"); }
     InterlockedIncrement(reinterpret_cast<LONG*>(&dllCount_));
 }
 
@@ -236,20 +237,12 @@ STDMETHODIMP ContextMenu::GetCommandString(UINT_PTR index, UINT flags, UINT FAR*
     switch (flags)
     {
     case GCS_VERBA: {
-#if defined(UNOCODE) || defined(_UNICODE)
         auto s = Encoding::UnicodeToMultiByte(pos->second.DisplayName());
-#else
-        auto s = pos->second.DisplayName();
-#endif
         strncpy_s(buffer, size, s.c_str(), _TRUNCATE);
         break;
     }
     case GCS_VERBW: {
-#if defined(UNOCODE) || defined(_UNICODE)
         auto s = pos->second.DisplayName();
-#else
-        auto s = Encoding::MultiByteToUnicode(pos->second.DisplayName());
-#endif
         wcsncpy_s(reinterpret_cast<LPWSTR>(buffer), size, s.c_str(), _TRUNCATE);
         break;
     }
@@ -292,7 +285,7 @@ STDMETHODIMP ContextMenu::InvokeCommand(LPCMINVOKECOMMANDINFO info) {
     if (!drop_.empty()) ss << _T(" \"/drop:") << drop_ << _T("\"");
     for (auto file : Files()) ss << _T(" \"") << file << _T("\"");
 
-    auto cmd = new TCHAR[ss.str().size() + 5];
+    auto cmd = new TCHAR[ss.str().size() + 1];
     try {
         _tcscpy_s(cmd, ss.str().size() + 1, ss.str().c_str());
         PROCESS_INFORMATION pi = {};
@@ -302,7 +295,7 @@ STDMETHODIMP ContextMenu::InvokeCommand(LPCMINVOKECOMMANDINFO info) {
         CloseHandle(pi.hThread);
         CloseHandle(pi.hProcess);
     }
-    catch (...) { /* TODO: Logging. */ }
+    catch (...) { CUBE_LOG << _T("CreateProcess error"); }
     delete[] cmd;
 
     return S_OK;

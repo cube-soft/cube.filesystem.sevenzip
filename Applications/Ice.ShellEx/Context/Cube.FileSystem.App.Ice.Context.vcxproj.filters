@@ -22,7 +22,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Encoding.h" />
     <ClInclude Include="Resources.h" />
     <ClInclude Include="Context\ContextMenu.h">
       <Filter>Context</Filter>

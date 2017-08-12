@@ -16,6 +16,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 #include "ContextMenuIcon.h"
+#include "Log.h"
 
 namespace Cube {
 namespace FileSystem {
@@ -43,7 +44,7 @@ ContextMenuIcon::ContextMenuIcon() :
         fnBegin_ = reinterpret_cast<FnBeginBufferedPaint>(GetProcAddress(ux_, "BeginBufferedPaint"));
         fnEnd_   = reinterpret_cast<FnEndBufferedPaint>(GetProcAddress(ux_, "EndBufferedPaint"));
     }
-    catch (...) { /* TODO: Logging. */ }
+    catch (...) { CUBE_LOG << _T("LoadLibrary error"); }
 }
 
 /* ------------------------------------------------------------------------- */
