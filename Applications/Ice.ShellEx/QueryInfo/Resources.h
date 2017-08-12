@@ -26,3 +26,4 @@
 #define CUBEICE_TIP_SIZE            _T("サイズ")
 #define CUBEICE_TIP_ALL             _T("全")
 #define CUBEICE_TIP_OTHERS          _T("ほか、")
+#define CUBEICE_TIP_COUNT           _T("個の項目")

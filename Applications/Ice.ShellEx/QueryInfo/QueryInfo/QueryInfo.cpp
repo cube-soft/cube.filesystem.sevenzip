@@ -193,10 +193,12 @@ STDMETHODIMP QueryInfo::GetInfoTip(DWORD /* flags */, LPWSTR* dest) {
 ///
 /* ------------------------------------------------------------------------- */
 QueryInfo::TString QueryInfo::CreateInfoTip() {
-    if (!Settings().ToolTip()) return TString();
+    if (!Settings().ToolTip() || Settings().ToolTipCount() <= 0) return TString();
 
     std::basic_ostringstream<TCHAR> ss;
     PutFileInfoTip(ss);
+    PutArchiveInfoTip(ss);
+
     return ss.str();
 }
 
@@ -250,6 +252,33 @@ void QueryInfo::PutFileInfoTip(TStream& ss, HANDLE file) {
     TCHAR stime[32] = {};
     _stprintf_s(stime, _T("%d/%02d/%02d %d:%02d"), tm.wYear, tm.wMonth, tm.wDay, tm.wHour, tm.wMinute);
     ss << CUBEICE_TIP_LASTWRITETIME << _T(": ") << stime;
+}
+
+/* ------------------------------------------------------------------------- */
+///
+/// PutArchiveInfoTip
+///
+/// <summary>
+/// 圧縮ファイルの詳細を出力します。
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+void QueryInfo::PutArchiveInfoTip(TStream& ss) {
+    if (archive_->Count() <= 0) return;
+
+    ss << std::endl
+       << CUBEICE_TIP_FILELIST << _T(":") << std::endl;
+
+    auto n = min(archive_->Count(), Settings().ToolTipCount());
+    for (auto i = 0; i < n; ++i) {
+        auto path = archive_->Get(i);
+        if (path.empty()) continue;
+        ss << PathFindFileName(path.c_str()) << std::endl;
+    }
+
+    auto more = (archive_->Count() > Settings().ToolTipCount());
+    if (more) ss << CUBEICE_TIP_OTHERS;
+    ss << CUBEICE_TIP_ALL << _T(' ') << Punct(archive_->Count()) << _T(' ') << CUBEICE_TIP_COUNT;
 }
 
 }}}

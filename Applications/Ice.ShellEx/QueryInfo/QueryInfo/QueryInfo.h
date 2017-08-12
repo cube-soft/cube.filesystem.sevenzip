@@ -73,6 +73,7 @@ private:
     TString CreateInfoTip();
     void PutFileInfoTip(TStream&);
     void PutFileInfoTip(TStream&, HANDLE);
+    void PutArchiveInfoTip(TStream&);
 
     HINSTANCE handle_;
     ULONG& dllCount_;

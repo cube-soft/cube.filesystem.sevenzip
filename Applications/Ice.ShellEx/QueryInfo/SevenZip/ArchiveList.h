@@ -45,7 +45,7 @@ public:
     ArchiveList& operator=(const ArchiveList&) = delete;
     ~ArchiveList() = default;
 
-    const int& Count() const { return static_cast<int>(count_); }
+    int Count() const { return static_cast<int>(count_); }
     TString Get(int) const;
 
 private:

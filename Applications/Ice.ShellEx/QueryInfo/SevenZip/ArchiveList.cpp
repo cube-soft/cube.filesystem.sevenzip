@@ -16,6 +16,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 #include <initguid.h>
+#include "Com/PropVariant.h"
 #include "ArchiveList.h"
 #include "Format.h"
 
@@ -59,8 +60,10 @@ ArchiveList::ArchiveList(const TString& path, HINSTANCE handle) :
 /// <returns>ファイル名</returns>
 ///
 /* ------------------------------------------------------------------------- */
-ArchiveList::TString ArchiveList::Get(int /* index */) const {
-    return TString();
+ArchiveList::TString ArchiveList::Get(int index) const {
+    PropVariantWrapper pv;
+    if (archive_->GetProperty(index, 3 /* kpidPath */, &pv) != S_OK) return TString();
+    return TString(pv.bstrVal);
 }
 
 }}}
