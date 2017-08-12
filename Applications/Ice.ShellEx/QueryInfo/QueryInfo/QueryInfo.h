@@ -18,9 +18,11 @@
 #pragma once
 
 #include "QueryInfoSettings.h"
+#include "SevenZip/ArchiveList.h"
 #include <shlobj.h>
 #include <shlwapi.h>
 #include <tchar.h>
+#include <memory>
 #include <string>
 #include <sstream>
 
@@ -77,6 +79,7 @@ private:
     ULONG objCount_;
     QueryInfoSettings settings_;
     TString filename_;
+    std::unique_ptr<ArchiveList> archive_;
 };
 
 }}}

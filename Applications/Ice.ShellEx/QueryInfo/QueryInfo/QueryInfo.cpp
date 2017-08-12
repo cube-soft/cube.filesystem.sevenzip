@@ -42,7 +42,8 @@ QueryInfo::QueryInfo(HINSTANCE handle, ULONG& count) :
     dllCount_(count),
     objCount_(1),
     settings_(),
-    filename_()
+    filename_(),
+    archive_()
 {
     try { Settings().Load(); }
     catch (...) { CUBE_LOG << _T("LoadSettings error"); }
@@ -143,6 +144,10 @@ STDMETHODIMP QueryInfo::QueryInterface(REFIID iid, LPVOID * obj) {
 /* ------------------------------------------------------------------------- */
 STDMETHODIMP QueryInfo::Load(LPCOLESTR filename, DWORD /* mode */) {
     FileName() = filename;
+    try {
+        archive_.reset(new ArchiveList(filename, handle_));
+    }
+    catch (...) { CUBE_LOG << _T("Load error"); }
     return S_OK;
 }
 

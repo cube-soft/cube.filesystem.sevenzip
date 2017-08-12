@@ -11,6 +11,12 @@
     <ClCompile Include="QueryInfo\QueryInfoSettings.cpp">
       <Filter>QueryInfo</Filter>
     </ClCompile>
+    <ClCompile Include="SevenZip\ArchiveList.cpp">
+      <Filter>SevenZip</Filter>
+    </ClCompile>
+    <ClCompile Include="SevenZip\SevenZipLibrary.cpp">
+      <Filter>SevenZip</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.def" />
@@ -21,6 +27,12 @@
   <ItemGroup>
     <Filter Include="QueryInfo">
       <UniqueIdentifier>{0489f7cb-caee-4395-81e9-af1b84627546}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SevenZip">
+      <UniqueIdentifier>{fbabee7a-ee11-46e5-acef-8b0a88cd7be5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Com">
+      <UniqueIdentifier>{b8dd178b-d1dd-433a-b22f-7dfd2034a546}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -34,5 +46,29 @@
       <Filter>QueryInfo</Filter>
     </ClInclude>
     <ClInclude Include="Resources.h" />
+    <ClInclude Include="SevenZip\ArchiveList.h">
+      <Filter>SevenZip</Filter>
+    </ClInclude>
+    <ClInclude Include="SevenZip\SevenZipLibrary.h">
+      <Filter>SevenZip</Filter>
+    </ClInclude>
+    <ClInclude Include="SevenZip\IArchive.h">
+      <Filter>SevenZip</Filter>
+    </ClInclude>
+    <ClInclude Include="SevenZip\IStream.h">
+      <Filter>SevenZip</Filter>
+    </ClInclude>
+    <ClInclude Include="SevenZip\Interface.h">
+      <Filter>SevenZip</Filter>
+    </ClInclude>
+    <ClInclude Include="Com\DynamicLinkLibrary.h">
+      <Filter>Com</Filter>
+    </ClInclude>
+    <ClInclude Include="Com\PropVariant.h">
+      <Filter>Com</Filter>
+    </ClInclude>
+    <ClInclude Include="Com\ComPtr.h">
+      <Filter>Com</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

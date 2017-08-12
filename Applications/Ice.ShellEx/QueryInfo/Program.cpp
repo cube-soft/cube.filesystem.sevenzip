@@ -19,6 +19,7 @@
 #include <initguid.h>
 #include <shlguid.h>
 #include <shlobj.h>
+#include "Log.h"
 
 // {CB8641A3-EBC7-4758-A302-AA6667B817C8}
 DEFINE_GUID(CUBEICE_INFOTIP_CLSID, 0xcb8641a3, 0xebc7, 0x4758, 0xa3, 0x2, 0xaa, 0x66, 0x67, 0xb8, 0x17, 0xc8);
