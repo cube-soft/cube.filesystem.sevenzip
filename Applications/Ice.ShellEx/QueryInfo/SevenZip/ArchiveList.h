@@ -17,7 +17,8 @@
 /* ------------------------------------------------------------------------- */
 #pragma once
 
-#include "SevenZip/SevenZipLibrary.h"
+#include "SevenZipLibrary.h"
+#include "Stream.h"
 #include <tchar.h>
 #include <string>
 
@@ -44,13 +45,15 @@ public:
     ArchiveList& operator=(const ArchiveList&) = delete;
     ~ArchiveList() = default;
 
-    const int& Count() const { return count_; }
+    const int& Count() const { return static_cast<int>(count_); }
     TString Get(int) const;
 
 private:
-    SevenZipLibrary sevenzip_;
     TString path_;
-    int count_;
+    UInt32 count_;
+    SevenZipLibrary sevenzip_;
+    ComPtr<IInArchive> archive_;
+    ComPtr<InStream> stream_;
 };
 
 }}}

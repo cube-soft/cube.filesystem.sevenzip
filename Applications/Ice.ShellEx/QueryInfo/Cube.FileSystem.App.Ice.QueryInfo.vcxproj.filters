@@ -17,6 +17,9 @@
     <ClCompile Include="SevenZip\SevenZipLibrary.cpp">
       <Filter>SevenZip</Filter>
     </ClCompile>
+    <ClCompile Include="SevenZip\Stream.cpp">
+      <Filter>SevenZip</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.def" />
@@ -62,6 +65,12 @@
       <Filter>Com</Filter>
     </ClInclude>
     <ClInclude Include="SevenZip\SevenZipInterface.h">
+      <Filter>SevenZip</Filter>
+    </ClInclude>
+    <ClInclude Include="SevenZip\Format.h">
+      <Filter>SevenZip</Filter>
+    </ClInclude>
+    <ClInclude Include="SevenZip\Stream.h">
       <Filter>SevenZip</Filter>
     </ClInclude>
   </ItemGroup>

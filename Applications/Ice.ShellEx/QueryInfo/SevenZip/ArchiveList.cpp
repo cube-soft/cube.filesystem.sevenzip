@@ -15,7 +15,9 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+#include <initguid.h>
 #include "ArchiveList.h"
+#include "Format.h"
 
 namespace Cube {
 namespace FileSystem {
@@ -32,8 +34,17 @@ namespace Ice {
 /// <param name="path">圧縮ファイルのパス</param>
 ///
 /* ------------------------------------------------------------------------- */
-ArchiveList::ArchiveList(const TString& path, HINSTANCE handle)
-    : sevenzip_(handle), path_(path), count_(0) {}
+ArchiveList::ArchiveList(const TString& path, HINSTANCE handle) :
+    path_(path),
+    count_(0),
+    sevenzip_(handle),
+    archive_(),
+    stream_(new InStream(path))
+{
+    archive_ = sevenzip_.GetInArchive(&FORMAT_ZIP);
+    archive_->Open(stream_, 0, nullptr);
+    archive_->GetNumberOfItems(&count_);
+}
 
 /* ------------------------------------------------------------------------- */
 ///

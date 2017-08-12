@@ -17,43 +17,19 @@
 /* ------------------------------------------------------------------------- */
 #pragma once
 
-#include "Com/ComPtr.h"
-#include "Com/DynamicLinkLibrary.h"
-#include "SevenZipInterface.h"
-#include <tchar.h>
 #include <windows.h>
-#include <string>
 
-namespace Cube {
-namespace FileSystem {
-namespace Ice {
+#define DEFINE_FORMAT_GUID(name, id) \
+DEFINE_GUID(FORMAT_ ## name, \
+0x23170F69, 0x40C1, 0x278A, 0x10, 0x00, 0x00, 0x01, 0x10, (id), 0x00, 0x00);
 
 /* ------------------------------------------------------------------------- */
 ///
-/// SevenZipLibrary
+/// FORMAT_XXX
 /// 
 /// <summary>
-/// 7z.dll をロードするためのクラスです。
+/// 各種ファイル形式に対応する GUID を定義します。
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-class SevenZipLibrary {
-public:
-    typedef std::basic_string<TCHAR> TString;
-
-    SevenZipLibrary() = delete;
-    SevenZipLibrary(HINSTANCE);
-    SevenZipLibrary(const SevenZipLibrary&) = delete;
-    SevenZipLibrary& operator=(const SevenZipLibrary&) = delete;
-    ~SevenZipLibrary() = default;
-
-    ComPtr<IInArchive> GetInArchive(const CLSID*) const;
-
-private:
-    typedef HRESULT(WINAPI *CreateObjectFunc)(const GUID *clsID, const GUID *iid, void **outObject);
-
-    DynamicLinkLibrary dll_;
-    CreateObjectFunc create_;
-};
-
-}}}
+DEFINE_FORMAT_GUID(ZIP, 0x01)

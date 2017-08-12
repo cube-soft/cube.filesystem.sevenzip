@@ -94,6 +94,7 @@
     <ClCompile Include="QueryInfo\QueryInfoSettings.cpp" />
     <ClCompile Include="SevenZip\ArchiveList.cpp" />
     <ClCompile Include="SevenZip\SevenZipLibrary.cpp" />
+    <ClCompile Include="SevenZip\Stream.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.def" />
@@ -110,8 +111,10 @@
     <ClInclude Include="QueryInfo\QueryInfoSettings.h" />
     <ClInclude Include="Resources.h" />
     <ClInclude Include="SevenZip\ArchiveList.h" />
+    <ClInclude Include="SevenZip\Format.h" />
     <ClInclude Include="SevenZip\SevenZipInterface.h" />
     <ClInclude Include="SevenZip\SevenZipLibrary.h" />
+    <ClInclude Include="SevenZip\Stream.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

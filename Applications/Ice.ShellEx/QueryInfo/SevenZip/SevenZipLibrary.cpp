@@ -57,12 +57,7 @@ static std::basic_string<TCHAR> GetSevenZipPath(HINSTANCE handle) {
 /* ------------------------------------------------------------------------- */
 SevenZipLibrary::SevenZipLibrary(HINSTANCE handle) :
     dll_(GetSevenZipPath(handle)),
-    get_(nullptr),
-    create_(nullptr)
-{
-    get_    = dll_.GetProcAddress<GetHandlerPropertyFunc>("GetHandlerProperty");
-    create_ = dll_.GetProcAddress<CreateObjectFunc>("CreateObject");
-}
+    create_(dll_.GetProcAddress<CreateObjectFunc>("CreateObject")) {}
 
 /* ------------------------------------------------------------------------- */
 ///
@@ -73,12 +68,14 @@ SevenZipLibrary::SevenZipLibrary(HINSTANCE handle) :
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-ComPtr<IInArchive> SevenZipLibrary::GetInArchive(const CLSID* clsid) {
-    ComPtr<IInArchive> dest;
-    if (!create_(clsid, &IID_IInArchive, reinterpret_cast<void**>(dest.GetAddress()))) {
-        throw std::runtime_error("CreateObject error");
+ComPtr<IInArchive> SevenZipLibrary::GetInArchive(const CLSID* clsid) const {
+    IInArchive* dest;
+
+    if (create_(clsid, &IID_IInArchive, reinterpret_cast<void**>(&dest)) != S_OK) {
+        throw std::runtime_error("CreateObject");
     }
-    return dest;
+
+    return ComPtr<IInArchive>(dest);
 }
 
 }}}
