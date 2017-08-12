@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 #pragma once
 
+#include <unknwn.h>
 #include <memory>
 #include <utility>
 

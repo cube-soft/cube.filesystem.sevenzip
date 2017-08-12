@@ -52,15 +52,6 @@
     <ClInclude Include="SevenZip\SevenZipLibrary.h">
       <Filter>SevenZip</Filter>
     </ClInclude>
-    <ClInclude Include="SevenZip\IArchive.h">
-      <Filter>SevenZip</Filter>
-    </ClInclude>
-    <ClInclude Include="SevenZip\IStream.h">
-      <Filter>SevenZip</Filter>
-    </ClInclude>
-    <ClInclude Include="SevenZip\Interface.h">
-      <Filter>SevenZip</Filter>
-    </ClInclude>
     <ClInclude Include="Com\DynamicLinkLibrary.h">
       <Filter>Com</Filter>
     </ClInclude>
@@ -69,6 +60,9 @@
     </ClInclude>
     <ClInclude Include="Com\ComPtr.h">
       <Filter>Com</Filter>
+    </ClInclude>
+    <ClInclude Include="SevenZip\SevenZipInterface.h">
+      <Filter>SevenZip</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

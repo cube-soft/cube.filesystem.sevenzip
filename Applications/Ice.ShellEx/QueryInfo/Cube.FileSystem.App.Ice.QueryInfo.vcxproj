@@ -110,9 +110,7 @@
     <ClInclude Include="QueryInfo\QueryInfoSettings.h" />
     <ClInclude Include="Resources.h" />
     <ClInclude Include="SevenZip\ArchiveList.h" />
-    <ClInclude Include="SevenZip\IArchive.h" />
-    <ClInclude Include="SevenZip\Interface.h" />
-    <ClInclude Include="SevenZip\IStream.h" />
+    <ClInclude Include="SevenZip\SevenZipInterface.h" />
     <ClInclude Include="SevenZip\SevenZipLibrary.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -17,9 +17,9 @@
 /* ------------------------------------------------------------------------- */
 #pragma once
 
-#include "IArchive.h"
 #include "Com/ComPtr.h"
 #include "Com/DynamicLinkLibrary.h"
+#include "SevenZipInterface.h"
 #include <tchar.h>
 #include <windows.h>
 #include <string>
