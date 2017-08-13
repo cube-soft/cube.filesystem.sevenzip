@@ -65,7 +65,7 @@ namespace Cube.FileSystem.App.Ice.Associate
                 var registrar = new AssociateRegistrar(exe)
                 {
                     IconLocation = icon,
-                    ToolTip      = false, // settings.Value.ToolTip
+                    ToolTip      = settings.Value.ToolTip,
                 };
 
                 registrar.Arguments = PresetMenu.Extract.ToArguments();

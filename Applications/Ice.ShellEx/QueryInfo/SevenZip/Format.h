@@ -19,6 +19,7 @@
 
 #include <tchar.h>
 #include <windows.h>
+#include <algorithm>
 #include <map>
 #include <string>
 
@@ -133,8 +134,8 @@ inline const GUID* GetFormat(const std::basic_string<TCHAR>& path) {
         { _T(".z"),     IID_FORMAT_LZW      }
     };
 
-    auto ext = PathFindExtension(path.c_str());
-    _tcslwr_s(ext, _tcslen(ext));
+    auto ext = std::basic_string<TCHAR>(PathFindExtension(path.c_str()));
+    std::transform(ext.begin(), ext.end(), ext.begin(), ::_totlower);
 
     auto pos = fmt.find(ext);
     return pos != fmt.end() ? &pos->second : nullptr;
