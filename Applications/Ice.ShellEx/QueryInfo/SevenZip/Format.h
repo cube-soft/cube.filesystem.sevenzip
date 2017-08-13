@@ -17,10 +17,13 @@
 /* ------------------------------------------------------------------------- */
 #pragma once
 
+#include <tchar.h>
 #include <windows.h>
+#include <map>
+#include <string>
 
 #define DEFINE_FORMAT_GUID(name, id) \
-DEFINE_GUID(FORMAT_ ## name, \
+DEFINE_GUID(IID_FORMAT_ ## name, \
 0x23170F69, 0x40C1, 0x278A, 0x10, 0x00, 0x00, 0x01, 0x10, (id), 0x00, 0x00);
 
 /* ------------------------------------------------------------------------- */
@@ -85,3 +88,54 @@ DEFINE_FORMAT_GUID(DEB,      0xec)
 DEFINE_FORMAT_GUID(CPIO,     0xed)
 DEFINE_FORMAT_GUID(TAR,      0xee)
 DEFINE_FORMAT_GUID(GZIP,     0xef)
+
+/* ------------------------------------------------------------------------- */
+///
+/// GetFormat
+/// 
+/// <summary>
+/// ファイル名に対応する GUID を取得します。
+/// </summary>
+///
+/// <param name="path">ファイル名</param>
+///
+/// <returns>GUID</returns>
+///
+/* ------------------------------------------------------------------------- */
+inline const GUID* GetFormat(const std::basic_string<TCHAR>& path) {
+    static std::map<std::basic_string<TCHAR>, GUID> fmt = {
+        { _T(".zip"),   IID_FORMAT_ZIP      },
+        { _T(".lzh"),   IID_FORMAT_LZH      },
+        { _T(".rar"),   IID_FORMAT_RAR      },
+        { _T(".7z"),    IID_FORMAT_SEVENZIP },
+        { _T(".iso"),   IID_FORMAT_ISO      },
+        { _T(".tar"),   IID_FORMAT_TAR      },
+        { _T(".gz"),    IID_FORMAT_GZIP     },
+        { _T(".tgz"),   IID_FORMAT_GZIP     },
+        { _T(".bz2"),   IID_FORMAT_BZIP2    },
+        { _T(".tbz"),   IID_FORMAT_BZIP2    },
+        { _T(".xz"),    IID_FORMAT_XZ       },
+        { _T(".txz"),   IID_FORMAT_XZ       },
+        { _T(".arj"),   IID_FORMAT_ARJ      },
+        { _T(".cab"),   IID_FORMAT_CAB      },
+        { _T(".chm"),   IID_FORMAT_CHM      },
+        { _T(".cpio"),  IID_FORMAT_CPIO     },
+        { _T(".deb"),   IID_FORMAT_DEB      },
+        { _T(".dmg"),   IID_FORMAT_DEB      },
+        { _T(".flv"),   IID_FORMAT_FLV      },
+        { _T(".jar"),   IID_FORMAT_ZIP      },
+        { _T(".rpm"),   IID_FORMAT_RPM      },
+        { _T(".swf"),   IID_FORMAT_SWF      },
+        { _T(".vhd"),   IID_FORMAT_VHD      },
+        { _T(".vmdk"),  IID_FORMAT_VMDK     },
+        { _T(".wim"),   IID_FORMAT_WIM      },
+        { _T(".xar"),   IID_FORMAT_XAR      },
+        { _T(".z"),     IID_FORMAT_LZW      }
+    };
+
+    auto ext = PathFindExtension(path.c_str());
+    _tcslwr_s(ext, _tcslen(ext));
+
+    auto pos = fmt.find(ext);
+    return pos != fmt.end() ? &pos->second : nullptr;
+}

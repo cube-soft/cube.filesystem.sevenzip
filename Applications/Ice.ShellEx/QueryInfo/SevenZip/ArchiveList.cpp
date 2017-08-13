@@ -42,9 +42,12 @@ ArchiveList::ArchiveList(const TString& path, HINSTANCE handle) :
     archive_(),
     stream_(new InStream(path))
 {
-    archive_ = sevenzip_.GetInArchive(&FORMAT_ZIP);
-    archive_->Open(stream_, 0, nullptr);
-    archive_->GetNumberOfItems(&count_);
+    auto guid = GetFormat(path);
+    if (guid != nullptr) {
+        archive_ = sevenzip_.GetInArchive(guid);
+        archive_->Open(stream_, 0, nullptr);
+        archive_->GetNumberOfItems(&count_);
+    }
 }
 
 /* ------------------------------------------------------------------------- */
@@ -61,9 +64,12 @@ ArchiveList::ArchiveList(const TString& path, HINSTANCE handle) :
 ///
 /* ------------------------------------------------------------------------- */
 ArchiveList::TString ArchiveList::Get(int index) const {
+    if (!archive_) return TString();
+    
     PropVariantWrapper pv;
-    if (archive_->GetProperty(index, 3 /* kpidPath */, &pv) != S_OK) return TString();
-    return TString(pv.bstrVal);
+    return archive_->GetProperty(index, 3 /* kpidPath */, &pv) == S_OK ?
+           TString(pv.bstrVal) :
+           TString();
 }
 
 }}}

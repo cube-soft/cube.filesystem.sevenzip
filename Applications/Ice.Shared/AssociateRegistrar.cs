@@ -328,7 +328,7 @@ namespace Cube.FileSystem.Ice
         #region Fields
         private static readonly object PreArchiver = null;
         private static readonly Guid TooTipKey = new Guid("{00021500-0000-0000-c000-000000000046}");
-        private static readonly Guid ToolTipHandler = new Guid("{f3db85f4-4731-4e80-bc2e-754a7320d830}");
+        private static readonly Guid ToolTipHandler = new Guid("{cb8641a3-ebc7-4758-a302-aa6667b817c8}");
         #endregion
     }
 }
