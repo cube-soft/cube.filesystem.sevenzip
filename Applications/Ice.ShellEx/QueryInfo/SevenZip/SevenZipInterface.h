@@ -41,6 +41,8 @@ struct i: public base
 #define STREAM_INTERFACE_SUB(i, base, x) DECL_INTERFACE_SUB(i, base, 3, x)
 #define STREAM_INTERFACE(i, x) STREAM_INTERFACE_SUB(i, IUnknown, x)
 
+#define PASSWORD_INTERFACE(i, x) DECL_INTERFACE(i, 5, x)
+
 #define ARCHIVE_INTERFACE_SUB(i, base, x) DECL_INTERFACE_SUB(i, base, 6, x)
 #define ARCHIVE_INTERFACE(i, x) ARCHIVE_INTERFACE_SUB(i, IUnknown, x)
 
@@ -97,6 +99,19 @@ STREAM_INTERFACE_SUB(IInStream, ISequentialInStream, 0x03) {
 STREAM_INTERFACE_SUB(IOutStream, ISequentialOutStream, 0x04) {
     STDMETHOD(Seek)(Int64 offset, UInt32 seekOrigin, UInt64 *newPosition) PURE;
     STDMETHOD(SetSize)(UInt64 newSize) PURE;
+};
+
+/* ------------------------------------------------------------------------- */
+///
+/// ICryptoGetTextPassword
+/// 
+/// <summary>
+/// パスワードを取得するためのインターフェースを定義します。
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+PASSWORD_INTERFACE(ICryptoGetTextPassword, 0x10) {
+    STDMETHOD(CryptoGetTextPassword)(BSTR *password) PURE;
 };
 
 /* ------------------------------------------------------------------------- */
