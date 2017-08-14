@@ -64,9 +64,6 @@ namespace Cube.FileSystem.SevenZip
         {
             get
             {
-                var sp = new SecurityPermission(SecurityPermissionFlag.UnmanagedCode);
-                sp.Demand();
-
                 switch (VarType)
                 {
                     case VarEnum.VT_EMPTY:
@@ -195,7 +192,7 @@ namespace Cube.FileSystem.SevenZip
         public void Set(string value)
         {
             VarType = VarEnum.VT_BSTR;
-            _value  = Marshal.StringToBSTR(value);
+            _vstr   = Marshal.StringToBSTR(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -315,10 +312,27 @@ namespace Cube.FileSystem.SevenZip
 
         #region Fields
         [FieldOffset(0)] private ushort _vt;
-        [FieldOffset(8)] private IntPtr _value;
+        [FieldOffset(8)] private IntPtr _vstr;
         [FieldOffset(8)] private uint   _v32u;
         [FieldOffset(8)] private long   _v64;
         [FieldOffset(8)] private ulong  _v64u;
+        [FieldOffset(8)] private PropArray _hack;
         #endregion
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// PropArray
+    /// 
+    /// <summary>
+    /// x86/x64 のサイズの違いを埋める用途で使用するクラスです。
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct PropArray
+    {
+        uint _cElems;
+        IntPtr _pElems;
     }
 }

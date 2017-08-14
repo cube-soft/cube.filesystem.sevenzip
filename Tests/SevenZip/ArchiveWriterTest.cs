@@ -16,6 +16,7 @@
 /// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ///
 /* ------------------------------------------------------------------------- */
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Cube.FileSystem.SevenZip;
@@ -178,10 +179,21 @@ namespace Cube.FileSystem.Tests
                 ).Returns(Format.Zip);
 
                 yield return new TestCaseData(Format.Zip,
+                    "ZipFast.zip",
+                    "",
+                    new[] { "Sample.txt", "Archive" },
+                    new ZipOption { CompressionLevel = CompressionLevel.Fast }
+                ).Returns(Format.Zip);
+
+                yield return new TestCaseData(Format.Zip,
                     "ZipUltra.zip",
                     "",
                     new[] { "Sample.txt", "Archive" },
-                    new ZipOption { CompressionLevel = CompressionLevel.Ultra }
+                    new ZipOption
+                    {
+                        CompressionLevel = CompressionLevel.Ultra,
+                        ThreadCount      = Environment.ProcessorCount,
+                    }
                 ).Returns(Format.Zip);
 
                 yield return new TestCaseData(Format.Zip,
@@ -220,7 +232,7 @@ namespace Cube.FileSystem.Tests
                 ).Returns(Format.Zip);
 
                 yield return new TestCaseData(Format.SevenZip,
-                    "7zLzma2.zip",
+                    "7zLzma2.7z",
                     "",
                     new[] { "Sample.txt", "Archive" },
                     new SevenZipOption

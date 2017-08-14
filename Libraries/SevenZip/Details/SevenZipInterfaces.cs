@@ -51,7 +51,11 @@ namespace Cube.FileSystem.SevenZip
         /// <returns>OperationResult</returns>        
         ///
         /* ----------------------------------------------------------------- */
-        int SetProperties(IntPtr names, IntPtr values, int numProperties);
+        int SetProperties(
+            [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPWStr, SizeParamIndex = 2)] string[] names,
+            IntPtr values,
+            uint numProperties
+        );
     }
 
     /* --------------------------------------------------------------------- */

@@ -87,24 +87,16 @@ namespace Cube.FileSystem.SevenZip
         {
             if (Option == null || dest == null) return;
 
-            var sp = new SecurityPermission(SecurityPermissionFlag.UnmanagedCode);
-            sp.Demand();
-
-            var cl = PropVariant.Create((uint)Option.CompressionLevel);
-            var kh = Create(new[] { ToBstr("x") }.Concat(_dic.Keys.Select(o => ToBstr(o))).ToArray());
-            var vh = Create(new[] { cl }.Concat(_dic.Values).ToArray());
-            var n  = _dic.Count + 1;
+            var values = CreateValues();
 
             try
             {
-                var result = dest.SetProperties(kh.AddrOfPinnedObject(), vh.AddrOfPinnedObject(), n);
+                var k = CreateNames();
+                var v = values.AddrOfPinnedObject();
+                var result = dest.SetProperties(k, v, (uint)k.Length);
                 if (result != 0) throw new System.IO.IOException($"SetProperties:{result}");
             }
-            finally
-            {
-                kh.Free();
-                vh.Free();
-            }
+            finally { values.Free(); }
         }
 
         /* ----------------------------------------------------------------- */
@@ -127,25 +119,37 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ToBstr
+        /// CreateNames
         ///
         /// <summary>
-        /// ネイティブな文字列型に変換します。
+        /// ISetProperties オブジェクトに設定する名前一覧を生成します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private IntPtr ToBstr(string value) => Marshal.StringToBSTR(value);
+        private string[] CreateNames()
+            => new[]
+            {
+                "x",
+                "mt",
+            }.Concat(_dic.Keys).ToArray();
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Create
+        /// CreateValues
         ///
         /// <summary>
-        /// アンマネージなオブジェクトを生成します。
+        /// ISetProperties オブジェクトに設定する値一覧を生成します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private GCHandle Create(object obj) => GCHandle.Alloc(obj, GCHandleType.Pinned);
+        private GCHandle CreateValues()
+            => GCHandle.Alloc(new[]
+                {
+                    PropVariant.Create((uint)Option.CompressionLevel),
+                    PropVariant.Create((uint)Option.ThreadCount),
+                }.Concat(_dic.Values).ToArray(),
+                GCHandleType.Pinned
+            );
 
         #endregion
 
