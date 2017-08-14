@@ -50,8 +50,8 @@ namespace Cube.FileSystem.SevenZip
         {
             var asm = Assembly.GetExecutingAssembly();
             var dir = Path.GetDirectoryName(asm.Location);
-
-            Initialize(Path.Combine(dir, "7z.dll"));
+            _handle = Kernel32.NativeMethods.LoadLibrary(Path.Combine(dir, "7z.dll"));
+            if (_handle.IsInvalid) throw new Win32Exception("LoadLibrary");
         }
 
         #endregion
@@ -197,29 +197,6 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Initialize
-        ///
-        /// <summary>
-        /// オブジェクトを初期化します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Initialize(string path)
-        {
-            if (!File.Exists(path)) throw new FileNotFoundException();
-            _handle = Kernel32.NativeMethods.LoadLibrary(path);
-            if (_handle.IsInvalid) throw new Win32Exception("LoadLibrary");
-
-            var ptr = Kernel32.NativeMethods.GetProcAddress(_handle, "GetHandlerProperty");
-            if (ptr == IntPtr.Zero)
-            {
-                _handle.Close();
-                throw new ArgumentException("GetProcAddress");
-            }
-        }
 
         /* ----------------------------------------------------------------- */
         ///
