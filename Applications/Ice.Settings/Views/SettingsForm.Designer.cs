@@ -346,6 +346,7 @@
             this.ContextCustomizeButton.TabIndex = 0;
             this.ContextCustomizeButton.Text = "カスタマイズ";
             this.ContextCustomizeButton.UseVisualStyleBackColor = true;
+            this.ContextCustomizeButton.Visible = false;
             // 
             // ContextMailPanel
             // 
