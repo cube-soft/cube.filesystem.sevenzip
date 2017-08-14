@@ -153,10 +153,10 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        ~SevenZipLibrary()
-        {
-            Dispose(false);
-        }
+        //~SevenZipLibrary()
+        //{
+        //    Dispose(false);
+        //}
 
         /* ----------------------------------------------------------------- */
         ///
@@ -170,7 +170,7 @@ namespace Cube.FileSystem.SevenZip
         public void Dispose()
         {
             Dispose(true);
-            GC.SuppressFinalize(this);
+            // GC.SuppressFinalize(this);
         }
 
         /* ----------------------------------------------------------------- */

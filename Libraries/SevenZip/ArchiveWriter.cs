@@ -347,7 +347,7 @@ namespace Cube.FileSystem.SevenZip
 
             try
             {
-                if (Option != null) GetSetter()?.Execute(raw as ISetProperties);
+                GetSetter()?.Execute(raw as ISetProperties);
                 raw.UpdateItems(stream, (uint)items.Count, cb);
             }
             finally
@@ -412,6 +412,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         private ArchiveOptionSetter GetSetter()
         {
+            if (Option == null) return null;
+
             switch (Format)
             {
                 case Format.Zip:

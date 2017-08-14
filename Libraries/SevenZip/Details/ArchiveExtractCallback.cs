@@ -305,10 +305,10 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        ~ArchiveExtractCallback()
-        {
-            Dispose(false);
-        }
+        //~ArchiveExtractCallback()
+        //{
+        //    Dispose(false);
+        //}
 
         /* ----------------------------------------------------------------- */
         ///
@@ -322,7 +322,7 @@ namespace Cube.FileSystem.SevenZip
         public void Dispose()
         {
             Dispose(true);
-            GC.SuppressFinalize(this);
+            // GC.SuppressFinalize(this);
         }
 
         /* ----------------------------------------------------------------- */

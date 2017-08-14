@@ -17,6 +17,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 
 namespace Cube.FileSystem.SevenZip
@@ -34,21 +35,6 @@ namespace Cube.FileSystem.SevenZip
         : ArchiveCallbackBase, IArchiveUpdateCallback, ICryptoGetTextPassword2, IDisposable
     {
         #region Constructors
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ArchiveUpdateCallback
-        ///
-        /// <summary>
-        /// オブジェクトを初期化します。
-        /// </summary>
-        /// 
-        /// <param name="items">圧縮するファイル一覧</param>
-        /// <param name="dest">保存パス</param>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public ArchiveUpdateCallback(IList<FileItem> items, string dest)
-            : this(items, dest, new Operator()) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -119,13 +105,14 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int CryptoGetTextPassword2(ref int enabled, out string password)
         {
-            var e = new QueryEventArgs<string, string>(Destination);
-            if (Password != null) Password.Request(e);
-            else e.Cancel = true;
+            Debug.Assert(Password != null);
 
-            var valid = !e.Cancel && !string.IsNullOrEmpty(e.Result);
-            enabled  = valid ? 1 : 0;
-            password = valid ? e.Result : string.Empty;
+            var e = new QueryEventArgs<string, string>(Destination);
+            Password.Request(e);
+
+            var ok = !e.Cancel && !string.IsNullOrEmpty(e.Result);
+            enabled  = ok ? 1 : 0;
+            password = ok ? e.Result : string.Empty;
 
             return (int)OperationResult.OK;
         }
@@ -320,10 +307,10 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        ~ArchiveUpdateCallback()
-        {
-            Dispose(false);
-        }
+        //~ArchiveUpdateCallback()
+        //{
+        //    Dispose(false);
+        //}
 
         /* ----------------------------------------------------------------- */
         ///
@@ -337,7 +324,7 @@ namespace Cube.FileSystem.SevenZip
         public void Dispose()
         {
             Dispose(true);
-            GC.SuppressFinalize(this);
+            // GC.SuppressFinalize(this);
         }
 
         /* ----------------------------------------------------------------- */

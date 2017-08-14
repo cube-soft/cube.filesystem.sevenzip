@@ -16,6 +16,8 @@
 /// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ///
 /* ------------------------------------------------------------------------- */
+using System.Diagnostics;
+
 namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
@@ -82,22 +84,16 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int CryptoGetTextPassword(out string password)
         {
-            if (Password != null)
-            {
-                var e = new QueryEventArgs<string, string>(Source);
-                Password.Request(e);
+            Debug.Assert(Password != null);
 
-                var ok = !e.Cancel && !string.IsNullOrEmpty(e.Result);
-                Result = e.Cancel ? OperationResult.UserCancel :
-                         ok       ? OperationResult.OK :
-                                    OperationResult.WrongPassword;
-                password = ok ? e.Result : string.Empty;
-            }
-            else
-            {
-                Result = OperationResult.WrongPassword;
-                password = string.Empty;
-            }
+            var e = new QueryEventArgs<string, string>(Source);
+            Password.Request(e);
+
+            var ok = !e.Cancel && !string.IsNullOrEmpty(e.Result);
+            Result = e.Cancel ? OperationResult.UserCancel :
+                     ok       ? OperationResult.OK :
+                                OperationResult.WrongPassword;
+            password = ok ? e.Result : string.Empty;
 
             return (int)Result;
         }

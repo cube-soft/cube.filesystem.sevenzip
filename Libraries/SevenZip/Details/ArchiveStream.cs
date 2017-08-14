@@ -116,10 +116,10 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        ~ArchiveStreamBase()
-        {
-            Dispose(false);
-        }
+        //~ArchiveStreamBase()
+        //{
+        //    Dispose(false);
+        //}
 
         /* ----------------------------------------------------------------- */
         ///
@@ -133,7 +133,7 @@ namespace Cube.FileSystem.SevenZip
         public void Dispose()
         {
             Dispose(true);
-            GC.SuppressFinalize(this);
+            // GC.SuppressFinalize(this);
         }
 
         /* ----------------------------------------------------------------- */

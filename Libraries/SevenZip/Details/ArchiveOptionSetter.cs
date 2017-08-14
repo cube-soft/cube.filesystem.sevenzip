@@ -16,11 +16,10 @@
 /// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ///
 /* ------------------------------------------------------------------------- */
-using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Security.Permissions;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -85,7 +84,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public virtual void Execute(ISetProperties dest)
         {
-            if (Option == null || dest == null) return;
+            Debug.Assert(Option != null && dest != null);
 
             var values = CreateValues();
 
@@ -94,7 +93,7 @@ namespace Cube.FileSystem.SevenZip
                 var k = CreateNames();
                 var v = values.AddrOfPinnedObject();
                 var result = dest.SetProperties(k, v, (uint)k.Length);
-                if (result != 0) throw new System.IO.IOException($"SetProperties:{result}");
+                Debug.Assert(result == 0);
             }
             finally { values.Free(); }
         }
