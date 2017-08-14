@@ -114,7 +114,7 @@ namespace Cube.FileSystem.App.Ice
                 DeleteSource();
             }
             catch (UserCancelException /* err */) { /* user cancel */ }
-            catch (Exception err) { this.LogWarn(err.ToString(), err); }
+            catch (Exception err) { OnErrorReportRequired(ValueEventArgs.Create(err)); }
         }
 
         #endregion

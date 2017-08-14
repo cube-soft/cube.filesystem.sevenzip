@@ -235,6 +235,9 @@
   <data name="MessageRemainTime" xml:space="preserve">
     <value>残り時間</value>
   </data>
+  <data name="MessageUnexpectedError" xml:space="preserve">
+    <value>予期しないエラーが発生しました。</value>
+  </data>
   <data name="MessageUnknownFile" xml:space="preserve">
     <value>不明なファイル</value>
   </data>

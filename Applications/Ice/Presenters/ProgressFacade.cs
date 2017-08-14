@@ -308,6 +308,39 @@ namespace Cube.FileSystem.App.Ice
 
         #endregion
 
+        #region OpenDirectoryRequired
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ErrorReportRequired
+        /// 
+        /// <summary>
+        /// エラーレポート表示時に発生するイベントです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public event ValueEventHandler<Exception> ErrorReportRequired;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OnErrorReportRequired
+        /// 
+        /// <summary>
+        /// ErrorReportRequired を発生させます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected virtual void OnErrorReportRequired(ValueEventArgs<Exception> e)
+        {
+            if (Settings.Value.ErrorReport && ErrorReportRequired != null)
+            {
+                ErrorReportRequired(this, e);
+            }
+            this.LogError(e.Value.ToString(), e.Value);
+        }
+
+        #endregion
+
         #region OverwriteRequired
 
         /* ----------------------------------------------------------------- */

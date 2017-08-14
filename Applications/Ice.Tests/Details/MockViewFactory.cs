@@ -15,6 +15,7 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System;
 using System.Threading;
 using Cube.FileSystem.Ice;
 using NUnit.Framework;
@@ -234,6 +235,22 @@ namespace Cube.FileSystem.App.Ice.Tests
         public override void ShowMailView(ValueEventArgs<string> e)
         {
             Assert.That(System.IO.File.Exists(e.Value), Is.True);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowErrorView
+        /// 
+        /// <summary>
+        /// エラーメッセージを表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">エラー情報を保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public override void ShowErrorView(ValueEventArgs<Exception> e)
+        {
+            Assert.That(e.Value, Is.Not.Null);
         }
 
         #endregion

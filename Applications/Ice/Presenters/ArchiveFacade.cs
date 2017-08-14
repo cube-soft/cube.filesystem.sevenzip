@@ -15,6 +15,7 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System;
 using System.Linq;
 using Cube.FileSystem.SevenZip;
 using Cube.FileSystem.Ice;
@@ -159,6 +160,7 @@ namespace Cube.FileSystem.App.Ice
                 Open(Destination, Settings.Value.Archive.OpenDirectory);
             }
             catch (UserCancelException /* err */) { /* user cancel */ }
+            catch (Exception err) { OnErrorReportRequired(ValueEventArgs.Create(err)); }
             finally { ProgressStop(); }
         }
 

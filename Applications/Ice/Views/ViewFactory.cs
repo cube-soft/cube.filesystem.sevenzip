@@ -15,6 +15,7 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System;
 using System.Windows.Forms;
 using Cube.FileSystem.Ice;
 
@@ -166,6 +167,27 @@ namespace Cube.FileSystem.App.Ice
             Body    = "Attached by CubeICE",
             Attach  = e.Value,
         }.Show();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowErrorView
+        /// 
+        /// <summary>
+        /// エラーメッセージを表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">エラー情報を保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public virtual void ShowErrorView(ValueEventArgs<Exception> e)
+        {
+            var msg = !string.IsNullOrEmpty(e.Value.Message) ?
+                      e.Value.Message :
+                      Properties.Resources.MessageUnexpectedError;
+
+            MessageBox.Show(msg, Application.ProductName,
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
 
         #endregion
 
@@ -339,6 +361,9 @@ namespace Cube.FileSystem.App.Ice
 
         public static void ShowMailView(ValueEventArgs<string> e)
             => _factory?.ShowMailView(e);
+
+        public static void ShowErrorView(ValueEventArgs<Exception> e)
+            => _factory?.ShowErrorView(e);
 
         #endregion
 

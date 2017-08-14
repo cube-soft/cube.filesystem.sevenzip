@@ -421,6 +421,15 @@ namespace Cube.FileSystem.App.Ice.Properties {
         }
         
         /// <summary>
+        ///   予期しないエラーが発生しました。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MessageUnexpectedError {
+            get {
+                return ResourceManager.GetString("MessageUnexpectedError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   不明なファイル に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MessageUnknownFile {
