@@ -95,6 +95,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Examples\Sample.lzh">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Packages.config" />
     <None Include="Examples\Archive\FilterDirectory\Filter.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

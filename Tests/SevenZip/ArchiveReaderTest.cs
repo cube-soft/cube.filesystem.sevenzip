@@ -115,6 +115,7 @@ namespace Cube.FileSystem.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [TestCase("Sample.cab")]
+        [TestCase("Sample.lzh")]
         [TestCase("Sample.tar")]
         [TestCase("Sample.tar.bz2")]
         [TestCase("Sample.tar.gz")]
