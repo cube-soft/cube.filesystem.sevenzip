@@ -45,17 +45,12 @@ namespace Cube.FileSystem.Tests
         /// ファイル一覧を取得するテストを実行します。
         /// </summary>
         /// 
-        /// <remarks>
-        /// Example フォルダにテスト用のサンプルファイルを追加した場合、
-        /// それに合わせて期待値を更新して下さい。
-        /// </remarks>
-        ///
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(Operator_TestCases))]
         public void GetFiles(IOperatorCore core)
         {
             var io = new Operator(core);
-            Assert.That(io.GetFiles(Examples).Count(), Is.EqualTo(21));
+            Assert.That(io.GetFiles(Examples).Count(), Is.GreaterThan(20));
             Assert.That(io.GetFiles(Example("Sample.txt")), Is.Null);
 
             var empty = Result("Empty");
@@ -73,17 +68,12 @@ namespace Cube.FileSystem.Tests
         /// ディレクトリ一覧を取得するテストを実行します。
         /// </summary>
         /// 
-        /// <remarks>
-        /// Example フォルダにテスト用のサンプルファイルを追加した場合、
-        /// それに合わせて期待値を更新して下さい。
-        /// </remarks>
-        ///
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(Operator_TestCases))]
         public void GetDirectories(IOperatorCore core)
         {
             var io = new Operator(core);
-            Assert.That(io.GetDirectories(Examples).Count(), Is.EqualTo(1));
+            Assert.That(io.GetDirectories(Examples).Count(), Is.GreaterThanOrEqualTo(1));
             Assert.That(io.GetDirectories(Example("Sample.txt")), Is.Null);
 
             var empty = Result("Empty");
