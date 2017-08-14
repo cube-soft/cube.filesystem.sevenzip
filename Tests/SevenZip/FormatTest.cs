@@ -46,13 +46,13 @@ namespace Cube.FileSystem.Tests
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [TestCase("Sample.txt",    ExpectedResult = Format.Unknown)]
-        [TestCase("Empty.txt",     ExpectedResult = Format.Unknown)]
-        [TestCase("Sample.zip",    ExpectedResult = Format.Zip)]
-        [TestCase("Sample.tar",    ExpectedResult = Format.Tar)]
-        [TestCase("Sample.tar.gz", ExpectedResult = Format.GZip)]
-        [TestCase("Sample.tar.bz", ExpectedResult = Format.BZip2)]
-        [TestCase("Password.7z",   ExpectedResult = Format.SevenZip)]
+        [TestCase("Sample.txt",     ExpectedResult = Format.Unknown)]
+        [TestCase("Empty.txt",      ExpectedResult = Format.Unknown)]
+        [TestCase("Sample.zip",     ExpectedResult = Format.Zip)]
+        [TestCase("Sample.tar",     ExpectedResult = Format.Tar)]
+        [TestCase("Sample.tar.gz",  ExpectedResult = Format.GZip)]
+        [TestCase("Sample.tar.bz2", ExpectedResult = Format.BZip2)]
+        [TestCase("Password.7z",    ExpectedResult = Format.SevenZip)]
         public Format Detect(string filename)
         {
             var src  = Example(filename);

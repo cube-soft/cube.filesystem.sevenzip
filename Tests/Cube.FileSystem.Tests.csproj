@@ -147,7 +147,7 @@
     <None Include="Examples\Sample.tar">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\Sample.tar.bz">
+    <None Include="Examples\Sample.tar.bz2">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Examples\Sample.tar.gz">
