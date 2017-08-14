@@ -45,7 +45,7 @@ ArchiveList::ArchiveList(const TString& path, HINSTANCE handle) :
     auto guid = GetFormat(path);
     if (guid != nullptr) {
         archive_ = sevenzip_.GetInArchive(guid);
-        archive_->Open(stream_, 0, nullptr);
+        archive_->Open(stream_, nullptr, nullptr);
         archive_->GetNumberOfItems(&count_);
     }
 }
