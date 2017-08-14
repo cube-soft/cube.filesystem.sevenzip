@@ -122,6 +122,18 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public EncryptionMethod EncryptionMethod { get; set; } = EncryptionMethod.Default;
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// UseUtf8
+        ///
+        /// <summary>
+        /// ファイル名を UTF-8 に変換するかどうかを示す値を取得または
+        /// 設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public bool UseUtf8 { get; set; } = false;
+
         #endregion
     }
 

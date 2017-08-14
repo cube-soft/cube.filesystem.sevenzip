@@ -104,18 +104,21 @@ namespace Cube.FileSystem.Tests
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [Test]
-        public void Archive_Japanese()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void Archive_Japanese(bool utf8)
         {
             var fmt  = Format.Zip;
             var src  = Result("日本語のファイル名.txt");
-            var dest = Result("ZipJapanese.zip");
+            var code = utf8 ? "UTF8" : "SJis";
+            var dest = Result($"ZipJapanese{code}.zip");
 
-            System.IO.File.Copy(Example("Sample.txt"), src);
+            System.IO.File.Copy(Example("Sample.txt"), src, true);
             Assert.That(System.IO.File.Exists(src), Is.True);
 
             using (var writer = new ArchiveWriter(fmt))
             {
+                writer.Option = new ZipOption { UseUtf8 = utf8 };
                 writer.Add(src);
                 writer.Save(dest);
             }

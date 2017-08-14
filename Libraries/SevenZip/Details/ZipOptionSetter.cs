@@ -91,6 +91,7 @@ namespace Cube.FileSystem.SevenZip
             {
                 AddCompressionMethod(zo);
                 AddEncryptionMethod(zo);
+                AddUseUtf8(zo);
             }
             base.Execute(dest);
         }
@@ -129,6 +130,21 @@ namespace Cube.FileSystem.SevenZip
             var value = zo.EncryptionMethod;
             if (value == EncryptionMethod.Default) return;
             Add("em", PropVariant.Create(value.ToString()));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// AddUseUtf8
+        ///
+        /// <summary>
+        /// ファイル名を UTF-8 に変換するかどうかを示す値を追加します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void AddUseUtf8(ZipOption zo)
+        {
+            var value = zo.UseUtf8;
+            if (value) Add("cu", PropVariant.Create(value));
         }
 
         #endregion
