@@ -86,7 +86,7 @@ namespace Cube.FileSystem.Tests
             var src = Example(filename);
             using (var archive = new SevenZip.ArchiveReader(src, password))
             {
-                var dest = Result("Extract");
+                var dest = Result($@"Extract\{filename}");
                 archive.Extract(dest);
 
                 foreach (var item in expected)
@@ -97,6 +97,40 @@ namespace Cube.FileSystem.Tests
                     Assert.That(info.CreationTime,   Is.Not.EqualTo(DateTime.MinValue));
                     Assert.That(info.LastWriteTime,  Is.Not.EqualTo(DateTime.MinValue));
                     Assert.That(info.LastAccessTime, Is.Not.EqualTo(DateTime.MinValue));
+                }
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract
+        ///
+        /// <summary>
+        /// 圧縮ファイルを展開するテストを実行します。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// 簡単な存在チェックのみを実行するバージョンです。
+        /// </remarks>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [TestCase("Sample.cab")]
+        [TestCase("Sample.tar")]
+        [TestCase("Sample.tar.bz2")]
+        [TestCase("Sample.tar.gz")]
+        [TestCase("Sample.tar.xz")]
+        public void Extract(string filename)
+        {
+            var src = Example(filename);
+            using (var archive = new SevenZip.ArchiveReader(src))
+            {
+                var dest = Result($@"Extract_Lite\{filename}");
+                archive.Extract(dest);
+
+                foreach (var item in archive.Items)
+                {
+                    var info = IO.Get(IO.Combine(dest, item.FullName));
+                    Assert.That(info.Exists, Is.True);
                 }
             }
         }
@@ -116,7 +150,7 @@ namespace Cube.FileSystem.Tests
             var src = Example(filename);
             using (var archive = new SevenZip.ArchiveReader(src, password))
             {
-                var dest = Result("Extract_Each");
+                var dest = Result($@"Extract_Each\{filename}");
                 var actual = archive.Items.ToList();
                 for (var i = 0; i < expected.Count; ++i)
                 {
@@ -491,30 +525,6 @@ namespace Cube.FileSystem.Tests
                         Extension     = ".txt",
                         Length        = 39,
                         Encrypted     = true,
-                        IsDirectory   = false,
-                    }
-                });
-
-                yield return new TestCaseData("Sample.tar.gz", "", new List<ExpectedItem>
-                {
-                    new ExpectedItem
-                    {
-                        FullName      = "Sample.tar",
-                        Extension     = ".tar",
-                        Length        = 20480,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    }
-                });
-
-                yield return new TestCaseData("Sample.tar.xz", "", new List<ExpectedItem>
-                {
-                    new ExpectedItem
-                    {
-                        FullName      = "Sample.tar",
-                        Extension     = ".tar",
-                        Length        = 20480,
-                        Encrypted     = false,
                         IsDirectory   = false,
                     }
                 });
