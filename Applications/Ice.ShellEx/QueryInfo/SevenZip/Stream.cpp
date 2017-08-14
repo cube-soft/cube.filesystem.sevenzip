@@ -122,7 +122,7 @@ STDMETHODIMP InStream::Seek(INT64 offset, UINT32 method, UINT64* newptr) {
 
     LARGE_INTEGER lnew;
     auto result = imp_->Seek(loff, &lnew, method);
-    if (result) *newptr = lnew.QuadPart;
+    if (result && newptr) *newptr = lnew.QuadPart;
 
     return result ? S_OK : E_FAIL;
 }
@@ -143,9 +143,11 @@ STDMETHODIMP InStream::Seek(INT64 offset, UINT32 method, UINT64* newptr) {
 ///
 /* ------------------------------------------------------------------------- */
 STDMETHODIMP InStream::Read(void* data, UINT32 size, UINT32* proceed) {
+    if (!data) return E_FAIL;
+
     DWORD actual = 0;
     auto result = imp_->Read(data, size, &actual);
-    if (result) *proceed = actual;
+    if (result && proceed) *proceed = actual;
     return result ? S_OK : E_FAIL;
 }
 
