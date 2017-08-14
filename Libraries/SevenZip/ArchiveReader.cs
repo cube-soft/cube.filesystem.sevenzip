@@ -356,8 +356,7 @@ namespace Cube.FileSystem.SevenZip
             _raw = _7z.GetInArchive(Format);
             Debug.Assert(_raw != null);
 
-            var pos = 32UL * 1024;
-            _raw.Open(_stream, ref pos, new ArchiveOpenCallback(Source) { Password = _password });
+            _raw.Open(_stream, IntPtr.Zero, new ArchiveOpenCallback(Source) { Password = _password });
             _items = new ReadOnlyArchiveList(_raw, Format, Source, _password, _io);
         }
 

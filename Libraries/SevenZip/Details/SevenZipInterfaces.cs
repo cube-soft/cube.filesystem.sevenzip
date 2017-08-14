@@ -684,15 +684,20 @@ namespace Cube.FileSystem.SevenZip
         /// Opens archive for reading.
         /// </summary>
         /// 
-        /// <param name="stream">Archive file stream</param>
-        /// <param name="checkpos">Maximum start position for checking</param>
-        /// <param name="callback">Callback for opening archive</param>
+        /// <param name="stream">入力ストリーム</param>
+        /// <param name="max">最大ヘッダ長</param>
+        /// <param name="callback">コールバックオブジェクト</param>
+        /// 
+        /// <remarks>
+        /// max の値を null に設定した場合、7-Zip はヘッダ長の解析を試みる
+        /// ため、この機能を使用する事としています。
+        /// </remarks>
         /// 
         /* ----------------------------------------------------------------- */
         [PreserveSig]
         int Open(
             IInStream stream,
-            [In] ref ulong checkpos,
+            IntPtr max, // [In] ref ulong max
             [MarshalAs(UnmanagedType.Interface)] IArchiveOpenCallback callback
         );
 
