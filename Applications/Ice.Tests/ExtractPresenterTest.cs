@@ -218,6 +218,30 @@ namespace Cube.FileSystem.App.Ice.Tests
             }
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract_ErrorReport
+        /// 
+        /// <summary>
+        /// エラーレポートの表示テストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public async Task Extract_ErrorReport()
+        {
+            var src  = Example("Sample.txt");
+            var dest = Result("ErrorReport");
+
+            using (var ep = Create(src, dest))
+            {
+                ep.Settings.Value.ErrorReport = true;
+                ep.View.Show();
+                for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
+                Assert.That(ep.View.Visible, Is.False, "Timeout");
+            }
+        }
+
         #endregion
 
         #region TestCases
