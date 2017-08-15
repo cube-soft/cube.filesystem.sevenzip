@@ -259,6 +259,13 @@ namespace Cube.FileSystem.Tests
                     null
                 ).Returns(Format.GZip);
 
+                yield return new TestCaseData(Format.XZ,
+                    "XzTest.xz",
+                    "",
+                    new[] { "Sample.txt" },
+                    null
+                ).Returns(Format.XZ);
+
                 yield return new TestCaseData(Format.Tar,
                     "TarTest.tar",
                     "",
@@ -287,6 +294,17 @@ namespace Cube.FileSystem.Tests
                         CompressionLevel  = CompressionLevel.Ultra,
                     }
                 ).Returns(Format.BZip2);
+
+                yield return new TestCaseData(Format.Tar,
+                    "TarTest.tar.xz",
+                    "",
+                    new[] { "Sample.txt", "Archive" },
+                    new TarOption
+                    {
+                        CompressionMethod = CompressionMethod.XZ,
+                        CompressionLevel  = CompressionLevel.Ultra,
+                    }
+                ).Returns(Format.XZ);
 
                 yield return new TestCaseData(Format.Sfx,
                     "ExecutableTest.exe",
