@@ -266,7 +266,6 @@ namespace Cube.FileSystem.App.Ice.Settings
                 Create(nameof(AssociateSettings.Jar),      "*.jar",   index++),
                 Create(nameof(AssociateSettings.Nupkg),    "*.nupkg", index++),
                 Create(nameof(AssociateSettings.Rpm),      "*.rpm",   index++),
-                Create(nameof(AssociateSettings.Swf),      "*.swf",   index++),
                 Create(nameof(AssociateSettings.Vhd),      "*.vhd",   index++),
                 Create(nameof(AssociateSettings.Vmdk),     "*.vmdk",  index++),
                 Create(nameof(AssociateSettings.Wim),      "*.wim",   index++),
