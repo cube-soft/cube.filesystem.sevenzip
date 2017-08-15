@@ -85,6 +85,7 @@ namespace Cube.FileSystem.Tests
         [TestCase("Sample.chm")]
         [TestCase("Sample.cpio")]
         [TestCase("Sample.docx")]
+        [TestCase("Sample.flv")]
         [TestCase("Sample.jar")]
         [TestCase("Sample.lha")]
         [TestCase("Sample.lzh")]

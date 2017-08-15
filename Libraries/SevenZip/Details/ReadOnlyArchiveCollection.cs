@@ -16,8 +16,10 @@
 /// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ///
 /* ------------------------------------------------------------------------- */
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cube.Log;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -79,23 +81,14 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// コレクションの個数を取得します。
         /// </summary>
+        /// 
+        /// <remarks>
+        /// BZip2, GZip など一部の圧縮形式で項目数を取得出来ていないため、
+        /// 暫定的に初期値を 1 に設定しています。
+        /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public int Count
-        {
-            get
-            {
-                switch (Format)
-                {
-                    case Format.BZip2:
-                    case Format.GZip:
-                    case Format.XZ:
-                        return 1;
-                    default:
-                        return (int)_raw.GetNumberOfItems();
-                }
-            }
-        }
+        public int Count => Math.Max((int)_raw.GetNumberOfItems(), 1);
 
         /* ----------------------------------------------------------------- */
         ///

@@ -52,6 +52,7 @@ namespace Cube.FileSystem.Tests
         [TestCase("Sample.cab",      ExpectedResult = Format.Cab)]
         [TestCase("Sample.chm",      ExpectedResult = Format.Chm)]
         [TestCase("Sample.docx",     ExpectedResult = Format.Zip)]
+        [TestCase("Sample.flv",      ExpectedResult = Format.Flv)]
         [TestCase("Sample.jar",      ExpectedResult = Format.Zip)]
         [TestCase("Sample.lha",      ExpectedResult = Format.Lzh)]
         [TestCase("Sample.lzh",      ExpectedResult = Format.Lzh)]

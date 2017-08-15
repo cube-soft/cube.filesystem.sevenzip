@@ -521,7 +521,7 @@ namespace Cube.FileSystem.SevenZip
                 case Format.XZ:
                     return GetPath(dest, ".tar");
                 default:
-                    return GetPath(dest, null);
+                    return GetPath(dest, "");
             }
         }
 
@@ -539,7 +539,7 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetPath(string path, string addExtOrEmpty)
+        private string GetPath(string path, string ext)
         {
             if (!string.IsNullOrEmpty(path)) return path;
 
@@ -547,9 +547,8 @@ namespace Cube.FileSystem.SevenZip
             var fmt  = Formats.FromExtension(info.Extension);
             if (fmt != Format.Unknown) return info.Name;
 
-            return !string.IsNullOrEmpty(addExtOrEmpty) ?
-                   $"{info.Name}{addExtOrEmpty}" :
-                   string.Empty;
+            var name = (Index == 0) ? info.Name : $"{info.Name}({Index})";
+            return !string.IsNullOrEmpty(ext) ? $"{name}{ext}" : name;
         }
 
         /* ----------------------------------------------------------------- */
