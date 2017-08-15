@@ -105,19 +105,23 @@ DEFINE_FORMAT_GUID(GZIP,     0xef)
 /* ------------------------------------------------------------------------- */
 inline const GUID* GetFormat(const std::basic_string<TCHAR>& path) {
     static std::map<std::basic_string<TCHAR>, GUID> fmt = {
-        { _T(".zip"),   IID_FORMAT_ZIP      },
-        { _T(".lzh"),   IID_FORMAT_LZH      },
-        { _T(".rar"),   IID_FORMAT_RAR      },
         { _T(".7z"),    IID_FORMAT_SEVENZIP },
-        { _T(".iso"),   IID_FORMAT_ISO      },
-        { _T(".tar"),   IID_FORMAT_TAR      },
         { _T(".arj"),   IID_FORMAT_ARJ      },
         { _T(".cab"),   IID_FORMAT_CAB      },
         { _T(".chm"),   IID_FORMAT_CHM      },
         { _T(".cpio"),  IID_FORMAT_CPIO     },
+        { _T(".deb"),   IID_FORMAT_DEB      },
+        { _T(".dmg"),   IID_FORMAT_DMG      },
+        { _T(".hfs"),   IID_FORMAT_HFS      },
+        { _T(".iso"),   IID_FORMAT_ISO      },
         { _T(".jar"),   IID_FORMAT_ZIP      },
+        { _T(".lzh"),   IID_FORMAT_LZH      },
+        { _T(".nupkg"), IID_FORMAT_ZIP      },
+        { _T(".rar"),   IID_FORMAT_RAR      },
         { _T(".rpm"),   IID_FORMAT_RPM      },
+        { _T(".tar"),   IID_FORMAT_TAR      },
         { _T(".xar"),   IID_FORMAT_XAR      },
+        { _T(".zip"),   IID_FORMAT_ZIP      },
     };
 
     auto ext = std::basic_string<TCHAR>(PathFindExtension(path.c_str()));
