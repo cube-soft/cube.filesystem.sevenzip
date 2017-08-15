@@ -46,13 +46,25 @@ namespace Cube.FileSystem.Tests
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [TestCase("Sample.txt",     ExpectedResult = Format.Unknown)]
-        [TestCase("Empty.txt",      ExpectedResult = Format.Unknown)]
-        [TestCase("Sample.zip",     ExpectedResult = Format.Zip)]
-        [TestCase("Sample.tar",     ExpectedResult = Format.Tar)]
-        [TestCase("Sample.tar.gz",  ExpectedResult = Format.GZip)]
-        [TestCase("Sample.tar.bz2", ExpectedResult = Format.BZip2)]
-        [TestCase("Password.7z",    ExpectedResult = Format.SevenZip)]
+        [TestCase("Sample.txt",      ExpectedResult = Format.Unknown)]
+        [TestCase("Empty.txt",       ExpectedResult = Format.Unknown)]
+        [TestCase("Password.7z",     ExpectedResult = Format.SevenZip)]
+        [TestCase("Sample.cab",      ExpectedResult = Format.Cab)]
+        [TestCase("Sample.chm",      ExpectedResult = Format.Chm)]
+        [TestCase("Sample.docx",     ExpectedResult = Format.Zip)]
+        [TestCase("Sample.jar",      ExpectedResult = Format.Zip)]
+        [TestCase("Sample.lha",      ExpectedResult = Format.Lzh)]
+        [TestCase("Sample.lzh",      ExpectedResult = Format.Lzh)]
+        [TestCase("Sample.pptx",     ExpectedResult = Format.Zip)]
+        [TestCase("Sample.rar",      ExpectedResult = Format.Rar)]
+        [TestCase("Sample.rar5",     ExpectedResult = Format.Rar5)]
+        [TestCase("Sample.tar",      ExpectedResult = Format.Tar)]
+        [TestCase("Sample.tar.bz2",  ExpectedResult = Format.BZip2)]
+        [TestCase("Sample.tar.gz",   ExpectedResult = Format.GZip)]
+        [TestCase("Sample.tar.xz",   ExpectedResult = Format.XZ)]
+        [TestCase("Sample.tar.z",    ExpectedResult = Format.Lzw)]
+        [TestCase("Sample.xlsx",     ExpectedResult = Format.Zip)]
+        [TestCase("Sample.zip",      ExpectedResult = Format.Zip)]
         public Format Detect(string filename)
         {
             var src  = Example(filename);

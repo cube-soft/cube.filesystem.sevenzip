@@ -80,23 +80,36 @@ namespace Cube.FileSystem.Tests
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [TestCaseSource(nameof(TestCases))]
-        public void Extract(string filename, string password, IList<ExpectedItem> expected)
+        [TestCase("Sample.arj")]
+        [TestCase("Sample.cab")]
+        [TestCase("Sample.chm")]
+        [TestCase("Sample.cpio")]
+        [TestCase("Sample.docx")]
+        [TestCase("Sample.jar")]
+        [TestCase("Sample.lha")]
+        [TestCase("Sample.lzh")]
+        [TestCase("Sample.pptx")]
+        [TestCase("Sample.rar")]
+        [TestCase("Sample.rar5")]
+        [TestCase("Sample.tar")]
+        [TestCase("Sample.tar.bz2")]
+        [TestCase("Sample.tar.gz")]
+        [TestCase("Sample.tar.lzma")]
+        [TestCase("Sample.tar.xz")]
+        [TestCase("Sample.tar.z")]
+        [TestCase("Sample.xlsx")]
+        public void Extract(string filename)
         {
             var src = Example(filename);
-            using (var archive = new SevenZip.ArchiveReader(src, password))
+            using (var archive = new SevenZip.ArchiveReader(src))
             {
                 var dest = Result($@"Extract\{filename}");
                 archive.Extract(dest);
 
-                foreach (var item in expected)
+                foreach (var item in archive.Items)
                 {
                     var info = IO.Get(IO.Combine(dest, item.FullName));
-                    Assert.That(info.Exists,         Is.True);
-                    Assert.That(info.Length,         Is.EqualTo(item.Length));
-                    Assert.That(info.CreationTime,   Is.Not.EqualTo(DateTime.MinValue));
-                    Assert.That(info.LastWriteTime,  Is.Not.EqualTo(DateTime.MinValue));
-                    Assert.That(info.LastAccessTime, Is.Not.EqualTo(DateTime.MinValue));
+                    Assert.That(info.Exists, Is.True, info.FullName);
                 }
             }
         }
@@ -110,28 +123,27 @@ namespace Cube.FileSystem.Tests
         /// </summary>
         /// 
         /// <remarks>
-        /// 簡単な存在チェックのみを実行するバージョンです。
+        /// 展開された項目に対しても確認します。
         /// </remarks>
         /// 
         /* ----------------------------------------------------------------- */
-        [TestCase("Sample.cab")]
-        [TestCase("Sample.lzh")]
-        [TestCase("Sample.tar")]
-        [TestCase("Sample.tar.bz2")]
-        [TestCase("Sample.tar.gz")]
-        [TestCase("Sample.tar.xz")]
-        public void Extract(string filename)
+        [TestCaseSource(nameof(TestCases))]
+        public void Extract(string filename, string password, IList<ExpectedItem> expected)
         {
             var src = Example(filename);
-            using (var archive = new SevenZip.ArchiveReader(src))
+            using (var archive = new SevenZip.ArchiveReader(src, password))
             {
-                var dest = Result($@"Extract_Lite\{filename}");
+                var dest = Result($@"Extract_Detail\{filename}");
                 archive.Extract(dest);
 
-                foreach (var item in archive.Items)
+                foreach (var item in expected)
                 {
                     var info = IO.Get(IO.Combine(dest, item.FullName));
-                    Assert.That(info.Exists, Is.True);
+                    Assert.That(info.Exists,         Is.True);
+                    Assert.That(info.Length,         Is.EqualTo(item.Length));
+                    Assert.That(info.CreationTime,   Is.Not.EqualTo(DateTime.MinValue));
+                    Assert.That(info.LastWriteTime,  Is.Not.EqualTo(DateTime.MinValue));
+                    Assert.That(info.LastAccessTime, Is.Not.EqualTo(DateTime.MinValue));
                 }
             }
         }
