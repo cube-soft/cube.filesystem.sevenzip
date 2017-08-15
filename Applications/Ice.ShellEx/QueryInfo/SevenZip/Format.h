@@ -111,21 +111,13 @@ inline const GUID* GetFormat(const std::basic_string<TCHAR>& path) {
         { _T(".7z"),    IID_FORMAT_SEVENZIP },
         { _T(".iso"),   IID_FORMAT_ISO      },
         { _T(".tar"),   IID_FORMAT_TAR      },
-        //{ _T(".arj"),   IID_FORMAT_ARJ      },
+        { _T(".arj"),   IID_FORMAT_ARJ      },
         { _T(".cab"),   IID_FORMAT_CAB      },
         { _T(".chm"),   IID_FORMAT_CHM      },
-        //{ _T(".cpio"),  IID_FORMAT_CPIO     },
-        //{ _T(".deb"),   IID_FORMAT_DEB      },
-        //{ _T(".dmg"),   IID_FORMAT_DEB      },
-        //{ _T(".flv"),   IID_FORMAT_FLV      },
+        { _T(".cpio"),  IID_FORMAT_CPIO     },
         { _T(".jar"),   IID_FORMAT_ZIP      },
-        //{ _T(".rpm"),   IID_FORMAT_RPM      },
-        //{ _T(".swf"),   IID_FORMAT_SWF      },
-        //{ _T(".vhd"),   IID_FORMAT_VHD      },
-        //{ _T(".vmdk"),  IID_FORMAT_VMDK     },
-        //{ _T(".wim"),   IID_FORMAT_WIM      },
-        //{ _T(".xar"),   IID_FORMAT_XAR      },
-        //{ _T(".z"),     IID_FORMAT_LZW      }
+        { _T(".rpm"),   IID_FORMAT_RPM      },
+        { _T(".xar"),   IID_FORMAT_XAR      },
     };
 
     auto ext = std::basic_string<TCHAR>(PathFindExtension(path.c_str()));
