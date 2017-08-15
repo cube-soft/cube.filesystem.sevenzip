@@ -59,6 +59,7 @@ namespace Cube.FileSystem.Ice
                 { nameof(Dmg),  false },
                 { nameof(Flv),  false },
                 { nameof(GZ),   true  },
+                { nameof(Hfs),  false },
                 { nameof(Iso),  false },
                 { nameof(Jar),  false },
                 { nameof(Lzh),  true  },
@@ -251,6 +252,22 @@ namespace Cube.FileSystem.Ice
         /* ----------------------------------------------------------------- */
         [DataMember(Name = "gz")]
         public bool GZ
+        {
+            get { return GetProperty(); }
+            set { SetProperty(value); }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// hfs
+        /// 
+        /// <summary>
+        /// *.hfs の関連付け状態を取得または設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [DataMember(Name = "hfs")]
+        public bool Hfs
         {
             get { return GetProperty(); }
             set { SetProperty(value); }

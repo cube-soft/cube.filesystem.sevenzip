@@ -263,6 +263,7 @@ namespace Cube.FileSystem.App.Ice.Settings
                 Create(nameof(AssociateSettings.Deb),      "*.deb",  index++),
                 Create(nameof(AssociateSettings.Dmg),      "*.dmg",  index++),
                 Create(nameof(AssociateSettings.Flv),      "*.flv",  index++),
+                Create(nameof(AssociateSettings.Hfs),      "*.hfs",  index++),
                 Create(nameof(AssociateSettings.Jar),      "*.jar",  index++),
                 Create(nameof(AssociateSettings.Rpm),      "*.rpm",  index++),
                 Create(nameof(AssociateSettings.Swf),      "*.swf",  index++),
