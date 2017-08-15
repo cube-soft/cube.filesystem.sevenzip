@@ -248,6 +248,7 @@
             this.AssociateMenuPanel.Location = new System.Drawing.Point(0, 0);
             this.AssociateMenuPanel.Margin = new System.Windows.Forms.Padding(0);
             this.AssociateMenuPanel.Name = "AssociateMenuPanel";
+            this.AssociateMenuPanel.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.AssociateMenuPanel.Size = new System.Drawing.Size(458, 127);
             this.AssociateMenuPanel.TabIndex = 0;
             // 

@@ -265,6 +265,21 @@ namespace Cube.FileSystem.App.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Nupkg
+        /// 
+        /// <summary>
+        /// *.nupkg の関連付け状態を取得または設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public bool Nupkg
+        {
+            get { return _model.Settings.Nupkg; }
+            set { _model.Settings.Nupkg = value; }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Rar
         /// 
         /// <summary>

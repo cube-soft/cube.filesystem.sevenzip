@@ -49,34 +49,35 @@ namespace Cube.FileSystem.Ice
         {
             Value = new Dictionary<string, bool>
             {
-                { "7z",         true  },
-                { nameof(Arj),  false },
-                { nameof(BZ2),  true  },
-                { nameof(Cab),  false },
-                { nameof(Chm),  false },
-                { nameof(Cpio), false },
-                { nameof(Deb),  false },
-                { nameof(Dmg),  false },
-                { nameof(Flv),  false },
-                { nameof(GZ),   true  },
-                { nameof(Hfs),  false },
-                { nameof(Iso),  false },
-                { nameof(Jar),  false },
-                { nameof(Lzh),  true  },
-                { nameof(Rar),  true  },
-                { nameof(Rpm),  false },
-                { nameof(Swf),  false },
-                { nameof(Tar),  true  },
-                { nameof(Tbz),  true  },
-                { nameof(Tgz),  true  },
-                { nameof(Txz),  true  },
-                { nameof(Vhd),  false },
-                { nameof(Vmdk), false },
-                { nameof(Wim),  false },
-                { nameof(Xar),  false },
-                { nameof(XZ),   true  },
-                { nameof(Z),    false },
-                { nameof(Zip),  true  },
+                { "7z",          true  },
+                { nameof(Arj),   false },
+                { nameof(BZ2),   true  },
+                { nameof(Cab),   false },
+                { nameof(Chm),   false },
+                { nameof(Cpio),  false },
+                { nameof(Deb),   false },
+                { nameof(Dmg),   false },
+                { nameof(Flv),   false },
+                { nameof(GZ),    true  },
+                { nameof(Hfs),   false },
+                { nameof(Iso),   false },
+                { nameof(Jar),   false },
+                { nameof(Lzh),   true  },
+                { nameof(Nupkg), false },
+                { nameof(Rar),   true  },
+                { nameof(Rpm),   false },
+                { nameof(Swf),   false },
+                { nameof(Tar),   true  },
+                { nameof(Tbz),   true  },
+                { nameof(Tgz),   true  },
+                { nameof(Txz),   true  },
+                { nameof(Vhd),   false },
+                { nameof(Vmdk),  false },
+                { nameof(Wim),   false },
+                { nameof(Xar),   false },
+                { nameof(XZ),    true  },
+                { nameof(Z),     false },
+                { nameof(Zip),   true  },
             };
         }
 
@@ -316,6 +317,22 @@ namespace Cube.FileSystem.Ice
         /* ----------------------------------------------------------------- */
         [DataMember(Name = "lzh")]
         public bool Lzh
+        {
+            get { return GetProperty(); }
+            set { SetProperty(value); }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Nupkg
+        /// 
+        /// <summary>
+        /// *.nupkg の関連付け状態を取得または設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [DataMember(Name = "nupkg")]
+        public bool Nupkg
         {
             get { return GetProperty(); }
             set { SetProperty(value); }

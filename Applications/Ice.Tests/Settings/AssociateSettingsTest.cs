@@ -47,7 +47,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         {
             var src = new SettingsFolder().Value.Associate;
 
-            Assert.That(src.Value.Count, Is.EqualTo(27));
+            Assert.That(src.Value.Count, Is.EqualTo(29));
             Assert.That(src.Arj,         Is.False);
             Assert.That(src.BZ2,         Is.True );
             Assert.That(src.Cab,         Is.False);
@@ -57,9 +57,11 @@ namespace Cube.FileSystem.App.Ice.Tests
             Assert.That(src.Dmg,         Is.False);
             Assert.That(src.Flv,         Is.False);
             Assert.That(src.GZ,          Is.True );
+            Assert.That(src.Hfs,         Is.False);
             Assert.That(src.Iso,         Is.False);
             Assert.That(src.Jar,         Is.False);
             Assert.That(src.Lzh,         Is.True );
+            Assert.That(src.Nupkg,       Is.False);
             Assert.That(src.Rar,         Is.True );
             Assert.That(src.Rpm,         Is.False);
             Assert.That(src.SevenZip,    Is.True );
