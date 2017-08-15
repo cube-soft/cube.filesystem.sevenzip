@@ -119,6 +119,7 @@ inline const GUID* GetFormat(const std::basic_string<TCHAR>& path) {
         { _T(".nupkg"), IID_FORMAT_ZIP      },
         { _T(".rar"),   IID_FORMAT_RAR      },
         { _T(".rpm"),   IID_FORMAT_RPM      },
+        { _T(".swf"),   IID_FORMAT_SWF      },
         { _T(".tar"),   IID_FORMAT_TAR      },
         { _T(".xar"),   IID_FORMAT_XAR      },
         { _T(".zip"),   IID_FORMAT_ZIP      },
