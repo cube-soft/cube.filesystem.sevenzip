@@ -370,6 +370,7 @@ namespace Cube.FileSystem.SevenZip
             while (_inner.MoveNext())
             {
                 if (_inner.Current.Index != index) continue;
+                if (string.IsNullOrEmpty(_inner.Current.FullName)) return Skip();
                 if (Filters != null && _inner.Current.Match(Filters)) return Skip();
                 if (_inner.Current.IsDirectory) return CreateDirectory();
 

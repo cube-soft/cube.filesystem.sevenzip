@@ -404,7 +404,8 @@ namespace Cube.FileSystem.SevenZip
             CreationTime   = Get<DateTime>(ItemPropId.CreationTime);
             LastWriteTime  = Get<DateTime>(ItemPropId.LastWriteTime);
             LastAccessTime = Get<DateTime>(ItemPropId.LastAccessTime);
-            Filter         = new PathFilter(RawName)
+
+            Filter = new PathFilter(RawName)
             {
                 AllowParentDirectory  = false,
                 AllowDriveLetter      = false,
@@ -413,8 +414,10 @@ namespace Cube.FileSystem.SevenZip
                 AllowUnc              = false,
             };
 
+            FullName = Filter.EscapedPath;
+            if (string.IsNullOrEmpty(Filter.EscapedPath)) return;
+
             var info = IO.Get(Filter.EscapedPath);
-            FullName             = Filter.EscapedPath;
             Name                 = info.Name;
             NameWithoutExtension = info.NameWithoutExtension;
             Extension            = info.Extension;
@@ -441,6 +444,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public override void Extract(string directory, IProgress<ArchiveReport> progress)
         {
+            if (string.IsNullOrEmpty(FullName)) return;
+
             if (IsDirectory)
             {
                 this.CreateDirectory(directory, IO);
@@ -507,16 +512,44 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         private string GetPath()
         {
+            var dest = Get<string>(ItemPropId.Path);
+
             switch (Format)
             {
                 case Format.BZip2:
                 case Format.GZip:
                 case Format.XZ:
-                    var info = IO.Get(IO.Get(Source).NameWithoutExtension);
-                    return info.Extension.ToLower() == ".tar" ? info.Name : $"{info.Name}.tar";
+                    return GetPath(dest, ".tar");
                 default:
-                    return Get<string>(ItemPropId.Path);
+                    return GetPath(dest, null);
             }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetPath
+        ///
+        /// <summary>
+        /// パスを取得します。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// パスが取得できなかった場合、元の圧縮ファイルのパスから
+        /// 推測した結果を返します。
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        private string GetPath(string path, string addExtOrEmpty)
+        {
+            if (!string.IsNullOrEmpty(path)) return path;
+
+            var info = IO.Get(IO.Get(Source).NameWithoutExtension);
+            var fmt  = Formats.FromExtension(info.Extension);
+            if (fmt != Format.Unknown) return info.Name;
+
+            return !string.IsNullOrEmpty(addExtOrEmpty) ?
+                   $"{info.Name}{addExtOrEmpty}" :
+                   string.Empty;
         }
 
         /* ----------------------------------------------------------------- */
