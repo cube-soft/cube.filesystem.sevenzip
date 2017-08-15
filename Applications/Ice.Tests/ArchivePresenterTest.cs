@@ -261,7 +261,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     new ArchiveSettings
                     {
                         SaveLocation = SaveLocation.Others,
-                        Filtering = true,
+                        Filtering    = true,
                     },
                     @"Runtime\Sample.tar.bz2",
                     1L
@@ -280,6 +280,22 @@ namespace Cube.FileSystem.App.Ice.Tests
                         Filtering     = true,
                     },
                     @"Drop\Sample.tar.gz",
+                    1L
+                );
+
+                yield return new TestCaseData(
+                    new[] { "Sample.txt", "Archive" },
+                    PresetMenu.ArchiveXZ.ToArguments().Concat(new[]
+                    {
+                        "/o:source",
+                        "/drop:Drop",
+                    }),
+                    new ArchiveSettings
+                    {
+                        SaveLocation = SaveLocation.Others,
+                        Filtering    = true,
+                    },
+                    @"Drop\Sample.tar.xz",
                     1L
                 );
 

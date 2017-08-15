@@ -124,7 +124,8 @@ namespace Cube.FileSystem.Ice
         ArchiveGZip         = 0x00001000,
         ArchiveDetail       = 0x00002000,
         ArchiveSfx          = 0x00004000,
-        ArchiveOptions      = 0x00007f00,
+        ArchiveXZ           = 0x00008000,
+        ArchiveOptions      = 0x0000ff00,
 
         MailZip             = 0x00010000,
         MailZipPassword     = 0x00020000,
@@ -133,7 +134,8 @@ namespace Cube.FileSystem.Ice
         MailGZip            = 0x00100000,
         MailDetail          = 0x00200000,
         MailSfx             = 0x00400000,
-        MailOptions         = 0x007f0000,
+        MailXZ              = 0x00800000,
+        MailOptions         = 0x00ff0000,
 
         DefaultContext      = 0x00007ff3,
         DefaultDesktop      = 0x00000107,

@@ -56,6 +56,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         [TestCase(PresetMenu.MailSevenZip,       ExpectedResult = 2)]
         [TestCase(PresetMenu.MailBZip2,          ExpectedResult = 2)]
         [TestCase(PresetMenu.MailGZip,           ExpectedResult = 2)]
+        [TestCase(PresetMenu.MailXZ,             ExpectedResult = 2)]
         [TestCase(PresetMenu.MailSfx,            ExpectedResult = 2)]
         [TestCase(PresetMenu.MailDetail,         ExpectedResult = 2)]
         public int ToArguments(PresetMenu menu)

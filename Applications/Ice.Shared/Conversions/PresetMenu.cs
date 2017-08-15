@@ -77,6 +77,7 @@ namespace Cube.FileSystem.Ice
             if (m.HasFlag(PresetMenu.ArchiveSevenZip)) return new[] { "/c:7z" };
             if (m.HasFlag(PresetMenu.ArchiveBZip2)) return new[] { "/c:bzip2" };
             if (m.HasFlag(PresetMenu.ArchiveGZip)) return new[] { "/c:gzip" };
+            if (m.HasFlag(PresetMenu.ArchiveXZ)) return new[] { "/c:xz" };
             if (m.HasFlag(PresetMenu.ArchiveSfx)) return new[] { "/c:exe" };
             if (m.HasFlag(PresetMenu.ArchiveDetail)) return new[] { "/c:detail" };
             return new string[0];
@@ -117,6 +118,7 @@ namespace Cube.FileSystem.Ice
             if (m.HasFlag(PresetMenu.MailSevenZip)) return new[] { "/c:7z", "/m" };
             if (m.HasFlag(PresetMenu.MailBZip2)) return new[] { "/c:bzip2", "/m" };
             if (m.HasFlag(PresetMenu.MailGZip)) return new[] { "/c:gzip", "/m" };
+            if (m.HasFlag(PresetMenu.MailXZ)) return new[] { "/c:xz", "/m" };
             if (m.HasFlag(PresetMenu.MailSfx)) return new[] { "/c:exe", "/m" };
             if (m.HasFlag(PresetMenu.MailDetail)) return new[] { "/c:detail", "/m" };
             return new string[0];
