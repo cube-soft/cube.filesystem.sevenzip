@@ -113,6 +113,9 @@
     <None Include="Examples\Sample.lzh">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Examples\Sample.nupkg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Examples\Sample.pptx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

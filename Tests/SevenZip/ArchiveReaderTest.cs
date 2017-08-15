@@ -88,6 +88,7 @@ namespace Cube.FileSystem.Tests
         [TestCase("Sample.jar")]
         [TestCase("Sample.lha")]
         [TestCase("Sample.lzh")]
+        [TestCase("Sample.nupkg")]
         [TestCase("Sample.pptx")]
         [TestCase("Sample.rar")]
         [TestCase("Sample.rar5")]
