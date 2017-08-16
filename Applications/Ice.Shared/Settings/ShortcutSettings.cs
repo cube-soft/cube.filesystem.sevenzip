@@ -31,7 +31,6 @@ namespace Cube.FileSystem.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [DataContract]
     public class ShortcutSettings : ObservableProperty
     {
         #region Properties
@@ -75,6 +74,31 @@ namespace Cube.FileSystem.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Sync
+        /// 
+        /// <summary>
+        /// 実際にショートカットが存在するかどうかの結果に応じて
+        /// Preset の値を更新します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void Sync()
+        {
+            var b0 = new Shortcut(GetFileName(Properties.Resources.ScArcive)).Exists;
+            if (b0) Preset |= PresetMenu.Archive;
+            else Preset &= ~PresetMenu.Archive;
+
+            var b1 = new Shortcut(GetFileName(Properties.Resources.ScExtract)).Exists;
+            if (b1) Preset |= PresetMenu.Extract;
+            else Preset &= ~PresetMenu.Extract;
+
+            var b2 = new Shortcut(GetFileName(Properties.Resources.ScSettings)).Exists;
+            if (b2) Preset |= PresetMenu.Settings;
+            else Preset &= ~PresetMenu.Settings;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Update
         /// 
         /// <summary>
@@ -104,8 +128,8 @@ namespace Cube.FileSystem.Ice
         /* ----------------------------------------------------------------- */
         private void UpdateArchive()
         {
-            var src  = CreateFileName(Properties.Resources.ScArcive);
-            var dest = CreateLink("cubeice.exe");
+            var src  = GetFileName(Properties.Resources.ScArcive);
+            var dest = GetLink("cubeice.exe");
             var sc   = new Shortcut(src)
             {
                 Link         = dest,
@@ -128,8 +152,8 @@ namespace Cube.FileSystem.Ice
         /* ----------------------------------------------------------------- */
         private void UpdateExtract()
         {
-            var src  = CreateFileName(Properties.Resources.ScExtract);
-            var dest = CreateLink("cubeice.exe");
+            var src  = GetFileName(Properties.Resources.ScExtract);
+            var dest = GetLink("cubeice.exe");
             var sc   = new Shortcut(src)
             {
                 Link         = dest,
@@ -152,8 +176,8 @@ namespace Cube.FileSystem.Ice
         /* ----------------------------------------------------------------- */
         public void UpdateSettings()
         {
-            var src  = CreateFileName(Properties.Resources.ScSettings);
-            var dest = CreateLink("cubeice-setting.exe");
+            var src  = GetFileName(Properties.Resources.ScSettings);
+            var dest = GetLink("cubeice-setting.exe");
             var sc   = new Shortcut(src)
             {
                 Link         = dest,
@@ -166,14 +190,14 @@ namespace Cube.FileSystem.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CreateFileName
+        /// GetFileName
         /// 
         /// <summary>
-        /// ショートカットのパスを生成します。
+        /// ショートカットのパスを取得します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private string CreateFileName(string name)
+        private string GetFileName(string name)
         {
             var dir = !string.IsNullOrEmpty(Directory) ?
                       Directory :
@@ -183,14 +207,14 @@ namespace Cube.FileSystem.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CreateLink
+        /// GetLink
         /// 
         /// <summary>
-        /// リンク先のパスを生成します。
+        /// リンク先のパスを取得します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private string CreateLink(string filename)
+        private string GetLink(string filename)
         {
             var asm = Assembly.GetExecutingAssembly().Location;
             var dir = System.IO.Path.GetDirectoryName(asm);

@@ -35,7 +35,7 @@ namespace Cube.FileSystem.App.Ice.Tests
     {
         /* ----------------------------------------------------------------- */
         ///
-        /// Update
+        /// SyncUpdate
         /// 
         /// <summary>
         /// ShortcutSettings の更新テストを実行します。
@@ -43,24 +43,38 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Update()
+        public void SyncUpdate()
         {
+            var src  = new ShortcutSettings() { Directory = Results };
+            var menu = PresetMenu.Archive |
+                       PresetMenu.ArchiveDetail |
+                       PresetMenu.Extract |
+                       PresetMenu.Settings;
+
+            src.Preset = menu;
+            Assert.That(src.Preset, Is.EqualTo(menu));
+
+            src.Sync();
+            Assert.That(src.Preset.HasFlag(PresetMenu.Archive),       Is.False);
+            Assert.That(src.Preset.HasFlag(PresetMenu.ArchiveDetail), Is.True);
+            Assert.That(src.Preset.HasFlag(PresetMenu.Extract),       Is.False);
+            Assert.That(src.Preset.HasFlag(PresetMenu.Settings),      Is.False);
+
             var archive  = new Shortcut(Result("CubeICE 圧縮"));
             var extract  = new Shortcut(Result("CubeICE 解凍"));
-            var src      = new ShortcutSettings() { Directory = Results };
+            var settings = new Shortcut(Result("CubeICE 設定"));
 
-            src.Preset = PresetMenu.Archive       |
-                         PresetMenu.ArchiveDetail |
-                         PresetMenu.Extract       |
-                         PresetMenu.Settings;
+            src.Preset = menu;
             src.Update();
             Assert.That(archive.Exists,  Is.True);
             Assert.That(extract.Exists,  Is.True);
+            Assert.That(settings.Exists, Is.False); // Link does not exist.
 
             src.Preset = PresetMenu.None;
             src.Update();
             Assert.That(archive.Exists,  Is.False);
             Assert.That(extract.Exists,  Is.False);
+            Assert.That(settings.Exists, Is.False);
         }
     }
 }
