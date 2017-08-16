@@ -495,6 +495,11 @@ namespace Cube.FileSystem.App.Ice.Tests.Settings
             Assert.That(src.Settings,      Is.False);
             Assert.That(src.ArchiveOption, Is.EqualTo(PresetMenu.ArchiveZip));
             Assert.That(dest.Preset,       Is.EqualTo(PresetMenu.ArchiveZip));
+
+            src.Archive  = false;
+            src.Extract  = false;
+            src.Settings = false;
+            Assert.That(dest.Preset, Is.EqualTo(PresetMenu.ArchiveZip));
         }
 
         /* ----------------------------------------------------------------- */
