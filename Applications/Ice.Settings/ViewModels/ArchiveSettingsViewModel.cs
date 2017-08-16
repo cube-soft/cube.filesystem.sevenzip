@@ -28,7 +28,7 @@ namespace Cube.FileSystem.App.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveSettingsViewModel : GeneralSettingsViewModel
+    public class ArchiveSettingsViewModel : GeneralSettingsViewModel<ArchiveSettings>
     {
         /* ----------------------------------------------------------------- */
         ///

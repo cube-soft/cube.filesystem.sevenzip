@@ -28,7 +28,8 @@ namespace Cube.FileSystem.App.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class GeneralSettingsViewModel : ObservableProperty
+    public class GeneralSettingsViewModel<TModel> : ObservableProperty
+        where TModel : GeneralSettings
     {
         #region Constructors
 
@@ -43,7 +44,7 @@ namespace Cube.FileSystem.App.Ice.Settings
         /// <param name="model">Model オブジェクト</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public GeneralSettingsViewModel(GeneralSettings model)
+        public GeneralSettingsViewModel(TModel model)
         {
             Model = model;
             Model.PropertyChanged += (s, e) => OnPropertyChanged(e);
@@ -178,7 +179,7 @@ namespace Cube.FileSystem.App.Ice.Settings
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        protected GeneralSettings Model { get; }
+        protected TModel Model { get; }
 
         #endregion
 

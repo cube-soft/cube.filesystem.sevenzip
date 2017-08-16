@@ -29,7 +29,7 @@ namespace Cube.FileSystem.App.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ExtractSettingsViewModel : GeneralSettingsViewModel
+    public class ExtractSettingsViewModel : GeneralSettingsViewModel<ExtractSettings>
     {
         #region Constructors
 
@@ -44,10 +44,7 @@ namespace Cube.FileSystem.App.Ice.Settings
         /// <param name="model">Model オブジェクト</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public ExtractSettingsViewModel(ExtractSettings model) : base(model)
-        {
-            Debug.Assert(model != null);
-        }
+        public ExtractSettingsViewModel(ExtractSettings model) : base(model) { }
 
         #endregion
 
@@ -96,24 +93,13 @@ namespace Cube.FileSystem.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool DeleteSource
         {
-            get { return Cast().DeleteSource; }
-            set { Cast().DeleteSource = value; }
+            get { return Model.DeleteSource; }
+            set { Model.DeleteSource = value; }
         }
 
         #endregion
 
         #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Cast
-        /// 
-        /// <summary>
-        /// キャストを実行します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        private ExtractSettings Cast() => Model as ExtractSettings;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -126,7 +112,7 @@ namespace Cube.FileSystem.App.Ice.Settings
         /// 
         /* ----------------------------------------------------------------- */
         public bool HasFlag(CreateDirectoryMethod value)
-            => Cast().RootDirectory.HasFlag(value);
+            => Model.RootDirectory.HasFlag(value);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -139,9 +125,8 @@ namespace Cube.FileSystem.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public void SetRootDirectory(CreateDirectoryMethod value, bool check)
         {
-            var e = Cast();
-            if (check) e.RootDirectory |= value;
-            else e.RootDirectory &= ~value;
+            if (check) Model.RootDirectory |= value;
+            else Model.RootDirectory &= ~value;
         }
 
         #endregion
