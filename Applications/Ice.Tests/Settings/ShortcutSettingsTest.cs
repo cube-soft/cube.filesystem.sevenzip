@@ -45,6 +45,10 @@ namespace Cube.FileSystem.App.Ice.Tests
         [Test]
         public void SyncUpdate()
         {
+            var archive  = new Shortcut(Result("CubeICE 圧縮"));
+            var extract  = new Shortcut(Result("CubeICE 解凍"));
+            var settings = new Shortcut(Result("CubeICE 設定"));
+
             var src  = new ShortcutSettings() { Directory = Results };
             var menu = PresetMenu.Archive |
                        PresetMenu.ArchiveDetail |
@@ -60,15 +64,17 @@ namespace Cube.FileSystem.App.Ice.Tests
             Assert.That(src.Preset.HasFlag(PresetMenu.Extract),       Is.False);
             Assert.That(src.Preset.HasFlag(PresetMenu.Settings),      Is.False);
 
-            var archive  = new Shortcut(Result("CubeICE 圧縮"));
-            var extract  = new Shortcut(Result("CubeICE 解凍"));
-            var settings = new Shortcut(Result("CubeICE 設定"));
-
             src.Preset = menu;
             src.Update();
             Assert.That(archive.Exists,  Is.True);
             Assert.That(extract.Exists,  Is.True);
             Assert.That(settings.Exists, Is.False); // Link does not exist.
+
+            src.Preset = PresetMenu.None;
+            src.Sync();
+            Assert.That(src.Preset.HasFlag(PresetMenu.Archive),  Is.True);
+            Assert.That(src.Preset.HasFlag(PresetMenu.Extract),  Is.True);
+            Assert.That(src.Preset.HasFlag(PresetMenu.Settings), Is.False);
 
             src.Preset = PresetMenu.None;
             src.Update();
