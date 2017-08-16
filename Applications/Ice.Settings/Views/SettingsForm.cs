@@ -101,7 +101,8 @@ namespace Cube.FileSystem.App.Ice.Settings
             ShortcutSettingsBindingSource.DataSource  = vm.Shortcut;
             ArchiveSettingsBindingSource.DataSource   = vm.Archive;
             ExtractSettingsBindingSource.DataSource   = vm.Extract;
-
+            VersionPanel.Version                      = vm.Version;
+            
             Enable(ArchiveSaveOthersRadioButton, ArchiveSaveTextBox, ArchiveSaveButton);
             Enable(ExtractSaveOthersRadioButton, ExtractSaveTextBox, ExtractSaveButton);
 
