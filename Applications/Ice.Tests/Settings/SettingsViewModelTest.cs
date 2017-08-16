@@ -82,6 +82,23 @@ namespace Cube.FileSystem.App.Ice.Tests.Settings
             Assert.That(m.Value.GetFilters().Count(), Is.EqualTo(0));
             Assert.That(m.Value.ToolTip,              Is.False);
             Assert.That(m.Value.ToolTipCount,         Is.EqualTo(0));
+
+            m.Value.CheckUpdate  = true;
+            m.Value.ErrorReport  = true;
+            m.Value.Filters      = "Add|Filter|By|Model";
+            m.Value.ToolTip      = true;
+            m.Value.ToolTipCount = 9;
+
+            var f = vm.Filtering.Split(new[]
+            {
+                Environment.NewLine
+            }, StringSplitOptions.RemoveEmptyEntries);
+
+            Assert.That(f.Count(),       Is.EqualTo(4));
+            Assert.That(vm.CheckUpdate,  Is.True);
+            Assert.That(vm.ErrorReport,  Is.True);
+            Assert.That(vm.ToolTip,      Is.True);
+            Assert.That(vm.ToolTipCount, Is.EqualTo(9));
         }
 
         /* ----------------------------------------------------------------- */
