@@ -68,13 +68,13 @@ namespace Cube.FileSystem.App.Ice.Tests
             src.Update();
             Assert.That(archive.Exists,  Is.True);
             Assert.That(extract.Exists,  Is.True);
-            Assert.That(settings.Exists, Is.False); // Link does not exist.
+            Assert.That(settings.Exists, Is.True);
 
             src.Preset = PresetMenu.None;
             src.Sync();
             Assert.That(src.Preset.HasFlag(PresetMenu.Archive),  Is.True);
             Assert.That(src.Preset.HasFlag(PresetMenu.Extract),  Is.True);
-            Assert.That(src.Preset.HasFlag(PresetMenu.Settings), Is.False);
+            Assert.That(src.Preset.HasFlag(PresetMenu.Settings), Is.True);
 
             src.Preset = PresetMenu.None;
             src.Update();
