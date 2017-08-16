@@ -15,6 +15,7 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System.Diagnostics;
 using Cube.FileSystem.Ice;
 
 namespace Cube.FileSystem.App.Ice.Settings
@@ -43,7 +44,10 @@ namespace Cube.FileSystem.App.Ice.Settings
         /// <param name="model">Model オブジェクト</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public ExtractSettingsViewModel(ExtractSettings model) : base(model) { }
+        public ExtractSettingsViewModel(ExtractSettings model) : base(model)
+        {
+            Debug.Assert(model != null);
+        }
 
         #endregion
 
@@ -92,8 +96,8 @@ namespace Cube.FileSystem.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool DeleteSource
         {
-            get { return TryCast()?.DeleteSource ?? false; }
-            set { if (Model is ExtractSettings e) e.DeleteSource = value; }
+            get { return Cast().DeleteSource; }
+            set { Cast().DeleteSource = value; }
         }
 
         #endregion
@@ -102,14 +106,14 @@ namespace Cube.FileSystem.App.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// TryCast
+        /// Cast
         /// 
         /// <summary>
-        /// キャストを試行します。
+        /// キャストを実行します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private ExtractSettings TryCast() => Model as ExtractSettings;
+        private ExtractSettings Cast() => Model as ExtractSettings;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -122,7 +126,7 @@ namespace Cube.FileSystem.App.Ice.Settings
         /// 
         /* ----------------------------------------------------------------- */
         public bool HasFlag(CreateDirectoryMethod value)
-            => TryCast()?.RootDirectory.HasFlag(value) ?? false;
+            => Cast().RootDirectory.HasFlag(value);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -135,11 +139,9 @@ namespace Cube.FileSystem.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public void SetRootDirectory(CreateDirectoryMethod value, bool check)
         {
-            if (Model is ExtractSettings e)
-            {
-                if (check) e.RootDirectory |= value;
-                else e.RootDirectory &= ~value;
-            }
+            var e = Cast();
+            if (check) e.RootDirectory |= value;
+            else e.RootDirectory &= ~value;
         }
 
         #endregion

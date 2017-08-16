@@ -546,10 +546,10 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        ~ProgressFacade()
-        {
-            Dispose(false);
-        }
+        //~ProgressFacade()
+        //{
+        //    Dispose(false);
+        //}
 
         /* ----------------------------------------------------------------- */
         ///
@@ -563,7 +563,7 @@ namespace Cube.FileSystem.App.Ice
         public void Dispose()
         {
             Dispose(true);
-            GC.SuppressFinalize(this);
+            // GC.SuppressFinalize(this);
         }
 
         /* ----------------------------------------------------------------- */

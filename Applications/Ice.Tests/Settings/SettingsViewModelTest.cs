@@ -26,10 +26,10 @@ namespace Cube.FileSystem.App.Ice.Tests.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ShortcutSettingsTest
+    /// SettingsViewModelTest
     /// 
     /// <summary>
-    /// ShortcutSettings のテスト用クラスです。
+    /// SettingsViewModel のテスト用クラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -152,15 +152,23 @@ namespace Cube.FileSystem.App.Ice.Tests.Settings
             src.SkipDesktop = true;
             Assert.That(dest.OpenDirectory, Is.EqualTo(OpenDirectoryMethod.SkipDesktop));
 
+            dest.OpenDirectory = OpenDirectoryMethod.OpenNotDesktop;
+            Assert.That(src.OpenDirectory, Is.True);
+            Assert.That(src.SkipDesktop,   Is.True);
+
             src.SaveDirectoryName = @"path\to\save";
             Assert.That(dest.SaveDirectoryName, Is.EqualTo(@"path\to\save"));
             src.SaveDirectoryName = string.Empty;
             Assert.That(dest.SaveDirectoryName, Is.Empty);
+            dest.SaveDirectoryName = @"path\to\new";
+            Assert.That(src.SaveDirectoryName, Is.EqualTo(@"path\to\new"));
 
             src.Filtering = true;
             Assert.That(dest.Filtering, Is.True);
             src.Filtering = false;
             Assert.That(dest.Filtering, Is.False);
+            dest.Filtering = true;
+            Assert.That(src.Filtering, Is.True);
         }
 
         /* ----------------------------------------------------------------- */
@@ -231,6 +239,10 @@ namespace Cube.FileSystem.App.Ice.Tests.Settings
             src.SkipDesktop = true;
             Assert.That(dest.OpenDirectory, Is.EqualTo(OpenDirectoryMethod.SkipDesktop));
 
+            dest.OpenDirectory = OpenDirectoryMethod.OpenNotDesktop;
+            Assert.That(src.OpenDirectory, Is.True);
+            Assert.That(src.SkipDesktop,   Is.True);
+
             src.CreateDirectory = true;
             src.SkipSingleDirectory = true;
             Assert.That(dest.RootDirectory, Is.EqualTo(CreateDirectoryMethod.CreateSmart));
@@ -244,20 +256,32 @@ namespace Cube.FileSystem.App.Ice.Tests.Settings
             src.SkipSingleDirectory = true;
             Assert.That(dest.RootDirectory, Is.EqualTo(CreateDirectoryMethod.SkipSingleDirectory));
 
+            dest.RootDirectory = CreateDirectoryMethod.Create |
+                                 CreateDirectoryMethod.SkipSingleDirectory |
+                                 CreateDirectoryMethod.SkipSingleFile;
+            Assert.That(src.CreateDirectory,     Is.True);
+            Assert.That(src.SkipSingleDirectory, Is.True);
+
             src.SaveDirectoryName = @"path\to\extract";
             Assert.That(dest.SaveDirectoryName, Is.EqualTo(@"path\to\extract"));
             src.SaveDirectoryName = string.Empty;
             Assert.That(dest.SaveDirectoryName, Is.Empty);
+            dest.SaveDirectoryName = @"path\to\ex2";
+            Assert.That(src.SaveDirectoryName, Is.EqualTo(@"path\to\ex2"));
 
             src.DeleteSource = true;
             Assert.That(dest.DeleteSource, Is.True);
             src.DeleteSource = false;
             Assert.That(dest.DeleteSource, Is.False);
+            dest.DeleteSource = true;
+            Assert.That(src.DeleteSource, Is.True);
 
             src.Filtering = true;
             Assert.That(dest.Filtering, Is.True);
             src.Filtering = false;
             Assert.That(dest.Filtering, Is.False);
+            dest.Filtering = true;
+            Assert.That(src.Filtering, Is.True);
         }
 
         /* ----------------------------------------------------------------- */

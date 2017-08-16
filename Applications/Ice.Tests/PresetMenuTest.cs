@@ -44,6 +44,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         ///
         /* --------------------------------------------------------------------- */
         [TestCase(PresetMenu.Archive,            ExpectedResult = 1)]
+        [TestCase(PresetMenu.ArchiveZipPassword, ExpectedResult = 2)]
         [TestCase(PresetMenu.Extract,            ExpectedResult = 1)]
         [TestCase(PresetMenu.ExtractDesktop,     ExpectedResult = 2)]
         [TestCase(PresetMenu.ExtractMyDocuments, ExpectedResult = 2)]
