@@ -50,28 +50,10 @@ namespace Cube.FileSystem.Ice
             set { SetProperty(ref _preset, value); }
         }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// IsExtended
-        /// 
-        /// <summary>
-        /// コンテキストメニューの拡張機能が有効かどうかを示す値を
-        /// 取得または設定します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        [DataMember]
-        public bool IsExtended
-        {
-            get { return _extended; }
-            set { SetProperty(ref _extended, value); }
-        }
-
         #endregion
 
         #region Fields
         private PresetMenu _preset = PresetMenu.DefaultContext;
-        private bool _extended = false;
         #endregion
     }
 }

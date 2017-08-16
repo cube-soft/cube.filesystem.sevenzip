@@ -15,7 +15,6 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
-using System.ComponentModel;
 using Cube.FileSystem.Ice;
 
 namespace Cube.FileSystem.App.Ice.Settings
@@ -408,11 +407,7 @@ namespace Cube.FileSystem.App.Ice.Settings
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public void Reset()
-        {
-            _model.IsExtended = false;
-            _model.Preset = PresetMenu.DefaultContext;
-        }
+        public void Reset() => _model.Preset = PresetMenu.DefaultContext;
 
         #endregion
 
