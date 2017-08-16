@@ -286,10 +286,23 @@ namespace Cube.FileSystem.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public SettingsFolder() : base("CubeSoft", @"CubeICE\v3")
+        public SettingsFolder() : this(@"CubeICE\v3") { }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SettingsFolder
+        /// 
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        /// 
+        /// <param name="subkey">レジストリのサブキー名</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public SettingsFolder(string subkey) : base("CubeSoft", subkey)
         {
-            AutoSave = false;
-            Version.Digit = 3;
+            AutoSave       = false;
+            Version.Digit  = 3;
             Version.Suffix = Properties.Resources.VersionSuffix;
         }
 
