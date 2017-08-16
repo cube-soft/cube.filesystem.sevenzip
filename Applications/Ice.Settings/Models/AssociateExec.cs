@@ -37,7 +37,7 @@ namespace Cube.FileSystem.App.Ice.Settings
     /// </remarks>
     ///
     /* --------------------------------------------------------------------- */
-    public class AssociateExec
+    internal class AssociateExec
     {
         #region Constructors
 
@@ -76,17 +76,6 @@ namespace Cube.FileSystem.App.Ice.Settings
         #endregion
 
         #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Update
-        /// 
-        /// <summary>
-        /// ファイルの関連付けを更新します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public void Update() => Update(false);
 
         /* ----------------------------------------------------------------- */
         ///
