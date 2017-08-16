@@ -174,7 +174,7 @@ namespace Cube.FileSystem.Ice
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public void UpdateSettings()
+        private void UpdateSettings()
         {
             var src  = GetFileName(Properties.Resources.ScSettings);
             var dest = GetLink("cubeice-setting.exe");
