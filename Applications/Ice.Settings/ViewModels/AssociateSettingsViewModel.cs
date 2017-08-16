@@ -15,6 +15,8 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System.ComponentModel;
+using System.Linq;
 using Cube.FileSystem.Ice;
 
 namespace Cube.FileSystem.App.Ice.Settings
@@ -494,6 +496,28 @@ namespace Cube.FileSystem.App.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
+        /// SelectAll
+        /// 
+        /// <summary>
+        /// 全ての項目を選択します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void SelectAll() => ApplyAll(true);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Clear
+        /// 
+        /// <summary>
+        /// 全ての項目の選択状態を解除します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void Clear() => ApplyAll(false);
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Update
         /// 
         /// <summary>
@@ -507,8 +531,30 @@ namespace Cube.FileSystem.App.Ice.Settings
 
         #endregion
 
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ApplyAll
+        /// 
+        /// <summary>
+        /// 全ての項目を有効または無効に設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void ApplyAll(bool enabled)
+        {
+            var items = _model.Settings.Value;
+            foreach (var key in items.Keys.ToArray()) items[key] = enabled;
+
+            var e = new PropertyChangedEventArgs(nameof(_model.Settings.Value));
+            OnPropertyChanged(e);
+        }
+
         #region Fields
         private AssociateExec _model;
+        #endregion
+
         #endregion
     }
 }

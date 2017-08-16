@@ -106,8 +106,10 @@ namespace Cube.FileSystem.App.Ice.Settings
             Enable(ArchiveSaveOthersRadioButton, ArchiveSaveTextBox, ArchiveSaveButton);
             Enable(ExtractSaveOthersRadioButton, ExtractSaveTextBox, ExtractSaveButton);
 
-            SettingsPanel.Apply += (s, e) => vm.Update();
-            ContextResetButton.Click += (s, e) => vm.Context.Reset();
+            SettingsPanel.Apply        += (s, e) => vm.Update();
+            ContextResetButton.Click   += (s, e) => vm.Context.Reset();
+            AssociateAllButton.Click   += (s, e) => vm.Associate.SelectAll();
+            AssociateClearButton.Click += (s, e) => vm.Associate.Clear();
         }
 
         #endregion
@@ -125,10 +127,6 @@ namespace Cube.FileSystem.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         protected override void OnLoad(EventArgs ev)
         {
-            // Association
-            AssociateAllButton.Click   += (s, e) => Reset(AssociateMenuPanel, true);
-            AssociateClearButton.Click += (s, e) => Reset(AssociateMenuPanel, false);
-
             // Archive
             ArchiveSaveButton.Click += (s, e) => Browse(ArchiveSaveTextBox);
             ArchiveSaveOthersRadioButton.CheckedChanged += (s, e)
@@ -183,24 +181,6 @@ namespace Cube.FileSystem.App.Ice.Settings
             var src = sender as RadioButton;
             if (src == null) return;
             foreach (var c in controls) c.Enabled = src.Checked;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Reset
-        /// 
-        /// <summary>
-        /// コントロールが保持している CheckBox オブジェクトの
-        /// チェック状態を再設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Reset(Control container, bool check)
-        {
-            foreach (var control in container.Controls)
-            {
-                if (control is CheckBox cb) cb.Checked = check;
-            }
         }
 
         /* ----------------------------------------------------------------- */
