@@ -491,6 +491,7 @@ namespace Cube.FileSystem.App.Ice.Tests.Settings
             vm.Sync();
             vm.Associate.Clear();
             vm.Update();
+            vm.Update();
             Assert.Pass();
         }
 
