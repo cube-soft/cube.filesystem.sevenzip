@@ -131,6 +131,30 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Archive_PasswordCancel
+        /// 
+        /// <summary>
+        /// パスワードの設定をキャンセルするテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Archive_PasswordCancel()
+            => Assert.That(
+            () =>
+            {
+                using (var writer = new ArchiveWriter(Format.Zip))
+                {
+                    var dest  = Result("PasswordCancel.zip");
+                    var query = new Query<string, string>(x => x.Cancel = true);
+                    writer.Add(Example("Sample.txt"));
+                    writer.Save(dest, query, null);
+                }
+            },
+            Throws.TypeOf<UserCancelException>());
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Add_Throws
         ///
         /// <summary>

@@ -219,9 +219,6 @@ namespace Cube.FileSystem.SevenZip
                 case ItemPropId.Path:
                     value.Set(src.PathInArchive);
                     break;
-                case ItemPropId.Extension:
-                    value.Set(src.Extension);
-                    break;
                 case ItemPropId.Attributes:
                     value.Set((uint)src.Attributes);
                     break;
