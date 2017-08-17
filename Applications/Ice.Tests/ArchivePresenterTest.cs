@@ -163,6 +163,35 @@ namespace Cube.FileSystem.App.Ice.Tests
             Assert.That(IO.Get(tmp).Exists, Is.False);
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Archive_PasswordCancel
+        /// 
+        /// <summary>
+        /// パスワードの設定をキャンセルするテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public async Task Archive_PasswordCancel()
+        {
+            var src  = Example("Sample.txt");
+            var dest = Result(@"PasswordCancel\Sample.zip");
+            var args = PresetMenu.ArchiveZipPassword.ToArguments().Concat(new[] { src });
+
+            using (var ap = Create(new Request(args)))
+            {
+                ap.Settings.Value.Archive.SaveLocation = SaveLocation.Others;
+                ap.Settings.Value.Archive.SaveDirectoryName = Result("PasswordCancel");
+                ap.View.Show();
+
+                for (var i = 0; ap.View.Visible && i < 50; ++i) await Task.Delay(100);
+                Assert.That(ap.View.Visible, Is.False, "Timeout");
+            }
+
+            Assert.That(IO.Get(dest).Exists, Is.False);
+        }
+
         #endregion
 
         #region TestCases
