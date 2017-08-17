@@ -92,7 +92,6 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
@@ -100,9 +99,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Views\MailForm.cs" />
-    <Compile Include="Models\OverwriteEventArgs.cs" />
     <Compile Include="Models\EventAggregator.cs" />
+    <Compile Include="Models\OverwriteEventArgs.cs" />
     <Compile Include="Models\Request.cs" />
     <Compile Include="Models\SuspendableProgress.cs" />
     <Compile Include="NativeMethods\Mapi32.cs" />
@@ -113,20 +111,13 @@
     <Compile Include="Presenters\ProgressFacade.cs" />
     <Compile Include="Presenters\ProgressPresenter.cs" />
     <Compile Include="Views\IProgressView.cs" />
+    <Compile Include="Views\MailForm.cs" />
     <Compile Include="Views\ViewDataSource.cs" />
     <Compile Include="Views\ViewFactory.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Views\RuntimeSettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\RuntimeSettingsForm.Designer.cs">
-      <DependentUpon>RuntimeSettingsForm.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="Views\RuntimeSettingsForm.resx">
-      <DependentUpon>RuntimeSettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
     <Compile Include="Views\OverwriteForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -163,6 +154,15 @@
     <EmbeddedResource Include="Views\ProgressForm.resx">
       <DependentUpon>ProgressForm.cs</DependentUpon>
     </EmbeddedResource>
+    <Compile Include="Views\RuntimeSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\RuntimeSettingsForm.Designer.cs">
+      <DependentUpon>RuntimeSettingsForm.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Views\RuntimeSettingsForm.resx">
+      <DependentUpon>RuntimeSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -197,7 +197,6 @@
     <None Include="Resources\Icons\FileOld.ico" />
     <None Include="Resources\Images\HeaderExtract.png" />
     <None Include="Resources\Images\HeaderArchive.png" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\Cube.FileSystem.csproj">

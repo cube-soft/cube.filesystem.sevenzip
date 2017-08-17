@@ -89,6 +89,8 @@
     <Reference Include="log4net">
       <HintPath>..\..\..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -105,6 +107,7 @@
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\ShortcutSettingsViewModel.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Views\SettingsForm.cs">
@@ -137,17 +140,18 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Content Include="App.ico" />
-    <None Include="App.config" />
-    <None Include="App.manifest" />
-    <None Include="Packages.config" />
     <None Include="Properties\DataSources\Cube.FileSystem.Ice.ArchiveSettings.datasource" />
     <None Include="Properties\DataSources\Cube.FileSystem.Ice.AssociateSettings.datasource" />
     <None Include="Properties\DataSources\Cube.FileSystem.Ice.ContextSetttings.datasource" />
     <None Include="Properties\DataSources\Cube.FileSystem.Ice.ExtractSettings.datasource" />
     <None Include="Properties\DataSources\Cube.FileSystem.Ice.Settings.datasource" />
     <None Include="Properties\DataSources\Cube.FileSystem.Ice.ShortcutSettings.datasource" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App.ico" />
+    <None Include="App.config" />
+    <None Include="App.manifest" />
+    <None Include="Packages.config" />
     <None Include="Resources\Logo.png" />
   </ItemGroup>
   <ItemGroup>

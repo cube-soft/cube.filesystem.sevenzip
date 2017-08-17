@@ -72,27 +72,26 @@
     <Reference Include="log4net">
       <HintPath>..\..\..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Settings\ArchiveRuntimeSettings.cs" />
     <Compile Include="Conversions\PresetMenu.cs" />
+    <Compile Include="Settings\ArchiveRuntimeSettings.cs" />
     <Compile Include="Settings\ArchiveSettings.cs" />
-    <Compile Include="AssociateRegistrar.cs" />
     <Compile Include="Settings\AssociateSettings.cs" />
     <Compile Include="Settings\ContextSettings.cs" />
     <Compile Include="Settings\ExtractSettings.cs" />
     <Compile Include="Settings\GeneralSettings.cs" />
-    <Compile Include="Parameters.cs" />
     <Compile Include="Settings\Settings.cs" />
     <Compile Include="Settings\ShortcutSettings.cs" />
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="AssociateRegistrar.cs" />
+    <Compile Include="Parameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="Packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\Resources.Designer.cs">
@@ -114,6 +113,9 @@
       <Project>{74c9f388-360e-4c46-a9a6-e131eab2e49c}</Project>
       <Name>Cube.FileSystem.SevenZip</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
