@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Runtime.Serialization;
 
 namespace Cube.FileSystem.Ice
@@ -304,6 +305,30 @@ namespace Cube.FileSystem.Ice
             AutoSave       = false;
             Version.Digit  = 3;
             Version.Suffix = Properties.Resources.VersionSuffix;
+
+            var asm = Assembly.GetExecutingAssembly().Location;
+            var dir = System.IO.Path.GetDirectoryName(asm);
+            Startup.Command = $"\"{System.IO.Path.Combine(dir, "cubeice-checker.exe")}\"";
+            Startup.Name    = "cubeice-checker";
+        }
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OnSaved
+        /// 
+        /// <summary>
+        /// ネットワークオプションを初期化します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected override void OnSaved(EventArgs e)
+        {
+            if (Value != null) Startup.Enabled = Value.CheckUpdate;
+            base.OnSaved(e);
         }
 
         #endregion

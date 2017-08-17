@@ -532,15 +532,21 @@ namespace Cube.FileSystem.App.Ice.Tests.Settings
         [TestCase(false)]
         public void SyncUpdate(bool install)
         {
-            var vm = new SettingsViewModel(Create()) { InstallMode = install };
-            vm.CheckUpdate = false;
-            vm.Sync();
-            vm.Associate.Clear();
-            vm.Update();
+            var m0 = Create();
+            m0.Startup.Name = "cubeice-test";
 
-            var m = Create();
-            m.Load();
-            new SettingsViewModel(m).Update();
+            var vm0 = new SettingsViewModel(m0) { InstallMode = install };
+            vm0.CheckUpdate = true;
+            vm0.Sync();
+            vm0.Associate.Clear();
+            vm0.Update();
+
+            var m1 = Create();
+            m1.Startup.Name = "cubeice-test";
+            m1.Load();
+
+            var vm1 = new SettingsViewModel(m1);
+            vm1.Update();
 
             Assert.Pass();
         }
