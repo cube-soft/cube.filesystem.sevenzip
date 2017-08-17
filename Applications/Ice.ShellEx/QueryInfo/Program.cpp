@@ -15,10 +15,10 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+#include "Config.h"
 #include "QueryInfo/QueryInfoFactory.h"
 #include <initguid.h>
 #include <shlguid.h>
-#include <shlobj.h>
 #include "Log.h"
 
 // {CB8641A3-EBC7-4758-A302-AA6667B817C8}

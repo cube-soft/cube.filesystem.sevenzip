@@ -15,11 +15,11 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+#include "Config.h"
 #include "Context/ContextMenuFactory.h"
 #include "Context/ContextMenu.h"
 #include <initguid.h>
 #include <shlguid.h>
-#include <shlobj.h>
 
 // {BE7948B2-982A-4FDF-9A72-5EBB9134A787}
 DEFINE_GUID(CUBEICE_CTX_CLSID, 0xbe7948b2, 0x982a, 0x4fdf, 0x9a, 0x72, 0x5e, 0xbb, 0x91, 0x34, 0xa7, 0x87);

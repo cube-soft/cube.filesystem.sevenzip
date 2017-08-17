@@ -17,7 +17,7 @@
 /* ------------------------------------------------------------------------- */
 #pragma once
 
-#include <shlobj.h>
+#include "Config.h"
 
 namespace Cube {
 namespace FileSystem {

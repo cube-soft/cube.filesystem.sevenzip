@@ -17,9 +17,9 @@
 /* ------------------------------------------------------------------------- */
 #pragma once
 
+#include "Config.h"
 #include "QueryInfoSettings.h"
 #include "SevenZip/ArchiveList.h"
-#include <shlobj.h>
 #include <shlwapi.h>
 #include <tchar.h>
 #include <memory>

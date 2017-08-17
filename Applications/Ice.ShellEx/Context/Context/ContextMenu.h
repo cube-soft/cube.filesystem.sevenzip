@@ -17,11 +17,11 @@
 /* ------------------------------------------------------------------------- */
 #pragma once
 
+#include "Config.h"
 #include "ContextMenuIcon.h"
 #include "ContextMenuItem.h"
 #include "ContextSettings.h"
 #include "Resources.h"
-#include <shlobj.h>
 #include <tchar.h>
 #include <map>
 #include <memory>
