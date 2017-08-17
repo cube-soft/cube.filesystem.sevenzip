@@ -580,7 +580,7 @@ namespace Cube.FileSystem.SevenZip
             switch (result)
             {
                 case OperationResult.OK:
-                case OperationResult.Unknown:
+                case OperationResult.Prepare:
                     break;
                 case OperationResult.DataError:
                     if (Encrypted) ThrowEncryption();
