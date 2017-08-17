@@ -331,6 +331,11 @@ namespace Cube.FileSystem.Tests
         /// パスワード要求時にキャンセルするテストを実行します。
         /// </summary>
         /// 
+        /// <remarks>
+        /// 0 バイトのファイルはパスワード無しで展開が完了するため、
+        /// Extracted イベントが 1 回発生します。
+        /// </remarks>
+        /// 
         /* ----------------------------------------------------------------- */
         [Test]
         public void Extract_UserCancel()
@@ -345,13 +350,9 @@ namespace Cube.FileSystem.Tests
                 {
                     archive.Extracted += (s, e) => ++count;
                     archive.Extract(Results);
-                    Assert.Fail("never reached");
                 }
             }
-            catch (UserCancelException /* err */) { Assert.Pass(); }
-            catch (Exception err) { Assert.Fail(err.ToString()); }
-
-            Assert.That(count, Is.EqualTo(0));
+            catch (UserCancelException) { Assert.That(count, Is.EqualTo(1)); }
         }
 
         /* ----------------------------------------------------------------- */
