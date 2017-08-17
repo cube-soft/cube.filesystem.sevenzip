@@ -6,7 +6,7 @@ Copyright (c) 2010 CubeSoft Inc.
 support@cube-soft.jp  
 http://www.cube-soft.jp/cubeice/
 
-# はじめに
+## はじめに
 
 CubeICE は、様々な形式に対応した圧縮・解凍ソフトです。
 圧縮・解凍したいファイルを選択して右クリックから表示されるコンテキストメニューで
@@ -16,14 +16,14 @@ CubeICE を使用するためには、Microsoft .NET Framework 3.5 以上がイ�
 されている必要があります。.NET Framework 3.5 は、以下の URL からダウンロードして下さい。  
 http://www.microsoft.com/ja-jp/download/details.aspx?id=22
 
-## 動作環境
+### 動作環境
 
 * OS   ... Windows 7 以降
 * 圧縮 ... zip, 7z, gzip, bzip2
 * 解凍 ... zip, lzh, rar, 7z, iso, tar, gz, tgz, bz2, tbz, xz, txz, arj, cab,
            chm, cpio, deb, dmg, hfs, jar, nupkg, rpm, vhd, vmdk, wim, xar, z
 
-## アンインストール時の注意
+### アンインストール時の注意
 
 CubeICE はエクスプローラーなどの右クリックから表示されるコンテキストメニューを
 拡張していますが、この拡張のためのプログラムがアンインストール時に
@@ -32,7 +32,7 @@ CubeICE はエクスプローラーなどの右クリックから表示される
 該当プログラムは、32bit 版の場合は cubeicectx-vXX.dll、
 64bit 版の場合は cubeicectx-vXX-x86.dll および cubeicectx-vXX-x64.dll です。
 
-# 利用ライブラリ
+## 利用ライブラリ
 
 CubeICE は、以下のライブラリを利用しています。
 それぞれのライブラリについては、記載した URL から取得することができます。
@@ -56,7 +56,7 @@ CubeICE は、以下のライブラリを利用しています。
     - http://omermor.github.io/AsyncBridge/
     - https://www.nuget.org/packages/AsyncBridge.Net35
 
-# バージョン履歴
+## バージョン履歴
 
 * 2017/08/21 version 0.8.0β
     - .NET Framework を利用する形に変更
