@@ -342,7 +342,7 @@ namespace Cube.FileSystem.Tests
         {
             var count = 0;
 
-            try
+            Assert.That(() =>
             {
                 var src   = Example("Password.7z");
                 var query = new Query<string, string>(e => e.Cancel = true);
@@ -351,8 +351,9 @@ namespace Cube.FileSystem.Tests
                     archive.Extracted += (s, e) => ++count;
                     archive.Extract(Results);
                 }
-            }
-            catch (UserCancelException) { Assert.That(count, Is.EqualTo(1)); }
+            }, Throws.TypeOf<UserCancelException>());
+
+            Assert.That(count, Is.EqualTo(1));
         }
 
         /* ----------------------------------------------------------------- */
