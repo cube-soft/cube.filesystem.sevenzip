@@ -21,6 +21,7 @@ using Microsoft.Win32;
 using Cube.FileSystem.Ice;
 using Cube.FileSystem.App.Ice.Settings;
 using NUnit.Framework;
+using Cube.Registries;
 
 namespace Cube.FileSystem.App.Ice.Tests.Settings
 {

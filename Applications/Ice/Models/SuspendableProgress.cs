@@ -30,7 +30,7 @@ namespace Cube.FileSystem.App.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class SuspendableProgress<T> : IProgress<T>
+    public class SuspendableProgress<T> : IProgress<T> where T : EventArgs
     {
         #region Constructors
 

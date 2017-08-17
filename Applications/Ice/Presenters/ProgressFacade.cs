@@ -22,6 +22,7 @@ using System.Threading;
 using Cube.FileSystem.SevenZip;
 using Cube.FileSystem.Ice;
 using Cube.Log;
+using Cube.Enumerations;
 
 namespace Cube.FileSystem.App.Ice
 {

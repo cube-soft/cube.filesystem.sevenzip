@@ -40,6 +40,7 @@ namespace Cube.FileSystem.App.Ice.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
+    [Ignore("NUnit for .NET 3.5 does not support async/await")]
     class ArchivePresenterTest : MockViewHandler
     {
         #region Tests
@@ -54,6 +55,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
+        [Ignore("NUnit for .NET 3.5 does not support async/await")]
         public async Task Archive(string[] files, IEnumerable<string> args,
             ArchiveSettings archive, string dest, long count)
         {
@@ -75,7 +77,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                 Assert.That(ap.Model.ProgressReport.Ratio, Is.EqualTo(0.0));
                 ap.View.Show();
                 Assert.That(ap.View.Visible, Is.True);
-                for (var i = 0; ap.View.Visible && i < 50; ++i) await Task.Delay(100);
+                for (var i = 0; ap.View.Visible && i < 50; ++i) await TaskEx.Delay(100);
                 Assert.That(ap.View.Visible, Is.False, "Timeout");
                 Assert.That(ap.Model.ProgressReport.Ratio, Is.EqualTo(1.0).Within(0.01));
 
@@ -117,7 +119,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                 ap.Settings.Value.Archive.SaveDirectoryName = Result("Exists");
                 ap.View.Show();
 
-                for (var i = 0; ap.View.Visible && i < 50; ++i) await Task.Delay(100);
+                for (var i = 0; ap.View.Visible && i < 50; ++i) await TaskEx.Delay(100);
                 Assert.That(ap.View.Visible, Is.False, "Timeout");
             }
 
@@ -152,7 +154,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                 ap.Settings.Value.Archive.SaveLocation = SaveLocation.Runtime;
                 ap.View.Show();
 
-                for (var i = 0; ap.View.Visible && i < 50; ++i) await Task.Delay(100);
+                for (var i = 0; ap.View.Visible && i < 50; ++i) await TaskEx.Delay(100);
                 Assert.That(ap.View.Visible, Is.False, "Timeout");
 
                 tmp = ap.Model.Tmp;

@@ -40,6 +40,7 @@ namespace Cube.FileSystem.App.Ice.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
+    [Ignore("NUnit for .NET 3.5 does not support async/await")]
     class ExtractPresenterTest : MockViewHandler
     {
         #region Tests
@@ -78,7 +79,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                 Assert.That(ep.Model.ProgressReport.Ratio, Is.EqualTo(0.0));
                 ep.View.Show();
                 Assert.That(ep.View.Visible, Is.True);
-                for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
+                for (var i = 0; ep.View.Visible && i < 50; ++i) await TaskEx.Delay(100);
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
                 Assert.That(ep.Model.ProgressReport.Ratio, Is.EqualTo(1.0).Within(0.01));
 
@@ -120,7 +121,7 @@ namespace Cube.FileSystem.App.Ice.Tests
             {
                 ep.Settings.Value.Extract.RootDirectory = CreateDirectoryMethod.None;
                 ep.View.Show();
-                for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
+                for (var i = 0; ep.View.Visible && i < 50; ++i) await TaskEx.Delay(100);
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
             }
 
@@ -156,11 +157,11 @@ namespace Cube.FileSystem.App.Ice.Tests
 
                 ep.EventAggregator.GetEvents().Suspend.Publish(true);
                 var count = ep.View.Value;
-                await Task.Delay(150);
+                await TaskEx.Delay(150);
                 Assert.That(ep.View.Value, Is.EqualTo(count).Within(10)); // see remarks
                 ep.EventAggregator.GetEvents().Suspend.Publish(false);
 
-                for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
+                for (var i = 0; ep.View.Visible && i < 50; ++i) await TaskEx.Delay(100);
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
             }
 
@@ -188,7 +189,7 @@ namespace Cube.FileSystem.App.Ice.Tests
             {
                 ep.Settings.Value.Extract.DeleteSource = true;
                 ep.View.Show();
-                for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
+                for (var i = 0; ep.View.Visible && i < 50; ++i) await TaskEx.Delay(100);
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
             }
 
@@ -214,7 +215,7 @@ namespace Cube.FileSystem.App.Ice.Tests
             using (var ep = Create(src, dest))
             {
                 ep.View.Show();
-                for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
+                for (var i = 0; ep.View.Visible && i < 50; ++i) await TaskEx.Delay(100);
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
             }
         }
@@ -238,7 +239,7 @@ namespace Cube.FileSystem.App.Ice.Tests
             {
                 ep.Settings.Value.ErrorReport = true;
                 ep.View.Show();
-                for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
+                for (var i = 0; ep.View.Visible && i < 50; ++i) await TaskEx.Delay(100);
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
             }
         }

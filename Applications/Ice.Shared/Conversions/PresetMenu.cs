@@ -16,6 +16,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System.Collections.Generic;
+using Cube.Enumerations;
 
 namespace Cube.FileSystem.Ice
 {

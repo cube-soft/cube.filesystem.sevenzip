@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using Cube.FileSystem.Ice;
 using NUnit.Framework;
+using Cube.Enumerations;
 
 namespace Cube.FileSystem.App.Ice.Tests
 {

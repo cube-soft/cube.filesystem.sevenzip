@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.IO;
+using System.Linq;
 
 namespace Cube.FileSystem
 {
@@ -396,7 +397,10 @@ namespace Cube.FileSystem
         /// <param name="filename">ファイル名</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public string Combine(params string[] paths) => Path.Combine(paths);
+        public string Combine(params string[] paths)
+            => paths.Length > 0 ?
+               paths.Aggregate((a, x) => Path.Combine(a, x)) :
+               string.Empty;
 
         /* ----------------------------------------------------------------- */
         ///

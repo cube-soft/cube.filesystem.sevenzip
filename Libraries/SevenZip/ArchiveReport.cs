@@ -16,6 +16,8 @@
 /// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ///
 /* ------------------------------------------------------------------------- */
+using System;
+
 namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
@@ -27,7 +29,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     /// 
     /* --------------------------------------------------------------------- */
-    public class ArchiveReport
+    public class ArchiveReport : EventArgs
     {
         #region Properties
 
