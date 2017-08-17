@@ -95,10 +95,11 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [Test]
-        public void Create_WrongLocation()
+        [TestCase("/o")]
+        [TestCase("/o:wrong")]
+        public void Create_WrongLocation(string arg)
         {
-            var request = new Request(new[] { "/x", "/o" });
+            var request = new Request(new[] { "/x", arg });
             Assert.That(request.Mode,     Is.EqualTo(Mode.Extract));
             Assert.That(request.Location, Is.EqualTo(SaveLocation.Unknown));
         }

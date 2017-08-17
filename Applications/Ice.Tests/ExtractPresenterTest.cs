@@ -71,6 +71,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                 Assert.That(ep.Model.ProgressInterval.TotalMilliseconds, Is.EqualTo(100).Within(1));
                 ep.Model.ProgressInterval = TimeSpan.FromMilliseconds(10);
 
+                ep.Settings.Value.Explorer = "dummy.exe";
                 ep.Settings.Value.Extract = extract;
                 ep.Settings.Value.Extract.SaveDirectoryName = Result("Others");
 
@@ -197,7 +198,7 @@ namespace Cube.FileSystem.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract_UserCancel
+        /// Extract_PasswordCancel
         /// 
         /// <summary>
         /// パスワード入力をキャンセルした時の挙動を確認します。
@@ -205,10 +206,10 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public async Task Extract_UserCancel()
+        public async Task Extract_PasswordCancel()
         {
             var src  = Example("Password.7z");
-            var dest = Result("UserCancel");
+            var dest = Result("PasswordCancel");
 
             using (var ep = Create(src, dest))
             {
