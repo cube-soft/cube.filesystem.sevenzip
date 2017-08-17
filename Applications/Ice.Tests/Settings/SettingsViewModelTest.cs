@@ -496,9 +496,7 @@ namespace Cube.FileSystem.App.Ice.Tests.Settings
             var src  = vm.Shortcut;
             var dest = m.Value.Shortcut;
 
-            var io  = new Operator();
-            var asm = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            dest.Directory = io.Combine(io.Get(asm).DirectoryName, "Results");
+            dest.Directory = GetTmpDirectory();
 
             src.Archive       = true;
             src.Extract       = true;
@@ -534,6 +532,7 @@ namespace Cube.FileSystem.App.Ice.Tests.Settings
         {
             var m0 = Create();
             m0.Startup.Name = "cubeice-test";
+            m0.Value.Shortcut.Directory = GetTmpDirectory();
 
             var vm0 = new SettingsViewModel(m0) { InstallMode = install };
             vm0.CheckUpdate = true;
@@ -542,8 +541,9 @@ namespace Cube.FileSystem.App.Ice.Tests.Settings
             vm0.Update();
 
             var m1 = Create();
-            m1.Startup.Name = "cubeice-test";
             m1.Load();
+            m1.Startup.Name = "cubeice-test";
+            m1.Value.Shortcut.Directory = GetTmpDirectory();
 
             var vm1 = new SettingsViewModel(m1);
             vm1.Update();
@@ -576,6 +576,22 @@ namespace Cube.FileSystem.App.Ice.Tests.Settings
         /// 
         /* ----------------------------------------------------------------- */
         private SettingsFolder Create() => new SettingsFolder(KeyName);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetTmpDirectory
+        ///
+        /// <summary>
+        /// 一時ディレクトリのパスを取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private string GetTmpDirectory()
+        {
+            var io = new Operator();
+            var asm = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            return io.Combine(io.Get(asm).DirectoryName, "Results");
+        }
 
         /* ----------------------------------------------------------------- */
         ///
