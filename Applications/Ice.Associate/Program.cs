@@ -16,6 +16,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Linq;
 using System.Reflection;
 using Cube.FileSystem.Ice;
 
@@ -42,7 +43,7 @@ namespace Cube.FileSystem.App.Ice.Associate
         /// 
         /* ----------------------------------------------------------------- */
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             var type = typeof(Program);
 
@@ -50,6 +51,7 @@ namespace Cube.FileSystem.App.Ice.Associate
             {
                 Cube.Log.Operations.Configure();
                 Cube.Log.Operations.Info(type, Assembly.GetExecutingAssembly());
+                Cube.Log.Operations.Info(type, string.Join(" ", args));
 
                 var asm  = Assembly.GetExecutingAssembly().Location;
                 var dir  = System.IO.Path.GetDirectoryName(asm);
@@ -60,7 +62,8 @@ namespace Cube.FileSystem.App.Ice.Associate
                 Cube.Log.Operations.Info(type, $"IconLocation:{icon}");
 
                 var settings = new SettingsFolder();
-                settings.Load();
+                if (args.Length > 0 && args[0].ToLower() == "/uninstall") Clear(settings);
+                else settings.Load();
 
                 var registrar = new AssociateRegistrar(exe)
                 {
@@ -79,6 +82,27 @@ namespace Cube.FileSystem.App.Ice.Associate
                 );
             }
             catch (Exception err) { Cube.Log.Operations.Error(type, err.ToString()); }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Clear
+        /// 
+        /// <summary>
+        /// 全ての関連付けを設定を無効にします。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// アンインストール時に使用します。
+        /// </remarks>
+        /// 
+        /* ----------------------------------------------------------------- */
+        static void Clear(SettingsFolder settings)
+        {
+            foreach (var key in settings.Value.Associate.Value.Keys.ToArray())
+            {
+                settings.Value.Associate.Value[key] = false;
+            }
         }
     }
 }
