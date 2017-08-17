@@ -59,7 +59,7 @@ namespace Cube.FileSystem.App.Ice.Settings
                 var model = new SettingsFolder();
                 model.Load();
 
-                var install = args.Length > 0 && args[0] == "install";
+                var install = args.Length > 0 && args[0] == "/install";
                 if (install) Cube.Log.Operations.Info(type, "InstallMode");
 
                 var vm = new SettingsViewModel(model) { InstallMode = install };
