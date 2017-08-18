@@ -96,7 +96,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\AssociateExec.cs" />
+    <Compile Include="Models\AssociateCommand.cs" />
     <Compile Include="ViewModels\ArchiveSettingsViewModel.cs" />
     <Compile Include="ViewModels\AssociateSettingsViewModel.cs" />
     <Compile Include="ViewModels\ContextSettingsViewModel.cs" />

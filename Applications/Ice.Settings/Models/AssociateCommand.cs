@@ -25,10 +25,10 @@ namespace Cube.FileSystem.App.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// AssociateExec
+    /// AssociateCommand
     /// 
     /// <summary>
-    /// ファイルの関連付けの更新を実行するクラスです。
+    /// ファイルの関連付けの更新を実行するコマンドです。
     /// </summary>
     /// 
     /// <remarks>
@@ -37,13 +37,13 @@ namespace Cube.FileSystem.App.Ice.Settings
     /// </remarks>
     ///
     /* --------------------------------------------------------------------- */
-    internal class AssociateExec
+    internal class AssociateCommand
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// AssociateExec
+        /// AssociateCommand
         /// 
         /// <summary>
         /// オブジェクトを初期化します。
@@ -52,7 +52,7 @@ namespace Cube.FileSystem.App.Ice.Settings
         /// <param name="settings">設定用オブジェクト</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public AssociateExec(AssociateSettings settings)
+        public AssociateCommand(AssociateSettings settings)
         {
             Settings = settings;
             Reset();
@@ -79,20 +79,20 @@ namespace Cube.FileSystem.App.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Update
+        /// Execute
         /// 
         /// <summary>
-        /// ファイルの関連付けを強制的に更新します。
+        /// ファイルの関連付けを状態を更新します。
         /// </summary>
         /// 
         /// <param name="force">強制的に更新するかどうかを示す値</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public void Update(bool force)
+        public void Execute(bool force)
         {
             try
             {
-                if (!force && !UpdateIsNeed()) return;
+                if (!force && !IsChanged()) return;
 
                 var asm = Assembly.GetExecutingAssembly().Location;
                 var dir = System.IO.Path.GetDirectoryName(asm);
@@ -112,14 +112,15 @@ namespace Cube.FileSystem.App.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// UpdateIsNeed
+        /// IsChanged
         /// 
         /// <summary>
-        /// ファイルの関連付けの更新が必要かどうかを判別します。
+        /// ファイルの関連付け状態を表す値が変更されたかどうかを判別
+        /// します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private bool UpdateIsNeed()
+        private bool IsChanged()
         {
             foreach (var item in Settings.Value)
             {
