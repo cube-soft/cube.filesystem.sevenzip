@@ -137,10 +137,11 @@ namespace Cube.FileSystem.App.Ice.Tests
         [Test]
         public async Task Archive_Overwrite()
         {
+            var dir  = Result("Overwrite");
             var src  = Example("Sample.txt");
-            var dest = Result(@"Overwrite\Sample.zip");
+            var dest = IO.Combine(dir, "Sample.zip");
 
-            IO.CreateDirectory(Result("Overwrite"));
+            IO.CreateDirectory(dir);
             IO.Copy(Example("Single.zip"), dest);
             Mock.Destination = dest;
 
@@ -175,14 +176,15 @@ namespace Cube.FileSystem.App.Ice.Tests
         [Test]
         public async Task Archive_PasswordCancel()
         {
+            var dir  = Result("PasswordCancel");
             var src  = Example("Sample.txt");
-            var dest = Result(@"PasswordCancel\Sample.zip");
+            var dest = IO.Combine(dir, "Sample.zip");
             var args = PresetMenu.ArchiveZipPassword.ToArguments().Concat(new[] { src });
 
             using (var ap = Create(new Request(args)))
             {
                 ap.Settings.Value.Archive.SaveLocation = SaveLocation.Others;
-                ap.Settings.Value.Archive.SaveDirectoryName = Result("PasswordCancel");
+                ap.Settings.Value.Archive.SaveDirectoryName = dir;
                 ap.View.Show();
 
                 for (var i = 0; ap.View.Visible && i < 50; ++i) await Task.Delay(100);
@@ -207,18 +209,17 @@ namespace Cube.FileSystem.App.Ice.Tests
             var dir  = Result("MoveFailed");
             var src  = Example("Sample.txt");
             var dest = IO.Combine(dir, "Sample.zip");
-            var args = PresetMenu.ArchiveZip.ToArguments().Concat(new[] { src });
 
             IO.CreateDirectory(dir);
             IO.Copy(Example("Single.zip"), dest, true);
+            Mock.Destination = dir;
+
+            var args = PresetMenu.ArchiveZip.ToArguments().Concat(new[] { "/o:runtime", src });
 
             using (var _ = IO.OpenRead(dest))
             using (var ap = Create(new Request(args)))
             {
-                ap.Settings.Value.Archive.SaveLocation = SaveLocation.Others;
-                ap.Settings.Value.Archive.SaveDirectoryName = dir;
                 ap.View.Show();
-
                 for (var i = 0; ap.View.Visible && i < 50; ++i) await Task.Delay(100);
                 Assert.That(ap.View.Visible, Is.False, "Timeout");
             }
