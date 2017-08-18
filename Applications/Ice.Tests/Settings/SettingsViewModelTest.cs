@@ -383,10 +383,35 @@ namespace Cube.FileSystem.App.Ice.Tests.Settings
             Assert.That(src.Z,        Is.False); Assert.That(dest.Z,        Is.False);
             Assert.That(src.Zip,      Is.False); Assert.That(dest.Zip,      Is.False);
 
-            src.Arj = true;
-            Assert.That(dest.Arj, Is.True);
-            src.Zip = true;
-            Assert.That(dest.Zip, Is.True);
+            src.Arj      = true; Assert.That(dest.Arj,      Is.True);
+            src.BZ2      = true; Assert.That(dest.BZ2,      Is.True);
+            src.Cab      = true; Assert.That(dest.Cab,      Is.True);
+            src.Chm      = true; Assert.That(dest.Chm,      Is.True);
+            src.Cpio     = true; Assert.That(dest.Cpio,     Is.True);
+            src.Deb      = true; Assert.That(dest.Deb,      Is.True);
+            src.Dmg      = true; Assert.That(dest.Dmg,      Is.True);
+            src.Flv      = true; Assert.That(dest.Flv,      Is.True);
+            src.GZ       = true; Assert.That(dest.GZ,       Is.True);
+            src.Hfs      = true; Assert.That(dest.Hfs,      Is.True);
+            src.Iso      = true; Assert.That(dest.Iso,      Is.True);
+            src.Jar      = true; Assert.That(dest.Jar,      Is.True);
+            src.Lzh      = true; Assert.That(dest.Lzh,      Is.True);
+            src.Nupkg    = true; Assert.That(dest.Nupkg,    Is.True);
+            src.Rar      = true; Assert.That(dest.Rar,      Is.True);
+            src.Rpm      = true; Assert.That(dest.Rpm,      Is.True);
+            src.SevenZip = true; Assert.That(dest.SevenZip, Is.True);
+            src.Swf      = true; Assert.That(dest.Swf,      Is.True);
+            src.Tar      = true; Assert.That(dest.Tar,      Is.True);
+            src.Tbz      = true; Assert.That(dest.Tbz,      Is.True);
+            src.Tgz      = true; Assert.That(dest.Tgz,      Is.True);
+            src.Txz      = true; Assert.That(dest.Txz,      Is.True);
+            src.Vhd      = true; Assert.That(dest.Vhd,      Is.True);
+            src.Vmdk     = true; Assert.That(dest.Vmdk,     Is.True);
+            src.Wim      = true; Assert.That(dest.Wim,      Is.True);
+            src.Xar      = true; Assert.That(dest.Xar,      Is.True);
+            src.XZ       = true; Assert.That(dest.XZ,       Is.True);
+            src.Z        = true; Assert.That(dest.Z,        Is.True);
+            src.Zip      = true; Assert.That(dest.Zip,      Is.True);
         }
 
         /* ----------------------------------------------------------------- */
