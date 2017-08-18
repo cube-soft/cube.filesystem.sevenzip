@@ -18,6 +18,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -93,7 +94,7 @@ namespace Cube.FileSystem.SevenZip
                 typeof(CreateObjectDelegate)
             ) as CreateObjectDelegate;
 
-            if (func == null) return null;
+            Debug.Assert(func != null);
 
             var iid = typeof(IInArchive).GUID;
             func(ref clsid, ref iid, out object result);
@@ -135,7 +136,7 @@ namespace Cube.FileSystem.SevenZip
                 typeof(CreateObjectDelegate)
             ) as CreateObjectDelegate;
 
-            if (func == null) return null;
+            Debug.Assert(func != null);
 
             var iid = typeof(IOutArchive).GUID;
             func(ref clsid, ref iid, out object result);

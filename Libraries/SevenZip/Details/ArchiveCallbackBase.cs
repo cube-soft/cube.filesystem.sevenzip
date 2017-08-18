@@ -70,7 +70,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public OperationResult Result { get; protected set; } = OperationResult.Unknown;
+        public OperationResult Result { get; protected set; } = OperationResult.Prepare;
 
         /* ----------------------------------------------------------------- */
         ///

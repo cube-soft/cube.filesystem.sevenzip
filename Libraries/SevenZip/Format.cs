@@ -355,7 +355,6 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public static Format FromStream(Stream stream)
         {
-            if (!stream.CanRead) return Format.Unknown;
             if (_sig == null) _sig = CreateSignatureMap();
 
             var preserve = stream.Position;

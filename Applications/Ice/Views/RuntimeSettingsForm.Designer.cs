@@ -113,7 +113,7 @@
             this.OutputTextBox.Margin = new System.Windows.Forms.Padding(3, 11, 3, 3);
             this.OutputTextBox.Name = "OutputTextBox";
             this.OutputTextBox.Size = new System.Drawing.Size(210, 23);
-            this.OutputTextBox.TabIndex = 2;
+            this.OutputTextBox.TabIndex = 1;
             // 
             // OutputButton
             // 
@@ -121,7 +121,7 @@
             this.OutputButton.Margin = new System.Windows.Forms.Padding(3, 11, 3, 3);
             this.OutputButton.Name = "OutputButton";
             this.OutputButton.Size = new System.Drawing.Size(60, 23);
-            this.OutputButton.TabIndex = 3;
+            this.OutputButton.TabIndex = 0;
             this.OutputButton.Text = "...";
             this.OutputButton.UseVisualStyleBackColor = true;
             // 
@@ -419,15 +419,14 @@
             this.ExecuteButton.Text = "OK";
             this.ExecuteButton.UseVisualStyleBackColor = true;
             // 
-            // DetailsForm
+            // RuntimeSettingsForm
             // 
-            this.AcceptButton = this.ExecuteButton;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(364, 441);
             this.Controls.Add(this.RootPanel);
             this.Font = new System.Drawing.Font("Meiryo UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(128)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "DetailsForm";
+            this.Name = "RuntimeSettingsForm";
             this.ShowInTaskbar = false;
             this.Text = "CubeICE 圧縮詳細設定";
             this.RootPanel.ResumeLayout(false);

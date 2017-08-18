@@ -167,7 +167,9 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void Save(string path, string password)
         {
-            var query = new PasswordQuery(password);
+            var query = !string.IsNullOrEmpty(password) ?
+                        new PasswordQuery(password) :
+                        null;
 
             if (Format == Format.Sfx) SaveCoreSfx(path, query, null, GetItems());
             else if (Format == Format.Tar) SaveCoreTar(path, query, null, GetItems());
@@ -189,7 +191,9 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void Save(string path, IQuery<string, string> password, IProgress<ArchiveReport> progress)
         {
-            var query = new PasswordQuery(password);
+            var query = password != null ?
+                        new PasswordQuery(password) :
+                        null;
 
             if (Format == Format.Sfx) SaveCoreSfx(path, query, progress, GetItems());
             else if (Format == Format.Tar) SaveCoreTar(path, query, progress, GetItems());
@@ -443,7 +447,7 @@ namespace Cube.FileSystem.SevenZip
             switch (result)
             {
                 case OperationResult.OK:
-                case OperationResult.Unknown:
+                case OperationResult.Prepare:
                     break;
                 case OperationResult.UserCancel:
                     throw new UserCancelException();

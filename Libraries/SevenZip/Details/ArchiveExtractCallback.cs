@@ -243,8 +243,9 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int GetStream(uint index, out ISequentialOutStream stream, AskMode mode)
         {
-            stream = (mode == AskMode.Extract) ? CreateStream(index) : null;
-            return (int)OperationResult.OK;
+            var ok = Result == OperationResult.OK || Result == OperationResult.Prepare;
+            stream = ok && mode == AskMode.Extract ? CreateStream(index) : null;
+            return ok ? (int)OperationResult.OK : (int)Result;
         }
 
         /* ----------------------------------------------------------------- */
@@ -289,7 +290,6 @@ namespace Cube.FileSystem.SevenZip
 
             RaiseExtracted(item);
             Progress?.Report(ProgressReport);
-            Result = result;
         }
 
         #endregion
@@ -430,6 +430,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         private void RaiseExtracted(ArchiveItem item)
         {
+            if (Result != OperationResult.OK) return;
             item.SetAttributes(Destination, _io);
             Extracted?.Invoke(this, ValueEventArgs.Create(item));
         }

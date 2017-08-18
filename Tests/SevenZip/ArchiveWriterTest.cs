@@ -131,7 +131,53 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Add_Throws
+        /// Archive_PasswordCancel
+        /// 
+        /// <summary>
+        /// パスワードの設定をキャンセルした時の挙動を確認します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Archive_PasswordCancel()
+            => Assert.That(() =>
+            {
+                using (var writer = new ArchiveWriter(Format.Zip))
+                {
+                    var dest  = Result("PasswordCancel.zip");
+                    var query = new Query<string, string>(x => x.Cancel = true);
+                    writer.Add(Example("Sample.txt"));
+                    writer.Save(dest, query, null);
+                }
+            },
+            Throws.TypeOf<UserCancelException>());
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Archive_SfxNotFound
+        /// 
+        /// <summary>
+        /// 存在しない SFX モジュールを設定した時の挙動を確認します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Archive_SfxNotFound()
+            => Assert.That(() =>
+            {
+                using (var writer = new ArchiveWriter(Format.Sfx))
+                {
+                    var dest = Result("SfxNotFound.exe");
+                    writer.Option = new ExecutableOption { Module = "dummy.sfx" };
+                    writer.Add(Example("Sample.txt"));
+                    writer.Save(dest);
+                }
+            },
+            Throws.TypeOf<System.IO.FileNotFoundException>());
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Add_NotFound
         ///
         /// <summary>
         /// 存在しないファイルを指定した時の挙動を確認します。
@@ -139,7 +185,7 @@ namespace Cube.FileSystem.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Add_Throws()
+        public void Add_NotFound()
             => Assert.That(() =>
             {
                 using (var writer = new ArchiveWriter(Format.Zip))

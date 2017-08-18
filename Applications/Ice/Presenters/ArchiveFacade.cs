@@ -266,8 +266,6 @@ namespace Cube.FileSystem.App.Ice
             }
 
             var info = IO.Get(Destination);
-            if (!info.Exists) return Destination;
-
             SetTmp(info.DirectoryName);
             return Tmp;
         }

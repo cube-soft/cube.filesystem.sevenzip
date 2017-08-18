@@ -19,6 +19,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cube.FileSystem.SevenZip;
+using Cube.FileSystem.SevenZip.Archives;
 using NUnit.Framework;
 
 namespace Cube.FileSystem.Tests
@@ -51,7 +53,7 @@ namespace Cube.FileSystem.Tests
         public void Items(string filename, string password, IList<ExpectedItem> expected)
         {
             var src = Example(filename);
-            using (var archive = new SevenZip.ArchiveReader(src, password))
+            using (var archive = new ArchiveReader(src, password))
             {
                 var actual = archive.Items.ToList();
                 Assert.That(actual.Count, Is.EqualTo(expected.Count));
@@ -69,6 +71,34 @@ namespace Cube.FileSystem.Tests
                     Assert.That(item.IsDirectory, Is.EqualTo(expected[i].IsDirectory));
                 }
             }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CreateDirectory
+        ///
+        /// <summary>
+        /// ArchiveItem の拡張メソッドのテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void CreateDirectory()
+        {
+            var dest = Result("CreateDirectory");
+            using (var archive = new ArchiveReader(Example("Sample.zip")))
+            {
+                foreach (var item in archive.Items)
+                {
+                    item.CreateDirectory(dest);
+                    item.SetAttributes(dest);
+                }
+            }
+
+            Assert.That(IO.Get(IO.Combine(dest, @"Sample")).Exists,         Is.True );
+            Assert.That(IO.Get(IO.Combine(dest, @"Sample\Foo.txt")).Exists, Is.False);
+            Assert.That(IO.Get(IO.Combine(dest, @"Sample\Bar.txt")).Exists, Is.False);
+            Assert.That(IO.Get(IO.Combine(dest, @"Sample\Bas.txt")).Exists, Is.False);
         }
 
         /* ----------------------------------------------------------------- */
@@ -94,18 +124,21 @@ namespace Cube.FileSystem.Tests
         [TestCase("Sample.rar")]
         [TestCase("Sample.rar5")]
         [TestCase("Sample.tar")]
-        [TestCase("Sample.tar.bz2")]
-        [TestCase("Sample.tar.gz")]
         [TestCase("Sample.tar.lzma")]
-        [TestCase("Sample.tar.xz")]
         [TestCase("Sample.tar.z")]
+        [TestCase("Sample.tbz")]
+        [TestCase("Sample.tgz")]
+        [TestCase("Sample.txz")]
         [TestCase("Sample.xlsx")]
         public void Extract(string filename)
         {
-            var src = Example(filename);
-            using (var archive = new SevenZip.ArchiveReader(src))
+            var src   = Example(filename);
+            var count = 0;
+
+            using (var archive = new ArchiveReader(src))
             {
                 var dest = Result($@"Extract\{filename}");
+                archive.Extracted += (s, e) => ++count;
                 archive.Extract(dest);
 
                 foreach (var item in archive.Items)
@@ -113,6 +146,8 @@ namespace Cube.FileSystem.Tests
                     var info = IO.Get(IO.Combine(dest, item.FullName));
                     Assert.That(info.Exists, Is.True, info.FullName);
                 }
+
+                Assert.That(count, Is.AtLeast(1));
             }
         }
 
@@ -132,11 +167,14 @@ namespace Cube.FileSystem.Tests
         [TestCaseSource(nameof(TestCases))]
         public void Extract(string filename, string password, IList<ExpectedItem> expected)
         {
-            var src = Example(filename);
-            using (var archive = new SevenZip.ArchiveReader(src, password))
+            var src      = Example(filename);
+            var bytes    = 0L;
+            var progress = new Progress<ArchiveReport>(x => bytes = x.Bytes);
+
+            using (var archive = new ArchiveReader(src, password))
             {
                 var dest = Result($@"Extract_Detail\{filename}");
-                archive.Extract(dest);
+                archive.Extract(dest, progress);
 
                 foreach (var item in expected)
                 {
@@ -147,6 +185,8 @@ namespace Cube.FileSystem.Tests
                     Assert.That(info.LastWriteTime,  Is.Not.EqualTo(DateTime.MinValue));
                     Assert.That(info.LastAccessTime, Is.Not.EqualTo(DateTime.MinValue));
                 }
+
+                Assert.That(bytes, Is.AtLeast(1));
             }
         }
 
@@ -163,7 +203,7 @@ namespace Cube.FileSystem.Tests
         public void Extract_Each(string filename, string password, IList<ExpectedItem> expected)
         {
             var src = Example(filename);
-            using (var archive = new SevenZip.ArchiveReader(src, password))
+            using (var archive = new ArchiveReader(src, password))
             {
                 var dest = Result($@"Extract_Each\{filename}");
                 var actual = archive.Items.ToList();
@@ -193,7 +233,7 @@ namespace Cube.FileSystem.Tests
         [Test]
         public void Extract_NotSupported()
             => Assert.That(
-                () => new SevenZip.ArchiveReader(Example("Sample.txt")),
+                () => new ArchiveReader(Example("Sample.txt")),
                 Throws.TypeOf<NotSupportedException>()
             );
 
@@ -212,7 +252,7 @@ namespace Cube.FileSystem.Tests
             var src  = Example("SampleFilter.zip");
             var dest = Result("Extract_Filter");
 
-            using (var archive = new SevenZip.ArchiveReader(src))
+            using (var archive = new ArchiveReader(src))
             {
                 archive.Filters = new[] { ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini" };
                 archive.Extract(dest);
@@ -243,7 +283,7 @@ namespace Cube.FileSystem.Tests
             var src  = Example("InvalidReserved.zip");
             var dest = Result("Extract_Reserved");
 
-            using (var archive = new SevenZip.ArchiveReader(src))
+            using (var archive = new ArchiveReader(src))
             {
                 archive.Extract(dest);
             }
@@ -284,12 +324,12 @@ namespace Cube.FileSystem.Tests
             => Assert.That(() =>
             {
                 var src = Example("Password.7z");
-                using (var archive = new SevenZip.ArchiveReader(src, password))
+                using (var archive = new ArchiveReader(src, password))
                 {
                     archive.Extract(Results);
                 }
             },
-            Throws.TypeOf<SevenZip.EncryptionException>());
+            Throws.TypeOf<EncryptionException>());
 
         /* ----------------------------------------------------------------- */
         ///
@@ -305,12 +345,12 @@ namespace Cube.FileSystem.Tests
             => Assert.That(() =>
             {
                 var src = Example("Password.7z");
-                using (var archive = new SevenZip.ArchiveReader(src, password))
+                using (var archive = new ArchiveReader(src, password))
                 {
                     foreach (var item in archive.Items) item.Extract(Results);
                 }
             },
-            Throws.TypeOf<SevenZip.EncryptionException>());
+            Throws.TypeOf<EncryptionException>());
 
         /* ----------------------------------------------------------------- */
         ///
@@ -320,19 +360,30 @@ namespace Cube.FileSystem.Tests
         /// パスワード要求時にキャンセルするテストを実行します。
         /// </summary>
         /// 
+        /// <remarks>
+        /// 0 バイトのファイルはパスワード無しで展開が完了するため、
+        /// Extracted イベントが 1 回発生します。
+        /// </remarks>
+        /// 
         /* ----------------------------------------------------------------- */
         [Test]
         public void Extract_UserCancel()
-            => Assert.That(() =>
+        {
+            var count = 0;
+
+            Assert.That(() =>
             {
-                var src = Example("Password.7z");
+                var src   = Example("Password.7z");
                 var query = new Query<string, string>(e => e.Cancel = true);
-                using (var archive = new SevenZip.ArchiveReader(src, query))
+                using (var archive = new ArchiveReader(src, query))
                 {
+                    archive.Extracted += (s, e) => ++count;
                     archive.Extract(Results);
                 }
-            },
-            Throws.TypeOf<SevenZip.UserCancelException>());
+            }, Throws.TypeOf<UserCancelException>());
+
+            Assert.That(count, Is.EqualTo(1));
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -349,12 +400,12 @@ namespace Cube.FileSystem.Tests
             {
                 var src = Example("Password.7z");
                 var query = new Query<string, string>(e => e.Cancel = true);
-                using (var archive = new SevenZip.ArchiveReader(src, query))
+                using (var archive = new ArchiveReader(src, query))
                 {
                     foreach (var item in archive.Items) item.Extract(Results);
                 }
             },
-            Throws.TypeOf<SevenZip.UserCancelException>());
+            Throws.TypeOf<UserCancelException>());
 
         #endregion
 

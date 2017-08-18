@@ -1055,7 +1055,7 @@
             this.ApplyButton.Name = "ApplyButton";
             this.ApplyButton.Size = new System.Drawing.Size(100, 30);
             this.ApplyButton.TabIndex = 2;
-            this.ApplyButton.Text = "適用 (&A)";
+            this.ApplyButton.Text = "適用";
             this.ApplyButton.UseVisualStyleBackColor = true;
             // 
             // ExitButton
