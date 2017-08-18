@@ -61,10 +61,10 @@ namespace Cube.FileSystem.Tests
         [TestCase("Sample.rar",      ExpectedResult = Format.Rar)]
         [TestCase("Sample.rar5",     ExpectedResult = Format.Rar5)]
         [TestCase("Sample.tar",      ExpectedResult = Format.Tar)]
-        [TestCase("Sample.tar.bz2",  ExpectedResult = Format.BZip2)]
-        [TestCase("Sample.tar.gz",   ExpectedResult = Format.GZip)]
-        [TestCase("Sample.tar.xz",   ExpectedResult = Format.XZ)]
         [TestCase("Sample.tar.z",    ExpectedResult = Format.Lzw)]
+        [TestCase("Sample.tbz",      ExpectedResult = Format.BZip2)]
+        [TestCase("Sample.tgz",      ExpectedResult = Format.GZip)]
+        [TestCase("Sample.txz",      ExpectedResult = Format.XZ)]
         [TestCase("Sample.xlsx",     ExpectedResult = Format.Zip)]
         [TestCase("Sample.zip",      ExpectedResult = Format.Zip)]
         public Format Detect(string filename)
@@ -93,6 +93,22 @@ namespace Cube.FileSystem.Tests
             => Assert.That(
                 Formats.FromFile(Example("NotFound.rar")),
                 Is.EqualTo(Format.Rar)
+            );
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// FromStream_CannotRead
+        ///
+        /// <summary>
+        /// 書き込み専用のストリームを指定した時の挙動を確認します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void FromStream_CannotRead()
+            => Assert.That(
+                () => Formats.FromStream(IO.OpenWrite(Example("Sample.zip"))),
+                Throws.TypeOf<NotSupportedException>()
             );
 
         /* ----------------------------------------------------------------- */

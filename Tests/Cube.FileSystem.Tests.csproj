@@ -177,10 +177,10 @@
     <None Include="Examples\Sample.tar">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\Sample.tar.bz2">
+    <None Include="Examples\Sample.tbz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\Sample.tar.gz">
+    <None Include="Examples\Sample.tgz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Examples\Sample.tar.lz">
@@ -192,7 +192,7 @@
     <None Include="Examples\Sample.tar.lzo">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\Sample.tar.xz">
+    <None Include="Examples\Sample.txz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Examples\Sample.tar.z">

@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cube.FileSystem.SevenZip;
+using Cube.FileSystem.SevenZip.Archives;
 using NUnit.Framework;
 
 namespace Cube.FileSystem.Tests
@@ -74,6 +75,34 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// CreateDirectory
+        ///
+        /// <summary>
+        /// ArchiveItem の拡張メソッドのテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void CreateDirectory()
+        {
+            var dest = Result("CreateDirectory");
+            using (var archive = new ArchiveReader(Example("Sample.zip")))
+            {
+                foreach (var item in archive.Items)
+                {
+                    item.CreateDirectory(dest);
+                    item.SetAttributes(dest);
+                }
+            }
+
+            Assert.That(IO.Get(IO.Combine(dest, @"Sample")).Exists,         Is.True );
+            Assert.That(IO.Get(IO.Combine(dest, @"Sample\Foo.txt")).Exists, Is.False);
+            Assert.That(IO.Get(IO.Combine(dest, @"Sample\Bar.txt")).Exists, Is.False);
+            Assert.That(IO.Get(IO.Combine(dest, @"Sample\Bas.txt")).Exists, Is.False);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Extract
         ///
         /// <summary>
@@ -95,11 +124,11 @@ namespace Cube.FileSystem.Tests
         [TestCase("Sample.rar")]
         [TestCase("Sample.rar5")]
         [TestCase("Sample.tar")]
-        [TestCase("Sample.tar.bz2")]
-        [TestCase("Sample.tar.gz")]
         [TestCase("Sample.tar.lzma")]
-        [TestCase("Sample.tar.xz")]
         [TestCase("Sample.tar.z")]
+        [TestCase("Sample.tbz")]
+        [TestCase("Sample.tgz")]
+        [TestCase("Sample.txz")]
         [TestCase("Sample.xlsx")]
         public void Extract(string filename)
         {
@@ -138,14 +167,14 @@ namespace Cube.FileSystem.Tests
         [TestCaseSource(nameof(TestCases))]
         public void Extract(string filename, string password, IList<ExpectedItem> expected)
         {
-            var src   = Example(filename);
-            var count = 0;
+            var src      = Example(filename);
+            var bytes    = 0L;
+            var progress = new Progress<ArchiveReport>(x => bytes = x.Bytes);
 
             using (var archive = new ArchiveReader(src, password))
             {
                 var dest = Result($@"Extract_Detail\{filename}");
-                archive.Extracted += (s, e) => ++count;
-                archive.Extract(dest);
+                archive.Extract(dest, progress);
 
                 foreach (var item in expected)
                 {
@@ -157,7 +186,7 @@ namespace Cube.FileSystem.Tests
                     Assert.That(info.LastAccessTime, Is.Not.EqualTo(DateTime.MinValue));
                 }
 
-                Assert.That(count, Is.AtLeast(1));
+                Assert.That(bytes, Is.AtLeast(1));
             }
         }
 

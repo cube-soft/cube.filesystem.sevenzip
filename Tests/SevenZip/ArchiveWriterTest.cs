@@ -134,14 +134,13 @@ namespace Cube.FileSystem.Tests
         /// Archive_PasswordCancel
         /// 
         /// <summary>
-        /// パスワードの設定をキャンセルするテストを実行します。
+        /// パスワードの設定をキャンセルした時の挙動を確認します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
         public void Archive_PasswordCancel()
-            => Assert.That(
-            () =>
+            => Assert.That(() =>
             {
                 using (var writer = new ArchiveWriter(Format.Zip))
                 {
@@ -155,7 +154,30 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Add_Throws
+        /// Archive_SfxNotFound
+        /// 
+        /// <summary>
+        /// 存在しない SFX モジュールを設定した時の挙動を確認します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Archive_SfxNotFound()
+            => Assert.That(() =>
+            {
+                using (var writer = new ArchiveWriter(Format.Sfx))
+                {
+                    var dest = Result("SfxNotFound.exe");
+                    writer.Option = new ExecutableOption { Module = "dummy.sfx" };
+                    writer.Add(Example("Sample.txt"));
+                    writer.Save(dest);
+                }
+            },
+            Throws.TypeOf<System.IO.FileNotFoundException>());
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Add_NotFound
         ///
         /// <summary>
         /// 存在しないファイルを指定した時の挙動を確認します。
@@ -163,7 +185,7 @@ namespace Cube.FileSystem.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Add_Throws()
+        public void Add_NotFound()
             => Assert.That(() =>
             {
                 using (var writer = new ArchiveWriter(Format.Zip))

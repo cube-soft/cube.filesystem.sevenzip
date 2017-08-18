@@ -479,19 +479,11 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         private T Get<T>(ItemPropId pid)
         {
-            try
-            {
-                var var = new PropVariant();
-                _raw.GetProperty((uint)Index, pid, ref var);
+            var var = new PropVariant();
+            _raw.GetProperty((uint)Index, pid, ref var);
 
-                var obj = var.Object;
-                return (obj != null && obj is T) ? (T)obj : default(T);
-            }
-            catch (Exception err)
-            {
-                this.LogWarn(err.ToString(), err);
-                return default(T);
-            }
+            var obj = var.Object;
+            return (obj != null && obj is T) ? (T)obj : default(T);
         }
 
         /* ----------------------------------------------------------------- */
