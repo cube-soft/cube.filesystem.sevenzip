@@ -648,19 +648,21 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void WhenFailed(object sender, FailedEventArgs e)
         {
-            this.LogWarn(e.Name);
-            foreach (var path in e.Paths) this.LogWarn(path);
-            this.LogWarn(e.Exception.ToString(), e.Exception);
+            var sb = new System.Text.StringBuilder();
+            foreach (var path in e.Paths) sb.AppendLine(path);
+            sb.Append($"{e.Name} {e.Exception.Message}");
 
             var ev = new MessageEventArgs
             {
-                Message = e.Exception.Message,
+                Message = sb.ToString(),
                 Buttons = MessageBoxButtons.AbortRetryIgnore,
                 Icon    = MessageBoxIcon.Warning,
                 Result  = DialogResult.Abort,
             };
 
             OnMessageReceived(ev);
+            this.LogWarn(sb.ToString());
+
             e.Cancel = ev.Result != DialogResult.Retry;
             if (ev.Result == DialogResult.Abort || ev.Result == DialogResult.Cancel)
             {
