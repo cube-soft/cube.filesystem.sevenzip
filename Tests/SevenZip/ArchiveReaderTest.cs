@@ -34,7 +34,6 @@ namespace Cube.FileSystem.Tests
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [Parallelizable]
     [TestFixture]
     class ArchiveReaderTest : FileResource
     {
