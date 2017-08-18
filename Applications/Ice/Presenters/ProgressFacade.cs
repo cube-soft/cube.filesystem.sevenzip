@@ -648,18 +648,13 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void WhenFailed(object sender, FailedEventArgs e)
         {
-
             this.LogWarn(e.Name);
             foreach (var path in e.Paths) this.LogWarn(path);
             this.LogWarn(e.Exception.ToString(), e.Exception);
 
-            var sb = new System.Text.StringBuilder();
-            sb.AppendLine($"{e.Name}:{e.Exception.Message}");
-            sb.Append(e.Paths.LastOrDefault());
-
             var ev = new MessageEventArgs
             {
-                Message = sb.ToString(),
+                Message = e.Exception.Message,
                 Buttons = MessageBoxButtons.AbortRetryIgnore,
                 Icon    = MessageBoxIcon.Warning,
                 Result  = DialogResult.Abort,
