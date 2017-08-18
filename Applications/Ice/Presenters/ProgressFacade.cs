@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Windows.Forms;
 using Cube.FileSystem.SevenZip;
 using Cube.FileSystem.Ice;
 using Cube.Log;
@@ -55,7 +56,7 @@ namespace Cube.FileSystem.App.Ice
             Settings = settings;
             IO       = new Operator(new Alpha());
 
-            IO.Failed += (s, e) => RaiseFailed(e);
+            IO.Failed += WhenFailed;
             _timer.Elapsed += (s, e) => OnProgress(ValueEventArgs.Create(ProgressReport));
         }
 
@@ -586,6 +587,7 @@ namespace Cube.FileSystem.App.Ice
 
             try
             {
+                IO.Failed -= WhenFailed;
                 if (string.IsNullOrEmpty(Tmp)) return;
                 else if (IO.Get(Tmp).Exists) IO.Delete(Tmp);
             }
@@ -637,20 +639,38 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// RaiseFailed
+        /// WhenFailed
         /// 
         /// <summary>
-        /// Failed イベントを発生させます。
+        /// Failed イベント発生時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void RaiseFailed(FailedEventArgs e)
+        private void WhenFailed(object sender, FailedEventArgs e)
         {
+
             this.LogWarn(e.Name);
             foreach (var path in e.Paths) this.LogWarn(path);
             this.LogWarn(e.Exception.ToString(), e.Exception);
 
-            e.Cancel = true;
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine($"{e.Name}:{e.Exception.Message}");
+            sb.Append(e.Paths.LastOrDefault());
+
+            var ev = new MessageEventArgs
+            {
+                Message = sb.ToString(),
+                Buttons = MessageBoxButtons.AbortRetryIgnore,
+                Icon    = MessageBoxIcon.Warning,
+                Result  = DialogResult.Abort,
+            };
+
+            OnMessageReceived(ev);
+            e.Cancel = ev.Result != DialogResult.Retry;
+            if (ev.Result == DialogResult.Abort || ev.Result == DialogResult.Cancel)
+            {
+                throw new UserCancelException();
+            }
         }
 
         #region Fields

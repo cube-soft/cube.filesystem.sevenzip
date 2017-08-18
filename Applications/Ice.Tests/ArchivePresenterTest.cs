@@ -192,6 +192,38 @@ namespace Cube.FileSystem.App.Ice.Tests
             Assert.That(IO.Get(dest).Exists, Is.False);
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Archive_MoveFailed
+        /// 
+        /// <summary>
+        /// ファイルの移動に失敗するテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public async Task Archive_MoveFailed()
+        {
+            var dir  = Result("MoveFailed");
+            var src  = Example("Sample.txt");
+            var dest = IO.Combine(dir, "Sample.zip");
+            var args = PresetMenu.ArchiveZip.ToArguments().Concat(new[] { src });
+
+            IO.CreateDirectory(dir);
+            IO.Copy(Example("Single.zip"), dest, true);
+
+            using (var _ = IO.OpenRead(dest))
+            using (var ap = Create(new Request(args)))
+            {
+                ap.Settings.Value.Archive.SaveLocation = SaveLocation.Others;
+                ap.Settings.Value.Archive.SaveDirectoryName = dir;
+                ap.View.Show();
+
+                for (var i = 0; ap.View.Visible && i < 50; ++i) await Task.Delay(100);
+                Assert.That(ap.View.Visible, Is.False, "Timeout");
+            }
+        }
+
         #endregion
 
         #region TestCases
