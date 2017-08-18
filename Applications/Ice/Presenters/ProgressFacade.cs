@@ -238,11 +238,7 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         public virtual void OnDestinationRequired(QueryEventArgs<string, string> e)
-        {
-            if (DestinationRequired != null) DestinationRequired(this, e);
-            else e.Cancel = true;
-            if (e.Cancel) throw new UserCancelException();
-        }
+            => DestinationRequired?.Invoke(this, e);
 
         #endregion
 
@@ -274,10 +270,7 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         protected virtual void OnPasswordRequired(QueryEventArgs<string, string> e)
-        {
-            if (PasswordRequired != null) PasswordRequired(this, e);
-            else e.Cancel = true;
-        }
+            => PasswordRequired?.Invoke(this, e);
 
         #endregion
 
@@ -612,8 +605,9 @@ namespace Cube.FileSystem.App.Ice
                 case SaveLocation.MyDocuments:
                     return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 case SaveLocation.Runtime:
-                    var e = new QueryEventArgs<string, string>(query);
+                    var e = new QueryEventArgs<string, string>(query, true);
                     OnDestinationRequired(e);
+                    if (e.Cancel) throw new UserCancelException();
                     return e.Result;
                 case SaveLocation.Source:
                     return IO.Get(Request.Sources.First()).DirectoryName;

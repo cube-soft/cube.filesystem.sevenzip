@@ -97,9 +97,8 @@ namespace Cube.FileSystem.App.Ice
             var info = IO.Get(Request.Sources.First());
             var path = IO.Combine(info.DirectoryName, $"{info.NameWithoutExtension}.zip");
 
-            var e = new QueryEventArgs<string, ArchiveRuntimeSettings>(path);
-            if (RuntimeSettingsRequired != null) RuntimeSettingsRequired(this, e);
-            else e.Cancel = true;
+            var e = new QueryEventArgs<string, ArchiveRuntimeSettings>(path, true);
+            RuntimeSettingsRequired?.Invoke(this, e);
             if (e.Cancel) throw new UserCancelException();
 
             Runtime = e.Result;
@@ -257,8 +256,9 @@ namespace Cube.FileSystem.App.Ice
 
                 if (!runtime && IO.Get(path).Exists)
                 {
-                    var e = new QueryEventArgs<string, string>(query);
+                    var e = new QueryEventArgs<string, string>(query, true);
                     OnDestinationRequired(e);
+                    if (e.Cancel) throw new UserCancelException();
                     path = e.Result;
                 }
 
