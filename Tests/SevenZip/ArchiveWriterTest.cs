@@ -33,7 +33,6 @@ namespace Cube.FileSystem.Tests
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [Parallelizable]
     [TestFixture]
     class ArchiveWriterTest : FileResource
     {

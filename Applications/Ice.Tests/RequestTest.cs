@@ -116,7 +116,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         [Test]
         public void Create_WrongDrop()
         {
-            var request = new Request(new[] { "/x", "/o:source", "/drop" });
+            var request = new Request(new[] { "/x", "/o:source", "/drop", "/dummy" });
             Assert.That(request.Mode,          Is.EqualTo(Mode.Extract));
             Assert.That(request.Location,      Is.EqualTo(SaveLocation.Source));
             Assert.That(request.DropDirectory, Is.Empty);
