@@ -328,33 +328,30 @@ namespace Cube.FileSystem.App.Ice
 
         #endregion
 
-        #region ErrorReportRequired
+        #region MessageReceived
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ErrorReportRequired
+        /// MessageReceived
         /// 
         /// <summary>
-        /// エラーレポート表示時に発生するイベントです。
+        /// メッセージ受信時に発生するイベントです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public event ValueEventHandler<Exception> ErrorReportRequired;
+        public event MessageEventHandler MessageReceived;
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OnErrorReportRequired
+        /// OnMessageReceived
         /// 
         /// <summary>
-        /// ErrorReportRequired を発生させます。
+        /// MessageReceived を発生させます。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnErrorReportRequired(ValueEventArgs<Exception> e)
-        {
-            if (Settings.Value.ErrorReport) ErrorReportRequired?.Invoke(this, e);
-            this.LogError(e.Value.ToString(), e.Value);
-        }
+        protected virtual void OnMessageReceived(MessageEventArgs e)
+            => MessageReceived?.Invoke(this, e);
 
         #endregion
 
@@ -488,6 +485,24 @@ namespace Cube.FileSystem.App.Ice
             this.LogDebug($"Open:{src}\tExplorer:{exec}");
 
             OnOpenDirectoryRequired(KeyValueEventArgs.Create(exec, src));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Error
+        /// 
+        /// <summary>
+        /// エラー発生時の処理を実行します。
+        /// </summary>
+        /// 
+        /// <param name="err">例外オブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected void Error(Exception err)
+        {
+            this.LogError(err.ToString());
+            if (!Settings.Value.ErrorReport) return;
+            OnMessageReceived(new MessageEventArgs { Message = err.Message });
         }
 
         /* ----------------------------------------------------------------- */

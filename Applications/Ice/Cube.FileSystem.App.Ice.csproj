@@ -98,6 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\EventAggregator.cs" />
+    <Compile Include="Models\MessageEventArgs.cs" />
     <Compile Include="Models\OverwriteEventArgs.cs" />
     <Compile Include="Models\Request.cs" />
     <Compile Include="Models\SuspendableProgress.cs" />

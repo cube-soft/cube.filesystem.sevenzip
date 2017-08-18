@@ -159,7 +159,7 @@ namespace Cube.FileSystem.App.Ice
                 Open(Destination, Settings.Value.Archive.OpenDirectory);
             }
             catch (UserCancelException /* err */) { /* user cancel */ }
-            catch (Exception err) { OnErrorReportRequired(ValueEventArgs.Create(err)); }
+            catch (Exception err) { Error(err); }
             finally { ProgressStop(); }
         }
 

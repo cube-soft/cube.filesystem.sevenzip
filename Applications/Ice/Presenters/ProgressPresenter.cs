@@ -60,7 +60,7 @@ namespace Cube.FileSystem.App.Ice
             EventAggregator.GetEvents().Show.Subscribe(WhenShow);
             EventAggregator.GetEvents().Suspend.Subscribe(WhenSuspend);
 
-            Model.ErrorReportRequired   += WhenErrorReportRequired;
+            Model.MessageReceived       += WhenMessageReceived;
             Model.OpenDirectoryRequired += WhenOpenDirectoryRequired;
         }
 
@@ -147,15 +147,15 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// WhenErrorReportRequired
+        /// WhenMessageReceived
         /// 
         /// <summary>
-        /// エラーメッセージ表示時に実行されるハンドラです。
+        /// メッセージ受信時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenErrorReportRequired(object sender, ValueEventArgs<Exception> e)
-            => SyncWait(() => Views.ShowErrorView(e));
+        private void WhenMessageReceived(object sender, MessageEventArgs e)
+            => SyncWait(() => Views.ShowMessageBox(e));
 
         /* ----------------------------------------------------------------- */
         ///
