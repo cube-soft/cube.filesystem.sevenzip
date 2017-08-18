@@ -184,8 +184,6 @@ namespace Cube.FileSystem.Tests
                     Assert.That(info.LastWriteTime,  Is.Not.EqualTo(DateTime.MinValue));
                     Assert.That(info.LastAccessTime, Is.Not.EqualTo(DateTime.MinValue));
                 }
-
-                Assert.That(bytes, Is.AtLeast(1));
             }
         }
 
