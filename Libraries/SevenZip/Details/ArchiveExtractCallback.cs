@@ -243,9 +243,14 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int GetStream(uint index, out ISequentialOutStream stream, AskMode mode)
         {
-            var ok = Result == OperationResult.OK || Result == OperationResult.Prepare;
-            stream = ok && mode == AskMode.Extract ? CreateStream(index) : null;
-            return ok ? (int)OperationResult.OK : (int)Result;
+            stream = CallbackFunc(() =>
+            {
+                if (Result == OperationResult.Prepare) Result = OperationResult.OK;
+                return Result == OperationResult.OK && mode == AskMode.Extract ?
+                       CreateStream(index) :
+                       null;
+            });
+            return (int)Result;
         }
 
         /* ----------------------------------------------------------------- */
@@ -259,12 +264,12 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="mode">展開モード</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void PrepareOperation(AskMode mode)
+        public void PrepareOperation(AskMode mode) => CallbackAction(() =>
         {
             var item = _inner.Current;
             if (item == null || !_streams.ContainsKey(item)) return;
             Extracting?.Invoke(this, ValueEventArgs.Create(item));
-        }
+        });
 
         /* ----------------------------------------------------------------- */
         ///
@@ -277,20 +282,20 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="result">処理結果</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public void SetOperationResult(OperationResult result)
+        public void SetOperationResult(OperationResult result) => CallbackAction(() =>
         {
-            Result = result;
-            ProgressReport.Count++;
-
             var item = _inner.Current;
-            if (item == null || !_streams.ContainsKey(item)) return;
+            if (item != null && _streams.ContainsKey(item))
+            {
+                _streams[item].Dispose();
+                _streams.Remove(item);
+                RaiseExtracted(item);
+            }
 
-            _streams[item].Dispose();
-            _streams.Remove(item);
-
-            RaiseExtracted(item);
+            ProgressReport.Count++;
             Progress?.Report(ProgressReport);
-        }
+            Result = result;
+        });
 
         #endregion
 

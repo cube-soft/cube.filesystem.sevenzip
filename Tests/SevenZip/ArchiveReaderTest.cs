@@ -364,7 +364,7 @@ namespace Cube.FileSystem.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Extract_UserCancel()
+        public void Extract_PasswordCancel()
         {
             var count = 0;
 
@@ -384,7 +384,7 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract_Each_UserCancel
+        /// Extract_Each_PasswordCancel
         ///
         /// <summary>
         /// パスワード要求時にキャンセルするテストを実行します。
@@ -392,7 +392,7 @@ namespace Cube.FileSystem.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Extract_Each_UserCancel()
+        public void Extract_Each_PasswordCancel()
             => Assert.That(() =>
             {
                 var src = Example("Password.7z");
@@ -400,6 +400,50 @@ namespace Cube.FileSystem.Tests
                 using (var archive = new ArchiveReader(src, query))
                 {
                     foreach (var item in archive.Items) item.Extract(Results);
+                }
+            },
+            Throws.TypeOf<UserCancelException>());
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extracting_Throws
+        ///
+        /// <summary>
+        /// Extracting イベントで例外を送出した時の挙動を確認します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Extracting_Throws()
+            => Assert.That(() =>
+            {
+                var src = Example("Sample.zip");
+                using (var archive = new ArchiveReader(src))
+                {
+                    archive.Extracting += (s, e) => throw new ArgumentException();
+                    archive.Extract(Results);
+                }
+            },
+            Throws.TypeOf<System.IO.IOException>());
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extracted_Throws
+        ///
+        /// <summary>
+        /// Extracted イベントで例外を送出した時の挙動を確認します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Extraced_Throws()
+            => Assert.That(() =>
+            {
+                var src = Example("Sample.zip");
+                using (var archive = new ArchiveReader(src))
+                {
+                    archive.Extracted += (s, e) => throw new UserCancelException();
+                    archive.Extract(Results);
                 }
             },
             Throws.TypeOf<UserCancelException>());
@@ -821,7 +865,7 @@ namespace Cube.FileSystem.Tests
 
         #endregion
 
-        #region Helper class
+        #region Helper
 
         /* ----------------------------------------------------------------- */
         ///

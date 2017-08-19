@@ -263,12 +263,17 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int GetStream(uint index, out ISequentialInStream stream)
         {
-            stream = CreateStream(index);
+            stream = CallbackFunc(() =>
+            {
+                var dest = CreateStream(index);
 
-            ProgressReport.Count = index + 1;
-            Progress?.Report(ProgressReport);
+                Result = OperationResult.OK;
+                ProgressReport.Count = index + 1;
+                Progress?.Report(ProgressReport);
 
-            return (int)OperationResult.OK;
+                return dest;
+            });
+            return (int)Result;
         }
 
         /* ----------------------------------------------------------------- */

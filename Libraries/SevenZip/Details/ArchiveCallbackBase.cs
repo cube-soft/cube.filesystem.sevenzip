@@ -17,7 +17,6 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
-using System.Threading;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -82,6 +81,48 @@ namespace Cube.FileSystem.SevenZip
         /// 
         /* ----------------------------------------------------------------- */
         protected ArchiveReport ProgressReport { get; set; } = new ArchiveReport();
+
+        #endregion
+
+        #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CallbackAction
+        /// 
+        /// <summary>
+        /// コールバック関数を実行します。
+        /// </summary>
+        /// 
+        /// <param name="action">実行する関数オブジェクト</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        protected void CallbackAction(Action action)
+        {
+            try { action(); }
+            catch (UserCancelException) { Result = OperationResult.UserCancel; throw; }
+            catch (Exception) { Result = OperationResult.DataError; throw; }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CallbackFunc
+        /// 
+        /// <summary>
+        /// コールバック関数を実行します。
+        /// </summary>
+        /// 
+        /// <param name="func">実行する関数オブジェクト</param>
+        /// 
+        /// <returns>関数オブジェクトの戻り値</returns>
+        /// 
+        /* ----------------------------------------------------------------- */
+        protected T CallbackFunc<T>(Func<T> func)
+        {
+            try { return func(); }
+            catch (UserCancelException) { Result = OperationResult.UserCancel; throw; }
+            catch (Exception) { Result = OperationResult.DataError; throw; }
+        }
 
         #endregion
     }
