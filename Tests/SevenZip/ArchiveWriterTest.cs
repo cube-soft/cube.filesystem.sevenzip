@@ -176,6 +176,40 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Archive_PermissionError
+        ///
+        /// <summary>
+        /// 読み込みできないファイルを指定した時の挙動を確認します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Archive_PermissionError()
+            => Assert.That(() =>
+            {
+                var dir = Result("PermissionError");
+                var src = IO.Combine(dir, "Sample.txt");
+
+                IO.CreateDirectory(dir);
+                IO.Copy(Example("Sample.txt"), src);
+
+                using (var _ = System.IO.File.Open(
+                    src,
+                    System.IO.FileMode.Open,
+                    System.IO.FileAccess.ReadWrite,
+                    System.IO.FileShare.None
+                )) {
+                    using (var writer = new ArchiveWriter(Format.Zip))
+                    {
+                        writer.Add(src);
+                        writer.Save(IO.Combine(dir, "Sample.zip"));
+                    }
+                }
+            },
+            Throws.TypeOf<System.IO.IOException>());
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Add_NotFound
         ///
         /// <summary>

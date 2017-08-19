@@ -308,7 +308,37 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract_Throws
+        /// Extract_PermissionError
+        ///
+        /// <summary>
+        /// 書き込みできないファイルを指定した時の挙動を確認します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Extract_PermissionError()
+            => Assert.That(() =>
+            {
+                var dir  = Result("PermissionError");
+                var dest = IO.Combine(dir, @"Sample\Foo.txt");
+
+                IO.CreateDirectory(IO.Combine(dir, "Sample"));
+                IO.Copy(Example("Sample.txt"), dest);
+
+                var io = new Operator();
+                io.Failed += (s, e) => throw new UserCancelException();
+
+                using (var _ = io.OpenRead(dest))
+                using (var archive = new ArchiveReader(Example("Sample.zip"), "", io))
+                {
+                    archive.Extract(dir);
+                }
+            },
+            Throws.TypeOf<UserCancelException>());
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract_WrongPassword
         ///
         /// <summary>
         /// 暗号化されたファイルの展開に失敗するテストを実行します。
@@ -317,7 +347,7 @@ namespace Cube.FileSystem.Tests
         /* ----------------------------------------------------------------- */
         [TestCase("")]
         [TestCase("wrong")]
-        public void Extract_Throws(string password)
+        public void Extract_WrongPassword(string password)
             => Assert.That(() =>
             {
                 var src = Example("Password.7z");
@@ -330,7 +360,7 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract_Each_Throws
+        /// Extract_Each_WrongPassword
         ///
         /// <summary>
         /// 暗号化されたファイルの展開に失敗するテストを実行します。
@@ -338,7 +368,7 @@ namespace Cube.FileSystem.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [TestCase("")]
-        public void Extract_Each_Throws(string password)
+        public void Extract_Each_WrongPassword(string password)
             => Assert.That(() =>
             {
                 var src = Example("Password.7z");

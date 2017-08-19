@@ -236,10 +236,6 @@ namespace Cube.FileSystem.SevenZip
         /// 
         /// <returns>OperationResult</returns>
         /// 
-        /// <remarks>
-        /// 展開をスキップする場合、OperationResult.OK 以外の値を返します。
-        /// </remarks>
-        /// 
         /* ----------------------------------------------------------------- */
         public int GetStream(uint index, out ISequentialOutStream stream, AskMode mode)
         {
