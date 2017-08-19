@@ -366,11 +366,7 @@ namespace Cube.FileSystem
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnFailed(FailedEventArgs e)
-        {
-            if (Failed != null) Failed(this, e);
-            else throw e.Exception;
-        }
+        protected virtual void OnFailed(FailedEventArgs e) => Failed(this, e);
 
         #endregion
 
@@ -418,6 +414,7 @@ namespace Cube.FileSystem
                 }
                 catch (Exception err)
                 {
+                    if (Failed == null) throw;
                     var args = new FailedEventArgs(name, paths, err);
                     OnFailed(args);
                     if (args.Cancel) return false;
@@ -446,6 +443,7 @@ namespace Cube.FileSystem
                 try { return func(); }
                 catch (Exception err)
                 {
+                    if (Failed == null) throw;
                     var args = new FailedEventArgs(name, paths, err);
                     OnFailed(args);
                     if (args.Cancel) return default(T);
