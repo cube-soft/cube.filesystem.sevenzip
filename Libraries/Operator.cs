@@ -194,7 +194,11 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public void Delete(string path)
-            => Action(nameof(Delete), () => _core.Delete(path), path);
+            => Action(nameof(Delete), () =>
+            {
+                _core.SetAttributes(path, System.IO.FileAttributes.Normal);
+                _core.Delete(path);
+            }, path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -298,7 +302,7 @@ namespace Cube.FileSystem
 
                 if (!MoveCore(di, ti)) return;
                 if (!MoveCore(si, di)) MoveCore(ti, di); // recover
-                else _core.Delete(tmp);
+                else Delete(tmp);
             }
         }
 

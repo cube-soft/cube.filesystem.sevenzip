@@ -177,6 +177,8 @@ namespace Cube.FileSystem.Tests
             Assert.That(src.Exists, Is.True);
 
             io.Copy(src.FullName, dest.FullName, false);
+            io.SetAttributes(dest.FullName, System.IO.FileAttributes.ReadOnly);
+
             io.Move(src.FullName, dest.FullName, true);
             src.Refresh();
             dest.Refresh();
