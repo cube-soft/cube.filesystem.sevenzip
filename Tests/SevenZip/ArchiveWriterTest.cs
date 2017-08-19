@@ -190,7 +190,6 @@ namespace Cube.FileSystem.Tests
                 using (var writer = new ArchiveWriter(Format.Zip))
                 {
                     writer.Add(Example("NotFound.txt"));
-                    Assert.Fail("never reached");
                 }
             },
             Throws.TypeOf<System.IO.FileNotFoundException>());
