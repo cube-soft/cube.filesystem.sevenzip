@@ -228,7 +228,11 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public System.IO.FileStream Create(string path)
-            => Func(nameof(Create), () => _core.Create(path), path);
+            => Func(nameof(Create), () =>
+            {
+                CreateParentDirectory(_core.Get(path));
+                return _core.Create(path);
+            }, path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -260,7 +264,11 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public System.IO.FileStream OpenWrite(string path)
-            => Func(nameof(OpenWrite), () => _core.OpenWrite(path), path);
+            => Func(nameof(OpenWrite), () =>
+            {
+                CreateParentDirectory(_core.Get(path));
+                return _core.OpenWrite(path);
+            }, path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -334,7 +342,11 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public void Copy(string src, string dest, bool overwrite)
-            => Action(nameof(Copy), () => _core.Copy(src, dest, overwrite), src, dest);
+            => Action(nameof(Copy), () =>
+            {
+                CreateParentDirectory(_core.Get(dest));
+                _core.Copy(src, dest, overwrite);
+            }, src, dest);
 
         #endregion
 
@@ -378,6 +390,21 @@ namespace Cube.FileSystem
 
         /* ----------------------------------------------------------------- */
         ///
+        /// CreateParentDirectory
+        ///
+        /// <summary>
+        /// 親ディレクトリを生成します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void CreateParentDirectory(IInformation info)
+        {
+            var dir = info.DirectoryName;
+            if (!_core.Get(dir).Exists) _core.CreateDirectory(dir);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// MoveCore
         ///
         /// <summary>
@@ -388,8 +415,7 @@ namespace Cube.FileSystem
         private bool MoveCore(IInformation src, IInformation dest)
             => Action(nameof(Move), () =>
         {
-            var dir = dest.DirectoryName;
-            if (!_core.Get(dir).Exists) _core.CreateDirectory(dir);
+            CreateParentDirectory(dest);
             _core.Move(src.FullName, dest.FullName);
         }, src.FullName, dest.FullName);
 

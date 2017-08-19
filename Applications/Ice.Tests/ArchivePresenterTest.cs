@@ -104,7 +104,6 @@ namespace Cube.FileSystem.App.Ice.Tests
             var dest   = Result(@"Exists\SampleRuntime.zip");
             var args   = PresetMenu.Archive.ToArguments().Concat(new[] { src });
 
-            IO.CreateDirectory(Result("Exists"));
             IO.Copy(Example("Single.zip"), exists);
             Mock.Destination = dest;
 
@@ -138,7 +137,6 @@ namespace Cube.FileSystem.App.Ice.Tests
             var src  = Example("Sample.txt");
             var dest = IO.Combine(dir, "Sample.zip");
 
-            IO.CreateDirectory(dir);
             IO.Copy(Example("Single.zip"), dest);
             Mock.Destination = dest;
 
@@ -207,7 +205,6 @@ namespace Cube.FileSystem.App.Ice.Tests
             var src  = Example("Sample.txt");
             var dest = IO.Combine(dir, "Sample.zip");
 
-            IO.CreateDirectory(dir);
             IO.Copy(Example("Single.zip"), dest, true);
             Mock.Destination = dir;
 

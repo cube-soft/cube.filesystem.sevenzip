@@ -112,8 +112,8 @@ namespace Cube.FileSystem.Tests
             var code = utf8 ? "UTF8" : "SJis";
             var dest = Result($"ZipJapanese{code}.zip");
 
-            System.IO.File.Copy(Example("Sample.txt"), src, true);
-            Assert.That(System.IO.File.Exists(src), Is.True);
+            IO.Copy(Example("Sample.txt"), src, true);
+            Assert.That(IO.Get(src).Exists, Is.True);
 
             using (var writer = new ArchiveWriter(fmt))
             {
@@ -190,7 +190,6 @@ namespace Cube.FileSystem.Tests
                 var dir = Result("PermissionError");
                 var src = IO.Combine(dir, "Sample.txt");
 
-                IO.CreateDirectory(dir);
                 IO.Copy(Example("Sample.txt"), src);
 
                 using (var _ = System.IO.File.Open(

@@ -109,7 +109,6 @@ namespace Cube.FileSystem.App.Ice.Tests
             var src   = Example("Complex.zip");
             var dest  = Result("Overwrite");
 
-            IO.CreateDirectory(Result(@"Overwrite\Directory"));
             IO.Copy(dummy, Result(@"Overwrite\Foo.txt"));
             IO.Copy(dummy, Result(@"Overwrite\Directory\Empty.txt"));
 

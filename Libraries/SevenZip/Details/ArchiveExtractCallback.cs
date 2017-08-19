@@ -378,9 +378,6 @@ namespace Cube.FileSystem.SevenZip
                 if (_inner.Current.IsDirectory) return CreateDirectory();
 
                 var path = _io.Combine(Destination, _inner.Current.FullName);
-                var dir  = _io.Get(path).DirectoryName;
-                if (!_io.Get(dir).Exists) _io.CreateDirectory(dir);
-
                 var dest = new ArchiveStreamWriter(_io.Create(path));
                 _streams.Add(_inner.Current, dest);
 

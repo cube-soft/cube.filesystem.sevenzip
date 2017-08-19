@@ -322,7 +322,6 @@ namespace Cube.FileSystem.Tests
                 var dir  = Result("PermissionError");
                 var dest = IO.Combine(dir, @"Sample\Foo.txt");
 
-                IO.CreateDirectory(IO.Combine(dir, "Sample"));
                 IO.Copy(Example("Sample.txt"), dest);
 
                 var io = new Operator();
