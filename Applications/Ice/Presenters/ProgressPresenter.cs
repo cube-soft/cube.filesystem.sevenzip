@@ -58,6 +58,7 @@ namespace Cube.FileSystem.App.Ice
 
             Debug.Assert(EventAggregator.GetEvents() != null);
             EventAggregator.GetEvents().Show.Subscribe(WhenShow);
+            EventAggregator.GetEvents().Cancel.Subscribe(() => Model.Cancel());
             EventAggregator.GetEvents().Suspend.Subscribe(WhenSuspend);
 
             Model.MessageReceived       += WhenMessageReceived;

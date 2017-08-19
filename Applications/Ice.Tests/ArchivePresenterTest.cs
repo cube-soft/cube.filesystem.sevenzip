@@ -66,16 +66,13 @@ namespace Cube.FileSystem.App.Ice.Tests
 
             using (var ap = Create(request))
             {
-                Assert.That(ap.Model.ProgressInterval.TotalMilliseconds, Is.EqualTo(100).Within(1));
-                ap.Model.ProgressInterval = TimeSpan.FromMilliseconds(10);
-
                 ap.Settings.Value.Archive = archive;
                 ap.Settings.Value.Archive.SaveDirectoryName = Result("Others");
 
                 Assert.That(ap.Model.ProgressReport.Ratio, Is.EqualTo(0.0));
                 ap.View.Show();
                 Assert.That(ap.View.Visible, Is.True);
-                for (var i = 0; ap.View.Visible && i < 50; ++i) await Task.Delay(100);
+                for (var i = 0; ap.View.Visible && i < 100; ++i) await Task.Delay(50);
                 Assert.That(ap.View.Visible, Is.False, "Timeout");
                 Assert.That(ap.Model.ProgressReport.Ratio, Is.EqualTo(1.0).Within(0.01));
 
@@ -117,7 +114,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                 ap.Settings.Value.Archive.SaveDirectoryName = Result("Exists");
                 ap.View.Show();
 
-                for (var i = 0; ap.View.Visible && i < 50; ++i) await Task.Delay(100);
+                for (var i = 0; ap.View.Visible && i < 100; ++i) await Task.Delay(50);
                 Assert.That(ap.View.Visible, Is.False, "Timeout");
             }
 
@@ -153,7 +150,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                 ap.Settings.Value.Archive.SaveLocation = SaveLocation.Runtime;
                 ap.View.Show();
 
-                for (var i = 0; ap.View.Visible && i < 50; ++i) await Task.Delay(100);
+                for (var i = 0; ap.View.Visible && i < 100; ++i) await Task.Delay(50);
                 Assert.That(ap.View.Visible, Is.False, "Timeout");
 
                 tmp = ap.Model.Tmp;
@@ -187,7 +184,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                 ap.Settings.Value.Archive.SaveDirectoryName = dir;
                 ap.View.Show();
 
-                for (var i = 0; ap.View.Visible && i < 50; ++i) await Task.Delay(100);
+                for (var i = 0; ap.View.Visible && i < 100; ++i) await Task.Delay(50);
                 Assert.That(ap.View.Visible, Is.False, "Timeout");
             }
 
@@ -220,7 +217,7 @@ namespace Cube.FileSystem.App.Ice.Tests
             using (var ap = Create(new Request(args)))
             {
                 ap.View.Show();
-                for (var i = 0; ap.View.Visible && i < 50; ++i) await Task.Delay(100);
+                for (var i = 0; ap.View.Visible && i < 100; ++i) await Task.Delay(50);
                 Assert.That(ap.View.Visible, Is.False, "Timeout");
             }
         }
@@ -400,7 +397,10 @@ namespace Cube.FileSystem.App.Ice.Tests
 
             s.Value.Filters = "Filter.txt|FilterDirectory";
 
-            return new ArchivePresenter(v, request, s, e);
+            var dest = new ArchivePresenter(v, request, s, e);
+            Assert.That(dest.Model.ProgressInterval.TotalMilliseconds, Is.EqualTo(100).Within(1));
+            dest.Model.ProgressInterval = TimeSpan.FromMilliseconds(20);
+            return dest;
         }
 
         /* ----------------------------------------------------------------- */

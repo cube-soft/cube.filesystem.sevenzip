@@ -68,9 +68,6 @@ namespace Cube.FileSystem.App.Ice.Tests
 
             using (var ep = Create(request))
             {
-                Assert.That(ep.Model.ProgressInterval.TotalMilliseconds, Is.EqualTo(100).Within(1));
-                ep.Model.ProgressInterval = TimeSpan.FromMilliseconds(10);
-
                 ep.Settings.Value.Explorer = "dummy.exe";
                 ep.Settings.Value.Extract = extract;
                 ep.Settings.Value.Extract.SaveDirectoryName = Result("Others");
@@ -78,7 +75,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                 Assert.That(ep.Model.ProgressReport.Ratio, Is.EqualTo(0.0));
                 ep.View.Show();
                 Assert.That(ep.View.Visible, Is.True);
-                for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
+                for (var i = 0; ep.View.Visible && i < 100; ++i) await Task.Delay(50);
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
                 Assert.That(ep.Model.ProgressReport.Ratio, Is.EqualTo(1.0).Within(0.01));
 
@@ -120,12 +117,38 @@ namespace Cube.FileSystem.App.Ice.Tests
             {
                 ep.Settings.Value.Extract.RootDirectory = CreateDirectoryMethod.None;
                 ep.View.Show();
-                for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
+                for (var i = 0; ep.View.Visible && i < 100; ++i) await Task.Delay(50);
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
             }
 
             Assert.That(IO.Get(Result(@"Overwrite\Foo(2).txt")).Exists, Is.True);
             Assert.That(IO.Get(Result(@"Overwrite\Directory\Empty(2).txt")).Exists, Is.True);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract_Cancel
+        /// 
+        /// <summary>
+        /// 処理をキャンセルするテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public async Task Extract_Cancel()
+        {
+            var src = Example("Complex.zip");
+            var dest = Result("UserCancel");
+
+            using (var ep = Create(src, dest))
+            {
+                ep.View.Show();
+                ep.EventAggregator.GetEvents().Cancel.Publish();
+                for (var i = 0; ep.View.Visible && i < 100; ++i) await Task.Delay(50);
+                Assert.That(ep.View.Visible, Is.False, "Timeout");
+            }
+
+            Assert.Pass();
         }
 
         /* ----------------------------------------------------------------- */
@@ -160,7 +183,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                 Assert.That(ep.View.Value, Is.EqualTo(count).Within(10)); // see remarks
                 ep.EventAggregator.GetEvents().Suspend.Publish(false);
 
-                for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
+                for (var i = 0; ep.View.Visible && i < 100; ++i) await Task.Delay(50);
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
             }
 
@@ -188,7 +211,7 @@ namespace Cube.FileSystem.App.Ice.Tests
             {
                 ep.Settings.Value.Extract.DeleteSource = true;
                 ep.View.Show();
-                for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
+                for (var i = 0; ep.View.Visible && i < 100; ++i) await Task.Delay(50);
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
             }
 
@@ -214,7 +237,7 @@ namespace Cube.FileSystem.App.Ice.Tests
             using (var ep = Create(src, dest))
             {
                 ep.View.Show();
-                for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
+                for (var i = 0; ep.View.Visible && i < 100; ++i) await Task.Delay(50);
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
             }
         }
@@ -238,7 +261,7 @@ namespace Cube.FileSystem.App.Ice.Tests
             {
                 ep.Settings.Value.ErrorReport = true;
                 ep.View.Show();
-                for (var i = 0; ep.View.Visible && i < 50; ++i) await Task.Delay(100);
+                for (var i = 0; ep.View.Visible && i < 100; ++i) await Task.Delay(50);
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
             }
         }
@@ -660,7 +683,10 @@ namespace Cube.FileSystem.App.Ice.Tests
             var e = new EventAggregator();
             var s = new SettingsFolder();
 
-            return new ExtractPresenter(v, request, s, e);
+            var dest = new ExtractPresenter(v, request, s, e);
+            Assert.That(dest.Model.ProgressInterval.TotalMilliseconds, Is.EqualTo(100).Within(1));
+            dest.Model.ProgressInterval = TimeSpan.FromMilliseconds(20);
+            return dest;
         }
 
         /* ----------------------------------------------------------------- */

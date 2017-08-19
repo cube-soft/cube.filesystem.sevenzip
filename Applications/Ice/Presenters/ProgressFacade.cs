@@ -373,6 +373,25 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Cancel
+        /// 
+        /// <summary>
+        /// 処理をキャンセルします。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// 一時停止状態になっている場合は、その状態を解除します。
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Cancel()
+        {
+            _cancel.Cancel();
+            Resume();
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Suspend
         /// 
         /// <summary>
@@ -405,7 +424,7 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         protected IProgress<ArchiveReport> CreateInnerProgress(Action<ArchiveReport> action)
-            => new SuspendableProgress<ArchiveReport>(_wait, action);
+            => new SuspendableProgress<ArchiveReport>(_cancel.Token, _wait, action);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -675,6 +694,7 @@ namespace Cube.FileSystem.App.Ice
         private string _dest;
         private string _tmp;
         private System.Timers.Timer _timer = new System.Timers.Timer(100.0);
+        private CancellationTokenSource _cancel = new CancellationTokenSource();
         private ManualResetEvent _wait = new ManualResetEvent(true);
         #endregion
 
