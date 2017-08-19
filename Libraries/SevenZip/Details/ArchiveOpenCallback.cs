@@ -69,8 +69,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void SetTotal(IntPtr count, IntPtr bytes)
         {
-            if (count != IntPtr.Zero) ProgressReport.TotalCount = Marshal.ReadInt64(count);
-            if (bytes != IntPtr.Zero) ProgressReport.TotalBytes = Marshal.ReadInt64(bytes);
+            if (count != IntPtr.Zero) ArchiveReport.TotalCount = Marshal.ReadInt64(count);
+            if (bytes != IntPtr.Zero) ArchiveReport.TotalBytes = Marshal.ReadInt64(bytes);
         }
 
         /* ----------------------------------------------------------------- */
@@ -87,9 +87,9 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void SetCompleted(IntPtr count, IntPtr bytes)
         {
-            if (count != IntPtr.Zero) ProgressReport.Count = Marshal.ReadInt64(count);
-            if (bytes != IntPtr.Zero) ProgressReport.Bytes = Marshal.ReadInt64(bytes);
-            Progress?.Report(ProgressReport);
+            if (count != IntPtr.Zero) ArchiveReport.Count = Marshal.ReadInt64(count);
+            if (bytes != IntPtr.Zero) ArchiveReport.Bytes = Marshal.ReadInt64(bytes);
+            Progress?.Report(ArchiveReport);
             Result = OperationResult.OK;
         }
 

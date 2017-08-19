@@ -73,14 +73,14 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ProgressReport
+        /// ArchiveReport
         ///
         /// <summary>
         /// 進捗報告の内容を取得または設定します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        protected ArchiveReport ProgressReport { get; set; } = new ArchiveReport();
+        protected ArchiveReport ArchiveReport { get; set; } = new ArchiveReport();
 
         #endregion
 
@@ -123,6 +123,18 @@ namespace Cube.FileSystem.SevenZip
             catch (UserCancelException) { Result = OperationResult.UserCancel; throw; }
             catch (Exception) { Result = OperationResult.DataError; throw; }
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Report
+        /// 
+        /// <summary>
+        /// 進捗状況を通知します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        protected void Report()
+            => CallbackAction(() => Progress?.Report(ArchiveReport));
 
         #endregion
     }
