@@ -245,7 +245,6 @@ namespace Cube.FileSystem.SevenZip
         {
             stream = CallbackFunc(() =>
             {
-                if (Result == OperationResult.Prepare) Result = OperationResult.OK;
                 return Result == OperationResult.OK && mode == AskMode.Extract ?
                        CreateStream(index) :
                        null;

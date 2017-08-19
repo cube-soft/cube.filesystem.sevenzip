@@ -69,7 +69,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public OperationResult Result { get; protected set; } = OperationResult.Prepare;
+        public OperationResult Result { get; protected set; } = OperationResult.OK;
 
         /* ----------------------------------------------------------------- */
         ///

@@ -265,13 +265,9 @@ namespace Cube.FileSystem.SevenZip
         {
             stream = CallbackFunc(() =>
             {
-                var dest = CreateStream(index);
-
-                Result = OperationResult.OK;
                 ProgressReport.Count = index + 1;
                 Progress?.Report(ProgressReport);
-
-                return dest;
+                return CreateStream(index);
             });
             return (int)Result;
         }

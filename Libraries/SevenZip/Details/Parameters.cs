@@ -57,7 +57,6 @@ namespace Cube.FileSystem.SevenZip
         WrongPassword,
 
         // Extended for Cube.FileSystem
-        Prepare     = -1,
         UserCancel  = -2,
     }
 
