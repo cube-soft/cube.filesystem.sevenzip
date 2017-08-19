@@ -112,6 +112,20 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// FromMethod
+        ///
+        /// <summary>
+        /// CompressionMethod から Format に変換するテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [TestCase(CompressionMethod.GZip, ExpectedResult = Format.GZip)]
+        [TestCase(CompressionMethod.Lzma, ExpectedResult = Format.Unknown)]
+        public Format FromMethod(CompressionMethod method)
+            => Formats.FromMethod(method);
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// ToClassId
         ///
         /// <summary>
@@ -142,6 +156,20 @@ namespace Cube.FileSystem.Tests
         [TestCase(Format.Unknown,  ExpectedResult = "")]
         public string ToExtension(Format format)
             => format.ToExtension();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ToMethod
+        ///
+        /// <summary>
+        /// Format から CompressionMethod に変換するテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [TestCase(Format.BZip2, ExpectedResult = CompressionMethod.BZip2)]
+        [TestCase(Format.Zip,   ExpectedResult = CompressionMethod.Default)]
+        public CompressionMethod ToMethod(Format format)
+            => format.ToMethod();
 
         #endregion
     }

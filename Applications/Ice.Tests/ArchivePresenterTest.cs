@@ -109,6 +109,7 @@ namespace Cube.FileSystem.App.Ice.Tests
 
             using (var ap = Create(new Request(args)))
             {
+                ap.Settings.Value.ErrorReport = false;
                 ap.Settings.Value.Archive.SaveLocation = SaveLocation.Others;
                 ap.Settings.Value.Archive.SaveDirectoryName = Result("Exists");
                 ap.View.Show();
