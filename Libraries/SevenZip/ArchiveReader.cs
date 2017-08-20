@@ -156,7 +156,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public IReadOnlyCollection<ArchiveItem> Items => _items;
+        public IReadOnlyList<ArchiveItem> Items => _items;
 
         /* ----------------------------------------------------------------- */
         ///
