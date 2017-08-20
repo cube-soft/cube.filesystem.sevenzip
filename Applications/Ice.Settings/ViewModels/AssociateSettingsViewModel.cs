@@ -47,7 +47,7 @@ namespace Cube.FileSystem.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public AssociateSettingsViewModel(AssociateSettings model)
         {
-            _model = new AssociateExec(model);
+            _model = new AssociateCommand(model);
             _model.Settings.PropertyChanged += (s, e) => OnPropertyChanged(e);
         }
 
@@ -527,7 +527,7 @@ namespace Cube.FileSystem.App.Ice.Settings
         /// <param name="force">強制モード</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public void Update(bool force) => _model.Update(force);
+        public void Update(bool force) => _model.Execute(force);
 
         #endregion
 
@@ -552,7 +552,7 @@ namespace Cube.FileSystem.App.Ice.Settings
         }
 
         #region Fields
-        private AssociateExec _model;
+        private AssociateCommand _model;
         #endregion
 
         #endregion

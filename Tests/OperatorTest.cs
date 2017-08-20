@@ -33,7 +33,7 @@ namespace Cube.FileSystem.Tests
     /* --------------------------------------------------------------------- */
     [Parallelizable]
     [TestFixture]
-    class OperatorTest : FileResource
+    class OperatorTest : FileHandler
     {
         #region Tests
 
@@ -130,6 +130,25 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Create
+        ///
+        /// <summary>
+        /// 書き込み用ストリームを生成するテストを実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [TestCaseSource(nameof(Operator_TestCases))]
+        public void Create(IOperatorCore core)
+        {
+            var dest = Result(@"Directory\Create.txt");
+            var io = new Operator(core);
+
+            using (var stream = io.Create(dest)) stream.WriteByte((byte)'A');
+            Assert.That(io.Get(dest).Length, Is.EqualTo(1));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// OpenWrite
         ///
         /// <summary>
@@ -148,7 +167,7 @@ namespace Cube.FileSystem.Tests
             using (var stream = io.OpenWrite(dest)) stream.WriteByte((byte)'A');
             Assert.That(io.Get(dest).Length, Is.EqualTo(count));
 
-            var newfile = Result("OpenWrite_Create.txt");
+            var newfile = Result(@"Directory\OpenWrite.txt");
             using (var stream = io.OpenWrite(newfile)) stream.WriteByte((byte)'A');
             Assert.That(io.Get(newfile).Length, Is.EqualTo(1));
         }
@@ -177,6 +196,8 @@ namespace Cube.FileSystem.Tests
             Assert.That(src.Exists, Is.True);
 
             io.Copy(src.FullName, dest.FullName, false);
+            io.SetAttributes(dest.FullName, System.IO.FileAttributes.ReadOnly);
+
             io.Move(src.FullName, dest.FullName, true);
             src.Refresh();
             dest.Refresh();

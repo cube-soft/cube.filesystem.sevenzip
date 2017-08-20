@@ -156,7 +156,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public IReadOnlyCollection<ArchiveItem> Items => _items;
+        public IReadOnlyList<ArchiveItem> Items => _items;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -374,7 +374,6 @@ namespace Cube.FileSystem.SevenZip
             switch (result)
             {
                 case OperationResult.OK:
-                case OperationResult.Prepare:
                     break;
                 case OperationResult.DataError:
                     if (Items.Any(x => x.Encrypted)) ThrowEncryption();
@@ -384,7 +383,7 @@ namespace Cube.FileSystem.SevenZip
                     ThrowEncryption();
                     break;
                 case OperationResult.UserCancel:
-                    throw new UserCancelException();
+                    throw new OperationCanceledException();
                 default:
                     throw new System.IO.IOException($"{result}");
             }

@@ -16,114 +16,87 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Windows.Forms;
 
 namespace Cube.FileSystem.App.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// OverwriteMode
+    /// MessageEventArgs
     /// 
     /// <summary>
-    /// 上書き方法を示す列挙型です。
+    /// メッセージボックスに表示する情報を保持するためのクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [Flags]
-    public enum OverwriteMode
+    public class MessageEventArgs : EventArgs
     {
-        Query        = 0x000,
-        Cancel       = 0x002,
-        Yes          = 0x006,
-        No           = 0x007,
-        Rename       = 0x010,
-        Operations   = 0x01f,
-
-        Always       = 0x100,
-        AlwaysYes    = Always | Yes,
-        AlwaysNo     = Always | No,
-        AlwaysRename = Always | Rename,
-    }
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// OverwriteInfo
-    /// 
-    /// <summary>
-    /// 上書き対象となる項目の情報を保持するためのクラスです。
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    public class OverwriteEventArgs : EventArgs
-    {
-        #region Constructors
-
         /* ----------------------------------------------------------------- */
         ///
-        /// OverwriteEventArgs
+        /// Title
         /// 
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// メッセージボックスのタイトルを取得または設定します。
         /// </summary>
-        /// 
-        /// <param name="src">上書き元の情報</param>
-        /// <param name="dest">上書き先の情報</param>
         ///
         /* ----------------------------------------------------------------- */
-        public OverwriteEventArgs(IInformation src, IInformation dest)
-        {
-            Source      = src;
-            Destination = dest;
-        }
-
-        #endregion
-
-        #region Constructors
+        public string Title { get; set; } = string.Empty;
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Source
+        /// Message
         /// 
         /// <summary>
-        /// 上書き元の情報を取得します。
+        /// メッセージを取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
-        public IInformation Source { get; }
+        public string Message { get; set; } = string.Empty;
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Destination
+        /// Icon
         /// 
         /// <summary>
-        /// 上書き先の情報を取得します。
+        /// メッセージボックスに表示するアイコンを取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
-        public IInformation Destination { get; }
+        public MessageBoxIcon Icon { get; set; } = MessageBoxIcon.Error;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Buttons
+        /// 
+        /// <summary>
+        /// メッセージボックスに表示するボタンを取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public MessageBoxButtons Buttons { get; set; } = MessageBoxButtons.OK;
 
         /* ----------------------------------------------------------------- */
         ///
         /// Result
         /// 
         /// <summary>
-        /// 上書き方法を取得または設定します。
+        /// ユーザがどのボタンをクリックしたかを示す値を取得または設定
+        /// します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
-        public OverwriteMode Result { get; set; } = OverwriteMode.Cancel;
-
-        #endregion
+        public DialogResult Result { get; set; } = DialogResult.OK;
     }
 
     /* --------------------------------------------------------------------- */
     ///
-    /// OverwriteEventHandler
+    /// MessageEventHandler
     /// 
     /// <summary>
-    /// 上書き確認ダイアログを表示するための delegate です。
+    /// メッセージボックスを表示するための delegate です。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [Serializable]
-    public delegate void OverwriteEventHandler(object sender, OverwriteEventArgs e);
+    public delegate void MessageEventHandler(object sender, MessageEventArgs e);
 }

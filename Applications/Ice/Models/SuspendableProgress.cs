@@ -42,14 +42,18 @@ namespace Cube.FileSystem.App.Ice
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
+        /// <param name="cancel">キャンセル用オブジェクト</param>
         /// <param name="wait">一時停止用オブジェクト</param>
         /// <param name="action">コールバック</param>
         ///
         /* ----------------------------------------------------------------- */
-        public SuspendableProgress(WaitHandle wait, Action<T> action)
+        public SuspendableProgress(CancellationToken cancel, WaitHandle wait, Action<T> action)
         {
+            Debug.Assert(cancel != null);
             Debug.Assert(wait != null);
-            _wait = wait;
+
+            _cancel = cancel;
+            _wait   = wait;
             if (action != null) ProgressChanged += (s, e) => action(e);
         }
 
@@ -79,11 +83,19 @@ namespace Cube.FileSystem.App.Ice
         /// <summary>
         /// 進行状況の更新を報告します。
         /// </summary>
+        /// 
+        /// <remarks>
+        /// WaitHandle のチェック後に CancellationToken のチェックを実行
+        /// します。したがって、キャンセル処理を発生させるには、
+        /// WaitHnale をシグナル状態にして下さい。
+        /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
         public void Report(T value)
         {
             _wait.WaitOne();
+            _cancel.ThrowIfCancellationRequested();
+
             OnReport(value);
         }
 
@@ -105,6 +117,7 @@ namespace Cube.FileSystem.App.Ice
         #endregion
 
         #region Fields
+        private readonly CancellationToken _cancel;
         private readonly WaitHandle _wait;
         #endregion
     }

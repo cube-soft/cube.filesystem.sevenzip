@@ -16,6 +16,7 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Cube.FileSystem.App.Ice.Tests
 {
@@ -180,6 +181,20 @@ namespace Cube.FileSystem.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         protected void Reset()
             => Mock = new MockViewSettings();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Wait
+        /// 
+        /// <summary>
+        /// View が非表示になるまで待ちます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected async Task Wait(Cube.Forms.IForm view)
+        {
+            for (var i = 0; view.Visible && i < 100; ++i) await TaskEx.Delay(50);
+        }
 
         #endregion
 

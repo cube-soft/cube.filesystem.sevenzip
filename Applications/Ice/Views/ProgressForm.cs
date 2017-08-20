@@ -49,7 +49,7 @@ namespace Cube.FileSystem.App.Ice
         {
             InitializeComponent();
 
-            ExitButton.Click += (s, e) => Close();
+            ExitButton.Click += (s, e) => EventAggregator.GetEvents()?.Cancel.Publish();
 
             SuspendButton.Tag = false;
             SuspendButton.Click += WhenSuspendOrResume;

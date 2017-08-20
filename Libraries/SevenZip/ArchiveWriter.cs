@@ -447,10 +447,9 @@ namespace Cube.FileSystem.SevenZip
             switch (result)
             {
                 case OperationResult.OK:
-                case OperationResult.Prepare:
                     break;
                 case OperationResult.UserCancel:
-                    throw new UserCancelException();
+                    throw new OperationCanceledException();
                 default:
                     throw new System.IO.IOException($"{result}");
             }

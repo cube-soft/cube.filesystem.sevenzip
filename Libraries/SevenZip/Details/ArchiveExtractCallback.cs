@@ -62,8 +62,8 @@ namespace Cube.FileSystem.SevenZip
             _io         = io;
             _inner      = Items.GetEnumerator();
 
-            ProgressReport.Count = 0;
-            ProgressReport.Bytes = 0;
+            ArchiveReport.Count = 0;
+            ArchiveReport.Bytes = 0;
         }
 
         #endregion
@@ -120,8 +120,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public long TotalCount
         {
-            get { return ProgressReport.TotalCount; }
-            set { ProgressReport.TotalCount = value; }
+            get { return ArchiveReport.TotalCount; }
+            set { ArchiveReport.TotalCount = value; }
         }
 
         /* ----------------------------------------------------------------- */
@@ -139,8 +139,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public long TotalBytes
         {
-            get { return ProgressReport.TotalBytes; }
-            set { ProgressReport.TotalBytes = value; }
+            get { return ArchiveReport.TotalBytes; }
+            set { ArchiveReport.TotalBytes = value; }
         }
 
         #endregion
@@ -191,8 +191,8 @@ namespace Cube.FileSystem.SevenZip
             if (TotalCount < 0) TotalCount = Items.Count();
             if (TotalBytes < 0) TotalBytes = (long)bytes;
 
-            _hack = Math.Max((long)bytes - ProgressReport.TotalBytes, 0);
-            Progress?.Report(ProgressReport);
+            _hack = Math.Max((long)bytes - ArchiveReport.TotalBytes, 0);
+            Report();
         }
 
         /* ----------------------------------------------------------------- */
@@ -218,8 +218,8 @@ namespace Cube.FileSystem.SevenZip
         public void SetCompleted(ref ulong bytes)
         {
             var cvt = Math.Max((long)bytes - _hack, 0);
-            ProgressReport.Bytes = cvt;
-            Progress?.Report(ProgressReport);
+            ArchiveReport.Bytes = cvt;
+            Report();
         }
 
         /* ----------------------------------------------------------------- */
@@ -236,16 +236,17 @@ namespace Cube.FileSystem.SevenZip
         /// 
         /// <returns>OperationResult</returns>
         /// 
-        /// <remarks>
-        /// 展開をスキップする場合、OperationResult.OK 以外の値を返します。
-        /// </remarks>
-        /// 
         /* ----------------------------------------------------------------- */
         public int GetStream(uint index, out ISequentialOutStream stream, AskMode mode)
         {
-            var ok = Result == OperationResult.OK || Result == OperationResult.Prepare;
-            stream = ok && mode == AskMode.Extract ? CreateStream(index) : null;
-            return ok ? (int)OperationResult.OK : (int)Result;
+            Report();
+            stream = CallbackFunc(() =>
+            {
+                return Result == OperationResult.OK && mode == AskMode.Extract ?
+                       CreateStream(index) :
+                       null;
+            });
+            return (int)Result;
         }
 
         /* ----------------------------------------------------------------- */
@@ -259,12 +260,14 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="mode">展開モード</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void PrepareOperation(AskMode mode)
+        public void PrepareOperation(AskMode mode) => CallbackAction(() =>
         {
             var item = _inner.Current;
             if (item == null || !_streams.ContainsKey(item)) return;
+
             Extracting?.Invoke(this, ValueEventArgs.Create(item));
-        }
+            Report();
+        });
 
         /* ----------------------------------------------------------------- */
         ///
@@ -277,20 +280,20 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="result">処理結果</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public void SetOperationResult(OperationResult result)
+        public void SetOperationResult(OperationResult result) => CallbackAction(() =>
         {
-            Result = result;
-            ProgressReport.Count++;
-
             var item = _inner.Current;
-            if (item == null || !_streams.ContainsKey(item)) return;
+            if (item != null && _streams.ContainsKey(item))
+            {
+                _streams[item].Dispose();
+                _streams.Remove(item);
+                RaiseExtracted(item);
+            }
 
-            _streams[item].Dispose();
-            _streams.Remove(item);
-
-            RaiseExtracted(item);
-            Progress?.Report(ProgressReport);
-        }
+            ArchiveReport.Count++;
+            Report();
+            Result = result;
+        });
 
         #endregion
 
@@ -375,9 +378,6 @@ namespace Cube.FileSystem.SevenZip
                 if (_inner.Current.IsDirectory) return CreateDirectory();
 
                 var path = _io.Combine(Destination, _inner.Current.FullName);
-                var dir  = _io.Get(path).DirectoryName;
-                if (!_io.Get(dir).Exists) _io.CreateDirectory(dir);
-
                 var dest = new ArchiveStreamWriter(_io.Create(path));
                 _streams.Add(_inner.Current, dest);
 
@@ -412,8 +412,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         private ArchiveStreamWriter Skip()
         {
-            ProgressReport.Count++;
-            ProgressReport.Bytes += _inner.Current.Length;
+            ArchiveReport.Count++;
+            ArchiveReport.Bytes += _inner.Current.Length;
             this.LogDebug($"Skip:{_inner.Current.FullName}");
 
             return null;

@@ -50,11 +50,10 @@ using (var reader = new ArchiveReader(@"path\to\archive", password))
 using (var reader = new ArchiveReader(@"path\to\archive", "password"))
 {
     var directory = @"path\to\directory";
-    var items = reader.Items.ToList();
 
     // Save as "path\to\directory\{item.FullName}"
-    items[0].Extract(directory);
-    items[3].Extract(directory);
+    reader.Items[0].Extract(directory);
+    reader.Items[3].Extract(directory);
 }
 ```
 
@@ -73,4 +72,5 @@ using (var reader = new ArchiveReader(@"path\to\archive", "password"))
 ## License
  
 Copyright (c) 2010 [CubeSoft, Inc.](http://www.cube-soft.jp/)
-The Cube.FileSystem.SevenZip project is licensed under the [GNU LGPLv3](https://github.com/cube-soft/Cube.FileSystem/blob/master/Libraries/SevenZip/License.txt) and the other projects are [Apache 2.0](https://github.com/cube-soft/Cube.FileSystem/blob/master/License.txt).
+The Cube.FileSystem.SevenZip project is licensed under the [GNU LGPLv3](https://github.com/cube-soft/Cube.FileSystem/blob/master/Libraries/SevenZip/License.txt)
+and the other projects are [Apache 2.0](https://github.com/cube-soft/Cube.FileSystem/blob/master/License.txt).

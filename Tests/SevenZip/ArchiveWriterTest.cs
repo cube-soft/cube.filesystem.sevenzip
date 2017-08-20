@@ -34,7 +34,7 @@ namespace Cube.FileSystem.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ArchiveWriterTest : FileResource
+    class ArchiveWriterTest : FileHandler
     {
         #region Tests
 
@@ -112,8 +112,8 @@ namespace Cube.FileSystem.Tests
             var code = utf8 ? "UTF8" : "SJis";
             var dest = Result($"ZipJapanese{code}.zip");
 
-            System.IO.File.Copy(Example("Sample.txt"), src, true);
-            Assert.That(System.IO.File.Exists(src), Is.True);
+            IO.Copy(Example("Sample.txt"), src, true);
+            Assert.That(IO.Get(src).Exists, Is.True);
 
             using (var writer = new ArchiveWriter(fmt))
             {
@@ -149,7 +149,7 @@ namespace Cube.FileSystem.Tests
                     writer.Save(dest, query, null);
                 }
             },
-            Throws.TypeOf<UserCancelException>());
+            Throws.TypeOf<OperationCanceledException>());
 
         /* ----------------------------------------------------------------- */
         ///
@@ -176,6 +176,39 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Archive_PermissionError
+        ///
+        /// <summary>
+        /// 読み込みできないファイルを指定した時の挙動を確認します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Archive_PermissionError()
+            => Assert.That(() =>
+            {
+                var dir = Result("PermissionError");
+                var src = IO.Combine(dir, "Sample.txt");
+
+                IO.Copy(Example("Sample.txt"), src);
+
+                using (var _ = System.IO.File.Open(
+                    src,
+                    System.IO.FileMode.Open,
+                    System.IO.FileAccess.ReadWrite,
+                    System.IO.FileShare.None
+                )) {
+                    using (var writer = new ArchiveWriter(Format.Zip))
+                    {
+                        writer.Add(src);
+                        writer.Save(IO.Combine(dir, "Sample.zip"));
+                    }
+                }
+            },
+            Throws.TypeOf<System.IO.IOException>());
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Add_NotFound
         ///
         /// <summary>
@@ -190,7 +223,6 @@ namespace Cube.FileSystem.Tests
                 using (var writer = new ArchiveWriter(Format.Zip))
                 {
                     writer.Add(Example("NotFound.txt"));
-                    Assert.Fail("never reached");
                 }
             },
             Throws.TypeOf<System.IO.FileNotFoundException>());

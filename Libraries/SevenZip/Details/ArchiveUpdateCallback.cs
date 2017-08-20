@@ -52,7 +52,7 @@ namespace Cube.FileSystem.SevenZip
             : base()
         {
             Items = items;
-            ProgressReport.TotalCount = items.Count;
+            ArchiveReport.TotalCount = items.Count;
             _io = io;
         }
 
@@ -144,8 +144,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void SetTotal(ulong bytes)
         {
-            ProgressReport.TotalBytes = (long)bytes;
-            Progress?.Report(ProgressReport);
+            ArchiveReport.TotalBytes = (long)bytes;
+            Report();
         }
 
         /* ----------------------------------------------------------------- */
@@ -161,8 +161,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void SetCompleted(ref ulong bytes)
         {
-            ProgressReport.Bytes = (long)bytes;
-            Progress?.Report(ProgressReport);
+            ArchiveReport.Bytes = (long)bytes;
+            Report();
         }
 
         /* ----------------------------------------------------------------- */
@@ -191,7 +191,8 @@ namespace Cube.FileSystem.SevenZip
             newprop = 1;
             indexInArchive = uint.MaxValue;
 
-            return (int)OperationResult.OK;
+            Report();
+            return (int)Result;
         }
 
         /* ----------------------------------------------------------------- */
@@ -244,7 +245,8 @@ namespace Cube.FileSystem.SevenZip
                     break;
             }
 
-            return (int)OperationResult.OK;
+            Report();
+            return (int)Result;
         }
 
         /* ----------------------------------------------------------------- */
@@ -263,12 +265,14 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int GetStream(uint index, out ISequentialInStream stream)
         {
-            stream = CreateStream(index);
-
-            ProgressReport.Count = index + 1;
-            Progress?.Report(ProgressReport);
-
-            return (int)OperationResult.OK;
+            Report();
+            stream = CallbackFunc(() =>
+            {
+                ArchiveReport.Count = index + 1;
+                Progress?.Report(ArchiveReport);
+                return CreateStream(index);
+            });
+            return (int)Result;
         }
 
         /* ----------------------------------------------------------------- */

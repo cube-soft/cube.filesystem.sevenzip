@@ -170,23 +170,25 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ShowErrorView
+        /// ShowMessageBox
         /// 
         /// <summary>
-        /// エラーメッセージを表示します。
+        /// メッセージボックスを表示します。
         /// </summary>
         /// 
-        /// <param name="e">エラー情報を保持するオブジェクト</param>
+        /// <param name="e">メッセージ内容を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public virtual void ShowErrorView(ValueEventArgs<Exception> e)
+        public virtual void ShowMessageBox(MessageEventArgs e)
         {
-            var msg = !string.IsNullOrEmpty(e.Value.Message) ?
-                      e.Value.Message :
-                      Properties.Resources.MessageUnexpectedError;
+            var message = !string.IsNullOrEmpty(e.Message) ?
+                          e.Message :
+                          Properties.Resources.MessageUnexpectedError;
+            var title   = !string.IsNullOrEmpty(e.Title) ?
+                          e.Title :
+                          Application.ProductName;
 
-            MessageBox.Show(msg, Application.ProductName,
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            e.Result = MessageBox.Show(message, title, e.Buttons, e.Icon);
         }
 
         #endregion
@@ -362,8 +364,8 @@ namespace Cube.FileSystem.App.Ice
         public static void ShowMailView(ValueEventArgs<string> e)
             => _factory?.ShowMailView(e);
 
-        public static void ShowErrorView(ValueEventArgs<Exception> e)
-            => _factory?.ShowErrorView(e);
+        public static void ShowMessageBox(MessageEventArgs e)
+            => _factory?.ShowMessageBox(e);
 
         #endregion
 

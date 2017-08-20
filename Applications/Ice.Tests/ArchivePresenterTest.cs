@@ -55,7 +55,6 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
-        [Ignore("NUnit for .NET 3.5 does not support async/await")]
         public async Task Archive(string[] files, IEnumerable<string> args,
             ArchiveSettings archive, string dest, long count)
         {
@@ -68,16 +67,13 @@ namespace Cube.FileSystem.App.Ice.Tests
 
             using (var ap = Create(request))
             {
-                Assert.That(ap.Model.ProgressInterval.TotalMilliseconds, Is.EqualTo(100).Within(1));
-                ap.Model.ProgressInterval = TimeSpan.FromMilliseconds(10);
-
                 ap.Settings.Value.Archive = archive;
                 ap.Settings.Value.Archive.SaveDirectoryName = Result("Others");
 
                 Assert.That(ap.Model.ProgressReport.Ratio, Is.EqualTo(0.0));
                 ap.View.Show();
                 Assert.That(ap.View.Visible, Is.True);
-                for (var i = 0; ap.View.Visible && i < 50; ++i) await TaskEx.Delay(100);
+                await Wait(ap.View);
                 Assert.That(ap.View.Visible, Is.False, "Timeout");
                 Assert.That(ap.Model.ProgressReport.Ratio, Is.EqualTo(1.0).Within(0.01));
 
@@ -109,17 +105,17 @@ namespace Cube.FileSystem.App.Ice.Tests
             var dest   = Result(@"Exists\SampleRuntime.zip");
             var args   = PresetMenu.Archive.ToArguments().Concat(new[] { src });
 
-            IO.CreateDirectory(Result("Exists"));
             IO.Copy(Example("Single.zip"), exists);
             Mock.Destination = dest;
 
             using (var ap = Create(new Request(args)))
             {
+                ap.Settings.Value.ErrorReport = false;
                 ap.Settings.Value.Archive.SaveLocation = SaveLocation.Others;
                 ap.Settings.Value.Archive.SaveDirectoryName = Result("Exists");
                 ap.View.Show();
 
-                for (var i = 0; ap.View.Visible && i < 50; ++i) await TaskEx.Delay(100);
+                await Wait(ap.View);
                 Assert.That(ap.View.Visible, Is.False, "Timeout");
             }
 
@@ -139,10 +135,10 @@ namespace Cube.FileSystem.App.Ice.Tests
         [Test]
         public async Task Archive_Overwrite()
         {
+            var dir  = Result("Overwrite");
             var src  = Example("Sample.txt");
-            var dest = Result(@"Overwrite\Sample.zip");
+            var dest = IO.Combine(dir, "Sample.zip");
 
-            IO.CreateDirectory(Result("Overwrite"));
             IO.Copy(Example("Single.zip"), dest);
             Mock.Destination = dest;
 
@@ -154,7 +150,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                 ap.Settings.Value.Archive.SaveLocation = SaveLocation.Runtime;
                 ap.View.Show();
 
-                for (var i = 0; ap.View.Visible && i < 50; ++i) await TaskEx.Delay(100);
+                await Wait(ap.View);
                 Assert.That(ap.View.Visible, Is.False, "Timeout");
 
                 tmp = ap.Model.Tmp;
@@ -177,21 +173,52 @@ namespace Cube.FileSystem.App.Ice.Tests
         [Test]
         public async Task Archive_PasswordCancel()
         {
+            var dir  = Result("PasswordCancel");
             var src  = Example("Sample.txt");
-            var dest = Result(@"PasswordCancel\Sample.zip");
+            var dest = IO.Combine(dir, "Sample.zip");
             var args = PresetMenu.ArchiveZipPassword.ToArguments().Concat(new[] { src });
 
             using (var ap = Create(new Request(args)))
             {
                 ap.Settings.Value.Archive.SaveLocation = SaveLocation.Others;
-                ap.Settings.Value.Archive.SaveDirectoryName = Result("PasswordCancel");
+                ap.Settings.Value.Archive.SaveDirectoryName = dir;
                 ap.View.Show();
 
-                for (var i = 0; ap.View.Visible && i < 50; ++i) await TaskEx.Delay(100);
+                await Wait(ap.View);
                 Assert.That(ap.View.Visible, Is.False, "Timeout");
             }
 
             Assert.That(IO.Get(dest).Exists, Is.False);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Archive_MoveFailed
+        /// 
+        /// <summary>
+        /// ファイルの移動に失敗するテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public async Task Archive_MoveFailed()
+        {
+            var dir  = Result("MoveFailed");
+            var src  = Example("Sample.txt");
+            var dest = IO.Combine(dir, "Sample.zip");
+
+            IO.Copy(Example("Single.zip"), dest, true);
+            Mock.Destination = dir;
+
+            var args = PresetMenu.ArchiveZip.ToArguments().Concat(new[] { "/o:runtime", src });
+
+            using (var _ = IO.OpenRead(dest))
+            using (var ap = Create(new Request(args)))
+            {
+                ap.View.Show();
+                await Wait(ap.View);
+                Assert.That(ap.View.Visible, Is.False, "Timeout");
+            }
         }
 
         #endregion
@@ -369,7 +396,10 @@ namespace Cube.FileSystem.App.Ice.Tests
 
             s.Value.Filters = "Filter.txt|FilterDirectory";
 
-            return new ArchivePresenter(v, request, s, e);
+            var dest = new ArchivePresenter(v, request, s, e);
+            Assert.That(dest.Model.ProgressInterval.TotalMilliseconds, Is.EqualTo(100).Within(1));
+            dest.Model.ProgressInterval = TimeSpan.FromMilliseconds(20);
+            return dest;
         }
 
         /* ----------------------------------------------------------------- */

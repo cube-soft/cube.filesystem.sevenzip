@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Windows.Forms;
 using Cube.FileSystem.SevenZip;
 using Cube.FileSystem.Ice;
 using Cube.Log;
@@ -56,7 +57,7 @@ namespace Cube.FileSystem.App.Ice
             Settings = settings;
             IO       = new Operator(new Alpha());
 
-            IO.Failed += (s, e) => RaiseFailed(e);
+            IO.Failed += WhenFailed;
             _timer.Elapsed += (s, e) => OnProgress(ValueEventArgs.Create(ProgressReport));
         }
 
@@ -239,11 +240,7 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         public virtual void OnDestinationRequired(QueryEventArgs<string, string> e)
-        {
-            if (DestinationRequired != null) DestinationRequired(this, e);
-            else e.Cancel = true;
-            if (e.Cancel) throw new UserCancelException();
-        }
+            => DestinationRequired?.Invoke(this, e);
 
         #endregion
 
@@ -275,10 +272,7 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         protected virtual void OnPasswordRequired(QueryEventArgs<string, string> e)
-        {
-            if (PasswordRequired != null) PasswordRequired(this, e);
-            else e.Cancel = true;
-        }
+            => PasswordRequired?.Invoke(this, e);
 
         #endregion
 
@@ -309,39 +303,6 @@ namespace Cube.FileSystem.App.Ice
 
         #endregion
 
-        #region OpenDirectoryRequired
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ErrorReportRequired
-        /// 
-        /// <summary>
-        /// エラーレポート表示時に発生するイベントです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public event ValueEventHandler<Exception> ErrorReportRequired;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnErrorReportRequired
-        /// 
-        /// <summary>
-        /// ErrorReportRequired を発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected virtual void OnErrorReportRequired(ValueEventArgs<Exception> e)
-        {
-            if (Settings.Value.ErrorReport && ErrorReportRequired != null)
-            {
-                ErrorReportRequired(this, e);
-            }
-            this.LogError(e.Value.ToString(), e.Value);
-        }
-
-        #endregion
-
         #region OverwriteRequired
 
         /* ----------------------------------------------------------------- */
@@ -369,6 +330,33 @@ namespace Cube.FileSystem.App.Ice
 
         #endregion
 
+        #region MessageReceived
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// MessageReceived
+        /// 
+        /// <summary>
+        /// メッセージ受信時に発生するイベントです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public event MessageEventHandler MessageReceived;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OnMessageReceived
+        /// 
+        /// <summary>
+        /// MessageReceived を発生させます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected virtual void OnMessageReceived(MessageEventArgs e)
+            => MessageReceived?.Invoke(this, e);
+
+        #endregion
+
         #endregion
 
         #region Methods
@@ -383,6 +371,25 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         public abstract void Start();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Cancel
+        /// 
+        /// <summary>
+        /// 処理をキャンセルします。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// 一時停止状態になっている場合は、その状態を解除します。
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Cancel()
+        {
+            _cancel.Cancel();
+            Resume();
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -418,7 +425,7 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         protected IProgress<ArchiveReport> CreateInnerProgress(Action<ArchiveReport> action)
-            => new SuspendableProgress<ArchiveReport>(_wait, action);
+            => new SuspendableProgress<ArchiveReport>(_cancel.Token, _wait, action);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -503,6 +510,24 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Error
+        /// 
+        /// <summary>
+        /// エラー発生時の処理を実行します。
+        /// </summary>
+        /// 
+        /// <param name="err">例外オブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected void Error(Exception err)
+        {
+            this.LogError(err.ToString());
+            if (!Settings.Value.ErrorReport) return;
+            OnMessageReceived(new MessageEventArgs { Message = err.Message });
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// GetSaveLocation
         /// 
         /// <summary>
@@ -582,6 +607,7 @@ namespace Cube.FileSystem.App.Ice
 
             try
             {
+                IO.Failed -= WhenFailed;
                 if (string.IsNullOrEmpty(Tmp)) return;
                 else if (IO.Get(Tmp).Exists) IO.Delete(Tmp);
             }
@@ -613,8 +639,9 @@ namespace Cube.FileSystem.App.Ice
                 case SaveLocation.MyDocuments:
                     return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 case SaveLocation.Runtime:
-                    var e = new QueryEventArgs<string, string>(query);
+                    var e = new QueryEventArgs<string, string>(query, true);
                     OnDestinationRequired(e);
+                    if (e.Cancel) throw new OperationCanceledException();
                     return e.Result;
                 case SaveLocation.Source:
                     return IO.Get(Request.Sources.First()).DirectoryName;
@@ -632,20 +659,35 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// RaiseFailed
+        /// WhenFailed
         /// 
         /// <summary>
-        /// Failed イベントを発生させます。
+        /// Failed イベント発生時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void RaiseFailed(FailedEventArgs e)
+        private void WhenFailed(object sender, FailedEventArgs e)
         {
-            this.LogWarn(e.Name);
-            foreach (var path in e.Paths) this.LogWarn(path);
-            this.LogWarn(e.Exception.ToString(), e.Exception);
+            var sb = new System.Text.StringBuilder();
+            foreach (var path in e.Paths) sb.AppendLine(path);
+            sb.Append($"{e.Name} {e.Exception.Message}");
 
-            e.Cancel = true;
+            var ev = new MessageEventArgs
+            {
+                Message = sb.ToString(),
+                Buttons = MessageBoxButtons.AbortRetryIgnore,
+                Icon    = MessageBoxIcon.Warning,
+                Result  = DialogResult.Abort,
+            };
+
+            OnMessageReceived(ev);
+            this.LogWarn(sb.ToString());
+
+            e.Cancel = ev.Result != DialogResult.Retry;
+            if (ev.Result == DialogResult.Abort || ev.Result == DialogResult.Cancel)
+            {
+                throw new OperationCanceledException();
+            }
         }
 
         #region Fields
@@ -653,6 +695,7 @@ namespace Cube.FileSystem.App.Ice
         private string _dest;
         private string _tmp;
         private System.Timers.Timer _timer = new System.Timers.Timer(100.0);
+        private CancellationTokenSource _cancel = new CancellationTokenSource();
         private ManualResetEvent _wait = new ManualResetEvent(true);
         #endregion
 

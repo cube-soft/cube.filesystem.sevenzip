@@ -17,7 +17,6 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
-using System.Threading;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -70,18 +69,72 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public OperationResult Result { get; protected set; } = OperationResult.Prepare;
+        public OperationResult Result { get; protected set; } = OperationResult.OK;
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ProgressReport
+        /// ArchiveReport
         ///
         /// <summary>
         /// 進捗報告の内容を取得または設定します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        protected ArchiveReport ProgressReport { get; set; } = new ArchiveReport();
+        protected ArchiveReport ArchiveReport { get; set; } = new ArchiveReport();
+
+        #endregion
+
+        #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CallbackAction
+        /// 
+        /// <summary>
+        /// コールバック関数を実行します。
+        /// </summary>
+        /// 
+        /// <param name="action">実行する関数オブジェクト</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        protected void CallbackAction(Action action)
+        {
+            try { action(); }
+            catch (OperationCanceledException) { Result = OperationResult.UserCancel; throw; }
+            catch (Exception) { Result = OperationResult.DataError; throw; }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CallbackFunc
+        /// 
+        /// <summary>
+        /// コールバック関数を実行します。
+        /// </summary>
+        /// 
+        /// <param name="func">実行する関数オブジェクト</param>
+        /// 
+        /// <returns>関数オブジェクトの戻り値</returns>
+        /// 
+        /* ----------------------------------------------------------------- */
+        protected T CallbackFunc<T>(Func<T> func)
+        {
+            try { return func(); }
+            catch (OperationCanceledException) { Result = OperationResult.UserCancel; throw; }
+            catch (Exception) { Result = OperationResult.DataError; throw; }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Report
+        /// 
+        /// <summary>
+        /// 進捗状況を通知します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        protected void Report()
+            => CallbackAction(() => Progress?.Report(ArchiveReport));
 
         #endregion
     }

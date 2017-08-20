@@ -92,7 +92,7 @@
     <Compile Include="Details\ArchiveUpdateCallback.cs" />
     <Compile Include="Details\Parameters.cs" />
     <Compile Include="Details\PasswordQuery.cs" />
-    <Compile Include="Details\ReadOnlyArchiveCollection.cs" />
+    <Compile Include="Details\ReadOnlyArchiveList.cs" />
     <Compile Include="Details\SevenZipInterfaces.cs" />
     <Compile Include="Details\SevenZipLibrary.cs" />
     <Compile Include="Details\SevenZipOptionSetter.cs" />

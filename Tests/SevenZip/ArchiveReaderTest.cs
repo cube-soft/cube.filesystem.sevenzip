@@ -35,7 +35,7 @@ namespace Cube.FileSystem.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ArchiveReaderTest : FileResource
+    class ArchiveReaderTest : FileHandler
     {
         #region Tests
 
@@ -308,7 +308,36 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract_Throws
+        /// Extract_PermissionError
+        ///
+        /// <summary>
+        /// 書き込みできないファイルを指定した時の挙動を確認します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Extract_PermissionError()
+            => Assert.That(() =>
+            {
+                var dir  = Result("PermissionError");
+                var dest = IO.Combine(dir, @"Sample\Foo.txt");
+
+                IO.Copy(Example("Sample.txt"), dest);
+
+                var io = new Operator();
+                io.Failed += (s, e) => throw new OperationCanceledException();
+
+                using (var _ = io.OpenRead(dest))
+                using (var archive = new ArchiveReader(Example("Sample.zip"), "", io))
+                {
+                    archive.Extract(dir);
+                }
+            },
+            Throws.TypeOf<OperationCanceledException>());
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract_WrongPassword
         ///
         /// <summary>
         /// 暗号化されたファイルの展開に失敗するテストを実行します。
@@ -317,7 +346,7 @@ namespace Cube.FileSystem.Tests
         /* ----------------------------------------------------------------- */
         [TestCase("")]
         [TestCase("wrong")]
-        public void Extract_Throws(string password)
+        public void Extract_WrongPassword(string password)
             => Assert.That(() =>
             {
                 var src = Example("Password.7z");
@@ -330,7 +359,7 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract_Each_Throws
+        /// Extract_Each_WrongPassword
         ///
         /// <summary>
         /// 暗号化されたファイルの展開に失敗するテストを実行します。
@@ -338,7 +367,7 @@ namespace Cube.FileSystem.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [TestCase("")]
-        public void Extract_Each_Throws(string password)
+        public void Extract_Each_WrongPassword(string password)
             => Assert.That(() =>
             {
                 var src = Example("Password.7z");
@@ -364,7 +393,7 @@ namespace Cube.FileSystem.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Extract_UserCancel()
+        public void Extract_PasswordCancel()
         {
             var count = 0;
 
@@ -377,14 +406,14 @@ namespace Cube.FileSystem.Tests
                     archive.Extracted += (s, e) => ++count;
                     archive.Extract(Results);
                 }
-            }, Throws.TypeOf<UserCancelException>());
+            }, Throws.TypeOf<OperationCanceledException>());
 
             Assert.That(count, Is.EqualTo(1));
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract_Each_UserCancel
+        /// Extract_Each_PasswordCancel
         ///
         /// <summary>
         /// パスワード要求時にキャンセルするテストを実行します。
@@ -392,7 +421,7 @@ namespace Cube.FileSystem.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Extract_Each_UserCancel()
+        public void Extract_Each_PasswordCancel()
             => Assert.That(() =>
             {
                 var src = Example("Password.7z");
@@ -402,7 +431,51 @@ namespace Cube.FileSystem.Tests
                     foreach (var item in archive.Items) item.Extract(Results);
                 }
             },
-            Throws.TypeOf<UserCancelException>());
+            Throws.TypeOf<OperationCanceledException>());
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extracting_Throws
+        ///
+        /// <summary>
+        /// Extracting イベントで例外を送出した時の挙動を確認します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Extracting_Throws()
+            => Assert.That(() =>
+            {
+                var src = Example("Sample.zip");
+                using (var archive = new ArchiveReader(src))
+                {
+                    archive.Extracting += (s, e) => throw new ArgumentException();
+                    archive.Extract(Results);
+                }
+            },
+            Throws.TypeOf<System.IO.IOException>());
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extracted_Throws
+        ///
+        /// <summary>
+        /// Extracted イベントで例外を送出した時の挙動を確認します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Extraced_Throws()
+            => Assert.That(() =>
+            {
+                var src = Example("Sample.zip");
+                using (var archive = new ArchiveReader(src))
+                {
+                    archive.Extracted += (s, e) => throw new OperationCanceledException();
+                    archive.Extract(Results);
+                }
+            },
+            Throws.TypeOf<OperationCanceledException>());
 
         #endregion
 
@@ -821,7 +894,7 @@ namespace Cube.FileSystem.Tests
 
         #endregion
 
-        #region Helper class
+        #region Helper
 
         /* ----------------------------------------------------------------- */
         ///

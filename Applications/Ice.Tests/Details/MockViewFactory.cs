@@ -239,18 +239,23 @@ namespace Cube.FileSystem.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ShowErrorView
+        /// ShowMessageBox
         /// 
         /// <summary>
-        /// エラーメッセージを表示します。
+        /// メッセージボックスを表示します。
         /// </summary>
         /// 
-        /// <param name="e">エラー情報を保持するオブジェクト</param>
+        /// <param name="e">メッセージ内容を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public override void ShowErrorView(ValueEventArgs<Exception> e)
+        public override void ShowMessageBox(MessageEventArgs e)
         {
-            Assert.That(e.Value, Is.Not.Null);
+            Assert.That(e.Title,   Is.Not.Null);
+            Assert.That(e.Message, Is.Not.Null);
+            Assert.That(e.Icon,    Is.Not.Null);
+            Assert.That(e.Buttons, Is.Not.Null);
+
+            e.Result = System.Windows.Forms.DialogResult.Cancel;
         }
 
         #endregion

@@ -194,7 +194,11 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public void Delete(string path)
-            => Action(nameof(Delete), () => _core.Delete(path), path);
+            => Action(nameof(Delete), () =>
+            {
+                _core.SetAttributes(path, System.IO.FileAttributes.Normal);
+                _core.Delete(path);
+            }, path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -224,7 +228,11 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public System.IO.FileStream Create(string path)
-            => Func(nameof(Create), () => _core.Create(path), path);
+            => Func(nameof(Create), () =>
+            {
+                CreateParentDirectory(_core.Get(path));
+                return _core.Create(path);
+            }, path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -256,7 +264,11 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public System.IO.FileStream OpenWrite(string path)
-            => Func(nameof(OpenWrite), () => _core.OpenWrite(path), path);
+            => Func(nameof(OpenWrite), () =>
+            {
+                CreateParentDirectory(_core.Get(path));
+                return _core.OpenWrite(path);
+            }, path);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -298,7 +310,7 @@ namespace Cube.FileSystem
 
                 if (!MoveCore(di, ti)) return;
                 if (!MoveCore(si, di)) MoveCore(ti, di); // recover
-                else _core.Delete(tmp);
+                else Delete(tmp);
             }
         }
 
@@ -330,7 +342,11 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public void Copy(string src, string dest, bool overwrite)
-            => Action(nameof(Copy), () => _core.Copy(src, dest, overwrite), src, dest);
+            => Action(nameof(Copy), () =>
+            {
+                CreateParentDirectory(_core.Get(dest));
+                _core.Copy(src, dest, overwrite);
+            }, src, dest);
 
         #endregion
 
@@ -366,15 +382,26 @@ namespace Cube.FileSystem
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnFailed(FailedEventArgs e)
-        {
-            if (Failed != null) Failed(this, e);
-            else throw e.Exception;
-        }
+        protected virtual void OnFailed(FailedEventArgs e) => Failed(this, e);
 
         #endregion
 
         #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CreateParentDirectory
+        ///
+        /// <summary>
+        /// 親ディレクトリを生成します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private void CreateParentDirectory(IInformation info)
+        {
+            var dir = info.DirectoryName;
+            if (!_core.Get(dir).Exists) _core.CreateDirectory(dir);
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -388,8 +415,7 @@ namespace Cube.FileSystem
         private bool MoveCore(IInformation src, IInformation dest)
             => Action(nameof(Move), () =>
         {
-            var dir = dest.DirectoryName;
-            if (!_core.Get(dir).Exists) _core.CreateDirectory(dir);
+            CreateParentDirectory(dest);
             _core.Move(src.FullName, dest.FullName);
         }, src.FullName, dest.FullName);
 
@@ -418,6 +444,7 @@ namespace Cube.FileSystem
                 }
                 catch (Exception err)
                 {
+                    if (Failed == null) throw;
                     var args = new FailedEventArgs(name, paths, err);
                     OnFailed(args);
                     if (args.Cancel) return false;
@@ -446,6 +473,7 @@ namespace Cube.FileSystem
                 try { return func(); }
                 catch (Exception err)
                 {
+                    if (Failed == null) throw;
                     var args = new FailedEventArgs(name, paths, err);
                     OnFailed(args);
                     if (args.Cancel) return default(T);
