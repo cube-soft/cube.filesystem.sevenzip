@@ -100,7 +100,7 @@ namespace Cube.FileSystem.SevenZip
         protected void CallbackAction(Action action)
         {
             try { action(); }
-            catch (UserCancelException) { Result = OperationResult.UserCancel; throw; }
+            catch (OperationCanceledException) { Result = OperationResult.UserCancel; throw; }
             catch (Exception) { Result = OperationResult.DataError; throw; }
         }
 
@@ -120,7 +120,7 @@ namespace Cube.FileSystem.SevenZip
         protected T CallbackFunc<T>(Func<T> func)
         {
             try { return func(); }
-            catch (UserCancelException) { Result = OperationResult.UserCancel; throw; }
+            catch (OperationCanceledException) { Result = OperationResult.UserCancel; throw; }
             catch (Exception) { Result = OperationResult.DataError; throw; }
         }
 

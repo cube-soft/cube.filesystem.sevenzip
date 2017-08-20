@@ -113,7 +113,7 @@ namespace Cube.FileSystem.App.Ice
                 }
                 DeleteSource();
             }
-            catch (UserCancelException /* err */) { /* user cancel */ }
+            catch (OperationCanceledException) { /* user cancel */ }
             catch (Exception err) { Error(err); }
         }
 
@@ -381,7 +381,7 @@ namespace Cube.FileSystem.App.Ice
         {
             var e = new OverwriteEventArgs(src, dest);
             OnOverwriteRequired(e);
-            if (e.Result == OverwriteMode.Cancel) throw new UserCancelException();
+            if (e.Result == OverwriteMode.Cancel) throw new OperationCanceledException();
             OverwriteMode = e.Result;
         }
 

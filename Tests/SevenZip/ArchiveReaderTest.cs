@@ -325,7 +325,7 @@ namespace Cube.FileSystem.Tests
                 IO.Copy(Example("Sample.txt"), dest);
 
                 var io = new Operator();
-                io.Failed += (s, e) => throw new UserCancelException();
+                io.Failed += (s, e) => throw new OperationCanceledException();
 
                 using (var _ = io.OpenRead(dest))
                 using (var archive = new ArchiveReader(Example("Sample.zip"), "", io))
@@ -333,7 +333,7 @@ namespace Cube.FileSystem.Tests
                     archive.Extract(dir);
                 }
             },
-            Throws.TypeOf<UserCancelException>());
+            Throws.TypeOf<OperationCanceledException>());
 
         /* ----------------------------------------------------------------- */
         ///
@@ -406,7 +406,7 @@ namespace Cube.FileSystem.Tests
                     archive.Extracted += (s, e) => ++count;
                     archive.Extract(Results);
                 }
-            }, Throws.TypeOf<UserCancelException>());
+            }, Throws.TypeOf<OperationCanceledException>());
 
             Assert.That(count, Is.EqualTo(1));
         }
@@ -431,7 +431,7 @@ namespace Cube.FileSystem.Tests
                     foreach (var item in archive.Items) item.Extract(Results);
                 }
             },
-            Throws.TypeOf<UserCancelException>());
+            Throws.TypeOf<OperationCanceledException>());
 
         /* ----------------------------------------------------------------- */
         ///
@@ -471,11 +471,11 @@ namespace Cube.FileSystem.Tests
                 var src = Example("Sample.zip");
                 using (var archive = new ArchiveReader(src))
                 {
-                    archive.Extracted += (s, e) => throw new UserCancelException();
+                    archive.Extracted += (s, e) => throw new OperationCanceledException();
                     archive.Extract(Results);
                 }
             },
-            Throws.TypeOf<UserCancelException>());
+            Throws.TypeOf<OperationCanceledException>());
 
         #endregion
 

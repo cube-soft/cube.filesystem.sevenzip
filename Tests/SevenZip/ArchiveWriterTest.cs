@@ -149,7 +149,7 @@ namespace Cube.FileSystem.Tests
                     writer.Save(dest, query, null);
                 }
             },
-            Throws.TypeOf<UserCancelException>());
+            Throws.TypeOf<OperationCanceledException>());
 
         /* ----------------------------------------------------------------- */
         ///

@@ -18,7 +18,6 @@
 using System;
 using System.Diagnostics;
 using System.Threading;
-using Cube.FileSystem.SevenZip;
 
 namespace Cube.FileSystem.App.Ice
 {
@@ -95,7 +94,7 @@ namespace Cube.FileSystem.App.Ice
         public void Report(T value)
         {
             _wait.WaitOne();
-            if (_cancel.IsCancellationRequested) throw new UserCancelException();
+            _cancel.ThrowIfCancellationRequested();
 
             OnReport(value);
         }

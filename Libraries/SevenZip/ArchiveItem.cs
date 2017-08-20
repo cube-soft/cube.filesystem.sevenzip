@@ -581,7 +581,7 @@ namespace Cube.FileSystem.SevenZip
                     ThrowEncryption();
                     break;
                 case OperationResult.UserCancel:
-                    throw new UserCancelException();
+                    throw new OperationCanceledException();
                 default:
                     throw new System.IO.IOException($"{result}");
             }

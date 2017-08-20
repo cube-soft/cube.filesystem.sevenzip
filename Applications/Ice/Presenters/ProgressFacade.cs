@@ -640,7 +640,7 @@ namespace Cube.FileSystem.App.Ice
                 case SaveLocation.Runtime:
                     var e = new QueryEventArgs<string, string>(query, true);
                     OnDestinationRequired(e);
-                    if (e.Cancel) throw new UserCancelException();
+                    if (e.Cancel) throw new OperationCanceledException();
                     return e.Result;
                 case SaveLocation.Source:
                     return IO.Get(Request.Sources.First()).DirectoryName;
@@ -685,7 +685,7 @@ namespace Cube.FileSystem.App.Ice
             e.Cancel = ev.Result != DialogResult.Retry;
             if (ev.Result == DialogResult.Abort || ev.Result == DialogResult.Cancel)
             {
-                throw new UserCancelException();
+                throw new OperationCanceledException();
             }
         }
 

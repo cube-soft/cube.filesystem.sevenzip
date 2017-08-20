@@ -448,7 +448,7 @@ namespace Cube.FileSystem.SevenZip
                 case OperationResult.OK:
                     break;
                 case OperationResult.UserCancel:
-                    throw new UserCancelException();
+                    throw new OperationCanceledException();
                 default:
                     throw new System.IO.IOException($"{result}");
             }

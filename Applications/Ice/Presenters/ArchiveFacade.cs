@@ -99,7 +99,7 @@ namespace Cube.FileSystem.App.Ice
 
             var e = new QueryEventArgs<string, ArchiveRuntimeSettings>(path, true);
             RuntimeSettingsRequired?.Invoke(this, e);
-            if (e.Cancel) throw new UserCancelException();
+            if (e.Cancel) throw new OperationCanceledException();
 
             Runtime = e.Result;
         }
@@ -158,7 +158,7 @@ namespace Cube.FileSystem.App.Ice
                 RaiseMailRequired();
                 Open(Destination, Settings.Value.Archive.OpenDirectory);
             }
-            catch (UserCancelException /* err */) { /* user cancel */ }
+            catch (OperationCanceledException) { /* user cancel */ }
             catch (Exception err) { Error(err); }
             finally { ProgressStop(); }
         }
@@ -258,7 +258,7 @@ namespace Cube.FileSystem.App.Ice
                 {
                     var e = new QueryEventArgs<string, string>(query, true);
                     OnDestinationRequired(e);
-                    if (e.Cancel) throw new UserCancelException();
+                    if (e.Cancel) throw new OperationCanceledException();
                     path = e.Result;
                 }
 
