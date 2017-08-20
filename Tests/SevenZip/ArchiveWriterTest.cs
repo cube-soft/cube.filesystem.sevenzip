@@ -113,7 +113,7 @@ namespace Cube.FileSystem.Tests
             var dest = Result($"ZipJapanese{code}.zip");
 
             IO.Copy(Example("Sample.txt"), src, true);
-            Assert.That(IO.Get(src).Exists, Is.True);
+            Assert.That(IO.Exists(src), Is.True);
 
             using (var writer = new ArchiveWriter(fmt))
             {

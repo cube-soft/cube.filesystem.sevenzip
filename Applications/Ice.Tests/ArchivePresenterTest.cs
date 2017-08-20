@@ -83,7 +83,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                 Assert.That(ap.View.Value,      Is.EqualTo(100));
             }
 
-            Assert.That(IO.Get(Result(dest)).Exists, Is.True);
+            Assert.That(IO.Exists(Result(dest)), Is.True);
         }
 
         /* ----------------------------------------------------------------- */
@@ -118,7 +118,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                 Assert.That(ap.View.Visible, Is.False, "Timeout");
             }
 
-            Assert.That(IO.Get(dest).Exists, Is.True);
+            Assert.That(IO.Exists(dest), Is.True);
         }
 
         /* ----------------------------------------------------------------- */
@@ -156,8 +156,8 @@ namespace Cube.FileSystem.App.Ice.Tests
                 Assert.That(tmp, Is.Not.Null.And.Not.Empty);
             }
 
-            Assert.That(IO.Get(dest).Exists, Is.True);
-            Assert.That(IO.Get(tmp).Exists, Is.False);
+            Assert.That(IO.Exists(dest), Is.True);
+            Assert.That(IO.Exists(tmp), Is.False);
         }
 
         /* ----------------------------------------------------------------- */
@@ -187,7 +187,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                 Assert.That(ap.View.Visible, Is.False, "Timeout");
             }
 
-            Assert.That(IO.Get(dest).Exists, Is.False);
+            Assert.That(IO.Exists(dest), Is.False);
         }
 
         /* ----------------------------------------------------------------- */

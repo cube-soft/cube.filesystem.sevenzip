@@ -64,7 +64,7 @@ namespace Cube.FileSystem.App.Ice.Tests
 
             Views.Configure(_mock);
 
-            if (!IO.Get(Results).Exists) IO.CreateDirectory(Results);
+            if (!IO.Exists(Results)) IO.CreateDirectory(Results);
             Delete(Results);
         }
 

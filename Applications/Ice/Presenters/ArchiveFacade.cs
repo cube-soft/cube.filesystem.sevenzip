@@ -197,7 +197,7 @@ namespace Cube.FileSystem.App.Ice
             }
 
             // Move
-            if (string.IsNullOrEmpty(Tmp) || !IO.Get(Tmp).Exists) return;
+            if (string.IsNullOrEmpty(Tmp) || !IO.Exists(Tmp)) return;
             IO.Move(Tmp, Destination, true);
         }
 
@@ -254,7 +254,7 @@ namespace Cube.FileSystem.App.Ice
                 var runtime = kv.Key == SaveLocation.Runtime;
                 var path    = runtime ? kv.Value : AddFileName(kv.Value, format);
 
-                if (!runtime && IO.Get(path).Exists)
+                if (!runtime && IO.Exists(path))
                 {
                     var e = new QueryEventArgs<string, string>(query, true);
                     OnDestinationRequired(e);

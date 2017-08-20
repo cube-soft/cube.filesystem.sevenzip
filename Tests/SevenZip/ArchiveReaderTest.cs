@@ -94,10 +94,10 @@ namespace Cube.FileSystem.Tests
                 }
             }
 
-            Assert.That(IO.Get(IO.Combine(dest, @"Sample")).Exists,         Is.True );
-            Assert.That(IO.Get(IO.Combine(dest, @"Sample\Foo.txt")).Exists, Is.False);
-            Assert.That(IO.Get(IO.Combine(dest, @"Sample\Bar.txt")).Exists, Is.False);
-            Assert.That(IO.Get(IO.Combine(dest, @"Sample\Bas.txt")).Exists, Is.False);
+            Assert.That(IO.Exists(IO.Combine(dest, @"Sample")),         Is.True );
+            Assert.That(IO.Exists(IO.Combine(dest, @"Sample\Foo.txt")), Is.False);
+            Assert.That(IO.Exists(IO.Combine(dest, @"Sample\Bar.txt")), Is.False);
+            Assert.That(IO.Exists(IO.Combine(dest, @"Sample\Bas.txt")), Is.False);
         }
 
         /* ----------------------------------------------------------------- */
@@ -255,13 +255,13 @@ namespace Cube.FileSystem.Tests
                 archive.Extract(dest);
             }
 
-            Assert.That(IO.Get(IO.Combine(dest, @"フィルタリング テスト用")).Exists,              Is.True);
-            Assert.That(IO.Get(IO.Combine(dest, @"フィルタリング テスト用\.DS_Store")).Exists,    Is.False);
-            Assert.That(IO.Get(IO.Combine(dest, @"フィルタリング テスト用\desktop.ini")).Exists,  Is.False);
-            Assert.That(IO.Get(IO.Combine(dest, @"フィルタリング テスト用\DS_Store.txt")).Exists, Is.True);
-            Assert.That(IO.Get(IO.Combine(dest, @"フィルタリング テスト用\Thumbs.db")).Exists,    Is.False);
-            Assert.That(IO.Get(IO.Combine(dest, @"フィルタリング テスト用\__MACOSX")).Exists,     Is.False);
-            Assert.That(IO.Get(IO.Combine(dest, @"フィルタリング テスト用\フィルタリングされないファイル.txt")).Exists, Is.True);
+            Assert.That(IO.Exists(IO.Combine(dest, @"フィルタリング テスト用")),              Is.True);
+            Assert.That(IO.Exists(IO.Combine(dest, @"フィルタリング テスト用\.DS_Store")),    Is.False);
+            Assert.That(IO.Exists(IO.Combine(dest, @"フィルタリング テスト用\desktop.ini")),  Is.False);
+            Assert.That(IO.Exists(IO.Combine(dest, @"フィルタリング テスト用\DS_Store.txt")), Is.True);
+            Assert.That(IO.Exists(IO.Combine(dest, @"フィルタリング テスト用\Thumbs.db")),    Is.False);
+            Assert.That(IO.Exists(IO.Combine(dest, @"フィルタリング テスト用\__MACOSX")),     Is.False);
+            Assert.That(IO.Exists(IO.Combine(dest, @"フィルタリング テスト用\フィルタリングされないファイル.txt")), Is.True);
         }
 
         /* ----------------------------------------------------------------- */
@@ -285,25 +285,25 @@ namespace Cube.FileSystem.Tests
                 archive.Extract(dest);
             }
 
-            Assert.That(IO.Get(IO.Combine(dest, @"NUL")).Exists,                Is.False);
-            Assert.That(IO.Get(IO.Combine(dest, @"_NUL")).Exists,               Is.True);
-            Assert.That(IO.Get(IO.Combine(dest, @"_NUL\_CON\_CON.txt")).Exists, Is.True);
-            Assert.That(IO.Get(IO.Combine(dest, @"_NUL\_CON\_AUX.txt")).Exists, Is.True);
-            Assert.That(IO.Get(IO.Combine(dest, @"_NUL\_CON\_PRN.txt")).Exists, Is.True);
-            Assert.That(IO.Get(IO.Combine(dest, @"_NUL\_CON\abf.txt")).Exists,  Is.True);
-            Assert.That(IO.Get(IO.Combine(dest, @"_NUL\_AUX\_CON.txt")).Exists, Is.True);
-            Assert.That(IO.Get(IO.Combine(dest, @"_NUL\_AUX\_AUX.txt")).Exists, Is.True);
-            Assert.That(IO.Get(IO.Combine(dest, @"_NUL\_AUX\_PRN.txt")).Exists, Is.True);
-            Assert.That(IO.Get(IO.Combine(dest, @"_NUL\_AUX\abf.txt")).Exists,  Is.True);
-            Assert.That(IO.Get(IO.Combine(dest, @"_NUL\abf\_CON.txt")).Exists,  Is.True);
-            Assert.That(IO.Get(IO.Combine(dest, @"_NUL\abf\_AUX.txt")).Exists,  Is.True);
-            Assert.That(IO.Get(IO.Combine(dest, @"_NUL\abf\_PRN.txt")).Exists,  Is.True);
-            Assert.That(IO.Get(IO.Combine(dest, @"_NUL\abf\abf.txt")).Exists,   Is.True);
-            Assert.That(IO.Get(IO.Combine(dest, @"_CON")).Exists,               Is.True);
-            Assert.That(IO.Get(IO.Combine(dest, @"_CON.txt")).Exists,           Is.True);
-            Assert.That(IO.Get(IO.Combine(dest, @"CON.txt")).Exists,            Is.False);
-            Assert.That(IO.Get(IO.Combine(dest, @"abf")).Exists,                Is.True);
-            Assert.That(IO.Get(IO.Combine(dest, @"abf.txt")).Exists,            Is.True);
+            Assert.That(IO.Exists(IO.Combine(dest, @"NUL")),                Is.False);
+            Assert.That(IO.Exists(IO.Combine(dest, @"_NUL")),               Is.True);
+            Assert.That(IO.Exists(IO.Combine(dest, @"_NUL\_CON\_CON.txt")), Is.True);
+            Assert.That(IO.Exists(IO.Combine(dest, @"_NUL\_CON\_AUX.txt")), Is.True);
+            Assert.That(IO.Exists(IO.Combine(dest, @"_NUL\_CON\_PRN.txt")), Is.True);
+            Assert.That(IO.Exists(IO.Combine(dest, @"_NUL\_CON\abf.txt")),  Is.True);
+            Assert.That(IO.Exists(IO.Combine(dest, @"_NUL\_AUX\_CON.txt")), Is.True);
+            Assert.That(IO.Exists(IO.Combine(dest, @"_NUL\_AUX\_AUX.txt")), Is.True);
+            Assert.That(IO.Exists(IO.Combine(dest, @"_NUL\_AUX\_PRN.txt")), Is.True);
+            Assert.That(IO.Exists(IO.Combine(dest, @"_NUL\_AUX\abf.txt")),  Is.True);
+            Assert.That(IO.Exists(IO.Combine(dest, @"_NUL\abf\_CON.txt")),  Is.True);
+            Assert.That(IO.Exists(IO.Combine(dest, @"_NUL\abf\_AUX.txt")),  Is.True);
+            Assert.That(IO.Exists(IO.Combine(dest, @"_NUL\abf\_PRN.txt")),  Is.True);
+            Assert.That(IO.Exists(IO.Combine(dest, @"_NUL\abf\abf.txt")),   Is.True);
+            Assert.That(IO.Exists(IO.Combine(dest, @"_CON")),               Is.True);
+            Assert.That(IO.Exists(IO.Combine(dest, @"_CON.txt")),           Is.True);
+            Assert.That(IO.Exists(IO.Combine(dest, @"CON.txt")),            Is.False);
+            Assert.That(IO.Exists(IO.Combine(dest, @"abf")),                Is.True);
+            Assert.That(IO.Exists(IO.Combine(dest, @"abf.txt")),            Is.True);
         }
 
         /* ----------------------------------------------------------------- */

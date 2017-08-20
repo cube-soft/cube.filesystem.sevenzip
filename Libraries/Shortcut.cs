@@ -161,7 +161,7 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public bool Exists
-            => !string.IsNullOrEmpty(FileName) && _io.Get(FullName).Exists;
+            => !string.IsNullOrEmpty(FileName) && _io.Exists(FullName);
 
         #endregion
 
@@ -178,7 +178,7 @@ namespace Cube.FileSystem
         /* ----------------------------------------------------------------- */
         public void Create()
         {
-            if (string.IsNullOrEmpty(Link) || !_io.Get(Link).Exists) return;
+            if (string.IsNullOrEmpty(Link) || !_io.Exists(Link)) return;
 
             var guid = new Guid("00021401-0000-0000-C000-000000000046");
             var type = Type.GetTypeFromCLSID(guid);
