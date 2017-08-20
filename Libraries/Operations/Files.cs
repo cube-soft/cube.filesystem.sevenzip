@@ -66,7 +66,7 @@ namespace Cube.FileSystem.Files
         {
             if (string.IsNullOrEmpty(path)) return null;
 
-            var dest   = new SHFILEINFO();
+            var dest   = new Shell32.SHFILEINFO();
             var result = Shell32.NativeMethods.SHGetFileInfo(path,
                 0x0080, // FILE_ATTRIBUTE_NORMAL
                 ref dest,

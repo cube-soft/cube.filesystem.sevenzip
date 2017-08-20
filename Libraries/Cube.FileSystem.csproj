@@ -85,16 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Details\IShellLink.cs" />
-    <Compile Include="Drives\Device.cs" />
-    <Compile Include="Drives\DeviceNumber.cs" />
-    <Compile Include="Drives\Drive.cs" />
-    <Compile Include="Drives\VetoException.cs" />
-    <Compile Include="NativeMethods\Structures\SHFileInfo.cs" />
-    <Compile Include="NativeMethods\Structures\SpDevice.cs" />
-    <Compile Include="NativeMethods\Kernel32.cs" />
-    <Compile Include="NativeMethods\SetupApi.cs" />
     <Compile Include="NativeMethods\Shell32.cs" />
-    <Compile Include="NativeMethods\WinMM.cs" />
     <Compile Include="Operations\Files.cs" />
     <Compile Include="Alpha.cs" />
     <Compile Include="FailedEventArgs.cs" />
