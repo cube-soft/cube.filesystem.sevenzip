@@ -33,7 +33,7 @@ namespace Cube.FileSystem.Tests
     /* --------------------------------------------------------------------- */
     [Parallelizable]
     [TestFixture]
-    class OperatorTest : FileResource
+    class OperatorTest : FileHandler
     {
         #region Tests
 

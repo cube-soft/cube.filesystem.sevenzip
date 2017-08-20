@@ -34,7 +34,7 @@ namespace Cube.FileSystem.Tests
     /* --------------------------------------------------------------------- */
     [Parallelizable]
     [TestFixture]
-    class DriveTest : FileResource
+    class DriveTest : FileHandler
     {
         /* ----------------------------------------------------------------- */
         ///

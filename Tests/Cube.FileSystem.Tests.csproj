@@ -83,7 +83,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Details\FileResource.cs" />
+    <Compile Include="Details\FileHandler.cs" />
     <Compile Include="SevenZip\ArchiveReaderTest.cs" />
     <Compile Include="SevenZip\ArchiveWriterTest.cs" />
     <Compile Include="SevenZip\FormatTest.cs" />
