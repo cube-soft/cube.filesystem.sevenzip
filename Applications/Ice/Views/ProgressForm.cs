@@ -78,10 +78,15 @@ namespace Cube.FileSystem.App.Ice
             {
                 if (MainProgressBar.Value == value) return;
 
+                MainProgressBar.Style = value > 0 ?
+                                        ProgressBarStyle.Continuous :
+                                        ProgressBarStyle.Marquee;
+
                 var min = MainProgressBar.Minimum;
                 var max = MainProgressBar.Maximum;
                 MainProgressBar.Value = Math.Min(Math.Max(value, min), max);
 
+                ExitButton.Enabled    =
                 SuspendButton.Enabled = value > 0;
 
                 UpdateTitle();
@@ -110,10 +115,6 @@ namespace Cube.FileSystem.App.Ice
             {
                 if (MainProgressBar.Maximum == value) return;
                 MainProgressBar.Maximum = value;
-                MainProgressBar.Style   = value > 0 ?
-                                          ProgressBarStyle.Continuous :
-                                          ProgressBarStyle.Marquee;
-                ExitButton.Enabled      = value > 0;
             }
         }
 
