@@ -184,6 +184,19 @@ namespace Cube.FileSystem
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Exists
+        ///
+        /// <summary>
+        /// ファイルまたはディレクトリが存在するかどうかを判別します。
+        /// </summary>
+        /// 
+        /// <param name="path">対象となるパス</param>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public bool Exists(string path) => _core.Exists(path);
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Delete
         ///
         /// <summary>
@@ -196,6 +209,7 @@ namespace Cube.FileSystem
         public void Delete(string path)
             => Action(nameof(Delete), () =>
             {
+                if (!_core.Exists(path)) return;
                 _core.SetAttributes(path, System.IO.FileAttributes.Normal);
                 _core.Delete(path);
             }, path);
@@ -400,7 +414,7 @@ namespace Cube.FileSystem
         private void CreateParentDirectory(IInformation info)
         {
             var dir = info.DirectoryName;
-            if (!_core.Get(dir).Exists) _core.CreateDirectory(dir);
+            if (!_core.Exists(dir)) _core.CreateDirectory(dir);
         }
 
         /* ----------------------------------------------------------------- */

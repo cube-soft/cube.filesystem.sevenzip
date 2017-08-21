@@ -114,7 +114,7 @@ namespace Cube.FileSystem.Files
             {
                 var name = $"{info.NameWithoutExtension}({i}){info.Extension}";
                 var dest = io.Combine(info.DirectoryName, name);
-                if (!io.Get(dest).Exists) return dest;
+                if (!io.Exists(dest)) return dest;
             }
         }
     }

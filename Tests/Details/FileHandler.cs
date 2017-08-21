@@ -61,7 +61,7 @@ namespace Cube.FileSystem.Tests
             Root = IO.Get(reader.Location).DirectoryName;
             _directory = GetType().FullName.Replace($"{reader.Product}.", "");
 
-            if (!IO.Get(Results).Exists) IO.CreateDirectory(Results);
+            if (!IO.Exists(Results)) IO.CreateDirectory(Results);
             Delete(Results);
         }
 

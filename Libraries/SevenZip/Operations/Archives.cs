@@ -73,7 +73,7 @@ namespace Cube.FileSystem.SevenZip.Archives
         {
             if (!item.IsDirectory) return;
             var path = io.Combine(root, item.FullName);
-            if (!io.Get(path).Exists) io.CreateDirectory(path);
+            if (!io.Exists(path)) io.CreateDirectory(path);
             SetAttributes(item, root, io);
         }
 
@@ -112,7 +112,7 @@ namespace Cube.FileSystem.SevenZip.Archives
         public static void SetAttributes(this ArchiveItem item, string root, Operator io)
         {
             var path = io.Combine(root, item.FullName);
-            if (!io.Get(path).Exists) return;
+            if (!io.Exists(path)) return;
 
             io.SetAttributes(path, item.Attributes);
             SetCreationTime(item, path, io);

@@ -90,8 +90,8 @@ namespace Cube.FileSystem.App.Ice.Tests
                 Assert.That(tmp, Is.Not.Null.And.Not.Empty);
             }
 
-            Assert.That(IO.Get(Result(check)).Exists, Is.True);
-            Assert.That(IO.Get(tmp).Exists, Is.False);
+            Assert.That(IO.Exists(Result(check)), Is.True);
+            Assert.That(IO.Exists(tmp), Is.False);
         }
 
         /* ----------------------------------------------------------------- */
@@ -121,8 +121,8 @@ namespace Cube.FileSystem.App.Ice.Tests
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
             }
 
-            Assert.That(IO.Get(Result(@"Overwrite\Foo(2).txt")).Exists, Is.True);
-            Assert.That(IO.Get(Result(@"Overwrite\Directory\Empty(2).txt")).Exists, Is.True);
+            Assert.That(IO.Exists(Result(@"Overwrite\Foo(2).txt")), Is.True);
+            Assert.That(IO.Exists(Result(@"Overwrite\Directory\Empty(2).txt")), Is.True);
         }
 
         /* ----------------------------------------------------------------- */
@@ -187,7 +187,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
             }
 
-            Assert.That(IO.Get(Result(@"Suspend\Complex")).Exists, Is.True);
+            Assert.That(IO.Exists(Result(@"Suspend\Complex")), Is.True);
         }
 
         /* ----------------------------------------------------------------- */
@@ -215,8 +215,8 @@ namespace Cube.FileSystem.App.Ice.Tests
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
             }
 
-            Assert.That(IO.Get(Result(@"DeleteSource\Complex")).Exists, Is.True);
-            Assert.That(IO.Get(src).Exists, Is.False);
+            Assert.That(IO.Exists(Result(@"DeleteSource\Complex")), Is.True);
+            Assert.That(IO.Exists(src), Is.False);
         }
 
         /* ----------------------------------------------------------------- */

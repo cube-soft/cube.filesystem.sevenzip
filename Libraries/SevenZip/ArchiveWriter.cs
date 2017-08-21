@@ -266,7 +266,7 @@ namespace Cube.FileSystem.SevenZip
             IProgress<ArchiveReport> progress, IList<FileItem> items)
         {
             var sfx = (Option as ExecutableOption)?.Module;
-            if (string.IsNullOrEmpty(sfx) || !_io.Get(sfx).Exists)
+            if (string.IsNullOrEmpty(sfx) || !_io.Exists(sfx))
             {
                 throw new System.IO.FileNotFoundException("SFX");
             }
@@ -284,7 +284,7 @@ namespace Cube.FileSystem.SevenZip
                     using (var src = _io.OpenRead(tmp)) src.CopyTo(dest);
                 }
             }
-            finally { if (_io.Get(tmp).Exists) _io.Delete(tmp); }
+            finally { _io.Delete(tmp); }
         }
 
         /* ----------------------------------------------------------------- */
@@ -324,7 +324,7 @@ namespace Cube.FileSystem.SevenZip
                         break;
                 }
             }
-            finally { if (_io.Get(dir).Exists) _io.Delete(dir); }
+            finally { _io.Delete(dir); }
         }
 
         /* ----------------------------------------------------------------- */

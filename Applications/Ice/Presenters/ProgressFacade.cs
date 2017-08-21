@@ -608,8 +608,7 @@ namespace Cube.FileSystem.App.Ice
             try
             {
                 IO.Failed -= WhenFailed;
-                if (string.IsNullOrEmpty(Tmp)) return;
-                else if (IO.Get(Tmp).Exists) IO.Delete(Tmp);
+                if (!string.IsNullOrEmpty(Tmp)) IO.Delete(Tmp);
             }
             catch (Exception err) { this.LogWarn(err.ToString(), err); }
             finally { _disposed = true; }
