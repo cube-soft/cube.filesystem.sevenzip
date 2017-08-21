@@ -227,10 +227,10 @@
     <value>この場所には同じ名前のファイルが既に存在します。上書きしますか？</value>
   </data>
   <data name="MessagePreArchive" xml:space="preserve">
-    <value>ファイルを圧縮する準備をしています...</value>
+    <value>ファイルを圧縮する準備をしています。この操作には数分かかる事があります。</value>
   </data>
   <data name="MessagePreExtract" xml:space="preserve">
-    <value>ファイルを解凍する準備をしています...</value>
+    <value>ファイルを解凍する準備をしています。この操作には数分かかる事があります。</value>
   </data>
   <data name="MessageRemainTime" xml:space="preserve">
     <value>残り時間</value>

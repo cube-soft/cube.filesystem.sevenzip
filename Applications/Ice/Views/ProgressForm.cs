@@ -78,10 +78,6 @@ namespace Cube.FileSystem.App.Ice
             {
                 if (MainProgressBar.Value == value) return;
 
-                MainProgressBar.Style = value > 0 ?
-                                        ProgressBarStyle.Continuous :
-                                        ProgressBarStyle.Marquee;
-
                 var min = MainProgressBar.Minimum;
                 var max = MainProgressBar.Maximum;
                 MainProgressBar.Value = Math.Min(Math.Max(value, min), max);
@@ -101,6 +97,11 @@ namespace Cube.FileSystem.App.Ice
         /// 進捗状況を示す値の単位を取得または設定します。
         /// </summary>
         /// 
+        /// <remarks>
+        /// Unit が決定されるまでは Progress イベントが発生しないため、
+        /// キャンセル不可能に設定しています。
+        /// </remarks>
+        /// 
         /* ----------------------------------------------------------------- */
         public int Unit
         {
@@ -109,6 +110,10 @@ namespace Cube.FileSystem.App.Ice
             {
                 if (MainProgressBar.Maximum == value) return;
                 MainProgressBar.Maximum = value;
+                MainProgressBar.Style   = value > 0 ?
+                                          ProgressBarStyle.Continuous :
+                                          ProgressBarStyle.Marquee;
+                ExitButton.Enabled      = value > 0;
             }
         }
 
