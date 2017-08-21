@@ -394,7 +394,7 @@ namespace Cube.FileSystem.App.Ice.Properties {
         }
         
         /// <summary>
-        ///   ファイルを圧縮する準備をしています... に類似しているローカライズされた文字列を検索します。
+        ///   ファイルを圧縮する準備をしています。この操作には数分かかる事があります。 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MessagePreArchive {
             get {
@@ -403,7 +403,7 @@ namespace Cube.FileSystem.App.Ice.Properties {
         }
         
         /// <summary>
-        ///   ファイルを解凍する準備をしています... に類似しているローカライズされた文字列を検索します。
+        ///   ファイルを解凍する準備をしています。この操作には数分かかる事があります。 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MessagePreExtract {
             get {
