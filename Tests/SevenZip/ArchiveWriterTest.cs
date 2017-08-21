@@ -18,6 +18,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Cube.FileSystem.SevenZip;
 using NUnit.Framework;
@@ -192,20 +193,51 @@ namespace Cube.FileSystem.Tests
 
                 IO.Copy(Example("Sample.txt"), src);
 
-                using (var _ = System.IO.File.Open(
-                    src,
-                    System.IO.FileMode.Open,
-                    System.IO.FileAccess.ReadWrite,
-                    System.IO.FileShare.None
-                )) {
-                    using (var writer = new ArchiveWriter(Format.Zip))
-                    {
-                        writer.Add(src);
-                        writer.Save(IO.Combine(dir, "Sample.zip"));
-                    }
+                using (var _ = OpenExclude(src))
+                using (var writer = new ArchiveWriter(Format.Zip))
+                {
+                    writer.Add(src);
+                    writer.Save(IO.Combine(dir, "Sample.zip"));
                 }
             },
             Throws.TypeOf<System.IO.IOException>());
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Archive_Ignore
+        ///
+        /// <summary>
+        /// 一部のファイルを無視して圧縮するテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Archive_Skip()
+        {
+            var dir    = Result("Ignore");
+            var ignore = IO.Combine(dir, "Sample.txt");
+
+            var io = new Operator();
+            io.Failed += (s, e) => e.Cancel = true;
+            io.Copy(Example("Sample.txt"), ignore);
+
+            var dest = io.Combine(dir, "Sample.zip");
+
+            using (var _ = OpenExclude(ignore))
+            using (var writer = new ArchiveWriter(Format.Zip, io))
+            {
+                writer.Add(ignore);
+                writer.Add(Example("Archive"));
+                writer.Save(dest);
+            }
+
+            using (var reader = new ArchiveReader(dest))
+            {
+                foreach (var item in reader.Items) System.Diagnostics.Debug.WriteLine(item.FullName);
+                Assert.That(reader.Items.Count, Is.EqualTo(7));
+                Assert.That(reader.Items.Any(x => x.FullName == "Sample.txt"), Is.False);
+            }
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -416,6 +448,22 @@ namespace Cube.FileSystem.Tests
             var dir = System.IO.Path.GetDirectoryName(asm);
             return System.IO.Path.Combine(dir, filename);
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OpenExclude
+        ///
+        /// <summary>
+        /// ファイルを排他モードで開きます。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private System.IO.Stream OpenExclude(string path)
+            => System.IO.File.Open(path,
+                System.IO.FileMode.Open,
+                System.IO.FileAccess.ReadWrite,
+                System.IO.FileShare.None
+            );
 
         #endregion
     }
