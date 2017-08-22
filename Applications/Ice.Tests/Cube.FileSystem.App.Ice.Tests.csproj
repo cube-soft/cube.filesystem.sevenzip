@@ -101,7 +101,7 @@
     <Compile Include="ExtractPresenterTest.cs" />
     <Compile Include="PresetMenuTest.cs" />
     <Compile Include="RequestTest.cs" />
-    <Compile Include="ViewDataSourceTest.cs" />
+    <Compile Include="ArchiveDetailsDataTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

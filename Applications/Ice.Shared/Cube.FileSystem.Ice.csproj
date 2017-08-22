@@ -81,7 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Conversions\PresetMenu.cs" />
-    <Compile Include="Settings\ArchiveRuntimeSettings.cs" />
+    <Compile Include="Settings\ArchiveDetails.cs" />
     <Compile Include="Settings\ArchiveSettings.cs" />
     <Compile Include="Settings\AssociateSettings.cs" />
     <Compile Include="Settings\ContextSettings.cs" />
