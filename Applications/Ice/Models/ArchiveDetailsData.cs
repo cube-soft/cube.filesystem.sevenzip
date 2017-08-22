@@ -22,14 +22,14 @@ namespace Cube.FileSystem.App.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// SettingsViewDataSource
+    /// ArchiveDetailsData
     ///
     /// <summary>
-    /// SettingsView の表示時に使用するデータを定義したクラスです。
+    /// ArchiveDetailsForm の表示時に使用するデータを定義したクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public static class SettingsViewDataSource
+    public static class ArchiveDetailsData
     {
         #region Properties
 

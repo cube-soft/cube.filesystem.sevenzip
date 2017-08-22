@@ -180,7 +180,7 @@ namespace Cube.FileSystem.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ShowRuntimeSettingsView
+        /// ShowArchiveDetailsView
         /// 
         /// <summary>
         /// 圧縮の詳細設定用画面を表示します。
@@ -189,12 +189,12 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// <param name="e">詳細設定を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public override void ShowRuntimeSettingsView(QueryEventArgs<string, ArchiveRuntimeSettings> e)
+        public override void ShowArchiveDetailsView(QueryEventArgs<string, ArchiveDetails> e)
         {
             var format = SevenZip.Formats.FromExtension(System.IO.Path.GetExtension(e.Query));
 
             e.Cancel = false;
-            e.Result = new ArchiveRuntimeSettings(format)
+            e.Result = new ArchiveDetails(format)
             {
                 Path              = Settings.Destination,
                 Password          = Settings.Password,
