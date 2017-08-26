@@ -107,8 +107,12 @@ namespace Cube.FileSystem.App.Ice
                 {
                     this.LogDebug($"Format:{reader.Format}\tSource:{Source}");
 
-                    SetDirectories(reader);
-                    Extract(reader);
+                    var dest = GetSaveLocation(Settings.Value.Extract, Source);
+                    SetTmp(dest.Value);
+
+                    if (reader.Items.Count == 1) ExtractTar(reader, dest);
+                    else Extract(reader, dest);
+
                     Open(IO.Combine(Destination, OpenDirectoryName), Settings.Value.Extract.OpenDirectory);
                 }
                 DeleteSource();
@@ -123,6 +127,78 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// SetDirectories
+        /// 
+        /// <summary>
+        /// Destination, Tmp および OpenDirectoryName を設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void SetDirectories(ArchiveReader reader, KeyValuePair<SaveLocation, string> dest)
+        {
+            var src = IO.Get(Source).NameWithoutExtension;
+            var m = Settings.Value.Extract.RootDirectory;
+
+            if (m.HasFlag(CreateDirectoryMethod.Create))
+            {
+                if ((m & CreateDirectoryMethod.SkipOptions) != 0)
+                {
+                    var ds = SeekRootDirectory(reader);
+                    var one = IsSingleFileOrDirectory(m, ds);
+
+                    Destination = one ? dest.Value : IO.Combine(dest.Value, src);
+                    SetOpenDirectoryName(ds);
+                }
+                else
+                {
+                    Destination = IO.Combine(dest.Value, src);
+                    SetOpenDirectoryName(null);
+                }
+            }
+            else
+            {
+                Destination = dest.Value;
+                SetOpenDirectoryName(SeekRootDirectory(reader));
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ExtractTar
+        /// 
+        /// <summary>
+        /// TAR 形式の圧縮ファイルを展開します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void ExtractTar(ArchiveReader reader, KeyValuePair<SaveLocation, string> dest)
+        {
+            try
+            {
+                var item = reader.Items[0];
+                var path = IO.Combine(Tmp, item.FullName);
+
+                ProgressStart();
+                WhenExtracting(this, ValueEventArgs.Create(item));
+                item.Extract(Tmp, CreateInnerProgress(e => ProgressReport = e));
+
+                if (Formats.FromFile(path) == Format.Tar)
+                {
+                    var query = new Query<string, string>(x => OnPasswordRequired(x));
+                    using (var r = new ArchiveReader(path, query, IO)) Extract(r, dest);
+                }
+                else
+                {
+                    SetDirectories(reader, dest);
+                    WhenExtracted(this, ValueEventArgs.Create(item));
+                    ProgressResult();
+                }
+            }
+            finally { ProgressStop(); }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Extract
         /// 
         /// <summary>
@@ -130,10 +206,11 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Extract(ArchiveReader reader)
+        private void Extract(ArchiveReader reader, KeyValuePair<SaveLocation, string> dest)
         {
             try
             {
+                SetDirectories(reader, dest);
                 if (Settings.Value.Extract.Filtering) reader.Filters = Settings.Value.GetFilters();
 
                 reader.Extracting += WhenExtracting;
@@ -174,52 +251,13 @@ namespace Cube.FileSystem.App.Ice
             {
                 try
                 {
+
                     src.Extract(Tmp, progress);
                     retry = false;
                 }
                 catch (EncryptionException /* err */) { retry = true; }
             }
             while (retry);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SetDirectories
-        /// 
-        /// <summary>
-        /// Destination, Tmp および OpenDirectoryName を設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void SetDirectories(ArchiveReader reader)
-        {
-            var src  = IO.Get(Source).NameWithoutExtension;
-            var dest = GetSaveLocation(Settings.Value.Extract, Source);
-            var m    = Settings.Value.Extract.RootDirectory;
-
-            if (m.HasFlag(CreateDirectoryMethod.Create))
-            {
-                if ((m & CreateDirectoryMethod.SkipOptions) != 0)
-                {
-                    var ds  = SeekRootDirectory(reader);
-                    var one = IsSingleFileOrDirectory(m, ds);
-
-                    Destination = one ? dest.Value : IO.Combine(dest.Value, src);
-                    SetOpenDirectoryName(ds);
-                }
-                else
-                {
-                    Destination = IO.Combine(dest.Value, src);
-                    SetOpenDirectoryName(null);
-                }
-            }
-            else
-            {
-                Destination = dest.Value;
-                SetOpenDirectoryName(SeekRootDirectory(reader));
-            }
-
-            SetTmp(dest.Value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -318,6 +356,7 @@ namespace Cube.FileSystem.App.Ice
 
             foreach (var item in items)
             {
+                if (string.IsNullOrEmpty(item.FullName)) continue;
                 var root = GetRootDirectory(item, "*"); // Count all files as "*"
                 var key = root.ToLower();
                 if (!dest.ContainsKey(key)) dest.Add(key, root);

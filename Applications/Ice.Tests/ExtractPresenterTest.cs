@@ -640,6 +640,81 @@ namespace Cube.FileSystem.App.Ice.Tests
                     @"RootDirectory\Complex-0x07\Complex",
                     5L
                 );
+
+                yield return new TestCaseData("Sample.tar", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[]
+                    {
+                        "/o:source",
+                        @"/drop:Tar",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation = SaveLocation.Others,
+                        RootDirectory = CreateDirectoryMethod.CreateSmart,
+                    },
+                    @"Tar\TarSample",
+                    4L
+                );
+
+                yield return new TestCaseData("Sample.tbz", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[]
+                    {
+                        "/o:source",
+                        @"/drop:Tar\BZipSample",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = CreateDirectoryMethod.CreateSmart,
+                    },
+                    @"Tar\BZipSample\TarSample",
+                    4L
+                );
+
+                yield return new TestCaseData("Sample.tgz", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[]
+                    {
+                        "/o:source",
+                        @"/drop:Tar\GZipSample",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = CreateDirectoryMethod.CreateSmart,
+                    },
+                    @"Tar\GZipSample\TarSample",
+                    4L
+                );
+
+                yield return new TestCaseData("Sample.tar.lzma", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[]
+                    {
+                        "/o:source",
+                        @"/drop:Tar\LzmaSample",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = CreateDirectoryMethod.CreateSmart,
+                    },
+                    @"Tar\LzmaSample\Sample",
+                    5L
+                );
+
+                yield return new TestCaseData("Sample.tar.z", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[]
+                    {
+                        "/o:source",
+                        @"/drop:Tar\LzwSample",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = CreateDirectoryMethod.CreateSmart,
+                    },
+                    @"Tar\LzwSample\Sample",
+                    5L
+                );
             }
         }
 
