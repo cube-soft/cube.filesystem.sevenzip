@@ -217,7 +217,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void SetCompleted(ref ulong bytes)
         {
-            var cvt = Math.Max((long)bytes - _hack, 0);
+            var cvt = Math.Min(Math.Max((long)bytes - _hack, 0), ArchiveReport.TotalBytes);
             ArchiveReport.Bytes = cvt;
             Report();
         }
