@@ -176,7 +176,7 @@ namespace Cube.FileSystem
         /// 
         /* ----------------------------------------------------------------- */
         public bool Exists(string path)
-            => Directory.Exists(path) || File.Exists(path);
+            => File.Exists(path) || Directory.Exists(path);
 
         /* ----------------------------------------------------------------- */
         ///
