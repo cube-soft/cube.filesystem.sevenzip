@@ -559,8 +559,11 @@ namespace Cube.FileSystem.App.Ice.Tests.Settings
             m0.Startup.Name = "cubeice-test";
             m0.Value.Shortcut.Directory = GetTmpDirectory();
 
-            var vm0 = new SettingsViewModel(m0) { InstallMode = install };
-            vm0.CheckUpdate = true;
+            var vm0 = new SettingsViewModel(m0)
+            {
+                CheckUpdate = true,
+                InstallMode = install,
+            };
             vm0.Sync();
             vm0.Associate.Clear();
             vm0.Update();
@@ -570,7 +573,11 @@ namespace Cube.FileSystem.App.Ice.Tests.Settings
             m1.Startup.Name = "cubeice-test";
             m1.Value.Shortcut.Directory = GetTmpDirectory();
 
-            var vm1 = new SettingsViewModel(m1);
+            var vm1 = new SettingsViewModel(m1)
+            {
+                CheckUpdate = false,
+                InstallMode = false,
+            };
             vm1.Update();
 
             Assert.Pass();
