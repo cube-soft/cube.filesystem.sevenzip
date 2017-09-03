@@ -53,13 +53,12 @@ namespace Cube.FileSystem.SevenZip
         /// 
         /* ----------------------------------------------------------------- */
         public ArchiveExtractCallback(string src, string dest, IEnumerable<ArchiveItem> items, Operator io)
-            : base(src)
+            : base(src, io)
         {
             Destination = dest;
             Items       = items;
             TotalCount  = -1;
             TotalBytes  = -1;
-            _io         = io;
             _inner      = Items.GetEnumerator();
 
             ArchiveReport.Count = 0;
@@ -377,8 +376,8 @@ namespace Cube.FileSystem.SevenZip
                 if (Filters != null && _inner.Current.Match(Filters)) return Skip();
                 if (_inner.Current.IsDirectory) return CreateDirectory();
 
-                var path = _io.Combine(Destination, _inner.Current.FullName);
-                var dest = new ArchiveStreamWriter(_io.Create(path));
+                var path = IO.Combine(Destination, _inner.Current.FullName);
+                var dest = new ArchiveStreamWriter(IO.Create(path));
                 _streams.Add(_inner.Current, dest);
 
                 return dest;
@@ -397,7 +396,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         private ArchiveStreamWriter CreateDirectory()
         {
-            _inner.Current.CreateDirectory(Destination, _io);
+            _inner.Current.CreateDirectory(Destination, IO);
             return null;
         }
 
@@ -431,13 +430,12 @@ namespace Cube.FileSystem.SevenZip
         private void RaiseExtracted(ArchiveItem item)
         {
             if (Result != OperationResult.OK) return;
-            item.SetAttributes(Destination, _io);
+            item.SetAttributes(Destination, IO);
             Extracted?.Invoke(this, ValueEventArgs.Create(item));
         }
 
         #region Fields
         private bool _disposed = false;
-        private Operator _io;
         private IEnumerator<ArchiveItem> _inner;
         private IDictionary<ArchiveItem, ArchiveStreamWriter> _streams = new Dictionary<ArchiveItem, ArchiveStreamWriter>();
         private long _hack = 0;

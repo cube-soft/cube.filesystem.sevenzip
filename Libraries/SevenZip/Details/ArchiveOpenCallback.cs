@@ -42,12 +42,17 @@ namespace Cube.FileSystem.SevenZip
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
+        /// <param name="src">圧縮ファイルのパス</param>
+        /// <param name="io">入出力用のオブジェクト</param>
+        /// 
         /* ----------------------------------------------------------------- */
-        public ArchiveOpenCallback(string src) : base(src) { }
+        public ArchiveOpenCallback(string src, Operator io) : base(src, io) { }
 
         #endregion
 
         #region Methods
+
+        #region IArchiveOpenCallback
 
         /* ----------------------------------------------------------------- */
         ///
@@ -95,6 +100,8 @@ namespace Cube.FileSystem.SevenZip
             Report();
             Result = OperationResult.OK;
         }
+
+        #endregion
 
         #endregion
     }

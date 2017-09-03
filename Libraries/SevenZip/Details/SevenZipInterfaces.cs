@@ -198,11 +198,13 @@ namespace Cube.FileSystem.SevenZip
         /// GetProperty
         ///
         /// <summary>
-        /// Gets the archive property data.
+        /// 圧縮ファイルのプロパティを取得します。
         /// </summary>
         /// 
-        /// <param name="pid">The property identificator.</param>
-        /// <param name="value">The property value.</param>
+        /// <param name="pid">プロパティ ID</param>
+        /// <param name="value">プロパティ ID に対応する値</param>
+        /// 
+        /// <returns>OperationResult</returns>
         ///
         /* ----------------------------------------------------------------- */
         [PreserveSig]
@@ -213,13 +215,14 @@ namespace Cube.FileSystem.SevenZip
         /// GetStream
         ///
         /// <summary>
-        /// Gets the stream for reading the volume.
+        /// 読み込むボリュームに対応するストリームを取得します。
         /// </summary>
         /// 
-        /// <param name="name">The volume file name.</param>
-        /// <param name="stream">Stream pointer for reading.</param>
+        /// <param name="name">ボリューム名</param>
+        /// <param name="stream">読み込みストリーム</param>
         /// 
-        /// <returns>Zero if Ok</returns>
+        /// <returns>OperationResult</returns>
+        /// 
         /* ----------------------------------------------------------------- */
         [PreserveSig]
         int GetStream(
