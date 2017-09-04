@@ -18,6 +18,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
+using Cube.Log;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -240,6 +241,7 @@ namespace Cube.FileSystem.SevenZip
                     value.Set((ulong)src.Length);
                     break;
                 default:
+                    this.LogDebug($"Unknown\tPid:{pid}");
                     value.Clear();
                     break;
             }

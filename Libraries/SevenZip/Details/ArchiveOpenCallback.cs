@@ -17,7 +17,9 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using Cube.Log;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -30,7 +32,8 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal sealed class ArchiveOpenCallback : ArchivePasswordCallback, IArchiveOpenCallback
+    internal sealed class ArchiveOpenCallback : ArchivePasswordCallback,
+        IArchiveOpenCallback, IArchiveOpenVolumeCallback, IDisposable
     {
         #region Constructors
 
@@ -43,10 +46,15 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /// <param name="src">圧縮ファイルのパス</param>
+        /// <param name="stream">圧縮ファイルの入力ストリーム</param>
         /// <param name="io">入出力用のオブジェクト</param>
         /// 
         /* ----------------------------------------------------------------- */
-        public ArchiveOpenCallback(string src, Operator io) : base(src, io) { }
+        public ArchiveOpenCallback(string src, ArchiveStreamReader stream, Operator io)
+            : base(src, io)
+        {
+            _streams.Add(stream);
+        }
 
         #endregion
 
@@ -103,6 +111,154 @@ namespace Cube.FileSystem.SevenZip
 
         #endregion
 
+        #region IArchiveOpenVolumeCallback
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetProperty
+        ///
+        /// <summary>
+        /// 圧縮ファイルのプロパティを取得します。
+        /// </summary>
+        /// 
+        /// <param name="pid">プロパティ ID</param>
+        /// <param name="value">プロパティ ID に対応する値</param>
+        /// 
+        /// <returns>OperationResult</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public int GetProperty(ItemPropId pid, ref PropVariant value)
+        {
+            var info = IO.Get(Source);
+
+            switch (pid)
+            {
+                case ItemPropId.Name:
+                    value.Set(info.FullName);
+                    break;
+                case ItemPropId.IsDirectory:
+                    value.Set(info.IsDirectory);
+                    break;
+                case ItemPropId.Size:
+                    value.Set((ulong)info.Length);
+                    break;
+                case ItemPropId.Attributes:
+                    value.Set((uint)info.Attributes);
+                    break;
+                case ItemPropId.CreationTime:
+                    value.Set(info.CreationTime);
+                    break;
+                case ItemPropId.LastAccessTime:
+                    value.Set(info.LastAccessTime);
+                    break;
+                case ItemPropId.LastWriteTime:
+                    value.Set(info.LastWriteTime);
+                    break;
+                default:
+                    this.LogDebug($"Unknown\tPid:{pid}");
+                    value.Clear();
+                    break;
+            }
+
+            Report();
+            return (int)Result;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetStream
+        ///
+        /// <summary>
+        /// 読み込むボリュームに対応するストリームを取得します。
+        /// </summary>
+        /// 
+        /// <param name="name">ボリューム名</param>
+        /// <param name="stream">読み込みストリーム</param>
+        /// 
+        /// <returns>OperationResult</returns>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public int GetStream(string name, out IInStream stream)
+        {
+            Report();
+
+            var src = IO.Exists(name) ?
+                      name :
+                      IO.Combine(IO.Get(Source).DirectoryName, name);
+
+            if (IO.Exists(src))
+            {
+                var dest = new ArchiveStreamReader(IO.OpenRead(src));
+                _streams.Add(dest);
+                stream = dest;
+            }
+            else stream = null;
+
+            Result = (stream != null) ? OperationResult.OK : OperationResult.DataError;
+            return (int)Result;
+        }
+
+        #endregion
+
+        #region IDisposable
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ~ArchiveOpenCallback
+        ///
+        /// <summary>
+        /// オブジェクトを破棄します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        // ~ArchiveOpenCallback() {
+        //   Dispose(false);
+        // }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Dispose
+        ///
+        /// <summary>
+        /// リソースを開放します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public void Dispose()
+        {
+            Dispose(true);
+            // GC.SuppressFinalize(this);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Dispose
+        ///
+        /// <summary>
+        /// リソースを開放します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        void Dispose(bool disposing)
+        {
+            if (_disposed) return;
+
+            if (disposing)
+            {
+                foreach (var item in _streams) item.Dispose();
+                _streams.Clear();
+            }
+
+            _disposed = true;
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Fields
+        private bool _disposed = false;
+        private IList<ArchiveStreamReader> _streams = new List<ArchiveStreamReader>();
         #endregion
     }
 }

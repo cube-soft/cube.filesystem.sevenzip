@@ -320,7 +320,7 @@ namespace Cube.FileSystem.SevenZip
             if (disposing)
             {
                 _raw.Close();
-                _stream.Dispose();
+                _callback.Dispose();
                 _7z.Dispose();
             }
 
@@ -347,8 +347,8 @@ namespace Cube.FileSystem.SevenZip
             Format = Formats.FromFile(Source, _io);
             if (Format == Format.Unknown) throw new NotSupportedException();
 
-            _stream = new ArchiveStreamReader(_io.OpenRead(Source));
-            Debug.Assert(_stream != null);
+            var stream = new ArchiveStreamReader(_io.OpenRead(Source));
+            Debug.Assert(stream != null);
 
             _7z = new SevenZipLibrary();
             Debug.Assert(_7z != null);
@@ -356,7 +356,8 @@ namespace Cube.FileSystem.SevenZip
             _raw = _7z.GetInArchive(Format);
             Debug.Assert(_raw != null);
 
-            _raw.Open(_stream, IntPtr.Zero, new ArchiveOpenCallback(Source, _io) { Password = _password });
+            _callback = new ArchiveOpenCallback(Source, stream, _io) { Password = _password };
+            _raw.Open(stream, IntPtr.Zero, _callback);
             _items = new ReadOnlyArchiveList(_raw, Format, Source, _password, _io);
         }
 
@@ -408,7 +409,7 @@ namespace Cube.FileSystem.SevenZip
         private bool _disposed = false;
         private SevenZipLibrary _7z;
         private IInArchive _raw;
-        private ArchiveStreamReader _stream;
+        private ArchiveOpenCallback _callback;
         private IQuery<string, string> _password;
         private Operator _io;
         private ReadOnlyArchiveList _items;
