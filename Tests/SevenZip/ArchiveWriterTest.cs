@@ -233,7 +233,6 @@ namespace Cube.FileSystem.Tests
 
             using (var reader = new ArchiveReader(dest))
             {
-                foreach (var item in reader.Items) System.Diagnostics.Debug.WriteLine(item.FullName);
                 Assert.That(reader.Items.Count, Is.EqualTo(7));
                 Assert.That(reader.Items.Any(x => x.FullName == "Sample.txt"), Is.False);
             }

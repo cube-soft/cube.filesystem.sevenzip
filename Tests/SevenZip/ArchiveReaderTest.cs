@@ -122,6 +122,7 @@ namespace Cube.FileSystem.Tests
         [TestCase("Sample.pptx")]
         [TestCase("Sample.rar")]
         [TestCase("Sample.rar5")]
+        [TestCase("Sample.rar.001")]
         [TestCase("Sample.tar")]
         [TestCase("Sample.tar.lzma")]
         [TestCase("Sample.tar.z")]
