@@ -338,6 +338,33 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Extract_MergeError
+        ///
+        /// <summary>
+        /// 分割された圧縮ファイルの展開に失敗する時の挙動を確認します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Extract_MergeError()
+            => Assert.That(() =>
+            {
+                var dir = Result("MergeError");
+                for (var i = 1; i < 4; ++i)
+                {
+                    var name = $"Sample.rar.{i:000}";
+                    IO.Copy(Example(name), IO.Combine(dir, name));
+                }
+
+                using (var archive = new ArchiveReader(IO.Combine(dir, "Sample.rar.001")))
+                {
+                    archive.Extract(dir);
+                }
+            },
+            Throws.TypeOf<System.IO.IOException>());
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Extract_WrongPassword
         ///
         /// <summary>
