@@ -136,24 +136,6 @@ namespace Cube.FileSystem.SevenZip
                 case ItemPropId.Name:
                     value.Set(info.FullName);
                     break;
-                case ItemPropId.IsDirectory:
-                    value.Set(info.IsDirectory);
-                    break;
-                case ItemPropId.Size:
-                    value.Set((ulong)info.Length);
-                    break;
-                case ItemPropId.Attributes:
-                    value.Set((uint)info.Attributes);
-                    break;
-                case ItemPropId.CreationTime:
-                    value.Set(info.CreationTime);
-                    break;
-                case ItemPropId.LastAccessTime:
-                    value.Set(info.LastAccessTime);
-                    break;
-                case ItemPropId.LastWriteTime:
-                    value.Set(info.LastWriteTime);
-                    break;
                 default:
                     this.LogDebug($"Unknown\tPid:{pid}");
                     value.Clear();
