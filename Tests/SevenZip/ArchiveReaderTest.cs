@@ -109,30 +109,30 @@ namespace Cube.FileSystem.Tests
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [TestCase("Sample.arj")]
-        [TestCase("Sample.cab")]
-        [TestCase("Sample.chm")]
-        [TestCase("Sample.cpio")]
-        [TestCase("Sample.docx")]
-        [TestCase("Sample.flv")]
-        [TestCase("Sample.jar")]
-        [TestCase("Sample.lha")]
-        [TestCase("Sample.lzh")]
-        [TestCase("Sample.nupkg")]
-        [TestCase("Sample.pptx")]
-        [TestCase("Sample.rar")]
-        [TestCase("Sample.rar5")]
-        [TestCase("Sample.rar.001")]
-        [TestCase("Sample.tar")]
-        [TestCase("Sample.tar.lzma")]
-        [TestCase("Sample.tar.z")]
-        [TestCase("Sample.tbz")]
-        [TestCase("Sample.tgz")]
-        [TestCase("Sample.txz")]
-        [TestCase("Sample.xlsx")]
-        public void Extract(string filename)
+        [TestCase("Sample.arj",      ExpectedResult =  3)]
+        [TestCase("Sample.cab",      ExpectedResult =  3)]
+        [TestCase("Sample.chm",      ExpectedResult = 80)]
+        [TestCase("Sample.cpio",     ExpectedResult =  3)]
+        [TestCase("Sample.docx",     ExpectedResult = 13)]
+        [TestCase("Sample.flv",      ExpectedResult =  2)]
+        [TestCase("Sample.jar",      ExpectedResult =  3)]
+        [TestCase("Sample.lha",      ExpectedResult =  3)]
+        [TestCase("Sample.lzh",      ExpectedResult =  3)]
+        [TestCase("Sample.nupkg",    ExpectedResult =  5)]
+        [TestCase("Sample.pptx",     ExpectedResult = 40)]
+        [TestCase("Sample.rar",      ExpectedResult =  3)]
+        [TestCase("Sample.rar5",     ExpectedResult =  3)]
+        [TestCase("Sample.rar.001",  ExpectedResult =  3)]
+        [TestCase("Sample.tar",      ExpectedResult =  3)]
+        [TestCase("Sample.tar.lzma", ExpectedResult =  1)]
+        [TestCase("Sample.tar.z",    ExpectedResult =  1)]
+        [TestCase("Sample.tbz",      ExpectedResult =  1)]
+        [TestCase("Sample.tgz",      ExpectedResult =  1)]
+        [TestCase("Sample.txz",      ExpectedResult =  1)]
+        [TestCase("Sample.xlsx",     ExpectedResult = 14)]
+        public int Extract(string filename)
         {
-            var src   = Example(filename);
+            var src = Example(filename);
             var count = 0;
 
             using (var archive = new ArchiveReader(src))
@@ -140,15 +140,9 @@ namespace Cube.FileSystem.Tests
                 var dest = Result($@"Extract\{filename}");
                 archive.Extracted += (s, e) => ++count;
                 archive.Extract(dest);
-
-                foreach (var item in archive.Items)
-                {
-                    var info = IO.Get(IO.Combine(dest, item.FullName));
-                    Assert.That(info.Exists, Is.True, info.FullName);
-                }
-
-                Assert.That(count, Is.AtLeast(1));
             }
+
+            return count;
         }
 
         /* ----------------------------------------------------------------- */
