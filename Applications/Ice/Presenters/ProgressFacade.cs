@@ -673,19 +673,16 @@ namespace Cube.FileSystem.App.Ice
             var ev = new MessageEventArgs
             {
                 Message = sb.ToString(),
-                Buttons = MessageBoxButtons.AbortRetryIgnore,
+                Buttons = MessageBoxButtons.RetryCancel,
                 Icon    = MessageBoxIcon.Warning,
-                Result  = DialogResult.Abort,
+                Result  = DialogResult.Cancel,
             };
 
             OnMessageReceived(ev);
             this.LogWarn(sb.ToString());
 
             e.Cancel = ev.Result != DialogResult.Retry;
-            if (ev.Result == DialogResult.Abort || ev.Result == DialogResult.Cancel)
-            {
-                throw new OperationCanceledException();
-            }
+            if (e.Cancel) throw new OperationCanceledException();
         }
 
         #region Fields
