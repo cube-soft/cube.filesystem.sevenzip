@@ -143,7 +143,7 @@ namespace Cube.FileSystem.App.Ice
             {
                 if ((m & CreateDirectoryMethod.SkipOptions) != 0)
                 {
-                    var ds = SeekRootDirectory(reader);
+                    var ds = SeekRootDirectories(reader);
                     var one = IsSingleFileOrDirectory(m, ds);
 
                     Destination = one ? dest.Value : IO.Combine(dest.Value, src);
@@ -158,7 +158,7 @@ namespace Cube.FileSystem.App.Ice
             else
             {
                 Destination = dest.Value;
-                SetOpenDirectoryName(SeekRootDirectory(reader));
+                SetOpenDirectoryName(SeekRootDirectories(reader));
             }
         }
 
@@ -334,10 +334,10 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SeekRootDirectory
+        /// SeekRootDirectories
         /// 
         /// <summary>
-        /// ルートディレクトリを検索します。
+        /// 各項目のルートディレクトリを検索します。
         /// </summary>
         /// 
         /// <remarks>
@@ -346,7 +346,7 @@ namespace Cube.FileSystem.App.Ice
         /// </remarks>
         /// 
         /* ----------------------------------------------------------------- */
-        private IEnumerable<string> SeekRootDirectory(ArchiveReader reader)
+        private IEnumerable<string> SeekRootDirectories(ArchiveReader reader)
         {
             var dest    = new Dictionary<string, string>();
             var filters = Settings.Value.GetFilters();
