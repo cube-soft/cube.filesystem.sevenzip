@@ -95,8 +95,8 @@ namespace Cube.FileSystem.SevenZip
         public ArchiveReader(string path, string password, Operator io)
         {
             Source = path;
-            _password = new PasswordQuery(password);
             _io = io;
+            _password = new PasswordQuery(password);
             Open();
         }
 
@@ -116,8 +116,8 @@ namespace Cube.FileSystem.SevenZip
         public ArchiveReader(string path, IQuery<string, string> password, Operator io)
         {
             Source = path;
-            _password = new PasswordQuery(password);
             _io = io;
+            _password = new PasswordQuery(password);
             Open();
         }
 
@@ -268,7 +268,7 @@ namespace Cube.FileSystem.SevenZip
                 cb.Extracting += (s, e) => OnExtracting(e);
                 cb.Extracted  += (s, e) => OnExtracted(e);
 
-                _raw.Extract(null, uint.MaxValue, 0, cb);
+                _archive.Extract(null, uint.MaxValue, 0, cb);
                 ThrowIfError(cb.Result);
             }
         }
@@ -319,7 +319,7 @@ namespace Cube.FileSystem.SevenZip
 
             if (disposing)
             {
-                _raw.Close();
+                _archive.Close();
                 _callback.Dispose();
                 _7z.Dispose();
             }
@@ -353,12 +353,12 @@ namespace Cube.FileSystem.SevenZip
             _7z = new SevenZipLibrary();
             Debug.Assert(_7z != null);
 
-            _raw = _7z.GetInArchive(Format);
-            Debug.Assert(_raw != null);
+            _archive = _7z.GetInArchive(Format);
+            Debug.Assert(_archive != null);
 
             _callback = new ArchiveOpenCallback(Source, stream, _io) { Password = _password };
-            _raw.Open(stream, IntPtr.Zero, _callback);
-            _items = new ReadOnlyArchiveList(_raw, Format, Source, _password, _io);
+            _archive.Open(stream, IntPtr.Zero, _callback);
+            _items = new ReadOnlyArchiveList(_archive, Format, Source, _password, _io);
         }
 
         /* ----------------------------------------------------------------- */
@@ -377,12 +377,15 @@ namespace Cube.FileSystem.SevenZip
                 case OperationResult.OK:
                     break;
                 case OperationResult.DataError:
-                    if (Items.Any(x => x.Encrypted)) ThrowEncryption();
+                    if (Items.Any(x => x.Encrypted))
+                    {
+                        _password.Reset();
+                        throw new EncryptionException();
+                    }
                     else throw new System.IO.IOException($"{result}");
-                    break;
                 case OperationResult.WrongPassword:
-                    ThrowEncryption();
-                    break;
+                    _password.Reset();
+                    throw new EncryptionException();
                 case OperationResult.UserCancel:
                     throw new OperationCanceledException();
                 default:
@@ -390,28 +393,13 @@ namespace Cube.FileSystem.SevenZip
             }
         }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ThrowEncryption
-        ///
-        /// <summary>
-        /// パスワードエラーに関する処理を実行します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void ThrowEncryption()
-        {
-            if (_password is PasswordQuery query) query.Reset();
-            throw new EncryptionException();
-        }
-
         #region Fields
         private bool _disposed = false;
-        private SevenZipLibrary _7z;
-        private IInArchive _raw;
-        private ArchiveOpenCallback _callback;
-        private IQuery<string, string> _password;
         private Operator _io;
+        private PasswordQuery _password;
+        private SevenZipLibrary _7z;
+        private IInArchive _archive;
+        private ArchiveOpenCallback _callback;
         private ReadOnlyArchiveList _items;
         #endregion
 

@@ -382,18 +382,18 @@ namespace Cube.FileSystem.SevenZip
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
-        /// <param name="raw">実装オブジェクト</param>
+        /// <param name="archive">実装オブジェクト</param>
         /// <param name="format">圧縮ファイル形式</param>
         /// <param name="src">圧縮ファイルのパス</param>
         /// <param name="index">圧縮ファイル中のインデックス</param>
         /// <param name="password">パスワード取得用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveItemImpl(IInArchive raw, Format format, string src, int index,
+        public ArchiveItemImpl(IInArchive archive, Format format, string src, int index,
             IQuery<string, string> password, Operator io)
             : base(format, src, index, password, io)
         {
-            _raw = raw;
+            _archive = archive;
 
             Exists         = true;
             RawName        = GetPath();
@@ -459,7 +459,7 @@ namespace Cube.FileSystem.SevenZip
                 cb.Password   = Password;
                 cb.Progress   = progress;
 
-                _raw.Extract(new[] { (uint)Index }, 1, 0, cb);
+                _archive.Extract(new[] { (uint)Index }, 1, 0, cb);
                 ThrowIfError(cb.Result);
             }
         }
@@ -480,7 +480,7 @@ namespace Cube.FileSystem.SevenZip
         private T Get<T>(ItemPropId pid)
         {
             var var = new PropVariant();
-            _raw.GetProperty((uint)Index, pid, ref var);
+            _archive.GetProperty((uint)Index, pid, ref var);
 
             var obj = var.Object;
             return (obj != null && obj is T) ? (T)obj : default(T);
@@ -574,12 +574,15 @@ namespace Cube.FileSystem.SevenZip
                 case OperationResult.OK:
                     break;
                 case OperationResult.DataError:
-                    if (Encrypted) ThrowEncryption();
+                    if (Encrypted)
+                    {
+                        ResetPassword();
+                        throw new EncryptionException();
+                    }
                     else throw new System.IO.IOException($"{result}");
-                    break;
                 case OperationResult.WrongPassword:
-                    ThrowEncryption();
-                    break;
+                    ResetPassword();
+                    throw new EncryptionException();
                 case OperationResult.UserCancel:
                     throw new OperationCanceledException();
                 default:
@@ -589,21 +592,21 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ThrowEncryption
+        /// ResetPassword
         ///
         /// <summary>
-        /// パスワードエラーに関する処理を実行します。
+        /// パスワードをリセットします。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void ThrowEncryption()
+        private void ResetPassword()
         {
-            if (Password is PasswordQuery query) query.Reset();
-            throw new EncryptionException();
+            System.Diagnostics.Debug.Assert(Password is PasswordQuery);
+            ((PasswordQuery)Password).Reset();
         }
 
         #region Fields
-        private IInArchive _raw;
+        private IInArchive _archive;
         #endregion
 
         #endregion
