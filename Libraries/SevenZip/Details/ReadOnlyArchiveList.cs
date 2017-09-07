@@ -19,7 +19,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Cube.Log;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -44,18 +43,18 @@ namespace Cube.FileSystem.SevenZip
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
-        /// <param name="raw">実装オブジェクト</param>
+        /// <param name="archive">実装オブジェクト</param>
         /// <param name="src">圧縮ファイルのパス</param>
         /// <param name="password">パスワード取得用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ReadOnlyArchiveList(IInArchive raw, Format format,
+        public ReadOnlyArchiveList(IInArchive archive, Format format,
             string src, IQuery<string, string> password, Operator io)
         {
             Format   = format;
             Source   = src;
             Password = password;
-            _raw     = raw;
+            _archive = archive;
             _io      = io;
         }
 
@@ -88,7 +87,7 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public int Count => Math.Max((int)_raw.GetNumberOfItems(), 1);
+        public int Count => Math.Max((int)_archive.GetNumberOfItems(), 1);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -105,7 +104,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public ArchiveItem this[int index]
         {
-            get { return new ArchiveItemImpl(_raw, Format, Source, index, Password, _io); }
+            get { return new ArchiveItemImpl(_archive, Format, Source, index, Password, _io); }
         }
 
         /* ----------------------------------------------------------------- */
@@ -162,7 +161,7 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Fields
-        private IInArchive _raw;
+        private IInArchive _archive;
         private Operator _io;
         #endregion
     }

@@ -341,9 +341,9 @@ namespace Cube.FileSystem.SevenZip
             var dir = _io.Get(_io.Get(path).DirectoryName);
             if (!dir.Exists) _io.CreateDirectory(dir.FullName);
 
-            var raw    = _7z.GetOutArchive(format);
-            var stream = new ArchiveStreamWriter(_io.Create(path));
-            var cb     = new ArchiveUpdateCallback(items, path, _io)
+            var archive = _7z.GetOutArchive(format);
+            var stream  = new ArchiveStreamWriter(_io.Create(path));
+            var cb      = new ArchiveUpdateCallback(items, path, _io)
             {
                 Password = password,
                 Progress = progress,
@@ -351,8 +351,8 @@ namespace Cube.FileSystem.SevenZip
 
             try
             {
-                GetSetter()?.Execute(raw as ISetProperties);
-                raw.UpdateItems(stream, (uint)items.Count, cb);
+                GetSetter()?.Execute(archive as ISetProperties);
+                archive.UpdateItems(stream, (uint)items.Count, cb);
             }
             finally
             {
