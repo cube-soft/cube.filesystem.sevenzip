@@ -26,7 +26,8 @@ after_build:
     - xcopy /Y /I 7z.* Tests\bin\x86\Release
     - xcopy /Y /I 7z.* Applications\Ice.Tests\bin\x86\Release
 artifacts:
-    - path: '**\*.nupkg'
+    - path: 'Libraries\**\*.nupkg'
+      type: NuGetPackage
 test_script:
     - ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:nunit3-console.exe -targetargs:Cube.FileSystem.Tests.dll -targetdir:Tests\bin\x86\Release -hideskipped:All -output:CoverResult.xml -filter:"+[*]* -[AlphaFS]* -[*]*NativeMethods -[*]*Properties.*"
     - ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:nunit3-console.exe -targetargs:Cube.FileSystem.App.Ice.Tests.dll -targetdir:Applications\Ice.Tests\bin\x86\Release -hideskipped:All -mergeoutput -output:CoverResult.xml -filter:"+[*]* -[AlphaFS]* -[*]*NativeMethods -[*]*Properties.* -[*]*Form -[*]*.Program"

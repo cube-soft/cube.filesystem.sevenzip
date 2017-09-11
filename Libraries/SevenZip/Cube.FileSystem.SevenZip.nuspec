@@ -10,12 +10,11 @@
     <projectUrl>https://github.com/cube-soft/Cube.FileSystem</projectUrl>
     <iconUrl>https://github.com/cube-soft/Cube.FileSystem/blob/master/Icon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>I/O library for CubeSoft applications.</description>
+    <description>C# wrapper library for 7-Zip.</description>
     <releaseNotes>Private release.</releaseNotes>
     <copyright>$copyright$</copyright>
-    <tags>Cube Windows</tags>
+    <tags>Cube Windows SevenZip</tags>
     <dependencies>
-      <dependency id="AlphaFS" version="2.1.3" />
       <dependency id="Cube.Core" version="1.5.0" />
       <dependency id="log4net" version="2.0.8" />
     </dependencies>
