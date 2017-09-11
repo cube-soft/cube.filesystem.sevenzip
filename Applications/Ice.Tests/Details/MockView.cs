@@ -35,14 +35,14 @@ namespace Cube.FileSystem.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// EventAggregator
+        /// EventHub
         /// 
         /// <summary>
         /// イベントを集約するためのオブジェクトを取得または設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IEventAggregator EventAggregator { get; set; }
+        public IEventHub EventHub { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///

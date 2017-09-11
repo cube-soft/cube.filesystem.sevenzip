@@ -142,7 +142,7 @@ namespace Cube.FileSystem.App.Ice.Tests
             using (var ep = Create(src, dest))
             {
                 ep.View.Show();
-                ep.EventAggregator.GetEvents().Cancel.Publish();
+                ep.EventHub.GetEvents().Cancel.Publish();
                 await Wait(ep.View);
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
             }
@@ -176,11 +176,11 @@ namespace Cube.FileSystem.App.Ice.Tests
                 ep.Model.ProgressInterval = TimeSpan.FromMilliseconds(50);
                 ep.View.Show();
 
-                ep.EventAggregator.GetEvents().Suspend.Publish(true);
+                ep.EventHub.GetEvents().Suspend.Publish(true);
                 var count = ep.View.Value;
                 await Task.Delay(150);
                 Assert.That(ep.View.Value, Is.EqualTo(count).Within(10)); // see remarks
-                ep.EventAggregator.GetEvents().Suspend.Publish(false);
+                ep.EventHub.GetEvents().Suspend.Publish(false);
 
                 await Wait(ep.View);
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
@@ -754,7 +754,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         private ExtractPresenter Create(Request request)
         {
             var v = Views.CreateProgressView();
-            var e = new EventAggregator();
+            var e = new EventHub();
             var s = new SettingsFolder();
 
             var dest = new ExtractPresenter(v, request, s, e);

@@ -49,7 +49,7 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         public ExtractPresenter(IProgressView view, Request model,
-            SettingsFolder settings, IEventAggregator events)
+            SettingsFolder settings, IEventHub events)
             : base(view, new ExtractFacade(model, settings), settings, events)
         {
             // View

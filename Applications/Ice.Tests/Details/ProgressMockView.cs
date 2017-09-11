@@ -161,7 +161,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         {
             base.Show();
             Start();
-            EventAggregator.GetEvents()?.Show.Publish();
+            EventHub.GetEvents()?.Show.Publish();
         }
 
         #endregion

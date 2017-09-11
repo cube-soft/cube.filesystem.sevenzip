@@ -390,7 +390,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         private ArchivePresenter Create(Request request)
         {
             var v = Views.CreateProgressView();
-            var e = new EventAggregator();
+            var e = new EventHub();
             var s = new SettingsFolder();
 
             s.Value.Filters = "Filter.txt|FilterDirectory";

@@ -60,7 +60,7 @@ namespace Cube.FileSystem.App.Ice
                 Application.SetCompatibleTextRenderingDefault(false);
 
                 var settings = new SettingsFolder();
-                var events   = new EventAggregator();
+                var events   = new EventHub();
                 var view     = new ProgressForm();
                 var model    = new Request(args);
 
