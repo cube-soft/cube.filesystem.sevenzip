@@ -84,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Details\FileHandler.cs" />
+    <Compile Include="Details\GlobalSetup.cs" />
     <Compile Include="SevenZip\ArchiveReaderTest.cs" />
     <Compile Include="SevenZip\ArchiveWriterTest.cs" />
     <Compile Include="SevenZip\FormatTest.cs" />
@@ -94,6 +95,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Packages.config" />
     <None Include="Examples\Archive\FilterDirectory\Filter.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
