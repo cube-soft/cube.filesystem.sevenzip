@@ -237,19 +237,19 @@
     <None Include="Examples\Sample.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\Sample.zip.001">
+    <None Include="Examples\MultiVolume.z01">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\Sample.zip.002">
+    <None Include="Examples\MultiVolume.z02">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\Sample.zip.003">
+    <None Include="Examples\MultiVolume.z03">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\Sample.zip.004">
+    <None Include="Examples\MultiVolume.z04">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\Sample.zip.005">
+    <None Include="Examples\MultiVolume.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Examples\SampleComma.zip">

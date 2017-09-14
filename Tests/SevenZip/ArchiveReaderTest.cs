@@ -555,7 +555,7 @@ namespace Cube.FileSystem.Tests
                     },
                 });
 
-                yield return new TestCaseData("Sample.zip.001", "", new List<ExpectedItem>
+                yield return new TestCaseData("MultiVolume.zip", "", new List<ExpectedItem>
                 {
                     new ExpectedItem
                     {
