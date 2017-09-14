@@ -159,55 +159,5 @@ namespace Cube.FileSystem.Ice
         public int ThreadCount { get; set; } = Environment.ProcessorCount;
 
         #endregion
-
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ToOption
-        /// 
-        /// <summary>
-        /// ArchiveOption オブジェクトに変換します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public ArchiveOption ToOption()
-        {
-            switch (Format)
-            {
-                case Format.Zip:
-                    return new ZipOption
-                    {
-                        CompressionLevel  = CompressionLevel,
-                        CompressionMethod = CompressionMethod,
-                        EncryptionMethod  = EncryptionMethod,
-                        ThreadCount       = ThreadCount,
-                    };
-                case Format.SevenZip:
-                case Format.Sfx:
-                    return new ExecutableOption
-                    {
-                        CompressionLevel  = CompressionLevel,
-                        CompressionMethod = CompressionMethod,
-                        ThreadCount       = ThreadCount,
-                        Module            = SfxModule,
-                    };
-                case Format.Tar:
-                    return new TarOption
-                    {
-                        CompressionLevel  = CompressionLevel,
-                        CompressionMethod = CompressionMethod,
-                        ThreadCount       = ThreadCount,
-                    };
-                default:
-                    return new ArchiveOption
-                    {
-                        CompressionLevel = CompressionLevel,
-                        ThreadCount      = ThreadCount,
-                    };
-            }
-        }
-
-        #endregion
     }
 }

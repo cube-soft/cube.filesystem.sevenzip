@@ -41,5 +41,30 @@ namespace Cube.FileSystem.Ice
         /// 
         /* ----------------------------------------------------------------- */
         public ArchiveSettings() : base() { }
+
+        #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// UseUtf8
+        /// 
+        /// <summary>
+        /// 圧縮時にファイル名を UTF-8 に変換するかどうかを示す値を
+        /// 取得または設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [DataMember(Name = "UseUTF8")]
+        public bool UseUtf8
+        {
+            get { return _useUtf8; }
+            set { SetProperty(ref _useUtf8, value); }
+        }
+
+        #endregion
+
+        #region Fields
+        private bool _useUtf8 = false;
+        #endregion
     }
 }

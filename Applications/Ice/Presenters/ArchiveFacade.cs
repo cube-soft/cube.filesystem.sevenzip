@@ -180,16 +180,16 @@ namespace Cube.FileSystem.App.Ice
         {
             var fmt   = GetFormat();
             var dest  = GetDestination(fmt);
-            var query = !string.IsNullOrEmpty(Details?.Password) || Request.Password ?
+            var query = !string.IsNullOrEmpty(Details.Password) || Request.Password ?
                         new Query<string, string>(x => RaisePasswordRequired(x)) :
                         null;
 
-            this.LogDebug(string.Format("Format:{0}\tMethod:{1}",
-                fmt, Details?.CompressionMethod ?? CompressionMethod.Default));
+            System.Diagnostics.Debug.Assert(Details != null);
+            this.LogDebug(string.Format("Format:{0}\tMethod:{1}", fmt, Details.CompressionMethod));
 
             using (var writer = new ArchiveWriter(fmt, IO))
             {
-                writer.Option = Details?.ToOption();
+                writer.Option = Details.ToOption(Settings);
                 if (Settings.Value.Archive.Filtering) writer.Filters = Settings.Value.GetFilters();
                 foreach (var item in Request.Sources) writer.Add(item);
                 ProgressStart();
@@ -219,20 +219,23 @@ namespace Cube.FileSystem.App.Ice
                 case Format.Tar:
                 case Format.Zip:
                 case Format.SevenZip:
-                    return Request.Format;
                 case Format.Sfx:
                     Details = new ArchiveDetails(f);
-                    return Details.Format;
+                    break;
                 case Format.BZip2:
                 case Format.GZip:
                 case Format.XZ:
-                    Details = new ArchiveDetails(Format.Tar);
-                    Details.CompressionMethod = f.ToMethod();
-                    return Details.Format;
+                    Details = new ArchiveDetails(Format.Tar)
+                    {
+                        CompressionMethod = f.ToMethod(),
+                    };
+                    break;
                 default:
                     RaiseDetailsRequired();
-                    return Details.Format;
+                    break;
             }
+
+            return Details.Format;
         }
 
         /* ----------------------------------------------------------------- */
@@ -283,7 +286,7 @@ namespace Cube.FileSystem.App.Ice
         {
             var name = IO.Get(Request.Sources.First()).NameWithoutExtension;
             var head = format.ToExtension();
-            var tail = Details?.CompressionMethod.ToExtension() ?? string.Empty;
+            var tail = Details.CompressionMethod.ToExtension() ?? string.Empty;
             var ext  = $"{head}{tail}";
 
             return IO.Combine(src, $"{name}{ext}");
@@ -300,7 +303,7 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void RaisePasswordRequired(QueryEventArgs<string, string> e)
         {
-            if (!string.IsNullOrEmpty(Details?.Password))
+            if (!string.IsNullOrEmpty(Details.Password))
             {
                 e.Result = Details.Password;
                 e.Cancel = false;
