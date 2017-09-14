@@ -28,7 +28,6 @@ namespace Cube.FileSystem.Tests
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [Parallelizable]
     [TestFixture]
     class PathFilterTest
     {

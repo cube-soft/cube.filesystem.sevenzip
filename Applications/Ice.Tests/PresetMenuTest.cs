@@ -30,7 +30,6 @@ namespace Cube.FileSystem.App.Ice.Tests
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [Parallelizable]
     [TestFixture]
     class PresetMenuTest
     {

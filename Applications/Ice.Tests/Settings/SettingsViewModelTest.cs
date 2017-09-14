@@ -34,7 +34,6 @@ namespace Cube.FileSystem.App.Ice.Tests.Settings
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    [Parallelizable]
     class SettingsViewModelTest
     {
         #region Tests
