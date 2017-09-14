@@ -555,6 +555,45 @@ namespace Cube.FileSystem.Tests
                     },
                 });
 
+                yield return new TestCaseData("Sample.zip.001", "", new List<ExpectedItem>
+                {
+                    new ExpectedItem
+                    {
+                        FullName      = "Split",
+                        Extension     = string.Empty,
+                        Length        = 0,
+                        Encrypted     = false,
+                        IsDirectory   = true,
+                    },
+
+                    new ExpectedItem
+                    {
+                        FullName      = @"Split\Manual.pdf",
+                        Extension     = ".pdf",
+                        Length        = 990040,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+
+                    new ExpectedItem
+                    {
+                        FullName      = @"Split\Sample1.txt",
+                        Extension     = ".txt",
+                        Length        = 5,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+
+                    new ExpectedItem
+                    {
+                        FullName      = @"Split\Sample2.txt",
+                        Extension     = ".txt",
+                        Length        = 6,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+                });
+
                 yield return new TestCaseData("Password.7z", "password", new List<ExpectedItem>
                 {
                     new ExpectedItem
