@@ -286,7 +286,7 @@ namespace Cube.FileSystem.App.Ice
         {
             var name = IO.Get(Request.Sources.First()).NameWithoutExtension;
             var head = format.ToExtension();
-            var tail = Details.CompressionMethod.ToExtension() ?? string.Empty;
+            var tail = Details.CompressionMethod.ToExtension();
             var ext  = $"{head}{tail}";
 
             return IO.Combine(src, $"{name}{ext}");
