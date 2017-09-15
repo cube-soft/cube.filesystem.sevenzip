@@ -73,6 +73,7 @@
             this.ArchiveOptionGroupBox = new System.Windows.Forms.GroupBox();
             this.ArchiveOptionPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.ArchiveFilterCheckBox = new System.Windows.Forms.CheckBox();
+            this.UseUtf8CheckBox = new System.Windows.Forms.CheckBox();
             this.ArchiveOpenDirectoryCheckBox = new System.Windows.Forms.CheckBox();
             this.ArchiveOpenSmartCheckBox = new System.Windows.Forms.CheckBox();
             this.ExtractTabPage = new System.Windows.Forms.TabPage();
@@ -609,7 +610,7 @@
             this.ArchiveOptionGroupBox.Location = new System.Drawing.Point(3, 144);
             this.ArchiveOptionGroupBox.Name = "ArchiveOptionGroupBox";
             this.ArchiveOptionGroupBox.Padding = new System.Windows.Forms.Padding(8, 3, 8, 3);
-            this.ArchiveOptionGroupBox.Size = new System.Drawing.Size(474, 105);
+            this.ArchiveOptionGroupBox.Size = new System.Drawing.Size(474, 125);
             this.ArchiveOptionGroupBox.TabIndex = 1;
             this.ArchiveOptionGroupBox.TabStop = false;
             this.ArchiveOptionGroupBox.Text = "オプション";
@@ -617,13 +618,14 @@
             // ArchiveOptionPanel
             // 
             this.ArchiveOptionPanel.Controls.Add(this.ArchiveFilterCheckBox);
+            this.ArchiveOptionPanel.Controls.Add(this.UseUtf8CheckBox);
             this.ArchiveOptionPanel.Controls.Add(this.ArchiveOpenDirectoryCheckBox);
             this.ArchiveOptionPanel.Controls.Add(this.ArchiveOpenSmartCheckBox);
             this.ArchiveOptionPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ArchiveOptionPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.ArchiveOptionPanel.Location = new System.Drawing.Point(8, 19);
             this.ArchiveOptionPanel.Name = "ArchiveOptionPanel";
-            this.ArchiveOptionPanel.Size = new System.Drawing.Size(458, 83);
+            this.ArchiveOptionPanel.Size = new System.Drawing.Size(458, 103);
             this.ArchiveOptionPanel.TabIndex = 0;
             // 
             // ArchiveFilterCheckBox
@@ -637,14 +639,25 @@
             this.ArchiveFilterCheckBox.Text = "ファイルのフィルタリングを行う（フィルタリング設定は詳細へ）";
             this.ArchiveFilterCheckBox.UseVisualStyleBackColor = true;
             // 
+            // UseUtf8CheckBox
+            // 
+            this.UseUtf8CheckBox.AutoSize = true;
+            this.UseUtf8CheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ArchiveSettingsBindingSource, "UseUtf8", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.UseUtf8CheckBox.Location = new System.Drawing.Point(3, 28);
+            this.UseUtf8CheckBox.Name = "UseUtf8CheckBox";
+            this.UseUtf8CheckBox.Size = new System.Drawing.Size(177, 19);
+            this.UseUtf8CheckBox.TabIndex = 1;
+            this.UseUtf8CheckBox.Text = "ファイル名を UTF-8 に変換する";
+            this.UseUtf8CheckBox.UseVisualStyleBackColor = true;
+            // 
             // ArchiveOpenDirectoryCheckBox
             // 
             this.ArchiveOpenDirectoryCheckBox.AutoSize = true;
             this.ArchiveOpenDirectoryCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ArchiveSettingsBindingSource, "OpenDirectory", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.ArchiveOpenDirectoryCheckBox.Location = new System.Drawing.Point(3, 28);
+            this.ArchiveOpenDirectoryCheckBox.Location = new System.Drawing.Point(3, 53);
             this.ArchiveOpenDirectoryCheckBox.Name = "ArchiveOpenDirectoryCheckBox";
             this.ArchiveOpenDirectoryCheckBox.Size = new System.Drawing.Size(169, 19);
-            this.ArchiveOpenDirectoryCheckBox.TabIndex = 1;
+            this.ArchiveOpenDirectoryCheckBox.TabIndex = 2;
             this.ArchiveOpenDirectoryCheckBox.Text = "圧縮後に保存先フォルダを開く";
             this.ArchiveOpenDirectoryCheckBox.UseVisualStyleBackColor = true;
             // 
@@ -654,11 +667,11 @@
             this.ArchiveOpenSmartCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ArchiveSettingsBindingSource, "SkipDesktop", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ArchiveOpenSmartCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", this.ArchiveSettingsBindingSource, "OpenDirectory", true, System.Windows.Forms.DataSourceUpdateMode.Never));
             this.ArchiveOpenSmartCheckBox.Enabled = false;
-            this.ArchiveOpenSmartCheckBox.Location = new System.Drawing.Point(15, 53);
+            this.ArchiveOpenSmartCheckBox.Location = new System.Drawing.Point(15, 78);
             this.ArchiveOpenSmartCheckBox.Margin = new System.Windows.Forms.Padding(15, 3, 3, 3);
             this.ArchiveOpenSmartCheckBox.Name = "ArchiveOpenSmartCheckBox";
             this.ArchiveOpenSmartCheckBox.Size = new System.Drawing.Size(163, 19);
-            this.ArchiveOpenSmartCheckBox.TabIndex = 2;
+            this.ArchiveOpenSmartCheckBox.TabIndex = 3;
             this.ArchiveOpenSmartCheckBox.Text = "デスクトップの場合は開かない";
             this.ArchiveOpenSmartCheckBox.UseVisualStyleBackColor = true;
             // 
@@ -1230,6 +1243,7 @@
         private System.Windows.Forms.BindingSource ExtractSettingsBindingSource;
         private System.Windows.Forms.BindingSource ShortcutSettingsBindingSource;
         private System.Windows.Forms.BindingSource AssociateSettingsBindingSource;
+        private System.Windows.Forms.CheckBox UseUtf8CheckBox;
     }
 }
 
