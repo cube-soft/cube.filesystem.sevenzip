@@ -31,6 +31,7 @@
 #define CUBEICE_MENU_7Z             _T("7z")
 #define CUBEICE_MENU_GZIP           _T("GZip")
 #define CUBEICE_MENU_BZIP2          _T("BZip2")
+#define CUBEICE_MENU_XZ             _T("XZ")
 #define CUBEICE_MENU_SFX            _T("自己解凍形式")
 #define CUBEICE_MENU_DETAIL         _T("詳細設定")
 
