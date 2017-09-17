@@ -275,6 +275,7 @@ namespace Cube.FileSystem.App.Ice.Settings
                 Create(PresetMenu.ArchiveSevenZip,    Properties.Resources.MenuSevenZip,    index++),
                 Create(PresetMenu.ArchiveBZip2,       Properties.Resources.MenuBZip2,       index++),
                 Create(PresetMenu.ArchiveGZip,        Properties.Resources.MenuGZip,        index++),
+                Create(PresetMenu.ArchiveXZ,          Properties.Resources.MenuXZ,          index++),
                 Create(PresetMenu.ArchiveSfx,         Properties.Resources.MenuSfx,         index++),
                 Create(PresetMenu.ArchiveDetail,      Properties.Resources.MenuDetail,      index++),
             });
@@ -294,6 +295,7 @@ namespace Cube.FileSystem.App.Ice.Settings
                 Create(PresetMenu.MailSevenZip,       Properties.Resources.MenuSevenZip,    index++),
                 Create(PresetMenu.MailBZip2,          Properties.Resources.MenuBZip2,       index++),
                 Create(PresetMenu.MailGZip,           Properties.Resources.MenuGZip,        index++),
+                Create(PresetMenu.MailXZ,             Properties.Resources.MenuXZ,          index++),
                 Create(PresetMenu.MailSfx,            Properties.Resources.MenuSfx,         index++),
                 Create(PresetMenu.MailDetail,         Properties.Resources.MenuDetail,      index++),
             });

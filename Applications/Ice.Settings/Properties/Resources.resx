@@ -151,6 +151,9 @@
   <data name="MenuSfx" xml:space="preserve">
     <value>自己解凍形式</value>
   </data>
+  <data name="MenuXZ" xml:space="preserve">
+    <value>XZ</value>
+  </data>
   <data name="MenuZip" xml:space="preserve">
     <value>Zip</value>
   </data>

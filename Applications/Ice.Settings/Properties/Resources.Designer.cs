@@ -161,6 +161,15 @@ namespace Cube.FileSystem.App.Ice.Settings.Properties {
         }
         
         /// <summary>
+        ///   XZ に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuXZ {
+            get {
+                return ResourceManager.GetString("MenuXZ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Zip に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MenuZip {
