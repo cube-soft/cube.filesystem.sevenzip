@@ -136,8 +136,9 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void SetDirectories(ArchiveReader reader, KeyValuePair<SaveLocation, string> dest)
         {
-            var src = IO.Get(Source).NameWithoutExtension;
-            var m = Settings.Value.Extract.RootDirectory;
+            var name = IO.Get(Source).NameWithoutExtension;
+            var src  = name.EndsWith(".tar") ? name.Remove(name.Length - 4) : name;
+            var m    = Settings.Value.Extract.RootDirectory;
 
             if (m.HasFlag(CreateDirectoryMethod.Create))
             {
