@@ -155,6 +155,9 @@ namespace Cube.FileSystem.App.Ice.Tests.Settings
             Assert.That(src.SaveOthers,    Is.True);
             Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Others));
 
+            src.UseUtf8 = true;
+            Assert.That(dest.UseUtf8, Is.True);
+
             src.OpenDirectory = true;
             src.SkipDesktop = true;
             Assert.That(dest.OpenDirectory, Is.EqualTo(OpenDirectoryMethod.OpenNotDesktop));
@@ -435,6 +438,7 @@ namespace Cube.FileSystem.App.Ice.Tests.Settings
             src.ArchiveBZip2       = true;
             src.ArchiveDetail      = true;
             src.ArchiveGZip        = true;
+            src.ArchiveXZ          = true;
             src.ArchiveSevenZip    = true;
             src.ArchiveSfx         = true;
             src.ArchiveZip         = true;
@@ -448,16 +452,18 @@ namespace Cube.FileSystem.App.Ice.Tests.Settings
             src.MailBZip2          = true;
             src.MailDetail         = true;
             src.MailGZip           = true;
+            src.MailXZ             = true;
             src.MailSevenZip       = true;
             src.MailSfx            = true;
             src.MailZip            = true;
             src.MailZipPassword    = true;
-            Assert.That((uint)dest.Preset, Is.EqualTo(0x07f7ffb));
+            Assert.That((uint)dest.Preset, Is.EqualTo(0x0fffffb));
 
             src.Archive            = false;
             src.ArchiveBZip2       = false;
             src.ArchiveDetail      = false;
             src.ArchiveGZip        = false;
+            src.ArchiveXZ          = false;
             src.ArchiveSevenZip    = false;
             src.ArchiveSfx         = false;
             src.ArchiveZip         = false;
@@ -471,6 +477,7 @@ namespace Cube.FileSystem.App.Ice.Tests.Settings
             src.MailBZip2          = false;
             src.MailDetail         = false;
             src.MailGZip           = false;
+            src.MailXZ             = false;
             src.MailSevenZip       = false;
             src.MailSfx            = false;
             src.MailZip            = false;
@@ -482,6 +489,7 @@ namespace Cube.FileSystem.App.Ice.Tests.Settings
             Assert.That(src.ArchiveBZip2,       Is.True);
             Assert.That(src.ArchiveDetail,      Is.True);
             Assert.That(src.ArchiveGZip,        Is.True);
+            Assert.That(src.ArchiveXZ,          Is.False);
             Assert.That(src.ArchiveSevenZip,    Is.True);
             Assert.That(src.ArchiveSfx,         Is.True);
             Assert.That(src.ArchiveZip,         Is.True);
@@ -495,6 +503,7 @@ namespace Cube.FileSystem.App.Ice.Tests.Settings
             Assert.That(src.MailBZip2,          Is.False);
             Assert.That(src.MailDetail,         Is.False);
             Assert.That(src.MailGZip,           Is.False);
+            Assert.That(src.MailXZ,             Is.False);
             Assert.That(src.MailSevenZip,       Is.False);
             Assert.That(src.MailSfx,            Is.False);
             Assert.That(src.MailZip,            Is.False);
