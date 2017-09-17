@@ -167,7 +167,7 @@
             this.RootPanel.RowCount = 2;
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.RootPanel.Size = new System.Drawing.Size(544, 631);
+            this.RootPanel.Size = new System.Drawing.Size(544, 651);
             this.RootPanel.TabIndex = 0;
             // 
             // SettingsPanel
@@ -177,7 +177,7 @@
             this.SettingsPanel.Location = new System.Drawing.Point(3, 3);
             this.SettingsPanel.Name = "SettingsPanel";
             this.SettingsPanel.Padding = new System.Windows.Forms.Padding(8);
-            this.SettingsPanel.Size = new System.Drawing.Size(538, 575);
+            this.SettingsPanel.Size = new System.Drawing.Size(538, 595);
             this.SettingsPanel.TabIndex = 0;
             // 
             // SettingsTabControl
@@ -191,7 +191,7 @@
             this.SettingsTabControl.Location = new System.Drawing.Point(8, 8);
             this.SettingsTabControl.Name = "SettingsTabControl";
             this.SettingsTabControl.SelectedIndex = 0;
-            this.SettingsTabControl.Size = new System.Drawing.Size(522, 559);
+            this.SettingsTabControl.Size = new System.Drawing.Size(522, 579);
             this.SettingsTabControl.TabIndex = 0;
             // 
             // GeneralTabPage
@@ -200,7 +200,7 @@
             this.GeneralTabPage.Location = new System.Drawing.Point(4, 24);
             this.GeneralTabPage.Name = "GeneralTabPage";
             this.GeneralTabPage.Padding = new System.Windows.Forms.Padding(12, 8, 3, 8);
-            this.GeneralTabPage.Size = new System.Drawing.Size(514, 531);
+            this.GeneralTabPage.Size = new System.Drawing.Size(514, 551);
             this.GeneralTabPage.TabIndex = 0;
             this.GeneralTabPage.Text = "一般";
             this.GeneralTabPage.UseVisualStyleBackColor = true;
@@ -214,7 +214,7 @@
             this.GeneralPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.GeneralPanel.Location = new System.Drawing.Point(12, 8);
             this.GeneralPanel.Name = "GeneralPanel";
-            this.GeneralPanel.Size = new System.Drawing.Size(499, 515);
+            this.GeneralPanel.Size = new System.Drawing.Size(499, 535);
             this.GeneralPanel.TabIndex = 0;
             // 
             // AssociateGroupBox
@@ -289,7 +289,7 @@
             this.ContextGroupBox.Location = new System.Drawing.Point(3, 189);
             this.ContextGroupBox.Name = "ContextGroupBox";
             this.ContextGroupBox.Padding = new System.Windows.Forms.Padding(8, 3, 8, 3);
-            this.ContextGroupBox.Size = new System.Drawing.Size(474, 255);
+            this.ContextGroupBox.Size = new System.Drawing.Size(474, 280);
             this.ContextGroupBox.TabIndex = 1;
             this.ContextGroupBox.TabStop = false;
             this.ContextGroupBox.Text = "コンテキストメニュー";
@@ -314,7 +314,7 @@
             this.ContextPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.ContextPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.ContextPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
-            this.ContextPanel.Size = new System.Drawing.Size(458, 233);
+            this.ContextPanel.Size = new System.Drawing.Size(458, 258);
             this.ContextPanel.TabIndex = 0;
             // 
             // ContextButtonsPanel
@@ -323,7 +323,7 @@
             this.ContextButtonsPanel.Controls.Add(this.ContextResetButton);
             this.ContextButtonsPanel.Controls.Add(this.ContextCustomizeButton);
             this.ContextButtonsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ContextButtonsPanel.Location = new System.Drawing.Point(0, 202);
+            this.ContextButtonsPanel.Location = new System.Drawing.Point(0, 227);
             this.ContextButtonsPanel.Margin = new System.Windows.Forms.Padding(0);
             this.ContextButtonsPanel.Name = "ContextButtonsPanel";
             this.ContextButtonsPanel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -359,7 +359,7 @@
             this.ContextMailPanel.Location = new System.Drawing.Point(314, 24);
             this.ContextMailPanel.Margin = new System.Windows.Forms.Padding(12, 0, 0, 0);
             this.ContextMailPanel.Name = "ContextMailPanel";
-            this.ContextMailPanel.Size = new System.Drawing.Size(144, 178);
+            this.ContextMailPanel.Size = new System.Drawing.Size(144, 203);
             this.ContextMailPanel.TabIndex = 5;
             // 
             // ContextSettingsBindingSource
@@ -375,7 +375,7 @@
             this.ContextExtractPanel.Location = new System.Drawing.Point(163, 24);
             this.ContextExtractPanel.Margin = new System.Windows.Forms.Padding(12, 0, 0, 0);
             this.ContextExtractPanel.Name = "ContextExtractPanel";
-            this.ContextExtractPanel.Size = new System.Drawing.Size(139, 178);
+            this.ContextExtractPanel.Size = new System.Drawing.Size(139, 203);
             this.ContextExtractPanel.TabIndex = 4;
             // 
             // ContextMailCheckBox
@@ -423,13 +423,13 @@
             this.ContextArchivePanel.Location = new System.Drawing.Point(12, 24);
             this.ContextArchivePanel.Margin = new System.Windows.Forms.Padding(12, 0, 0, 0);
             this.ContextArchivePanel.Name = "ContextArchivePanel";
-            this.ContextArchivePanel.Size = new System.Drawing.Size(139, 178);
+            this.ContextArchivePanel.Size = new System.Drawing.Size(139, 203);
             this.ContextArchivePanel.TabIndex = 3;
             // 
             // ShortcutGroupBox
             // 
             this.ShortcutGroupBox.Controls.Add(this.ShortcutPanel);
-            this.ShortcutGroupBox.Location = new System.Drawing.Point(3, 450);
+            this.ShortcutGroupBox.Location = new System.Drawing.Point(3, 475);
             this.ShortcutGroupBox.Name = "ShortcutGroupBox";
             this.ShortcutGroupBox.Padding = new System.Windows.Forms.Padding(12, 3, 12, 6);
             this.ShortcutGroupBox.Size = new System.Drawing.Size(474, 54);
@@ -1053,7 +1053,7 @@
             this.ButtonsPanel.Controls.Add(this.ExitButton);
             this.ButtonsPanel.Controls.Add(this.ExecuteButton);
             this.ButtonsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ButtonsPanel.Location = new System.Drawing.Point(3, 584);
+            this.ButtonsPanel.Location = new System.Drawing.Point(3, 604);
             this.ButtonsPanel.Name = "ButtonsPanel";
             this.ButtonsPanel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.ButtonsPanel.Size = new System.Drawing.Size(538, 44);
@@ -1098,7 +1098,7 @@
             // SettingsForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(544, 631);
+            this.ClientSize = new System.Drawing.Size(544, 651);
             this.Controls.Add(this.RootPanel);
             this.Font = new System.Drawing.Font("Meiryo UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(128)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

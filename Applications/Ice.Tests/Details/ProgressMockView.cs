@@ -30,7 +30,7 @@ namespace Cube.FileSystem.App.Ice.Tests
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    class ProgressMockView : MockView, IProgressView
+    class ProgressMockView : Cube.Forms.MockView, IProgressView
     {
         #region Properties
 
