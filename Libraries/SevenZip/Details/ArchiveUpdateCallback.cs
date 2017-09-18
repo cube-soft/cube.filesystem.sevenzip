@@ -18,6 +18,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
+using Cube.Log;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -49,11 +50,10 @@ namespace Cube.FileSystem.SevenZip
         /// 
         /* ----------------------------------------------------------------- */
         public ArchiveUpdateCallback(IList<FileItem> items, string dest, Operator io)
-            : base()
+            : base(io)
         {
             Items = items;
             ArchiveReport.TotalCount = items.Count;
-            _io = io;
         }
 
         #endregion
@@ -241,6 +241,7 @@ namespace Cube.FileSystem.SevenZip
                     value.Set((ulong)src.Length);
                     break;
                 default:
+                    this.LogDebug($"Unknown\tPid:{pid}");
                     value.Clear();
                     break;
             }
@@ -376,17 +377,16 @@ namespace Cube.FileSystem.SevenZip
         private ArchiveStreamReader CreateStream(uint index)
         {
             var path = Items[(int)index].FullName;
-            var info = _io.Get(path);
+            var info = IO.Get(path);
             if (info.IsDirectory) return null;
 
-            var dest = new ArchiveStreamReader(_io.OpenRead(path));
+            var dest = new ArchiveStreamReader(IO.OpenRead(path));
             _streams.Add(dest);
             return dest;
         }
 
         #region Fields
         private bool _disposed = false;
-        private Operator _io;
         private IList<ArchiveStreamReader> _streams = new List<ArchiveStreamReader>();
         #endregion
 

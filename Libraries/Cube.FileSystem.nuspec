@@ -1,32 +1,21 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>Cube.FileSystem</id>
-    <version>1.4.1</version>
-    <authors>CubeSoft</authors>
+    <id>Cube.FileSystem.Net35</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <copyright>$copyright$</copyright>
     <description>I/O library for CubeSoft applications.</description>
-    <copyright>Copyright (c) 2010 CubeSoft, Inc.</copyright>
     <licenseUrl>https://github.com/cube-soft/Cube.FileSystem/blob/master/License.txt</licenseUrl>
     <projectUrl>https://github.com/cube-soft/Cube.FileSystem</projectUrl>
     <iconUrl>https://github.com/cube-soft/Cube.FileSystem/blob/master/Icon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <releaseNotes>Private release.</releaseNotes>
     <tags>Cube Windows</tags>
-    <dependencies>
-      <group>
-        <dependency id="AlphaFS" version="2.1.3" />
-        <dependency id="Cube.Core" version="1.4.3" />
-        <dependency id="log4net" version="2.0.8" />
-      </group>
-      <group targetFramework="net35">
-        <dependency id="AsyncBridge.Net35" version="0.2.0" />
-        <dependency id="Cube.Backwards" version="1.4.0" />
-        <dependency id="TaskParallelLibrary" version="1.0.2856.0" />
-      </group>
-    </dependencies>
   </metadata>
   <files>
-    <file src="bin\Release\Cube.FileSystem.dll" target="lib\net45" />
     <file src="bin\net35\Release\Cube.FileSystem.dll" target="lib\net35" />
   </files>
 </package>

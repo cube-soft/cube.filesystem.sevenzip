@@ -325,7 +325,7 @@ namespace Cube.FileSystem.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected override void OnSaved(EventArgs e)
+        protected override void OnSaved(KeyValueEventArgs<Cube.Settings.SettingsType, string> e)
         {
             if (Value != null) Startup.Enabled = Value.CheckUpdate;
             base.OnSaved(e);

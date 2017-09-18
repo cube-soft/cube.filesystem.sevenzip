@@ -30,6 +30,8 @@ namespace Cube.FileSystem.App.Ice.Settings
     /* --------------------------------------------------------------------- */
     public class ArchiveSettingsViewModel : GeneralSettingsViewModel<ArchiveSettings>
     {
+        #region Constructors
+
         /* ----------------------------------------------------------------- */
         ///
         /// ArchiveSettingsViewModel
@@ -42,5 +44,27 @@ namespace Cube.FileSystem.App.Ice.Settings
         /// 
         /* ----------------------------------------------------------------- */
         public ArchiveSettingsViewModel(ArchiveSettings model) : base(model) { }
+
+        #endregion
+
+        #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// UseUtf8
+        /// 
+        /// <summary>
+        /// ファイル名を UTF-8 に変換するかどうかを示す値を取得または
+        /// 設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public bool UseUtf8
+        {
+            get { return Model.UseUtf8; }
+            set { Model.UseUtf8 = value; }
+        }
+
+        #endregion
     }
 }

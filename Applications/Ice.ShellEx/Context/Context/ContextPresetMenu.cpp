@@ -56,6 +56,8 @@ static ContextMenuItem GetContextMenuItem(int id, const std::basic_string<TCHAR>
         return ContextMenuItem(CUBEICE_MENU_BZIP2,    exe, _T("/c:bzip2"),          _T(""));
     case PresetMenu::ArchiveGZip:
         return ContextMenuItem(CUBEICE_MENU_GZIP,     exe, _T("/c:gzip"),           _T(""));
+    case PresetMenu::ArchiveXZ:
+        return ContextMenuItem(CUBEICE_MENU_XZ,       exe, _T("/c:xz"),             _T(""));
     case PresetMenu::ArchiveSfx:
         return ContextMenuItem(CUBEICE_MENU_SFX,      exe, _T("/c:exe"),            _T(""));
     case PresetMenu::ArchiveDetail:
@@ -74,6 +76,8 @@ static ContextMenuItem GetContextMenuItem(int id, const std::basic_string<TCHAR>
         return ContextMenuItem(CUBEICE_MENU_DETAIL,   exe, _T("/c:detail /m"),      _T(""));
     case PresetMenu::MailGZip:
         return ContextMenuItem(CUBEICE_MENU_GZIP,     exe, _T("/c:gzip /m"),        _T(""));
+    case PresetMenu::MailXZ:
+        return ContextMenuItem(CUBEICE_MENU_XZ,       exe, _T("/c:xz /m"),          _T(""));
     case PresetMenu::MailSevenZip:
         return ContextMenuItem(CUBEICE_MENU_7Z,       exe, _T("/c:7z /m"),          _T(""));
     case PresetMenu::MailSfx:
@@ -129,6 +133,7 @@ std::vector<ContextMenuItem> GetContextMenuItems(int menu, const std::basic_stri
         AddContextMenuItem(archive, menu, PresetMenu::ArchiveZipPassword, exe);
         AddContextMenuItem(archive, menu, PresetMenu::ArchiveSevenZip,    exe);
         AddContextMenuItem(archive, menu, PresetMenu::ArchiveBZip2,       exe);
+        AddContextMenuItem(archive, menu, PresetMenu::ArchiveXZ,          exe);
         AddContextMenuItem(archive, menu, PresetMenu::ArchiveGZip,        exe);
         AddContextMenuItem(archive, menu, PresetMenu::ArchiveSfx,         exe);
         AddContextMenuItem(archive, menu, PresetMenu::ArchiveDetail,      exe);
@@ -155,6 +160,7 @@ std::vector<ContextMenuItem> GetContextMenuItems(int menu, const std::basic_stri
         AddContextMenuItem(mail, menu, PresetMenu::MailSevenZip,    exe);
         AddContextMenuItem(mail, menu, PresetMenu::MailBZip2,       exe);
         AddContextMenuItem(mail, menu, PresetMenu::MailGZip,        exe);
+        AddContextMenuItem(mail, menu, PresetMenu::MailXZ,          exe);
         AddContextMenuItem(mail, menu, PresetMenu::MailSfx,         exe);
         AddContextMenuItem(mail, menu, PresetMenu::MailDetail,      exe);
 

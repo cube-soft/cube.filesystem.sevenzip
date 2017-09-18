@@ -26,27 +26,27 @@ namespace Cube.FileSystem.App.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// RuntimeSettingsForm
+    /// ArchiveDetailsForm
     ///
     /// <summary>
     /// 圧縮処理の詳細画面を表示するクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class RuntimeSettingsForm : Form
+    public partial class ArchiveDetailsForm : Form
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// RuntimeSettingsForm
+        /// ArchiveDetailsForm
         /// 
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public RuntimeSettingsForm()
+        public ArchiveDetailsForm()
         {
             InitializeComponent();
 
@@ -230,7 +230,7 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void UpdateFormat()
         {
-            Update(FormatComboBox, SettingsViewDataSource.Format);
+            Update(FormatComboBox, ArchiveDetailsData.Format);
             if (!FormatComboBox.Enabled) return;
             FormatComboBox.SelectedValue = Format.Zip;
         }
@@ -246,7 +246,7 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void UpdateCompressionLevel()
         {
-            Update(CompressionLevelComboBox, SettingsViewDataSource.CompressionLevel);
+            Update(CompressionLevelComboBox, ArchiveDetailsData.CompressionLevel);
             if (!CompressionLevelComboBox.Enabled) return;
             CompressionLevelComboBox.SelectedValue = CompressionLevel.Ultra;
         }
@@ -262,7 +262,7 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void UpdateCompressionMethod()
         {
-            Update(CompressionMethodComboBox, SettingsViewDataSource.GetCompressionMethod(Format));
+            Update(CompressionMethodComboBox, ArchiveDetailsData.GetCompressionMethod(Format));
             if (!CompressionMethodComboBox.Enabled) return;
             CompressionMethodComboBox.SelectedIndex = 0;
         }
@@ -278,7 +278,7 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         private void UpdateEncryptionMethod()
         {
-            Update(EncryptionMethodComboBox, SettingsViewDataSource.EncryptionMethod);
+            Update(EncryptionMethodComboBox, ArchiveDetailsData.EncryptionMethod);
             if (!EncryptionMethodComboBox.Enabled) return;
             EncryptionMethodComboBox.SelectedIndex = 0;
         }

@@ -74,13 +74,13 @@
       <HintPath>..\..\packages\Cube.Backwards.1.4.0\lib\net35\Cube.Backwards.dll</HintPath>
     </Reference>
     <Reference Include="Cube.Core">
-      <HintPath>..\..\packages\Cube.Core.1.4.3\lib\net35\Cube.Core.dll</HintPath>
+      <HintPath>..\..\packages\Cube.Core.Net35.1.5.0\lib\net35\Cube.Core.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.2.0.8\lib\net35-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\..\packages\NUnit.3.7.1\lib\net35\nunit.framework.dll</HintPath>
+      <HintPath>..\..\packages\NUnit.3.8.1\lib\net35\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System.Threading">
       <HintPath>..\..\packages\TaskParallelLibrary.1.0.2856.0\lib\Net35\System.Threading.dll</HintPath>
@@ -94,6 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Details\FileHandler.cs" />
+    <Compile Include="Details\GlobalSetup.cs" />
     <Compile Include="SevenZip\ArchiveReaderTest.cs" />
     <Compile Include="SevenZip\ArchiveWriterTest.cs" />
     <Compile Include="SevenZip\FormatTest.cs" />
@@ -104,6 +105,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Packages.config" />
     <None Include="Examples\Archive\FilterDirectory\Filter.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -165,6 +169,9 @@
     <None Include="Examples\Sample.chm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Examples\Sample.cab">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Examples\Sample.cpio">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -193,6 +200,21 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Examples\Sample.rar5">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\Sample.rar.001">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\Sample.rar.002">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\Sample.rar.003">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\Sample.rar.004">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\Sample.rar.005">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Examples\Sample.tar">
@@ -226,6 +248,21 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Examples\Sample.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\MultiVolume.z01">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\MultiVolume.z02">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\MultiVolume.z03">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\MultiVolume.z04">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\MultiVolume.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Examples\SampleComma.zip">

@@ -66,6 +66,12 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\Cube.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AsyncBridge.Net35">
       <HintPath>..\..\..\packages\AsyncBridge.Net35.0.2.0\lib\net35-Client\AsyncBridge.Net35.dll</HintPath>
@@ -74,7 +80,7 @@
       <HintPath>..\..\..\packages\Cube.Backwards.1.4.0\lib\net35\Cube.Backwards.dll</HintPath>
     </Reference>
     <Reference Include="Cube.Core">
-      <HintPath>..\..\..\packages\Cube.Core.1.4.3\lib\net35\Cube.Core.dll</HintPath>
+      <HintPath>..\..\..\packages\Cube.Core.Net35.1.5.0\lib\net35\Cube.Core.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\packages\log4net.2.0.8\lib\net35-full\log4net.dll</HintPath>
@@ -91,7 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Conversions\PresetMenu.cs" />
-    <Compile Include="Settings\ArchiveRuntimeSettings.cs" />
+    <Compile Include="Settings\ArchiveDetails.cs" />
     <Compile Include="Settings\ArchiveSettings.cs" />
     <Compile Include="Settings\AssociateSettings.cs" />
     <Compile Include="Settings\ContextSettings.cs" />
@@ -115,6 +121,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\Cube.snk" />
+    <None Include="Packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\Libraries\Cube.FileSystem.csproj">
       <Project>{e89aad2c-5a74-49f6-ad84-65f0016ef1bb}</Project>
       <Name>Cube.FileSystem</Name>
@@ -123,9 +133,6 @@
       <Project>{74c9f388-360e-4c46-a9a6-e131eab2e49c}</Project>
       <Name>Cube.FileSystem.SevenZip</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

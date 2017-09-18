@@ -19,14 +19,14 @@ namespace Cube.FileSystem.App.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// EventAggregator
+    /// EventHub
     /// 
     /// <summary>
     /// CubeICE で発生するイベントを集約するクラスです。
     /// </summary>
     /// 
     /* --------------------------------------------------------------------- */
-    public class EventAggregator : IEventAggregator
+    public class EventHub : IEventHub
     {
         /* ----------------------------------------------------------------- */
         ///
@@ -64,14 +64,14 @@ namespace Cube.FileSystem.App.Ice
 
     /* --------------------------------------------------------------------- */
     ///
-    /// EventAggregatorConverter
+    /// EventHubConverter
     /// 
     /// <summary>
-    /// EventAggregator クラスに関連する拡張メソッドを定義したクラスです。
+    /// EventHub クラスに関連する拡張メソッドを定義したクラスです。
     /// </summary>
     /// 
     /* --------------------------------------------------------------------- */
-    public static class EventAggregatorConverter
+    public static class EventHubConverter
     {
         /* ----------------------------------------------------------------- */
         ///
@@ -83,7 +83,7 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public static EventAggregator GetEvents(this IEventAggregator e)
-            => e as EventAggregator;
+        public static EventHub GetEvents(this IEventHub e)
+            => e as EventHub;
     }
 }

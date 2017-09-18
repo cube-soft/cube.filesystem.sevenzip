@@ -51,15 +51,15 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         public ProgressPresenter(IProgressView view, ProgressFacade model,
-            SettingsFolder settings, IEventAggregator events)
+            SettingsFolder settings, IEventHub events)
             : base(view, model, settings, events)
         {
-            View.EventAggregator = EventAggregator;
+            View.EventHub = EventHub;
 
-            Debug.Assert(EventAggregator.GetEvents() != null);
-            EventAggregator.GetEvents().Show.Subscribe(WhenShow);
-            EventAggregator.GetEvents().Cancel.Subscribe(() => Model.Cancel());
-            EventAggregator.GetEvents().Suspend.Subscribe(WhenSuspend);
+            Debug.Assert(EventHub.GetEvents() != null);
+            EventHub.GetEvents().Show.Subscribe(WhenShow);
+            EventHub.GetEvents().Cancel.Subscribe(() => Model.Cancel());
+            EventHub.GetEvents().Suspend.Subscribe(WhenSuspend);
 
             Model.MessageReceived       += WhenMessageReceived;
             Model.OpenDirectoryRequired += WhenOpenDirectoryRequired;

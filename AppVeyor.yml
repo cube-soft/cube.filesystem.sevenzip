@@ -1,4 +1,4 @@
-version: 1.4.0.{build}
+version: 1.5.0.{build}
 branches:
     except:
         - net35
@@ -8,7 +8,7 @@ image: Visual Studio 2017
 nuget:
     project_feed: true
     disable_publish_on_pr: true
-platform: x86
+platform: Any CPU
 configuration: Release
 before_build:
     - ps: Start-FileDownload https://ci.appveyor.com/api/projects/clown/7z/artifacts/7z.dll
@@ -23,11 +23,11 @@ build:
     publish_nuget: true
     verbosity: normal
 after_build:
-    - xcopy /Y /I 7z.* Tests\bin\x86\Release
-    - xcopy /Y /I 7z.* Applications\Ice.Tests\bin\x86\Release
+    - xcopy /Y /I 7z.* Tests\bin\Release
+    - xcopy /Y /I 7z.* Applications\Ice.Tests\bin\Release
 test_script:
-    - ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:nunit3-console.exe -targetargs:Cube.FileSystem.Tests.dll -targetdir:Tests\bin\x86\Release -hideskipped:All -output:CoverResult.xml -filter:"+[*]* -[AlphaFS]* -[*]*NativeMethods -[*]*Properties.*"
-    - ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:nunit3-console.exe -targetargs:Cube.FileSystem.App.Ice.Tests.dll -targetdir:Applications\Ice.Tests\bin\x86\Release -hideskipped:All -mergeoutput -output:CoverResult.xml -filter:"+[*]* -[AlphaFS]* -[*]*NativeMethods -[*]*Properties.* -[*]*Form -[*]*.Program"
+    - ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:nunit3-console.exe -targetargs:Cube.FileSystem.Tests.dll -targetdir:Tests\bin\Release -hideskipped:All -output:CoverResult.xml -filter:"+[*]* -[AlphaFS]* -[*]*NativeMethods -[*]*Properties.*"
+    - ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:nunit3-console.exe -targetargs:Cube.FileSystem.App.Ice.Tests.dll -targetdir:Applications\Ice.Tests\bin\Release -hideskipped:All -mergeoutput -output:CoverResult.xml -filter:"+[*]* -[AlphaFS]* -[*]*NativeMethods -[*]*Properties.* -[*]*Form -[*]*.Program"
 after_test:
     - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
     - pip install codecov

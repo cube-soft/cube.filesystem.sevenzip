@@ -23,33 +23,47 @@ namespace Cube.FileSystem.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveRuntimeSettings
+    /// ArchiveDetails
     ///
     /// <summary>
     /// 圧縮処理の実行時詳細設定を保持するクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveRuntimeSettings
+    public class ArchiveDetails
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveRuntimeSettings
+        /// ArchiveDetails
         /// 
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveRuntimeSettings(Format format)
+        public ArchiveDetails()
         {
             var asm = Assembly.GetExecutingAssembly();
             var dir = System.IO.Path.GetDirectoryName(asm.Location);
+            SfxModule = System.IO.Path.Combine(dir, "7z.sfx");
+        }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ArchiveDetails
+        /// 
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        /// 
+        /// <param name="format">圧縮形式</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ArchiveDetails(Format format) : this()
+        {
             Format = format;
-            Module = System.IO.Path.Combine(dir, "7z.sfx");
         }
 
         #endregion
@@ -65,7 +79,7 @@ namespace Cube.FileSystem.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Format Format { get; }
+        public Format Format { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -91,14 +105,14 @@ namespace Cube.FileSystem.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Module
+        /// SfxModule
         /// 
         /// <summary>
         /// 自己解凍形式モジュールのパスを取得または設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Module { get; set; }
+        public string SfxModule { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -143,56 +157,6 @@ namespace Cube.FileSystem.Ice
         ///
         /* ----------------------------------------------------------------- */
         public int ThreadCount { get; set; } = Environment.ProcessorCount;
-
-        #endregion
-
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ToOption
-        /// 
-        /// <summary>
-        /// ArchiveOption オブジェクトに変換します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public ArchiveOption ToOption()
-        {
-            switch (Format)
-            {
-                case Format.Zip:
-                    return new ZipOption
-                    {
-                        CompressionLevel  = CompressionLevel,
-                        CompressionMethod = CompressionMethod,
-                        EncryptionMethod  = EncryptionMethod,
-                        ThreadCount       = ThreadCount,
-                    };
-                case Format.SevenZip:
-                case Format.Sfx:
-                    return new ExecutableOption
-                    {
-                        CompressionLevel  = CompressionLevel,
-                        CompressionMethod = CompressionMethod,
-                        ThreadCount       = ThreadCount,
-                        Module            = Module,
-                    };
-                case Format.Tar:
-                    return new TarOption
-                    {
-                        CompressionLevel  = CompressionLevel,
-                        CompressionMethod = CompressionMethod,
-                        ThreadCount       = ThreadCount,
-                    };
-                default:
-                    return new ArchiveOption
-                    {
-                        CompressionLevel = CompressionLevel,
-                        ThreadCount      = ThreadCount,
-                    };
-            }
-        }
 
         #endregion
     }

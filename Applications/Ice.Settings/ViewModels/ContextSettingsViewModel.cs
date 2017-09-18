@@ -149,6 +149,21 @@ namespace Cube.FileSystem.App.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
+        /// ArchiveXZ
+        /// 
+        /// <summary>
+        /// XZ で圧縮の項目が有効かどうかを示す値を取得または設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public bool ArchiveXZ
+        {
+            get { return _model.Preset.HasFlag(PresetMenu.ArchiveXZ); }
+            set { Set(PresetMenu.ArchiveXZ, value); }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// ArchiveSfx
         /// 
         /// <summary>
@@ -359,6 +374,22 @@ namespace Cube.FileSystem.App.Ice.Settings
         {
             get { return _model.Preset.HasFlag(PresetMenu.MailBZip2); }
             set { Set(PresetMenu.MailBZip2, value); }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// MailXZ
+        /// 
+        /// <summary>
+        /// XZ で圧縮してメール送信の項目が有効かどうかを示す値を取得
+        /// または設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public bool MailXZ
+        {
+            get { return _model.Preset.HasFlag(PresetMenu.MailXZ); }
+            set { Set(PresetMenu.MailXZ, value); }
         }
 
         /* ----------------------------------------------------------------- */

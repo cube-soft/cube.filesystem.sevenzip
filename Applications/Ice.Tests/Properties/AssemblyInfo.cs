@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("CubeSoft")]
 [assembly: AssemblyProduct("Cube.FileSystem.App.Ice.Tests")]
-[assembly: AssemblyCopyright("Copyright © 2017 CubeSoft, Inc.")]
+[assembly: AssemblyCopyright("Copyright © 2010 CubeSoft, Inc.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // すべての値を指定するか、次を使用してビルド番号とリビジョン番号を既定に設定できます
 // 以下のように '*' を使用します:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.8.0.0")]
-[assembly: AssemblyFileVersion("0.8.0.0")]
+[assembly: AssemblyVersion("0.8.1.0")]
+[assembly: AssemblyFileVersion("0.8.1.0")]

@@ -143,7 +143,7 @@ namespace Cube.FileSystem.App.Ice.Tests
             using (var ep = Create(src, dest))
             {
                 ep.View.Show();
-                ep.EventAggregator.GetEvents().Cancel.Publish();
+                ep.EventHub.GetEvents().Cancel.Publish();
                 await Wait(ep.View);
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
             }
@@ -177,11 +177,11 @@ namespace Cube.FileSystem.App.Ice.Tests
                 ep.Model.ProgressInterval = TimeSpan.FromMilliseconds(50);
                 ep.View.Show();
 
-                ep.EventAggregator.GetEvents().Suspend.Publish(true);
+                ep.EventHub.GetEvents().Suspend.Publish(true);
                 var count = ep.View.Value;
                 await TaskEx.Delay(150);
                 Assert.That(ep.View.Value, Is.EqualTo(count).Within(10)); // see remarks
-                ep.EventAggregator.GetEvents().Suspend.Publish(false);
+                ep.EventHub.GetEvents().Suspend.Publish(false);
 
                 await Wait(ep.View);
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
@@ -641,6 +641,81 @@ namespace Cube.FileSystem.App.Ice.Tests
                     @"RootDirectory\Complex-0x07\Complex",
                     5L
                 );
+
+                yield return new TestCaseData("Sample.tar", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[]
+                    {
+                        "/o:source",
+                        @"/drop:Tar",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation = SaveLocation.Others,
+                        RootDirectory = CreateDirectoryMethod.CreateSmart,
+                    },
+                    @"Tar\TarSample",
+                    4L
+                );
+
+                yield return new TestCaseData("Sample.tbz", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[]
+                    {
+                        "/o:source",
+                        @"/drop:Tar\BZipSample",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = CreateDirectoryMethod.CreateSmart,
+                    },
+                    @"Tar\BZipSample\TarSample",
+                    4L
+                );
+
+                yield return new TestCaseData("Sample.tgz", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[]
+                    {
+                        "/o:source",
+                        @"/drop:Tar\GZipSample",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = CreateDirectoryMethod.CreateSmart,
+                    },
+                    @"Tar\GZipSample\TarSample",
+                    4L
+                );
+
+                yield return new TestCaseData("Sample.tar.lzma", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[]
+                    {
+                        "/o:source",
+                        @"/drop:Tar\LzmaSample",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = CreateDirectoryMethod.CreateSmart,
+                    },
+                    @"Tar\LzmaSample\Sample",
+                    5L
+                );
+
+                yield return new TestCaseData("Sample.tar.z", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[]
+                    {
+                        "/o:source",
+                        @"/drop:Tar\LzwSample",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = CreateDirectoryMethod.CreateSmart,
+                    },
+                    @"Tar\LzwSample\Sample",
+                    5L
+                );
             }
         }
 
@@ -680,7 +755,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         private ExtractPresenter Create(Request request)
         {
             var v = Views.CreateProgressView();
-            var e = new EventAggregator();
+            var e = new EventHub();
             var s = new SettingsFolder();
 
             var dest = new ExtractPresenter(v, request, s, e);

@@ -43,9 +43,10 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /// <param name="src">圧縮ファイルのパス</param>
+        /// <param name="io">入出力用のオブジェクト</param>
         /// 
         /* ----------------------------------------------------------------- */
-        protected ArchivePasswordCallback(string src) : base()
+        protected ArchivePasswordCallback(string src, Operator io) : base(io)
         {
             Source = src;
         }

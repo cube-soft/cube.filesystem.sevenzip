@@ -342,9 +342,9 @@ namespace Cube.FileSystem.SevenZip
             var dir = _io.Get(_io.Get(path).DirectoryName);
             if (!dir.Exists) _io.CreateDirectory(dir.FullName);
 
-            var raw    = _7z.GetOutArchive(format);
-            var stream = new ArchiveStreamWriter(_io.Create(path));
-            var cb     = new ArchiveUpdateCallback(items, path, _io)
+            var archive = _7z.GetOutArchive(format);
+            var stream  = new ArchiveStreamWriter(_io.Create(path));
+            var cb      = new ArchiveUpdateCallback(items, path, _io)
             {
                 Password = password,
                 Progress = progress,
@@ -352,8 +352,8 @@ namespace Cube.FileSystem.SevenZip
 
             try
             {
-                GetSetter()?.Execute(raw as ISetProperties);
-                raw.UpdateItems(stream, (uint)items.Count, cb);
+                GetSetter()?.Execute(archive as ISetProperties);
+                archive.UpdateItems(stream, (uint)items.Count, cb);
             }
             finally
             {
@@ -376,7 +376,7 @@ namespace Cube.FileSystem.SevenZip
         private void AddItem(IInformation info, string name)
         {
             var path = info.FullName;
-            _items.Add(new FileItem(path, name));
+            if (CanRead(info)) _items.Add(new FileItem(path, name));
             if (!info.IsDirectory) return;
 
             foreach (var file in _io.GetFiles(path))
@@ -405,6 +405,25 @@ namespace Cube.FileSystem.SevenZip
             => Filters == null ?
                _items :
                _items.Where(x => !new PathFilter(x.FullName).MatchAny(Filters)).ToList();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CanRead
+        ///
+        /// <summary>
+        /// 読み込み可能なファイルかどうかを判別します。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// ディレクトリの場合は true が返ります。
+        /// </remarks>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private bool CanRead(IInformation info)
+        {
+            if (info.IsDirectory) return true;
+            using (var stream = _io.OpenRead(info.FullName)) return stream != null;
+        }
 
         /* ----------------------------------------------------------------- */
         ///

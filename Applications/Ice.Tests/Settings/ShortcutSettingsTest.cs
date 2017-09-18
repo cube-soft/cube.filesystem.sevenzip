@@ -31,7 +31,6 @@ namespace Cube.FileSystem.App.Ice.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    [Parallelizable]
     class ShortcutSettingsTest : MockViewHandler
     {
         /* ----------------------------------------------------------------- */

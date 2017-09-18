@@ -49,7 +49,7 @@ namespace Cube.FileSystem.App.Ice
         {
             InitializeComponent();
 
-            ExitButton.Click += (s, e) => EventAggregator.GetEvents()?.Cancel.Publish();
+            ExitButton.Click += (s, e) => EventHub.GetEvents()?.Cancel.Publish();
 
             SuspendButton.Tag = false;
             SuspendButton.Click += WhenSuspendOrResume;
@@ -310,7 +310,7 @@ namespace Cube.FileSystem.App.Ice
             UpdateElapseLabel();
             Start();
 
-            EventAggregator.GetEvents()?.Show.Publish();
+            EventHub.GetEvents()?.Show.Publish();
         }
 
         /* ----------------------------------------------------------------- */
@@ -419,7 +419,7 @@ namespace Cube.FileSystem.App.Ice
             if (suspend) Stop();
             else Start();
 
-            EventAggregator.GetEvents()?.Suspend.Publish(suspend);
+            EventHub.GetEvents()?.Suspend.Publish(suspend);
         }
 
         #region Fields

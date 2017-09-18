@@ -1,6 +1,6 @@
 ﻿namespace Cube.FileSystem.App.Ice
 {
-    partial class RuntimeSettingsForm
+    partial class ArchiveDetailsForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RuntimeSettingsForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ArchiveDetailsForm));
             this.RootPanel = new System.Windows.Forms.TableLayoutPanel();
             this.OutputPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.OutputLabel = new System.Windows.Forms.Label();

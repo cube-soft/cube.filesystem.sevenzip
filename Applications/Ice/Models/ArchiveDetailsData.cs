@@ -17,19 +17,20 @@
 /* ------------------------------------------------------------------------- */
 using System.Collections.Generic;
 using Cube.FileSystem.SevenZip;
+using Cube.FileSystem.Ice;
 
 namespace Cube.FileSystem.App.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// SettingsViewDataSource
+    /// ArchiveDetailsData
     ///
     /// <summary>
-    /// SettingsView の表示時に使用するデータを定義したクラスです。
+    /// ArchiveDetailsForm の表示時に使用するデータを定義したクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public static class SettingsViewDataSource
+    public static class ArchiveDetailsData
     {
         #region Properties
 
@@ -231,5 +232,82 @@ namespace Cube.FileSystem.App.Ice
         #endregion
 
         #endregion
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// ArchiveDetailsOperations
+    ///
+    /// <summary>
+    /// ArchiveDetails の拡張メソッドを定義するためのクラスです。
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public static class ArchiveDetailsOperations
+    {
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ToOption
+        /// 
+        /// <summary>
+        /// ArchiveOption オブジェクトに変換します。
+        /// </summary>
+        /// 
+        /// <param name="src">実行時圧縮設定</param>
+        /// <param name="settings">ユーザ設定</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static ArchiveOption ToOption(this ArchiveDetails src, SettingsFolder settings)
+            => ToOption(src, settings.Value.Archive);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ToOption
+        /// 
+        /// <summary>
+        /// ArchiveOption オブジェクトに変換します。
+        /// </summary>
+        /// 
+        /// <param name="src">実行時圧縮設定</param>
+        /// <param name="common">圧縮に関するユーザ設定</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static ArchiveOption ToOption(this ArchiveDetails src, ArchiveSettings common)
+        {
+            switch (src.Format)
+            {
+                case Format.Zip:
+                    return new ZipOption
+                    {
+                        CompressionLevel  = src.CompressionLevel,
+                        CompressionMethod = src.CompressionMethod,
+                        EncryptionMethod  = src.EncryptionMethod,
+                        ThreadCount       = src.ThreadCount,
+                        UseUtf8           = common.UseUtf8,
+                    };
+                case Format.SevenZip:
+                case Format.Sfx:
+                    return new ExecutableOption
+                    {
+                        CompressionLevel  = src.CompressionLevel,
+                        CompressionMethod = src.CompressionMethod,
+                        ThreadCount       = src.ThreadCount,
+                        Module            = src.SfxModule,
+                    };
+                case Format.Tar:
+                    return new TarOption
+                    {
+                        CompressionLevel  = src.CompressionLevel,
+                        CompressionMethod = src.CompressionMethod,
+                        ThreadCount       = src.ThreadCount,
+                    };
+                default:
+                    return new ArchiveOption
+                    {
+                        CompressionLevel = src.CompressionLevel,
+                        ThreadCount      = src.ThreadCount,
+                    };
+            }
+        }
     }
 }

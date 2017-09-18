@@ -49,7 +49,7 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         public ArchivePresenter(IProgressView view, Request args,
-            SettingsFolder settings, IEventAggregator events)
+            SettingsFolder settings, IEventHub events)
             : base(view, new ArchiveFacade(args, settings), settings, events)
         {
             // View
@@ -58,11 +58,11 @@ namespace Cube.FileSystem.App.Ice
 
             // Model
             var model = Model as ArchiveFacade;
-            model.DestinationRequired     += WhenDestinationRequired;
-            model.PasswordRequired        += WhenPasswordRequired;
-            model.Progress                += WhenProgress;
-            model.RuntimeSettingsRequired += WhenSettingsRequired;
-            model.MailRequired            += WhenMailRequired;
+            model.DestinationRequired += WhenDestinationRequired;
+            model.PasswordRequired    += WhenPasswordRequired;
+            model.Progress            += WhenProgress;
+            model.DetailsRequired     += WhenDetailsRequired;
+            model.MailRequired        += WhenMailRequired;
         }
 
         #endregion
@@ -71,15 +71,15 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// WhenSettingsRequired
+        /// WhenDetailsRequired
         /// 
         /// <summary>
         /// 詳細設定要求時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenSettingsRequired(object sender, QueryEventArgs<string, ArchiveRuntimeSettings> e)
-            => ShowDialog(() => Views.ShowRuntimeSettingsView(e));
+        private void WhenDetailsRequired(object sender, QueryEventArgs<string, ArchiveDetails> e)
+            => ShowDialog(() => Views.ShowArchiveDetailsView(e));
 
         /* ----------------------------------------------------------------- */
         ///

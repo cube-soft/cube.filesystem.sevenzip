@@ -28,7 +28,6 @@ namespace Cube.FileSystem.Tests
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [Parallelizable]
     [TestFixture]
     class PathFilterTest
     {
@@ -149,12 +148,13 @@ namespace Cube.FileSystem.Tests
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [TestCase(@"\\domain\dir\deny.txt", false, ExpectedResult = @"domain\dir\deny.txt")]
-        [TestCase(@"\\domain\dir\allow.txt", true, ExpectedResult = @"\\domain\dir\allow.txt")]
-        public string Escape_Unc(string src, bool unc)
+        [TestCase(@"\\domain\dir\allow.txt", true, false, ExpectedResult = @"\\domain\dir\allow.txt")]
+        [TestCase(@"\\domain\dir\allow.txt", true,  true, ExpectedResult = @"domain\dir\allow.txt")]
+        [TestCase(@"\\domain\dir\deny.txt", false, false, ExpectedResult = @"domain\dir\deny.txt")]
+        public string Escape_Unc(string src, bool unc, bool inactivation)
             => new PathFilter(src)
             {
-                AllowInactivation = false,
+                AllowInactivation = inactivation,
                 AllowUnc          = unc
             }.EscapedPath;
 

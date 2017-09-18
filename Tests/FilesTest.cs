@@ -29,7 +29,6 @@ namespace Cube.FileSystem.Tests
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [Parallelizable]
     [TestFixture]
     class FilesTest : FileHandler
     {
