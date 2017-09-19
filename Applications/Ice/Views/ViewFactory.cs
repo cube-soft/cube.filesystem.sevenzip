@@ -15,9 +15,9 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
-using System;
 using System.Windows.Forms;
 using Cube.FileSystem.Ice;
+using Cube.Forms.Processes;
 
 namespace Cube.FileSystem.App.Ice
 {
@@ -149,7 +149,10 @@ namespace Cube.FileSystem.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         public virtual void ShowExplorerView(KeyValueEventArgs<string, string> e)
-            => System.Diagnostics.Process.Start(e.Key, $"\"{e.Value}\"");
+        {
+            var proc = System.Diagnostics.Process.Start(e.Key, $"\"{e.Value}\"");
+            proc.Activate();
+        }
 
         /* ----------------------------------------------------------------- */
         ///
