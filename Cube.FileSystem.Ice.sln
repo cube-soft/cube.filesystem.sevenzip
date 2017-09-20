@@ -9,15 +9,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.SevenZip", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.Tests", "Tests\Cube.FileSystem.Tests.csproj", "{BDBA9B88-28D5-4369-B6AF-ADA67D95AC98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.Ice", "Applications\Ice.Shared\Cube.FileSystem.Ice.csproj", "{1BADAB3F-38B5-4ACF-ADDF-036918BFC51C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.Ice", "Applications\Ice\Common\Cube.FileSystem.Ice.csproj", "{1BADAB3F-38B5-4ACF-ADDF-036918BFC51C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.App.Ice", "Applications\Ice\Cube.FileSystem.App.Ice.csproj", "{E14092D2-266A-4CC7-B1CE-2ADD0CB8E65B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.App.Ice", "Applications\Ice\Progress\Cube.FileSystem.App.Ice.csproj", "{E14092D2-266A-4CC7-B1CE-2ADD0CB8E65B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.App.Ice.Associate", "Applications\Ice.Associate\Cube.FileSystem.App.Ice.Associate.csproj", "{DC0D85B9-13D1-49BB-B462-AD66287D3181}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.App.Ice.Associate", "Applications\Ice\Associate\Cube.FileSystem.App.Ice.Associate.csproj", "{DC0D85B9-13D1-49BB-B462-AD66287D3181}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.App.Ice.Settings", "Applications\Ice.Settings\Cube.FileSystem.App.Ice.Settings.csproj", "{42B72A9A-C752-4D99-97D0-D341F1BD2A45}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.App.Ice.Settings", "Applications\Ice\Settings\Cube.FileSystem.App.Ice.Settings.csproj", "{42B72A9A-C752-4D99-97D0-D341F1BD2A45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.App.Ice.Tests", "Applications\Ice.Tests\Cube.FileSystem.App.Ice.Tests.csproj", "{7CBF700C-6F9D-49B5-A905-E5C37302DA93}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.App.Ice.Tests", "Applications\Ice\Tests\Cube.FileSystem.App.Ice.Tests.csproj", "{7CBF700C-6F9D-49B5-A905-E5C37302DA93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -76,16 +76,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Cube.Core">
-      <HintPath>..\..\..\packages\Cube.Core.1.5.0\lib\net45\Cube.Core.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Cube.Core.1.5.0\lib\net45\Cube.Core.dll</HintPath>
     </Reference>
     <Reference Include="Cube.Forms">
-      <HintPath>..\..\..\packages\Cube.Forms.1.4.4\lib\net45\Cube.Forms.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Cube.Forms.1.4.4\lib\net45\Cube.Forms.dll</HintPath>
     </Reference>
     <Reference Include="Cube.Images">
-      <HintPath>..\..\..\packages\Cube.Images.1.5.0\lib\net45\Cube.Images.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Cube.Images.1.5.0\lib\net45\Cube.Images.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\..\..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+      <HintPath>..\..\..\..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -198,15 +198,15 @@
     <None Include="Resources\Images\HeaderArchive.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Libraries\Cube.FileSystem.csproj">
+    <ProjectReference Include="..\..\..\Libraries\Cube.FileSystem.csproj">
       <Project>{e89aad2c-5a74-49f6-ad84-65f0016ef1bb}</Project>
       <Name>Cube.FileSystem</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Libraries\SevenZip\Cube.FileSystem.SevenZip.csproj">
+    <ProjectReference Include="..\..\..\Libraries\SevenZip\Cube.FileSystem.SevenZip.csproj">
       <Project>{74c9f388-360e-4c46-a9a6-e131eab2e49c}</Project>
       <Name>Cube.FileSystem.SevenZip</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ice.Shared\Cube.FileSystem.Ice.csproj">
+    <ProjectReference Include="..\Common\Cube.FileSystem.Ice.csproj">
       <Project>{1badab3f-38b5-4acf-addf-036918bfc51c}</Project>
       <Name>Cube.FileSystem.Ice</Name>
     </ProjectReference>
