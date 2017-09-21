@@ -343,33 +343,37 @@ namespace Cube.FileSystem.App.Ice
         /// <param name="factory">Factory オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void Configure(ViewFactory factory) => _factory = factory;
+        public static void Configure(ViewFactory factory)
+        {
+            System.Diagnostics.Debug.Assert(factory != null);
+            _factory = factory;
+        }
 
         #region Factory methods
 
         public static IProgressView CreateProgressView()
-            => _factory?.CreateProgressView();
+            => _factory.CreateProgressView();
 
         public static void ShowSaveView(QueryEventArgs<string, string> e, bool directory)
-            => _factory?.ShowSaveView(e, directory);
+            => _factory.ShowSaveView(e, directory);
 
         public static void ShowPasswordView(QueryEventArgs<string, string> e, bool confirm)
-            => _factory?.ShowPasswordView(e, confirm);
+            => _factory.ShowPasswordView(e, confirm);
 
         public static void ShowOverwriteView(OverwriteEventArgs e)
-            => _factory?.ShowOverwriteView(e);
+            => _factory.ShowOverwriteView(e);
 
         public static void ShowArchiveDetailsView(QueryEventArgs<string, ArchiveDetails> e)
-            => _factory?.ShowArchiveDetailsView(e);
+            => _factory.ShowArchiveDetailsView(e);
 
         public static void ShowExplorerView(KeyValueEventArgs<string, string> e)
-            => _factory?.ShowExplorerView(e);
+            => _factory.ShowExplorerView(e);
 
         public static void ShowMailView(ValueEventArgs<string> e)
-            => _factory?.ShowMailView(e);
+            => _factory.ShowMailView(e);
 
         public static void ShowMessageBox(MessageEventArgs e)
-            => _factory?.ShowMessageBox(e);
+            => _factory.ShowMessageBox(e);
 
         #endregion
 
