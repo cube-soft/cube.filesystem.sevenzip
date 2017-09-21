@@ -186,10 +186,7 @@ namespace Cube.FileSystem.SevenZip
         void Dispose(bool disposing)
         {
             if (_disposed) return;
-            if (disposing)
-            {
-                if (_handle != null && !_handle.IsClosed) _handle.Close();
-            }
+            if (_handle != null && !_handle.IsClosed) _handle.Close();
             _disposed = true;
         }
 
