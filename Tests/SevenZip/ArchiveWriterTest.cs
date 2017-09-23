@@ -35,7 +35,7 @@ namespace Cube.FileSystem.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ArchiveWriterTest : FileHandler
+    class ArchiveWriterTest : FileHelper
     {
         #region Tests
 

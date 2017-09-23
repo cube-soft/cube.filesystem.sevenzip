@@ -16,37 +16,36 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System.Reflection;
-using System.Threading.Tasks;
 
-namespace Cube.FileSystem.App.Ice.Tests
+namespace Cube.FileSystem.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// MockViewHandler
+    /// FileHelper
     /// 
     /// <summary>
-    /// テストで MockView を使用するためのクラスです。
+    /// テストでファイルを使用するためのクラスです。
     /// </summary>
     /// 
     /* --------------------------------------------------------------------- */
-    class MockViewHandler
+    class FileHelper
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// FileResource
+        /// FileHelper
         ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected MockViewHandler() : this(new Operator()) { }
+        protected FileHelper() : this(new Operator()) { }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// FileResource
+        /// FileHelper
         ///
         /// <summary>
         /// オブジェクトを初期化します。
@@ -55,14 +54,12 @@ namespace Cube.FileSystem.App.Ice.Tests
         /// <param name="io">ファイル操作用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected MockViewHandler(Operator io)
+        protected FileHelper(Operator io)
         {
             var reader = new AssemblyReader(Assembly.GetExecutingAssembly());
             IO = io;
             Root = IO.Get(reader.Location).DirectoryName;
             _directory = GetType().FullName.Replace($"{reader.Product}.", "");
-
-            Views.Configure(_mock);
 
             if (!IO.Exists(Results)) IO.CreateDirectory(Results);
             Delete(Results);
@@ -71,21 +68,6 @@ namespace Cube.FileSystem.App.Ice.Tests
         #endregion
 
         #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Mock
-        ///
-        /// <summary>
-        /// MockView のテスト時設定を取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected MockViewSettings Mock
-        {
-            get { return _mock.Settings; }
-            set { _mock.Settings = value; }
-        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -166,35 +148,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         protected string Result(string filename)
-            => !string.IsNullOrEmpty(filename)
-               ? IO.Combine(Results, filename) :
-               string.Empty;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Reset
-        /// 
-        /// <summary>
-        /// 内部状態をリセットします。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected void Reset()
-            => Mock = new MockViewSettings();
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Wait
-        /// 
-        /// <summary>
-        /// View が非表示になるまで待ちます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected async Task Wait(Cube.Forms.IForm view)
-        {
-            for (var i = 0; view.Visible && i < 100; ++i) await Task.Delay(50);
-        }
+            => IO.Combine(Results, filename);
 
         #endregion
 
@@ -221,7 +175,6 @@ namespace Cube.FileSystem.App.Ice.Tests
         }
 
         #region Fields
-        private MockViewFactory _mock = new MockViewFactory();
         private string _directory = string.Empty;
         #endregion
 

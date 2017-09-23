@@ -40,7 +40,7 @@ namespace Cube.FileSystem.App.Ice.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ExtractPresenterTest : MockViewHandler
+    class ExtractPresenterTest : MockViewHelper
     {
         #region Tests
 

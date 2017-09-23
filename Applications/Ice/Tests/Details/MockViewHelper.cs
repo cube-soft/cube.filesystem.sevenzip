@@ -16,36 +16,37 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System.Reflection;
+using System.Threading.Tasks;
 
-namespace Cube.FileSystem.Tests
+namespace Cube.FileSystem.App.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// FileHandler
+    /// MockViewHelper
     /// 
     /// <summary>
-    /// テストでファイルを使用するためのクラスです。
+    /// テストで MockView を使用するためのクラスです。
     /// </summary>
     /// 
     /* --------------------------------------------------------------------- */
-    class FileHandler
+    class MockViewHelper
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// FileResource
+        /// MockViewHelper
         ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected FileHandler() : this(new Operator()) { }
+        protected MockViewHelper() : this(new Operator()) { }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// FileResource
+        /// MockViewHelper
         ///
         /// <summary>
         /// オブジェクトを初期化します。
@@ -54,12 +55,14 @@ namespace Cube.FileSystem.Tests
         /// <param name="io">ファイル操作用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected FileHandler(Operator io)
+        protected MockViewHelper(Operator io)
         {
             var reader = new AssemblyReader(Assembly.GetExecutingAssembly());
             IO = io;
             Root = IO.Get(reader.Location).DirectoryName;
             _directory = GetType().FullName.Replace($"{reader.Product}.", "");
+
+            Views.Configure(_mock);
 
             if (!IO.Exists(Results)) IO.CreateDirectory(Results);
             Delete(Results);
@@ -68,6 +71,21 @@ namespace Cube.FileSystem.Tests
         #endregion
 
         #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Mock
+        ///
+        /// <summary>
+        /// MockView のテスト時設定を取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected MockViewSettings Mock
+        {
+            get { return _mock.Settings; }
+            set { _mock.Settings = value; }
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -131,8 +149,7 @@ namespace Cube.FileSystem.Tests
         /// <returns>パス</returns>
         ///
         /* ----------------------------------------------------------------- */
-        protected string Example(string filename)
-            => IO.Combine(Examples, filename);
+        protected string Example(string filename) => IO.Combine(Examples, filename);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -148,7 +165,34 @@ namespace Cube.FileSystem.Tests
         ///
         /* ----------------------------------------------------------------- */
         protected string Result(string filename)
-            => IO.Combine(Results, filename);
+            => !string.IsNullOrEmpty(filename)
+               ? IO.Combine(Results, filename) :
+               string.Empty;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Reset
+        /// 
+        /// <summary>
+        /// 内部状態をリセットします。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected void Reset() => Mock = new MockViewSettings();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Wait
+        /// 
+        /// <summary>
+        /// View が非表示になるまで待ちます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected async Task Wait(Cube.Forms.IForm view)
+        {
+            for (var i = 0; view.Visible && i < 100; ++i) await Task.Delay(50);
+        }
 
         #endregion
 
@@ -175,6 +219,7 @@ namespace Cube.FileSystem.Tests
         }
 
         #region Fields
+        private MockViewFactory _mock = new MockViewFactory();
         private string _directory = string.Empty;
         #endregion
 

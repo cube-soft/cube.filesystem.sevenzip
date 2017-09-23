@@ -32,7 +32,7 @@ namespace Cube.FileSystem.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class OperatorTest : FileHandler
+    class OperatorTest : FileHelper
     {
         #region Tests
 

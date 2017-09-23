@@ -91,7 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Details\MockViewFactory.cs" />
-    <Compile Include="Details\MockViewHandler.cs" />
+    <Compile Include="Details\MockViewHelper.cs" />
     <Compile Include="Details\ProgressMockView.cs" />
     <Compile Include="Settings\AssociateRegistrarTest.cs" />
     <Compile Include="Settings\SettingsViewModelTest.cs" />

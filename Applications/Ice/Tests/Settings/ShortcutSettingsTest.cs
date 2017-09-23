@@ -30,7 +30,7 @@ namespace Cube.FileSystem.App.Ice.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ShortcutSettingsTest : MockViewHandler
+    class ShortcutSettingsTest : MockViewHelper
     {
         /* ----------------------------------------------------------------- */
         ///
