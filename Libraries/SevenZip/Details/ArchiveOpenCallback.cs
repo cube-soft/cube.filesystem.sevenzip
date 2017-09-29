@@ -82,10 +82,10 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void SetTotal(IntPtr count, IntPtr bytes)
         {
-            if (count != IntPtr.Zero) ArchiveReport.TotalCount = Marshal.ReadInt64(count);
-            if (bytes != IntPtr.Zero) ArchiveReport.TotalBytes = Marshal.ReadInt64(bytes);
+            if (count != IntPtr.Zero) Report.TotalCount = Marshal.ReadInt64(count);
+            if (bytes != IntPtr.Zero) Report.TotalBytes = Marshal.ReadInt64(bytes);
 
-            Report();
+            ExecuteReport();
         }
 
         /* ----------------------------------------------------------------- */
@@ -102,10 +102,10 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void SetCompleted(IntPtr count, IntPtr bytes)
         {
-            if (count != IntPtr.Zero) ArchiveReport.Count = Marshal.ReadInt64(count);
-            if (bytes != IntPtr.Zero) ArchiveReport.Bytes = Marshal.ReadInt64(bytes);
+            if (count != IntPtr.Zero) Report.Count = Marshal.ReadInt64(count);
+            if (bytes != IntPtr.Zero) Report.Bytes = Marshal.ReadInt64(bytes);
 
-            Report();
+            ExecuteReport();
             Result = OperationResult.OK;
         }
 
@@ -142,7 +142,7 @@ namespace Cube.FileSystem.SevenZip
                     break;
             }
 
-            Report();
+            ExecuteReport();
             return (int)Result;
         }
 
@@ -162,7 +162,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int GetStream(string name, out IInStream stream)
         {
-            Report();
+            ExecuteReport();
 
             var src = IO.Exists(name) ?
                       name :

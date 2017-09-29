@@ -72,12 +72,12 @@ namespace Cube.FileSystem.App.Ice.Tests
                 ep.Settings.Value.Extract = extract;
                 ep.Settings.Value.Extract.SaveDirectoryName = Result("Others");
 
-                Assert.That(ep.Model.ProgressReport.Ratio, Is.EqualTo(0.0));
+                Assert.That(ep.Model.Report.Ratio, Is.EqualTo(0.0));
                 ep.View.Show();
                 Assert.That(ep.View.Visible, Is.True);
                 await Wait(ep.View);
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
-                Assert.That(ep.Model.ProgressReport.Ratio, Is.EqualTo(1.0).Within(0.01));
+                Assert.That(ep.Model.Report.Ratio, Is.EqualTo(1.0).Within(0.01));
 
                 Assert.That(ep.View.Elapsed,    Is.GreaterThan(TimeSpan.Zero));
                 Assert.That(ep.View.FileName,   Is.EqualTo(filename));
@@ -173,7 +173,7 @@ namespace Cube.FileSystem.App.Ice.Tests
 
             using (var ep = Create(src, dest))
             {
-                ep.Model.ProgressInterval = TimeSpan.FromMilliseconds(50);
+                ep.Model.Interval = TimeSpan.FromMilliseconds(50);
                 ep.View.Show();
 
                 ep.EventHub.GetEvents().Suspend.Publish(true);
@@ -758,8 +758,8 @@ namespace Cube.FileSystem.App.Ice.Tests
             var s = new SettingsFolder();
 
             var dest = new ExtractPresenter(v, request, s, e);
-            Assert.That(dest.Model.ProgressInterval.TotalMilliseconds, Is.EqualTo(100).Within(1));
-            dest.Model.ProgressInterval = TimeSpan.FromMilliseconds(20);
+            Assert.That(dest.Model.Interval.TotalMilliseconds, Is.EqualTo(100).Within(1));
+            dest.Model.Interval = TimeSpan.FromMilliseconds(20);
             return dest;
         }
 

@@ -181,7 +181,7 @@ namespace Cube.FileSystem.App.Ice
 
                 ProgressStart();
                 WhenExtracting(this, ValueEventArgs.Create(item));
-                item.Extract(Tmp, CreateInnerProgress(e => ProgressReport = e));
+                item.Extract(Tmp, CreateInnerProgress(e => Report = e));
 
                 if (Formats.FromFile(path) == Format.Tar)
                 {
@@ -217,7 +217,7 @@ namespace Cube.FileSystem.App.Ice
                 reader.Extracting += WhenExtracting;
                 reader.Extracted  += WhenExtracted;
                 ProgressStart();
-                ExtractCore(reader, CreateInnerProgress(e => ProgressReport = e));
+                ExtractCore(reader, CreateInnerProgress(e => Report = e));
                 ProgressResult();
             }
             finally

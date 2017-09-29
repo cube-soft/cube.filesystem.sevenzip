@@ -55,14 +55,13 @@ namespace Cube.FileSystem.SevenZip
         public ArchiveExtractCallback(string src, string dest, IEnumerable<ArchiveItem> items, Operator io)
             : base(src, io)
         {
-            Destination = dest;
-            Items       = items;
-            TotalCount  = -1;
-            TotalBytes  = -1;
-            _inner      = Items.GetEnumerator();
-
-            ArchiveReport.Count = 0;
-            ArchiveReport.Bytes = 0;
+            Destination  = dest;
+            Items        = items;
+            TotalCount   = -1;
+            TotalBytes   = -1;
+            Report.Count = 0;
+            Report.Bytes = 0;
+            _inner       = Items.GetEnumerator();
         }
 
         #endregion
@@ -119,8 +118,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public long TotalCount
         {
-            get { return ArchiveReport.TotalCount; }
-            set { ArchiveReport.TotalCount = value; }
+            get { return Report.TotalCount; }
+            set { Report.TotalCount = value; }
         }
 
         /* ----------------------------------------------------------------- */
@@ -138,8 +137,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public long TotalBytes
         {
-            get { return ArchiveReport.TotalBytes; }
-            set { ArchiveReport.TotalBytes = value; }
+            get { return Report.TotalBytes; }
+            set { Report.TotalBytes = value; }
         }
 
         #endregion
@@ -190,8 +189,8 @@ namespace Cube.FileSystem.SevenZip
             if (TotalCount < 0) TotalCount = Items.Count();
             if (TotalBytes < 0) TotalBytes = (long)bytes;
 
-            _hack = Math.Max((long)bytes - ArchiveReport.TotalBytes, 0);
-            Report();
+            _hack = Math.Max((long)bytes - Report.TotalBytes, 0);
+            ExecuteReport();
         }
 
         /* ----------------------------------------------------------------- */
@@ -216,9 +215,9 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void SetCompleted(ref ulong bytes)
         {
-            var cvt = Math.Min(Math.Max((long)bytes - _hack, 0), ArchiveReport.TotalBytes);
-            ArchiveReport.Bytes = cvt;
-            Report();
+            var cvt = Math.Min(Math.Max((long)bytes - _hack, 0), Report.TotalBytes);
+            Report.Bytes = cvt;
+            ExecuteReport();
         }
 
         /* ----------------------------------------------------------------- */
@@ -238,7 +237,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int GetStream(uint index, out ISequentialOutStream stream, AskMode mode)
         {
-            Report();
+            ExecuteReport();
             stream = CallbackFunc(() =>
             {
                 return Result == OperationResult.OK && mode == AskMode.Extract ?
@@ -265,7 +264,7 @@ namespace Cube.FileSystem.SevenZip
             if (item == null || !_streams.ContainsKey(item)) return;
 
             Extracting?.Invoke(this, ValueEventArgs.Create(item));
-            Report();
+            ExecuteReport();
         });
 
         /* ----------------------------------------------------------------- */
@@ -289,8 +288,8 @@ namespace Cube.FileSystem.SevenZip
                 RaiseExtracted(item);
             }
 
-            ArchiveReport.Count++;
-            Report();
+            Report.Count++;
+            ExecuteReport();
             Result = result;
         });
 
@@ -411,8 +410,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         private ArchiveStreamWriter Skip()
         {
-            ArchiveReport.Count++;
-            ArchiveReport.Bytes += _inner.Current.Length;
+            Report.Count++;
+            Report.Bytes += _inner.Current.Length;
             this.LogDebug($"Skip:{_inner.Current.FullName}");
 
             return null;

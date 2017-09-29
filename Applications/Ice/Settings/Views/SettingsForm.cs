@@ -32,7 +32,7 @@ namespace Cube.FileSystem.App.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class SettingsForm : Cube.Forms.FormBase
+    public partial class SettingsForm : Cube.Forms.StandardForm
     {
         #region Constructors
 

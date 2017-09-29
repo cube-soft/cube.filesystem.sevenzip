@@ -57,7 +57,7 @@ namespace Cube.FileSystem.App.Ice
             IO       = new Operator(new Alpha());
 
             IO.Failed += WhenFailed;
-            _timer.Elapsed += (s, e) => OnProgress(ValueEventArgs.Create(ProgressReport));
+            _timer.Elapsed += (s, e) => OnProgress(ValueEventArgs.Create(Report));
         }
 
         #endregion
@@ -139,25 +139,25 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ProgressReport
+        /// Report
         /// 
         /// <summary>
         /// 進捗状況の内容を取得または設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveReport ProgressReport { get; protected set; } = new ArchiveReport();
+        public ArchiveReport Report { get; protected set; } = new ArchiveReport();
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ProgressInterval
+        /// Interval
         /// 
         /// <summary>
         /// 進捗状況の報告間隔を取得または設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public TimeSpan ProgressInterval
+        public TimeSpan Interval
         {
             get { return TimeSpan.FromMilliseconds(_timer.Interval); }
             set { _timer.Interval = value.TotalMilliseconds; }
@@ -466,15 +466,15 @@ namespace Cube.FileSystem.App.Ice
         {
             this.LogDebug(string.Format(
                 "Count:{0:#,0}\tBytes:{1:#,0}",
-                ProgressReport.TotalCount,
-                ProgressReport.TotalBytes
+                Report.TotalCount,
+                Report.TotalBytes
             ));
 
             // hack (see remarks)
-            ProgressReport.Count = ProgressReport.TotalCount;
-            ProgressReport.Bytes = ProgressReport.TotalBytes;
+            Report.Count = Report.TotalCount;
+            Report.Bytes = Report.TotalBytes;
 
-            OnProgress(ValueEventArgs.Create(ProgressReport));
+            OnProgress(ValueEventArgs.Create(Report));
         }
 
         /* ----------------------------------------------------------------- */

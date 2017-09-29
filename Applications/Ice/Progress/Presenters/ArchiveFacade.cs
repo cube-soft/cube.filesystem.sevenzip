@@ -193,7 +193,7 @@ namespace Cube.FileSystem.App.Ice
                 if (Settings.Value.Archive.Filtering) writer.Filters = Settings.Value.GetFilters();
                 foreach (var item in Request.Sources) writer.Add(item);
                 ProgressStart();
-                writer.Save(dest, query, CreateInnerProgress(x => ProgressReport = x));
+                writer.Save(dest, query, CreateInnerProgress(x => Report = x));
             }
 
             // Move

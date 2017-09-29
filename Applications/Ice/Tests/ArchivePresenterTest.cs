@@ -69,12 +69,12 @@ namespace Cube.FileSystem.App.Ice.Tests
                 ap.Settings.Value.Archive = archive;
                 ap.Settings.Value.Archive.SaveDirectoryName = Result("Others");
 
-                Assert.That(ap.Model.ProgressReport.Ratio, Is.EqualTo(0.0));
+                Assert.That(ap.Model.Report.Ratio, Is.EqualTo(0.0));
                 ap.View.Show();
                 Assert.That(ap.View.Visible, Is.True);
                 await Wait(ap.View);
                 Assert.That(ap.View.Visible, Is.False, "Timeout");
-                Assert.That(ap.Model.ProgressReport.Ratio, Is.EqualTo(1.0).Within(0.01));
+                Assert.That(ap.Model.Report.Ratio, Is.EqualTo(1.0).Within(0.01));
 
                 Assert.That(ap.View.Elapsed,    Is.GreaterThan(TimeSpan.Zero));
                 Assert.That(ap.View.FileName,   Is.EqualTo(filename));
@@ -396,8 +396,8 @@ namespace Cube.FileSystem.App.Ice.Tests
             s.Value.Filters = "Filter.txt|FilterDirectory";
 
             var dest = new ArchivePresenter(v, request, s, e);
-            Assert.That(dest.Model.ProgressInterval.TotalMilliseconds, Is.EqualTo(100).Within(1));
-            dest.Model.ProgressInterval = TimeSpan.FromMilliseconds(20);
+            Assert.That(dest.Model.Interval.TotalMilliseconds, Is.EqualTo(100).Within(1));
+            dest.Model.Interval = TimeSpan.FromMilliseconds(20);
             return dest;
         }
 

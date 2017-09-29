@@ -32,7 +32,7 @@ namespace Cube.FileSystem.App.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class ProgressForm : Cube.Forms.FormBase, IProgressView
+    public partial class ProgressForm : Cube.Forms.StandardForm, IProgressView
     {
         #region Constructors
 

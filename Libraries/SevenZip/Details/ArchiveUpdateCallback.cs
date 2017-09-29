@@ -53,7 +53,7 @@ namespace Cube.FileSystem.SevenZip
             : base(io)
         {
             Items = items;
-            ArchiveReport.TotalCount = items.Count;
+            Report.TotalCount = items.Count;
         }
 
         #endregion
@@ -144,8 +144,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void SetTotal(ulong bytes)
         {
-            ArchiveReport.TotalBytes = (long)bytes;
-            Report();
+            Report.TotalBytes = (long)bytes;
+            ExecuteReport();
         }
 
         /* ----------------------------------------------------------------- */
@@ -161,8 +161,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void SetCompleted(ref ulong bytes)
         {
-            ArchiveReport.Bytes = (long)bytes;
-            Report();
+            Report.Bytes = (long)bytes;
+            ExecuteReport();
         }
 
         /* ----------------------------------------------------------------- */
@@ -191,7 +191,7 @@ namespace Cube.FileSystem.SevenZip
             newprop = 1;
             indexInArchive = uint.MaxValue;
 
-            Report();
+            ExecuteReport();
             return (int)Result;
         }
 
@@ -246,7 +246,7 @@ namespace Cube.FileSystem.SevenZip
                     break;
             }
 
-            Report();
+            ExecuteReport();
             return (int)Result;
         }
 
@@ -266,11 +266,11 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int GetStream(uint index, out ISequentialInStream stream)
         {
-            Report();
+            ExecuteReport();
             stream = CallbackFunc(() =>
             {
-                ArchiveReport.Count = index + 1;
-                Progress?.Report(ArchiveReport);
+                Report.Count = index + 1;
+                Progress?.Report(Report);
                 return CreateStream(index);
             });
             return (int)Result;

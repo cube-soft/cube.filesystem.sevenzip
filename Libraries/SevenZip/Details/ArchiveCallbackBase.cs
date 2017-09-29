@@ -104,14 +104,14 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveReport
+        /// Report
         ///
         /// <summary>
         /// 進捗報告の内容を取得または設定します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        protected ArchiveReport ArchiveReport { get; set; } = new ArchiveReport();
+        protected ArchiveReport Report { get; set; } = new ArchiveReport();
 
         #endregion
 
@@ -157,15 +157,15 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Report
+        /// ExecuteReport
         /// 
         /// <summary>
         /// 進捗状況を通知します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        protected void Report()
-            => CallbackAction(() => Progress?.Report(ArchiveReport));
+        protected void ExecuteReport()
+            => CallbackAction(() => Progress?.Report(Report));
 
         #endregion
     }
