@@ -175,6 +175,17 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         public IEnumerable<string> Sources { get; private set; }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Options
+        /// 
+        /// <summary>
+        /// オプション部分の元の文字列一覧を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public IEnumerable<string> Options { get; private set; }
+
         #endregion
 
         #region Implementations
@@ -191,20 +202,26 @@ namespace Cube.FileSystem.App.Ice
         private void ParseOptions(string[] args)
         {
             var sources = new List<string>();
+            var options = new List<string>();
 
             for (var i = 1; i < args.Length; ++i)
             {
                 if (!args[i].StartsWith("/")) sources.Add(args[i]);
-                else if (args[i] == "/m") Mail = true;
-                else if (args[i] == "/p") Password = true;
-                else if (args[i].StartsWith("/o")) Location = GetLocation(args[i]);
-                else if (args[i].StartsWith("/drop")) DropDirectory = GetTail(args[i]);
+                else
+                {
+                    options.Add(args[i]);
+                    if (args[i] == "/m") Mail = true;
+                    else if (args[i] == "/p") Password = true;
+                    else if (args[i].StartsWith("/o")) Location = GetLocation(args[i]);
+                    else if (args[i].StartsWith("/drop")) DropDirectory = GetTail(args[i]);
+                }
             }
 
             if (!string.IsNullOrEmpty(DropDirectory) &&
                 Location == SaveLocation.Source) Location = SaveLocation.Drop;
 
             Sources = sources;
+            Options = options;
         }
 
         /* ----------------------------------------------------------------- */

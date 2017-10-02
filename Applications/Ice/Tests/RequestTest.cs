@@ -15,6 +15,7 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+using System.Linq;
 using Cube.FileSystem.Ice;
 using Cube.FileSystem.SevenZip;
 using NUnit.Framework;
@@ -116,9 +117,10 @@ namespace Cube.FileSystem.App.Ice.Tests
         public void Create_WrongDrop()
         {
             var request = new Request(new[] { "/x", "/o:source", "/drop", "/dummy" });
-            Assert.That(request.Mode,          Is.EqualTo(Mode.Extract));
-            Assert.That(request.Location,      Is.EqualTo(SaveLocation.Source));
-            Assert.That(request.DropDirectory, Is.Empty);
+            Assert.That(request.Options.Count(), Is.EqualTo(3));
+            Assert.That(request.Mode,            Is.EqualTo(Mode.Extract));
+            Assert.That(request.Location,        Is.EqualTo(SaveLocation.Source));
+            Assert.That(request.DropDirectory,   Is.Empty);
         }
     }
 }
