@@ -33,8 +33,8 @@ artifacts:
     - path: Applications\Ice\Associate\bin\Release
       name: CubeIce.Settings.Associate
 test_script:
-    - ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:nunit3-console.exe -targetargs:Cube.FileSystem.Tests.dll -targetdir:Tests\bin\Release -hideskipped:All -output:CoverResult.xml -filter:"+[*]* -[AlphaFS]* -[*]*NativeMethods -[*]*Properties.*"
-    - ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:nunit3-console.exe -targetargs:Cube.FileSystem.App.Ice.Tests.dll -targetdir:Applications\Ice\Tests\bin\Release -hideskipped:All -mergeoutput -output:CoverResult.xml -filter:"+[*]* -[AlphaFS]* -[*]*NativeMethods -[*]*Properties.* -[*]*Form -[*]*.Program"
+    - ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:nunit3-console.exe -targetargs:Cube.FileSystem.Tests.dll -targetdir:Tests\bin\Release -returntargetcode -hideskipped:All -output:CoverResult.xml -filter:"+[*]* -[AlphaFS]* -[*]*NativeMethods -[*]*Properties.*"
+    - ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:nunit3-console.exe -targetargs:Cube.FileSystem.App.Ice.Tests.dll -targetdir:Applications\Ice\Tests\bin\Release -returntargetcode -hideskipped:All -mergeoutput -output:CoverResult.xml -filter:"+[*]* -[AlphaFS]* -[*]*NativeMethods -[*]*Properties.* -[*]*Form -[*]*.Program"
 after_test:
     - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
     - pip install codecov
