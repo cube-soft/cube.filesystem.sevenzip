@@ -58,11 +58,11 @@ namespace Cube.FileSystem.App.Ice
 
             // Model
             var model = Model as ArchiveFacade;
-            model.DestinationRequired += WhenDestinationRequired;
-            model.PasswordRequired    += WhenPasswordRequired;
+            model.DestinationRequested += WhenDestinationRequested;
+            model.PasswordRequested    += WhenPasswordRequested;
             model.Progress            += WhenProgress;
-            model.DetailsRequired     += WhenDetailsRequired;
-            model.MailRequired        += WhenMailRequired;
+            model.DetailsRequested     += WhenDetailsRequested;
+            model.MailRequested        += WhenMailRequested;
         }
 
         #endregion
@@ -71,50 +71,50 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// WhenDetailsRequired
+        /// WhenDetailsRequested
         /// 
         /// <summary>
         /// 詳細設定要求時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenDetailsRequired(object sender, QueryEventArgs<string, ArchiveDetails> e)
+        private void WhenDetailsRequested(object sender, QueryEventArgs<string, ArchiveDetails> e)
             => ShowDialog(() => Views.ShowArchiveDetailsView(e));
 
         /* ----------------------------------------------------------------- */
         ///
-        /// WhenDestinationRequired
+        /// WhenDestinationRequested
         /// 
         /// <summary>
         /// 保存パス要求時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenDestinationRequired(object sender, QueryEventArgs<string, string> e)
+        private void WhenDestinationRequested(object sender, QueryEventArgs<string, string> e)
             => ShowDialog(() => Views.ShowSaveView(e, false));
 
         /* ----------------------------------------------------------------- */
         ///
-        /// WhenPasswordRequired
+        /// WhenPasswordRequested
         /// 
         /// <summary>
         /// パスワード要求時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenPasswordRequired(object sender, QueryEventArgs<string, string> e)
+        private void WhenPasswordRequested(object sender, QueryEventArgs<string, string> e)
             => ShowDialog(() => Views.ShowPasswordView(e, true));
 
         /* ----------------------------------------------------------------- */
         ///
-        /// WhenMailRequired
+        /// WhenMailRequested
         /// 
         /// <summary>
         /// メール画面表示要求時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenMailRequired(object sender, ValueEventArgs<string> e)
+        private void WhenMailRequested(object sender, ValueEventArgs<string> e)
             => Views.ShowMailView(e);
 
         /* ----------------------------------------------------------------- */

@@ -62,7 +62,7 @@ namespace Cube.FileSystem.App.Ice
             ExecuteButton.Click += (s, e) => Close();
             ExitButton.Click    += (s, e) => Close();
 
-            OutputButton.Click                  += WhenPathRequired;
+            OutputButton.Click                  += WhenPathRequested;
             OutputTextBox.TextChanged           += WhenPathChanged;
             FormatComboBox.SelectedValueChanged += WhenFormatChanged;
             EncryptionCheckBox.CheckedChanged   += WhenEncryptionChanged;
@@ -319,14 +319,14 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// WhenPathRequired
+        /// WhenPathRequested
         /// 
         /// <summary>
         /// 保存パスの要求時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenPathRequired(object sender, EventArgs e)
+        private void WhenPathRequested(object sender, EventArgs e)
         {
             var dialog = new SaveFileDialog
             {

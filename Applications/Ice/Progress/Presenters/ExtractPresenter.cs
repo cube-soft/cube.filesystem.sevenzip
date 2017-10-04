@@ -58,9 +58,9 @@ namespace Cube.FileSystem.App.Ice
             View.Status   = Properties.Resources.MessagePreExtract;
 
             // Model
-            Model.DestinationRequired += WhenDestinationRequired;
-            Model.PasswordRequired    += WhenPasswordRequired;
-            Model.OverwriteRequired   += WhenOverwriteRequired;
+            Model.DestinationRequested += WhenDestinationRequested;
+            Model.PasswordRequested    += WhenPasswordRequested;
+            Model.OverwriteRequested   += WhenOverwriteRequested;
             Model.Progress            += WhenProgress;
         }
 
@@ -70,38 +70,38 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// WhenDestinationRequired
+        /// WhenDestinationRequested
         /// 
         /// <summary>
         /// 保存パス要求時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenDestinationRequired(object sender, QueryEventArgs<string, string> e)
+        private void WhenDestinationRequested(object sender, QueryEventArgs<string, string> e)
             => ShowDialog(() => Views.ShowSaveView(e, true));
 
         /* ----------------------------------------------------------------- */
         ///
-        /// WhenPasswordRequired
+        /// WhenPasswordRequested
         /// 
         /// <summary>
         /// パスワード要求時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenPasswordRequired(object sender, QueryEventArgs<string, string> e)
+        private void WhenPasswordRequested(object sender, QueryEventArgs<string, string> e)
             => ShowDialog(() => Views.ShowPasswordView(e, false));
 
         /* ----------------------------------------------------------------- */
         ///
-        /// WhenOverwriteRequired
+        /// WhenOverwriteRequested
         /// 
         /// <summary>
         /// 上書き確認時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenOverwriteRequired(object sender, OverwriteEventArgs e)
+        private void WhenOverwriteRequested(object sender, OverwriteEventArgs e)
             => ShowDialog(() => Views.ShowOverwriteView(e));
 
         /* ----------------------------------------------------------------- */

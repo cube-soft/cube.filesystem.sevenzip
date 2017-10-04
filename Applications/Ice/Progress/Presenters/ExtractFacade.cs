@@ -102,7 +102,7 @@ namespace Cube.FileSystem.App.Ice
         {
             try
             {
-                var query = new Query<string, string>(x => OnPasswordRequired(x));
+                var query = new Query<string, string>(x => OnPasswordRequested(x));
                 using (var reader = new ArchiveReader(Source, query, IO))
                 {
                     this.LogDebug($"Format:{reader.Format}\tSource:{Source}");
@@ -185,7 +185,7 @@ namespace Cube.FileSystem.App.Ice
 
                 if (Formats.FromFile(path) == Format.Tar)
                 {
-                    var query = new Query<string, string>(x => OnPasswordRequired(x));
+                    var query = new Query<string, string>(x => OnPasswordRequested(x));
                     using (var r = new ArchiveReader(path, query, IO)) Extract(r, dest);
                 }
                 else
@@ -410,17 +410,17 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// RaiseOverwriteRequired
+        /// RaiseOverwriteRequested
         /// 
         /// <summary>
-        /// OverwriteRequired イベントを発生させます。
+        /// OverwriteRequested イベントを発生させます。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void RaiseOverwriteRequired(IInformation src, IInformation dest)
+        private void RaiseOverwriteRequested(IInformation src, IInformation dest)
         {
             var e = new OverwriteEventArgs(src, dest);
-            OnOverwriteRequired(e);
+            OnOverwriteRequested(e);
             if (e.Result == OverwriteMode.Cancel) throw new OperationCanceledException();
             OverwriteMode = e.Result;
         }
@@ -454,7 +454,7 @@ namespace Cube.FileSystem.App.Ice
             if (dest.Exists)
             {
                 if (e.Value.IsDirectory) return;
-                if (!OverwriteMode.HasFlag(OverwriteMode.Always)) RaiseOverwriteRequired(src, dest);
+                if (!OverwriteMode.HasFlag(OverwriteMode.Always)) RaiseOverwriteRequested(src, dest);
                 Overwrite(src, dest);
             }
             else Move(src, dest);

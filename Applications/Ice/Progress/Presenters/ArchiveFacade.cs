@@ -32,7 +32,7 @@ namespace Cube.FileSystem.App.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveFacade : ProgressFacade
+    public sealed class ArchiveFacade : ProgressFacade
     {
         #region Constructors
 
@@ -70,35 +70,35 @@ namespace Cube.FileSystem.App.Ice
 
         #region Events
 
-        #region DetailsRequired
+        #region DetailsRequested
 
         /* ----------------------------------------------------------------- */
         ///
-        /// DetailsRequired
+        /// DetailsRequested
         /// 
         /// <summary>
         /// 圧縮の詳細設定が要求された時に発生するイベントです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public event QueryEventHandler<string, ArchiveDetails> DetailsRequired;
+        public event QueryEventHandler<string, ArchiveDetails> DetailsRequested;
 
         /* ----------------------------------------------------------------- */
         ///
-        /// RaiseDetailsRequired
+        /// RaiseDetailsRequested
         /// 
         /// <summary>
-        /// DetailsRequired イベントを発生させます。
+        /// DetailsRequested イベントを発生させます。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void RaiseDetailsRequired()
+        private void RaiseDetailsRequested()
         {
             var info = IO.Get(Request.Sources.First());
             var path = IO.Combine(info.DirectoryName, $"{info.NameWithoutExtension}.zip");
 
             var e = new QueryEventArgs<string, ArchiveDetails>(path, true);
-            DetailsRequired?.Invoke(this, e);
+            DetailsRequested?.Invoke(this, e);
             if (e.Cancel) throw new OperationCanceledException();
 
             Details = e.Result;
@@ -110,28 +110,28 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// MailRequired
+        /// MailRequested
         /// 
         /// <summary>
         /// メール画面の表示が要求された時に発生するイベントです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public event ValueEventHandler<string> MailRequired;
+        public event ValueEventHandler<string> MailRequested;
 
         /* ----------------------------------------------------------------- */
         ///
-        /// RaiseMailRequired
+        /// RaiseMailRequested
         /// 
         /// <summary>
-        /// MailRequired イベントを発生させます。
+        /// MailRequested イベントを発生させます。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void RaiseMailRequired()
+        private void RaiseMailRequested()
         {
             if (!Request.Mail) return;
-            MailRequired?.Invoke(this, ValueEventArgs.Create(Destination));
+            MailRequested?.Invoke(this, ValueEventArgs.Create(Destination));
         }
 
         #endregion
@@ -155,7 +155,7 @@ namespace Cube.FileSystem.App.Ice
             {
                 Archive();
                 ProgressResult();
-                RaiseMailRequired();
+                RaiseMailRequested();
                 Open(Destination, Settings.Value.Archive.OpenDirectory);
             }
             catch (OperationCanceledException) { /* user cancel */ }
@@ -181,7 +181,7 @@ namespace Cube.FileSystem.App.Ice
             var fmt   = GetFormat();
             var dest  = GetDestination(fmt);
             var query = !string.IsNullOrEmpty(Details.Password) || Request.Password ?
-                        new Query<string, string>(x => RaisePasswordRequired(x)) :
+                        new Query<string, string>(x => RaisePasswordRequested(x)) :
                         null;
 
             System.Diagnostics.Debug.Assert(Details != null);
@@ -225,13 +225,11 @@ namespace Cube.FileSystem.App.Ice
                 case Format.BZip2:
                 case Format.GZip:
                 case Format.XZ:
-                    Details = new ArchiveDetails(Format.Tar)
-                    {
-                        CompressionMethod = f.ToMethod(),
-                    };
+                    Details = new ArchiveDetails(Format.Tar);
+                    Details.CompressionMethod = f.ToMethod();
                     break;
                 default:
-                    RaiseDetailsRequired();
+                    RaiseDetailsRequested();
                     break;
             }
 
@@ -260,7 +258,7 @@ namespace Cube.FileSystem.App.Ice
                 if (!runtime && IO.Exists(path))
                 {
                     var e = new QueryEventArgs<string, string>(query, true);
-                    OnDestinationRequired(e);
+                    OnDestinationRequested(e);
                     if (e.Cancel) throw new OperationCanceledException();
                     path = e.Result;
                 }
@@ -294,21 +292,21 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// RaisePasswordRequired
+        /// RaisePasswordRequested
         /// 
         /// <summary>
-        /// 必要に応じて PasswordRequired イベントを発生させます。
+        /// 必要に応じて PasswordRequested イベントを発生させます。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void RaisePasswordRequired(QueryEventArgs<string, string> e)
+        private void RaisePasswordRequested(QueryEventArgs<string, string> e)
         {
             if (!string.IsNullOrEmpty(Details.Password))
             {
                 e.Result = Details.Password;
                 e.Cancel = false;
             }
-            else OnPasswordRequired(e);
+            else OnPasswordRequested(e);
         }
 
         #endregion

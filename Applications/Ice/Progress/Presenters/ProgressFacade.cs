@@ -216,116 +216,116 @@ namespace Cube.FileSystem.App.Ice
 
         #endregion
 
-        #region DestinationRequired
+        #region DestinationRequested
 
         /* ----------------------------------------------------------------- */
         ///
-        /// DestinationRequired
+        /// DestinationRequested
         /// 
         /// <summary>
         /// 保存パス要求時に発生するイベントです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public QueryEventHandler<string, string> DestinationRequired;
+        public QueryEventHandler<string, string> DestinationRequested;
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OnDestinationRequired
+        /// OnDestinationRequested
         /// 
         /// <summary>
-        /// DestinationRequired イベントを発生させます。
+        /// DestinationRequested イベントを発生させます。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public virtual void OnDestinationRequired(QueryEventArgs<string, string> e)
-            => DestinationRequired?.Invoke(this, e);
+        public virtual void OnDestinationRequested(QueryEventArgs<string, string> e)
+            => DestinationRequested?.Invoke(this, e);
 
         #endregion
 
-        #region PasswordRequired
+        #region PasswordRequested
 
         /* ----------------------------------------------------------------- */
         ///
-        /// PasswordRequired
+        /// PasswordRequested
         /// 
         /// <summary>
         /// パスワード要求時に発生するイベントです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public QueryEventHandler<string, string> PasswordRequired;
+        public QueryEventHandler<string, string> PasswordRequested;
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OnPasswordRequired
+        /// OnPasswordRequested
         /// 
         /// <summary>
-        /// PasswordRequired イベントを発生させます。
+        /// PasswordRequested イベントを発生させます。
         /// </summary>
         /// 
         /// <remarks>
-        /// PasswordRequire イベントにハンドラが設定されていない場合、
+        /// PasswordRequested イベントにハンドラが設定されていない場合、
         /// SevenZip.EncryptionException 例外が送出されます。
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnPasswordRequired(QueryEventArgs<string, string> e)
-            => PasswordRequired?.Invoke(this, e);
+        protected virtual void OnPasswordRequested(QueryEventArgs<string, string> e)
+            => PasswordRequested?.Invoke(this, e);
 
         #endregion
 
-        #region OpenDirectoryRequired
+        #region OpenDirectoryRequested
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OpenDirectoryRequired
+        /// OpenDirectoryRequested
         /// 
         /// <summary>
         /// ディレクトリを開く時に発生するイベントです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public event KeyValueEventHandler<string, string> OpenDirectoryRequired;
+        public event KeyValueEventHandler<string, string> OpenDirectoryRequested;
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OnOpenDirectoryRequired
+        /// OnOpenDirectoryRequested
         /// 
         /// <summary>
-        /// OpenDirectoryRequired を発生させます。
+        /// OpenDirectoryRequested を発生させます。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnOpenDirectoryRequired(KeyValueEventArgs<string, string> e)
-            => OpenDirectoryRequired?.Invoke(this, e);
+        protected virtual void OnOpenDirectoryRequested(KeyValueEventArgs<string, string> e)
+            => OpenDirectoryRequested?.Invoke(this, e);
 
         #endregion
 
-        #region OverwriteRequired
+        #region OverwriteRequested
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OverwriteRequired
+        /// OverwriteRequested
         /// 
         /// <summary>
         /// ファイルの上書き時に発生するイベントです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public event OverwriteEventHandler OverwriteRequired;
+        public event OverwriteEventHandler OverwriteRequested;
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OnOverwriteRequired
+        /// OnOverwriteRequested
         /// 
         /// <summary>
-        /// OverwriteRequired イベントを発生させます。
+        /// OverwriteRequested イベントを発生させます。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnOverwriteRequired(OverwriteEventArgs e)
-            => OverwriteRequired?.Invoke(this, e);
+        protected virtual void OnOverwriteRequested(OverwriteEventArgs e)
+            => OverwriteRequested?.Invoke(this, e);
 
         #endregion
 
@@ -504,7 +504,7 @@ namespace Cube.FileSystem.App.Ice
 
             this.LogDebug($"Open:{src}\tExplorer:{exec}");
 
-            OnOpenDirectoryRequired(KeyValueEventArgs.Create(exec, src));
+            OnOpenDirectoryRequested(KeyValueEventArgs.Create(exec, src));
         }
 
         /* ----------------------------------------------------------------- */
@@ -638,7 +638,7 @@ namespace Cube.FileSystem.App.Ice
                     return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 case SaveLocation.Runtime:
                     var e = new QueryEventArgs<string, string>(query, true);
-                    OnDestinationRequired(e);
+                    OnDestinationRequested(e);
                     if (e.Cancel) throw new OperationCanceledException();
                     return e.Result;
                 case SaveLocation.Source:

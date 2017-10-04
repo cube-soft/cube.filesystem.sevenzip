@@ -62,7 +62,7 @@ namespace Cube.FileSystem.App.Ice
             EventHub.GetEvents().Suspend.Subscribe(WhenSuspend);
 
             Model.MessageReceived       += WhenMessageReceived;
-            Model.OpenDirectoryRequired += WhenOpenDirectoryRequired;
+            Model.OpenDirectoryRequested += WhenOpenDirectoryRequested;
         }
 
         #endregion
@@ -160,14 +160,14 @@ namespace Cube.FileSystem.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// WhenOpenDirectoryRequired
+        /// WhenOpenDirectoryRequested
         /// 
         /// <summary>
         /// ディレクトリを開く時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenOpenDirectoryRequired(object sender, KeyValueEventArgs<string, string> e)
+        private void WhenOpenDirectoryRequested(object sender, KeyValueEventArgs<string, string> e)
             => Views.ShowExplorerView(e);
 
         #endregion
