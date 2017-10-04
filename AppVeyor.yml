@@ -1,7 +1,7 @@
 version: 1.5.1.{build}
 branches:
-    except:
-        - net35
+    only:
+        - master
 skip_tags: true
 clone_folder: C:\Cube\Cube.FileSystem
 image: Visual Studio 2017
