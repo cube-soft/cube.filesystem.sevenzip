@@ -134,10 +134,10 @@ namespace Cube.FileSystem.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void SetDirectories(ArchiveReader reader, KeyValuePair<SaveLocation, string> dest)
+        private void SetDirectories(ArchiveReader reader, KeyValuePair<SaveLocation, string> dest, bool trim)
         {
             var name = IO.Get(Source).NameWithoutExtension;
-            var src  = name.EndsWith(".tar") ? name.Remove(name.Length - 4) : name;
+            var src  = trim ? IO.Get(name).NameWithoutExtension : name;
             var m    = Settings.Value.Extract.RootDirectory;
 
             if (m.HasFlag(CreateDirectoryMethod.Create))
@@ -190,7 +190,8 @@ namespace Cube.FileSystem.App.Ice
                 }
                 else
                 {
-                    SetDirectories(reader, dest);
+                    Report.TotalBytes = IO.Get(path).Length;
+                    SetDirectories(reader, dest, true);
                     WhenExtracted(this, ValueEventArgs.Create(item));
                     ProgressResult();
                 }
@@ -211,7 +212,7 @@ namespace Cube.FileSystem.App.Ice
         {
             try
             {
-                SetDirectories(reader, dest);
+                SetDirectories(reader, dest, false);
                 if (Settings.Value.Extract.Filtering) reader.Filters = Settings.Value.GetFilters();
 
                 reader.Extracting += WhenExtracting;
@@ -252,7 +253,6 @@ namespace Cube.FileSystem.App.Ice
             {
                 try
                 {
-
                     src.Extract(Tmp, progress);
                     retry = false;
                 }

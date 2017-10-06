@@ -77,13 +77,13 @@ namespace Cube.FileSystem.App.Ice.Tests
                 Assert.That(ep.View.Visible, Is.True);
                 await Wait(ep.View);
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
-                Assert.That(ep.Model.Report.Ratio, Is.EqualTo(1.0).Within(0.01));
 
-                Assert.That(ep.View.Elapsed,    Is.GreaterThan(TimeSpan.Zero));
-                Assert.That(ep.View.FileName,   Is.EqualTo(filename));
-                Assert.That(ep.View.Count,      Is.EqualTo(count));
-                Assert.That(ep.View.TotalCount, Is.EqualTo(count));
-                Assert.That(ep.View.Value,      Is.EqualTo(100));
+                Assert.That(ep.View.Elapsed,       Is.GreaterThan(TimeSpan.Zero));
+                Assert.That(ep.View.FileName,      Is.EqualTo(filename));
+                Assert.That(ep.View.Count,         Is.EqualTo(count));
+                Assert.That(ep.View.TotalCount,    Is.EqualTo(count));
+                Assert.That(ep.View.Value,         Is.EqualTo(100));
+                Assert.That(ep.Model.Report.Ratio, Is.EqualTo(1.0).Within(0.01));
 
                 tmp = ep.Model.Tmp;
                 Assert.That(tmp, Is.Not.Null.And.Not.Empty);
@@ -106,7 +106,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         public async Task Extract_Rename()
         {
             var dummy = Example("Sample.txt");
-            var src   = Example("Complex.zip");
+            var src   = Example("Complex.1.0.0.zip");
             var dest  = Result("Overwrite");
 
             IO.Copy(dummy, Result(@"Overwrite\Foo.txt"));
@@ -168,7 +168,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         [Test]
         public async Task Extract_Suspend()
         {
-            var src  = Example("Complex.zip");
+            var src  = Example("Complex.1.0.0.zip");
             var dest = Result("Suspend");
 
             using (var ep = Create(src, dest))
@@ -186,7 +186,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                 Assert.That(ep.View.Visible, Is.False, "Timeout");
             }
 
-            Assert.That(IO.Exists(Result(@"Suspend\Complex")), Is.True);
+            Assert.That(IO.Exists(Result(@"Suspend\Complex.1.0.0")), Is.True);
         }
 
         /* ----------------------------------------------------------------- */
@@ -204,7 +204,7 @@ namespace Cube.FileSystem.App.Ice.Tests
             var src  = Result("Complex.zip");
             var dest = Result("DeleteSource");
 
-            IO.Copy(Example("Complex.zip"), src);
+            IO.Copy(Example("Complex.1.0.0.zip"), src);
 
             using (var ep = Create(src, dest))
             {
@@ -282,7 +282,7 @@ namespace Cube.FileSystem.App.Ice.Tests
         {
             get
             {
-                yield return new TestCaseData("Complex.zip", "",
+                yield return new TestCaseData("Complex.1.0.0.zip", "",
                     PresetMenu.Extract.ToArguments(),
                     new ExtractSettings
                     {
@@ -291,11 +291,11 @@ namespace Cube.FileSystem.App.Ice.Tests
                         OpenDirectory = OpenDirectoryMethod.None,
                         Filtering     = false,
                     },
-                    @"Others\Complex",
+                    @"Others\Complex.1.0.0",
                     5L
                 );
 
-                yield return new TestCaseData("Complex.zip", "",
+                yield return new TestCaseData("Complex.1.0.0.zip", "",
                     PresetMenu.ExtractRuntime.ToArguments(),
                     new ExtractSettings
                     {
@@ -304,7 +304,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                         OpenDirectory = OpenDirectoryMethod.Open,
                         Filtering     = false,
                     },
-                    @"Runtime\Complex",
+                    @"Runtime\Complex.1.0.0",
                     5L
                 );
 
@@ -344,7 +344,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     3L
                 );
 
-                yield return new TestCaseData("Single.zip", "",
+                yield return new TestCaseData("Single.1.0.0.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
                         "/o:source",
                         @"/drop:RootDirectory\Single-0x00",
@@ -358,7 +358,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     1L
                 );
 
-                yield return new TestCaseData("Single.zip", "",
+                yield return new TestCaseData("Single.1.0.0.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
                         "/o:source",
                         @"/drop:RootDirectory\Single-0x01",
@@ -368,11 +368,11 @@ namespace Cube.FileSystem.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.Create,
                     },
-                    @"RootDirectory\Single-0x01\Single",
+                    @"RootDirectory\Single-0x01\Single.1.0",
                     1L
                 );
 
-                yield return new TestCaseData("Single.zip", "",
+                yield return new TestCaseData("Single.1.0.0.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
                         "/o:source",
                         @"/drop:RootDirectory\Single-0x03",
@@ -382,11 +382,11 @@ namespace Cube.FileSystem.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
                     },
-                    @"RootDirectory\Single-0x03\Single",
+                    @"RootDirectory\Single-0x03\Single.1.0",
                     1L
                 );
 
-                yield return new TestCaseData("Single.zip", "",
+                yield return new TestCaseData("Single.1.0.0.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
                         "/o:source",
                         @"/drop:RootDirectory\Single-0x05",
@@ -401,14 +401,14 @@ namespace Cube.FileSystem.App.Ice.Tests
                     1L
                 );
 
-                yield return new TestCaseData("Single.zip", "",
+                yield return new TestCaseData("Single.1.0.0.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
                         "/o:source",
                         @"/drop:RootDirectory\Single-0x07",
                     }),
                     new ExtractSettings
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.Create |
                                         CreateDirectoryMethod.SkipSingleFile |
                                         CreateDirectoryMethod.SkipSingleDirectory,
@@ -417,7 +417,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     1L
                 );
 
-                yield return new TestCaseData("SingleDirectory.zip", "",
+                yield return new TestCaseData("SingleDirectory.1.0.0.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
                         "/o:source",
                         @"/drop:RootDirectory\SingleDirectory-0x00",
@@ -431,7 +431,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     4L
                 );
 
-                yield return new TestCaseData("SingleDirectory.zip", "",
+                yield return new TestCaseData("SingleDirectory.1.0.0.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
                         "/o:source",
                         @"/drop:RootDirectory\SingleDirectory-0x01",
@@ -441,11 +441,11 @@ namespace Cube.FileSystem.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.Create,
                     },
-                    @"RootDirectory\SingleDirectory-0x01\SingleDirectory",
+                    @"RootDirectory\SingleDirectory-0x01\SingleDirectory.1.0.0",
                     4L
                 );
 
-                yield return new TestCaseData("SingleDirectory.zip", "",
+                yield return new TestCaseData("SingleDirectory.1.0.0.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
                         "/o:source",
                         @"/drop:RootDirectory\SingleDirectory-0x03",
@@ -459,7 +459,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     4L
                 );
 
-                yield return new TestCaseData("SingleDirectory.zip", "",
+                yield return new TestCaseData("SingleDirectory.1.0.0.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
                         "/o:source",
                         @"/drop:RootDirectory\SingleDirectory-0x05",
@@ -470,11 +470,11 @@ namespace Cube.FileSystem.App.Ice.Tests
                         RootDirectory = CreateDirectoryMethod.Create |
                                         CreateDirectoryMethod.SkipSingleFile,
                     },
-                    @"RootDirectory\SingleDirectory-0x05\SingleDirectory",
+                    @"RootDirectory\SingleDirectory-0x05\SingleDirectory.1.0.0",
                     4L
                 );
 
-                yield return new TestCaseData("SingleDirectory.zip", "",
+                yield return new TestCaseData("SingleDirectory.1.0.0.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
                         "/o:source",
                         @"/drop:RootDirectory\SingleDirectory-0x07",
@@ -490,7 +490,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     4L
                 );
 
-                yield return new TestCaseData("MultiDirectory.zip", "",
+                yield return new TestCaseData("MultiDirectory.1.0.0.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
                         "/o:source",
                         @"/drop:RootDirectory\MultiDirectory-0x00",
@@ -504,7 +504,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     7L
                 );
 
-                yield return new TestCaseData("MultiDirectory.zip", "",
+                yield return new TestCaseData("MultiDirectory.1.0.0.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
                         "/o:source",
                         @"/drop:RootDirectory\MultiDirectory-0x01",
@@ -514,11 +514,11 @@ namespace Cube.FileSystem.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.Create,
                     },
-                    @"RootDirectory\MultiDirectory-0x01\MultiDirectory",
+                    @"RootDirectory\MultiDirectory-0x01\MultiDirectory.1.0.0",
                     7L
                 );
 
-                yield return new TestCaseData("MultiDirectory.zip", "",
+                yield return new TestCaseData("MultiDirectory.1.0.0.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
                         "/o:source",
                         @"/drop:RootDirectory\MultiDirectory-0x03",
@@ -528,11 +528,11 @@ namespace Cube.FileSystem.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
                     },
-                    @"RootDirectory\MultiDirectory-0x03\MultiDirectory",
+                    @"RootDirectory\MultiDirectory-0x03\MultiDirectory.1.0.0",
                     7L
                 );
 
-                yield return new TestCaseData("MultiDirectory.zip", "",
+                yield return new TestCaseData("MultiDirectory.1.0.0.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
                         "/o:source",
                         @"/drop:RootDirectory\MultiDirectory-0x05",
@@ -543,11 +543,11 @@ namespace Cube.FileSystem.App.Ice.Tests
                         RootDirectory = CreateDirectoryMethod.Create |
                                         CreateDirectoryMethod.SkipSingleFile,
                     },
-                    @"RootDirectory\MultiDirectory-0x05\MultiDirectory",
+                    @"RootDirectory\MultiDirectory-0x05\MultiDirectory.1.0.0",
                     7L
                 );
 
-                yield return new TestCaseData("MultiDirectory.zip", "",
+                yield return new TestCaseData("MultiDirectory.1.0.0.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[] {
                         "/o:source",
                         @"/drop:RootDirectory\MultiDirectory-0x07",
@@ -559,11 +559,11 @@ namespace Cube.FileSystem.App.Ice.Tests
                                         CreateDirectoryMethod.SkipSingleFile |
                                         CreateDirectoryMethod.SkipSingleDirectory,
                     },
-                    @"RootDirectory\MultiDirectory-0x07\MultiDirectory",
+                    @"RootDirectory\MultiDirectory-0x07\MultiDirectory.1.0.0",
                     7L
                 );
 
-                yield return new TestCaseData("Complex.zip", "",
+                yield return new TestCaseData("Complex.1.0.0.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[]
                     {
                         "/o:source",
@@ -578,7 +578,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                     5L
                 );
 
-                yield return new TestCaseData("Complex.zip", "",
+                yield return new TestCaseData("Complex.1.0.0.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[]
                     {
                         "/o:source",
@@ -589,11 +589,11 @@ namespace Cube.FileSystem.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.Create,
                     },
-                    @"RootDirectory\Complex-0x01\Complex",
+                    @"RootDirectory\Complex-0x01\Complex.1.0.0",
                     5L
                 );
 
-                yield return new TestCaseData("Complex.zip", "",
+                yield return new TestCaseData("Complex.1.0.0.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[]
                     {
                         "/o:source",
@@ -604,11 +604,11 @@ namespace Cube.FileSystem.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
                     },
-                    @"RootDirectory\Complex-0x03\Complex",
+                    @"RootDirectory\Complex-0x03\Complex.1.0.0",
                     5L
                 );
 
-                yield return new TestCaseData("Complex.zip", "",
+                yield return new TestCaseData("Complex.1.0.0.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[]
                     {
                         "/o:source",
@@ -620,11 +620,11 @@ namespace Cube.FileSystem.App.Ice.Tests
                         RootDirectory = CreateDirectoryMethod.Create |
                                         CreateDirectoryMethod.SkipSingleFile,
                     },
-                    @"RootDirectory\Complex-0x05\Complex",
+                    @"RootDirectory\Complex-0x05\Complex.1.0.0",
                     5L
                 );
 
-                yield return new TestCaseData("Complex.zip", "",
+                yield return new TestCaseData("Complex.1.0.0.zip", "",
                     PresetMenu.Extract.ToArguments().Concat(new[]
                     {
                         "/o:source",
@@ -637,7 +637,7 @@ namespace Cube.FileSystem.App.Ice.Tests
                                         CreateDirectoryMethod.SkipSingleFile |
                                         CreateDirectoryMethod.SkipSingleDirectory,
                     },
-                    @"RootDirectory\Complex-0x07\Complex",
+                    @"RootDirectory\Complex-0x07\Complex.1.0.0",
                     5L
                 );
 
@@ -714,6 +714,21 @@ namespace Cube.FileSystem.App.Ice.Tests
                     },
                     @"Tar\LzwSample\Sample",
                     5L
+                );
+
+                yield return new TestCaseData("Sample.txt.bz2", "",
+                    PresetMenu.Extract.ToArguments().Concat(new[]
+                    {
+                        "/o:source",
+                        @"/drop:Bz2Sample",
+                    }),
+                    new ExtractSettings
+                    {
+                        SaveLocation = SaveLocation.Others,
+                        RootDirectory = CreateDirectoryMethod.CreateSmart,
+                    },
+                    @"Bz2Sample\Sample\Sample.txt",
+                    1L
                 );
             }
         }

@@ -96,11 +96,11 @@
     <Compile Include="Settings\AssociateRegistrarTest.cs" />
     <Compile Include="Settings\SettingsViewModelTest.cs" />
     <Compile Include="Settings\ShortcutSettingsTest.cs" />
+    <Compile Include="ArchiveDetailsDataTest.cs" />
     <Compile Include="ArchivePresenterTest.cs" />
     <Compile Include="ExtractPresenterTest.cs" />
     <Compile Include="PresetMenuTest.cs" />
     <Compile Include="RequestTest.cs" />
-    <Compile Include="ArchiveDetailsDataTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -120,10 +120,10 @@
     <None Include="Examples\Archive\Filter.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\Complex.zip">
+    <None Include="Examples\Complex.1.0.0.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\MultiDirectory.zip">
+    <None Include="Examples\MultiDirectory.1.0.0.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Examples\Password.7z">
@@ -147,16 +147,19 @@
     <None Include="Examples\Sample.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Examples\Sample.txt.bz2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Examples\SampleFilter.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Examples\SampleMac.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\Single.zip">
+    <None Include="Examples\Single.1.0.0.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\SingleDirectory.zip">
+    <None Include="Examples\SingleDirectory.1.0.0.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

@@ -464,16 +464,11 @@ namespace Cube.FileSystem.App.Ice
         /* ----------------------------------------------------------------- */
         protected void ProgressResult()
         {
-            this.LogDebug(string.Format(
-                "Count:{0:#,0}\tBytes:{1:#,0}",
-                Report.TotalCount,
-                Report.TotalBytes
-            ));
-
             // hack (see remarks)
             Report.Count = Report.TotalCount;
             Report.Bytes = Report.TotalBytes;
 
+            this.LogDebug($"Count:{Report.Count:#,0}\tBytes:{Report.Bytes:#,0}");
             OnProgress(ValueEventArgs.Create(Report));
         }
 
