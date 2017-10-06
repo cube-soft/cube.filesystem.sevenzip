@@ -495,53 +495,43 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /// <remarks>
-        /// BZIP2, GZIP, XZ に関してはパスの情報を取得する事ができない
-        /// ため、元のファイル名の拡張子を .tar に変更したものをパス
-        /// にする事としています。主要形式以外に関しては未調査なため、
-        /// 必要であればそれ以外の形式も同様の対応を行う必要があります。
+        /// TAR 系に関してはパスの情報を取得する事ができないため、元の
+        /// ファイル名の拡張子を .tar に変更したものをパスにする事として
+        /// います。
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
         private string GetPath()
         {
             var dest = Get<string>(ItemPropId.Path);
+            if (!string.IsNullOrEmpty(dest)) return dest;
 
-            switch (Format)
-            {
-                case Format.BZip2:
-                case Format.GZip:
-                case Format.XZ:
-                    return GetPath(dest, ".tar");
-                default:
-                    return GetPath(dest, "");
-            }
+            var i0 = IO.Get(Source);
+            var i1 = IO.Get(i0.NameWithoutExtension);
+
+            var fmt = Formats.FromExtension(i1.Extension);
+            if (fmt != Format.Unknown) return i1.Name;
+
+            var name = (Index == 0) ? i1.Name : $"{i1.Name}({Index})";
+            return IsTarExtension(i0.Extension) ? $"{name}.tar" : name;
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetPath
+        /// IsTarExtension
         ///
         /// <summary>
-        /// パスを取得します。
+        /// TAR 系の拡張子かどうかを判別します。
         /// </summary>
         /// 
         /// <remarks>
-        /// パスが取得できなかった場合、元の圧縮ファイルのパスから
-        /// 推測した結果を返します。
+        /// tb2 および t*z と言う文字列の場合に TAR 系の拡張子と判別して
+        /// います。
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetPath(string path, string ext)
-        {
-            if (!string.IsNullOrEmpty(path)) return path;
-
-            var info = IO.Get(IO.Get(Source).NameWithoutExtension);
-            var fmt  = Formats.FromExtension(info.Extension);
-            if (fmt != Format.Unknown) return info.Name;
-
-            var name = (Index == 0) ? info.Name : $"{info.Name}({Index})";
-            return !string.IsNullOrEmpty(ext) ? $"{name}{ext}" : name;
-        }
+        private bool IsTarExtension(string ext)
+            => ext == ".tb2" || (ext.Length == 4 && ext[0] == '.' && ext[1] == 't' && ext[3] == 'z');
 
         /* ----------------------------------------------------------------- */
         ///

@@ -65,9 +65,9 @@ namespace Cube.FileSystem.Tests
                     Assert.That(item.Index,       Is.EqualTo(i));
                     Assert.That(item.FullName,    Is.EqualTo(expected[i].FullName));
                     Assert.That(item.Extension,   Is.EqualTo(expected[i].Extension));
-                    Assert.That(item.Length,      Is.EqualTo(expected[i].Length));
                     Assert.That(item.Encrypted,   Is.EqualTo(expected[i].Encrypted));
                     Assert.That(item.IsDirectory, Is.EqualTo(expected[i].IsDirectory));
+                    if (expected[i].Length >= 0) Assert.That(item.Length, Is.EqualTo(expected[i].Length));
                 }
             }
         }
@@ -109,27 +109,22 @@ namespace Cube.FileSystem.Tests
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [TestCase("Sample.arj",      ExpectedResult =  3)]
-        [TestCase("Sample.cab",      ExpectedResult =  3)]
-        [TestCase("Sample.chm",      ExpectedResult = 80)]
-        [TestCase("Sample.cpio",     ExpectedResult =  3)]
-        [TestCase("Sample.docx",     ExpectedResult = 13)]
-        [TestCase("Sample.flv",      ExpectedResult =  2)]
-        [TestCase("Sample.jar",      ExpectedResult =  3)]
-        [TestCase("Sample.lha",      ExpectedResult =  3)]
-        [TestCase("Sample.lzh",      ExpectedResult =  3)]
-        [TestCase("Sample.nupkg",    ExpectedResult =  5)]
-        [TestCase("Sample.pptx",     ExpectedResult = 40)]
-        [TestCase("Sample.rar",      ExpectedResult =  3)]
-        [TestCase("Sample.rar5",     ExpectedResult =  3)]
-        [TestCase("Sample.rar.001",  ExpectedResult =  3)]
-        [TestCase("Sample.tar",      ExpectedResult =  3)]
-        [TestCase("Sample.tar.lzma", ExpectedResult =  1)]
-        [TestCase("Sample.tar.z",    ExpectedResult =  1)]
-        [TestCase("Sample.tbz",      ExpectedResult =  1)]
-        [TestCase("Sample.tgz",      ExpectedResult =  1)]
-        [TestCase("Sample.txz",      ExpectedResult =  1)]
-        [TestCase("Sample.xlsx",     ExpectedResult = 14)]
+        [TestCase("Sample.arj",     ExpectedResult =  3)]
+        [TestCase("Sample.cab",     ExpectedResult =  3)]
+        [TestCase("Sample.chm",     ExpectedResult = 80)]
+        [TestCase("Sample.cpio",    ExpectedResult =  3)]
+        [TestCase("Sample.docx",    ExpectedResult = 13)]
+        [TestCase("Sample.flv",     ExpectedResult =  2)]
+        [TestCase("Sample.jar",     ExpectedResult =  3)]
+        [TestCase("Sample.lha",     ExpectedResult =  3)]
+        [TestCase("Sample.lzh",     ExpectedResult =  3)]
+        [TestCase("Sample.nupkg",   ExpectedResult =  5)]
+        [TestCase("Sample.pptx",    ExpectedResult = 40)]
+        [TestCase("Sample.rar",     ExpectedResult =  3)]
+        [TestCase("Sample.rar5",    ExpectedResult =  3)]
+        [TestCase("Sample.rar.001", ExpectedResult =  3)]
+        [TestCase("Sample.tar",     ExpectedResult =  3)]
+        [TestCase("Sample.xlsx",    ExpectedResult = 14)]
         public int Extract(string filename)
         {
             var src = Example(filename);
@@ -147,7 +142,7 @@ namespace Cube.FileSystem.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract
+        /// Extract_Detail
         ///
         /// <summary>
         /// 圧縮ファイルを展開するテストを実行します。
@@ -159,7 +154,7 @@ namespace Cube.FileSystem.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
-        public void Extract(string filename, string password, IList<ExpectedItem> expected)
+        public void Extract_Detail(string filename, string password, IList<ExpectedItem> expected)
         {
             var src      = Example(filename);
             var bytes    = 0L;
@@ -174,10 +169,10 @@ namespace Cube.FileSystem.Tests
                 {
                     var info = IO.Get(IO.Combine(dest, item.FullName));
                     Assert.That(info.Exists,         Is.True);
-                    Assert.That(info.Length,         Is.EqualTo(item.Length));
                     Assert.That(info.CreationTime,   Is.Not.EqualTo(DateTime.MinValue));
                     Assert.That(info.LastWriteTime,  Is.Not.EqualTo(DateTime.MinValue));
                     Assert.That(info.LastAccessTime, Is.Not.EqualTo(DateTime.MinValue));
+                    if (item.Length >= 0) Assert.That(info.Length, Is.EqualTo(item.Length));
                 }
             }
         }
@@ -205,10 +200,10 @@ namespace Cube.FileSystem.Tests
 
                     var info = IO.Get(IO.Combine(dest, actual[i].FullName));
                     Assert.That(info.Exists,         Is.True);
-                    Assert.That(info.Length,         Is.EqualTo(expected[i].Length));
                     Assert.That(info.CreationTime,   Is.Not.EqualTo(DateTime.MinValue));
                     Assert.That(info.LastWriteTime,  Is.Not.EqualTo(DateTime.MinValue));
                     Assert.That(info.LastAccessTime, Is.Not.EqualTo(DateTime.MinValue));
+                    if (expected[i].Length >= 0) Assert.That(info.Length, Is.EqualTo(expected[i].Length));
                 }
             }
         }
@@ -946,6 +941,150 @@ namespace Cube.FileSystem.Tests
                         FullName      = @"test\test(2012_05_07).txt",
                         Extension     = ".txt",
                         Length        = 5,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+                });
+
+                yield return new TestCaseData("Sample.tar.bz2", "", new List<ExpectedItem>
+                {
+                    new ExpectedItem
+                    {
+                        FullName      = @"Sample.tar",
+                        Extension     = ".tar",
+                        Length        = -1,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+                });
+
+                yield return new TestCaseData("Sample.tar.gz", "", new List<ExpectedItem>
+                {
+                    new ExpectedItem
+                    {
+                        FullName      = @"Sample.tar",
+                        Extension     = ".tar",
+                        Length        = -1,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+                });
+
+                yield return new TestCaseData("Sample.tar.lzma", "", new List<ExpectedItem>
+                {
+                    new ExpectedItem
+                    {
+                        FullName      = @"Sample.tar",
+                        Extension     = ".tar",
+                        Length        = -1,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+                });
+
+                yield return new TestCaseData("Sample.tar.z", "", new List<ExpectedItem>
+                {
+                    new ExpectedItem
+                    {
+                        FullName      = @"Sample.tar",
+                        Extension     = ".tar",
+                        Length        = -1,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+                });
+
+                yield return new TestCaseData("Sample.taz", "", new List<ExpectedItem>
+                {
+                    new ExpectedItem
+                    {
+                        FullName      = @"Sample.tar",
+                        Extension     = ".tar",
+                        Length        = -1,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+                });
+
+                yield return new TestCaseData("Sample.tb2", "", new List<ExpectedItem>
+                {
+                    new ExpectedItem
+                    {
+                        FullName      = @"Sample.tar",
+                        Extension     = ".tar",
+                        Length        = -1,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+                });
+
+                yield return new TestCaseData("Sample.tbz", "", new List<ExpectedItem>
+                {
+                    new ExpectedItem
+                    {
+                        FullName      = @"Sample.tar",
+                        Extension     = ".tar",
+                        Length        = -1,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+                });
+
+                yield return new TestCaseData("Sample.tgz", "", new List<ExpectedItem>
+                {
+                    new ExpectedItem
+                    {
+                        FullName      = @"Sample.tar",
+                        Extension     = ".tar",
+                        Length        = -1,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+                });
+
+                yield return new TestCaseData("Sample.txz", "", new List<ExpectedItem>
+                {
+                    new ExpectedItem
+                    {
+                        FullName      = @"Sample.tar",
+                        Extension     = ".tar",
+                        Length        = -1,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+                });
+
+                yield return new TestCaseData("Sample.txt.bz2", "", new List<ExpectedItem>
+                {
+                    new ExpectedItem
+                    {
+                        FullName      = @"Sample.txt",
+                        Extension     = ".txt",
+                        Length        = -1,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+                });
+
+                yield return new TestCaseData("Sample.txt.gz", "", new List<ExpectedItem>
+                {
+                    new ExpectedItem
+                    {
+                        FullName      = @"Filter.txt",
+                        Extension     = ".txt",
+                        Length        = -1,
+                        Encrypted     = false,
+                        IsDirectory   = false,
+                    },
+                });
+
+                yield return new TestCaseData("Sample.txt.xz", "", new List<ExpectedItem>
+                {
+                    new ExpectedItem
+                    {
+                        FullName      = @"Sample.txt",
+                        Extension     = ".txt",
+                        Length        = -1,
                         Encrypted     = false,
                         IsDirectory   = false,
                     },
