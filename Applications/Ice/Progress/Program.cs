@@ -92,11 +92,12 @@ namespace Cube.FileSystem.App.Ice
         static void Extract(Request request)
         {
             var exec = Assembly.GetExecutingAssembly().Location;
-            var args = string.Join(" ", request.Options.Select(x => $"\"{x}\""));
+            var args = new System.Text.StringBuilder();
 
+            foreach (var s in request.Options) args.Append($"\"{s}\" ");
             foreach (var path in request.Sources)
             {
-                try { Process.Start(exec, $"/x /sr {args} \"{path}\""); }
+                try { Process.Start(exec, $"/x /sr {args.ToString()} \"{path}\""); }
                 catch (Exception err) { Log(err); }
             }
         }
