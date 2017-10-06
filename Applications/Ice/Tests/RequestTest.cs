@@ -116,11 +116,12 @@ namespace Cube.FileSystem.App.Ice.Tests
         [Test]
         public void Create_WrongDrop()
         {
-            var request = new Request(new[] { "/x", "/o:source", "/drop", "/dummy" });
-            Assert.That(request.Options.Count(), Is.EqualTo(3));
-            Assert.That(request.Mode,            Is.EqualTo(Mode.Extract));
-            Assert.That(request.Location,        Is.EqualTo(SaveLocation.Source));
-            Assert.That(request.DropDirectory,   Is.Empty);
+            var request = new Request(new[] { "/x", "/sr", "/o:source", "/drop", "/dummy" });
+            Assert.That(request.Options.Count(),   Is.EqualTo(4));
+            Assert.That(request.Mode,              Is.EqualTo(Mode.Extract));
+            Assert.That(request.Location,          Is.EqualTo(SaveLocation.Source));
+            Assert.That(request.SuppressRecursive, Is.True);
+            Assert.That(request.DropDirectory,     Is.Empty);
         }
     }
 }

@@ -184,7 +184,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.ico" />
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="App.manifest" />
     <None Include="Packages.config" />
     <None Include="Resources\Icons\Archive.ico" />

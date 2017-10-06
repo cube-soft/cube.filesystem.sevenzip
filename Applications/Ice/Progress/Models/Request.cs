@@ -98,18 +98,18 @@ namespace Cube.FileSystem.App.Ice
         /// Mode
         /// 
         /// <summary>
-        /// 実行モードを取得または設定します。
+        /// 実行モードを取得します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public Mode Mode { get; set; } = Mode.None;
+        public Mode Mode { get; private set; } = Mode.None;
 
         /* ----------------------------------------------------------------- */
         ///
         /// Format
         /// 
         /// <summary>
-        /// フォーマットを取得または設定します。
+        /// フォーマットを取得します。
         /// </summary>
         /// 
         /// <remarks>
@@ -117,41 +117,58 @@ namespace Cube.FileSystem.App.Ice
         /// </remarks>
         /// 
         /* ----------------------------------------------------------------- */
-        public Format Format { get; set; } = Format.Unknown;
+        public Format Format { get; private set; } = Format.Unknown;
 
         /* ----------------------------------------------------------------- */
         ///
         /// Location
         /// 
         /// <summary>
-        /// 圧縮または展開したファイルの保存位置を取得または設定します。
+        /// 圧縮または展開したファイルの保存位置を取得します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public SaveLocation Location { get; set; } = SaveLocation.Unknown;
+        public SaveLocation Location { get; private set; } = SaveLocation.Unknown;
 
         /* ----------------------------------------------------------------- */
         ///
         /// Password
         /// 
         /// <summary>
-        /// 圧縮ファイルにパスワードを設定するかどうかを示す値を取得
-        /// または設定します。
+        /// パスワードを設定するかどうかを示す値を取得します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public bool Password { get; set; } = false;
+        public bool Password { get; private set; } = false;
 
         /* ----------------------------------------------------------------- */
         ///
         /// Mail
         /// 
         /// <summary>
-        /// 圧縮後にメール送信するかどうかを示す値を取得または設定します。
+        /// 圧縮後にメール送信するかどうかを示す値を取得します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        public bool Mail { get; set; } = false;
+        public bool Mail { get; private set; } = false;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SuppressRecursive
+        /// 
+        /// <summary>
+        /// 再帰的な実行を抑制するかどうかを示す値を取得します。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// 複数の圧縮ファイルを指定して解凍時、現在、再帰的にプロセスを
+        /// 実行する実装となっていますが、予期せぬ引数が指定する事により
+        /// 無限にプロセスが実行される懸念があります。
+        /// そのため、このプロパティでそのような事態を防止します。
+        /// </remarks>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public bool SuppressRecursive { get; private set; } = false;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -212,6 +229,7 @@ namespace Cube.FileSystem.App.Ice
                     options.Add(args[i]);
                     if (args[i] == "/m") Mail = true;
                     else if (args[i] == "/p") Password = true;
+                    else if (args[i] == "/sr") SuppressRecursive = true;
                     else if (args[i].StartsWith("/o")) Location = GetLocation(args[i]);
                     else if (args[i].StartsWith("/drop")) DropDirectory = GetTail(args[i]);
                 }

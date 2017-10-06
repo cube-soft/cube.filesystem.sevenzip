@@ -16,6 +16,8 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using Cube.FileSystem.Ice;
@@ -45,38 +47,70 @@ namespace Cube.FileSystem.App.Ice
         [STAThread]
         static void Main(string[] args)
         {
-            var type = typeof(Program);
-
             try
             {
                 if (args.Length <= 0) return;
 
                 Cube.Log.Operations.Configure();
                 Cube.Log.Operations.ObserveTaskException();
-                Cube.Log.Operations.Info(type, Assembly.GetExecutingAssembly());
-                Cube.Log.Operations.Info(type, $"Arguments:{string.Join(" ", args)}");
+                Cube.Log.Operations.Info(typeof(Program), Assembly.GetExecutingAssembly());
+                Cube.Log.Operations.Info(typeof(Program), $"Arguments:{string.Join(" ", args)}");
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
 
-                var settings = new SettingsFolder();
-                var events   = new EventHub();
-                var view     = new ProgressForm();
-                var model    = new Request(args);
+                var s = new SettingsFolder();
+                var e = new EventHub();
+                var v = new ProgressForm();
+                var m = new Request(args);
 
-                settings.Load();
+                s.Load();
 
-                switch (model.Mode)
+                switch (m.Mode)
                 {
                     case Mode.Archive:
-                        using (var _ = new ArchivePresenter(view, model, settings, events)) Application.Run(view);
+                        using (var _ = new ArchivePresenter(v, m, s, e)) Application.Run(v);
                         break;
                     case Mode.Extract:
-                        using (var _ = new ExtractPresenter(view, model, settings, events)) Application.Run(view);
+                        if (m.Sources.Count() > 1 && !m.SuppressRecursive) Extract(m);
+                        else using (var _ = new ExtractPresenter(v, m, s, e)) Application.Run(v);
                         break;
                 }
             }
-            catch (Exception err) { Cube.Log.Operations.Error(type, err.ToString()); }
+            catch (Exception err) { Log(err); }
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract
+        /// 
+        /// <summary>
+        /// 複数の圧縮ファイルを解凍します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        static void Extract(Request request)
+        {
+            var exec = Assembly.GetExecutingAssembly().Location;
+            var args = string.Join(" ", request.Options.Select(x => $"\"{x}\""));
+
+            foreach (var path in request.Sources)
+            {
+                try { Process.Start(exec, $"/x /sr {args} \"{path}\""); }
+                catch (Exception err) { Log(err); }
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Log
+        /// 
+        /// <summary>
+        /// エラー内容をログに出力します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        static void Log(Exception err)
+            => Cube.Log.Operations.Error(typeof(Program), err.ToString());
     }
 }
