@@ -134,7 +134,7 @@
     <None Include="Packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Cube.FileSystem.Ice.csproj">
+    <ProjectReference Include="..\Core\Cube.FileSystem.Ice.csproj">
       <Project>{1badab3f-38b5-4acf-addf-036918bfc51c}</Project>
       <Name>Cube.FileSystem.Ice</Name>
     </ProjectReference>
