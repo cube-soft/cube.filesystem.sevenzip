@@ -200,7 +200,7 @@
     <None Include="Resources\Images\HeaderArchive.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Libraries\Cube.FileSystem.csproj">
+    <ProjectReference Include="..\..\..\Libraries\Core\Cube.FileSystem.csproj">
       <Project>{e89aad2c-5a74-49f6-ad84-65f0016ef1bb}</Project>
       <Name>Cube.FileSystem</Name>
     </ProjectReference>

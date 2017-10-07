@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem", "Libraries\Cube.FileSystem.csproj", "{E89AAD2C-5A74-49F6-AD84-65F0016EF1BB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem", "Libraries\Core\Cube.FileSystem.csproj", "{E89AAD2C-5A74-49F6-AD84-65F0016EF1BB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.SevenZip", "Libraries\SevenZip\Cube.FileSystem.SevenZip.csproj", "{74C9F388-360E-4C46-A9A6-E131EAB2E49C}"
 EndProject
