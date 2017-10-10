@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cube.FileSystem.App.Ice.Context", "Context\Cube.FileSystem.App.Ice.Context.vcxproj", "{C580D316-6704-483D-9930-CC063D3E0800}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cube.FileSystem.SevenZip.App.Ice.Context", "Context\Cube.FileSystem.SevenZip.App.Ice.Context.vcxproj", "{C580D316-6704-483D-9930-CC063D3E0800}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cube.FileSystem.App.Ice.QueryInfo", "QueryInfo\Cube.FileSystem.App.Ice.QueryInfo.vcxproj", "{4E6E949D-ECC5-42B1-BF66-2838947D397C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cube.FileSystem.SevenZip.App.Ice.QueryInfo", "QueryInfo\Cube.FileSystem.SevenZip.App.Ice.QueryInfo.vcxproj", "{4E6E949D-ECC5-42B1-BF66-2838947D397C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

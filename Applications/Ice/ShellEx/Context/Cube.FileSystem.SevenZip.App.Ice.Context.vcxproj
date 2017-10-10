@@ -12,9 +12,10 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C580D316-6704-483D-9930-CC063D3E0800}</ProjectGuid>
-    <RootNamespace>Cube.FileSystem.App.Ice.Context</RootNamespace>
+    <RootNamespace>Cube.FileSystem.SevenZip.App.Ice.Context</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+    <ProjectName>Cube.FileSystem.SevenZip.App.Ice.Context</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
