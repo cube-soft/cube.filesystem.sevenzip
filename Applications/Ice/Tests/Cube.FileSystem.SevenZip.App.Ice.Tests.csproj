@@ -156,6 +156,9 @@
     <None Include="Examples\Sample.txt.bz2">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Examples\SampleEmpty.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Examples\SampleFilter.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -308,6 +308,19 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                     5L
                 );
 
+                yield return new TestCaseData("SampleEmpty.zip", "",
+                    PresetMenu.Extract.ToArguments(),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = CreateDirectoryMethod.CreateSmart,
+                        OpenDirectory = OpenDirectoryMethod.OpenNotDesktop,
+                        Filtering     = false,
+                    },
+                    @"Others\Sample",
+                    7L
+                );
+
                 yield return new TestCaseData("SampleFilter.zip", "",
                     PresetMenu.Extract.ToArguments(),
                     new ExtractSettings
