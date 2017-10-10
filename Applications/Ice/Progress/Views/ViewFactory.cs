@@ -16,10 +16,10 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System.Windows.Forms;
-using Cube.FileSystem.Ice;
+using Cube.FileSystem.SevenZip.Ice;
 using Cube.Forms.Processes;
 
-namespace Cube.FileSystem.App.Ice
+namespace Cube.FileSystem.SevenZip.App.Ice
 {
     /* --------------------------------------------------------------------- */
     ///

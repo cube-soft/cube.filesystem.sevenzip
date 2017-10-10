@@ -20,7 +20,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Cube.Images.Icons;
 
-namespace Cube.FileSystem.App.Ice
+namespace Cube.FileSystem.SevenZip.App.Ice
 {
     /* --------------------------------------------------------------------- */
     ///

@@ -1,4 +1,4 @@
-﻿namespace Cube.FileSystem.App.Ice
+﻿namespace Cube.FileSystem.SevenZip.App.Ice
 {
     partial class OverwriteForm
     {

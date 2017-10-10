@@ -18,10 +18,10 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Cube.FileSystem.Ice;
+using Cube.FileSystem.SevenZip.Ice;
 using Cube.Log;
 
-namespace Cube.FileSystem.App.Ice.Settings
+namespace Cube.FileSystem.SevenZip.App.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///

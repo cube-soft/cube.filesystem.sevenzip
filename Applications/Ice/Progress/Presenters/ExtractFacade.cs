@@ -21,9 +21,9 @@ using System.Linq;
 using Cube.Log;
 using Cube.FileSystem.Files;
 using Cube.FileSystem.SevenZip;
-using Cube.FileSystem.Ice;
+using Cube.FileSystem.SevenZip.Ice;
 
-namespace Cube.FileSystem.App.Ice
+namespace Cube.FileSystem.SevenZip.App.Ice
 {
     /* --------------------------------------------------------------------- */
     ///

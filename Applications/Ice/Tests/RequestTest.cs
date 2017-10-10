@@ -16,11 +16,11 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System.Linq;
-using Cube.FileSystem.Ice;
+using Cube.FileSystem.SevenZip.Ice;
 using Cube.FileSystem.SevenZip;
 using NUnit.Framework;
 
-namespace Cube.FileSystem.App.Ice.Tests
+namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///

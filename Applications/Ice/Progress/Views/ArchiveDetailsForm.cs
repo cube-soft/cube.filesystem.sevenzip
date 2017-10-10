@@ -22,7 +22,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Cube.FileSystem.SevenZip;
 
-namespace Cube.FileSystem.App.Ice
+namespace Cube.FileSystem.SevenZip.App.Ice
 {
     /* --------------------------------------------------------------------- */
     ///

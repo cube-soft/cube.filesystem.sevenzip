@@ -17,7 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using System.Collections.Generic;
 
-namespace Cube.FileSystem.Ice
+namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///

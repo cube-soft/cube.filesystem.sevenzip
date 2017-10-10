@@ -18,7 +18,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace Cube.FileSystem.App.Ice
+namespace Cube.FileSystem.SevenZip.App.Ice
 {
     /* --------------------------------------------------------------------- */
     ///

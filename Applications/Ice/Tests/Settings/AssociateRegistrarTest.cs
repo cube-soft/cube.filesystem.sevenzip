@@ -16,10 +16,10 @@
 ///
 /* ------------------------------------------------------------------------- */
 using System.Collections.Generic;
-using Cube.FileSystem.Ice;
+using Cube.FileSystem.SevenZip.Ice;
 using NUnit.Framework;
 
-namespace Cube.FileSystem.App.Ice.Tests.Settings
+namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
 {
     /* --------------------------------------------------------------------- */
     ///

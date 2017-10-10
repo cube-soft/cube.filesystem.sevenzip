@@ -19,7 +19,7 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 
-namespace Cube.FileSystem.App.Ice.Tests
+namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///

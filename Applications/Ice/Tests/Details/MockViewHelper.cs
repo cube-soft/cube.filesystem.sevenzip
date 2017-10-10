@@ -18,7 +18,7 @@
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Cube.FileSystem.App.Ice.Tests
+namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///

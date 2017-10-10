@@ -18,7 +18,7 @@
 using System.Reflection;
 using NUnit.Framework;
 
-namespace Cube.FileSystem.Tests
+namespace Cube.FileSystem.SevenZip.Tests
 {
     /* --------------------------------------------------------------------- */
     ///

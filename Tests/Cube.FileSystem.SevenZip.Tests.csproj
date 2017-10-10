@@ -7,8 +7,8 @@
     <ProjectGuid>{BDBA9B88-28D5-4369-B6AF-ADA67D95AC98}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Cube.FileSystem.Tests</RootNamespace>
-    <AssemblyName>Cube.FileSystem.Tests</AssemblyName>
+    <RootNamespace>Cube.FileSystem.SevenZip.Tests</RootNamespace>
+    <AssemblyName>Cube.FileSystem.SevenZip.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -66,6 +66,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AlphaFS">
+      <HintPath>..\..\packages\AlphaFS.2.1.3\lib\net45\AlphaFS.dll</HintPath>
+    </Reference>
     <Reference Include="Cube.Core">
       <HintPath>..\..\packages\Cube.Core.1.5.1\lib\net45\Cube.Core.dll</HintPath>
     </Reference>

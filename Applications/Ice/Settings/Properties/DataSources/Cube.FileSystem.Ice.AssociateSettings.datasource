@@ -6,5 +6,5 @@
     cause the file to be unrecognizable by the program.
 -->
 <GenericObjectDataSource DisplayName="AssociateSettings" Version="1.0" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
-   <TypeInfo>Cube.FileSystem.Ice.AssociateSettings, cubeice, Version=0.8.0.0, Culture=neutral, PublicKeyToken=null</TypeInfo>
+   <TypeInfo>Cube.FileSystem.SevenZip.Ice.AssociateSettings, cubeice, Version=0.8.0.0, Culture=neutral, PublicKeyToken=null</TypeInfo>
 </GenericObjectDataSource>

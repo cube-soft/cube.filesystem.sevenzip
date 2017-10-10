@@ -18,11 +18,11 @@
 using System;
 using System.Linq;
 using Microsoft.Win32;
-using Cube.FileSystem.Ice;
-using Cube.FileSystem.App.Ice.Settings;
+using Cube.FileSystem.SevenZip.Ice;
+using Cube.FileSystem.SevenZip.App.Ice.Settings;
 using NUnit.Framework;
 
-namespace Cube.FileSystem.App.Ice.Tests.Settings
+namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
 {
     /* --------------------------------------------------------------------- */
     ///

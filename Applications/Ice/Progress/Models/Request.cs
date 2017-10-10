@@ -19,9 +19,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cube.FileSystem.SevenZip;
-using Cube.FileSystem.Ice;
+using Cube.FileSystem.SevenZip.Ice;
 
-namespace Cube.FileSystem.App.Ice
+namespace Cube.FileSystem.SevenZip.App.Ice
 {
     /* --------------------------------------------------------------------- */
     ///

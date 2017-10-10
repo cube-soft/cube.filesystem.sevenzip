@@ -17,7 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using System.Reflection;
 
-namespace Cube.FileSystem.Tests
+namespace Cube.FileSystem.SevenZip.Tests
 {
     /* --------------------------------------------------------------------- */
     ///

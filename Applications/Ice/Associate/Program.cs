@@ -18,9 +18,9 @@
 using System;
 using System.Linq;
 using System.Reflection;
-using Cube.FileSystem.Ice;
+using Cube.FileSystem.SevenZip.Ice;
 
-namespace Cube.FileSystem.App.Ice.Associate
+namespace Cube.FileSystem.SevenZip.App.Ice.Associate
 {
     /* --------------------------------------------------------------------- */
     ///

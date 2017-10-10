@@ -19,7 +19,7 @@ using System;
 using System.Reflection;
 using Cube.FileSystem.SevenZip;
 
-namespace Cube.FileSystem.Ice
+namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///

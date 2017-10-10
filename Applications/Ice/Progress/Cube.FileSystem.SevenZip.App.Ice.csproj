@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{E14092D2-266A-4CC7-B1CE-2ADD0CB8E65B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Cube.FileSystem.App.Ice</RootNamespace>
+    <RootNamespace>Cube.FileSystem.SevenZip.App.Ice</RootNamespace>
     <AssemblyName>cubeice</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -75,6 +75,9 @@
     <ApplicationManifest>App.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AlphaFS">
+      <HintPath>..\..\..\..\packages\AlphaFS.2.1.3\lib\net45\AlphaFS.dll</HintPath>
+    </Reference>
     <Reference Include="Cube.Core">
       <HintPath>..\..\..\..\packages\Cube.Core.1.5.1\lib\net45\Cube.Core.dll</HintPath>
     </Reference>
@@ -207,9 +210,9 @@
       <Project>{74c9f388-360e-4c46-a9a6-e131eab2e49c}</Project>
       <Name>Cube.FileSystem.SevenZip</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Core\Cube.FileSystem.Ice.csproj">
+    <ProjectReference Include="..\Core\Cube.FileSystem.SevenZip.Ice.csproj">
       <Project>{1badab3f-38b5-4acf-addf-036918bfc51c}</Project>
-      <Name>Cube.FileSystem.Ice</Name>
+      <Name>Cube.FileSystem.SevenZip.Ice</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -21,10 +21,10 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using Cube.FileSystem.SevenZip;
-using Cube.FileSystem.Ice;
+using Cube.FileSystem.SevenZip.Ice;
 using Cube.Log;
 
-namespace Cube.FileSystem.App.Ice
+namespace Cube.FileSystem.SevenZip.App.Ice
 {
     /* --------------------------------------------------------------------- */
     ///

@@ -19,10 +19,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Cube.FileSystem.Ice;
+using Cube.FileSystem.SevenZip.Ice;
 using NUnit.Framework;
 
-namespace Cube.FileSystem.App.Ice.Tests
+namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///

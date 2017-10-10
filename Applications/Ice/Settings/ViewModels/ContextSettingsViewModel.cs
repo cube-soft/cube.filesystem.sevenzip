@@ -15,9 +15,9 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.Ice;
+using Cube.FileSystem.SevenZip.Ice;
 
-namespace Cube.FileSystem.App.Ice.Settings
+namespace Cube.FileSystem.SevenZip.App.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///

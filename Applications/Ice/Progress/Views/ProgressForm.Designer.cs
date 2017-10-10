@@ -1,4 +1,4 @@
-﻿namespace Cube.FileSystem.App.Ice
+﻿namespace Cube.FileSystem.SevenZip.App.Ice
 {
     partial class ProgressForm
     {
@@ -158,7 +158,7 @@
             // 
             this.RootPanel.SetColumnSpan(this.HeaderPictureBox, 2);
             this.HeaderPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.HeaderPictureBox.Image = global::Cube.FileSystem.App.Ice.Properties.Resources.HeaderArchive;
+            this.HeaderPictureBox.Image = global::Cube.FileSystem.SevenZip.App.Ice.Properties.Resources.HeaderArchive;
             this.HeaderPictureBox.Location = new System.Drawing.Point(0, 0);
             this.HeaderPictureBox.Margin = new System.Windows.Forms.Padding(0);
             this.HeaderPictureBox.Name = "HeaderPictureBox";

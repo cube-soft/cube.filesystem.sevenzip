@@ -23,7 +23,7 @@ using Cube.FileSystem.SevenZip;
 using Cube.FileSystem.SevenZip.Archives;
 using NUnit.Framework;
 
-namespace Cube.FileSystem.Tests
+namespace Cube.FileSystem.SevenZip.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
