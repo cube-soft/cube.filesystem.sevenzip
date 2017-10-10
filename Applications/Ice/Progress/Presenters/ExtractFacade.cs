@@ -291,7 +291,14 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         {
             if (src.IsDirectory)
             {
-                if (!dest.Exists) IO.CreateDirectory(dest.FullName);
+                if (!dest.Exists)
+                {
+                    IO.CreateDirectory(dest.FullName);
+                    IO.SetAttributes(dest.FullName, src.Attributes);
+                    IO.SetCreationTime(dest.FullName, src.CreationTime);
+                    IO.SetLastWriteTime(dest.FullName, src.LastWriteTime);
+                    IO.SetLastAccessTime(dest.FullName, src.LastAccessTime);
+                }
             }
             else IO.Move(src.FullName, dest.FullName, true);
         }
