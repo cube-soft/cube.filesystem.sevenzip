@@ -76,6 +76,7 @@ We will implement add and/or modify files in the existed archives in the future.
 ## License
  
 Copyright (c) 2010 [CubeSoft, Inc.](http://www.cube-soft.jp/)
+
 The Cube.FileSystem.SevenZip project is licensed under the [GNU LGPLv3](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries/License.txt)
 and the other projects are [Apache 2.0](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/License.txt).
 Note that trade names, trademarks, service marks, or logo images distributed in CubeSoft applications are not allowed to reuse or modify all or parts of them.
