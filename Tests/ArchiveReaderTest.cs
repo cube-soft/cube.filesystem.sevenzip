@@ -111,33 +111,37 @@ namespace Cube.FileSystem.SevenZip.Tests
         /* ----------------------------------------------------------------- */
         [TestCase("Sample.arj",     ExpectedResult =  3)]
         [TestCase("Sample.cab",     ExpectedResult =  3)]
-        [TestCase("Sample.chm",     ExpectedResult = 80)]
-        [TestCase("Sample.cpio",    ExpectedResult =  3)]
+        [TestCase("Sample.chm",     ExpectedResult = 89)]
+        [TestCase("Sample.cpio",    ExpectedResult =  4)]
         [TestCase("Sample.docx",    ExpectedResult = 13)]
         [TestCase("Sample.flv",     ExpectedResult =  2)]
-        [TestCase("Sample.jar",     ExpectedResult =  3)]
-        [TestCase("Sample.lha",     ExpectedResult =  3)]
-        [TestCase("Sample.lzh",     ExpectedResult =  3)]
+        [TestCase("Sample.jar",     ExpectedResult =  4)]
+        [TestCase("Sample.lha",     ExpectedResult =  4)]
+        [TestCase("Sample.lzh",     ExpectedResult =  4)]
         [TestCase("Sample.nupkg",   ExpectedResult =  5)]
         [TestCase("Sample.pptx",    ExpectedResult = 40)]
-        [TestCase("Sample.rar",     ExpectedResult =  3)]
-        [TestCase("Sample.rar5",    ExpectedResult =  3)]
-        [TestCase("Sample.rar.001", ExpectedResult =  3)]
-        [TestCase("Sample.tar",     ExpectedResult =  3)]
+        [TestCase("Sample.rar",     ExpectedResult =  4)]
+        [TestCase("Sample.rar5",    ExpectedResult =  4)]
+        [TestCase("Sample.rar.001", ExpectedResult =  4)]
+        [TestCase("Sample.tar",     ExpectedResult =  4)]
         [TestCase("Sample.xlsx",    ExpectedResult = 14)]
+        [TestCase("SampleEmpty.7z", ExpectedResult =  7)]
         public int Extract(string filename)
         {
-            var src = Example(filename);
-            var count = 0;
+            var src        = Example(filename);
+            var extracting = 0;
+            var extracted  = 0;
 
             using (var archive = new ArchiveReader(src))
             {
                 var dest = Result($@"Extract\{filename}");
-                archive.Extracted += (s, e) => ++count;
+                archive.Extracting += (s, e) => ++extracting;
+                archive.Extracted += (s, e) => ++extracted;
                 archive.Extract(dest);
             }
 
-            return count;
+            Assert.That(extracted, Is.EqualTo(extracting));
+            return extracted;
         }
 
         /* ----------------------------------------------------------------- */
@@ -425,7 +429,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                 }
             }, Throws.TypeOf<OperationCanceledException>());
 
-            Assert.That(count, Is.EqualTo(1));
+            Assert.That(count, Is.EqualTo(2));
         }
 
         /* ----------------------------------------------------------------- */

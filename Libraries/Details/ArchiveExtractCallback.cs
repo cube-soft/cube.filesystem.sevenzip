@@ -395,7 +395,14 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         private ArchiveStreamWriter CreateDirectory()
         {
-            _inner.Current.CreateDirectory(Destination, IO);
+            var item = _inner.Current;
+
+            Extracting?.Invoke(this, ValueEventArgs.Create(item));
+            item.CreateDirectory(Destination, IO);
+            Report.Count++;
+            ExecuteReport();
+            Extracted?.Invoke(this, ValueEventArgs.Create(item));
+
             return null;
         }
 
