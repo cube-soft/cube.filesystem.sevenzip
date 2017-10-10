@@ -1,15 +1,15 @@
-Cube.FileSystem
+Cube.FileSystem.SevenZip
 ====
 
-[![AppVeyor](https://ci.appveyor.com/api/projects/status/6exuqpkn7ct3a790?svg=true)](https://ci.appveyor.com/project/clown/cube-filesystem)
-[![Codecov](https://codecov.io/gh/cube-soft/Cube.FileSystem/branch/master/graph/badge.svg)](https://codecov.io/gh/cube-soft/Cube.FileSystem)
+[![AppVeyor](https://ci.appveyor.com/api/projects/status/jao7f754rlookxxe?svg=true)](https://ci.appveyor.com/project/clown/cube-filesystem-sevenzip)
+[![Codecov](https://codecov.io/gh/cube-soft/Cube.FileSystem.SevenZip/branch/master/graph/badge.svg)](https://codecov.io/gh/cube-soft/Cube.FileSystem.SevenZip)
 
-Cube.FileSystem is an I/O library, especially for archiving or extracting files.
-The Cube.FileSystem.SevenZip project is licensed under the GNU LGPLv3 and the other projects are Apache 2.0.
+Cube.FileSystem.SevenZip is an I/O library, especially for archiving or extracting files.
+The Cube.FileSystem.SevenZip project (files in the Libraries directory) is licensed under the GNU LGPLv3 and the other projects are Apache 2.0.
 
 ## Usage
 
-Note that ArchiveWriter and ArchiveReader classes (Cube.FileSystem.SevenZip) need to execute in the same thread from constructing to destroying.
+Note that ArchiveWriter and ArchiveReader classes need to execute in the same thread from constructing to destroying.
 Use Task.Run() in the whole transaction if you need to archive or extract files asynchronously.
 
 ```cs
@@ -57,6 +57,10 @@ using (var reader = new ArchiveReader(@"path\to\archive", "password"))
 }
 ```
 
+## Todo
+
+We will implement add and/or modify files in the existed archives in the future.
+
 ## Requirements
 
 * [7-Zip](http://www.7-zip.org/) ... [cube-soft/7z](https://github.com/cube-soft/7z) is optimized for Japanese encoding.
@@ -72,5 +76,5 @@ using (var reader = new ArchiveReader(@"path\to\archive", "password"))
 ## License
  
 Copyright (c) 2010 [CubeSoft, Inc.](http://www.cube-soft.jp/)
-The Cube.FileSystem.SevenZip project is licensed under the [GNU LGPLv3](https://github.com/cube-soft/Cube.FileSystem/blob/master/Libraries/SevenZip/License.txt)
-and the other projects are [Apache 2.0](https://github.com/cube-soft/Cube.FileSystem/blob/master/License.txt).
+The Cube.FileSystem.SevenZip project is licensed under the [GNU LGPLv3](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries/License.txt)
+and the other projects are [Apache 2.0](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/License.txt).

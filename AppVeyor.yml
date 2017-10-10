@@ -1,9 +1,9 @@
-version: 1.5.0.{build}
+version: 1.5.1.{build}
 branches:
-    except:
-        - net35
+    only:
+        - master
 skip_tags: true
-clone_folder: C:\Cube\Cube.FileSystem
+clone_folder: C:\Cube\Cube.FileSystem.SevenZip
 image: Visual Studio 2017
 nuget:
     project_feed: true
@@ -14,20 +14,28 @@ before_build:
     - ps: Start-FileDownload https://ci.appveyor.com/api/projects/clown/7z/artifacts/7z.dll
     - ps: Start-FileDownload https://ci.appveyor.com/api/projects/clown/7z/artifacts/7z.sfx
     - nuget sources add -name Cube.Core -source https://ci.appveyor.com/nuget/cube.core
+    - nuget sources add -name Cube.FileSystem -source https://ci.appveyor.com/nuget/cube.filesystem
     - nuget sources add -name Cube.Images -source https://ci.appveyor.com/nuget/cube.images
     - nuget sources add -name Cube.Forms -source https://ci.appveyor.com/nuget/cube.forms
-    - nuget restore Cube.FileSystem.Ice.sln
+    - nuget restore Cube.FileSystem.SevenZip.Ice.sln
 build:
     parallel: true
-    project: Cube.FileSystem.Ice.sln
+    project: Cube.FileSystem.SevenZip.Ice.sln
     publish_nuget: true
     verbosity: normal
 after_build:
     - xcopy /Y /I 7z.* Tests\bin\Release
-    - xcopy /Y /I 7z.* Applications\Ice.Tests\bin\Release
+    - xcopy /Y /I 7z.* Applications\Ice\Tests\bin\Release
+artifacts:
+    - path: Applications\Ice\Progress\bin\Release
+      name: CubeIce
+    - path: Applications\Ice\Settings\bin\Release
+      name: CubeIce.Settings
+    - path: Applications\Ice\Associate\bin\Release
+      name: CubeIce.Settings.Associate
 test_script:
-    - ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:nunit3-console.exe -targetargs:Cube.FileSystem.Tests.dll -targetdir:Tests\bin\Release -hideskipped:All -output:CoverResult.xml -filter:"+[*]* -[AlphaFS]* -[*]*NativeMethods -[*]*Properties.*"
-    - ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:nunit3-console.exe -targetargs:Cube.FileSystem.App.Ice.Tests.dll -targetdir:Applications\Ice.Tests\bin\Release -hideskipped:All -mergeoutput -output:CoverResult.xml -filter:"+[*]* -[AlphaFS]* -[*]*NativeMethods -[*]*Properties.* -[*]*Form -[*]*.Program"
+    - ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:nunit3-console.exe -targetargs:Cube.FileSystem.SevenZip.Tests.dll -targetdir:Tests\bin\Release -returntargetcode -hideskipped:All -output:CoverResult.xml -filter:"+[*]* -[AlphaFS]* -[*]*NativeMethods -[*]*Properties.*"
+    - ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:nunit3-console.exe -targetargs:Cube.FileSystem.SevenZip.App.Ice.Tests.dll -targetdir:Applications\Ice\Tests\bin\Release -returntargetcode -hideskipped:All -mergeoutput -output:CoverResult.xml -filter:"+[*]* -[AlphaFS]* -[*]*NativeMethods -[*]*Properties.* -[*]*Form -[*]*.Program"
 after_test:
     - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
     - pip install codecov
