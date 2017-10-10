@@ -97,9 +97,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="App.config" />
     <None Include="Packages.config" />
     <None Include="Examples\Archive\FilterDirectory\Filter.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -276,6 +274,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Examples\SampleComma.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\SampleEmpty.7z">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Examples\SampleFilter.zip">
