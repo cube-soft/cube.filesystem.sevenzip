@@ -70,14 +70,17 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\..\Cube.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\Cube.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Cube.Core">
-      <HintPath>..\..\..\packages\Cube.Core.1.5.1\lib\net45\Cube.Core.dll</HintPath>
+      <HintPath>..\..\packages\Cube.Core.1.5.1\lib\net45\Cube.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Cube.FileSystem">
+      <HintPath>..\..\packages\Cube.FileSystem.1.5.1\lib\net45\Cube.FileSystem.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\..\..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+      <HintPath>..\..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -116,14 +119,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Cube.snk" />
+    <None Include="..\Cube.snk" />
     <None Include="Packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Core\Cube.FileSystem.csproj">
-      <Project>{e89aad2c-5a74-49f6-ad84-65f0016ef1bb}</Project>
-      <Name>Cube.FileSystem</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

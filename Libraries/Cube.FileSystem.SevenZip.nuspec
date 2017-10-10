@@ -11,9 +11,9 @@
     <releaseNotes>Private release.</releaseNotes>
     <tags>Cube Windows SevenZip</tags>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <licenseUrl>https://github.com/cube-soft/Cube.FileSystem/blob/master/License.txt</licenseUrl>
-    <projectUrl>https://github.com/cube-soft/Cube.FileSystem</projectUrl>
-    <iconUrl>https://github.com/cube-soft/Cube.FileSystem/blob/master/Icon.png</iconUrl>
+    <licenseUrl>https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/License.txt</licenseUrl>
+    <projectUrl>https://github.com/cube-soft/Cube.FileSystem.SevenZip</projectUrl>
+    <iconUrl>https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Icon.png</iconUrl>
   </metadata>
   <files>
     <file src="bin\Release\Cube.FileSystem.SevenZip.dll" target="lib\net45" />

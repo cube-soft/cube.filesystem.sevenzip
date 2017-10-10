@@ -69,6 +69,9 @@
     <Reference Include="Cube.Core">
       <HintPath>..\..\packages\Cube.Core.1.5.1\lib\net45\Cube.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Cube.FileSystem">
+      <HintPath>..\..\packages\Cube.FileSystem.1.5.1\lib\net45\Cube.FileSystem.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
@@ -85,13 +88,9 @@
   <ItemGroup>
     <Compile Include="Details\FileHelper.cs" />
     <Compile Include="Details\GlobalSetup.cs" />
-    <Compile Include="SevenZip\ArchiveReaderTest.cs" />
-    <Compile Include="SevenZip\ArchiveWriterTest.cs" />
-    <Compile Include="SevenZip\FormatTest.cs" />
-    <Compile Include="FilesTest.cs" />
-    <Compile Include="OperatorTest.cs" />
-    <Compile Include="PathFilterTest.cs" />
-    <Compile Include="ShortcutTest.cs" />
+    <Compile Include="ArchiveReaderTest.cs" />
+    <Compile Include="ArchiveWriterTest.cs" />
+    <Compile Include="FormatTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -287,11 +286,7 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Libraries\Core\Cube.FileSystem.csproj">
-      <Project>{e89aad2c-5a74-49f6-ad84-65f0016ef1bb}</Project>
-      <Name>Cube.FileSystem</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Libraries\SevenZip\Cube.FileSystem.SevenZip.csproj">
+    <ProjectReference Include="..\Libraries\Cube.FileSystem.SevenZip.csproj">
       <Project>{74c9f388-360e-4c46-a9a6-e131eab2e49c}</Project>
       <Name>Cube.FileSystem.SevenZip</Name>
     </ProjectReference>
