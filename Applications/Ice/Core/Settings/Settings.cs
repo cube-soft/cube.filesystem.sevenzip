@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Serialization;
+using Cube.Settings;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -287,7 +288,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public SettingsFolder() : this(@"CubeICE\v3") { }
+        public SettingsFolder()
+            : this(SettingsType.Registry, @"CubeSoft\CubeICE\v3") { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -297,10 +299,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
-        /// <param name="subkey">レジストリのサブキー名</param>
+        /// <param name="type">設定情報の保存方法</param>
+        /// <param name="path">設定情報の保存パス</param>
         ///
         /* ----------------------------------------------------------------- */
-        public SettingsFolder(string subkey) : base("CubeSoft", subkey)
+        public SettingsFolder(SettingsType type, string path) : base(type, path)
         {
             AutoSave       = false;
             Version.Digit  = 3;

@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using Cube.FileSystem.SevenZip;
 using Cube.FileSystem.SevenZip.Ice;
 using Cube.Log;
 
@@ -54,7 +53,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         {
             Request  = request;
             Settings = settings;
-            IO       = new Operator(new Alpha());
+            IO       = new AfsOperator();
 
             IO.Failed += WhenFailed;
             _timer.Elapsed += (s, e) => OnProgress(ValueEventArgs.Create(Report));

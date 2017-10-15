@@ -20,6 +20,7 @@ using System.Linq;
 using Microsoft.Win32;
 using Cube.FileSystem.SevenZip.Ice;
 using Cube.FileSystem.SevenZip.App.Ice.Settings;
+using Cube.Settings;
 using NUnit.Framework;
 
 namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
@@ -604,7 +605,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private static string KeyName = "CubeIceTest";
+        private static string KeyName = @"CubeSoft\CubeIceTest";
 
         /* ----------------------------------------------------------------- */
         ///
@@ -615,7 +616,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private SettingsFolder Create() => new SettingsFolder(KeyName);
+        private SettingsFolder Create() => new SettingsFolder(SettingsType.Registry, KeyName);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -647,7 +648,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
         {
             try
             {
-                using (var root = Registry.CurrentUser.OpenSubKey("CubeSoft", true))
+                using (var root = Registry.CurrentUser.OpenSubKey("Software", true))
                 {
                     root.DeleteSubKeyTree(KeyName, false);
                 }
