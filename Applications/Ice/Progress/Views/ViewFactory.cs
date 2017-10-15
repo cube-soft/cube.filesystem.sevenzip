@@ -1,19 +1,19 @@
 ﻿/* ------------------------------------------------------------------------- */
-///
-/// Copyright (c) 2010 CubeSoft, Inc.
-/// 
-/// Licensed under the Apache License, Version 2.0 (the "License");
-/// you may not use this file except in compliance with the License.
-/// You may obtain a copy of the License at
-///
-///  http://www.apache.org/licenses/LICENSE-2.0
-///
-/// Unless required by applicable law or agreed to in writing, software
-/// distributed under the License is distributed on an "AS IS" BASIS,
-/// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-/// See the License for the specific language governing permissions and
-/// limitations under the License.
-///
+//
+// Copyright (c) 2010 CubeSoft, Inc.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
 /* ------------------------------------------------------------------------- */
 using System.Windows.Forms;
 using Cube.FileSystem.SevenZip.Ice;
@@ -351,27 +351,119 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
         #region Factory methods
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CreateProgressView
+        /// 
+        /// <summary>
+        /// 進捗表示用画面を生成します。
+        /// </summary>
+        /// 
+        /// <returns>進捗表示用画面</returns>
+        ///
+        /* ----------------------------------------------------------------- */
         public static IProgressView CreateProgressView()
             => _factory.CreateProgressView();
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowSaveView
+        /// 
+        /// <summary>
+        /// 保存パス名を選択する画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">パスを保持するオブジェクト</param>
+        /// <param name="directory">
+        /// ディレクトリ用画面を使用するかどうかを示す値
+        /// </param>
+        ///
+        /* ----------------------------------------------------------------- */
         public static void ShowSaveView(QueryEventArgs<string, string> e, bool directory)
             => _factory.ShowSaveView(e, directory);
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowPasswordView
+        /// 
+        /// <summary>
+        /// パスワード入力画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">パスワード情報を保持するオブジェクト</param>
+        /// <param name="confirm">確認用入力項目の有無</param>
+        ///
+        /* ----------------------------------------------------------------- */
         public static void ShowPasswordView(QueryEventArgs<string, string> e, bool confirm)
             => _factory.ShowPasswordView(e, confirm);
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowOverwriteView
+        /// 
+        /// <summary>
+        /// 上書き確認用画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">ファイル情報を保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
         public static void ShowOverwriteView(OverwriteEventArgs e)
             => _factory.ShowOverwriteView(e);
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowArchiveDetailsView
+        /// 
+        /// <summary>
+        /// 圧縮の詳細設定用画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">詳細設定を保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
         public static void ShowArchiveDetailsView(QueryEventArgs<string, ArchiveDetails> e)
             => _factory.ShowArchiveDetailsView(e);
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowExplorerView
+        /// 
+        /// <summary>
+        /// エクスプローラ画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">情報を保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
         public static void ShowExplorerView(KeyValueEventArgs<string, string> e)
             => _factory.ShowExplorerView(e);
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowMailView
+        /// 
+        /// <summary>
+        /// メール送信用画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">添付情報を保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
         public static void ShowMailView(ValueEventArgs<string> e)
             => _factory.ShowMailView(e);
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowMessageBox
+        /// 
+        /// <summary>
+        /// メッセージボックスを表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">メッセージ内容を保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
         public static void ShowMessageBox(MessageEventArgs e)
             => _factory.ShowMessageBox(e);
 
