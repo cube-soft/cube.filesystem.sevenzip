@@ -62,7 +62,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
                 ToolTipCount = 15
             };
 
-            Assert.That(vm.Version,     Does.StartWith("Version 1.0.0"));
+            Assert.That(vm.Version,     Does.StartWith("Version"));
             Assert.That(vm.InstallMode, Is.False);
 
             Assert.That(m.Value.CheckUpdate,          Is.True);
