@@ -59,7 +59,7 @@ using (var reader = new ArchiveReader(@"path\to\archive", "password"))
 
 ## Todo
 
-We will implement add and/or modify files in the existed archives in the future.
+We will implement to add and/or modify files to existed archives in the future.
 
 ## Requirements
 
