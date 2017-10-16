@@ -309,8 +309,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             Version.Digit  = 3;
             Version.Suffix = Properties.Resources.VersionSuffix;
 
-            var asm = Assembly.GetExecutingAssembly().Location;
-            var dir = System.IO.Path.GetDirectoryName(asm);
+            var dir = System.IO.Path.GetDirectoryName(AssemblyReader.Default.Location);
             Startup.Command = $"\"{System.IO.Path.Combine(dir, "cubeice-checker.exe")}\"";
             Startup.Name    = "cubeice-checker";
         }

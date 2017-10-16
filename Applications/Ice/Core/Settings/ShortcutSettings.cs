@@ -216,8 +216,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private string GetLink(string filename)
         {
-            var asm = Assembly.GetExecutingAssembly().Location;
-            var dir = System.IO.Path.GetDirectoryName(asm);
+            var dir = System.IO.Path.GetDirectoryName(AssemblyReader.Default.Location);
             return System.IO.Path.Combine(dir, filename);
         }
 

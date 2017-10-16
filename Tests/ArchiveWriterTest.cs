@@ -442,7 +442,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /* ----------------------------------------------------------------- */
         private static string Current(string filename)
         {
-            var asm = Assembly.GetExecutingAssembly().Location;
+            var asm = AssemblyReader.Default.Location;
             var dir = System.IO.Path.GetDirectoryName(asm);
             return System.IO.Path.Combine(dir, filename);
         }

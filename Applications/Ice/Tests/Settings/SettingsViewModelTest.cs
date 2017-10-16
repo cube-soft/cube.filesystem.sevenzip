@@ -630,7 +630,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
         private string GetTmpDirectory()
         {
             var io = new Operator();
-            var asm = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            var asm = AssemblyReader.Default.Location;
             return io.Combine(io.Get(asm).DirectoryName, "Results");
         }
 

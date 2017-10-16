@@ -57,10 +57,9 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         protected MockViewHelper(Operator io)
         {
-            var reader = new AssemblyReader(Assembly.GetExecutingAssembly());
             IO = io;
-            Root = IO.Get(reader.Location).DirectoryName;
-            _directory = GetType().FullName.Replace($"{reader.Product}.", "");
+            Root = IO.Get(AssemblyReader.Default.Location).DirectoryName;
+            _directory = GetType().FullName.Replace($"{AssemblyReader.Default.Product}.", "");
 
             Views.Configure(_mock);
 

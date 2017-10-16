@@ -94,7 +94,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
             {
                 if (!force && !IsChanged()) return;
 
-                var asm = Assembly.GetExecutingAssembly().Location;
+                var asm = AssemblyReader.Default.Location;
                 var dir = System.IO.Path.GetDirectoryName(asm);
                 var exe = System.IO.Path.Combine(dir, Properties.Resources.FileAssociate);
 

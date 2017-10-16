@@ -91,7 +91,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         static void Extract(Request request)
         {
-            var exec = Assembly.GetExecutingAssembly().Location;
+            var exec = AssemblyReader.Default.Location;
             var args = new System.Text.StringBuilder();
 
             foreach (var s in request.Options) args.Append($"\"{s}\" ");

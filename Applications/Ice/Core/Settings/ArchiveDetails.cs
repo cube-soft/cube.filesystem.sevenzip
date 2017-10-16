@@ -44,8 +44,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         public ArchiveDetails()
         {
-            var asm = Assembly.GetExecutingAssembly();
-            var dir = System.IO.Path.GetDirectoryName(asm.Location);
+            var dir = System.IO.Path.GetDirectoryName(AssemblyReader.Default.Location);
             SfxModule = System.IO.Path.Combine(dir, "7z.sfx");
         }
 

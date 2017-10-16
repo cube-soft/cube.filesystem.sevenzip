@@ -53,7 +53,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Associate
                 Cube.Log.Operations.Info(type, Assembly.GetExecutingAssembly());
                 Cube.Log.Operations.Info(type, string.Join(" ", args));
 
-                var asm  = Assembly.GetExecutingAssembly().Location;
+                var asm  = AssemblyReader.Default.Location;
                 var dir  = System.IO.Path.GetDirectoryName(asm);
                 var exe  = System.IO.Path.Combine(dir, "cubeice.exe");
                 var icon = $"{exe},3";

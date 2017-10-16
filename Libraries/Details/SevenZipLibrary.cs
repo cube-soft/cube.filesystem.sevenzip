@@ -49,8 +49,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public SevenZipLibrary()
         {
-            var asm = Assembly.GetExecutingAssembly();
-            var dir = Path.GetDirectoryName(asm.Location);
+            var dir = Path.GetDirectoryName(AssemblyReader.Default.Location);
             _handle = Kernel32.NativeMethods.LoadLibrary(Path.Combine(dir, "7z.dll"));
             if (_handle.IsInvalid) throw new Win32Exception("LoadLibrary");
         }
