@@ -25,7 +25,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveDetailsForm
+    /// ArchiveForm
     ///
     /// <summary>
     /// 圧縮処理の詳細画面を表示するクラスです。
@@ -38,7 +38,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveDetailsForm
+        /// ArchiveForm
         /// 
         /// <summary>
         /// オブジェクトを初期化します。

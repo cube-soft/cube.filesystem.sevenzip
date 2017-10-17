@@ -179,7 +179,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ShowArchiveDetailsView
+        /// ShowArchiveView
         /// 
         /// <summary>
         /// 圧縮の詳細設定用画面を表示します。
@@ -188,18 +188,18 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// <param name="e">詳細設定を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public override void ShowArchiveDetailsView(QueryEventArgs<string, ArchiveDetails> e)
+        public override void ShowArchiveView(QueryEventArgs<string, ArchiveDetails> e)
         {
-            var format = SevenZip.Formats.FromExtension(System.IO.Path.GetExtension(e.Query));
+            var format = Formats.FromExtension(System.IO.Path.GetExtension(e.Query));
 
             e.Cancel = false;
             e.Result = new ArchiveDetails(format)
             {
                 Path              = Settings.Destination,
                 Password          = Settings.Password,
-                CompressionLevel  = SevenZip.CompressionLevel.Ultra,
-                CompressionMethod = SevenZip.CompressionMethod.Lzma,
-                EncryptionMethod  = SevenZip.EncryptionMethod.Aes256,
+                CompressionLevel  = CompressionLevel.Ultra,
+                CompressionMethod = CompressionMethod.Lzma,
+                EncryptionMethod  = EncryptionMethod.Aes256,
             };
         }
 

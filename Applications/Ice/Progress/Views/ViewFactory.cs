@@ -109,7 +109,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ShowArchiveDetailsView
+        /// ShowArchiveView
         /// 
         /// <summary>
         /// 圧縮の詳細設定用画面を表示します。
@@ -118,7 +118,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// <param name="e">詳細設定を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public virtual void ShowArchiveDetailsView(QueryEventArgs<string, ArchiveDetails> e)
+        public virtual void ShowArchiveView(QueryEventArgs<string, ArchiveDetails> e)
         {
             using (var view = new ArchiveDetailsForm { Path = e.Query })
             {
@@ -413,7 +413,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ShowArchiveDetailsView
+        /// ShowArchiveView
         /// 
         /// <summary>
         /// 圧縮の詳細設定用画面を表示します。
@@ -422,8 +422,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// <param name="e">詳細設定を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void ShowArchiveDetailsView(QueryEventArgs<string, ArchiveDetails> e)
-            => _factory.ShowArchiveDetailsView(e);
+        public static void ShowArchiveView(QueryEventArgs<string, ArchiveDetails> e)
+            => _factory.ShowArchiveView(e);
 
         /* ----------------------------------------------------------------- */
         ///
