@@ -63,6 +63,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public ArchiveWriter(Format format, Operator io)
         {
+            _dispose = new OnceAction<bool>(Dispose);
             Format = format;
             _io = io;
             _7z = new SevenZipLibrary();
@@ -210,10 +211,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        ~ArchiveWriter()
-        {
-            Dispose(false);
-        }
+        ~ArchiveWriter() { _dispose.Invoke(false); }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -226,7 +224,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void Dispose()
         {
-            Dispose(true);
+            _dispose.Invoke(true);
             GC.SuppressFinalize(this);
         }
 
@@ -241,9 +239,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         protected virtual void Dispose(bool disposing)
         {
-            if (_disposed) return;
-            if (disposing) _7z.Dispose();
-            _disposed = true;
+            _7z.Dispose();
         }
 
         #endregion
@@ -474,7 +470,7 @@ namespace Cube.FileSystem.SevenZip
         }
 
         #region Fields
-        private bool _disposed = false;
+        private OnceAction<bool> _dispose;
         private SevenZipLibrary _7z;
         private Operator _io;
         private IList<FileItem> _items = new List<FileItem>();

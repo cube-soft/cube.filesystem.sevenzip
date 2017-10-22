@@ -94,6 +94,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public ArchiveReader(string path, string password, Operator io)
         {
+            _dispose = new OnceAction<bool>(Dispose);
             Source = path;
             _io = io;
             _password = new PasswordQuery(password);
@@ -115,6 +116,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public ArchiveReader(string path, IQuery<string, string> password, Operator io)
         {
+            _dispose = new OnceAction<bool>(Dispose);
             Source = path;
             _io = io;
             _password = new PasswordQuery(password);
@@ -284,10 +286,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        ~ArchiveReader()
-        {
-            Dispose(false);
-        }
+        ~ArchiveReader() { _dispose.Invoke(false); }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -300,7 +299,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void Dispose()
         {
-            Dispose(true);
+            _dispose.Invoke(true);
             GC.SuppressFinalize(this);
         }
 
@@ -315,16 +314,9 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         protected virtual void Dispose(bool disposing)
         {
-            if (_disposed) return;
-
-            if (disposing)
-            {
-                _archive.Close();
-                _callback.Dispose();
-                _7z.Dispose();
-            }
-
-            _disposed = true;
+            if (disposing) _callback.Dispose();
+            _archive.Close();
+            _7z.Dispose();
         }
 
         #endregion
@@ -394,7 +386,7 @@ namespace Cube.FileSystem.SevenZip
         }
 
         #region Fields
-        private bool _disposed = false;
+        private OnceAction<bool> _dispose;
         private Operator _io;
         private PasswordQuery _password;
         private SevenZipLibrary _7z;

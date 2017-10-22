@@ -49,6 +49,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public SevenZipLibrary()
         {
+            _dispose = new OnceAction<bool>(Dispose);
             var dir = Path.GetDirectoryName(AssemblyReader.Default.Location);
             _handle = Kernel32.NativeMethods.LoadLibrary(Path.Combine(dir, "7z.dll"));
             if (_handle.IsInvalid) throw new Win32Exception("LoadLibrary");
@@ -153,10 +154,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        ~SevenZipLibrary()
-        {
-            Dispose(false);
-        }
+        ~SevenZipLibrary() { _dispose.Invoke(false); }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -169,7 +167,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void Dispose()
         {
-            Dispose(true);
+            _dispose.Invoke(true);
             GC.SuppressFinalize(this);
         }
 
@@ -184,9 +182,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         void Dispose(bool disposing)
         {
-            if (_disposed) return;
             if (_handle != null && !_handle.IsClosed) _handle.Close();
-            _disposed = true;
         }
 
         #endregion
@@ -212,7 +208,7 @@ namespace Cube.FileSystem.SevenZip
         );
 
         #region Fields
-        private bool _disposed = false;
+        private OnceAction<bool> _dispose;
         private SafeLibraryHandle _handle;
         #endregion
 

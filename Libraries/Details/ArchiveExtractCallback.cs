@@ -55,6 +55,7 @@ namespace Cube.FileSystem.SevenZip
         public ArchiveExtractCallback(string src, string dest, IEnumerable<ArchiveItem> items, Operator io)
             : base(src, io)
         {
+            _dispose     = new OnceAction<bool>(Dispose);
             Destination  = dest;
             Items        = items;
             TotalCount   = -1;
@@ -306,10 +307,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        ~ArchiveExtractCallback()
-        {
-            Dispose(false);
-        }
+        ~ArchiveExtractCallback() { _dispose.Invoke(false); }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -322,7 +320,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void Dispose()
         {
-            Dispose(true);
+            _dispose.Invoke(true);
             GC.SuppressFinalize(this);
         }
 
@@ -337,9 +335,6 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         private void Dispose(bool disposing)
         {
-            if (_disposed) return;
-            _disposed = true;
-
             if (disposing)
             {
                 foreach (var kv in _streams)
@@ -441,7 +436,7 @@ namespace Cube.FileSystem.SevenZip
         }
 
         #region Fields
-        private bool _disposed = false;
+        private OnceAction<bool> _dispose;
         private IEnumerator<ArchiveItem> _inner;
         private IDictionary<ArchiveItem, ArchiveStreamWriter> _streams = new Dictionary<ArchiveItem, ArchiveStreamWriter>();
         private long _hack = 0;

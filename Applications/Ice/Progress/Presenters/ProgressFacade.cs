@@ -52,6 +52,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         public ProgressFacade(Request request, SettingsFolder settings)
         {
+            _dispose = new OnceAction<bool>(Dispose);
             Request  = request;
             Settings = settings;
             IO       = new AfsOperator();
@@ -566,10 +567,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        ~ProgressFacade()
-        {
-            Dispose(false);
-        }
+        ~ProgressFacade() { _dispose.Invoke(false); }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -582,7 +580,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         public void Dispose()
         {
-            Dispose(true);
+            _dispose.Invoke(true);
             GC.SuppressFinalize(this);
         }
 
@@ -597,15 +595,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         protected virtual void Dispose(bool disposing)
         {
-            if (_disposed) return;
-
             try
             {
                 IO.Failed -= WhenFailed;
                 if (!string.IsNullOrEmpty(Tmp)) IO.Delete(Tmp);
             }
             catch (Exception err) { this.LogWarn(err.ToString(), err); }
-            finally { _disposed = true; }
         }
 
         #endregion
@@ -681,7 +676,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         }
 
         #region Fields
-        private bool _disposed = false;
+        private OnceAction<bool> _dispose;
         private string _dest;
         private string _tmp;
         private System.Timers.Timer _timer = new System.Timers.Timer(100.0);

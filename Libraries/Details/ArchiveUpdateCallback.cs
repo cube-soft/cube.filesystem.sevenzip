@@ -52,6 +52,7 @@ namespace Cube.FileSystem.SevenZip
         public ArchiveUpdateCallback(IList<FileItem> items, string dest, Operator io)
             : base(io)
         {
+            _dispose = new OnceAction<bool>(Dispose);
             Items = items;
             Report.TotalCount = items.Count;
         }
@@ -317,10 +318,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        ~ArchiveUpdateCallback()
-        {
-            Dispose(false);
-        }
+        ~ArchiveUpdateCallback() { _dispose.Invoke(false); }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -333,7 +331,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void Dispose()
         {
-            Dispose(true);
+            _dispose.Invoke(true);
             GC.SuppressFinalize(this);
         }
 
@@ -348,15 +346,11 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         private void Dispose(bool disposing)
         {
-            if (_disposed) return;
-
             if (disposing)
             {
                 foreach (var stream in _streams) stream.Dispose();
                 _streams.Clear();
             }
-
-            _disposed = true;
         }
 
         #endregion
@@ -386,7 +380,7 @@ namespace Cube.FileSystem.SevenZip
         }
 
         #region Fields
-        private bool _disposed = false;
+        private OnceAction<bool> _dispose;
         private IList<ArchiveStreamReader> _streams = new List<ArchiveStreamReader>();
         #endregion
 

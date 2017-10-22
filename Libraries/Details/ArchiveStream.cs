@@ -54,6 +54,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         protected ArchiveStreamBase(Stream baseStream, bool disposeStream)
         {
+            _dispose = new OnceAction<bool>(Dispose);
             BaseStream = baseStream;
             _disposeStream = disposeStream;
         }
@@ -110,16 +111,8 @@ namespace Cube.FileSystem.SevenZip
         /// オブジェクトを破棄します。
         /// </summary>
         /// 
-        /// <remarks>
-        /// Dispose(bool disposing) にアンマネージリソースを解放するコードが
-        /// 含まれる場合にのみ、ファイナライザーをオーバーライドします。
-        /// </remarks>
-        ///
         /* ----------------------------------------------------------------- */
-        ~ArchiveStreamBase()
-        {
-            Dispose(false);
-        }
+        ~ArchiveStreamBase() { _dispose.Invoke(false); }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -132,7 +125,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void Dispose()
         {
-            Dispose(true);
+            _dispose.Invoke(true);
             GC.SuppressFinalize(this);
         }
 
@@ -147,9 +140,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         protected virtual void Dispose(bool disposing)
         {
-            if (_disposed) return;
             if (disposing && _disposeStream) BaseStream.Dispose();
-            _disposed = true;
         }
 
         #endregion
@@ -157,7 +148,7 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Fields
-        private bool _disposed = false;
+        private OnceAction<bool> _dispose;
         private bool _disposeStream = true;
         #endregion
     }

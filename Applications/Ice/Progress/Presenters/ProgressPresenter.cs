@@ -105,9 +105,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         {
             try
             {
-                if (_disposed) return;
                 if (disposing) Model.Dispose();
-                _disposed = true;
             }
             finally { base.Dispose(disposing); }
         }
@@ -170,10 +168,6 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         private void WhenOpenDirectoryRequested(object sender, KeyValueEventArgs<string, string> e)
             => Views.ShowExplorerView(e);
 
-        #endregion
-
-        #region Fields
-        private bool _disposed = false;
         #endregion
     }
 }

@@ -53,6 +53,7 @@ namespace Cube.FileSystem.SevenZip
         public ArchiveOpenCallback(string src, ArchiveStreamReader stream, Operator io)
             : base(src, io)
         {
+            _dispose = new OnceAction<bool>(Dispose);
             _streams.Add(stream);
         }
 
@@ -193,10 +194,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        ~ArchiveOpenCallback()
-        {
-            Dispose(false);
-        }
+        ~ArchiveOpenCallback() { _dispose.Invoke(false); }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -209,7 +207,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void Dispose()
         {
-            Dispose(true);
+            _dispose.Invoke(true);
             GC.SuppressFinalize(this);
         }
 
@@ -224,15 +222,11 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         void Dispose(bool disposing)
         {
-            if (_disposed) return;
-
             if (disposing)
             {
                 foreach (var item in _streams) item.Dispose();
                 _streams.Clear();
             }
-
-            _disposed = true;
         }
 
         #endregion
@@ -240,7 +234,7 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Fields
-        private bool _disposed = false;
+        private OnceAction<bool> _dispose;
         private IList<ArchiveStreamReader> _streams = new List<ArchiveStreamReader>();
         #endregion
     }
