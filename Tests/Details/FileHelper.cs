@@ -58,10 +58,8 @@ namespace Cube.FileSystem.SevenZip.Tests
         protected FileHelper(Operator io)
         {
             IO = io;
-
-            var asm = new AssemblyReader(Assembly.GetExecutingAssembly());
-            Root = IO.Get(asm.Location).DirectoryName;
-            _directory = GetType().FullName.Replace($"{asm.Product}.", "");
+            Root = IO.Get(Assembly.GetExecutingAssembly().Location).DirectoryName;
+            _directory = GetType().FullName;
 
             if (!IO.Exists(Results)) IO.CreateDirectory(Results);
             Delete(Results);
