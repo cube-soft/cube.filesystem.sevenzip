@@ -598,14 +598,14 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// KeyName
+        /// SubKeyName
         ///
         /// <summary>
-        /// テスト用のレジストリキー名を取得します。
+        /// テスト用のレジストリ・サブキー名を取得します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private static string KeyName = @"CubeSoft\CubeIceTest";
+        private static string SubKeyName = @"CubeSoft\CubeIceTest";
 
         /* ----------------------------------------------------------------- */
         ///
@@ -616,7 +616,10 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private SettingsFolder Create() => new SettingsFolder(SettingsType.Registry, KeyName);
+        private SettingsFolder Create() => new SettingsFolder(
+            SettingsType.Registry,
+            $@"Software\{SubKeyName}"
+        ) { AutoSave = false };
 
         /* ----------------------------------------------------------------- */
         ///
@@ -650,7 +653,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
             {
                 using (var root = Registry.CurrentUser.OpenSubKey("Software", true))
                 {
-                    root.DeleteSubKeyTree(KeyName, false);
+                    root.DeleteSubKeyTree(SubKeyName, false);
                 }
             }
             catch (Exception /* err */) { /* ignore */ }
