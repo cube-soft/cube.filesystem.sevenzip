@@ -42,10 +42,8 @@ namespace Cube.FileSystem.SevenZip.Kernel32
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [DllImport(LibName, CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern SafeLibraryHandle LoadLibrary(
-            [MarshalAs(UnmanagedType.LPTStr)] string lpFileName
-        );
+        [DllImport(LibName, CharSet = CharSet.Unicode, SetLastError = true)]
+        public static extern SafeLibraryHandle LoadLibrary(string lpFileName);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -56,7 +54,7 @@ namespace Cube.FileSystem.SevenZip.Kernel32
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [DllImport(LibName, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport(LibName, CharSet = CharSet.Ansi, SetLastError = true, BestFitMapping = false, ThrowOnUnmappableChar = true)]
         public static extern IntPtr GetProcAddress(
             SafeLibraryHandle hModule,
             [MarshalAs(UnmanagedType.LPStr)] string procName

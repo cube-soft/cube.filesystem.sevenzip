@@ -597,6 +597,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         {
             try
             {
+                if (disposing)
+                {
+                    _timer.Dispose();
+                    _wait.Dispose();
+                }
+
                 IO.Failed -= WhenFailed;
                 if (!string.IsNullOrEmpty(Tmp)) IO.Delete(Tmp);
             }

@@ -106,7 +106,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Mapi32
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [DllImport("mapi32.dll", CharSet = CharSet.Ansi)]
+        [DllImport("mapi32.dll", CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
         public static extern int MAPISendMail(
             IntPtr lhSession,
             IntPtr ulUIParam,
