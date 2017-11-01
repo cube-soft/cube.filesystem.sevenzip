@@ -48,7 +48,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
-        public void Items(string filename, string password, IList<ExpectedItem> expected)
+        public void Items(string filename, string password, IList<string> expected)
         {
             var src = Example(filename);
             using (var archive = new ArchiveReader(src, password))
@@ -62,11 +62,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     item.Refresh(); // NOP
 
                     Assert.That(item.Index,       Is.EqualTo(i));
-                    Assert.That(item.FullName,    Is.EqualTo(expected[i].FullName));
-                    Assert.That(item.Extension,   Is.EqualTo(expected[i].Extension));
-                    Assert.That(item.Encrypted,   Is.EqualTo(expected[i].Encrypted));
-                    Assert.That(item.IsDirectory, Is.EqualTo(expected[i].IsDirectory));
-                    if (expected[i].Length >= 0) Assert.That(item.Length, Is.EqualTo(expected[i].Length));
+                    Assert.That(item.FullName,    Is.EqualTo(expected[i]));
                 }
             }
         }
@@ -135,7 +131,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             {
                 var dest = Result($@"Extract\{filename}");
                 archive.Extracting += (s, e) => ++extracting;
-                archive.Extracted += (s, e) => ++extracted;
+                archive.Extracted  += (s, e) => ++extracted;
                 archive.Extract(dest);
             }
 
@@ -151,32 +147,23 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// 圧縮ファイルを展開するテストを実行します。
         /// </summary>
         /// 
-        /// <remarks>
-        /// 展開された項目に対しても確認します。
-        /// </remarks>
-        /// 
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
-        public void Extract_Detail(string filename, string password, IList<ExpectedItem> expected)
+        public void Extract_Exists(string filename, string password, IList<string> expected)
         {
-            var src      = Example(filename);
-            var bytes    = 0L;
-            var progress = new Progress<ArchiveReport>(x => bytes = x.Bytes);
+            var src  = Example(filename);
+            var dest = Result($@"Extract_Exists\{filename}");
 
             using (var archive = new ArchiveReader(src, password))
             {
-                var dest = Result($@"Extract_Detail\{filename}");
+                var bytes    = 0L;
+                var progress = new Progress<ArchiveReport>(x => bytes = x.Bytes);
                 archive.Extract(dest, progress);
+            }
 
-                foreach (var item in expected)
-                {
-                    var info = IO.Get(IO.Combine(dest, item.FullName));
-                    Assert.That(info.Exists,         Is.True);
-                    Assert.That(info.CreationTime,   Is.Not.EqualTo(DateTime.MinValue));
-                    Assert.That(info.LastWriteTime,  Is.Not.EqualTo(DateTime.MinValue));
-                    Assert.That(info.LastAccessTime, Is.Not.EqualTo(DateTime.MinValue));
-                    if (item.Length >= 0) Assert.That(info.Length, Is.EqualTo(item.Length));
-                }
+            foreach (var f in expected)
+            {
+                Assert.That(IO.Exists(IO.Combine(dest, f)), Is.True);
             }
         }
 
@@ -190,23 +177,22 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
-        public void Extract_Each(string filename, string password, IList<ExpectedItem> expected)
+        public void Extract_Each(string filename, string password, IList<string> expected)
         {
-            var src = Example(filename);
+            var src  = Example(filename);
+            var dest = Result($@"Extract_Each\{filename}");
+
             using (var archive = new ArchiveReader(src, password))
             {
-                var dest = Result($@"Extract_Each\{filename}");
-                var actual = archive.Items.ToList();
+                var items = archive.Items.ToList();
                 for (var i = 0; i < expected.Count; ++i)
                 {
-                    actual[i].Extract(dest);
-
-                    var info = IO.Get(IO.Combine(dest, actual[i].FullName));
+                    items[i].Extract(dest);
+                    var info = IO.Get(IO.Combine(dest, expected[i]));
                     Assert.That(info.Exists,         Is.True);
                     Assert.That(info.CreationTime,   Is.Not.EqualTo(DateTime.MinValue));
                     Assert.That(info.LastWriteTime,  Is.Not.EqualTo(DateTime.MinValue));
                     Assert.That(info.LastAccessTime, Is.Not.EqualTo(DateTime.MinValue));
-                    if (expected[i].Length >= 0) Assert.That(info.Length, Is.EqualTo(expected[i].Length));
                 }
             }
         }
@@ -221,11 +207,10 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Extract_NotSupported()
-            => Assert.That(
-                () => new ArchiveReader(Example("Sample.txt")),
-                Throws.TypeOf<NotSupportedException>()
-            );
+        public void Extract_NotSupported() => Assert.That(
+            () => new ArchiveReader(Example("Sample.txt")),
+            Throws.TypeOf<NotSupportedException>()
+        );
 
         /* ----------------------------------------------------------------- */
         ///
@@ -273,10 +258,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             var src  = Example("InvalidReserved.zip");
             var dest = Result("Extract_Reserved");
 
-            using (var archive = new ArchiveReader(src))
-            {
-                archive.Extract(dest);
-            }
+            using (var archive = new ArchiveReader(src)) archive.Extract(dest);
 
             Assert.That(IO.Exists(IO.Combine(dest, @"NUL")),                Is.False);
             Assert.That(IO.Exists(IO.Combine(dest, @"_NUL")),               Is.True);
@@ -309,24 +291,22 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Extract_PermissionError()
-            => Assert.That(() =>
+        public void Extract_PermissionError() => Assert.That(() =>
+        {
+            var dir  = Result("PermissionError");
+            var dest = IO.Combine(dir, @"Sample\Foo.txt");
+
+            IO.Copy(Example("Sample.txt"), dest);
+
+            var io = new Operator();
+            io.Failed += (s, e) => throw new OperationCanceledException();
+
+            using (var _ = io.OpenRead(dest))
+            using (var archive = new ArchiveReader(Example("Sample.zip"), "", io))
             {
-                var dir  = Result("PermissionError");
-                var dest = IO.Combine(dir, @"Sample\Foo.txt");
-
-                IO.Copy(Example("Sample.txt"), dest);
-
-                var io = new Operator();
-                io.Failed += (s, e) => throw new OperationCanceledException();
-
-                using (var _ = io.OpenRead(dest))
-                using (var archive = new ArchiveReader(Example("Sample.zip"), "", io))
-                {
-                    archive.Extract(dir);
-                }
-            },
-            Throws.TypeOf<OperationCanceledException>());
+                archive.Extract(dir);
+            }
+        }, Throws.TypeOf<OperationCanceledException>());
 
         /* ----------------------------------------------------------------- */
         ///
@@ -338,22 +318,20 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Extract_MergeError()
-            => Assert.That(() =>
+        public void Extract_MergeError() => Assert.That(() =>
+        {
+            var dir = Result("MergeError");
+            for (var i = 1; i < 4; ++i)
             {
-                var dir = Result("MergeError");
-                for (var i = 1; i < 4; ++i)
-                {
-                    var name = $"Sample.rar.{i:000}";
-                    IO.Copy(Example(name), IO.Combine(dir, name));
-                }
+                var name = $"Sample.rar.{i:000}";
+                IO.Copy(Example(name), IO.Combine(dir, name));
+            }
 
-                using (var archive = new ArchiveReader(IO.Combine(dir, "Sample.rar.001")))
-                {
-                    archive.Extract(dir);
-                }
-            },
-            Throws.TypeOf<System.IO.IOException>());
+            using (var archive = new ArchiveReader(IO.Combine(dir, "Sample.rar.001")))
+            {
+                archive.Extract(dir);
+            }
+        }, Throws.TypeOf<System.IO.IOException>());
 
         /* ----------------------------------------------------------------- */
         ///
@@ -366,16 +344,14 @@ namespace Cube.FileSystem.SevenZip.Tests
         /* ----------------------------------------------------------------- */
         [TestCase("")]
         [TestCase("wrong")]
-        public void Extract_WrongPassword(string password)
-            => Assert.That(() =>
+        public void Extract_WrongPassword(string password) => Assert.That(() =>
+        {
+            var src = Example("Password.7z");
+            using (var archive = new ArchiveReader(src, password))
             {
-                var src = Example("Password.7z");
-                using (var archive = new ArchiveReader(src, password))
-                {
-                    archive.Extract(Results);
-                }
-            },
-            Throws.TypeOf<EncryptionException>());
+                archive.Extract(Results);
+            }
+        }, Throws.TypeOf<EncryptionException>());
 
         /* ----------------------------------------------------------------- */
         ///
@@ -387,16 +363,14 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [TestCase("")]
-        public void Extract_Each_WrongPassword(string password)
-            => Assert.That(() =>
+        public void Extract_Each_WrongPassword(string password) => Assert.That(() =>
+        {
+            var src = Example("Password.7z");
+            using (var archive = new ArchiveReader(src, password))
             {
-                var src = Example("Password.7z");
-                using (var archive = new ArchiveReader(src, password))
-                {
-                    foreach (var item in archive.Items) item.Extract(Results);
-                }
-            },
-            Throws.TypeOf<EncryptionException>());
+                foreach (var item in archive.Items) item.Extract(Results);
+            }
+        }, Throws.TypeOf<EncryptionException>());
 
         /* ----------------------------------------------------------------- */
         ///
@@ -441,17 +415,15 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Extract_Each_PasswordCancel()
-            => Assert.That(() =>
+        public void Extract_Each_PasswordCancel() => Assert.That(() =>
+        {
+            var src = Example("Password.7z");
+            var query = new Query<string, string>(e => e.Cancel = true);
+            using (var archive = new ArchiveReader(src, query))
             {
-                var src = Example("Password.7z");
-                var query = new Query<string, string>(e => e.Cancel = true);
-                using (var archive = new ArchiveReader(src, query))
-                {
-                    foreach (var item in archive.Items) item.Extract(Results);
-                }
-            },
-            Throws.TypeOf<OperationCanceledException>());
+                foreach (var item in archive.Items) item.Extract(Results);
+            }
+        }, Throws.TypeOf<OperationCanceledException>());
 
         /* ----------------------------------------------------------------- */
         ///
@@ -463,17 +435,15 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Extracting_Throws()
-            => Assert.That(() =>
+        public void Extracting_Throws() => Assert.That(() =>
+        {
+            var src = Example("Sample.zip");
+            using (var archive = new ArchiveReader(src))
             {
-                var src = Example("Sample.zip");
-                using (var archive = new ArchiveReader(src))
-                {
-                    archive.Extracting += (s, e) => throw new ArgumentException();
-                    archive.Extract(Results);
-                }
-            },
-            Throws.TypeOf<System.IO.IOException>());
+                archive.Extracting += (s, e) => throw new ArgumentException();
+                archive.Extract(Results);
+            }
+        }, Throws.TypeOf<System.IO.IOException>());
 
         /* ----------------------------------------------------------------- */
         ///
@@ -485,17 +455,15 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Extraced_Throws()
-            => Assert.That(() =>
+        public void Extraced_Throws() => Assert.That(() =>
+        {
+            var src = Example("Sample.zip");
+            using (var archive = new ArchiveReader(src))
             {
-                var src = Example("Sample.zip");
-                using (var archive = new ArchiveReader(src))
-                {
-                    archive.Extracted += (s, e) => throw new OperationCanceledException();
-                    archive.Extract(Results);
-                }
-            },
-            Throws.TypeOf<OperationCanceledException>());
+                archive.Extracted += (s, e) => throw new OperationCanceledException();
+                archive.Extract(Results);
+            }
+        }, Throws.TypeOf<OperationCanceledException>());
 
         #endregion
 
@@ -506,7 +474,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// TestCases
         ///
         /// <summary>
-        /// Items および Extract のテスト用データを取得します。
+        /// Items および Extract_* のテスト用データを取得します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
@@ -514,616 +482,93 @@ namespace Cube.FileSystem.SevenZip.Tests
         {
             get
             {
-                yield return new TestCaseData("Sample.zip", string.Empty, new List<ExpectedItem>
+                yield return new TestCaseData("Sample.zip", string.Empty, new List<string>
                 {
-                    new ExpectedItem
-                    {
-                        FullName      = "Sample",
-                        Extension     = string.Empty,
-                        Length        = 0,
-                        Encrypted     = false,
-                        IsDirectory   = true,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"Sample\Bar.txt",
-                        Extension     = ".txt",
-                        Length        = 7816,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"Sample\Bas.txt",
-                        Extension     = ".txt",
-                        Length        = 0,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"Sample\Foo.txt",
-                        Extension     = ".txt",
-                        Length        = 3,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
+                    @"Sample",
+                    @"Sample\Bar.txt",
+                    @"Sample\Bas.txt",
+                    @"Sample\Foo.txt",
                 });
 
-                yield return new TestCaseData("MultiVolume.zip", "", new List<ExpectedItem>
+                yield return new TestCaseData("MultiVolume.zip", "", new List<string>
                 {
-                    new ExpectedItem
-                    {
-                        FullName      = "Split",
-                        Extension     = string.Empty,
-                        Length        = 0,
-                        Encrypted     = false,
-                        IsDirectory   = true,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"Split\Manual.pdf",
-                        Extension     = ".pdf",
-                        Length        = 990040,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"Split\Sample1.txt",
-                        Extension     = ".txt",
-                        Length        = 5,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"Split\Sample2.txt",
-                        Extension     = ".txt",
-                        Length        = 6,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
+                    @"Split",
+                    @"Split\Manual.pdf",
+                    @"Split\Sample1.txt",
+                    @"Split\Sample2.txt",
                 });
 
-                yield return new TestCaseData("Password.7z", "password", new List<ExpectedItem>
+                yield return new TestCaseData("SampleComma.zip", "", new List<string>
                 {
-                    new ExpectedItem
-                    {
-                        FullName      = "Password",
-                        Extension     = string.Empty,
-                        Length        = 0,
-                        Encrypted     = false,
-                        IsDirectory   = true,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"Password\Second.txt",
-                        Extension     = ".txt",
-                        Length        = 0,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"Password\First.txt",
-                        Extension     = ".txt",
-                        Length        = 26,
-                        Encrypted     = true,
-                        IsDirectory   = false,
-                    },
+                    @"カンマ",
+                    @"カンマ\hello, world.txt",
+                    @"カンマ\test,テスト,ﾃｽﾄ.txt",
                 });
 
-                yield return new TestCaseData("PasswordHeader.7z", "password", new List<ExpectedItem>
+                yield return new TestCaseData("SampleMac.zip", "", new List<string>
                 {
-                    new ExpectedItem
-                    {
-                        FullName      = "Password",
-                        Extension     = string.Empty,
-                        Length        = 0,
-                        Encrypted     = false,
-                        IsDirectory   = true,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"Password\Second.txt",
-                        Extension     = ".txt",
-                        Length        = 0,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"Password\First.txt",
-                        Extension     = ".txt",
-                        Length        = 26,
-                        Encrypted     = true,
-                        IsDirectory   = false,
-                    },
-                });
-
-                yield return new TestCaseData("PasswordSymbol01.zip", "()[]{}<>", new List<ExpectedItem>
-                {
-                    new ExpectedItem
-                    {
-                        FullName      = "Symbol.txt",
-                        Extension     = ".txt",
-                        Length        = 22,
-                        Encrypted     = true,
-                        IsDirectory   = false,
-                    }
-                });
-
-                yield return new TestCaseData("PasswordSymbol02.zip", "\\#$%@?", new List<ExpectedItem>
-                {
-                    new ExpectedItem
-                    {
-                        FullName      = "Symbol.txt",
-                        Extension     = ".txt",
-                        Length        = 22,
-                        Encrypted     = true,
-                        IsDirectory   = false,
-                    }
-                });
-
-                yield return new TestCaseData("PasswordSymbol03.zip", "!&|+-*/=", new List<ExpectedItem>
-                {
-                    new ExpectedItem
-                    {
-                        FullName      = "Symbol.txt",
-                        Extension     = ".txt",
-                        Length        = 22,
-                        Encrypted     = true,
-                        IsDirectory   = false,
-                    }
-                });
-
-                yield return new TestCaseData("PasswordSymbol04.zip", "\"'^~`,._", new List<ExpectedItem>
-                {
-                    new ExpectedItem
-                    {
-                        FullName      = "Symbol.txt",
-                        Extension     = ".txt",
-                        Length        = 22,
-                        Encrypted     = true,
-                        IsDirectory   = false,
-                    }
-                });
-
-                yield return new TestCaseData("PasswordJapanese01.zip", "日本語パスワード", new List<ExpectedItem>
-                {
-                    new ExpectedItem
-                    {
-                        FullName      = "Japanese.txt",
-                        Extension     = ".txt",
-                        Length        = 39,
-                        Encrypted     = true,
-                        IsDirectory   = false,
-                    }
-                });
-
-                yield return new TestCaseData("PasswordJapanese02.zip", "ｶﾞｷﾞｸﾞｹﾞｺﾞﾊﾟﾋﾟﾌﾟﾍﾟﾎﾟ", new List<ExpectedItem>
-                {
-                    new ExpectedItem
-                    {
-                        FullName      = "Japanese.txt",
-                        Extension     = ".txt",
-                        Length        = 39,
-                        Encrypted     = true,
-                        IsDirectory   = false,
-                    }
-                });
-
-                yield return new TestCaseData("SampleComma.zip", "", new List<ExpectedItem>
-                {
-                    new ExpectedItem
-                    {
-                        FullName      = @"カンマ",
-                        Extension     = string.Empty,
-                        Length        = 0,
-                        Encrypted     = false,
-                        IsDirectory   = true,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"カンマ\hello, world.txt",
-                        Extension     = ".txt",
-                        Length        = 4,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"カンマ\test,テスト,ﾃｽﾄ.txt",
-                        Extension     = ".txt",
-                        Length        = 4,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-                });
-
-                yield return new TestCaseData("SampleMac.zip", "", new List<ExpectedItem>
-                {
-                    new ExpectedItem
-                    {
-                        FullName      = @"名称未設定フォルダ",
-                        Extension     = string.Empty,
-                        Length        = 0,
-                        Encrypted     = false,
-                        IsDirectory   = true,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"名称未設定フォルダ\がぎぐげご.txt",
-                        Extension     = ".txt",
-                        Length        = 6,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"__MACOSX",
-                        Extension     = string.Empty,
-                        Length        = 0,
-                        Encrypted     = false,
-                        IsDirectory   = true,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"__MACOSX\名称未設定フォルダ",
-                        Extension     = string.Empty,
-                        Length        = 0,
-                        Encrypted     = false,
-                        IsDirectory   = true,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"__MACOSX\名称未設定フォルダ\._がぎぐげご.txt",
-                        Extension     = ".txt",
-                        Length        = 171,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"名称未設定フォルダ\ぱぴぷぺぽ.txt",
-                        Extension     = ".txt",
-                        Length        = 6,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"__MACOSX\名称未設定フォルダ\._ぱぴぷぺぽ.txt",
-                        Extension     = ".txt",
-                        Length        = 171,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"名称未設定フォルダ\ガギグゲゴ.txt",
-                        Extension     = ".txt",
-                        Length        = 6,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"__MACOSX\名称未設定フォルダ\._ガギグゲゴ.txt",
-                        Extension     = ".txt",
-                        Length        = 171,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"名称未設定フォルダ\カタログ.txt",
-                        Extension     = ".txt",
-                        Length        = 6,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"__MACOSX\名称未設定フォルダ\._カタログ.txt",
-                        Extension     = ".txt",
-                        Length        = 171,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"名称未設定フォルダ\パピプペポ.txt",
-                        Extension     = ".txt",
-                        Length        = 6,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"__MACOSX\名称未設定フォルダ\._パピプペポ.txt",
-                        Extension     = ".txt",
-                        Length        = 171,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"名称未設定フォルダ\ｶﾀﾛｸﾞ.txt",
-                        Extension     = ".txt",
-                        Length        = 6,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"__MACOSX\名称未設定フォルダ\._ｶﾀﾛｸﾞ.txt",
-                        Extension     = ".txt",
-                        Length        = 171,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"名称未設定フォルダ\ｶﾞｷﾞｸﾞｹﾞｺﾞ.txt",
-                        Extension     = ".txt",
-                        Length        = 6,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"__MACOSX\名称未設定フォルダ\._ｶﾞｷﾞｸﾞｹﾞｺﾞ.txt",
-                        Extension     = ".txt",
-                        Length        = 171,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"名称未設定フォルダ\ﾊﾟﾋﾟﾌﾟﾍﾟﾎﾟ.txt",
-                        Extension     = ".txt",
-                        Length        = 6,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"__MACOSX\名称未設定フォルダ\._ﾊﾟﾋﾟﾌﾟﾍﾟﾎﾟ.txt",
-                        Extension     = ".txt",
-                        Length        = 171,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
+                    @"名称未設定フォルダ",
+                    @"名称未設定フォルダ\がぎぐげご.txt",
+                    @"__MACOSX",
+                    @"__MACOSX\名称未設定フォルダ",
+                    @"__MACOSX\名称未設定フォルダ\._がぎぐげご.txt",
+                    @"名称未設定フォルダ\ぱぴぷぺぽ.txt",
+                    @"__MACOSX\名称未設定フォルダ\._ぱぴぷぺぽ.txt",
+                    @"名称未設定フォルダ\ガギグゲゴ.txt",
+                    @"__MACOSX\名称未設定フォルダ\._ガギグゲゴ.txt",
+                    @"名称未設定フォルダ\カタログ.txt",
+                    @"__MACOSX\名称未設定フォルダ\._カタログ.txt",
+                    @"名称未設定フォルダ\パピプペポ.txt",
+                    @"__MACOSX\名称未設定フォルダ\._パピプペポ.txt",
+                    @"名称未設定フォルダ\ｶﾀﾛｸﾞ.txt",
+                    @"__MACOSX\名称未設定フォルダ\._ｶﾀﾛｸﾞ.txt",
+                    @"名称未設定フォルダ\ｶﾞｷﾞｸﾞｹﾞｺﾞ.txt",
+                    @"__MACOSX\名称未設定フォルダ\._ｶﾞｷﾞｸﾞｹﾞｺﾞ.txt",
+                    @"名称未設定フォルダ\ﾊﾟﾋﾟﾌﾟﾍﾟﾎﾟ.txt",
+                    @"__MACOSX\名称未設定フォルダ\._ﾊﾟﾋﾟﾌﾟﾍﾟﾎﾟ.txt",
                });
 
-                yield return new TestCaseData("InvalidSymbol.zip", "", new List<ExpectedItem>
+                yield return new TestCaseData("InvalidSymbol.zip", "", new List<string>
                 {
-                    new ExpectedItem
-                    {
-                        FullName      = @"test\_foo_bar_buzz_.txt",
-                        Extension     = ".txt",
-                        Length        = 5,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-
-                    new ExpectedItem
-                    {
-                        FullName      = @"test\test(2012_05_07).txt",
-                        Extension     = ".txt",
-                        Length        = 5,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
+                    @"test\_foo_bar_buzz_.txt",
+                    @"test\test(2012_05_07).txt",
                 });
 
-                yield return new TestCaseData("Sample.tar.bz2", "", new List<ExpectedItem>
+                yield return new TestCaseData("Password.7z", "password", new List<string>
                 {
-                    new ExpectedItem
-                    {
-                        FullName      = @"Sample.tar",
-                        Extension     = ".tar",
-                        Length        = -1,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
+                    @"Password",
+                    @"Password\Second.txt",
+                    @"Password\First.txt",
                 });
 
-                yield return new TestCaseData("Sample.tar.gz", "", new List<ExpectedItem>
+                yield return new TestCaseData("PasswordHeader.7z", "password", new List<string>
                 {
-                    new ExpectedItem
-                    {
-                        FullName      = @"Sample.tar",
-                        Extension     = ".tar",
-                        Length        = -1,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
+                    @"Password",
+                    @"Password\Second.txt",
+                    @"Password\First.txt",
                 });
 
-                yield return new TestCaseData("Sample.tar.lzma", "", new List<ExpectedItem>
-                {
-                    new ExpectedItem
-                    {
-                        FullName      = @"Sample.tar",
-                        Extension     = ".tar",
-                        Length        = -1,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-                });
+                yield return new TestCaseData("Sample.tar.bz2",  "", new List<string> { "Sample.tar" });
+                yield return new TestCaseData("Sample.tar.gz",   "", new List<string> { "Sample.tar" });
+                yield return new TestCaseData("Sample.tar.lzma", "", new List<string> { "Sample.tar" });
+                yield return new TestCaseData("Sample.tar.z",    "", new List<string> { "Sample.tar" });
+                yield return new TestCaseData("Sample.taz",      "", new List<string> { "Sample.tar" });
+                yield return new TestCaseData("Sample.tb2",      "", new List<string> { "Sample.tar" });
+                yield return new TestCaseData("Sample.tbz",      "", new List<string> { "Sample.tar" });
+                yield return new TestCaseData("Sample.tgz",      "", new List<string> { "Sample.tar" });
+                yield return new TestCaseData("Sample.txz",      "", new List<string> { "Sample.tar" });
+                yield return new TestCaseData("Sample.txt.bz2",  "", new List<string> { "Sample.txt" });
+                yield return new TestCaseData("Sample.txt.gz",   "", new List<string> { "Filter.txt" });
+                yield return new TestCaseData("Sample.txt.xz",   "", new List<string> { "Sample.txt" });
 
-                yield return new TestCaseData("Sample.tar.z", "", new List<ExpectedItem>
-                {
-                    new ExpectedItem
-                    {
-                        FullName      = @"Sample.tar",
-                        Extension     = ".tar",
-                        Length        = -1,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-                });
+                yield return new TestCaseData("PasswordSymbol01.zip", "()[]{}<>",  new List<string> { "Symbol.txt" });
+                yield return new TestCaseData("PasswordSymbol02.zip", "\\#$%@?",   new List<string> { "Symbol.txt" });
+                yield return new TestCaseData("PasswordSymbol03.zip", "!&|+-*/=",  new List<string> { "Symbol.txt" });
+                yield return new TestCaseData("PasswordSymbol04.zip", "\"'^~`,._", new List<string> { "Symbol.txt" });
+                yield return new TestCaseData("PasswordJapanese01.zip", "日本語パスワード",     new List<string> { "Japanese.txt" });
+                yield return new TestCaseData("PasswordJapanese02.zip", "ｶﾞｷﾞｸﾞｹﾞｺﾞﾊﾟﾋﾟﾌﾟﾍﾟﾎﾟ", new List<string> { "Japanese.txt" });
 
-                yield return new TestCaseData("Sample.taz", "", new List<ExpectedItem>
-                {
-                    new ExpectedItem
-                    {
-                        FullName      = @"Sample.tar",
-                        Extension     = ".tar",
-                        Length        = -1,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-                });
-
-                yield return new TestCaseData("Sample.tb2", "", new List<ExpectedItem>
-                {
-                    new ExpectedItem
-                    {
-                        FullName      = @"Sample.tar",
-                        Extension     = ".tar",
-                        Length        = -1,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-                });
-
-                yield return new TestCaseData("Sample.tbz", "", new List<ExpectedItem>
-                {
-                    new ExpectedItem
-                    {
-                        FullName      = @"Sample.tar",
-                        Extension     = ".tar",
-                        Length        = -1,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-                });
-
-                yield return new TestCaseData("Sample.tgz", "", new List<ExpectedItem>
-                {
-                    new ExpectedItem
-                    {
-                        FullName      = @"Sample.tar",
-                        Extension     = ".tar",
-                        Length        = -1,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-                });
-
-                yield return new TestCaseData("Sample.txz", "", new List<ExpectedItem>
-                {
-                    new ExpectedItem
-                    {
-                        FullName      = @"Sample.tar",
-                        Extension     = ".tar",
-                        Length        = -1,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-                });
-
-                yield return new TestCaseData("Sample.txt.bz2", "", new List<ExpectedItem>
-                {
-                    new ExpectedItem
-                    {
-                        FullName      = @"Sample.txt",
-                        Extension     = ".txt",
-                        Length        = -1,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-                });
-
-                yield return new TestCaseData("Sample.txt.gz", "", new List<ExpectedItem>
-                {
-                    new ExpectedItem
-                    {
-                        FullName      = @"Filter.txt",
-                        Extension     = ".txt",
-                        Length        = -1,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-                });
-
-                yield return new TestCaseData("Sample.txt.xz", "", new List<ExpectedItem>
-                {
-                    new ExpectedItem
-                    {
-                        FullName      = @"Sample.txt",
-                        Extension     = ".txt",
-                        Length        = -1,
-                        Encrypted     = false,
-                        IsDirectory   = false,
-                    },
-                });
             }
-        }
-
-        #endregion
-
-        #region Helper
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ExpectedItem
-        ///
-        /// <summary>
-        /// 展開後ファイルの期待値を格納するためのクラスです。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        public class ExpectedItem // : IInformation
-        {
-            public bool IsDirectory { get; set; }
-            public bool Encrypted { get; set; }
-            public string Extension { get; set; }
-            public string FullName { get; set; }
-            public long Length { get; set; }
-            // public bool Exists { get; set; }
-            // public string Name { get; set; }
-            // public string NameWithoutExtension { get; set; }
-            // public string DirectoryName { get; set; }
-            // public System.IO.FileAttributes Attributes { get; set; }
-            // public DateTime CreationTime { get; set; }
-            // public DateTime LastWriteTime { get; set; }
-            // public DateTime LastAccessTime { get; set; }
-            // public void Refresh() { }
         }
 
         #endregion
