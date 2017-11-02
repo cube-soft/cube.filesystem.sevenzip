@@ -166,7 +166,7 @@ namespace Cube.FileSystem.SevenZip
 
     /* --------------------------------------------------------------------- */
     ///
-    /// ExecutableOption
+    /// SfxOption
     /// 
     /// <summary>
     /// 自己解凍形式の圧縮ファイル作成時に設定可能なオプションを保持する
@@ -174,7 +174,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ExecutableOption : SevenZipOption
+    public class SfxOption : SevenZipOption
     {
         #region Properties
 

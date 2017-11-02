@@ -167,7 +167,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                 using (var writer = new ArchiveWriter(Format.Sfx))
                 {
                     var dest = Result("SfxNotFound.exe");
-                    writer.Option = new ExecutableOption { Module = "dummy.sfx" };
+                    writer.Option = new SfxOption { Module = "dummy.sfx" };
                     writer.Add(Example("Sample.txt"));
                     writer.Save(dest);
                 }
@@ -417,7 +417,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     "ExecutableTest.exe",
                     "",
                     new[] { "Sample.txt", "Archive" },
-                    new ExecutableOption
+                    new SfxOption
                     {
                         CompressionMethod = CompressionMethod.Lzma,
                         CompressionLevel  = CompressionLevel.Ultra,

@@ -260,7 +260,7 @@ namespace Cube.FileSystem.SevenZip
         private void SaveCoreSfx(string path, IQuery<string, string> password,
             IProgress<ArchiveReport> progress, IList<FileItem> items)
         {
-            var sfx = (Option as ExecutableOption)?.Module;
+            var sfx = (Option as SfxOption)?.Module;
             if (string.IsNullOrEmpty(sfx) || !_io.Exists(sfx))
             {
                 throw new System.IO.FileNotFoundException("SFX");
