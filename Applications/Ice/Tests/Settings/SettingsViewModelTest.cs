@@ -35,7 +35,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class SettingsViewModelTest
+    class SettingsViewModelTest : MockViewHelper
     {
         #region Tests
 
@@ -530,7 +530,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
             var src  = vm.Shortcut;
             var dest = m.Value.Shortcut;
 
-            dest.Directory = GetTmpDirectory();
+            dest.Directory = Results;
 
             src.Archive       = true;
             src.Extract       = true;
@@ -562,11 +562,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
         /* ----------------------------------------------------------------- */
         [TestCase(true)]
         [TestCase(false)]
-        public void SyncUpdate(bool install)
+        public void SyncUpdate(bool install) => Assert.DoesNotThrow(() =>
         {
             var m0 = Create();
             m0.Startup.Name = "cubeice-test";
-            m0.Value.Shortcut.Directory = GetTmpDirectory();
+            m0.Value.Shortcut.Directory = Results;
 
             var vm0 = new SettingsViewModel(m0)
             {
@@ -580,7 +580,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
             var m1 = Create();
             m1.Load();
             m1.Startup.Name = "cubeice-test";
-            m1.Value.Shortcut.Directory = GetTmpDirectory();
+            m1.Value.Shortcut.Directory = Results;
 
             var vm1 = new SettingsViewModel(m1)
             {
@@ -588,9 +588,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
                 InstallMode = false,
             };
             vm1.Update();
-
-            Assert.Pass();
-        }
+        });
 
         #endregion
 
@@ -623,22 +621,6 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetTmpDirectory
-        ///
-        /// <summary>
-        /// 一時ディレクトリのパスを取得します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        private string GetTmpDirectory()
-        {
-            var io = new Operator();
-            var asm = AssemblyReader.Default.Location;
-            return io.Combine(io.Get(asm).DirectoryName, "Results");
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// TearDown
         ///
         /// <summary>
@@ -649,14 +631,10 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
         [TearDown]
         public void TearDown()
         {
-            try
+            using (var root = Registry.CurrentUser.OpenSubKey("Software", true))
             {
-                using (var root = Registry.CurrentUser.OpenSubKey("Software", true))
-                {
-                    root.DeleteSubKeyTree(SubKeyName, false);
-                }
+                root.DeleteSubKeyTree(SubKeyName, false);
             }
-            catch (Exception /* err */) { /* ignore */ }
         }
 
         #endregion

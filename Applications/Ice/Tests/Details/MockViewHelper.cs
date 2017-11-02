@@ -118,7 +118,18 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected string Examples => IO.Combine(Root, "Examples");
+        protected string Examples => IO.Combine(Root, ExamplesName);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ExamplesName
+        /// 
+        /// <summary>
+        /// テスト用ファイルの存在するフォルダの名前を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected static string ExamplesName => "Examples";
 
         /* ----------------------------------------------------------------- */
         ///
@@ -129,7 +140,18 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected string Results => IO.Combine(Root, $@"Results\{_directory}");
+        protected string Results => IO.Combine(Root, $@"{ResultsName}\{_directory}");
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ResultsName
+        /// 
+        /// <summary>
+        /// テスト結果を格納するためのフォルダの名前を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected static string ResultsName => "Results";
 
         #endregion
 
@@ -163,10 +185,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// <returns>パス</returns>
         ///
         /* ----------------------------------------------------------------- */
-        protected string Result(string filename)
-            => !string.IsNullOrEmpty(filename)
-               ? IO.Combine(Results, filename) :
-               string.Empty;
+        protected string Result(string filename) => IO.Combine(Results, filename);
 
         /* ----------------------------------------------------------------- */
         ///

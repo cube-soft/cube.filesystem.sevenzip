@@ -381,7 +381,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
             var asm  = Assembly.GetExecutingAssembly().Location;
             var root = io.Get(asm).DirectoryName;
             var dir  = typeof(ArchiveTest).FullName;
-            return io.Combine(root, "Results", dir, path);
+            return io.Combine(root, ResultsName, dir, path);
         }
 
         /* ----------------------------------------------------------------- */
