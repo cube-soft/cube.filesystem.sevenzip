@@ -186,11 +186,16 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// <summary>
         /// View が非表示になるまで待ちます。
         /// </summary>
+        /// 
+        /// <param name="view">View オブジェクト</param>
+        /// 
+        /// <returns>正常に終了したかどうか</returns>
         ///
         /* ----------------------------------------------------------------- */
-        protected async Task Wait(Cube.Forms.IForm view)
+        protected async Task<bool> Wait(Cube.Forms.IForm view)
         {
             for (var i = 0; view.Visible && i < 100; ++i) await Task.Delay(50);
+            return !view.Visible;
         }
 
         #endregion

@@ -61,8 +61,8 @@ namespace Cube.FileSystem.SevenZip.Tests
                     var item = actual[i];
                     item.Refresh(); // NOP
 
-                    Assert.That(item.Index,       Is.EqualTo(i));
-                    Assert.That(item.FullName,    Is.EqualTo(expected[i]));
+                    Assert.That(item.Index,    Is.EqualTo(i));
+                    Assert.That(item.FullName, Is.EqualTo(expected[i]));
                 }
             }
         }
@@ -84,6 +84,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             {
                 foreach (var item in archive.Items)
                 {
+                    Assert.That(item.Format, Is.EqualTo(Format.Zip));
                     item.CreateDirectory(dest);
                     item.SetAttributes(dest);
                 }
@@ -141,7 +142,7 @@ namespace Cube.FileSystem.SevenZip.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract_Detail
+        /// Extract_Exists
         ///
         /// <summary>
         /// 圧縮ファイルを展開するテストを実行します。
@@ -163,7 +164,8 @@ namespace Cube.FileSystem.SevenZip.Tests
 
             foreach (var f in expected)
             {
-                Assert.That(IO.Exists(IO.Combine(dest, f)), Is.True);
+                var path = IO.Combine(dest, f);
+                Assert.That(IO.Exists(path), Is.True, path);
             }
         }
 
@@ -189,7 +191,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                 {
                     items[i].Extract(dest);
                     var info = IO.Get(IO.Combine(dest, expected[i]));
-                    Assert.That(info.Exists,         Is.True);
+                    Assert.That(info.Exists,         Is.True, info.FullName);
                     Assert.That(info.CreationTime,   Is.Not.EqualTo(DateTime.MinValue));
                     Assert.That(info.LastWriteTime,  Is.Not.EqualTo(DateTime.MinValue));
                     Assert.That(info.LastAccessTime, Is.Not.EqualTo(DateTime.MinValue));

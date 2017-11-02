@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Cube.FileSystem.SevenZip.Ice;
 using NUnit.Framework;
@@ -26,21 +27,15 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchivePresenterTest
+    /// ArchiveTest
     /// 
     /// <summary>
-    /// ArchivePresenterTest のテスト用クラスです。
+    /// 圧縮処理 のテスト用クラスです。
     /// </summary>
-    ///
-    /// <remarks>
-    /// Presenter クラスは静的クラス (Views) に対して変更を加えるため、
-    /// Parallelizable 属性を指定すると予期せぬエラーが発生する事が
-    /// あります。
-    /// </remarks>
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ArchivePresenterTest : MockViewHelper
+    class ArchiveTest : MockViewHelper
     {
         #region Tests
 
@@ -58,32 +53,28 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
             ArchiveSettings archive, string dest, long count)
         {
             var filename = GetFileName(files.First(), dest);
-            var request = new Request(args.Concat(files.Select(s => Example(s))));
-            request.DropDirectory = Result(request.DropDirectory);
+            var request  = new Request(args.Concat(files.Select(s => Example(s))));
 
             Mock.Destination = Result($@"Runtime\{filename}");
-            Mock.Password = "password"; // used by "/p" option
+            Mock.Password    = "password"; // used by "/p" option
 
-            using (var ap = Create(request))
+            using (var p = Create(request))
             {
-                ap.Settings.Value.Archive = archive;
-                ap.Settings.Value.Archive.SaveDirectoryName = Result("Others");
+                p.Settings.Value.Archive = archive;
+                p.Settings.Value.Archive.SaveDirectoryName = Result("Others");
+                p.View.Show();
 
-                Assert.That(ap.Model.Report.Ratio, Is.EqualTo(0.0));
-                ap.View.Show();
-                Assert.That(ap.View.Visible, Is.True);
-                await Wait(ap.View);
-                Assert.That(ap.View.Visible, Is.False, "Timeout");
-                Assert.That(ap.Model.Report.Ratio, Is.EqualTo(1.0).Within(0.01));
-
-                Assert.That(ap.View.Elapsed,    Is.GreaterThan(TimeSpan.Zero));
-                Assert.That(ap.View.FileName,   Is.EqualTo(filename));
-                Assert.That(ap.View.Count,      Is.EqualTo(count));
-                Assert.That(ap.View.TotalCount, Is.EqualTo(count));
-                Assert.That(ap.View.Value,      Is.EqualTo(100));
+                Assert.That(p.View.Visible,       Is.True, "Visible");
+                Assert.That(await Wait(p.View),   Is.True, "Timeout");
+                Assert.That(p.Model.Report.Ratio, Is.EqualTo(1.0).Within(0.01), "Ratio");
+                Assert.That(p.View.Elapsed,       Is.GreaterThan(TimeSpan.Zero), "Elapsed");
+                Assert.That(p.View.FileName,      Is.EqualTo(filename), "FileName");
+                Assert.That(p.View.Count,         Is.EqualTo(count), "Count");
+                Assert.That(p.View.TotalCount,    Is.EqualTo(count), "TotalCount");
+                Assert.That(p.View.Value,         Is.EqualTo(100), "Value");
             }
 
-            Assert.That(IO.Exists(Result(dest)), Is.True);
+            Assert.That(IO.Exists(dest), Is.True, dest);
         }
 
         /* ----------------------------------------------------------------- */
@@ -104,21 +95,20 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
             var dest   = Result(@"Exists\SampleRuntime.zip");
             var args   = PresetMenu.Archive.ToArguments().Concat(new[] { src });
 
-            IO.Copy(Example("Single.1.0.0.zip"), exists);
             Mock.Destination = dest;
+            IO.Copy(Example("Single.1.0.0.zip"), exists);
 
-            using (var ap = Create(new Request(args)))
+            using (var p = Create(new Request(args)))
             {
-                ap.Settings.Value.ErrorReport = false;
-                ap.Settings.Value.Archive.SaveLocation = SaveLocation.Others;
-                ap.Settings.Value.Archive.SaveDirectoryName = Result("Exists");
-                ap.View.Show();
+                p.Settings.Value.ErrorReport = false;
+                p.Settings.Value.Archive.SaveLocation = SaveLocation.Others;
+                p.Settings.Value.Archive.SaveDirectoryName = Result("Exists");
+                p.View.Show();
 
-                await Wait(ap.View);
-                Assert.That(ap.View.Visible, Is.False, "Timeout");
+                Assert.That(await Wait(p.View), Is.True, "Timeout");
             }
 
-            Assert.That(IO.Exists(dest), Is.True);
+            Assert.That(IO.Exists(dest), Is.True, dest);
         }
 
         /* ----------------------------------------------------------------- */
@@ -136,28 +126,26 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         {
             var dir  = Result("Overwrite");
             var src  = Example("Sample.txt");
-            var dest = IO.Combine(dir, "Sample.zip");
-
-            IO.Copy(Example("Single.1.0.0.zip"), dest);
-            Mock.Destination = dest;
-
             var args = PresetMenu.Archive.ToArguments().Concat(new[] { src });
+            var dest = IO.Combine(dir, "Sample.zip");
             var tmp  = string.Empty;
 
-            using (var ap = Create(new Request(args)))
+            Mock.Destination = dest;
+            IO.Copy(Example("Single.1.0.0.zip"), dest);
+
+            using (var p = Create(new Request(args)))
             {
-                ap.Settings.Value.Archive.SaveLocation = SaveLocation.Runtime;
-                ap.View.Show();
+                p.Settings.Value.Archive.SaveLocation = SaveLocation.Runtime;
+                p.View.Show();
 
-                await Wait(ap.View);
-                Assert.That(ap.View.Visible, Is.False, "Timeout");
+                Assert.That(await Wait(p.View), Is.True, "Timeout");
 
-                tmp = ap.Model.Tmp;
-                Assert.That(tmp, Is.Not.Null.And.Not.Empty);
+                tmp = p.Model.Tmp;
             }
 
-            Assert.That(IO.Exists(dest), Is.True);
-            Assert.That(IO.Exists(tmp), Is.False);
+            Assert.That(tmp, Is.Not.Null.And.Not.Empty);
+            Assert.That(IO.Exists(tmp), Is.False, tmp);
+            Assert.That(IO.Exists(dest), Is.True, dest);
         }
 
         /* ----------------------------------------------------------------- */
@@ -177,17 +165,16 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
             var dest = IO.Combine(dir, "Sample.zip");
             var args = PresetMenu.ArchiveZipPassword.ToArguments().Concat(new[] { src });
 
-            using (var ap = Create(new Request(args)))
+            using (var p = Create(new Request(args)))
             {
-                ap.Settings.Value.Archive.SaveLocation = SaveLocation.Others;
-                ap.Settings.Value.Archive.SaveDirectoryName = dir;
-                ap.View.Show();
+                p.Settings.Value.Archive.SaveLocation = SaveLocation.Others;
+                p.Settings.Value.Archive.SaveDirectoryName = dir;
+                p.View.Show();
 
-                await Wait(ap.View);
-                Assert.That(ap.View.Visible, Is.False, "Timeout");
+                Assert.That(await Wait(p.View), Is.True, "Timeout");
             }
 
-            Assert.That(IO.Exists(dest), Is.False);
+            Assert.That(IO.Exists(dest), Is.False, dest);
         }
 
         /* ----------------------------------------------------------------- */
@@ -206,17 +193,16 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
             var src  = Example("Sample.txt");
             var dest = IO.Combine(dir, "Sample.zip");
 
-            IO.Copy(Example("Single.1.0.0.zip"), dest, true);
             Mock.Destination = dir;
+            IO.Copy(Example("Single.1.0.0.zip"), dest, true);
 
             var args = PresetMenu.ArchiveZip.ToArguments().Concat(new[] { "/o:runtime", src });
 
             using (var _ = IO.OpenRead(dest))
-            using (var ap = Create(new Request(args)))
+            using (var p = Create(new Request(args)))
             {
-                ap.View.Show();
-                await Wait(ap.View);
-                Assert.That(ap.View.Visible, Is.False, "Timeout");
+                p.View.Show();
+                Assert.That(await Wait(p.View), Is.True, "Timeout");
             }
         }
 
@@ -231,7 +217,16 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// <summary>
         /// 圧縮処理のテスト用データを取得します。
         /// </summary>
-        /// 
+        ///
+        /// <remarks>
+        /// テストケースには、以下の順で指定します。
+        /// - 圧縮するファイル名一覧
+        /// - コマンドライン引数を表す IEnumerable(string) オブジェクト
+        /// - ユーザ設定用オブジェクト
+        /// - 圧縮ファイルのパス
+        /// - 圧縮するファイル + ディレクトリ数
+        /// </remarks>
+        ///
         /* ----------------------------------------------------------------- */
         private static IEnumerable<TestCaseData> TestCases
         {
@@ -246,7 +241,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                         OpenDirectory = OpenDirectoryMethod.Open,
                         Filtering     = true,
                     },
-                    @"Others\Sample.zip",
+                    FullName(@"Others\Sample.zip"),
                     1L
                 );
 
@@ -259,7 +254,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                         OpenDirectory = OpenDirectoryMethod.OpenNotDesktop,
                         Filtering     = false,
                     },
-                    @"Others\Sample.7z",
+                    FullName(@"Others\Sample.7z"),
                     8L
                 );
 
@@ -272,7 +267,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                         OpenDirectory = OpenDirectoryMethod.None,
                         Filtering     = true,
                     },
-                    @"Others\Sample.tar.bz2",
+                    FullName(@"Others\Sample.tar.bz2"),
                     1L
                 );
 
@@ -284,7 +279,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         Filtering     = true,
                     },
-                    @"Others\Sample.exe",
+                    FullName(@"Others\Sample.exe"),
                     4L
                 );
 
@@ -296,7 +291,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         Filtering     = true,
                     },
-                    @"Runtime\Sample.zip",
+                    FullName(@"Runtime\Sample.zip"),
                     4L
                 );
 
@@ -308,7 +303,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                         SaveLocation  = SaveLocation.Runtime,
                         Filtering     = true,
                     },
-                    @"Runtime\Sample.7z",
+                    FullName(@"Runtime\Sample.7z"),
                     4L
                 );
 
@@ -320,55 +315,43 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                         SaveLocation = SaveLocation.Others,
                         Filtering    = true,
                     },
-                    @"Runtime\Sample.tar.bz2",
+                    FullName(@"Runtime\Sample.tar.bz2"),
                     1L
                 );
 
                 yield return new TestCaseData(
                     new[] { "Sample.txt", "Archive" },
-                    PresetMenu.ArchiveGZip.ToArguments().Concat(new[]
-                    {
-                        "/o:source",
-                        "/drop:Drop",
-                    }),
+                    DropRequest(PresetMenu.ArchiveGZip, "Drop"),
                     new ArchiveSettings
                     {
                         SaveLocation  = SaveLocation.Others,
                         Filtering     = true,
                     },
-                    @"Drop\Sample.tar.gz",
+                    FullName(@"Drop\Sample.tar.gz"),
                     1L
                 );
 
                 yield return new TestCaseData(
                     new[] { "Sample.txt", "Archive" },
-                    PresetMenu.ArchiveXZ.ToArguments().Concat(new[]
-                    {
-                        "/o:source",
-                        "/drop:Drop",
-                    }),
+                    DropRequest(PresetMenu.ArchiveXZ, "Drop"),
                     new ArchiveSettings
                     {
                         SaveLocation = SaveLocation.Others,
                         Filtering    = true,
                     },
-                    @"Drop\Sample.tar.xz",
+                    FullName(@"Drop\Sample.tar.xz"),
                     1L
                 );
 
                 yield return new TestCaseData(
                     new[] { "Sample.txt", "Archive" },
-                    PresetMenu.MailZip.ToArguments().Concat(new[]
-                    {
-                        "/o:source",
-                        "/drop:Mail",
-                    }),
+                    DropRequest(PresetMenu.MailZip, "Mail"),
                     new ArchiveSettings
                     {
                         SaveLocation = SaveLocation.Others,
                         Filtering    = true,
                     },
-                    @"Mail\Sample.zip",
+                    FullName(@"Mail\Sample.zip"),
                     4L
                 );
             }
@@ -377,6 +360,42 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         #endregion
 
         #region Helper
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// FullName
+        /// 
+        /// <summary>
+        /// 結果を保存するディレクトリへの絶対パスに変換します。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// MockViewHelper.Result と同じ内容を返す静的メソッドです。
+        /// TestCase は静的に定義する必要があるためこちらを使用しています。
+        /// </remarks>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private static string FullName(string path)
+        {
+            var io   = new Operator();
+            var asm  = Assembly.GetExecutingAssembly().Location;
+            var root = io.Get(asm).DirectoryName;
+            var dir  = typeof(ArchiveTest).FullName;
+            return io.Combine(root, "Results", dir, path);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// DropRequest
+        /// 
+        /// <summary>
+        /// ドロップ先のパスを指定した Request オブジェクトを生成します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        private static IEnumerable<string> DropRequest(PresetMenu menu, string path)
+            => menu.ToArguments()
+                   .Concat(new[] { "/o:source", $"/drop:{FullName(path)}" });
 
         /* ----------------------------------------------------------------- */
         ///

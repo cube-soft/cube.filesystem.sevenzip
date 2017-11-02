@@ -108,11 +108,11 @@
     <Compile Include="Settings\AssociateRegistrarTest.cs" />
     <Compile Include="Settings\SettingsViewModelTest.cs" />
     <Compile Include="Settings\ShortcutSettingsTest.cs" />
-    <Compile Include="ArchiveDetailsDataTest.cs" />
-    <Compile Include="ArchivePresenterTest.cs" />
-    <Compile Include="ExtractPresenterTest.cs" />
+    <Compile Include="ArchiveTest.cs" />
+    <Compile Include="ExtractTest.cs" />
     <Compile Include="PresetMenuTest.cs" />
     <Compile Include="RequestTest.cs" />
+    <Compile Include="ViewResourceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

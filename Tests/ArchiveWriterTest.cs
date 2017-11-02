@@ -138,18 +138,16 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Archive_PasswordCancel()
-            => Assert.That(() =>
+        public void Archive_PasswordCancel() => Assert.That(() =>
+        {
+            using (var writer = new ArchiveWriter(Format.Zip))
             {
-                using (var writer = new ArchiveWriter(Format.Zip))
-                {
-                    var dest  = Result("PasswordCancel.zip");
-                    var query = new Query<string, string>(x => x.Cancel = true);
-                    writer.Add(Example("Sample.txt"));
-                    writer.Save(dest, query, null);
-                }
-            },
-            Throws.TypeOf<OperationCanceledException>());
+                var dest  = Result("PasswordCancel.zip");
+                var query = new Query<string, string>(x => x.Cancel = true);
+                writer.Add(Example("Sample.txt"));
+                writer.Save(dest, query, null);
+            }
+        }, Throws.TypeOf<OperationCanceledException>());
 
         /* ----------------------------------------------------------------- */
         ///
@@ -161,18 +159,16 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Archive_SfxNotFound()
-            => Assert.That(() =>
+        public void Archive_SfxNotFound() => Assert.That(() =>
+        {
+            using (var writer = new ArchiveWriter(Format.Sfx))
             {
-                using (var writer = new ArchiveWriter(Format.Sfx))
-                {
-                    var dest = Result("SfxNotFound.exe");
-                    writer.Option = new SfxOption { Module = "dummy.sfx" };
-                    writer.Add(Example("Sample.txt"));
-                    writer.Save(dest);
-                }
-            },
-            Throws.TypeOf<System.IO.FileNotFoundException>());
+                var dest = Result("SfxNotFound.exe");
+                writer.Option = new SfxOption { Module = "dummy.sfx" };
+                writer.Add(Example("Sample.txt"));
+                writer.Save(dest);
+            }
+        }, Throws.TypeOf<System.IO.FileNotFoundException>());
 
         /* ----------------------------------------------------------------- */
         ///
@@ -184,22 +180,20 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Archive_PermissionError()
-            => Assert.That(() =>
+        public void Archive_PermissionError() => Assert.That(() =>
+        {
+            var dir = Result("PermissionError");
+            var src = IO.Combine(dir, "Sample.txt");
+
+            IO.Copy(Example("Sample.txt"), src);
+
+            using (var _ = OpenExclude(src))
+            using (var writer = new ArchiveWriter(Format.Zip))
             {
-                var dir = Result("PermissionError");
-                var src = IO.Combine(dir, "Sample.txt");
-
-                IO.Copy(Example("Sample.txt"), src);
-
-                using (var _ = OpenExclude(src))
-                using (var writer = new ArchiveWriter(Format.Zip))
-                {
-                    writer.Add(src);
-                    writer.Save(IO.Combine(dir, "Sample.zip"));
-                }
-            },
-            Throws.TypeOf<System.IO.IOException>());
+                writer.Add(src);
+                writer.Save(IO.Combine(dir, "Sample.zip"));
+            }
+        }, Throws.TypeOf<System.IO.IOException>());
 
         /* ----------------------------------------------------------------- */
         ///
@@ -247,15 +241,13 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Add_NotFound()
-            => Assert.That(() =>
+        public void Add_NotFound() => Assert.That(() =>
+        {
+            using (var writer = new ArchiveWriter(Format.Zip))
             {
-                using (var writer = new ArchiveWriter(Format.Zip))
-                {
-                    writer.Add(Example("NotFound.txt"));
-                }
-            },
-            Throws.TypeOf<System.IO.FileNotFoundException>());
+                writer.Add(Example("NotFound.txt"));
+            }
+        }, Throws.TypeOf<System.IO.FileNotFoundException>());
 
         #endregion
 
@@ -268,34 +260,47 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// Archive のテスト用データを取得します。
         /// </summary>
-        /// 
+        ///
+        /// <remarks>
+        /// テストケースには、以下の順で指定します。
+        /// - 圧縮形式
+        /// - 圧縮ファイル名
+        /// - パスワード
+        /// - 圧縮するファイル名一覧
+        /// - 圧縮オプション
+        /// </remarks>
+        ///
         /* ----------------------------------------------------------------- */
         private static IEnumerable<TestCaseData> Archive_TestCases
         {
             get
             {
-                yield return new TestCaseData(Format.Zip,
+                yield return new TestCaseData(
+                    Format.Zip,
                     "ZipSingle.zip",
                     "",
                     new[] { "Sample.txt" },
                     null
                 ).Returns(Format.Zip);
 
-                yield return new TestCaseData(Format.Zip,
+                yield return new TestCaseData(
+                    Format.Zip,
                     "ZipDirectory.zip",
                     "",
                     new[] { "Archive" },
                     null
                 ).Returns(Format.Zip);
 
-                yield return new TestCaseData(Format.Zip,
+                yield return new TestCaseData(
+                    Format.Zip,
                     "ZipFast.zip",
                     "",
                     new[] { "Sample.txt", "Archive" },
                     new ZipOption { CompressionLevel = CompressionLevel.Fast }
                 ).Returns(Format.Zip);
 
-                yield return new TestCaseData(Format.Zip,
+                yield return new TestCaseData(
+                    Format.Zip,
                     "ZipUltra.zip",
                     "",
                     new[] { "Sample.txt", "Archive" },
@@ -306,42 +311,48 @@ namespace Cube.FileSystem.SevenZip.Tests
                     }
                 ).Returns(Format.Zip);
 
-                yield return new TestCaseData(Format.Zip,
+                yield return new TestCaseData(
+                    Format.Zip,
                     "ZipLzma.zip",
                     "",
                     new[] { "Sample.txt", "Archive" },
                     new ZipOption { CompressionMethod = CompressionMethod.Lzma }
                 ).Returns(Format.Zip);
 
-                yield return new TestCaseData(Format.Zip,
+                yield return new TestCaseData(
+                    Format.Zip,
                     "ZipPassword.zip",
                     "password",
                     new[] { "Sample.txt" },
                     null
                 ).Returns(Format.Zip);
 
-                yield return new TestCaseData(Format.Zip,
+                yield return new TestCaseData(
+                    Format.Zip,
                     "ZipPasswordJapanese01.zip",
                     "日本語パスワード",
                     new[] { "Sample.txt" },
                     null
                 ).Returns(Format.Zip);
 
-                yield return new TestCaseData(Format.Zip,
+                yield return new TestCaseData(
+                    Format.Zip,
                     "ZipPasswordJapanese02.zip",
                     "ｶﾞｷﾞｸﾞｹﾞｺﾞﾊﾟﾋﾟﾌﾟﾍﾟﾎﾟ",
                     new[] { "Sample.txt" },
                     null
                 ).Returns(Format.Zip);
 
-                yield return new TestCaseData(Format.Zip,
+                yield return new TestCaseData(
+                    Format.Zip,
                     "ZipPasswordAes256.zip",
                     "password",
                     new[] { "Sample.txt" },
                     new ZipOption { EncryptionMethod = EncryptionMethod.Aes256 }
                 ).Returns(Format.Zip);
 
-                yield return new TestCaseData(Format.SevenZip,
+                yield return new TestCaseData(
+                    Format.SevenZip,
                     "7zLzma2.7z",
                     "",
                     new[] { "Sample.txt", "Archive" },
@@ -352,35 +363,40 @@ namespace Cube.FileSystem.SevenZip.Tests
                     }
                 ).Returns(Format.SevenZip);
 
-                yield return new TestCaseData(Format.BZip2,
+                yield return new TestCaseData(
+                    Format.BZip2,
                     "BZip2Test.bz",
                     "",
                     new[] { "Sample.txt" },
                     null
                 ).Returns(Format.BZip2);
 
-                yield return new TestCaseData(Format.GZip,
+                yield return new TestCaseData(
+                    Format.GZip,
                     "GZipTest.gz",
                     "",
                     new[] { "Sample.txt" },
                     null
                 ).Returns(Format.GZip);
 
-                yield return new TestCaseData(Format.XZ,
+                yield return new TestCaseData(
+                    Format.XZ,
                     "XzTest.xz",
                     "",
                     new[] { "Sample.txt" },
                     null
                 ).Returns(Format.XZ);
 
-                yield return new TestCaseData(Format.Tar,
+                yield return new TestCaseData(
+                    Format.Tar,
                     "TarTest.tar",
                     "",
                     new[] { "Sample.txt", "Archive" },
                     null
                 ).Returns(Format.Tar);
 
-                yield return new TestCaseData(Format.Tar,
+                yield return new TestCaseData(
+                    Format.Tar,
                     "TarTest.tar.gz",
                     "",
                     new[] { "Sample.txt", "Archive" },
@@ -391,7 +407,8 @@ namespace Cube.FileSystem.SevenZip.Tests
                     }
                 ).Returns(Format.GZip);
 
-                yield return new TestCaseData(Format.Tar,
+                yield return new TestCaseData(
+                    Format.Tar,
                     "TarTest.tar.bz",
                     "",
                     new[] { "Sample.txt", "Archive" },
@@ -402,7 +419,8 @@ namespace Cube.FileSystem.SevenZip.Tests
                     }
                 ).Returns(Format.BZip2);
 
-                yield return new TestCaseData(Format.Tar,
+                yield return new TestCaseData(
+                    Format.Tar,
                     "TarTest.tar.xz",
                     "",
                     new[] { "Sample.txt", "Archive" },
@@ -413,7 +431,8 @@ namespace Cube.FileSystem.SevenZip.Tests
                     }
                 ).Returns(Format.XZ);
 
-                yield return new TestCaseData(Format.Sfx,
+                yield return new TestCaseData(
+                    Format.Sfx,
                     "ExecutableTest.exe",
                     "",
                     new[] { "Sample.txt", "Archive" },

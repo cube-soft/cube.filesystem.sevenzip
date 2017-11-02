@@ -21,15 +21,15 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveDetailsDataTest
+    /// ViewResourceTest
     /// 
     /// <summary>
-    /// ArchiveDetailsData のテスト用クラスです。
+    /// ViewResource のテスト用クラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ArchiveDetailsDataTest
+    class ViewResourceTest
     {
         /* ----------------------------------------------------------------- */
         ///
@@ -43,8 +43,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         [TestCase(4)]
         public void Format(int expected)
         {
-            Assert.That(ArchiveDetailsData.Format.Count, Is.EqualTo(expected));
-            Assert.That(ArchiveDetailsData.Format.Count, Is.EqualTo(expected));
+            Assert.That(ViewResource.Format.Count, Is.EqualTo(expected));
+            Assert.That(ViewResource.Format.Count, Is.EqualTo(expected));
         }
 
         /* ----------------------------------------------------------------- */
@@ -59,8 +59,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         [TestCase(6)]
         public void CompressionLevel(int expected)
         {
-            Assert.That(ArchiveDetailsData.CompressionLevel.Count, Is.EqualTo(expected));
-            Assert.That(ArchiveDetailsData.CompressionLevel.Count, Is.EqualTo(expected));
+            Assert.That(ViewResource.CompressionLevel.Count, Is.EqualTo(expected));
+            Assert.That(ViewResource.CompressionLevel.Count, Is.EqualTo(expected));
         }
 
         /* ----------------------------------------------------------------- */
@@ -75,8 +75,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         [TestCase(4)]
         public void CompressionMethods(int expected)
         {
-            Assert.That(ArchiveDetailsData.CompressionMethods.Count, Is.EqualTo(expected));
-            Assert.That(ArchiveDetailsData.CompressionMethods.Count, Is.EqualTo(expected));
+            Assert.That(ViewResource.CompressionMethods.Count, Is.EqualTo(expected));
+            Assert.That(ViewResource.CompressionMethods.Count, Is.EqualTo(expected));
         }
 
         /* ----------------------------------------------------------------- */
@@ -91,8 +91,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         [TestCase(4)]
         public void EncryptionMethod(int expected)
         {
-            Assert.That(ArchiveDetailsData.EncryptionMethod.Count, Is.EqualTo(expected));
-            Assert.That(ArchiveDetailsData.EncryptionMethod.Count, Is.EqualTo(expected));
+            Assert.That(ViewResource.EncryptionMethod.Count, Is.EqualTo(expected));
+            Assert.That(ViewResource.EncryptionMethod.Count, Is.EqualTo(expected));
         }
 
         /* ----------------------------------------------------------------- */
@@ -109,10 +109,10 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         [TestCase(SevenZip.Format.Tar,      4)]
         [TestCase(SevenZip.Format.Sfx,      6)]
         [TestCase(SevenZip.Format.BZip2,    0)]
-        public void GetCompressionMethod(SevenZip.Format format, int expected)
+        public void GetCompressionMethod(Format format, int expected)
         {
-            Assert.That(ArchiveDetailsData.GetCompressionMethod(format)?.Count ?? 0, Is.EqualTo(expected));
-            Assert.That(ArchiveDetailsData.GetCompressionMethod(format)?.Count ?? 0, Is.EqualTo(expected));
+            Assert.That(ViewResource.GetCompressionMethod(format)?.Count ?? 0, Is.EqualTo(expected));
+            Assert.That(ViewResource.GetCompressionMethod(format)?.Count ?? 0, Is.EqualTo(expected));
         }
     }
 }
