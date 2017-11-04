@@ -84,6 +84,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// 進行状況の更新を報告します。
         /// </summary>
         /// 
+        /// <param name="value">進捗内容</param>
+        /// 
         /// <remarks>
         /// WaitHandle のチェック後に CancellationToken のチェックを実行
         /// します。したがって、キャンセル処理を発生させるには、
@@ -99,10 +101,6 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             OnReport(value);
         }
 
-        #endregion
-
-        #region Virtual methods
-
         /* ----------------------------------------------------------------- */
         ///
         /// OnReport
@@ -110,6 +108,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// <summary>
         /// 進行状況の更新を報告します。
         /// </summary>
+        ///
+        /// <param name="value">進捗内容</param>
         ///
         /* ----------------------------------------------------------------- */
         protected virtual void OnReport(T value) => ProgressChanged?.Invoke(this, value);

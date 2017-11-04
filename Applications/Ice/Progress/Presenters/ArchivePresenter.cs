@@ -59,7 +59,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             var model = Model as ArchiveFacade;
             model.DestinationRequested += WhenDestinationRequested;
             model.PasswordRequested    += WhenPasswordRequested;
-            model.Progress            += WhenProgress;
+            model.Progress             += WhenProgress;
             model.DetailsRequested     += WhenDetailsRequested;
             model.MailRequested        += WhenMailRequested;
         }

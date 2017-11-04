@@ -119,8 +119,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public long TotalCount
         {
-            get { return Report.TotalCount; }
-            set { Report.TotalCount = value; }
+            get => Report.TotalCount;
+            set => Report.TotalCount = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -138,8 +138,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public long TotalBytes
         {
-            get { return Report.TotalBytes; }
-            set { Report.TotalBytes = value; }
+            get => Report.TotalBytes;
+            set => Report.TotalBytes = value;
         }
 
         #endregion

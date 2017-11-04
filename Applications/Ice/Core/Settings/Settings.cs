@@ -17,7 +17,6 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Runtime.Serialization;
 using Cube.Settings;
 
@@ -50,8 +49,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public bool CheckUpdate
         {
-            get { return _checkUpdate; }
-            set { SetProperty(ref _checkUpdate, value); }
+            get => _checkUpdate;
+            set => SetProperty(ref _checkUpdate, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -66,8 +65,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public bool ErrorReport
         {
-            get { return _errorReport; }
-            set { SetProperty(ref _errorReport, value); }
+            get => _errorReport;
+            set => SetProperty(ref _errorReport, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -86,8 +85,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public string Explorer
         {
-            get { return _explorer; }
-            set { SetProperty(ref _explorer, value); }
+            get => _explorer;
+            set => SetProperty(ref _explorer, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -103,8 +102,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public string Filters
         {
-            get { return _filtering; }
-            set { SetProperty(ref _filtering, value); }
+            get => _filtering;
+            set => SetProperty(ref _filtering, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -120,8 +119,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public bool ToolTip
         {
-            get { return _toolTip; }
-            set { SetProperty(ref _toolTip, value); }
+            get => _toolTip;
+            set => SetProperty(ref _toolTip, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -141,8 +140,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public int ToolTipCount
         {
-            get { return _toolTipCount; }
-            set { SetProperty(ref _toolTipCount, value); }
+            get => _toolTipCount;
+            set => SetProperty(ref _toolTipCount, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -157,8 +156,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public ArchiveSettings Archive
         {
-            get { return _archive; }
-            set { SetProperty(ref _archive, value); }
+            get => _archive;
+            set => SetProperty(ref _archive, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -173,8 +172,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public ExtractSettings Extract
         {
-            get { return _extract; }
-            set { SetProperty(ref _extract, value); }
+            get => _extract;
+            set => SetProperty(ref _extract, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -189,8 +188,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public AssociateSettings Associate
         {
-            get { return _associate; }
-            set { SetProperty(ref _associate, value); }
+            get => _associate;
+            set => SetProperty(ref _associate, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -205,8 +204,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public ContextSettings Context
         {
-            get { return _context; }
-            set { SetProperty(ref _context, value); }
+            get => _context;
+            set => SetProperty(ref _context, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -222,8 +221,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public ShortcutSettings Shortcut
         {
-            get { return _shortcut; }
-            set { SetProperty(ref _shortcut, value); }
+            get => _shortcut;
+            set => SetProperty(ref _shortcut, value);
         }
 
         #endregion
@@ -275,7 +274,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     /// 
     /* --------------------------------------------------------------------- */
-    public class SettingsFolder : Cube.Settings.SettingsFolder<Settings>
+    public class SettingsFolder : SettingsFolder<Settings>
     {
         #region Constructors
 
@@ -327,7 +326,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected override void OnSaved(KeyValueEventArgs<Cube.Settings.SettingsType, string> e)
+        protected override void OnSaved(KeyValueEventArgs<SettingsType, string> e)
         {
             if (Value != null) Startup.Enabled = Value.CheckUpdate;
             base.OnSaved(e);

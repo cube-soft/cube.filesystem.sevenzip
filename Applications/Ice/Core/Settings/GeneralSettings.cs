@@ -45,8 +45,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public SaveLocation SaveLocation
         {
-            get { return _saveLocation; }
-            set { SetProperty(ref _saveLocation, value); }
+            get => _saveLocation;
+            set => SetProperty(ref _saveLocation, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -65,8 +65,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public string SaveDirectoryName
         {
-            get { return _saveDirectoryName; }
-            set { SetProperty(ref _saveDirectoryName, value); }
+            get => _saveDirectoryName;
+            set => SetProperty(ref _saveDirectoryName, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -82,8 +82,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public bool Filtering
         {
-            get { return _filtering; }
-            set { SetProperty(ref _filtering, value); }
+            get => _filtering;
+            set => SetProperty(ref _filtering, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -99,8 +99,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public OpenDirectoryMethod OpenDirectory
         {
-            get { return _openDirectory; }
-            set { SetProperty(ref _openDirectory, value); }
+            get => _openDirectory;
+            set => SetProperty(ref _openDirectory, value);
         }
 
         #endregion

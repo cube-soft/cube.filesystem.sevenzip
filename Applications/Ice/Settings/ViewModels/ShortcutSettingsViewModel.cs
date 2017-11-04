@@ -64,8 +64,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Archive
         {
-            get { return _model.Preset.HasFlag(PresetMenu.Archive); }
-            set { Set(PresetMenu.Archive, value); }
+            get => _model.Preset.HasFlag(PresetMenu.Archive);
+            set => Set(PresetMenu.Archive, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -79,8 +79,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Extract
         {
-            get { return _model.Preset.HasFlag(PresetMenu.Extract); }
-            set { Set(PresetMenu.Extract, value); }
+            get => _model.Preset.HasFlag(PresetMenu.Extract);
+            set => Set(PresetMenu.Extract, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -94,8 +94,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Settings
         {
-            get { return _model.Preset.HasFlag(PresetMenu.Settings); }
-            set { Set(PresetMenu.Settings, value); }
+            get => _model.Preset.HasFlag(PresetMenu.Settings);
+            set => Set(PresetMenu.Settings, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -109,7 +109,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public PresetMenu ArchiveOption
         {
-            get { return _model.Preset & PresetMenu.ArchiveOptions; }
+            get => _model.Preset & PresetMenu.ArchiveOptions;
             set
             {
                 var strip = _model.Preset & ~PresetMenu.ArchiveOptions;

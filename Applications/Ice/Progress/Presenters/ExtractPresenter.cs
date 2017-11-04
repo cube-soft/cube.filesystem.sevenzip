@@ -113,7 +113,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenProgress(object sender, ValueEventArgs<SevenZip.ArchiveReport> e)
+        private void WhenProgress(object sender, ValueEventArgs<ArchiveReport> e)
             => Sync(() =>
         {
             View.TotalCount = e.Value.TotalCount;

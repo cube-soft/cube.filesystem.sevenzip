@@ -42,22 +42,13 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         public static IList<KeyValuePair<string, Format>> Format
+            => _format = _format ?? new List<KeyValuePair<string, Format>>
         {
-            get
-            {
-                if (_format == null)
-                {
-                    _format = new List<KeyValuePair<string, Format>>
-                    {
-                        Pair("Zip", SevenZip.Format.Zip),
-                        Pair("7z",  SevenZip.Format.SevenZip),
-                        Pair("Tar", SevenZip.Format.Tar),
-                        Pair(Properties.Resources.FormatSfx, SevenZip.Format.Sfx),
-                    };
-                }
-                return _format;
-            }
-        }
+            Pair("Zip",                          SevenZip.Format.Zip),
+            Pair("7z",                           SevenZip.Format.SevenZip),
+            Pair("Tar",                          SevenZip.Format.Tar),
+            Pair(Properties.Resources.FormatSfx, SevenZip.Format.Sfx),
+        };
 
         /* ----------------------------------------------------------------- */
         ///
@@ -70,24 +61,16 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         public static IList<KeyValuePair<string, CompressionLevel>> CompressionLevel
+            => _compressionLevel = _compressionLevel ??
+            new List<KeyValuePair<string, CompressionLevel>>
         {
-            get
-            {
-                if (_compressionLevel == null)
-                {
-                    _compressionLevel = new List<KeyValuePair<string, CompressionLevel>>
-                    {
-                        Pair(Properties.Resources.LevelNone,   SevenZip.CompressionLevel.None),
-                        Pair(Properties.Resources.LevelFast,   SevenZip.CompressionLevel.Fast),
-                        Pair(Properties.Resources.LevelLow,    SevenZip.CompressionLevel.Low),
-                        Pair(Properties.Resources.LevelNormal, SevenZip.CompressionLevel.Normal),
-                        Pair(Properties.Resources.LevelHigh,   SevenZip.CompressionLevel.High),
-                        Pair(Properties.Resources.LevelUltra,  SevenZip.CompressionLevel.Ultra)
-                    };
-                }
-                return _compressionLevel;
-            }
-        }
+            Pair(Properties.Resources.LevelNone,   SevenZip.CompressionLevel.None),
+            Pair(Properties.Resources.LevelFast,   SevenZip.CompressionLevel.Fast),
+            Pair(Properties.Resources.LevelLow,    SevenZip.CompressionLevel.Low),
+            Pair(Properties.Resources.LevelNormal, SevenZip.CompressionLevel.Normal),
+            Pair(Properties.Resources.LevelHigh,   SevenZip.CompressionLevel.High),
+            Pair(Properties.Resources.LevelUltra,  SevenZip.CompressionLevel.Ultra)
+        };
 
         /* ----------------------------------------------------------------- */
         ///
@@ -100,60 +83,52 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         public static IDictionary<Format, IList<KeyValuePair<string, CompressionMethod>>> CompressionMethods
+            => _compressionMethods = _compressionMethods ?? 
+            new Dictionary<Format, IList<KeyValuePair<string, CompressionMethod>>>
         {
-            get
             {
-                if (_compressionMethod == null)
+                SevenZip.Format.Zip, new List<KeyValuePair<string, CompressionMethod>>
                 {
-                    _compressionMethod = new Dictionary<Format, IList<KeyValuePair<string, CompressionMethod>>>
-                    {
-                        {
-                            SevenZip.Format.Zip, new List<KeyValuePair<string, CompressionMethod>>
-                            {
-                                Pair("Deflate",   CompressionMethod.Deflate),
-                                Pair("Deflate64", CompressionMethod.Deflate64),
-                                Pair("BZip2",     CompressionMethod.BZip2),
-                                Pair("LZMA",      CompressionMethod.Lzma),
-                                Pair("PPMd",      CompressionMethod.Ppmd),
-                                Pair("Copy",      CompressionMethod.Copy),
-                            }
-                        },
-                        {
-                            SevenZip.Format.SevenZip, new List<KeyValuePair<string, CompressionMethod>>
-                            {
-                                Pair("LZMA",      CompressionMethod.Lzma),
-                                Pair("LZMA2",     CompressionMethod.Lzma2),
-                                Pair("PPMd",      CompressionMethod.Ppmd),
-                                Pair("BZip2",     CompressionMethod.BZip2),
-                                Pair("Deflate",   CompressionMethod.Deflate),
-                                Pair("Copy",      CompressionMethod.Copy),
-                            }
-                        },
-                        {
-                            SevenZip.Format.Tar, new List<KeyValuePair<string, CompressionMethod>>
-                            {
-                                Pair("GZip",      CompressionMethod.GZip),
-                                Pair("BZip2",     CompressionMethod.BZip2),
-                                Pair("XZ",        CompressionMethod.XZ),
-                                Pair("Copy",      CompressionMethod.Copy),
-                            }
-                        },
-                        {
-                            SevenZip.Format.Sfx, new List<KeyValuePair<string, CompressionMethod>>
-                            {
-                                Pair("LZMA",      CompressionMethod.Lzma),
-                                Pair("LZMA2",     CompressionMethod.Lzma2),
-                                Pair("PPMd",      CompressionMethod.Ppmd),
-                                Pair("BZip2",     CompressionMethod.BZip2),
-                                Pair("Deflate",   CompressionMethod.Deflate),
-                                Pair("Copy",      CompressionMethod.Copy),
-                            }
-                        }
-                    };
+                    Pair("Deflate",   CompressionMethod.Deflate),
+                    Pair("Deflate64", CompressionMethod.Deflate64),
+                    Pair("BZip2",     CompressionMethod.BZip2),
+                    Pair("LZMA",      CompressionMethod.Lzma),
+                    Pair("PPMd",      CompressionMethod.Ppmd),
+                    Pair("Copy",      CompressionMethod.Copy),
                 }
-                return _compressionMethod;
+            },
+            {
+                SevenZip.Format.SevenZip, new List<KeyValuePair<string, CompressionMethod>>
+                {
+                    Pair("LZMA",      CompressionMethod.Lzma),
+                    Pair("LZMA2",     CompressionMethod.Lzma2),
+                    Pair("PPMd",      CompressionMethod.Ppmd),
+                    Pair("BZip2",     CompressionMethod.BZip2),
+                    Pair("Deflate",   CompressionMethod.Deflate),
+                    Pair("Copy",      CompressionMethod.Copy),
+                }
+            },
+            {
+                SevenZip.Format.Tar, new List<KeyValuePair<string, CompressionMethod>>
+                {
+                    Pair("GZip",      CompressionMethod.GZip),
+                    Pair("BZip2",     CompressionMethod.BZip2),
+                    Pair("XZ",        CompressionMethod.XZ),
+                    Pair("Copy",      CompressionMethod.Copy),
+                }
+            },
+            {
+                SevenZip.Format.Sfx, new List<KeyValuePair<string, CompressionMethod>>
+                {
+                    Pair("LZMA",      CompressionMethod.Lzma),
+                    Pair("LZMA2",     CompressionMethod.Lzma2),
+                    Pair("PPMd",      CompressionMethod.Ppmd),
+                    Pair("BZip2",     CompressionMethod.BZip2),
+                    Pair("Deflate",   CompressionMethod.Deflate),
+                    Pair("Copy",      CompressionMethod.Copy),
+                }
             }
-        }
+        };
 
         /* ----------------------------------------------------------------- */
         ///
@@ -166,22 +141,14 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         public static IList<KeyValuePair<string, EncryptionMethod>> EncryptionMethod
+            => _encryptionMethod = _encryptionMethod ??
+            new List<KeyValuePair<string, EncryptionMethod>>
         {
-            get
-            {
-                if (_encryptionMethod == null)
-                {
-                    _encryptionMethod = new List<KeyValuePair<string, EncryptionMethod>>
-                    {
-                        Pair("ZipCrypto", SevenZip.EncryptionMethod.ZipCrypto),
-                        Pair("AES128",    SevenZip.EncryptionMethod.Aes128),
-                        Pair("AES192",    SevenZip.EncryptionMethod.Aes192),
-                        Pair("AES256",    SevenZip.EncryptionMethod.Aes256),
-                    };
-                }
-                return _encryptionMethod;
-            }
-        }
+            Pair("ZipCrypto", SevenZip.EncryptionMethod.ZipCrypto),
+            Pair("AES128",    SevenZip.EncryptionMethod.Aes128),
+            Pair("AES192",    SevenZip.EncryptionMethod.Aes192),
+            Pair("AES256",    SevenZip.EncryptionMethod.Aes256),
+        };
 
         #endregion
 
@@ -226,7 +193,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         private static IList<KeyValuePair<string, Format>> _format;
         private static IList<KeyValuePair<string, EncryptionMethod>> _encryptionMethod;
         private static IList<KeyValuePair<string, CompressionLevel>> _compressionLevel;
-        private static IDictionary<Format, IList<KeyValuePair<string, CompressionMethod>>> _compressionMethod;
+        private static IDictionary<Format, IList<KeyValuePair<string, CompressionMethod>>> _compressionMethods;
         #endregion
 
         #endregion

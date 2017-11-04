@@ -148,7 +148,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         public string Path
         {
-            get { return OutputTextBox.Text; }
+            get => OutputTextBox.Text;
             set
             {
                 if (OutputTextBox.Text == value) return;
@@ -183,7 +183,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         private bool PathIsValid
         {
-            get { return _path; }
+            get => _path;
             set
             {
                 if (_path == value) return;
@@ -205,7 +205,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         private bool EncryptionIsValid
         {
-            get { return _encryption; }
+            get => _encryption;
             set
             {
                 if (_encryption == value) return;

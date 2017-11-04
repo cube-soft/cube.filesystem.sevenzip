@@ -45,8 +45,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public CreateDirectoryMethod RootDirectory
         {
-            get { return _rootDirectory; }
-            set { SetProperty(ref _rootDirectory, value); }
+            get => _rootDirectory;
+            set => SetProperty(ref _rootDirectory, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -62,8 +62,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public bool DeleteSource
         {
-            get { return _deleteSource; }
-            set { SetProperty(ref _deleteSource, value); }
+            get => _deleteSource;
+            set => SetProperty(ref _deleteSource, value);
         }
 
         #endregion

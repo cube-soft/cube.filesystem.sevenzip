@@ -66,8 +66,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool SevenZip
         {
-            get { return _model.Settings.SevenZip; }
-            set { _model.Settings.SevenZip = value; }
+            get => _model.Settings.SevenZip;
+            set => _model.Settings.SevenZip = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -81,8 +81,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Arj
         {
-            get { return _model.Settings.Arj; }
-            set { _model.Settings.Arj = value; }
+            get => _model.Settings.Arj;
+            set => _model.Settings.Arj = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -96,8 +96,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool BZ2
         {
-            get { return _model.Settings.BZ2; }
-            set { _model.Settings.BZ2 = value; }
+            get => _model.Settings.BZ2;
+            set => _model.Settings.BZ2 = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -111,8 +111,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Cab
         {
-            get { return _model.Settings.Cab; }
-            set { _model.Settings.Cab = value; }
+            get => _model.Settings.Cab;
+            set => _model.Settings.Cab = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -126,8 +126,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Chm
         {
-            get { return _model.Settings.Chm; }
-            set { _model.Settings.Chm = value; }
+            get => _model.Settings.Chm;
+            set => _model.Settings.Chm = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -141,8 +141,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Cpio
         {
-            get { return _model.Settings.Cpio; }
-            set { _model.Settings.Cpio = value; }
+            get => _model.Settings.Cpio;
+            set => _model.Settings.Cpio = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -156,8 +156,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Deb
         {
-            get { return _model.Settings.Deb; }
-            set { _model.Settings.Deb = value; }
+            get => _model.Settings.Deb;
+            set => _model.Settings.Deb = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -171,8 +171,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Dmg
         {
-            get { return _model.Settings.Dmg; }
-            set { _model.Settings.Dmg = value; }
+            get => _model.Settings.Dmg;
+            set => _model.Settings.Dmg = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -186,8 +186,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Flv
         {
-            get { return _model.Settings.Flv; }
-            set { _model.Settings.Flv = value; }
+            get => _model.Settings.Flv;
+            set => _model.Settings.Flv = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -201,8 +201,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool GZ
         {
-            get { return _model.Settings.GZ; }
-            set { _model.Settings.GZ = value; }
+            get => _model.Settings.GZ;
+            set => _model.Settings.GZ = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -216,8 +216,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Hfs
         {
-            get { return _model.Settings.Hfs; }
-            set { _model.Settings.Hfs = value; }
+            get => _model.Settings.Hfs;
+            set => _model.Settings.Hfs = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -231,8 +231,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Jar
         {
-            get { return _model.Settings.Jar; }
-            set { _model.Settings.Jar = value; }
+            get => _model.Settings.Jar;
+            set => _model.Settings.Jar = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -246,8 +246,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Iso
         {
-            get { return _model.Settings.Iso; }
-            set { _model.Settings.Iso = value; }
+            get => _model.Settings.Iso;
+            set => _model.Settings.Iso = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -261,8 +261,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Lzh
         {
-            get { return _model.Settings.Lzh; }
-            set { _model.Settings.Lzh = value; }
+            get => _model.Settings.Lzh;
+            set => _model.Settings.Lzh = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -276,8 +276,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Nupkg
         {
-            get { return _model.Settings.Nupkg; }
-            set { _model.Settings.Nupkg = value; }
+            get => _model.Settings.Nupkg;
+            set => _model.Settings.Nupkg = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -291,8 +291,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Rar
         {
-            get { return _model.Settings.Rar; }
-            set { _model.Settings.Rar = value; }
+            get => _model.Settings.Rar;
+            set => _model.Settings.Rar = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -306,8 +306,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Rpm
         {
-            get { return _model.Settings.Rpm; }
-            set { _model.Settings.Rpm = value; }
+            get => _model.Settings.Rpm;
+            set => _model.Settings.Rpm = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -321,8 +321,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Swf
         {
-            get { return _model.Settings.Swf; }
-            set { _model.Settings.Swf = value; }
+            get => _model.Settings.Swf;
+            set => _model.Settings.Swf = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -336,8 +336,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Tar
         {
-            get { return _model.Settings.Tar; }
-            set { _model.Settings.Tar = value; }
+            get => _model.Settings.Tar;
+            set => _model.Settings.Tar = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -351,8 +351,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Tbz
         {
-            get { return _model.Settings.Tbz; }
-            set { _model.Settings.Tbz = value; }
+            get => _model.Settings.Tbz;
+            set => _model.Settings.Tbz = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -366,8 +366,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Tgz
         {
-            get { return _model.Settings.Tgz; }
-            set { _model.Settings.Tgz = value; }
+            get => _model.Settings.Tgz;
+            set => _model.Settings.Tgz = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -381,8 +381,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Txz
         {
-            get { return _model.Settings.Txz; }
-            set { _model.Settings.Txz = value; }
+            get => _model.Settings.Txz;
+            set => _model.Settings.Txz = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -396,8 +396,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Vhd
         {
-            get { return _model.Settings.Vhd; }
-            set { _model.Settings.Vhd = value; }
+            get => _model.Settings.Vhd;
+            set => _model.Settings.Vhd = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -411,8 +411,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Vmdk
         {
-            get { return _model.Settings.Vmdk; }
-            set { _model.Settings.Vmdk = value; }
+            get => _model.Settings.Vmdk;
+            set => _model.Settings.Vmdk = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -426,8 +426,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Wim
         {
-            get { return _model.Settings.Wim; }
-            set { _model.Settings.Wim = value; }
+            get => _model.Settings.Wim;
+            set => _model.Settings.Wim = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -441,8 +441,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Xar
         {
-            get { return _model.Settings.Xar; }
-            set { _model.Settings.Xar = value; }
+            get => _model.Settings.Xar;
+            set => _model.Settings.Xar = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -456,8 +456,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool XZ
         {
-            get { return _model.Settings.XZ; }
-            set { _model.Settings.XZ = value; }
+            get => _model.Settings.XZ;
+            set => _model.Settings.XZ = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -471,8 +471,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Z
         {
-            get { return _model.Settings.Z; }
-            set { _model.Settings.Z = value; }
+            get => _model.Settings.Z;
+            set => _model.Settings.Z = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -486,8 +486,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Zip
         {
-            get { return _model.Settings.Zip; }
-            set { _model.Settings.Zip = value; }
+            get => _model.Settings.Zip;
+            set => _model.Settings.Zip = value;
         }
 
         #endregion

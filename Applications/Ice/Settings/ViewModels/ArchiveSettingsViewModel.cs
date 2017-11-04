@@ -61,8 +61,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool UseUtf8
         {
-            get { return Model.UseUtf8; }
-            set { Model.UseUtf8 = value; }
+            get => Model.UseUtf8;
+            set => Model.UseUtf8 = value;
         }
 
         #endregion

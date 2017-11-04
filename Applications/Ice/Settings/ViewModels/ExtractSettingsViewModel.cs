@@ -60,8 +60,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool CreateDirectory
         {
-            get { return HasFlag(CreateDirectoryMethod.Create); }
-            set { SetRootDirectory(CreateDirectoryMethod.Create, value); }
+            get => HasFlag(CreateDirectoryMethod.Create);
+            set => SetRootDirectory(CreateDirectoryMethod.Create, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -76,8 +76,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool SkipSingleDirectory
         {
-            get { return HasFlag(CreateDirectoryMethod.SkipSingleDirectory); }
-            set { SetRootDirectory(CreateDirectoryMethod.SkipSingleDirectory, value); }
+            get => HasFlag(CreateDirectoryMethod.SkipSingleDirectory);
+            set => SetRootDirectory(CreateDirectoryMethod.SkipSingleDirectory, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -92,8 +92,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool DeleteSource
         {
-            get { return Model.DeleteSource; }
-            set { Model.DeleteSource = value; }
+            get => Model.DeleteSource;
+            set => Model.DeleteSource = value;
         }
 
         #endregion

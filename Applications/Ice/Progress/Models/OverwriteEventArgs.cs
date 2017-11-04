@@ -87,7 +87,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
         #endregion
 
-        #region Constructors
+        #region Properties
 
         /* ----------------------------------------------------------------- */
         ///

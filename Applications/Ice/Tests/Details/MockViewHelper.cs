@@ -82,8 +82,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         protected MockViewSettings Mock
         {
-            get { return _mock.Settings; }
-            set { _mock.Settings = value; }
+            get => _mock.Settings;
+            set => _mock.Settings = value;
         }
 
         /* ----------------------------------------------------------------- */

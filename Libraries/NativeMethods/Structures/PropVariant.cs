@@ -46,8 +46,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public VarEnum VarType
         {
-            get { return (VarEnum)_vt; }
-            private set { _vt = (ushort)value; }
+            get => (VarEnum)_vt;
+            private set => _vt = (ushort)value;
         }
 
         /* ----------------------------------------------------------------- */

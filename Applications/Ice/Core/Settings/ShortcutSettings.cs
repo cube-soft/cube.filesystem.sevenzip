@@ -16,7 +16,6 @@
 //
 /* ------------------------------------------------------------------------- */
 using System;
-using System.Reflection;
 using System.Runtime.Serialization;
 
 namespace Cube.FileSystem.SevenZip.Ice
@@ -48,8 +47,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public PresetMenu Preset
         {
-            get { return _preset; }
-            set { SetProperty(ref _preset, value); }
+            get => _preset;
+            set => SetProperty(ref _preset, value);
         }
 
         /* ----------------------------------------------------------------- */

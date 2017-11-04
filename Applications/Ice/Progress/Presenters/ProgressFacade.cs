@@ -98,7 +98,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         public string Destination
         {
-            get { return _dest; }
+            get => _dest;
             protected set
             {
                 if (_dest == value) return;
@@ -118,7 +118,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         public string Tmp
         {
-            get { return _tmp; }
+            get => _tmp;
             private set
             {
                 if (_tmp == value) return;
@@ -160,8 +160,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         public TimeSpan Interval
         {
-            get { return TimeSpan.FromMilliseconds(_timer.Interval); }
-            set { _timer.Interval = value.TotalMilliseconds; }
+            get => TimeSpan.FromMilliseconds(_timer.Interval);
+            set => _timer.Interval = value.TotalMilliseconds;
         }
 
         /* ----------------------------------------------------------------- */

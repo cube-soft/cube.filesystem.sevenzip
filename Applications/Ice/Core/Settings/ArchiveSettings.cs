@@ -57,8 +57,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember(Name = "UseUTF8")]
         public bool UseUtf8
         {
-            get { return _useUtf8; }
-            set { SetProperty(ref _useUtf8, value); }
+            get => _useUtf8;
+            set => SetProperty(ref _useUtf8, value);
         }
 
         #endregion

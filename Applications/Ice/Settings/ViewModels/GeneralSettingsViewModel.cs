@@ -65,8 +65,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool SaveOthers
         {
-            get { return Model.SaveLocation == SaveLocation.Others; }
-            set { SetSaveLocation(SaveLocation.Others, value); }
+            get => Model.SaveLocation == SaveLocation.Others;
+            set => SetSaveLocation(SaveLocation.Others, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -80,8 +80,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool SaveSource
         {
-            get { return Model.SaveLocation == SaveLocation.Source; }
-            set { SetSaveLocation(SaveLocation.Source, value); }
+            get => Model.SaveLocation == SaveLocation.Source;
+            set => SetSaveLocation(SaveLocation.Source, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -95,8 +95,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool SaveRuntime
         {
-            get { return Model.SaveLocation == SaveLocation.Runtime; }
-            set { SetSaveLocation(SaveLocation.Runtime, value); }
+            get => Model.SaveLocation == SaveLocation.Runtime;
+            set => SetSaveLocation(SaveLocation.Runtime, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -110,8 +110,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public string SaveDirectoryName
         {
-            get { return Model.SaveDirectoryName; }
-            set { Model.SaveDirectoryName = value; }
+            get => Model.SaveDirectoryName;
+            set => Model.SaveDirectoryName = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -126,8 +126,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Filtering
         {
-            get { return Model.Filtering; }
-            set { Model.Filtering = value; }
+            get => Model.Filtering;
+            set => Model.Filtering = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -142,7 +142,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool OpenDirectory
         {
-            get { return Model.OpenDirectory.HasFlag(OpenDirectoryMethod.Open); }
+            get => Model.OpenDirectory.HasFlag(OpenDirectoryMethod.Open);
             set
             {
                 if (value) Model.OpenDirectory |= OpenDirectoryMethod.Open;
@@ -162,7 +162,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool SkipDesktop
         {
-            get { return Model.OpenDirectory.HasFlag(OpenDirectoryMethod.SkipDesktop); }
+            get => Model.OpenDirectory.HasFlag(OpenDirectoryMethod.SkipDesktop);
             set
             {
                 if (value) Model.OpenDirectory |= OpenDirectoryMethod.SkipDesktop;
