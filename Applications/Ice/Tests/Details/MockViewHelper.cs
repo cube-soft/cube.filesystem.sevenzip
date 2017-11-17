@@ -213,7 +213,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         protected async Task<bool> Wait(Cube.Forms.IForm view)
         {
-            for (var i = 0; view.Visible && i < 100; ++i) await Task.Delay(50);
+            for (var i = 0; view.Visible && i < 100; ++i) await Task.Delay(50).ConfigureAwait(false);
             return !view.Visible;
         }
 

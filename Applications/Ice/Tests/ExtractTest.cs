@@ -49,7 +49,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
-        public async Task Extract(string filename, string password,
+        public void Extract(string filename, string password,
             IEnumerable<string> args, ExtractSettings extract, string exists, long count)
         {
             var request = new Request(args.Concat(new[] { Example(filename) }));
@@ -66,7 +66,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                 p.View.Show();
 
                 Assert.That(p.View.Visible,       Is.True, "Visible");
-                Assert.That(await Wait(p.View),   Is.True, "Timeout");
+                Assert.That(Wait(p.View).Result,  Is.True, "Timeout");
                 Assert.That(p.View.Elapsed,       Is.GreaterThan(TimeSpan.Zero), "Elapsed");
                 Assert.That(p.View.FileName,      Is.EqualTo(filename), "FileName");
                 Assert.That(p.View.Count,         Is.EqualTo(count), "Count");
@@ -92,7 +92,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public async Task Extract_Rename()
+        public void Extract_Rename()
         {
             var dummy = Example("Sample.txt");
             var src   = Example("Complex.1.0.0.zip");
@@ -105,7 +105,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
             {
                 p.Settings.Value.Extract.RootDirectory = CreateDirectoryMethod.None;
                 p.View.Show();
-                Assert.That(await Wait(p.View), Is.True, "Timeout");
+                Assert.That(Wait(p.View).Result, Is.True, "Timeout");
             }
 
             Assert.That(IO.Exists(Result(@"Overwrite\Foo(2).txt")), Is.True);
@@ -122,7 +122,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public async Task Extract_Cancel()
+        public void Extract_Cancel()
         {
             var src = Example("Complex.zip");
             var dest = Result("UserCancel");
@@ -131,7 +131,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
             {
                 p.View.Show();
                 p.EventHub.GetEvents().Cancel.Publish();
-                Assert.That(await Wait(p.View), Is.True, "Timeout");
+                Assert.That(Wait(p.View).Result, Is.True, "Timeout");
             }
         }
 
@@ -151,7 +151,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public async Task Extract_Suspend()
+        public void Extract_Suspend()
         {
             var src    = Example("Complex.1.0.0.zip");
             var dest   = Result("Suspend");
@@ -163,10 +163,10 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                 p.View.Show();
                 p.EventHub.GetEvents().Suspend.Publish(true);
                 var count = p.View.Value;
-                await Task.Delay(150);
+                Task.Delay(150).Wait();
                 Assert.That(p.View.Value, Is.EqualTo(count).Within(10)); // see remarks
                 p.EventHub.GetEvents().Suspend.Publish(false);
-                Assert.That(await Wait(p.View), Is.True, "Timeout");
+                Assert.That(Wait(p.View).Result, Is.True, "Timeout");
             }
 
             Assert.That(IO.Exists(exists), Is.True, exists);
@@ -182,7 +182,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public async Task Extract_DeleteSource()
+        public void Extract_DeleteSource()
         {
             var src    = Result("Complex.zip");
             var dest   = Result("DeleteSource");
@@ -194,7 +194,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
             {
                 p.Settings.Value.Extract.DeleteSource = true;
                 p.View.Show();
-                Assert.That(await Wait(p.View), Is.True, "Timeout");
+                Assert.That(Wait(p.View).Result, Is.True, "Timeout");
             }
 
             Assert.That(IO.Exists(src), Is.False, src);
@@ -211,7 +211,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public async Task Extract_PasswordCancel()
+        public void Extract_PasswordCancel()
         {
             var src  = Example("Password.7z");
             var dest = Result("PasswordCancel");
@@ -219,7 +219,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
             using (var p = Create(src, dest))
             {
                 p.View.Show();
-                Assert.That(await Wait(p.View), Is.True, "Timeout");
+                Assert.That(Wait(p.View).Result, Is.True, "Timeout");
             }
         }
 
@@ -233,7 +233,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public async Task Extract_ErrorReport()
+        public void Extract_ErrorReport()
         {
             var src  = Example("Sample.txt");
             var dest = Result("ErrorReport");
@@ -242,7 +242,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
             {
                 p.Settings.Value.ErrorReport = true;
                 p.View.Show();
-                Assert.That(await Wait(p.View), Is.True, "Timeout");
+                Assert.That(Wait(p.View).Result, Is.True, "Timeout");
             }
         }
 

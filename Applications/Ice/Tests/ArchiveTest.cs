@@ -49,7 +49,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
-        public async Task Archive(string[] files, IEnumerable<string> args,
+        public void Archive(string[] files, IEnumerable<string> args,
             ArchiveSettings archive, string dest, long count)
         {
             var filename = GetFileName(files.First(), dest);
@@ -65,7 +65,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                 p.View.Show();
 
                 Assert.That(p.View.Visible,       Is.True, "Visible");
-                Assert.That(await Wait(p.View),   Is.True, "Timeout");
+                Assert.That(Wait(p.View).Result,  Is.True, "Timeout");
                 Assert.That(p.Model.Report.Ratio, Is.EqualTo(1.0).Within(0.01), "Ratio");
                 Assert.That(p.View.Elapsed,       Is.GreaterThan(TimeSpan.Zero), "Elapsed");
                 Assert.That(p.View.FileName,      Is.EqualTo(filename), "FileName");
@@ -88,7 +88,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public async Task Archive_Exists()
+        public void Archive_Exists()
         {
             var src    = Example("Sample.txt");
             var exists = Result(@"Exists\Sample.zip");
@@ -105,7 +105,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                 p.Settings.Value.Archive.SaveDirectoryName = Result("Exists");
                 p.View.Show();
 
-                Assert.That(await Wait(p.View), Is.True, "Timeout");
+                Assert.That(Wait(p.View).Result, Is.True, "Timeout");
             }
 
             Assert.That(IO.Exists(dest), Is.True, dest);
@@ -122,7 +122,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public async Task Archive_Overwrite()
+        public void Archive_Overwrite()
         {
             var dir  = Result("Overwrite");
             var src  = Example("Sample.txt");
@@ -138,7 +138,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                 p.Settings.Value.Archive.SaveLocation = SaveLocation.Runtime;
                 p.View.Show();
 
-                Assert.That(await Wait(p.View), Is.True, "Timeout");
+                Assert.That(Wait(p.View).Result, Is.True, "Timeout");
 
                 tmp = p.Model.Tmp;
             }
@@ -158,7 +158,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public async Task Archive_PasswordCancel()
+        public void Archive_PasswordCancel()
         {
             var dir  = Result("PasswordCancel");
             var src  = Example("Sample.txt");
@@ -171,7 +171,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                 p.Settings.Value.Archive.SaveDirectoryName = dir;
                 p.View.Show();
 
-                Assert.That(await Wait(p.View), Is.True, "Timeout");
+                Assert.That(Wait(p.View).Result, Is.True, "Timeout");
             }
 
             Assert.That(IO.Exists(dest), Is.False, dest);
@@ -187,7 +187,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public async Task Archive_MoveFailed()
+        public void Archive_MoveFailed()
         {
             var dir  = Result("MoveFailed");
             var src  = Example("Sample.txt");
@@ -202,7 +202,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
             using (var p = Create(new Request(args)))
             {
                 p.View.Show();
-                Assert.That(await Wait(p.View), Is.True, "Timeout");
+                Assert.That(Wait(p.View).Result, Is.True, "Timeout");
             }
         }
 
