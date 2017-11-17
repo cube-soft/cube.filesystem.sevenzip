@@ -368,7 +368,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     "BZip2Test.bz",
                     "",
                     new[] { "Sample.txt" },
-                    null
+                    new ArchiveOption()
                 ).Returns(Format.BZip2);
 
                 yield return new TestCaseData(
@@ -376,7 +376,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     "GZipTest.gz",
                     "",
                     new[] { "Sample.txt" },
-                    null
+                    new ArchiveOption()
                 ).Returns(Format.GZip);
 
                 yield return new TestCaseData(
@@ -384,7 +384,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     "XzTest.xz",
                     "",
                     new[] { "Sample.txt" },
-                    null
+                    new ArchiveOption()
                 ).Returns(Format.XZ);
 
                 yield return new TestCaseData(

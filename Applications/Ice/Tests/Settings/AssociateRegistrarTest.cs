@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System;
 using System.Collections.Generic;
 using Cube.FileSystem.SevenZip.Ice;
 using NUnit.Framework;
@@ -53,13 +54,41 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
 
         /* --------------------------------------------------------------------- */
         ///
+        /// Update_Throws
+        /// 
+        /// <summary>
+        /// Update 実行時の挙動を確認します。
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// Update では HKEY_CLASSES_ROOT 下のサブキーを修正をしようとする
+        /// ため、通常のアクセス権限では操作に失敗します。
+        /// </remarks>
+        ///
+        /* --------------------------------------------------------------------- */
+        [Test]
+        public void Update_Throws() => Assert.That(() =>
+        {
+            var path      = @"C:\Program Files\CubeICE\cubeice.exe";
+            var settings  = new SettingsFolder();
+            var registrar = new AssociateRegistrar(path)
+            {
+                Arguments    = new List<string> { "/x" },
+                IconLocation = "",
+                ToolTip      = false,
+            };
+            registrar.Update(settings.Value.Associate.Value);
+        }, Throws.TypeOf<UnauthorizedAccessException>());
+
+        /* --------------------------------------------------------------------- */
+        ///
         /// TestCases
         /// 
         /// <summary>
         /// Command のテスト用データを取得します。
         /// </summary>
         ///
-            /* --------------------------------------------------------------------- */
+        /* --------------------------------------------------------------------- */
         private static IEnumerable<TestCaseData> TestCases
         {
             get
