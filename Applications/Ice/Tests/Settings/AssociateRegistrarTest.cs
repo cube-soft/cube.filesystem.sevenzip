@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cube.FileSystem.SevenZip.Ice;
 using NUnit.Framework;
 
@@ -62,23 +63,38 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
         /// 
         /// <remarks>
         /// Update では HKEY_CLASSES_ROOT 下のサブキーを修正をしようとする
-        /// ため、通常のアクセス権限では操作に失敗します。
+        /// ため、通常のアクセス権限では操作に失敗します。管理者権限で
+        /// 実行された場合は、CubeICE が対応する全ての拡張子に対して、
+        /// 関連付けを解除します。
         /// </remarks>
         ///
         /* --------------------------------------------------------------------- */
         [Test]
-        public void Update_Throws() => Assert.That(() =>
+        public void Update_Throws()
         {
-            var path      = @"C:\Program Files\CubeICE\cubeice.exe";
-            var settings  = new SettingsFolder();
-            var registrar = new AssociateRegistrar(path)
+            try
             {
-                Arguments    = new List<string> { "/x" },
-                IconLocation = "",
-                ToolTip      = false,
-            };
-            registrar.Update(settings.Value.Associate.Value);
-        }, Throws.TypeOf<UnauthorizedAccessException>());
+                var path      = @"C:\Program Files\CubeICE\cubeice.exe";
+                var registrar = new AssociateRegistrar(path)
+                {
+                    Arguments = new List<string> { "/x" },
+                    IconLocation = "",
+                    ToolTip = false,
+                };
+
+                var settings = new SettingsFolder();
+                registrar.Update(settings.Value.Associate.Value);
+
+                foreach (var key in settings.Value.Associate.Value.Keys.ToArray())
+                {
+                    settings.Value.Associate.Value[key] = false;
+                }
+                registrar.Update(settings.Value.Associate.Value);
+
+                Assert.Pass("Administrator");
+            }
+            catch (UnauthorizedAccessException err) { Assert.Pass(err.Message); }
+        }
 
         /* --------------------------------------------------------------------- */
         ///
