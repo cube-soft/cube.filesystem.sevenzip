@@ -61,7 +61,7 @@ namespace Cube.FileSystem.SevenZip
             RawName        = GetPath();
             Encrypted      = Get<bool>(ItemPropId.Encrypted);
             IsDirectory    = Get<bool>(ItemPropId.IsDirectory);
-            Attributes     = GetAttributes();
+            Attributes     = (System.IO.FileAttributes)Get<uint>(ItemPropId.Attributes);
             Length         = (long)Get<ulong>(ItemPropId.Size);
             CreationTime   = Get<DateTime>(ItemPropId.CreationTime);
             LastWriteTime  = Get<DateTime>(ItemPropId.LastWriteTime);
@@ -106,7 +106,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public override void Extract(string directory, IProgress<ArchiveReport> progress)
         {
-            if (string.IsNullOrEmpty(FullName)) return;
+            System.Diagnostics.Debug.Assert(!string.IsNullOrEmpty(FullName));
 
             if (IsDirectory)
             {
@@ -194,21 +194,6 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         private bool IsTarExtension(string ext)
             => ext == ".tb2" || (ext.Length == 4 && ext[0] == '.' && ext[1] == 't' && ext[3] == 'z');
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetAttributes
-        ///
-        /// <summary>
-        /// 属性情報を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private System.IO.FileAttributes GetAttributes()
-        {
-            try { return (System.IO.FileAttributes)Get<uint>(ItemPropId.Attributes); }
-            catch (Exception /* err */) { return System.IO.FileAttributes.Normal; }
-        }
 
         /* ----------------------------------------------------------------- */
         ///
