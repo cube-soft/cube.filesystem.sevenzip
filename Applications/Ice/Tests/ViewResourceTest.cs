@@ -99,6 +99,22 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// IsEncryptionSupported
+        /// 
+        /// <summary>
+        /// 暗号化に対応しているかどうかを判別するテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [TestCase(SevenZip.Format.Zip,      ExpectedResult =  true)]
+        [TestCase(SevenZip.Format.SevenZip, ExpectedResult =  true)]
+        [TestCase(SevenZip.Format.Sfx,      ExpectedResult =  true)]
+        [TestCase(SevenZip.Format.Tar,      ExpectedResult = false)]
+        public bool IsEncryptionSupported(Format format)
+            => ViewResource.IsEncryptionSupported(format);
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// GetCompressionMethod
         /// 
         /// <summary>
@@ -116,6 +132,23 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
             Assert.That(ViewResource.GetCompressionMethod(format)?.Count ?? 0, Is.EqualTo(expected));
             Assert.That(ViewResource.GetCompressionMethod(format)?.Count ?? 0, Is.EqualTo(expected));
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetFilterType
+        /// 
+        /// <summary>
+        /// 拡張子フィルタを取得するために必要なファイルの種類を表す
+        /// 文字列を取得するテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [TestCase(SevenZip.Format.Zip,      ExpectedResult = "Zip")]
+        [TestCase(SevenZip.Format.SevenZip, ExpectedResult = "SevenZip")]
+        [TestCase(SevenZip.Format.Sfx,      ExpectedResult = "Sfx")]
+        [TestCase(SevenZip.Format.Tar,      ExpectedResult = "GZip")]
+        public string GetFilterType(Format format)
+            => ViewResource.GetFilterType(format, CompressionMethod.GZip);
 
         /* ----------------------------------------------------------------- */
         ///
