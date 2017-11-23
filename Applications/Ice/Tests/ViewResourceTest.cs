@@ -159,6 +159,21 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
             Assert.That(result.Contains("*.7Z"), Is.True);
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetFilter_NotSupported
+        /// 
+        /// <summary>
+        /// 圧縮処理に非対応の形式が指定された時の挙動を確認します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void GetFilter_NotSupported() => Assert.That(
+            ViewResource.GetFilter(SevenZip.Format.Rar),
+            Is.EqualTo("すべてのファイル (*.*)|*.*")
+        );
+
         #endregion
     }
 }
