@@ -78,7 +78,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         private void WhenDestinationRequested(object sender, QueryEventArgs<string, string> e)
-            => ShowDialog(() => Views.ShowSaveView(e, true));
+            => ShowDialog(() => Views.ShowSaveView(e, null));
 
         /* ----------------------------------------------------------------- */
         ///

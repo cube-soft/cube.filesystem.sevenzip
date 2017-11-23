@@ -56,15 +56,18 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         /// 
         /// <param name="e">パスを保持するオブジェクト</param>
-        /// <param name="directory">
-        /// ディレクトリ用画面を使用するかどうかを示す値
-        /// </param>
+        /// <param name="filename">ファイル名の初期設定</param>
+        /// 
+        /// <remarks>
+        /// filename が null または空文字の場合はディレクトリ選択用
+        /// ダイアログが表示されます。
+        /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public virtual void ShowSaveView(QueryEventArgs<string, string> e, bool directory)
+        public virtual void ShowSaveView(QueryEventArgs<string, string> e, string filename)
         {
-            if (directory) ShowSaveDirectoryView(e);
-            else ShowSaveFileView(e);
+            if (string.IsNullOrEmpty(filename)) ShowSaveDirectoryView(e);
+            else ShowSaveFileView(e, filename);
         }
 
         /* ----------------------------------------------------------------- */
@@ -208,13 +211,15 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         /// 
         /// <param name="e">パスを保持するオブジェクト</param>
+        /// <param name="filename">ファイル名の初期設定</param>
         ///
         /* ----------------------------------------------------------------- */
-        private void ShowSaveFileView(QueryEventArgs<string, string> e)
+        private void ShowSaveFileView(QueryEventArgs<string, string> e, string filename)
         {
             var view = new SaveFileDialog
             {
                 AddExtension    = true,
+                FileName        = System.IO.Path.GetFileNameWithoutExtension(filename),
                 Filter          = ViewResource.GetFilter(e.Query),
                 OverwritePrompt = true,
             };
@@ -350,13 +355,16 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         /// 
         /// <param name="e">パスを保持するオブジェクト</param>
-        /// <param name="directory">
-        /// ディレクトリ用画面を使用するかどうかを示す値
-        /// </param>
+        /// <param name="filename">ファイル名の初期設定</param>
+        /// 
+        /// <remarks>
+        /// filename が null または空文字の場合はディレクトリ選択用
+        /// ダイアログが表示されます。
+        /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public static void ShowSaveView(QueryEventArgs<string, string> e, bool directory)
-            => _factory.ShowSaveView(e, directory);
+        public static void ShowSaveView(QueryEventArgs<string, string> e, string filename)
+            => _factory.ShowSaveView(e, filename);
 
         /* ----------------------------------------------------------------- */
         ///

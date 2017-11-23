@@ -129,12 +129,10 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// </summary>
         /// 
         /// <param name="e">パスを保持するオブジェクト</param>
-        /// <param name="directory">
-        /// ディレクトリ用画面を使用するかどうかを示す値
-        /// </param>
+        /// <param name="filename">ファイル名の初期設定</param>
         ///
         /* ----------------------------------------------------------------- */
-        public override void ShowSaveView(QueryEventArgs<string, string> e, bool directory)
+        public override void ShowSaveView(QueryEventArgs<string, string> e, string filename)
         {
             e.Cancel = string.IsNullOrEmpty(Settings.Destination);
             e.Result = Settings.Destination;

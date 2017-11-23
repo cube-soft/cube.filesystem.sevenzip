@@ -16,6 +16,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Linq;
 using Cube.FileSystem.SevenZip.Ice;
 
 namespace Cube.FileSystem.SevenZip.App.Ice
@@ -90,7 +91,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         private void WhenDestinationRequested(object sender, QueryEventArgs<string, string> e)
-            => ShowDialog(() => Views.ShowSaveView(e, false));
+            => ShowDialog(() => Views.ShowSaveView(e, Model.Request.Sources.First()));
 
         /* ----------------------------------------------------------------- */
         ///

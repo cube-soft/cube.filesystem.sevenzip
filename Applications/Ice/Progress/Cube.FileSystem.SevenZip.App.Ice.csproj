@@ -114,7 +114,6 @@
     <Compile Include="Models\OverwriteEventArgs.cs" />
     <Compile Include="Models\Request.cs" />
     <Compile Include="Models\SuspendableProgress.cs" />
-    <Compile Include="Models\ViewResource.cs" />
     <Compile Include="NativeMethods\Mapi32.cs" />
     <Compile Include="Presenters\ArchiveFacade.cs" />
     <Compile Include="Presenters\ArchivePresenter.cs" />
@@ -125,6 +124,7 @@
     <Compile Include="Views\IProgressView.cs" />
     <Compile Include="Views\MailForm.cs" />
     <Compile Include="Views\ViewFactory.cs" />
+    <Compile Include="Views\ViewResource.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
