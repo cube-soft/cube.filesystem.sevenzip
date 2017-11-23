@@ -61,7 +61,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             Model.DestinationRequested += WhenDestinationRequested;
             Model.PasswordRequested    += WhenPasswordRequested;
             Model.OverwriteRequested   += WhenOverwriteRequested;
-            Model.Progress            += WhenProgress;
+            Model.Progress             += WhenProgress;
         }
 
         #endregion

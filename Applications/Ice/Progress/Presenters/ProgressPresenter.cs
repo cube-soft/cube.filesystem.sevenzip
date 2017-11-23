@@ -61,7 +61,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             EventHub.GetEvents().Cancel.Subscribe(() => Model.Cancel());
             EventHub.GetEvents().Suspend.Subscribe(WhenSuspend);
 
-            Model.MessageReceived       += WhenMessageReceived;
+            Model.MessageReceived        += WhenMessageReceived;
             Model.OpenDirectoryRequested += WhenOpenDirectoryRequested;
         }
 

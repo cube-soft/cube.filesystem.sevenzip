@@ -101,8 +101,11 @@ namespace Cube.FileSystem.SevenZip.Tests
             {
                 var path = IO.Combine(dest, kv.Key);
                 var info = IO.Get(path);
-                Assert.That(info.Exists, Is.True, kv.Key);
-                Assert.That(info.Length, Is.EqualTo(kv.Value), kv.Key);
+                Assert.That(info.Exists,         Is.True, kv.Key);
+                Assert.That(info.Length,         Is.EqualTo(kv.Value), kv.Key);
+                Assert.That(info.CreationTime,   Is.Not.EqualTo(DateTime.MinValue), kv.Key);
+                Assert.That(info.LastWriteTime,  Is.Not.EqualTo(DateTime.MinValue), kv.Key);
+                Assert.That(info.LastAccessTime, Is.Not.EqualTo(DateTime.MinValue), kv.Key);
             }
         }
 
@@ -189,21 +192,6 @@ namespace Cube.FileSystem.SevenZip.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract_NotSupported
-        ///
-        /// <summary>
-        /// 未対応のファイルが指定された時の挙動を確認します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        [Test]
-        public void Extract_NotSupported() => Assert.That(
-            () => new ArchiveReader(Example("Sample.txt")),
-            Throws.TypeOf<NotSupportedException>()
-        );
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// Extract_Filter
         ///
         /// <summary>
@@ -231,6 +219,21 @@ namespace Cube.FileSystem.SevenZip.Tests
             Assert.That(IO.Exists(IO.Combine(dest, @"フィルタリング テスト用\__MACOSX")),     Is.False);
             Assert.That(IO.Exists(IO.Combine(dest, @"フィルタリング テスト用\フィルタリングされないファイル.txt")), Is.True);
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract_NotSupported
+        ///
+        /// <summary>
+        /// 未対応のファイルが指定された時の挙動を確認します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Extract_NotSupported() => Assert.That(
+            () => new ArchiveReader(Example("Sample.txt")),
+            Throws.TypeOf<NotSupportedException>()
+        );
 
         /* ----------------------------------------------------------------- */
         ///
