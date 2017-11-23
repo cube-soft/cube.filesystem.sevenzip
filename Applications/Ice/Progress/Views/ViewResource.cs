@@ -156,6 +156,24 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// IsEncryptionSupported
+        /// 
+        /// <summary>
+        /// 暗号化に対応しているかどうかを判別します。
+        /// </summary>
+        /// 
+        /// <param name="format">圧縮ファイル形式</param>
+        /// 
+        /// <returns>暗号化に対応しているかどうか</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static bool IsEncryptionSupported(Format format)
+            => format == SevenZip.Format.Zip ||
+               format == SevenZip.Format.SevenZip ||
+               format == SevenZip.Format.Sfx;
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// GetCompressionMethod
         /// 
         /// <summary>
@@ -172,6 +190,25 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         public static IList<KeyValuePair<string, CompressionMethod>> GetCompressionMethod(Format format)
             => CompressionMethods.ContainsKey(format) ? CompressionMethods[format] : null;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetFilterType
+        /// 
+        /// <summary>
+        /// ファイルの種類を表す文字列を取得します。
+        /// </summary>
+        /// 
+        /// <param name="format">圧縮ファイル形式</param>
+        /// <param name="method">圧縮メソッド</param>
+        /// 
+        /// <returns>ファイルの種類を表す文字列</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static string GetFilterType(Format format, CompressionMethod method)
+            => format != SevenZip.Format.Tar ?
+               format.ToString() :
+               method.ToString();
 
         /* ----------------------------------------------------------------- */
         ///

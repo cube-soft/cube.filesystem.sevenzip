@@ -32,7 +32,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class ArchiveDetailsForm : Form
+    public partial class ArchiveForm : Form
     {
         #region Constructors
 
@@ -45,7 +45,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveDetailsForm()
+        public ArchiveForm()
         {
             InitializeComponent();
 
@@ -327,18 +327,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         private void WhenPathRequested(object sender, EventArgs e)
         {
-            var dialog = new SaveFileDialog
-            {
-                AddExtension                 = true,
-                InitialDirectory             = System.IO.Path.GetDirectoryName(Path),
-                FileName                     = System.IO.Path.GetFileName(Path),
-                Filter                       = Properties.Resources.FilterAll,
-                OverwritePrompt              = true,
-                SupportMultiDottedExtensions = true,
-            };
+            var type = ViewResource.GetFilterType(Format, CompressionMethod);
+            var args = new QueryEventArgs<string, string>(type);
 
-            if (dialog.ShowDialog() == DialogResult.Cancel) return;
-            Path = dialog.FileName;
+            Views.ShowSaveView(args, Path);
+            if (!args.Cancel) Path = args.Result;
         }
 
         /* ----------------------------------------------------------------- */
@@ -366,9 +359,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         {
             UpdateCompressionMethod();
             EncryptionMethodComboBox.Enabled &= (Format == Format.Zip);
-            EncryptionGroupBox.Enabled = Format == Format.Zip ||
-                                         Format == Format.SevenZip ||
-                                         Format == Format.Sfx;
+            EncryptionGroupBox.Enabled = ViewResource.IsEncryptionSupported(Format);
         }
 
         /* ----------------------------------------------------------------- */

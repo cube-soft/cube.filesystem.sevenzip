@@ -123,7 +123,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         public virtual void ShowArchiveView(QueryEventArgs<string, ArchiveDetails> e)
         {
-            using (var view = new ArchiveDetailsForm { Path = e.Query })
+            using (var view = new ArchiveForm { Path = e.Query })
             {
                 e.Cancel = view.ShowDialog() == DialogResult.Cancel;
                 if (e.Cancel) return;
@@ -218,10 +218,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         {
             var view = new SaveFileDialog
             {
-                AddExtension    = true,
-                FileName        = System.IO.Path.GetFileNameWithoutExtension(filename),
-                Filter          = ViewResource.GetFilter(e.Query),
+                AddExtension = true,
+                FileName = System.IO.Path.GetFileNameWithoutExtension(filename),
+                Filter = ViewResource.GetFilter(e.Query),
                 OverwritePrompt = true,
+                SupportMultiDottedExtensions = true,
             };
 
             e.Cancel = view.ShowDialog() == DialogResult.Cancel;
@@ -243,7 +244,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         {
             var view = new FolderBrowserDialog
             {
-                Description  = Properties.Resources.MessageExtractDestination,
+                Description = Properties.Resources.MessageExtractDestination,
                 SelectedPath = e.Query,
             };
 
