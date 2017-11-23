@@ -216,14 +216,14 @@ namespace Cube.FileSystem.SevenZip
                         ResetPassword();
                         throw new EncryptionException();
                     }
-                    else throw new System.IO.IOException($"{result}");
+                    else throw new System.IO.IOException($"{FullName} ({result})");
                 case OperationResult.WrongPassword:
                     ResetPassword();
                     throw new EncryptionException();
                 case OperationResult.UserCancel:
                     throw new OperationCanceledException();
                 default:
-                    throw new System.IO.IOException($"{result}");
+                    throw new System.IO.IOException($"{FullName} ({result})");
             }
         }
 
