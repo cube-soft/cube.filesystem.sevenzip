@@ -35,7 +35,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Format
+        /// Formats
         /// 
         /// <summary>
         /// Format で指定可能な種類を確認します。
@@ -43,10 +43,10 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// 
         /* ----------------------------------------------------------------- */
         [TestCase(4)]
-        public void Format(int expected)
+        public void Formats(int expected)
         {
-            Assert.That(ViewResource.Format.Count, Is.EqualTo(expected));
-            Assert.That(ViewResource.Format.Count, Is.EqualTo(expected));
+            Assert.That(ViewResource.Formats.Count, Is.EqualTo(expected));
+            Assert.That(ViewResource.Formats.Count, Is.EqualTo(expected));
         }
 
         /* ----------------------------------------------------------------- */
@@ -61,8 +61,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         [TestCase(6)]
         public void CompressionLevel(int expected)
         {
-            Assert.That(ViewResource.CompressionLevel.Count, Is.EqualTo(expected));
-            Assert.That(ViewResource.CompressionLevel.Count, Is.EqualTo(expected));
+            Assert.That(ViewResource.CompressionLevels.Count, Is.EqualTo(expected));
+            Assert.That(ViewResource.CompressionLevels.Count, Is.EqualTo(expected));
         }
 
         /* ----------------------------------------------------------------- */
@@ -93,8 +93,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         [TestCase(4)]
         public void EncryptionMethod(int expected)
         {
-            Assert.That(ViewResource.EncryptionMethod.Count, Is.EqualTo(expected));
-            Assert.That(ViewResource.EncryptionMethod.Count, Is.EqualTo(expected));
+            Assert.That(ViewResource.EncryptionMethods.Count, Is.EqualTo(expected));
+            Assert.That(ViewResource.EncryptionMethods.Count, Is.EqualTo(expected));
         }
 
         /* ----------------------------------------------------------------- */
@@ -106,10 +106,10 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [TestCase(SevenZip.Format.Zip,      ExpectedResult =  true)]
-        [TestCase(SevenZip.Format.SevenZip, ExpectedResult =  true)]
-        [TestCase(SevenZip.Format.Sfx,      ExpectedResult =  true)]
-        [TestCase(SevenZip.Format.Tar,      ExpectedResult = false)]
+        [TestCase(Format.Zip,      ExpectedResult =  true)]
+        [TestCase(Format.SevenZip, ExpectedResult =  true)]
+        [TestCase(Format.Sfx,      ExpectedResult =  true)]
+        [TestCase(Format.Tar,      ExpectedResult = false)]
         public bool IsEncryptionSupported(Format format)
             => ViewResource.IsEncryptionSupported(format);
 
@@ -122,11 +122,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [TestCase(SevenZip.Format.Zip,      6)]
-        [TestCase(SevenZip.Format.SevenZip, 6)]
-        [TestCase(SevenZip.Format.Tar,      4)]
-        [TestCase(SevenZip.Format.Sfx,      6)]
-        [TestCase(SevenZip.Format.BZip2,    0)]
+        [TestCase(Format.Zip,      6)]
+        [TestCase(Format.SevenZip, 6)]
+        [TestCase(Format.Tar,      4)]
+        [TestCase(Format.Sfx,      6)]
+        [TestCase(Format.BZip2,    0)]
         public void GetCompressionMethod(Format format, int expected)
         {
             Assert.That(ViewResource.GetCompressionMethod(format)?.Count ?? 0, Is.EqualTo(expected));
@@ -135,20 +135,42 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetFilterType
+        /// GetFormat
         /// 
         /// <summary>
-        /// 拡張子フィルタを取得するために必要なファイルの種類を表す
-        /// 文字列を取得するテストを実行します。
+        /// 拡張子フィルタを取得するために必要なファイルの種類を
+        /// 取得するテストを実行します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [TestCase(SevenZip.Format.Zip,      ExpectedResult = "Zip")]
-        [TestCase(SevenZip.Format.SevenZip, ExpectedResult = "SevenZip")]
-        [TestCase(SevenZip.Format.Sfx,      ExpectedResult = "Sfx")]
-        [TestCase(SevenZip.Format.Tar,      ExpectedResult = "GZip")]
-        public string GetFilterType(Format format)
-            => ViewResource.GetFilterType(format, CompressionMethod.GZip);
+        [TestCase(Format.Zip,      CompressionMethod.Default, ExpectedResult = Format.Zip)]
+        [TestCase(Format.SevenZip, CompressionMethod.Default, ExpectedResult = Format.SevenZip)]
+        [TestCase(Format.Sfx,      CompressionMethod.Default, ExpectedResult = Format.Sfx)]
+        [TestCase(Format.Tar,      CompressionMethod.Copy,    ExpectedResult = Format.Tar)]
+        [TestCase(Format.Tar,      CompressionMethod.BZip2,   ExpectedResult = Format.BZip2)]
+        [TestCase(Format.Tar,      CompressionMethod.GZip,    ExpectedResult = Format.GZip)]
+        [TestCase(Format.Tar,      CompressionMethod.XZ,      ExpectedResult = Format.XZ)]
+        public Format GetFormat(Format format, CompressionMethod method)
+            => ViewResource.GetFormat(format, method);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetExtension
+        /// 
+        /// <summary>
+        /// ファイルの種類に対応する拡張子を取得するテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [TestCase(Format.Zip,      ExpectedResult = ".zip")]
+        [TestCase(Format.SevenZip, ExpectedResult = ".7z")]
+        [TestCase(Format.Sfx,      ExpectedResult = ".exe")]
+        [TestCase(Format.Tar,      ExpectedResult = ".tar")]
+        [TestCase(Format.BZip2,    ExpectedResult = ".tar.bz2")]
+        [TestCase(Format.GZip,     ExpectedResult = ".tar.gz")]
+        [TestCase(Format.XZ,       ExpectedResult = ".tar.xz")]
+        public string GetExtension(Format format)
+            => ViewResource.GetExtension(format);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -159,13 +181,13 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        [TestCase(SevenZip.Format.Zip,      "*.zip")]
-        [TestCase(SevenZip.Format.SevenZip, "*.7z")]
-        [TestCase(SevenZip.Format.Tar,      "*.tar")]
-        [TestCase(SevenZip.Format.GZip,     "*.tar.gz;*.tgz")]
-        [TestCase(SevenZip.Format.BZip2,    "*.tar.bz2;*.tb2;*.tar.bz;*.tbz")]
-        [TestCase(SevenZip.Format.XZ,       "*.tar.xz;*.txz")]
-        [TestCase(SevenZip.Format.Sfx,      "*.exe")]
+        [TestCase(Format.Zip,      "*.zip")]
+        [TestCase(Format.SevenZip, "*.7z")]
+        [TestCase(Format.Tar,      "*.tar")]
+        [TestCase(Format.GZip,     "*.tar.gz;*.tgz")]
+        [TestCase(Format.BZip2,    "*.tar.bz2;*.tb2;*.tar.bz;*.tbz")]
+        [TestCase(Format.XZ,       "*.tar.xz;*.txz")]
+        [TestCase(Format.Sfx,      "*.exe")]
         public void GetFilter(Format format, string piece)
         {
             var result = ViewResource.GetFilter(format);
@@ -203,7 +225,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         [Test]
         public void GetFilter_NotSupported() => Assert.That(
-            ViewResource.GetFilter(SevenZip.Format.Rar),
+            ViewResource.GetFilter(Format.Rar),
             Is.EqualTo("すべてのファイル (*.*)|*.*")
         );
 

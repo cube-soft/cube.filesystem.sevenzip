@@ -34,25 +34,25 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Format
+        /// Formats
         /// 
         /// <summary>
         /// 表示文字列と Format オブジェクトの対応関係を取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public static IList<KeyValuePair<string, Format>> Format
-            => _format = _format ?? new List<KeyValuePair<string, Format>>
+        public static IList<KeyValuePair<string, Format>> Formats
+            => _formats = _formats ?? new List<KeyValuePair<string, Format>>
         {
-            Pair("Zip",                          SevenZip.Format.Zip),
-            Pair("7z",                           SevenZip.Format.SevenZip),
-            Pair("Tar",                          SevenZip.Format.Tar),
-            Pair(Properties.Resources.FormatSfx, SevenZip.Format.Sfx),
+            Pair("Zip",                          Format.Zip),
+            Pair("7z",                           Format.SevenZip),
+            Pair("Tar",                          Format.Tar),
+            Pair(Properties.Resources.FormatSfx, Format.Sfx),
         };
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CompressionLevel
+        /// CompressionLevels
         /// 
         /// <summary>
         /// 表示文字列と CompressionLevel オブジェクトの対応関係を
@@ -60,16 +60,16 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public static IList<KeyValuePair<string, CompressionLevel>> CompressionLevel
-            => _compressionLevel = _compressionLevel ??
+        public static IList<KeyValuePair<string, CompressionLevel>> CompressionLevels
+            => _compressionLevels = _compressionLevels ??
             new List<KeyValuePair<string, CompressionLevel>>
         {
-            Pair(Properties.Resources.LevelNone,   SevenZip.CompressionLevel.None),
-            Pair(Properties.Resources.LevelFast,   SevenZip.CompressionLevel.Fast),
-            Pair(Properties.Resources.LevelLow,    SevenZip.CompressionLevel.Low),
-            Pair(Properties.Resources.LevelNormal, SevenZip.CompressionLevel.Normal),
-            Pair(Properties.Resources.LevelHigh,   SevenZip.CompressionLevel.High),
-            Pair(Properties.Resources.LevelUltra,  SevenZip.CompressionLevel.Ultra)
+            Pair(Properties.Resources.LevelNone,   CompressionLevel.None),
+            Pair(Properties.Resources.LevelFast,   CompressionLevel.Fast),
+            Pair(Properties.Resources.LevelLow,    CompressionLevel.Low),
+            Pair(Properties.Resources.LevelNormal, CompressionLevel.Normal),
+            Pair(Properties.Resources.LevelHigh,   CompressionLevel.High),
+            Pair(Properties.Resources.LevelUltra,  CompressionLevel.Ultra)
         };
 
         /* ----------------------------------------------------------------- */
@@ -132,7 +132,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// EncryptionMethod
+        /// EncryptionMethods
         /// 
         /// <summary>
         /// 表示文字列と EncryptionMethod オブジェクトの対応関係を
@@ -140,14 +140,14 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public static IList<KeyValuePair<string, EncryptionMethod>> EncryptionMethod
-            => _encryptionMethod = _encryptionMethod ??
+        public static IList<KeyValuePair<string, EncryptionMethod>> EncryptionMethods
+            => _encryptionMethods = _encryptionMethods ??
             new List<KeyValuePair<string, EncryptionMethod>>
         {
-            Pair("ZipCrypto", SevenZip.EncryptionMethod.ZipCrypto),
-            Pair("AES128",    SevenZip.EncryptionMethod.Aes128),
-            Pair("AES192",    SevenZip.EncryptionMethod.Aes192),
-            Pair("AES256",    SevenZip.EncryptionMethod.Aes256),
+            Pair("ZipCrypto", EncryptionMethod.ZipCrypto),
+            Pair("AES128",    EncryptionMethod.Aes128),
+            Pair("AES192",    EncryptionMethod.Aes192),
+            Pair("AES256",    EncryptionMethod.Aes256),
         };
 
         #endregion
@@ -168,9 +168,9 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         public static bool IsEncryptionSupported(Format format)
-            => format == SevenZip.Format.Zip ||
-               format == SevenZip.Format.SevenZip ||
-               format == SevenZip.Format.Sfx;
+            => format == Format.Zip ||
+               format == Format.SevenZip ||
+               format == Format.Sfx;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -193,22 +193,56 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetFilterType
+        /// GetFormat
         /// 
         /// <summary>
-        /// ファイルの種類を表す文字列を取得します。
+        /// 拡張子フィルタを取得するために必要な Format オブジェクトを
+        /// 取得します。
         /// </summary>
         /// 
         /// <param name="format">圧縮ファイル形式</param>
         /// <param name="method">圧縮メソッド</param>
         /// 
-        /// <returns>ファイルの種類を表す文字列</returns>
+        /// <returns>圧縮ファイル形式</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static string GetFilterType(Format format, CompressionMethod method)
-            => format != SevenZip.Format.Tar ?
-               format.ToString() :
-               method.ToString();
+        public static Format GetFormat(Format format, CompressionMethod method)
+        {
+            if (format == Format.Tar)
+            {
+                switch (method)
+                {
+                    case CompressionMethod.BZip2: return Format.BZip2;
+                    case CompressionMethod.GZip:  return Format.GZip;
+                    case CompressionMethod.XZ:    return Format.XZ;
+                }
+            }
+            return format;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetExtension
+        /// 
+        /// <summary>
+        /// 圧縮ファイル形式に対応する拡張子を取得します。
+        /// </summary>
+        /// 
+        /// <param name="format">圧縮ファイル形式</param>
+        /// 
+        /// <returns>拡張子</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static string GetExtension(Format format)
+        {
+            switch (format)
+            {
+                case Format.BZip2: return ".tar.bz2";
+                case Format.GZip:  return ".tar.gz";
+                case Format.XZ:    return ".tar.xz";
+            }
+            return format.ToExtension();
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -273,9 +307,9 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             => new KeyValuePair<K, V>(key, value);
 
         #region Fields
-        private static IList<KeyValuePair<string, Format>> _format;
-        private static IList<KeyValuePair<string, EncryptionMethod>> _encryptionMethod;
-        private static IList<KeyValuePair<string, CompressionLevel>> _compressionLevel;
+        private static IList<KeyValuePair<string, Format>> _formats;
+        private static IList<KeyValuePair<string, EncryptionMethod>> _encryptionMethods;
+        private static IList<KeyValuePair<string, CompressionLevel>> _compressionLevels;
         private static IDictionary<Format, IList<KeyValuePair<string, CompressionMethod>>> _compressionMethods;
         #endregion
 

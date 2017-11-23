@@ -229,7 +229,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         private void UpdateFormat()
         {
-            Update(FormatComboBox, ViewResource.Format);
+            Update(FormatComboBox, ViewResource.Formats);
             if (!FormatComboBox.Enabled) return;
             FormatComboBox.SelectedValue = Format.Zip;
         }
@@ -245,7 +245,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         private void UpdateCompressionLevel()
         {
-            Update(CompressionLevelComboBox, ViewResource.CompressionLevel);
+            Update(CompressionLevelComboBox, ViewResource.CompressionLevels);
             if (!CompressionLevelComboBox.Enabled) return;
             CompressionLevelComboBox.SelectedValue = CompressionLevel.Ultra;
         }
@@ -277,7 +277,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         private void UpdateEncryptionMethod()
         {
-            Update(EncryptionMethodComboBox, ViewResource.EncryptionMethod);
+            Update(EncryptionMethodComboBox, ViewResource.EncryptionMethods);
             if (!EncryptionMethodComboBox.Enabled) return;
             EncryptionMethodComboBox.SelectedIndex = 0;
         }
@@ -327,8 +327,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         private void WhenPathRequested(object sender, EventArgs e)
         {
-            var type = ViewResource.GetFilterType(Format, CompressionMethod);
-            var args = new QueryEventArgs<string, string>(type);
+            var format = ViewResource.GetFormat(Format, CompressionMethod);
+            var args   = new QueryEventArgs<string, string>(format.ToString());
 
             Views.ShowSaveView(args, Path);
             if (!args.Cancel) Path = args.Result;
