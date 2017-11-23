@@ -173,6 +173,52 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         public static IList<KeyValuePair<string, CompressionMethod>> GetCompressionMethod(Format format)
             => CompressionMethods.ContainsKey(format) ? CompressionMethods[format] : null;
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetFilter
+        /// 
+        /// <summary>
+        /// 圧縮ファイル形式に対応する拡張子フィルタを取得します。
+        /// </summary>
+        /// 
+        /// <param name="format">圧縮ファイル形式</param>
+        /// 
+        /// <returns>拡張子フィルタ</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static string GetFilter(Format format) => GetFilter(format.ToString());
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetFilter
+        /// 
+        /// <summary>
+        /// 圧縮ファイル形式に対応する拡張子フィルタを取得します。
+        /// </summary>
+        /// 
+        /// <param name="format">圧縮ファイル形式</param>
+        /// 
+        /// <returns>拡張子フィルタ</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static string GetFilter(string format)
+        {
+            var cvt  = format.ToLower();
+            var dest = cvt == "zip"      ? Properties.Resources.FilterZip :
+                       cvt == "7z"       ? Properties.Resources.FilterSevenZip :
+                       cvt == "sevenzip" ? Properties.Resources.FilterSevenZip :
+                       cvt == "tar"      ? Properties.Resources.FilterTar :
+                       cvt == "gzip"     ? Properties.Resources.FilterGzip :
+                       cvt == "bzip2"    ? Properties.Resources.FilterBzip2 :
+                       cvt == "xz"       ? Properties.Resources.FilterXZ :
+                       cvt == "sfx"      ? Properties.Resources.FilterSfx :
+                       string.Empty;
+
+            return !string.IsNullOrEmpty(dest) ?
+                   $"{dest}|{Properties.Resources.FilterAll}" :
+                   Properties.Resources.FilterAll;
+        }
+
         #endregion
 
         #region Implementations

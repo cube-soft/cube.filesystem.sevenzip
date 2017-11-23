@@ -215,7 +215,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             var view = new SaveFileDialog
             {
                 AddExtension    = true,
-                Filter          = GetFilter(e.Query),
+                Filter          = ViewResource.GetFilter(e.Query),
                 OverwritePrompt = true,
             };
 
@@ -238,7 +238,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         {
             var view = new FolderBrowserDialog
             {
-                Description = Properties.Resources.MessageExtractDestination,
+                Description  = Properties.Resources.MessageExtractDestination,
                 SelectedPath = e.Query,
             };
 
@@ -286,30 +286,6 @@ namespace Cube.FileSystem.SevenZip.App.Ice
                 e.Cancel = view.ShowDialog() == DialogResult.Cancel;
                 if (!e.Cancel) e.Result = view.Password;
             }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetFilter
-        /// 
-        /// <summary>
-        /// フィルターを表す文字列を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private string GetFilter(string format)
-        {
-            var cvt  = format.ToLower();
-            var dest = cvt == "zip"   ? Properties.Resources.FilterZip      :
-                       cvt == "7z"    ? Properties.Resources.FilterSevenZip :
-                       cvt == "tar"   ? Properties.Resources.FilterTar      :
-                       cvt == "gzip"  ? Properties.Resources.FilterGzip     :
-                       cvt == "bzip2" ? Properties.Resources.FilterBzip2    :
-                       cvt == "xz"    ? Properties.Resources.FilterXZ       : string.Empty;
-
-            return !string.IsNullOrEmpty(dest) ?
-                   $"{dest}|{Properties.Resources.FilterAll}" :
-                   Properties.Resources.FilterAll;
         }
 
         #endregion

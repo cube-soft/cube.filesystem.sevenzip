@@ -31,6 +31,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
     [TestFixture]
     class ViewResourceTest
     {
+        #region Tests
+
         /* ----------------------------------------------------------------- */
         ///
         /// Format
@@ -114,5 +116,49 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
             Assert.That(ViewResource.GetCompressionMethod(format)?.Count ?? 0, Is.EqualTo(expected));
             Assert.That(ViewResource.GetCompressionMethod(format)?.Count ?? 0, Is.EqualTo(expected));
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetFilter
+        /// 
+        /// <summary>
+        /// Format に対応する 拡張子フィルタを取得するテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [TestCase(SevenZip.Format.Zip,      "*.zip")]
+        [TestCase(SevenZip.Format.SevenZip, "*.7z")]
+        [TestCase(SevenZip.Format.Tar,      "*.tar")]
+        [TestCase(SevenZip.Format.GZip,     "*.tar.gz;*.tgz")]
+        [TestCase(SevenZip.Format.BZip2,    "*.tar.bz2;*.tb2;*.tar.bz;*.tbz")]
+        [TestCase(SevenZip.Format.XZ,       "*.tar.xz;*.txz")]
+        [TestCase(SevenZip.Format.Sfx,      "*.exe")]
+        public void GetFilter(Format format, string piece)
+        {
+            var result = ViewResource.GetFilter(format);
+            Assert.That(result.Contains("*.*"),           Is.True);
+            Assert.That(result.Contains(piece),           Is.True);
+            Assert.That(result.Contains(piece.ToUpper()), Is.True);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetFilter_7z
+        /// 
+        /// <summary>
+        /// 7z に対応する 拡張子フィルタを取得するテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void GetFilter_7z()
+        {
+            var result = ViewResource.GetFilter("7z");
+            Assert.That(result.Contains("*.*"),  Is.True);
+            Assert.That(result.Contains("*.7z"), Is.True);
+            Assert.That(result.Contains("*.7Z"), Is.True);
+        }
+
+        #endregion
     }
 }

@@ -19,7 +19,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Properties {
     // または Visual Studio のようなツールを使用して自動生成されました。
     // メンバーを追加または削除するには、.ResX ファイルを編集して、/str オプションと共に
     // ResGen を実行し直すか、または VS プロジェクトをビルドし直します。
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -140,7 +140,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Properties {
         }
         
         /// <summary>
-        ///   BZip2 ファイル (*.bz, *.bz2)|*.bz;*.BZ;*.bz2;*.BZ2;*.tbz;*.TBZ に類似しているローカライズされた文字列を検索します。
+        ///   Tar.BZip2 ファイル (*.tar.bz2, *.tb2, *.tar.bz, *.tbz)|*.tar.bz2;*.tb2;*.tar.bz;*.tbz;*.TAR.BZ2;*.TB2;*.TAR.BZ;*.TBZ に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string FilterBzip2 {
             get {
@@ -149,7 +149,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Properties {
         }
         
         /// <summary>
-        ///   GZip ファイル (*.gz)|*.gz;*.GZ;*.tgz;*.TGZ に類似しているローカライズされた文字列を検索します。
+        ///   Tar.GZip ファイル (*.tar.gz, *.tgz)|*.tar.gz;*.tgz;*.TAR.GZ;*.TGZ に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string FilterGzip {
             get {
@@ -167,7 +167,16 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Properties {
         }
         
         /// <summary>
-        ///   Tar ファイル (*.tar)|*.tar;*.TAR;*.tar.gz;*.TAR.GZ;*.tar.bz;*.TAR.BZ;*.tar.bz2;*.TAR.BZ2;*.tar.xz;*.TAR.XZ;*.tgz;*.TGZ;*.tbz;*.TBZ;*.txz;*.TXZ に類似しているローカライズされた文字列を検索します。
+        ///   自己解凍形式ファイル (*.exe)|*.exe;*.EXE に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string FilterSfx {
+            get {
+                return ResourceManager.GetString("FilterSfx", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Tar ファイル (*.tar)|*.tar;*.TAR に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string FilterTar {
             get {
@@ -176,7 +185,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Properties {
         }
         
         /// <summary>
-        ///   XZ ファイル (*.xz)|*.xz;*.XZ;*.txz;*.TXZ に類似しているローカライズされた文字列を検索します。
+        ///   Tar.XZ ファイル (*.tar.xz, *.txz)|*.tar.xz;*.txz;*.TAR.XZ;*.TXZ に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string FilterXZ {
             get {
