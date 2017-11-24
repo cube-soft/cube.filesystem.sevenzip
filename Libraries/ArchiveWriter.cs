@@ -353,9 +353,10 @@ namespace Cube.FileSystem.SevenZip
             finally
             {
                 var result = cb.Result;
+                var err    = cb.Exception;
                 stream.Dispose();
                 cb.Dispose();
-                ThrowIfError(result);
+                ThrowIfError(result, err);
             }
         }
 
@@ -456,17 +457,18 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void ThrowIfError(OperationResult result)
+        private void ThrowIfError(OperationResult result, Exception err)
         {
             switch (result)
             {
                 case OperationResult.OK:
-                    break;
+                    return;
                 case OperationResult.UserCancel:
                     throw new OperationCanceledException();
-                default:
-                    throw new System.IO.IOException($"{result}");
             }
+
+            if (err != null) throw err;
+            else throw new System.IO.IOException($"{result}");
         }
 
         #region Fields

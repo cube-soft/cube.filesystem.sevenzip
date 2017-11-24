@@ -271,7 +271,7 @@ namespace Cube.FileSystem.SevenZip
                 cb.Extracted  += (s, e) => OnExtracted(e);
 
                 _archive.Extract(null, uint.MaxValue, 0, cb);
-                ThrowIfError(cb.Result);
+                ThrowIfError(cb.Result, cb.Exception);
             }
         }
 
@@ -362,27 +362,28 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void ThrowIfError(OperationResult result)
+        private void ThrowIfError(OperationResult result, Exception err)
         {
             switch (result)
             {
                 case OperationResult.OK:
-                    break;
+                    return;
                 case OperationResult.DataError:
                     if (Items.Any(x => x.Encrypted))
                     {
                         _password.Reset();
                         throw new EncryptionException();
                     }
-                    else throw new System.IO.IOException($"{result}");
+                    break;
                 case OperationResult.WrongPassword:
                     _password.Reset();
                     throw new EncryptionException();
                 case OperationResult.UserCancel:
                     throw new OperationCanceledException();
-                default:
-                    throw new System.IO.IOException($"{result}");
             }
+
+            if (err != null) throw err;
+            else throw new System.IO.IOException($"{result}");
         }
 
         #region Fields

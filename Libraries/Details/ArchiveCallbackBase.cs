@@ -104,6 +104,17 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Exception
+        ///
+        /// <summary>
+        /// 処理中に発生した例外を取得します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public Exception Exception { get; protected set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Report
         ///
         /// <summary>
@@ -132,7 +143,12 @@ namespace Cube.FileSystem.SevenZip
         {
             try { action(); }
             catch (OperationCanceledException) { Result = OperationResult.UserCancel; throw; }
-            catch (Exception) { Result = OperationResult.DataError; throw; }
+            catch (Exception err)
+            {
+                Result    = OperationResult.DataError;
+                Exception = err;
+                throw;
+            }
         }
 
         /* ----------------------------------------------------------------- */
@@ -152,7 +168,12 @@ namespace Cube.FileSystem.SevenZip
         {
             try { return func(); }
             catch (OperationCanceledException) { Result = OperationResult.UserCancel; throw; }
-            catch (Exception) { Result = OperationResult.DataError; throw; }
+            catch (Exception err)
+            {
+                Result    = OperationResult.DataError;
+                Exception = err;
+                throw;
+            }
         }
 
         /* ----------------------------------------------------------------- */

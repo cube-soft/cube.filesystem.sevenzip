@@ -197,7 +197,7 @@ namespace Cube.FileSystem.SevenZip.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Archive_Ignore
+        /// Archive_Skip
         ///
         /// <summary>
         /// 一部のファイルを無視して圧縮するテストを実行します。

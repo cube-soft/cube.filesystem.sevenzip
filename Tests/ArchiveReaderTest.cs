@@ -397,7 +397,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                 archive.Extracting += (s, e) => throw new ArgumentException();
                 archive.Extract(Results);
             }
-        }, Throws.TypeOf<System.IO.IOException>());
+        }, Throws.TypeOf<ArgumentException>());
 
         /* ----------------------------------------------------------------- */
         ///
