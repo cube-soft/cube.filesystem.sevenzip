@@ -107,7 +107,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
                 {
                     this.LogDebug($"Format:{reader.Format}\tSource:{Source}");
 
-                    var dest = GetSaveLocation(Settings.Value.Extract, Source);
+                    var dest = GetSaveLocation(Settings.Value.Extract, Format.Unknown, Source);
                     SetTmp(dest.Value);
 
                     if (reader.Items.Count == 1) ExtractTar(reader, dest);

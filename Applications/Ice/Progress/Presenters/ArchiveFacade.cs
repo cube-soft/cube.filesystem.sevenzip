@@ -249,14 +249,15 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             if (!string.IsNullOrEmpty(Details?.Path)) Destination = Details.Path;
             else
             {
-                var query   = Request.Format.ToString();
-                var kv      = GetSaveLocation(Settings.Value.Archive, query);
+                var query   = Request.Sources.First();
+                var user    = Request.Format;
+                var kv      = GetSaveLocation(Settings.Value.Archive, Request.Format, query);
                 var runtime = kv.Key == SaveLocation.Runtime;
                 var path    = runtime ? kv.Value : AddFileName(kv.Value, format);
 
                 if (!runtime && IO.Exists(path))
                 {
-                    var e = new QueryEventArgs<string, string>(query, true);
+                    var e = new PathQueryEventArgs(query, Request.Format, true);
                     OnDestinationRequested(e);
                     if (e.Cancel) throw new OperationCanceledException();
                     path = e.Result;

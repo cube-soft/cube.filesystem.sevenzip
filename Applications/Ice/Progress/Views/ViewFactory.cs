@@ -56,18 +56,17 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         /// 
         /// <param name="e">パスを保持するオブジェクト</param>
-        /// <param name="filename">ファイル名の初期設定</param>
         /// 
         /// <remarks>
-        /// filename が null または空文字の場合はディレクトリ選択用
-        /// ダイアログが表示されます。
+        /// Format.Unknown の場合はディレクトリ選択用ダイアログが表示
+        /// されます。
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public virtual void ShowSaveView(QueryEventArgs<string, string> e, string filename)
+        public virtual void ShowSaveView(PathQueryEventArgs e)
         {
-            if (string.IsNullOrEmpty(filename)) ShowSaveDirectoryView(e);
-            else ShowSaveFileView(e, filename);
+            if (e.Format == Format.Unknown) ShowSaveDirectoryView(e);
+            else ShowSaveFileView(e);
         }
 
         /* ----------------------------------------------------------------- */
@@ -211,16 +210,15 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         /// 
         /// <param name="e">パスを保持するオブジェクト</param>
-        /// <param name="filename">ファイル名の初期設定</param>
         ///
         /* ----------------------------------------------------------------- */
-        private void ShowSaveFileView(QueryEventArgs<string, string> e, string filename)
+        private void ShowSaveFileView(PathQueryEventArgs e)
         {
             var view = new SaveFileDialog
             {
                 AddExtension = true,
-                FileName = System.IO.Path.GetFileNameWithoutExtension(filename),
-                Filter = ViewResource.GetFilter(e.Query),
+                FileName = System.IO.Path.GetFileNameWithoutExtension(e.Query),
+                Filter = ViewResource.GetFilter(e.Format),
                 OverwritePrompt = true,
                 SupportMultiDottedExtensions = true,
             };
@@ -240,7 +238,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// <param name="e">パスを保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        private void ShowSaveDirectoryView(QueryEventArgs<string, string> e)
+        private void ShowSaveDirectoryView(PathQueryEventArgs e)
         {
             var view = new FolderBrowserDialog
             {
@@ -356,16 +354,15 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         /// 
         /// <param name="e">パスを保持するオブジェクト</param>
-        /// <param name="filename">ファイル名の初期設定</param>
         /// 
         /// <remarks>
-        /// filename が null または空文字の場合はディレクトリ選択用
-        /// ダイアログが表示されます。
+        /// Format.Unknown の場合はディレクトリ選択用ダイアログが表示
+        /// されます。
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public static void ShowSaveView(QueryEventArgs<string, string> e, string filename)
-            => _factory.ShowSaveView(e, filename);
+        public static void ShowSaveView(PathQueryEventArgs e)
+            => _factory.ShowSaveView(e);
 
         /* ----------------------------------------------------------------- */
         ///

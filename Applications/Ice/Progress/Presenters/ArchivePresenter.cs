@@ -90,8 +90,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenDestinationRequested(object sender, QueryEventArgs<string, string> e)
-            => ShowDialog(() => Views.ShowSaveView(e, Model.Request.Sources.First()));
+        private void WhenDestinationRequested(object sender, PathQueryEventArgs e)
+            => ShowDialog(() => Views.ShowSaveView(e));
 
         /* ----------------------------------------------------------------- */
         ///

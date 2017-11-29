@@ -328,9 +328,9 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         private void WhenPathRequested(object sender, EventArgs e)
         {
             var format = ViewResource.GetFormat(Format, CompressionMethod);
-            var args   = new QueryEventArgs<string, string>(format.ToString());
+            var args   = new PathQueryEventArgs(Path, format, true);
 
-            Views.ShowSaveView(args, Path);
+            Views.ShowSaveView(args);
             if (!args.Cancel) Path = args.Result;
         }
 

@@ -228,7 +228,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public QueryEventHandler<string, string> DestinationRequested;
+        public PathQueryEventHandler DestinationRequested;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -239,7 +239,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public virtual void OnDestinationRequested(QueryEventArgs<string, string> e)
+        public virtual void OnDestinationRequested(PathQueryEventArgs e)
             => DestinationRequested?.Invoke(this, e);
 
         #endregion
@@ -530,7 +530,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected KeyValuePair<SaveLocation, string> GetSaveLocation(GeneralSettings settings, string query)
+        protected KeyValuePair<SaveLocation, string> GetSaveLocation(GeneralSettings settings, Format format, string query)
         {
             var key = Request.Location != SaveLocation.Unknown ?
                       Request.Location :
@@ -539,7 +539,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             this.LogDebug(string.Format("SaveLocation:({0},{1})->{2}",
                 Request.Location, settings.SaveLocation, key));
 
-            return new KeyValuePair<SaveLocation, string>(key, GetSavePath(key, settings, query));
+            return new KeyValuePair<SaveLocation, string>(key, GetSavePath(key, settings, format, query));
         }
 
         /* ----------------------------------------------------------------- */
@@ -624,7 +624,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetSavePath(SaveLocation key, GeneralSettings settings, string query)
+        private string GetSavePath(SaveLocation key, GeneralSettings settings, Format format, string query)
         {
             switch (key)
             {
@@ -633,7 +633,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
                 case SaveLocation.MyDocuments:
                     return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 case SaveLocation.Runtime:
-                    var e = new QueryEventArgs<string, string>(query, true);
+                    var e = new PathQueryEventArgs(query, format, true);
                     OnDestinationRequested(e);
                     if (e.Cancel) throw new OperationCanceledException();
                     return e.Result;

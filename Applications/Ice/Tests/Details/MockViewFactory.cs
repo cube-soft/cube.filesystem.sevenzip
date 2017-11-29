@@ -129,10 +129,9 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// </summary>
         /// 
         /// <param name="e">パスを保持するオブジェクト</param>
-        /// <param name="filename">ファイル名の初期設定</param>
         ///
         /* ----------------------------------------------------------------- */
-        public override void ShowSaveView(QueryEventArgs<string, string> e, string filename)
+        public override void ShowSaveView(PathQueryEventArgs e)
         {
             e.Cancel = string.IsNullOrEmpty(Settings.Destination);
             e.Result = Settings.Destination;
