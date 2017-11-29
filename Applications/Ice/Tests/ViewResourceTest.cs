@@ -135,45 +135,6 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetFormat
-        /// 
-        /// <summary>
-        /// 拡張子フィルタを取得するために必要なファイルの種類を
-        /// 取得するテストを実行します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        [TestCase(Format.Zip,      CompressionMethod.Default, ExpectedResult = Format.Zip)]
-        [TestCase(Format.SevenZip, CompressionMethod.Default, ExpectedResult = Format.SevenZip)]
-        [TestCase(Format.Sfx,      CompressionMethod.Default, ExpectedResult = Format.Sfx)]
-        [TestCase(Format.Tar,      CompressionMethod.Copy,    ExpectedResult = Format.Tar)]
-        [TestCase(Format.Tar,      CompressionMethod.BZip2,   ExpectedResult = Format.BZip2)]
-        [TestCase(Format.Tar,      CompressionMethod.GZip,    ExpectedResult = Format.GZip)]
-        [TestCase(Format.Tar,      CompressionMethod.XZ,      ExpectedResult = Format.XZ)]
-        public Format GetFormat(Format format, CompressionMethod method)
-            => ViewResource.GetFormat(format, method);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetExtension
-        /// 
-        /// <summary>
-        /// ファイルの種類に対応する拡張子を取得するテストを実行します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        [TestCase(Format.Zip,      ExpectedResult = ".zip")]
-        [TestCase(Format.SevenZip, ExpectedResult = ".7z")]
-        [TestCase(Format.Sfx,      ExpectedResult = ".exe")]
-        [TestCase(Format.Tar,      ExpectedResult = ".tar")]
-        [TestCase(Format.BZip2,    ExpectedResult = ".tar.bz2")]
-        [TestCase(Format.GZip,     ExpectedResult = ".tar.gz")]
-        [TestCase(Format.XZ,       ExpectedResult = ".tar.xz")]
-        public string GetExtension(Format format)
-            => ViewResource.GetExtension(format);
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// GetFilter
         /// 
         /// <summary>

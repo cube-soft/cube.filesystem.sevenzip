@@ -193,59 +193,6 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetFormat
-        /// 
-        /// <summary>
-        /// 拡張子フィルタを取得するために必要な Format オブジェクトを
-        /// 取得します。
-        /// </summary>
-        /// 
-        /// <param name="format">圧縮ファイル形式</param>
-        /// <param name="method">圧縮メソッド</param>
-        /// 
-        /// <returns>圧縮ファイル形式</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static Format GetFormat(Format format, CompressionMethod method)
-        {
-            if (format == Format.Tar)
-            {
-                switch (method)
-                {
-                    case CompressionMethod.BZip2: return Format.BZip2;
-                    case CompressionMethod.GZip:  return Format.GZip;
-                    case CompressionMethod.XZ:    return Format.XZ;
-                }
-            }
-            return format;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetExtension
-        /// 
-        /// <summary>
-        /// 圧縮ファイル形式に対応する拡張子を取得します。
-        /// </summary>
-        /// 
-        /// <param name="format">圧縮ファイル形式</param>
-        /// 
-        /// <returns>拡張子</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static string GetExtension(Format format)
-        {
-            switch (format)
-            {
-                case Format.BZip2: return ".tar.bz2";
-                case Format.GZip:  return ".tar.gz";
-                case Format.XZ:    return ".tar.xz";
-            }
-            return format.ToExtension();
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// GetFilter
         /// 
         /// <summary>
