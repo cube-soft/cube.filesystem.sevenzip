@@ -87,7 +87,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             new Dictionary<Format, IList<KeyValuePair<string, CompressionMethod>>>
         {
             {
-                SevenZip.Format.Zip, new List<KeyValuePair<string, CompressionMethod>>
+                Format.Zip, new List<KeyValuePair<string, CompressionMethod>>
                 {
                     Pair("Deflate",   CompressionMethod.Deflate),
                     Pair("Deflate64", CompressionMethod.Deflate64),
@@ -98,7 +98,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
                 }
             },
             {
-                SevenZip.Format.SevenZip, new List<KeyValuePair<string, CompressionMethod>>
+                Format.SevenZip, new List<KeyValuePair<string, CompressionMethod>>
                 {
                     Pair("LZMA",      CompressionMethod.Lzma),
                     Pair("LZMA2",     CompressionMethod.Lzma2),
@@ -109,7 +109,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
                 }
             },
             {
-                SevenZip.Format.Tar, new List<KeyValuePair<string, CompressionMethod>>
+                Format.Tar, new List<KeyValuePair<string, CompressionMethod>>
                 {
                     Pair("GZip",      CompressionMethod.GZip),
                     Pair("BZip2",     CompressionMethod.BZip2),
@@ -118,7 +118,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
                 }
             },
             {
-                SevenZip.Format.Sfx, new List<KeyValuePair<string, CompressionMethod>>
+                Format.Sfx, new List<KeyValuePair<string, CompressionMethod>>
                 {
                     Pair("LZMA",      CompressionMethod.Lzma),
                     Pair("LZMA2",     CompressionMethod.Lzma2),
