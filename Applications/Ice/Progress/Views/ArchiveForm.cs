@@ -61,14 +61,15 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             ExecuteButton.Click += (s, e) => Close();
             ExitButton.Click    += (s, e) => Close();
 
-            OutputButton.Click                  += WhenPathRequested;
-            OutputTextBox.TextChanged           += WhenPathChanged;
-            FormatComboBox.SelectedValueChanged += WhenFormatChanged;
-            EncryptionCheckBox.CheckedChanged   += WhenEncryptionChanged;
-            PasswordTextBox.TextChanged         += WhenPasswordChanged;
-            ConfirmTextBox.TextChanged          += WhenConfirmChanged;
-            ConfirmTextBox.EnabledChanged       += WhenConfirmEnabledChanged;
-            ShowPasswordCheckBox.CheckedChanged += WhenShowPasswordChanged;
+            OutputButton.Click                             += WhenPathRequested;
+            OutputTextBox.TextChanged                      += WhenPathChanged;
+            FormatComboBox.SelectedValueChanged            += WhenFormatChanged;
+            CompressionMethodComboBox.SelectedValueChanged += WhenCompressionMethodChanged;
+            EncryptionCheckBox.CheckedChanged              += WhenEncryptionChanged;
+            PasswordTextBox.TextChanged                    += WhenPasswordChanged;
+            ConfirmTextBox.TextChanged                     += WhenConfirmChanged;
+            ConfirmTextBox.EnabledChanged                  += WhenConfirmEnabledChanged;
+            ShowPasswordCheckBox.CheckedChanged            += WhenShowPasswordChanged;
         }
 
         #endregion
@@ -153,6 +154,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             {
                 if (OutputTextBox.Text == value) return;
                 OutputTextBox.Text = value;
+                OutputTextBox.SelectionStart = Math.Max(value.Length - 1, 0);
+                OutputTextBox.SelectionLength = 0;
             }
         }
 
@@ -217,6 +220,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         #endregion
 
         #region Implementations
+
+        #region Update
 
         /* ----------------------------------------------------------------- */
         ///
@@ -316,6 +321,80 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             src.ValueMember   = "Value";
         }
 
+        #endregion
+
+        #region Password gimmick
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenPasswordChanged
+        ///
+        /// <summary>
+        /// パスワード入力が変更された時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenPasswordChanged(object sender, EventArgs e)
+        {
+            if (ShowPasswordCheckBox.Checked) EncryptionIsValid = PasswordTextBox.TextLength > 0;
+            else ConfirmTextBox.Text = string.Empty;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenConfirmChanged
+        ///
+        /// <summary>
+        /// 確認項目のテキストが変更された時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenConfirmChanged(object sender, EventArgs e)
+        {
+            if (!ConfirmTextBox.Enabled) return;
+
+            var eq = PasswordTextBox.Text.Equals(ConfirmTextBox.Text);
+            EncryptionIsValid = eq && PasswordTextBox.TextLength > 0;
+            ConfirmTextBox.BackColor = eq || ConfirmTextBox.TextLength <= 0 ?
+                                       SystemColors.Window :
+                                       Color.FromArgb(255, 102, 102);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenConfirmEnabledChanged
+        ///
+        /// <summary>
+        /// 確認項目の Enabled が変更された時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenConfirmEnabledChanged(object sender, EventArgs e)
+            => ConfirmTextBox.BackColor = ConfirmTextBox.Enabled ?
+                                          SystemColors.Window :
+                                          SystemColors.Control;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenShowPasswordChanged
+        ///
+        /// <summary>
+        /// パスワードを表示の状態が変更された時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenShowPasswordChanged(object sender, EventArgs e)
+        {
+            var show = ShowPasswordCheckBox.Checked;
+
+            PasswordTextBox.UseSystemPasswordChar = !show;
+            ConfirmTextBox.Enabled = !show;
+            ConfirmTextBox.Text = string.Empty;
+            EncryptionIsValid = show & (PasswordTextBox.TextLength > 0);
+        }
+
+        #endregion
+
         /* ----------------------------------------------------------------- */
         ///
         /// WhenPathRequested
@@ -364,6 +443,18 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// WhenCompressionMethodChanged
+        /// 
+        /// <summary>
+        /// CompressionMethod 変更時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenCompressionMethodChanged(object sender, EventArgs e)
+            => Path = new PathConverter(Path, Format, CompressionMethod).Result.FullName;
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// WhenEncryptionChanged
         /// 
         /// <summary>
@@ -384,81 +475,9 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             else WhenShowPasswordChanged(sender, e);
         }
 
-        #region Password gimmick
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenPasswordChanged
-        ///
-        /// <summary>
-        /// パスワード入力が変更された時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenPasswordChanged(object sender, EventArgs e)
-        {
-            if (ShowPasswordCheckBox.Checked) EncryptionIsValid = PasswordTextBox.TextLength > 0;
-            else ConfirmTextBox.Text = string.Empty;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenConfirmChanged
-        ///
-        /// <summary>
-        /// 確認項目のテキストが変更された時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenConfirmChanged(object sender, EventArgs e)
-        {
-            if (!ConfirmTextBox.Enabled) return;
-
-            var eq = PasswordTextBox.Text.Equals(ConfirmTextBox.Text);
-            EncryptionIsValid        = eq && PasswordTextBox.TextLength > 0;
-            ConfirmTextBox.BackColor = eq || ConfirmTextBox.TextLength <= 0 ?
-                                       SystemColors.Window :
-                                       Color.FromArgb(255, 102, 102);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenConfirmEnabledChanged
-        ///
-        /// <summary>
-        /// 確認項目の Enabled が変更された時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenConfirmEnabledChanged(object sender, EventArgs e)
-            => ConfirmTextBox.BackColor = ConfirmTextBox.Enabled ?
-                                          SystemColors.Window :
-                                          SystemColors.Control;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenShowPasswordChanged
-        ///
-        /// <summary>
-        /// パスワードを表示の状態が変更された時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenShowPasswordChanged(object sender, EventArgs e)
-        {
-            var show = ShowPasswordCheckBox.Checked;
-
-            PasswordTextBox.UseSystemPasswordChar = !show;
-            ConfirmTextBox.Enabled = !show;
-            ConfirmTextBox.Text = string.Empty;
-            EncryptionIsValid = show & (PasswordTextBox.TextLength > 0);
-        }
-
         #region Fields
         private bool _path = false;
         private bool _encryption = true;
-        #endregion
-
         #endregion
 
         #endregion
