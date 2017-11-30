@@ -216,8 +216,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         {
             var view = new SaveFileDialog
             {
-                AddExtension = true,
-                FileName = System.IO.Path.GetFileNameWithoutExtension(e.Query),
+                InitialDirectory = System.IO.Path.GetDirectoryName(e.Query),
+                FileName = System.IO.Path.GetFileName(e.Query),
                 Filter = ViewResource.GetFilter(e.Format),
                 OverwritePrompt = true,
                 SupportMultiDottedExtensions = true,
@@ -244,6 +244,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             {
                 Description = Properties.Resources.MessageExtractDestination,
                 SelectedPath = e.Query,
+                ShowNewFolderButton = true,
             };
 
             e.Cancel = view.ShowDialog() == DialogResult.Cancel;

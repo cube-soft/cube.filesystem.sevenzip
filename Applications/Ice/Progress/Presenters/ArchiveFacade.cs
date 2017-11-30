@@ -178,7 +178,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         private void Archive()
         {
             var fmt   = GetFormat();
-            var dest  = GetDestination(fmt);
+            var dest  = GetTmp(fmt);
             var query = !string.IsNullOrEmpty(Details.Password) || Request.Password ?
                         new Query<string, string>(x => RaisePasswordRequested(x)) :
                         null;
@@ -237,6 +237,23 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// GetTmp
+        /// 
+        /// <summary>
+        /// 保存先パスを決定後、一時ファイルのパスを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private string GetTmp(Format format)
+        {
+            Destination = GetDestination(format);
+            var info = IO.Get(Destination);
+            SetTmp(info.DirectoryName);
+            return Tmp;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// GetDestination
         /// 
         /// <summary>
@@ -246,48 +263,19 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         private string GetDestination(Format format)
         {
-            if (!string.IsNullOrEmpty(Details?.Path)) Destination = Details.Path;
-            else
-            {
-                var query   = Request.Sources.First();
-                var user    = Request.Format;
-                var kv      = GetSaveLocation(Settings.Value.Archive, Request.Format, query);
-                var runtime = kv.Key == SaveLocation.Runtime;
-                var path    = runtime ? kv.Value : AddFileName(kv.Value, format);
+            if (!string.IsNullOrEmpty(Details?.Path)) return Details.Path;
 
-                if (!runtime && IO.Exists(path))
-                {
-                    var e = new PathQueryEventArgs(query, Request.Format, true);
-                    OnDestinationRequested(e);
-                    if (e.Cancel) throw new OperationCanceledException();
-                    path = e.Result;
-                }
+            var cvt = new PathConverter(Request.Sources.First(), Request.Format, IO);
+            var kv = GetSaveLocation(Settings.Value.Archive, cvt.ResultFormat, cvt.Result.FullName);
+            if (kv.Key == SaveLocation.Runtime) return kv.Value;
 
-                Destination = path;
-            }
+            var path = IO.Combine(kv.Value, cvt.Result.Name);
+            if (!IO.Exists(path)) return path;
 
-            var info = IO.Get(Destination);
-            SetTmp(info.DirectoryName);
-            return Tmp;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// AddFileName
-        /// 
-        /// <summary>
-        /// FileName を結合します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private string AddFileName(string src, Format format)
-        {
-            var name = IO.Get(Request.Sources.First()).NameWithoutExtension;
-            var head = format.ToExtension();
-            var tail = Details.CompressionMethod.ToExtension();
-            var ext  = $"{head}{tail}";
-
-            return IO.Combine(src, $"{name}{ext}");
+            var e = new PathQueryEventArgs(path, cvt.ResultFormat, true);
+            OnDestinationRequested(e);
+            if (e.Cancel) throw new OperationCanceledException();
+            return e.Result;
         }
 
         /* ----------------------------------------------------------------- */
