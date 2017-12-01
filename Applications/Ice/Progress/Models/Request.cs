@@ -234,8 +234,9 @@ namespace Cube.FileSystem.SevenZip.App.Ice
                 }
             }
 
-            if (!string.IsNullOrEmpty(DropDirectory) &&
-                Location == SaveLocation.Source) Location = SaveLocation.Drop;
+            var droppable = Location == SaveLocation.Unknown ||
+                            Location == SaveLocation.Source;
+            if (!string.IsNullOrEmpty(DropDirectory) && droppable) Location = SaveLocation.Drop;
 
             Sources = sources;
             Options = options;

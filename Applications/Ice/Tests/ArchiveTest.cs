@@ -394,8 +394,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// 
         /* ----------------------------------------------------------------- */
         private static IEnumerable<string> DropRequest(PresetMenu menu, string path)
-            => menu.ToArguments()
-                   .Concat(new[] { "/o:source", $"/drop:{FullName(path)}" });
+            => menu.ToArguments().Concat(new[] { $"/drop:{FullName(path)}" });
 
         /* ----------------------------------------------------------------- */
         ///
