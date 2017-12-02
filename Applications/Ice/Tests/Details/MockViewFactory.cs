@@ -133,6 +133,9 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         public override void ShowSaveView(PathQueryEventArgs e)
         {
+            var message = $"{e.Query}({e.Format})";
+            Assert.That(e.Query, Is.Not.Null, message);
+
             e.Cancel = string.IsNullOrEmpty(Settings.Destination);
             e.Result = Settings.Destination;
         }

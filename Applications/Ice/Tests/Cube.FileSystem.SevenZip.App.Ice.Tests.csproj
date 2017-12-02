@@ -111,6 +111,7 @@
     <Compile Include="Settings\ShortcutSettingsTest.cs" />
     <Compile Include="ArchiveTest.cs" />
     <Compile Include="ExtractTest.cs" />
+    <Compile Include="PathConverterTest.cs" />
     <Compile Include="PresetMenuTest.cs" />
     <Compile Include="RequestTest.cs" />
     <Compile Include="ViewResourceTest.cs" />

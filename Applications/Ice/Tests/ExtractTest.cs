@@ -114,25 +114,31 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract_Cancel
+        /// Extract_DeleteSource
         /// 
         /// <summary>
-        /// 展開処理をキャンセルするテストを実行します。
+        /// 展開後に元の圧縮ファイルを削除するテストを実行します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Extract_Cancel()
+        public void Extract_DeleteSource()
         {
-            var src = Example("Complex.zip");
-            var dest = Result("UserCancel");
+            var src    = Result("Complex.zip");
+            var dest   = Result("DeleteSource");
+            var exists = Result(@"DeleteSource\Complex");
+
+            IO.Copy(Example("Complex.1.0.0.zip"), src);
 
             using (var p = Create(src, dest))
             {
+                p.Settings.Value.Extract.DeleteSource = true;
                 p.View.Show();
-                p.EventHub.GetEvents().Cancel.Publish();
                 Assert.That(Wait(p.View).Result, Is.True, "Timeout");
             }
+
+            Assert.That(IO.Exists(src), Is.False, src);
+            Assert.That(IO.Exists(exists), Is.True, exists);
         }
 
         /* ----------------------------------------------------------------- */
@@ -174,31 +180,22 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract_DeleteSource
+        /// Extract_Cancel
         /// 
         /// <summary>
-        /// 展開後に元の圧縮ファイルを削除するテストを実行します。
+        /// 展開処理をキャンセルするテストを実行します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Extract_DeleteSource()
+        public void Extract_Cancel()
         {
-            var src    = Result("Complex.zip");
-            var dest   = Result("DeleteSource");
-            var exists = Result(@"DeleteSource\Complex");
-
-            IO.Copy(Example("Complex.1.0.0.zip"), src);
-
-            using (var p = Create(src, dest))
+            using (var p = Create(Example("Complex.zip"), ""))
             {
-                p.Settings.Value.Extract.DeleteSource = true;
                 p.View.Show();
+                p.EventHub.GetEvents().Cancel.Publish();
                 Assert.That(Wait(p.View).Result, Is.True, "Timeout");
             }
-
-            Assert.That(IO.Exists(src), Is.False, src);
-            Assert.That(IO.Exists(exists), Is.True, exists);
         }
 
         /* ----------------------------------------------------------------- */
@@ -213,10 +210,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         [Test]
         public void Extract_PasswordCancel()
         {
-            var src  = Example("Password.7z");
-            var dest = Result("PasswordCancel");
-
-            using (var p = Create(src, dest))
+            using (var p = Create(Example("Password.7z"), ""))
             {
                 p.View.Show();
                 Assert.That(Wait(p.View).Result, Is.True, "Timeout");
@@ -235,10 +229,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         [Test]
         public void Extract_ErrorReport()
         {
-            var src  = Example("Sample.txt");
-            var dest = Result("ErrorReport");
-
-            using (var p = Create(src, dest))
+            using (var p = Create(Example("Sample.txt"), ""))
             {
                 p.Settings.Value.ErrorReport = true;
                 p.View.Show();
