@@ -1,19 +1,19 @@
 ﻿/* ------------------------------------------------------------------------- */
-///
-/// Copyright (c) 2010 CubeSoft, Inc.
-/// 
-/// Licensed under the Apache License, Version 2.0 (the "License");
-/// you may not use this file except in compliance with the License.
-/// You may obtain a copy of the License at
-///
-///  http://www.apache.org/licenses/LICENSE-2.0
-///
-/// Unless required by applicable law or agreed to in writing, software
-/// distributed under the License is distributed on an "AS IS" BASIS,
-/// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-/// See the License for the specific language governing permissions and
-/// limitations under the License.
-///
+//
+// Copyright (c) 2010 CubeSoft, Inc.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
 /* ------------------------------------------------------------------------- */
 using System;
 
@@ -30,8 +30,11 @@ namespace Cube.FileSystem.SevenZip.Ice
     /* --------------------------------------------------------------------- */
     public enum Mode
     {
+        /// <summary>無し</summary>
         None,
+        /// <summary>圧縮</summary>
         Archive,
+        /// <summary>解凍</summary>
         Extract,
     }
 
@@ -46,13 +49,20 @@ namespace Cube.FileSystem.SevenZip.Ice
     /* --------------------------------------------------------------------- */
     public enum SaveLocation
     {
-        Others          =  0,
-        Source          =  1,
-        Runtime         =  2,
-        Desktop         =  3,
-        MyDocuments     =  4,
-        Drop            = 10,
-        Unknown         = -1,
+        /// <summary>その他</summary>
+        Others = 0,
+        /// <summary>元のファイルと同じ場所</summary>
+        Source = 1,
+        /// <summary>実行時に指定</summary>
+        Runtime = 2,
+        /// <summary>デスクトップ</summary>
+        Desktop = 3,
+        /// <summary>マイドキュメント</summary>
+        MyDocuments = 4,
+        /// <summary>ドラッグ&amp;ドロップで指定</summary>
+        Drop = 10,
+        /// <summary>不明</summary>
+        Unknown = -1,
     }
 
     /* --------------------------------------------------------------------- */
@@ -67,12 +77,18 @@ namespace Cube.FileSystem.SevenZip.Ice
     [Flags]
     public enum CreateDirectoryMethod
     {
-        None                = 0x00,
+        /// <summary>作成しない</summary>
+        None = 0x00,
+        /// <summary>単一フォルダの場合スキップ</summary>
         SkipSingleDirectory = 0x02,
-        SkipSingleFile      = 0x04,
-        SkipOptions         = SkipSingleDirectory | SkipSingleFile,
-        Create              = 0x01,
-        CreateSmart         = Create | SkipSingleDirectory,
+        /// <summary>単一ファイルの場合スキップ</summary>
+        SkipSingleFile = 0x04,
+        /// <summary>スキップオプション用マスク</summary>
+        SkipOptions = SkipSingleDirectory | SkipSingleFile,
+        /// <summary>作成する</summary>
+        Create = 0x01,
+        /// <summary>必要な場合に作成する</summary>
+        CreateSmart = Create | SkipSingleDirectory,
     }
 
     /* --------------------------------------------------------------------- */
@@ -87,10 +103,14 @@ namespace Cube.FileSystem.SevenZip.Ice
     [Flags]
     public enum OpenDirectoryMethod
     {
-        None            = 0x0000,
-        SkipDesktop     = 0x0002,
-        Open            = 0x0001,
-        OpenNotDesktop  = Open | SkipDesktop,
+        /// <summary>開かない</summary>
+        None = 0x0000,
+        /// <summary>デスクトップの場合は開かない</summary>
+        SkipDesktop = 0x0002,
+        /// <summary>開く</summary>
+        Open = 0x0001,
+        /// <summary>デスクトップ以外の場合に開く</summary>
+        OpenNotDesktop = Open | SkipDesktop,
     }
 
     /* --------------------------------------------------------------------- */
@@ -105,39 +125,69 @@ namespace Cube.FileSystem.SevenZip.Ice
     [Flags]
     public enum PresetMenu
     {
-        None                = 0x0000000,
-        Archive             = 0x00000001,
-        Extract             = 0x00000002,
-        Settings            = 0x00000004,
-        Mail                = 0x00000008,
+        /// <summary>無し</summary>
+        None = 0x0000000,
+        /// <summary>圧縮</summary>
+        Archive = 0x00000001,
+        /// <summary>解凍</summary>
+        Extract = 0x00000002,
+        /// <summary>設定</summary>
+        Settings = 0x00000004,
+        /// <summary>圧縮してメール添付</summary>
+        Mail = 0x00000008,
 
-        ExtractSource       = 0x00000010,
-        ExtractDesktop      = 0x00000020,
-        ExtractRuntime      = 0x00000040,
-        ExtractMyDocuments  = 0x00000080,
-        ExtractOptions      = 0x000000f0,
+        /// <summary>圧縮ファイルと同じ場所に解凍</summary>
+        ExtractSource = 0x00000010,
+        /// <summary>デスクトップに解凍</summary>
+        ExtractDesktop = 0x00000020,
+        /// <summary>実行時に場所を指定して解凍</summary>
+        ExtractRuntime = 0x00000040,
+        /// <summary>マイドキュメントに解凍</summary>
+        ExtractMyDocuments = 0x00000080,
+        /// <summary>解凍オプション用マスク</summary>
+        ExtractOptions = 0x000000f0,
 
-        ArchiveZip          = 0x00000100,
-        ArchiveZipPassword  = 0x00000200,
-        ArchiveSevenZip     = 0x00000400,
-        ArchiveBZip2        = 0x00000800,
-        ArchiveGZip         = 0x00001000,
-        ArchiveDetail       = 0x00002000,
-        ArchiveSfx          = 0x00004000,
-        ArchiveXZ           = 0x00008000,
-        ArchiveOptions      = 0x0000ff00,
+        /// <summary>Zip に圧縮</summary>
+        ArchiveZip = 0x00000100,
+        /// <summary>パスワード付 Zip に圧縮</summary>
+        ArchiveZipPassword = 0x00000200,
+        /// <summary>7z に圧縮</summary>
+        ArchiveSevenZip = 0x00000400,
+        /// <summary>BZip2 に圧縮</summary>
+        ArchiveBZip2 = 0x00000800,
+        /// <summary>GZip に圧縮</summary>
+        ArchiveGZip = 0x00001000,
+        /// <summary>詳細を設定して圧縮</summary>
+        ArchiveDetail = 0x00002000,
+        /// <summary>自己解凍形式に圧縮</summary>
+        ArchiveSfx = 0x00004000,
+        /// <summary>XZ に圧縮</summary>
+        ArchiveXZ = 0x00008000,
+        /// <summary>圧縮オプション用マスク</summary>
+        ArchiveOptions = 0x0000ff00,
 
-        MailZip             = 0x00010000,
-        MailZipPassword     = 0x00020000,
-        MailSevenZip        = 0x00040000,
-        MailBZip2           = 0x00080000,
-        MailGZip            = 0x00100000,
-        MailDetail          = 0x00200000,
-        MailSfx             = 0x00400000,
-        MailXZ              = 0x00800000,
-        MailOptions         = 0x00ff0000,
+        /// <summary>Zip に圧縮してメール添付</summary>
+        MailZip = 0x00010000,
+        /// <summary>パスワード付 Zip に圧縮してメール添付</summary>
+        MailZipPassword = 0x00020000,
+        /// <summary>7z に圧縮してメール添付</summary>
+        MailSevenZip = 0x00040000,
+        /// <summary>BZip2 に圧縮してメール添付</summary>
+        MailBZip2 = 0x00080000,
+        /// <summary>GZip に圧縮してメール添付</summary>
+        MailGZip = 0x00100000,
+        /// <summary>詳細を設定して圧縮してメール添付</summary>
+        MailDetail = 0x00200000,
+        /// <summary>自己解凍形式に圧縮してメール添付</summary>
+        MailSfx = 0x00400000,
+        /// <summary>XZ に圧縮してメール添付</summary>
+        MailXZ = 0x00800000,
+        /// <summary>圧縮してメール添付オプション用マスク</summary>
+        MailOptions = 0x00ff0000,
 
-        DefaultContext      = 0x00007ff3,
-        DefaultDesktop      = 0x00000107,
+        /// <summary>コンテキストメニューの初期設定</summary>
+        DefaultContext = 0x00007ff3,
+        /// <summary>ショートカットメニューの初期設定</summary>
+        DefaultDesktop = 0x00000107,
     }
 }

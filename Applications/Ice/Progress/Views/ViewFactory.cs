@@ -1,19 +1,19 @@
 ﻿/* ------------------------------------------------------------------------- */
-///
-/// Copyright (c) 2010 CubeSoft, Inc.
-/// 
-/// Licensed under the Apache License, Version 2.0 (the "License");
-/// you may not use this file except in compliance with the License.
-/// You may obtain a copy of the License at
-///
-///  http://www.apache.org/licenses/LICENSE-2.0
-///
-/// Unless required by applicable law or agreed to in writing, software
-/// distributed under the License is distributed on an "AS IS" BASIS,
-/// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-/// See the License for the specific language governing permissions and
-/// limitations under the License.
-///
+//
+// Copyright (c) 2010 CubeSoft, Inc.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
 /* ------------------------------------------------------------------------- */
 using System.Windows.Forms;
 using Cube.FileSystem.SevenZip.Ice;
@@ -56,14 +56,16 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         /// 
         /// <param name="e">パスを保持するオブジェクト</param>
-        /// <param name="directory">
-        /// ディレクトリ用画面を使用するかどうかを示す値
-        /// </param>
+        /// 
+        /// <remarks>
+        /// Format.Unknown の場合はディレクトリ選択用ダイアログが表示
+        /// されます。
+        /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public virtual void ShowSaveView(QueryEventArgs<string, string> e, bool directory)
+        public virtual void ShowSaveView(PathQueryEventArgs e)
         {
-            if (directory) ShowSaveDirectoryView(e);
+            if (e.Format == Format.Unknown) ShowSaveDirectoryView(e);
             else ShowSaveFileView(e);
         }
 
@@ -109,7 +111,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ShowArchiveDetailsView
+        /// ShowArchiveView
         /// 
         /// <summary>
         /// 圧縮の詳細設定用画面を表示します。
@@ -118,9 +120,9 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// <param name="e">詳細設定を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public virtual void ShowArchiveDetailsView(QueryEventArgs<string, ArchiveDetails> e)
+        public virtual void ShowArchiveView(QueryEventArgs<string, ArchiveDetails> e)
         {
-            using (var view = new ArchiveDetailsForm { Path = e.Query })
+            using (var view = new ArchiveForm { Path = e.Query })
             {
                 e.Cancel = view.ShowDialog() == DialogResult.Cancel;
                 if (e.Cancel) return;
@@ -210,13 +212,15 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// <param name="e">パスを保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        private void ShowSaveFileView(QueryEventArgs<string, string> e)
+        private void ShowSaveFileView(PathQueryEventArgs e)
         {
             var view = new SaveFileDialog
             {
-                AddExtension    = true,
-                Filter          = GetFilter(e.Query),
+                InitialDirectory = System.IO.Path.GetDirectoryName(e.Query),
+                FileName = System.IO.Path.GetFileName(e.Query),
+                Filter = ViewResource.GetFilter(e.Format),
                 OverwritePrompt = true,
+                SupportMultiDottedExtensions = true,
             };
 
             e.Cancel = view.ShowDialog() == DialogResult.Cancel;
@@ -234,12 +238,13 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// <param name="e">パスを保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        private void ShowSaveDirectoryView(QueryEventArgs<string, string> e)
+        private void ShowSaveDirectoryView(PathQueryEventArgs e)
         {
             var view = new FolderBrowserDialog
             {
                 Description = Properties.Resources.MessageExtractDestination,
                 SelectedPath = e.Query,
+                ShowNewFolderButton = true,
             };
 
             e.Cancel = view.ShowDialog() == DialogResult.Cancel;
@@ -288,30 +293,6 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             }
         }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetFilter
-        /// 
-        /// <summary>
-        /// フィルターを表す文字列を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private string GetFilter(string format)
-        {
-            var cvt  = format.ToLower();
-            var dest = cvt == "zip"   ? Properties.Resources.FilterZip      :
-                       cvt == "7z"    ? Properties.Resources.FilterSevenZip :
-                       cvt == "tar"   ? Properties.Resources.FilterTar      :
-                       cvt == "gzip"  ? Properties.Resources.FilterGzip     :
-                       cvt == "bzip2" ? Properties.Resources.FilterBzip2    :
-                       cvt == "xz"    ? Properties.Resources.FilterXZ       : string.Empty;
-
-            return !string.IsNullOrEmpty(dest) ?
-                   $"{dest}|{Properties.Resources.FilterAll}" :
-                   Properties.Resources.FilterAll;
-        }
-
         #endregion
     }
 
@@ -351,27 +332,121 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
         #region Factory methods
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CreateProgressView
+        /// 
+        /// <summary>
+        /// 進捗表示用画面を生成します。
+        /// </summary>
+        /// 
+        /// <returns>進捗表示用画面</returns>
+        ///
+        /* ----------------------------------------------------------------- */
         public static IProgressView CreateProgressView()
             => _factory.CreateProgressView();
 
-        public static void ShowSaveView(QueryEventArgs<string, string> e, bool directory)
-            => _factory.ShowSaveView(e, directory);
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowSaveView
+        /// 
+        /// <summary>
+        /// 保存パス名を選択する画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">パスを保持するオブジェクト</param>
+        /// 
+        /// <remarks>
+        /// Format.Unknown の場合はディレクトリ選択用ダイアログが表示
+        /// されます。
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static void ShowSaveView(PathQueryEventArgs e)
+            => _factory.ShowSaveView(e);
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowPasswordView
+        /// 
+        /// <summary>
+        /// パスワード入力画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">パスワード情報を保持するオブジェクト</param>
+        /// <param name="confirm">確認用入力項目の有無</param>
+        ///
+        /* ----------------------------------------------------------------- */
         public static void ShowPasswordView(QueryEventArgs<string, string> e, bool confirm)
             => _factory.ShowPasswordView(e, confirm);
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowOverwriteView
+        /// 
+        /// <summary>
+        /// 上書き確認用画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">ファイル情報を保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
         public static void ShowOverwriteView(OverwriteEventArgs e)
             => _factory.ShowOverwriteView(e);
 
-        public static void ShowArchiveDetailsView(QueryEventArgs<string, ArchiveDetails> e)
-            => _factory.ShowArchiveDetailsView(e);
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowArchiveView
+        /// 
+        /// <summary>
+        /// 圧縮の詳細設定用画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">詳細設定を保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static void ShowArchiveView(QueryEventArgs<string, ArchiveDetails> e)
+            => _factory.ShowArchiveView(e);
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowExplorerView
+        /// 
+        /// <summary>
+        /// エクスプローラ画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">情報を保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
         public static void ShowExplorerView(KeyValueEventArgs<string, string> e)
             => _factory.ShowExplorerView(e);
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowMailView
+        /// 
+        /// <summary>
+        /// メール送信用画面を表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">添付情報を保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
         public static void ShowMailView(ValueEventArgs<string> e)
             => _factory.ShowMailView(e);
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShowMessageBox
+        /// 
+        /// <summary>
+        /// メッセージボックスを表示します。
+        /// </summary>
+        /// 
+        /// <param name="e">メッセージ内容を保持するオブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
         public static void ShowMessageBox(MessageEventArgs e)
             => _factory.ShowMessageBox(e);
 

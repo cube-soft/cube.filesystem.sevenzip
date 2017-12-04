@@ -1,0 +1,2 @@
+"test\_foo_bar_buzz_.txt",5
+"test\test(2012_05_07).txt",5

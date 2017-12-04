@@ -1,21 +1,20 @@
 ﻿/* ------------------------------------------------------------------------- */
-///
-/// Copyright (c) 2010 CubeSoft, Inc.
-/// 
-/// Licensed under the Apache License, Version 2.0 (the "License");
-/// you may not use this file except in compliance with the License.
-/// You may obtain a copy of the License at
-///
-///  http://www.apache.org/licenses/LICENSE-2.0
-///
-/// Unless required by applicable law or agreed to in writing, software
-/// distributed under the License is distributed on an "AS IS" BASIS,
-/// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-/// See the License for the specific language governing permissions and
-/// limitations under the License.
-///
+//
+// Copyright (c) 2010 CubeSoft, Inc.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
 /* ------------------------------------------------------------------------- */
-using System;
 using System.Threading;
 using Cube.FileSystem.SevenZip.Ice;
 using NUnit.Framework;
@@ -130,13 +129,13 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// </summary>
         /// 
         /// <param name="e">パスを保持するオブジェクト</param>
-        /// <param name="directory">
-        /// ディレクトリ用画面を使用するかどうかを示す値
-        /// </param>
         ///
         /* ----------------------------------------------------------------- */
-        public override void ShowSaveView(QueryEventArgs<string, string> e, bool directory)
+        public override void ShowSaveView(PathQueryEventArgs e)
         {
+            var message = $"{e.Query}({e.Format})";
+            Assert.That(e.Query, Is.Not.Null, message);
+
             e.Cancel = string.IsNullOrEmpty(Settings.Destination);
             e.Result = Settings.Destination;
         }
@@ -180,7 +179,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ShowArchiveDetailsView
+        /// ShowArchiveView
         /// 
         /// <summary>
         /// 圧縮の詳細設定用画面を表示します。
@@ -189,18 +188,18 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// <param name="e">詳細設定を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public override void ShowArchiveDetailsView(QueryEventArgs<string, ArchiveDetails> e)
+        public override void ShowArchiveView(QueryEventArgs<string, ArchiveDetails> e)
         {
-            var format = SevenZip.Formats.FromExtension(System.IO.Path.GetExtension(e.Query));
+            var format = Formats.FromExtension(System.IO.Path.GetExtension(e.Query));
 
             e.Cancel = false;
             e.Result = new ArchiveDetails(format)
             {
                 Path              = Settings.Destination,
                 Password          = Settings.Password,
-                CompressionLevel  = SevenZip.CompressionLevel.Ultra,
-                CompressionMethod = SevenZip.CompressionMethod.Lzma,
-                EncryptionMethod  = SevenZip.EncryptionMethod.Aes256,
+                CompressionLevel  = CompressionLevel.Ultra,
+                CompressionMethod = CompressionMethod.Lzma,
+                EncryptionMethod  = EncryptionMethod.Aes256,
             };
         }
 

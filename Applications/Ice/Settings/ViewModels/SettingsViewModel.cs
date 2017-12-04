@@ -1,19 +1,19 @@
 ﻿/* ------------------------------------------------------------------------- */
-///
-/// Copyright (c) 2010 CubeSoft, Inc.
-/// 
-/// Licensed under the Apache License, Version 2.0 (the "License");
-/// you may not use this file except in compliance with the License.
-/// You may obtain a copy of the License at
-///
-///  http://www.apache.org/licenses/LICENSE-2.0
-///
-/// Unless required by applicable law or agreed to in writing, software
-/// distributed under the License is distributed on an "AS IS" BASIS,
-/// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-/// See the License for the specific language governing permissions and
-/// limitations under the License.
-///
+//
+// Copyright (c) 2010 CubeSoft, Inc.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
 /* ------------------------------------------------------------------------- */
 using System;
 using Cube.FileSystem.SevenZip.Ice;
@@ -83,8 +83,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool CheckUpdate
         {
-            get { return _model.Value.CheckUpdate; }
-            set { _model.Value.CheckUpdate = value; }
+            get => _model.Value.CheckUpdate;
+            set => _model.Value.CheckUpdate = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -98,8 +98,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool ErrorReport
         {
-            get { return _model.Value.ErrorReport; }
-            set { _model.Value.ErrorReport = value; }
+            get => _model.Value.ErrorReport;
+            set => _model.Value.ErrorReport = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -114,8 +114,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public string Filtering
         {
-            get { return Transform(_model.Value.Filters, "|", Environment.NewLine); }
-            set { _model.Value.Filters = Transform(value, Environment.NewLine, "|"); }
+            get => Transform(_model.Value.Filters, "|", Environment.NewLine);
+            set => _model.Value.Filters = Transform(value, Environment.NewLine, "|");
         }
 
         /* ----------------------------------------------------------------- */
@@ -130,8 +130,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool ToolTip
         {
-            get { return _model.Value.ToolTip; }
-            set { _model.Value.ToolTip = value; }
+            get => _model.Value.ToolTip;
+            set => _model.Value.ToolTip = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -146,8 +146,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         public int ToolTipCount
         {
-            get { return _model.Value.ToolTipCount; }
-            set { _model.Value.ToolTipCount = value; }
+            get => _model.Value.ToolTipCount;
+            set => _model.Value.ToolTipCount = value;
         }
 
         /* ----------------------------------------------------------------- */

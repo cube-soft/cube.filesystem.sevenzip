@@ -1,20 +1,20 @@
 ﻿/* ------------------------------------------------------------------------- */
-///
-/// Copyright (c) 2010 CubeSoft, Inc.
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU Lesser General Public License as
-/// published by the Free Software Foundation, either version 3 of the
-/// License, or (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU Lesser General Public License for more details.
-///
-/// You should have received a copy of the GNU Lesser General Public License
-/// along with this program.  If not, see <http://www.gnu.org/licenses/>.
-///
+//
+// Copyright (c) 2010 CubeSoft, Inc.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
@@ -55,6 +55,7 @@ namespace Cube.FileSystem.SevenZip
         public ArchiveExtractCallback(string src, string dest, IEnumerable<ArchiveItem> items, Operator io)
             : base(src, io)
         {
+            _dispose     = new OnceAction<bool>(Dispose);
             Destination  = dest;
             Items        = items;
             TotalCount   = -1;
@@ -118,8 +119,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public long TotalCount
         {
-            get { return Report.TotalCount; }
-            set { Report.TotalCount = value; }
+            get => Report.TotalCount;
+            set => Report.TotalCount = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -137,8 +138,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public long TotalBytes
         {
-            get { return Report.TotalBytes; }
-            set { Report.TotalBytes = value; }
+            get => Report.TotalBytes;
+            set => Report.TotalBytes = value;
         }
 
         #endregion
@@ -306,10 +307,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        //~ArchiveExtractCallback()
-        //{
-        //    Dispose(false);
-        //}
+        ~ArchiveExtractCallback() { _dispose.Invoke(false); }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -322,8 +320,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void Dispose()
         {
-            Dispose(true);
-            // GC.SuppressFinalize(this);
+            _dispose.Invoke(true);
+            GC.SuppressFinalize(this);
         }
 
         /* ----------------------------------------------------------------- */
@@ -337,9 +335,6 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         private void Dispose(bool disposing)
         {
-            if (_disposed) return;
-            _disposed = true;
-
             if (disposing)
             {
                 foreach (var kv in _streams)
@@ -441,7 +436,7 @@ namespace Cube.FileSystem.SevenZip
         }
 
         #region Fields
-        private bool _disposed = false;
+        private OnceAction<bool> _dispose;
         private IEnumerator<ArchiveItem> _inner;
         private IDictionary<ArchiveItem, ArchiveStreamWriter> _streams = new Dictionary<ArchiveItem, ArchiveStreamWriter>();
         private long _hack = 0;

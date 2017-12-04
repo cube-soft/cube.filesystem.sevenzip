@@ -1,0 +1,4 @@
+"Sample",0
+"Sample\Bas.txt",0
+"Sample\Bar.txt",7816
+"Sample\Foo.txt",3

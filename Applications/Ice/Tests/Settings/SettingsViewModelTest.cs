@@ -1,29 +1,30 @@
 ﻿/* ------------------------------------------------------------------------- */
-///
-/// Copyright (c) 2010 CubeSoft, Inc.
-/// 
-/// Licensed under the Apache License, Version 2.0 (the "License");
-/// you may not use this file except in compliance with the License.
-/// You may obtain a copy of the License at
-///
-///  http://www.apache.org/licenses/LICENSE-2.0
-///
-/// Unless required by applicable law or agreed to in writing, software
-/// distributed under the License is distributed on an "AS IS" BASIS,
-/// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-/// See the License for the specific language governing permissions and
-/// limitations under the License.
-///
+//
+// Copyright (c) 2010 CubeSoft, Inc.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Linq;
 using Microsoft.Win32;
 using Cube.FileSystem.SevenZip.Ice;
 using Cube.FileSystem.SevenZip.App.Ice.Settings;
+using Cube.Settings;
 using NUnit.Framework;
 using Cube.Registries;
 
-namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
+namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
@@ -35,7 +36,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class SettingsViewModelTest
+    class SettingsViewModelTest : MockViewHelper
     {
         #region Tests
 
@@ -62,7 +63,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
                 ToolTipCount = 15
             };
 
-            Assert.That(vm.Version,     Does.StartWith("Version 1.0.0"));
+            Assert.That(vm.Version,     Does.StartWith("Version"));
             Assert.That(vm.InstallMode, Is.False);
 
             Assert.That(m.Value.CheckUpdate,          Is.True);
@@ -530,7 +531,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
             var src  = vm.Shortcut;
             var dest = m.Value.Shortcut;
 
-            dest.Directory = GetTmpDirectory();
+            dest.Directory = Results;
 
             src.Archive       = true;
             src.Extract       = true;
@@ -562,11 +563,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
         /* ----------------------------------------------------------------- */
         [TestCase(true)]
         [TestCase(false)]
-        public void SyncUpdate(bool install)
+        public void SyncUpdate(bool install) => Assert.DoesNotThrow(() =>
         {
             var m0 = Create();
             m0.Startup.Name = "cubeice-test";
-            m0.Value.Shortcut.Directory = GetTmpDirectory();
+            m0.Value.Shortcut.Directory = Results;
 
             var vm0 = new SettingsViewModel(m0)
             {
@@ -580,7 +581,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
             var m1 = Create();
             m1.Load();
             m1.Startup.Name = "cubeice-test";
-            m1.Value.Shortcut.Directory = GetTmpDirectory();
+            m1.Value.Shortcut.Directory = Results;
 
             var vm1 = new SettingsViewModel(m1)
             {
@@ -588,9 +589,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
                 InstallMode = false,
             };
             vm1.Update();
-
-            Assert.Pass();
-        }
+        });
 
         #endregion
 
@@ -598,14 +597,14 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// KeyName
+        /// SubKeyName
         ///
         /// <summary>
-        /// テスト用のレジストリキー名を取得します。
+        /// テスト用のレジストリ・サブキー名を取得します。
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private static string KeyName = "CubeIceTest";
+        private static string SubKeyName = @"CubeSoft\CubeIceTest";
 
         /* ----------------------------------------------------------------- */
         ///
@@ -616,23 +615,10 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        private SettingsFolder Create() => new SettingsFolder(KeyName);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetTmpDirectory
-        ///
-        /// <summary>
-        /// 一時ディレクトリのパスを取得します。
-        /// </summary>
-        /// 
-        /* ----------------------------------------------------------------- */
-        private string GetTmpDirectory()
-        {
-            var io = new Operator();
-            var asm = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            return io.Combine(io.Get(asm).DirectoryName, "Results");
-        }
+        private SettingsFolder Create() => new SettingsFolder(
+            SettingsType.Registry,
+            $@"Software\{SubKeyName}"
+        ) { AutoSave = false };
 
         /* ----------------------------------------------------------------- */
         ///
@@ -646,14 +632,10 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
         [TearDown]
         public void TearDown()
         {
-            try
+            using (var root = Registry.CurrentUser.OpenSubKey("Software", true))
             {
-                using (var root = Registry.CurrentUser.OpenSubKey("CubeSoft", true))
-                {
-                    root.DeleteSubKeyTree(KeyName, false);
-                }
+                root.DeleteSubKeyTree(SubKeyName, false);
             }
-            catch (Exception /* err */) { /* ignore */ }
         }
 
         #endregion

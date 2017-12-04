@@ -1,52 +1,51 @@
 ﻿/* ------------------------------------------------------------------------- */
-///
-/// Copyright (c) 2010 CubeSoft, Inc.
-/// 
-/// Licensed under the Apache License, Version 2.0 (the "License");
-/// you may not use this file except in compliance with the License.
-/// You may obtain a copy of the License at
-///
-///  http://www.apache.org/licenses/LICENSE-2.0
-///
-/// Unless required by applicable law or agreed to in writing, software
-/// distributed under the License is distributed on an "AS IS" BASIS,
-/// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-/// See the License for the specific language governing permissions and
-/// limitations under the License.
-///
+//
+// Copyright (c) 2010 CubeSoft, Inc.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
-using Cube.FileSystem.SevenZip;
 
 namespace Cube.FileSystem.SevenZip.App.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveDetailsForm
+    /// ArchiveForm
     ///
     /// <summary>
     /// 圧縮処理の詳細画面を表示するクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class ArchiveDetailsForm : Form
+    public partial class ArchiveForm : Form
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveDetailsForm
+        /// ArchiveForm
         /// 
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveDetailsForm()
+        public ArchiveForm()
         {
             InitializeComponent();
 
@@ -62,14 +61,15 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             ExecuteButton.Click += (s, e) => Close();
             ExitButton.Click    += (s, e) => Close();
 
-            OutputButton.Click                  += WhenPathRequested;
-            OutputTextBox.TextChanged           += WhenPathChanged;
-            FormatComboBox.SelectedValueChanged += WhenFormatChanged;
-            EncryptionCheckBox.CheckedChanged   += WhenEncryptionChanged;
-            PasswordTextBox.TextChanged         += WhenPasswordChanged;
-            ConfirmTextBox.TextChanged          += WhenConfirmChanged;
-            ConfirmTextBox.EnabledChanged       += WhenConfirmEnabledChanged;
-            ShowPasswordCheckBox.CheckedChanged += WhenShowPasswordChanged;
+            OutputButton.Click                             += WhenPathRequested;
+            OutputTextBox.TextChanged                      += WhenPathChanged;
+            FormatComboBox.SelectedValueChanged            += WhenFormatChanged;
+            CompressionMethodComboBox.SelectedValueChanged += WhenCompressionMethodChanged;
+            EncryptionCheckBox.CheckedChanged              += WhenEncryptionChanged;
+            PasswordTextBox.TextChanged                    += WhenPasswordChanged;
+            ConfirmTextBox.TextChanged                     += WhenConfirmChanged;
+            ConfirmTextBox.EnabledChanged                  += WhenConfirmEnabledChanged;
+            ShowPasswordCheckBox.CheckedChanged            += WhenShowPasswordChanged;
         }
 
         #endregion
@@ -149,11 +149,13 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         public string Path
         {
-            get { return OutputTextBox.Text; }
+            get => OutputTextBox.Text;
             set
             {
                 if (OutputTextBox.Text == value) return;
                 OutputTextBox.Text = value;
+                OutputTextBox.SelectionStart = Math.Max(value.Length - 1, 0);
+                OutputTextBox.SelectionLength = 0;
             }
         }
 
@@ -184,7 +186,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         private bool PathIsValid
         {
-            get { return _path; }
+            get => _path;
             set
             {
                 if (_path == value) return;
@@ -206,7 +208,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         private bool EncryptionIsValid
         {
-            get { return _encryption; }
+            get => _encryption;
             set
             {
                 if (_encryption == value) return;
@@ -219,6 +221,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
         #region Implementations
 
+        #region Update
+
         /* ----------------------------------------------------------------- */
         ///
         /// UpdateFormat
@@ -230,7 +234,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         private void UpdateFormat()
         {
-            Update(FormatComboBox, ArchiveDetailsData.Format);
+            Update(FormatComboBox, ViewResource.Formats);
             if (!FormatComboBox.Enabled) return;
             FormatComboBox.SelectedValue = Format.Zip;
         }
@@ -246,7 +250,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         private void UpdateCompressionLevel()
         {
-            Update(CompressionLevelComboBox, ArchiveDetailsData.CompressionLevel);
+            Update(CompressionLevelComboBox, ViewResource.CompressionLevels);
             if (!CompressionLevelComboBox.Enabled) return;
             CompressionLevelComboBox.SelectedValue = CompressionLevel.Ultra;
         }
@@ -262,7 +266,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         private void UpdateCompressionMethod()
         {
-            Update(CompressionMethodComboBox, ArchiveDetailsData.GetCompressionMethod(Format));
+            Update(CompressionMethodComboBox, ViewResource.GetCompressionMethod(Format));
             if (!CompressionMethodComboBox.Enabled) return;
             CompressionMethodComboBox.SelectedIndex = 0;
         }
@@ -278,7 +282,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         private void UpdateEncryptionMethod()
         {
-            Update(EncryptionMethodComboBox, ArchiveDetailsData.EncryptionMethod);
+            Update(EncryptionMethodComboBox, ViewResource.EncryptionMethods);
             if (!EncryptionMethodComboBox.Enabled) return;
             EncryptionMethodComboBox.SelectedIndex = 0;
         }
@@ -317,82 +321,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             src.ValueMember   = "Value";
         }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenPathRequested
-        /// 
-        /// <summary>
-        /// 保存パスの要求時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenPathRequested(object sender, EventArgs e)
-        {
-            var dialog = new SaveFileDialog
-            {
-                AddExtension                 = true,
-                InitialDirectory             = System.IO.Path.GetDirectoryName(Path),
-                FileName                     = System.IO.Path.GetFileName(Path),
-                Filter                       = Properties.Resources.FilterAll,
-                OverwritePrompt              = true,
-                SupportMultiDottedExtensions = true,
-            };
-
-            if (dialog.ShowDialog() == DialogResult.Cancel) return;
-            Path = dialog.FileName;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenPathChanged
-        /// 
-        /// <summary>
-        /// 保存パスの変更時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenPathChanged(object sender, EventArgs e)
-            => PathIsValid = OutputTextBox.TextLength > 0;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenFormatChanged
-        /// 
-        /// <summary>
-        /// Format 変更時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenFormatChanged(object sender, EventArgs e)
-        {
-            UpdateCompressionMethod();
-            EncryptionMethodComboBox.Enabled &= (Format == Format.Zip);
-            EncryptionGroupBox.Enabled = Format == Format.Zip ||
-                                         Format == Format.SevenZip ||
-                                         Format == Format.Sfx;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenEncryptionChanged
-        /// 
-        /// <summary>
-        /// 暗号化の有効/無効状態が変化した時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenEncryptionChanged(object sender, EventArgs e)
-        {
-            var enabled = EncryptionCheckBox.Checked;
-
-            PasswordTextBox.Enabled          =
-            ConfirmTextBox.Enabled           =
-            ShowPasswordCheckBox.Enabled     = enabled;
-            EncryptionMethodComboBox.Enabled = enabled & (Format == Format.Zip);
-
-            if (!enabled) ExecuteButton.Enabled = true;
-            else WhenShowPasswordChanged(sender, e);
-        }
+        #endregion
 
         #region Password gimmick
 
@@ -425,7 +354,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             if (!ConfirmTextBox.Enabled) return;
 
             var eq = PasswordTextBox.Text.Equals(ConfirmTextBox.Text);
-            EncryptionIsValid        = eq && PasswordTextBox.TextLength > 0;
+            EncryptionIsValid = eq && PasswordTextBox.TextLength > 0;
             ConfirmTextBox.BackColor = eq || ConfirmTextBox.TextLength <= 0 ?
                                        SystemColors.Window :
                                        Color.FromArgb(255, 102, 102);
@@ -464,11 +393,91 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             EncryptionIsValid = show & (PasswordTextBox.TextLength > 0);
         }
 
+        #endregion
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenPathRequested
+        /// 
+        /// <summary>
+        /// 保存パスの要求時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenPathRequested(object sender, EventArgs e)
+        {
+            var cvt  = new PathConverter(Path, Format, CompressionMethod);
+            var args = new PathQueryEventArgs(cvt.Result.FullName, cvt.ResultFormat, true);
+
+            Views.ShowSaveView(args);
+            if (!args.Cancel) Path = args.Result;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenPathChanged
+        /// 
+        /// <summary>
+        /// 保存パスの変更時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenPathChanged(object sender, EventArgs e)
+            => PathIsValid = OutputTextBox.TextLength > 0;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenFormatChanged
+        /// 
+        /// <summary>
+        /// Format 変更時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenFormatChanged(object sender, EventArgs e)
+        {
+            UpdateCompressionMethod();
+            EncryptionMethodComboBox.Enabled &= (Format == Format.Zip);
+            EncryptionGroupBox.Enabled = ViewResource.IsEncryptionSupported(Format);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenCompressionMethodChanged
+        /// 
+        /// <summary>
+        /// CompressionMethod 変更時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenCompressionMethodChanged(object sender, EventArgs e)
+            => Path = new PathConverter(Path, Format, CompressionMethod).Result.FullName;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenEncryptionChanged
+        /// 
+        /// <summary>
+        /// 暗号化の有効/無効状態が変化した時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenEncryptionChanged(object sender, EventArgs e)
+        {
+            var enabled = EncryptionCheckBox.Checked;
+
+            PasswordTextBox.Enabled          =
+            ConfirmTextBox.Enabled           =
+            ShowPasswordCheckBox.Enabled     = enabled;
+            EncryptionMethodComboBox.Enabled = enabled & (Format == Format.Zip);
+
+            if (!enabled) ExecuteButton.Enabled = true;
+            else WhenShowPasswordChanged(sender, e);
+        }
+
         #region Fields
         private bool _path = false;
         private bool _encryption = true;
-        #endregion
-
         #endregion
 
         #endregion

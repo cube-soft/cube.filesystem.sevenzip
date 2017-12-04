@@ -1,20 +1,20 @@
 ﻿/* ------------------------------------------------------------------------- */
-///
-/// Copyright (c) 2010 CubeSoft, Inc.
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU Lesser General Public License as
-/// published by the Free Software Foundation, either version 3 of the
-/// License, or (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU Lesser General Public License for more details.
-///
-/// You should have received a copy of the GNU Lesser General Public License
-/// along with this program.  If not, see <http://www.gnu.org/licenses/>.
-///
+//
+// Copyright (c) 2010 CubeSoft, Inc.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
@@ -94,6 +94,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public ArchiveReader(string path, string password, Operator io)
         {
+            _dispose = new OnceAction<bool>(Dispose);
             Source = path;
             _io = io;
             _password = new PasswordQuery(password);
@@ -115,6 +116,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public ArchiveReader(string path, IQuery<string, string> password, Operator io)
         {
+            _dispose = new OnceAction<bool>(Dispose);
             Source = path;
             _io = io;
             _password = new PasswordQuery(password);
@@ -269,7 +271,7 @@ namespace Cube.FileSystem.SevenZip
                 cb.Extracted  += (s, e) => OnExtracted(e);
 
                 _archive.Extract(null, uint.MaxValue, 0, cb);
-                ThrowIfError(cb.Result);
+                ThrowIfError(cb.Result, cb.Exception);
             }
         }
 
@@ -284,10 +286,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        ~ArchiveReader()
-        {
-            Dispose(false);
-        }
+        ~ArchiveReader() { _dispose.Invoke(false); }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -300,7 +299,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void Dispose()
         {
-            Dispose(true);
+            _dispose.Invoke(true);
             GC.SuppressFinalize(this);
         }
 
@@ -315,16 +314,9 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         protected virtual void Dispose(bool disposing)
         {
-            if (_disposed) return;
-
-            if (disposing)
-            {
-                _archive.Close();
-                _callback.Dispose();
-                _7z.Dispose();
-            }
-
-            _disposed = true;
+            if (disposing) _callback.Dispose();
+            _archive.Close();
+            _7z.Dispose();
         }
 
         #endregion
@@ -370,31 +362,32 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void ThrowIfError(OperationResult result)
+        private void ThrowIfError(OperationResult result, Exception err)
         {
             switch (result)
             {
                 case OperationResult.OK:
-                    break;
+                    return;
                 case OperationResult.DataError:
                     if (Items.Any(x => x.Encrypted))
                     {
                         _password.Reset();
                         throw new EncryptionException();
                     }
-                    else throw new System.IO.IOException($"{result}");
+                    break;
                 case OperationResult.WrongPassword:
                     _password.Reset();
                     throw new EncryptionException();
                 case OperationResult.UserCancel:
                     throw new OperationCanceledException();
-                default:
-                    throw new System.IO.IOException($"{result}");
             }
+
+            if (err != null) throw err;
+            else throw new System.IO.IOException($"{result}");
         }
 
         #region Fields
-        private bool _disposed = false;
+        private OnceAction<bool> _dispose;
         private Operator _io;
         private PasswordQuery _password;
         private SevenZipLibrary _7z;

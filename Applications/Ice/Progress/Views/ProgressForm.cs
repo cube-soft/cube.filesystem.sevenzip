@@ -1,19 +1,19 @@
 ﻿/* ------------------------------------------------------------------------- */
-///
-/// Copyright (c) 2010 CubeSoft, Inc.
-/// 
-/// Licensed under the Apache License, Version 2.0 (the "License");
-/// you may not use this file except in compliance with the License.
-/// You may obtain a copy of the License at
-///
-///  http://www.apache.org/licenses/LICENSE-2.0
-///
-/// Unless required by applicable law or agreed to in writing, software
-/// distributed under the License is distributed on an "AS IS" BASIS,
-/// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-/// See the License for the specific language governing permissions and
-/// limitations under the License.
-///
+//
+// Copyright (c) 2010 CubeSoft, Inc.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
 /* ------------------------------------------------------------------------- */
 using System;
 using System.ComponentModel;
@@ -73,7 +73,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         public int Value
         {
-            get { return MainProgressBar.Value; }
+            get => MainProgressBar.Value;
             set
             {
                 if (MainProgressBar.Value == value) return;
@@ -110,7 +110,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         public int Unit
         {
-            get { return MainProgressBar.Maximum; }
+            get => MainProgressBar.Maximum;
             set
             {
                 if (MainProgressBar.Maximum == value) return;
@@ -129,7 +129,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         public string FileName
         {
-            get { return _fileName; }
+            get => _fileName;
             set
             {
                 if (_fileName == value) return;
@@ -150,7 +150,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         public string Status
         {
-            get { return StatusLabel.Text; }
+            get => StatusLabel.Text;
             set
             {
                 if (StatusLabel.Text == value) return;
@@ -169,7 +169,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         public long Count
         {
-            get { return _count; }
+            get => _count;
             set
             {
                 if (_count == value) return;
@@ -190,7 +190,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         public long TotalCount
         {
-            get { return _totalCount; }
+            get => _totalCount;
             set
             {
                 if (_totalCount == value) return;
@@ -227,7 +227,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public TimeSpan Remain
         {
-            get { return _remain; }
+            get => _remain;
             private set
             {
                 if (Math.Abs((_remain - value).TotalSeconds) <= 1.0) return;
@@ -251,8 +251,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Image Logo
         {
-            get { return HeaderPictureBox.Image; }
-            set { HeaderPictureBox.Image = value; }
+            get => HeaderPictureBox.Image;
+            set => HeaderPictureBox.Image = value;
         }
 
         #endregion

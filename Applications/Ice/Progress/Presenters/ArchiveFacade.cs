@@ -1,23 +1,22 @@
 ﻿/* ------------------------------------------------------------------------- */
-///
-/// Copyright (c) 2010 CubeSoft, Inc.
-/// 
-/// Licensed under the Apache License, Version 2.0 (the "License");
-/// you may not use this file except in compliance with the License.
-/// You may obtain a copy of the License at
-///
-///  http://www.apache.org/licenses/LICENSE-2.0
-///
-/// Unless required by applicable law or agreed to in writing, software
-/// distributed under the License is distributed on an "AS IS" BASIS,
-/// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-/// See the License for the specific language governing permissions and
-/// limitations under the License.
-///
+//
+// Copyright (c) 2010 CubeSoft, Inc.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Linq;
-using Cube.FileSystem.SevenZip;
 using Cube.FileSystem.SevenZip.Ice;
 using Cube.Log;
 
@@ -179,7 +178,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         private void Archive()
         {
             var fmt   = GetFormat();
-            var dest  = GetDestination(fmt);
+            var dest  = GetTmp(fmt);
             var query = !string.IsNullOrEmpty(Details.Password) || Request.Password ?
                         new Query<string, string>(x => RaisePasswordRequested(x)) :
                         null;
@@ -238,6 +237,23 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// GetTmp
+        /// 
+        /// <summary>
+        /// 保存先パスを決定後、一時ファイルのパスを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private string GetTmp(Format format)
+        {
+            Destination = GetDestination(format);
+            var info = IO.Get(Destination);
+            SetTmp(info.DirectoryName);
+            return Tmp;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// GetDestination
         /// 
         /// <summary>
@@ -247,47 +263,19 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         private string GetDestination(Format format)
         {
-            if (!string.IsNullOrEmpty(Details?.Path)) Destination = Details.Path;
-            else
-            {
-                var query   = Request.Format.ToString();
-                var kv      = GetSaveLocation(Settings.Value.Archive, query);
-                var runtime = kv.Key == SaveLocation.Runtime;
-                var path    = runtime ? kv.Value : AddFileName(kv.Value, format);
+            if (!string.IsNullOrEmpty(Details?.Path)) return Details.Path;
 
-                if (!runtime && IO.Exists(path))
-                {
-                    var e = new QueryEventArgs<string, string>(query, true);
-                    OnDestinationRequested(e);
-                    if (e.Cancel) throw new OperationCanceledException();
-                    path = e.Result;
-                }
+            var cvt = new PathConverter(Request.Sources.First(), Request.Format, IO);
+            var kv = GetSaveLocation(Settings.Value.Archive, cvt.ResultFormat, cvt.Result.FullName);
+            if (kv.Key == SaveLocation.Runtime) return kv.Value;
 
-                Destination = path;
-            }
+            var path = IO.Combine(kv.Value, cvt.Result.Name);
+            if (!IO.Exists(path)) return path;
 
-            var info = IO.Get(Destination);
-            SetTmp(info.DirectoryName);
-            return Tmp;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// AddFileName
-        /// 
-        /// <summary>
-        /// FileName を結合します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private string AddFileName(string src, Format format)
-        {
-            var name = IO.Get(Request.Sources.First()).NameWithoutExtension;
-            var head = format.ToExtension();
-            var tail = Details.CompressionMethod.ToExtension();
-            var ext  = $"{head}{tail}";
-
-            return IO.Combine(src, $"{name}{ext}");
+            var e = new PathQueryEventArgs(path, cvt.ResultFormat, true);
+            OnDestinationRequested(e);
+            if (e.Cancel) throw new OperationCanceledException();
+            return e.Result;
         }
 
         /* ----------------------------------------------------------------- */

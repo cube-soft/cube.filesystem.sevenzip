@@ -59,14 +59,15 @@ using (var reader = new ArchiveReader(@"path\to\archive", "password"))
 
 ## Todo
 
-We will implement add and/or modify files in the existed archives in the future.
+We will implement to add and/or modify files to existed archives in the future.
 
-## Requirements
+## Dependencies
 
 * [7-Zip](http://www.7-zip.org/) ... [cube-soft/7z](https://github.com/cube-soft/7z) is optimized for Japanese encoding.
 * [AlphaFS](http://alphafs.alphaleonis.com/)
+* [Cube.Core](https://github.com/cube-soft/Cube.Core)
+* [Cube.FileSystem](https://github.com/cube-soft/Cube.FileSystem)
 * [log4net](https://logging.apache.org/log4net/)
-* [NUnit](http://nunit.org/)
 
 ## Thanks
 

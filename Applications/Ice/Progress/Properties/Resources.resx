@@ -143,19 +143,22 @@
     <value>すべてのファイル (*.*)|*.*</value>
   </data>
   <data name="FilterBzip2" xml:space="preserve">
-    <value>BZip2 ファイル (*.bz, *.bz2)|*.bz;*.BZ;*.bz2;*.BZ2;*.tbz;*.TBZ</value>
+    <value>Tar.BZip2 ファイル (*.tar.bz2, *.tb2, *.tar.bz, *.tbz)|*.tar.bz2;*.tb2;*.tar.bz;*.tbz;*.TAR.BZ2;*.TB2;*.TAR.BZ;*.TBZ</value>
   </data>
   <data name="FilterGzip" xml:space="preserve">
-    <value>GZip ファイル (*.gz)|*.gz;*.GZ;*.tgz;*.TGZ</value>
+    <value>Tar.GZip ファイル (*.tar.gz, *.tgz)|*.tar.gz;*.tgz;*.TAR.GZ;*.TGZ</value>
   </data>
   <data name="FilterSevenZip" xml:space="preserve">
     <value>7z ファイル (*.7z)|*.7z;*.7Z</value>
   </data>
+  <data name="FilterSfx" xml:space="preserve">
+    <value>自己解凍形式ファイル (*.exe)|*.exe;*.EXE</value>
+  </data>
   <data name="FilterTar" xml:space="preserve">
-    <value>Tar ファイル (*.tar)|*.tar;*.TAR;*.tar.gz;*.TAR.GZ;*.tar.bz;*.TAR.BZ;*.tar.bz2;*.TAR.BZ2;*.tar.xz;*.TAR.XZ;*.tgz;*.TGZ;*.tbz;*.TBZ;*.txz;*.TXZ</value>
+    <value>Tar ファイル (*.tar)|*.tar;*.TAR</value>
   </data>
   <data name="FilterXZ" xml:space="preserve">
-    <value>XZ ファイル (*.xz)|*.xz;*.XZ;*.txz;*.TXZ</value>
+    <value>Tar.XZ ファイル (*.tar.xz, *.txz)|*.tar.xz;*.txz;*.TAR.XZ;*.TXZ</value>
   </data>
   <data name="FilterZip" xml:space="preserve">
     <value>Zip ファイル (*.zip)|*.zip;*.ZIP</value>

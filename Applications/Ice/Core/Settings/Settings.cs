@@ -1,24 +1,24 @@
 ﻿/* ------------------------------------------------------------------------- */
-///
-/// Copyright (c) 2010 CubeSoft, Inc.
-/// 
-/// Licensed under the Apache License, Version 2.0 (the "License");
-/// you may not use this file except in compliance with the License.
-/// You may obtain a copy of the License at
-///
-///  http://www.apache.org/licenses/LICENSE-2.0
-///
-/// Unless required by applicable law or agreed to in writing, software
-/// distributed under the License is distributed on an "AS IS" BASIS,
-/// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-/// See the License for the specific language governing permissions and
-/// limitations under the License.
-///
+//
+// Copyright (c) 2010 CubeSoft, Inc.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Runtime.Serialization;
+using Cube.Settings;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -49,8 +49,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public bool CheckUpdate
         {
-            get { return _checkUpdate; }
-            set { SetProperty(ref _checkUpdate, value); }
+            get => _checkUpdate;
+            set => SetProperty(ref _checkUpdate, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -65,8 +65,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public bool ErrorReport
         {
-            get { return _errorReport; }
-            set { SetProperty(ref _errorReport, value); }
+            get => _errorReport;
+            set => SetProperty(ref _errorReport, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -85,8 +85,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public string Explorer
         {
-            get { return _explorer; }
-            set { SetProperty(ref _explorer, value); }
+            get => _explorer;
+            set => SetProperty(ref _explorer, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -102,8 +102,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public string Filters
         {
-            get { return _filtering; }
-            set { SetProperty(ref _filtering, value); }
+            get => _filtering;
+            set => SetProperty(ref _filtering, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -119,8 +119,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public bool ToolTip
         {
-            get { return _toolTip; }
-            set { SetProperty(ref _toolTip, value); }
+            get => _toolTip;
+            set => SetProperty(ref _toolTip, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -140,8 +140,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public int ToolTipCount
         {
-            get { return _toolTipCount; }
-            set { SetProperty(ref _toolTipCount, value); }
+            get => _toolTipCount;
+            set => SetProperty(ref _toolTipCount, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -156,8 +156,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public ArchiveSettings Archive
         {
-            get { return _archive; }
-            set { SetProperty(ref _archive, value); }
+            get => _archive;
+            set => SetProperty(ref _archive, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -172,8 +172,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public ExtractSettings Extract
         {
-            get { return _extract; }
-            set { SetProperty(ref _extract, value); }
+            get => _extract;
+            set => SetProperty(ref _extract, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -188,8 +188,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public AssociateSettings Associate
         {
-            get { return _associate; }
-            set { SetProperty(ref _associate, value); }
+            get => _associate;
+            set => SetProperty(ref _associate, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -204,8 +204,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public ContextSettings Context
         {
-            get { return _context; }
-            set { SetProperty(ref _context, value); }
+            get => _context;
+            set => SetProperty(ref _context, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -221,8 +221,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public ShortcutSettings Shortcut
         {
-            get { return _shortcut; }
-            set { SetProperty(ref _shortcut, value); }
+            get => _shortcut;
+            set => SetProperty(ref _shortcut, value);
         }
 
         #endregion
@@ -274,7 +274,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     /// 
     /* --------------------------------------------------------------------- */
-    public class SettingsFolder : Cube.Settings.SettingsFolder<Settings>
+    public class SettingsFolder : SettingsFolder<Settings>
     {
         #region Constructors
 
@@ -287,7 +287,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public SettingsFolder() : this(@"CubeICE\v3") { }
+        public SettingsFolder()
+            : this(SettingsType.Registry, @"CubeSoft\CubeICE\v3") { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -297,17 +298,17 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// オブジェクトを初期化します。
         /// </summary>
         /// 
-        /// <param name="subkey">レジストリのサブキー名</param>
+        /// <param name="type">設定情報の保存方法</param>
+        /// <param name="path">設定情報の保存パス</param>
         ///
         /* ----------------------------------------------------------------- */
-        public SettingsFolder(string subkey) : base("CubeSoft", subkey)
+        public SettingsFolder(SettingsType type, string path) : base(type, path)
         {
             AutoSave       = false;
             Version.Digit  = 3;
             Version.Suffix = Properties.Resources.VersionSuffix;
 
-            var asm = Assembly.GetExecutingAssembly().Location;
-            var dir = System.IO.Path.GetDirectoryName(asm);
+            var dir = System.IO.Path.GetDirectoryName(AssemblyReader.Default.Location);
             Startup.Command = $"\"{System.IO.Path.Combine(dir, "cubeice-checker.exe")}\"";
             Startup.Name    = "cubeice-checker";
         }
@@ -325,7 +326,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected override void OnSaved(KeyValueEventArgs<Cube.Settings.SettingsType, string> e)
+        protected override void OnSaved(KeyValueEventArgs<SettingsType, string> e)
         {
             if (Value != null) Startup.Enabled = Value.CheckUpdate;
             base.OnSaved(e);

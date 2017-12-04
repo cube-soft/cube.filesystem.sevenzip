@@ -1,0 +1,9 @@
+"Root",0
+"Root\Users",0
+"Root\Users\dummy",0
+"Root\Users\dummy\Objects",0
+"Root\Users\dummy\Objects\写真",0
+"Root\Users\dummy\Objects\写真\2017-12-04_関西空港",0
+"Root\Users\dummy\Objects\写真\2017-12-04_関西空港\IMG_0001.txt",20
+"Root\Users\dummy\Objects\写真\2017-12-04_関西空港\IMG_0002.txt",33
+"Root\Users\dummy\Objects\写真\2017-12-04_関西空港\IMG_0003.txt",50

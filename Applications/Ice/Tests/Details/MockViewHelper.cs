@@ -1,19 +1,19 @@
 ﻿/* ------------------------------------------------------------------------- */
-///
-/// Copyright (c) 2010 CubeSoft, Inc.
-/// 
-/// Licensed under the Apache License, Version 2.0 (the "License");
-/// you may not use this file except in compliance with the License.
-/// You may obtain a copy of the License at
-///
-///  http://www.apache.org/licenses/LICENSE-2.0
-///
-/// Unless required by applicable law or agreed to in writing, software
-/// distributed under the License is distributed on an "AS IS" BASIS,
-/// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-/// See the License for the specific language governing permissions and
-/// limitations under the License.
-///
+//
+// Copyright (c) 2010 CubeSoft, Inc.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
 /* ------------------------------------------------------------------------- */
 using System.Reflection;
 using System.Threading.Tasks;
@@ -57,10 +57,9 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         protected MockViewHelper(Operator io)
         {
-            var reader = new AssemblyReader(Assembly.GetExecutingAssembly());
             IO = io;
-            Root = IO.Get(reader.Location).DirectoryName;
-            _directory = GetType().FullName.Replace($"{reader.Product}.", "");
+            Root = IO.Get(Assembly.GetExecutingAssembly().Location).DirectoryName;
+            _directory = GetType().FullName;
 
             Views.Configure(_mock);
 
@@ -83,8 +82,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         protected MockViewSettings Mock
         {
-            get { return _mock.Settings; }
-            set { _mock.Settings = value; }
+            get => _mock.Settings;
+            set => _mock.Settings = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -119,7 +118,18 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected string Examples => IO.Combine(Root, "Examples");
+        protected string Examples => IO.Combine(Root, ExamplesName);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ExamplesName
+        /// 
+        /// <summary>
+        /// テスト用ファイルの存在するフォルダの名前を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected static string ExamplesName => "Examples";
 
         /* ----------------------------------------------------------------- */
         ///
@@ -130,7 +140,18 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected string Results => IO.Combine(Root, $@"Results\{_directory}");
+        protected string Results => IO.Combine(Root, $@"{ResultsName}\{_directory}");
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ResultsName
+        /// 
+        /// <summary>
+        /// テスト結果を格納するためのフォルダの名前を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected static string ResultsName => "Results";
 
         #endregion
 
@@ -164,10 +185,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// <returns>パス</returns>
         ///
         /* ----------------------------------------------------------------- */
-        protected string Result(string filename)
-            => !string.IsNullOrEmpty(filename)
-               ? IO.Combine(Results, filename) :
-               string.Empty;
+        protected string Result(string filename) => IO.Combine(Results, filename);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -187,11 +205,16 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// <summary>
         /// View が非表示になるまで待ちます。
         /// </summary>
+        /// 
+        /// <param name="view">View オブジェクト</param>
+        /// 
+        /// <returns>正常に終了したかどうか</returns>
         ///
         /* ----------------------------------------------------------------- */
-        protected async Task Wait(Cube.Forms.IForm view)
+        protected async Task<bool> Wait(Cube.Forms.IForm view)
         {
-            for (var i = 0; view.Visible && i < 100; ++i) await TaskEx.Delay(50);
+            for (var i = 0; view.Visible && i < 100; ++i) await TaskEx.Delay(50).ConfigureAwait(false);
+            return !view.Visible;
         }
 
         #endregion

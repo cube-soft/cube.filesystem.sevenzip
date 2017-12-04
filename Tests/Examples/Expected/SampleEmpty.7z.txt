@@ -1,0 +1,7 @@
+"Sample",0
+"Sample\Empty",0
+"Sample\Normal",0
+"Sample\Empty.txt",0
+"Sample\Normal\Empty.txt",0
+"Sample\Normal\Sample.txt",6
+"Sample\Sample.txt",26

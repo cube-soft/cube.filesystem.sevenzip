@@ -1,26 +1,25 @@
 ﻿/* ------------------------------------------------------------------------- */
-///
-/// Copyright (c) 2010 CubeSoft, Inc.
-/// 
-/// Licensed under the Apache License, Version 2.0 (the "License");
-/// you may not use this file except in compliance with the License.
-/// You may obtain a copy of the License at
-///
-///  http://www.apache.org/licenses/LICENSE-2.0
-///
-/// Unless required by applicable law or agreed to in writing, software
-/// distributed under the License is distributed on an "AS IS" BASIS,
-/// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-/// See the License for the specific language governing permissions and
-/// limitations under the License.
-///
+//
+// Copyright (c) 2010 CubeSoft, Inc.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using Cube.FileSystem.SevenZip;
 using Cube.FileSystem.SevenZip.Ice;
 using Cube.Log;
 using Cube.Enumerations;
@@ -49,13 +48,15 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         /// 
         /// <param name="request">リクエストオブジェクト</param>
+        /// <param name="settings">設定情報</param>
         ///
         /* ----------------------------------------------------------------- */
         public ProgressFacade(Request request, SettingsFolder settings)
         {
+            _dispose = new OnceAction<bool>(Dispose);
             Request  = request;
             Settings = settings;
-            IO       = new Operator(new Alpha());
+            IO       = new AfsOperator();
 
             IO.Failed += WhenFailed;
             _timer.Elapsed += (s, e) => OnProgress(ValueEventArgs.Create(Report));
@@ -98,7 +99,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         public string Destination
         {
-            get { return _dest; }
+            get => _dest;
             protected set
             {
                 if (_dest == value) return;
@@ -118,7 +119,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         public string Tmp
         {
-            get { return _tmp; }
+            get => _tmp;
             private set
             {
                 if (_tmp == value) return;
@@ -160,8 +161,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         public TimeSpan Interval
         {
-            get { return TimeSpan.FromMilliseconds(_timer.Interval); }
-            set { _timer.Interval = value.TotalMilliseconds; }
+            get => TimeSpan.FromMilliseconds(_timer.Interval);
+            set => _timer.Interval = value.TotalMilliseconds;
         }
 
         /* ----------------------------------------------------------------- */
@@ -228,7 +229,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public QueryEventHandler<string, string> DestinationRequested;
+        public PathQueryEventHandler DestinationRequested;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -239,7 +240,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public virtual void OnDestinationRequested(QueryEventArgs<string, string> e)
+        public virtual void OnDestinationRequested(PathQueryEventArgs e)
             => DestinationRequested?.Invoke(this, e);
 
         #endregion
@@ -530,7 +531,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected KeyValuePair<SaveLocation, string> GetSaveLocation(GeneralSettings settings, string query)
+        protected KeyValuePair<SaveLocation, string> GetSaveLocation(GeneralSettings settings, Format format, string query)
         {
             var key = Request.Location != SaveLocation.Unknown ?
                       Request.Location :
@@ -539,7 +540,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             this.LogDebug(string.Format("SaveLocation:({0},{1})->{2}",
                 Request.Location, settings.SaveLocation, key));
 
-            return new KeyValuePair<SaveLocation, string>(key, GetSavePath(key, settings, query));
+            return new KeyValuePair<SaveLocation, string>(key, GetSavePath(key, settings, format, query));
         }
 
         /* ----------------------------------------------------------------- */
@@ -567,10 +568,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        //~ProgressFacade()
-        //{
-        //    Dispose(false);
-        //}
+        ~ProgressFacade() { _dispose.Invoke(false); }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -583,8 +581,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         public void Dispose()
         {
-            Dispose(true);
-            // GC.SuppressFinalize(this);
+            _dispose.Invoke(true);
+            GC.SuppressFinalize(this);
         }
 
         /* ----------------------------------------------------------------- */
@@ -598,15 +596,18 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         protected virtual void Dispose(bool disposing)
         {
-            if (_disposed) return;
-
             try
             {
+                if (disposing)
+                {
+                    _timer.Dispose();
+                    // _wait.Dispose();
+                }
+
                 IO.Failed -= WhenFailed;
                 if (!string.IsNullOrEmpty(Tmp)) IO.Delete(Tmp);
             }
             catch (Exception err) { this.LogWarn(err.ToString(), err); }
-            finally { _disposed = true; }
         }
 
         #endregion
@@ -624,7 +625,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetSavePath(SaveLocation key, GeneralSettings settings, string query)
+        private string GetSavePath(SaveLocation key, GeneralSettings settings, Format format, string query)
         {
             switch (key)
             {
@@ -633,7 +634,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
                 case SaveLocation.MyDocuments:
                     return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 case SaveLocation.Runtime:
-                    var e = new QueryEventArgs<string, string>(query, true);
+                    var e = new PathQueryEventArgs(query, format, true);
                     OnDestinationRequested(e);
                     if (e.Cancel) throw new OperationCanceledException();
                     return e.Result;
@@ -682,7 +683,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         }
 
         #region Fields
-        private bool _disposed = false;
+        private OnceAction<bool> _dispose;
         private string _dest;
         private string _tmp;
         private System.Timers.Timer _timer = new System.Timers.Timer(100.0);

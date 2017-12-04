@@ -1,20 +1,20 @@
 ﻿/* ------------------------------------------------------------------------- */
-///
-/// Copyright (c) 2010 CubeSoft, Inc.
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU Lesser General Public License as
-/// published by the Free Software Foundation, either version 3 of the
-/// License, or (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU Lesser General Public License for more details.
-///
-/// You should have received a copy of the GNU Lesser General Public License
-/// along with this program.  If not, see <http://www.gnu.org/licenses/>.
-///
+//
+// Copyright (c) 2010 CubeSoft, Inc.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
@@ -64,6 +64,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public ArchiveWriter(Format format, Operator io)
         {
+            _dispose = new OnceAction<bool>(Dispose);
             Format = format;
             _io = io;
             _7z = new SevenZipLibrary();
@@ -211,10 +212,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         /// 
         /* ----------------------------------------------------------------- */
-        //~ArchiveWriter()
-        //{
-        //    Dispose(false);
-        //}
+        ~ArchiveWriter() { _dispose.Invoke(false); }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -227,8 +225,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void Dispose()
         {
-            Dispose(true);
-            // GC.SuppressFinalize(this);
+            _dispose.Invoke(true);
+            GC.SuppressFinalize(this);
         }
 
         /* ----------------------------------------------------------------- */
@@ -242,9 +240,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         protected virtual void Dispose(bool disposing)
         {
-            if (_disposed) return;
-            if (disposing) _7z.Dispose();
-            _disposed = true;
+            _7z.Dispose();
         }
 
         #endregion
@@ -265,7 +261,7 @@ namespace Cube.FileSystem.SevenZip
         private void SaveCoreSfx(string path, IQuery<string, string> password,
             IProgress<ArchiveReport> progress, IList<FileItem> items)
         {
-            var sfx = (Option as ExecutableOption)?.Module;
+            var sfx = (Option as SfxOption)?.Module;
             if (string.IsNullOrEmpty(sfx) || !_io.Exists(sfx))
             {
                 throw new System.IO.FileNotFoundException("SFX");
@@ -358,9 +354,10 @@ namespace Cube.FileSystem.SevenZip
             finally
             {
                 var result = cb.Result;
+                var err    = cb.Exception;
                 stream.Dispose();
                 cb.Dispose();
-                ThrowIfError(result);
+                ThrowIfError(result, err);
             }
         }
 
@@ -461,21 +458,22 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void ThrowIfError(OperationResult result)
+        private void ThrowIfError(OperationResult result, Exception err)
         {
             switch (result)
             {
                 case OperationResult.OK:
-                    break;
+                    return;
                 case OperationResult.UserCancel:
                     throw new OperationCanceledException();
-                default:
-                    throw new System.IO.IOException($"{result}");
             }
+
+            if (err != null) throw err;
+            else throw new System.IO.IOException($"{result}");
         }
 
         #region Fields
-        private bool _disposed = false;
+        private OnceAction<bool> _dispose;
         private SevenZipLibrary _7z;
         private Operator _io;
         private IList<FileItem> _items = new List<FileItem>();
