@@ -74,6 +74,7 @@
             this.ArchiveOptionPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.ArchiveFilterCheckBox = new System.Windows.Forms.CheckBox();
             this.UseUtf8CheckBox = new System.Windows.Forms.CheckBox();
+            this.OverwritePromptCheckBox = new System.Windows.Forms.CheckBox();
             this.ArchiveOpenDirectoryCheckBox = new System.Windows.Forms.CheckBox();
             this.ArchiveOpenSmartCheckBox = new System.Windows.Forms.CheckBox();
             this.ExtractTabPage = new System.Windows.Forms.TabPage();
@@ -502,7 +503,7 @@
             this.ArchiveTabPage.Location = new System.Drawing.Point(4, 24);
             this.ArchiveTabPage.Name = "ArchiveTabPage";
             this.ArchiveTabPage.Padding = new System.Windows.Forms.Padding(12, 8, 3, 8);
-            this.ArchiveTabPage.Size = new System.Drawing.Size(514, 531);
+            this.ArchiveTabPage.Size = new System.Drawing.Size(514, 551);
             this.ArchiveTabPage.TabIndex = 1;
             this.ArchiveTabPage.Text = "圧縮";
             this.ArchiveTabPage.UseVisualStyleBackColor = true;
@@ -515,7 +516,7 @@
             this.ArchivePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ArchivePanel.Location = new System.Drawing.Point(12, 8);
             this.ArchivePanel.Name = "ArchivePanel";
-            this.ArchivePanel.Size = new System.Drawing.Size(499, 515);
+            this.ArchivePanel.Size = new System.Drawing.Size(499, 535);
             this.ArchivePanel.TabIndex = 0;
             // 
             // ArchiveSaveGroupBox
@@ -610,7 +611,7 @@
             this.ArchiveOptionGroupBox.Location = new System.Drawing.Point(3, 144);
             this.ArchiveOptionGroupBox.Name = "ArchiveOptionGroupBox";
             this.ArchiveOptionGroupBox.Padding = new System.Windows.Forms.Padding(8, 3, 8, 3);
-            this.ArchiveOptionGroupBox.Size = new System.Drawing.Size(474, 125);
+            this.ArchiveOptionGroupBox.Size = new System.Drawing.Size(474, 155);
             this.ArchiveOptionGroupBox.TabIndex = 1;
             this.ArchiveOptionGroupBox.TabStop = false;
             this.ArchiveOptionGroupBox.Text = "オプション";
@@ -619,13 +620,14 @@
             // 
             this.ArchiveOptionPanel.Controls.Add(this.ArchiveFilterCheckBox);
             this.ArchiveOptionPanel.Controls.Add(this.UseUtf8CheckBox);
+            this.ArchiveOptionPanel.Controls.Add(this.OverwritePromptCheckBox);
             this.ArchiveOptionPanel.Controls.Add(this.ArchiveOpenDirectoryCheckBox);
             this.ArchiveOptionPanel.Controls.Add(this.ArchiveOpenSmartCheckBox);
             this.ArchiveOptionPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ArchiveOptionPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.ArchiveOptionPanel.Location = new System.Drawing.Point(8, 19);
             this.ArchiveOptionPanel.Name = "ArchiveOptionPanel";
-            this.ArchiveOptionPanel.Size = new System.Drawing.Size(458, 103);
+            this.ArchiveOptionPanel.Size = new System.Drawing.Size(458, 133);
             this.ArchiveOptionPanel.TabIndex = 0;
             // 
             // ArchiveFilterCheckBox
@@ -650,14 +652,25 @@
             this.UseUtf8CheckBox.Text = "ファイル名を UTF-8 に変換する";
             this.UseUtf8CheckBox.UseVisualStyleBackColor = true;
             // 
+            // OverwritePromptCheckBox
+            // 
+            this.OverwritePromptCheckBox.AutoSize = true;
+            this.OverwritePromptCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ArchiveSettingsBindingSource, "OverwritePrompt", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.OverwritePromptCheckBox.Location = new System.Drawing.Point(3, 53);
+            this.OverwritePromptCheckBox.Name = "OverwritePromptCheckBox";
+            this.OverwritePromptCheckBox.Size = new System.Drawing.Size(289, 19);
+            this.OverwritePromptCheckBox.TabIndex = 2;
+            this.OverwritePromptCheckBox.Text = "同名の圧縮ファイルが存在する時にダイアログを表示する";
+            this.OverwritePromptCheckBox.UseVisualStyleBackColor = true;
+            // 
             // ArchiveOpenDirectoryCheckBox
             // 
             this.ArchiveOpenDirectoryCheckBox.AutoSize = true;
             this.ArchiveOpenDirectoryCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ArchiveSettingsBindingSource, "OpenDirectory", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.ArchiveOpenDirectoryCheckBox.Location = new System.Drawing.Point(3, 53);
+            this.ArchiveOpenDirectoryCheckBox.Location = new System.Drawing.Point(3, 78);
             this.ArchiveOpenDirectoryCheckBox.Name = "ArchiveOpenDirectoryCheckBox";
             this.ArchiveOpenDirectoryCheckBox.Size = new System.Drawing.Size(169, 19);
-            this.ArchiveOpenDirectoryCheckBox.TabIndex = 2;
+            this.ArchiveOpenDirectoryCheckBox.TabIndex = 3;
             this.ArchiveOpenDirectoryCheckBox.Text = "圧縮後に保存先フォルダを開く";
             this.ArchiveOpenDirectoryCheckBox.UseVisualStyleBackColor = true;
             // 
@@ -667,11 +680,11 @@
             this.ArchiveOpenSmartCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ArchiveSettingsBindingSource, "SkipDesktop", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ArchiveOpenSmartCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", this.ArchiveSettingsBindingSource, "OpenDirectory", true, System.Windows.Forms.DataSourceUpdateMode.Never));
             this.ArchiveOpenSmartCheckBox.Enabled = false;
-            this.ArchiveOpenSmartCheckBox.Location = new System.Drawing.Point(15, 78);
+            this.ArchiveOpenSmartCheckBox.Location = new System.Drawing.Point(15, 103);
             this.ArchiveOpenSmartCheckBox.Margin = new System.Windows.Forms.Padding(15, 3, 3, 3);
             this.ArchiveOpenSmartCheckBox.Name = "ArchiveOpenSmartCheckBox";
             this.ArchiveOpenSmartCheckBox.Size = new System.Drawing.Size(163, 19);
-            this.ArchiveOpenSmartCheckBox.TabIndex = 3;
+            this.ArchiveOpenSmartCheckBox.TabIndex = 4;
             this.ArchiveOpenSmartCheckBox.Text = "デスクトップの場合は開かない";
             this.ArchiveOpenSmartCheckBox.UseVisualStyleBackColor = true;
             // 
@@ -681,7 +694,7 @@
             this.ExtractTabPage.Location = new System.Drawing.Point(4, 24);
             this.ExtractTabPage.Name = "ExtractTabPage";
             this.ExtractTabPage.Padding = new System.Windows.Forms.Padding(12, 8, 3, 8);
-            this.ExtractTabPage.Size = new System.Drawing.Size(514, 531);
+            this.ExtractTabPage.Size = new System.Drawing.Size(514, 551);
             this.ExtractTabPage.TabIndex = 2;
             this.ExtractTabPage.Text = "解凍";
             this.ExtractTabPage.UseVisualStyleBackColor = true;
@@ -694,7 +707,7 @@
             this.ExtractPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ExtractPanel.Location = new System.Drawing.Point(12, 8);
             this.ExtractPanel.Name = "ExtractPanel";
-            this.ExtractPanel.Size = new System.Drawing.Size(499, 515);
+            this.ExtractPanel.Size = new System.Drawing.Size(499, 535);
             this.ExtractPanel.TabIndex = 0;
             // 
             // ExtractSaveGroupBox
@@ -887,7 +900,7 @@
             this.DetailsTabPage.Location = new System.Drawing.Point(4, 24);
             this.DetailsTabPage.Name = "DetailsTabPage";
             this.DetailsTabPage.Padding = new System.Windows.Forms.Padding(12, 8, 3, 8);
-            this.DetailsTabPage.Size = new System.Drawing.Size(514, 531);
+            this.DetailsTabPage.Size = new System.Drawing.Size(514, 551);
             this.DetailsTabPage.TabIndex = 3;
             this.DetailsTabPage.Text = "詳細";
             this.DetailsTabPage.UseVisualStyleBackColor = true;
@@ -900,7 +913,7 @@
             this.DetailsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DetailsPanel.Location = new System.Drawing.Point(12, 8);
             this.DetailsPanel.Name = "DetailsPanel";
-            this.DetailsPanel.Size = new System.Drawing.Size(499, 515);
+            this.DetailsPanel.Size = new System.Drawing.Size(499, 535);
             this.DetailsPanel.TabIndex = 2;
             // 
             // FilterGroupBox
@@ -1042,7 +1055,7 @@
             this.VersionTabPage.Location = new System.Drawing.Point(4, 24);
             this.VersionTabPage.Name = "VersionTabPage";
             this.VersionTabPage.Padding = new System.Windows.Forms.Padding(12);
-            this.VersionTabPage.Size = new System.Drawing.Size(514, 531);
+            this.VersionTabPage.Size = new System.Drawing.Size(514, 551);
             this.VersionTabPage.TabIndex = 4;
             this.VersionTabPage.Text = "バージョン情報";
             this.VersionTabPage.UseVisualStyleBackColor = true;
@@ -1244,6 +1257,7 @@
         private System.Windows.Forms.BindingSource ShortcutSettingsBindingSource;
         private System.Windows.Forms.BindingSource AssociateSettingsBindingSource;
         private System.Windows.Forms.CheckBox UseUtf8CheckBox;
+        private System.Windows.Forms.CheckBox OverwritePromptCheckBox;
     }
 }
 

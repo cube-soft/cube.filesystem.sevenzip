@@ -270,12 +270,14 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             if (kv.Key == SaveLocation.Runtime) return kv.Value;
 
             var path = IO.Combine(kv.Value, cvt.Result.Name);
-            if (!IO.Exists(path)) return path;
-
-            var e = new PathQueryEventArgs(path, cvt.ResultFormat, true);
-            OnDestinationRequested(e);
-            if (e.Cancel) throw new OperationCanceledException();
-            return e.Result;
+            if (IO.Exists(path) && Settings.Value.Archive.OverwritePrompt)
+            {
+                var e = new PathQueryEventArgs(path, cvt.ResultFormat, true);
+                OnDestinationRequested(e);
+                if (e.Cancel) throw new OperationCanceledException();
+                return e.Result;
+            }
+            else return path;
         }
 
         /* ----------------------------------------------------------------- */

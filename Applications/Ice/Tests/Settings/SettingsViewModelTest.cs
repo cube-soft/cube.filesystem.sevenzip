@@ -159,6 +159,9 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
             src.UseUtf8 = true;
             Assert.That(dest.UseUtf8, Is.EqualTo(src.UseUtf8).And.True);
 
+            src.OverwritePrompt = false;
+            Assert.That(dest.OverwritePrompt, Is.EqualTo(src.OverwritePrompt).And.False);
+
             src.OpenDirectory = true;
             src.SkipDesktop = true;
             Assert.That(dest.OpenDirectory, Is.EqualTo(OpenDirectoryMethod.OpenNotDesktop));
@@ -592,7 +595,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 
         #endregion
 
-        #region Helper
+        #region Helper methods
 
         /* ----------------------------------------------------------------- */
         ///
