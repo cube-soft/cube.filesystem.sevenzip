@@ -194,7 +194,7 @@
     <value>再開</value>
   </data>
   <data name="MenuSuspend" xml:space="preserve">
-    <value>中断</value>
+    <value>一時停止</value>
   </data>
   <data name="MessageArchive" xml:space="preserve">
     <value>{0} を作成しています...</value>
