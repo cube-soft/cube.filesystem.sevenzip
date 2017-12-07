@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System;
 using System.Collections.Generic;
 
 namespace Cube.FileSystem.SevenZip.App.Ice
@@ -236,6 +237,22 @@ namespace Cube.FileSystem.SevenZip.App.Ice
                    $"{dest}|{Properties.Resources.FilterAll}" :
                    Properties.Resources.FilterAll;
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetTimeString
+        /// 
+        /// <summary>
+        /// TimeSpan オブジェクトを文字列に変換します。
+        /// </summary>
+        /// 
+        /// <param name="src">時間</param>
+        /// 
+        /// <returns>整形された文字列</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static string GetTimeString(TimeSpan src)
+            => $"{(int)src.TotalHours:00}:{src.Minutes:00}:{src.Seconds:00}";
 
         #endregion
 

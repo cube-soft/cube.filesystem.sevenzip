@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System;
 using NUnit.Framework;
 
 namespace Cube.FileSystem.SevenZip.App.Ice.Tests
@@ -112,6 +113,23 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         [TestCase(Format.Tar,      ExpectedResult = false)]
         public bool IsEncryptionSupported(Format format)
             => ViewResource.IsEncryptionSupported(format);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetTimeString
+        /// 
+        /// <summary>
+        /// TimeSpan オブジェクトの書式化のテストを実行します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [TestCase(0,  0,  0,  0, ExpectedResult = "00:00:00")]
+        [TestCase(0,  0, 29,  0, ExpectedResult = "00:29:00")]
+        [TestCase(0,  0, 30,  0, ExpectedResult = "00:30:00")]
+        [TestCase(0, 23, 59, 59, ExpectedResult = "23:59:59")]
+        [TestCase(1, 23, 59, 59, ExpectedResult = "47:59:59")]
+        public string GetTimeString(int day, int hour, int min, int sec)
+            => ViewResource.GetTimeString(new TimeSpan(day, hour, min, sec));
 
         /* ----------------------------------------------------------------- */
         ///
