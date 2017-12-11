@@ -151,7 +151,7 @@
             this.SuspendButton.Name = "SuspendButton";
             this.SuspendButton.Size = new System.Drawing.Size(100, 25);
             this.SuspendButton.TabIndex = 0;
-            this.SuspendButton.Text = "中断";
+            this.SuspendButton.Text = "一時停止";
             this.SuspendButton.UseVisualStyleBackColor = true;
             // 
             // HeaderPictureBox

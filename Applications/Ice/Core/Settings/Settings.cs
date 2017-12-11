@@ -288,7 +288,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         public SettingsFolder()
-            : this(SettingsType.Registry, @"CubeSoft\CubeICE\v3") { }
+            : this(SettingsType.Registry, @"Software\CubeSoft\CubeICE\v3") { }
 
         /* ----------------------------------------------------------------- */
         ///

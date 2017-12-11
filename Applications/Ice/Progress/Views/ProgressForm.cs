@@ -234,7 +234,10 @@ namespace Cube.FileSystem.SevenZip.App.Ice
                 _remain = value;
 
                 RemainLabel.Visible = value > TimeSpan.Zero;
-                RemainLabel.Text = $"{Properties.Resources.MessageRemainTime} : {GetTimeString(value)}";
+                RemainLabel.Text = string.Format("{0} : {1}",
+                    Properties.Resources.MessageRemainTime,
+                    ViewResource.GetTimeString(value)
+                );
             }
         }
 
@@ -356,8 +359,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void UpdateElapseLabel()
-            => ElapseLabel.Text = $"{Properties.Resources.MessageElapsedTime} : {GetTimeString(Elapsed)}";
+        private void UpdateElapseLabel() => ElapseLabel.Text = string.Format(
+            "{0} : {1}",
+            Properties.Resources.MessageElapsedTime,
+            ViewResource.GetTimeString(Elapsed)
+        );
 
         /* ----------------------------------------------------------------- */
         ///
@@ -386,18 +392,6 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             if (delta >= 0.0 && delta < unit * 2) return; // hack (see remarks)
             Remain = TimeSpan.FromSeconds(((long)value / unit + 1) * unit);
         }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetTimeString
-        ///
-        /// <summary>
-        /// TimeSpan オブジェクトを文字列に変換します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private string GetTimeString(TimeSpan src)
-            => $"{src.TotalHours:00}:{src.Minutes:00}:{src.Seconds:00}";
 
         /* ----------------------------------------------------------------- */
         ///

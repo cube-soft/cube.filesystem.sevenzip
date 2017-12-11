@@ -65,6 +65,23 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
             set => Model.UseUtf8 = value;
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OverwritePrompt
+        /// 
+        /// <summary>
+        /// 保存先に指定されたパスに同名のファイルが存在している時、
+        /// 名前を付けて保存ダイアログを表示するかどうかを示す値を取得
+        /// または設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public bool OverwritePrompt
+        {
+            get => Model.OverwritePrompt;
+            set => Model.OverwritePrompt = value;
+        }
+
         #endregion
     }
 }
