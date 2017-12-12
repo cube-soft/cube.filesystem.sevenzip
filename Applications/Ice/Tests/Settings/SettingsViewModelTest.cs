@@ -326,6 +326,10 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
             var dest = m.Value.Associate;
 
             Assert.That(dest.Value.Count, Is.EqualTo(29));
+            Assert.That(dest.IconIndex,   Is.EqualTo(3));
+
+            src.IconIndex = 0;
+            Assert.That(dest.IconIndex, Is.EqualTo(src.IconIndex).And.EqualTo(0));
 
             src.SelectAll();
             Assert.That(dest.Arj,      Is.EqualTo(src.Arj).And.True);

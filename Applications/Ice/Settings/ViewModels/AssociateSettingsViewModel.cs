@@ -57,6 +57,22 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
+        /// IconIndex
+        /// 
+        /// <summary>
+        /// 関連付けされたファイルに表示するアイコンのインデックスを
+        /// 取得または設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        public int IconIndex
+        {
+            get => _model.Settings.IconIndex;
+            set => _model.Settings.IconIndex = value;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// SevenZip
         /// 
         /// <summary>

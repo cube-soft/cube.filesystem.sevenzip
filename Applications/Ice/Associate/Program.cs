@@ -53,17 +53,17 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Associate
                 Cube.Log.Operations.Info(type, Assembly.GetExecutingAssembly());
                 Cube.Log.Operations.Info(type, string.Join(" ", args));
 
-                var asm  = AssemblyReader.Default.Location;
-                var dir  = System.IO.Path.GetDirectoryName(asm);
-                var exe  = System.IO.Path.Combine(dir, "cubeice.exe");
-                var icon = $"{exe},3";
-
-                Cube.Log.Operations.Info(type, $"FileName:{exe}");
-                Cube.Log.Operations.Info(type, $"IconLocation:{icon}");
-
                 var settings = new SettingsFolder();
                 if (args.Length > 0 && args[0].ToLower() == "/uninstall") Clear(settings);
                 else settings.Load();
+
+                var asm  = AssemblyReader.Default.Location;
+                var dir  = System.IO.Path.GetDirectoryName(asm);
+                var exe  = System.IO.Path.Combine(dir, "cubeice.exe");
+                var icon = $"{exe},{settings.Value.Associate.IconIndex}";
+
+                Cube.Log.Operations.Info(type, $"FileName:{exe}");
+                Cube.Log.Operations.Info(type, $"IconLocation:{icon}");
 
                 var registrar = new AssociateRegistrar(exe)
                 {

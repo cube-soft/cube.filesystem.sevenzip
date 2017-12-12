@@ -100,6 +100,23 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// IconIndex
+        /// 
+        /// <summary>
+        /// 関連付けされたファイルに表示するアイコンのインデックスを
+        /// 取得または設定します。
+        /// </summary>
+        /// 
+        /* ----------------------------------------------------------------- */
+        [DataMember]
+        public int IconIndex
+        {
+            get => _index;
+            set => SetProperty(ref _index, value);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// SevenZip
         /// 
         /// <summary>
@@ -600,6 +617,10 @@ namespace Cube.FileSystem.SevenZip.Ice
             OnPropertyChanged(new PropertyChangedEventArgs(name));
             return true;
         }
+
+        #region Fields
+        private int _index = 3;
+        #endregion
 
         #endregion
     }

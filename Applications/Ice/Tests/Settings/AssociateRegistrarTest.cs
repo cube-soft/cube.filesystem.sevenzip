@@ -74,15 +74,15 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
         {
             try
             {
+                var settings  = new SettingsFolder();
                 var path      = @"C:\Program Files\CubeICE\cubeice.exe";
                 var registrar = new AssociateRegistrar(path)
                 {
                     Arguments = new List<string> { "/x" },
-                    IconLocation = "",
+                    IconLocation = $"{path},{settings.Value.Associate.IconIndex}",
                     ToolTip = false,
                 };
 
-                var settings = new SettingsFolder();
                 registrar.Update(settings.Value.Associate.Value);
 
                 foreach (var key in settings.Value.Associate.Value.Keys.ToArray())
