@@ -28,7 +28,7 @@ namespace Cube.FileSystem.SevenZip.Tests
     /* --------------------------------------------------------------------- */
     ///
     /// ArchiveReaderTest
-    /// 
+    ///
     /// <summary>
     /// ArchiveReader のテスト用クラスです。
     /// </summary>
@@ -82,7 +82,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// 圧縮ファイルを展開するテストを実行します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
         public void Extract(string filename, string password)
@@ -116,7 +116,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// 圧縮ファイルの項目毎に展開するテストを実行します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
         public void Extract_Each(string filename, string password)
@@ -155,12 +155,12 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// 圧縮ファイルを展開するテストを実行します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// 解凍処理が正常に終了したかどうかを解凍された個数で確認する
         /// 簡易テストです。
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [TestCase("Sample.cab",     ExpectedResult =  3)]
         [TestCase("Sample.chm",     ExpectedResult = 89)]
@@ -197,7 +197,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// フィルタリング設定を行った時の挙動を確認します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Extract_Filter()
@@ -227,7 +227,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// 未対応のファイルが指定された時の挙動を確認します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Extract_NotSupported() => Assert.That(
@@ -242,7 +242,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// 書き込みできないファイルを指定した時の挙動を確認します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Extract_PermissionError() => Assert.That(() =>
@@ -269,7 +269,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// 分割された圧縮ファイルの展開に失敗する時の挙動を確認します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Extract_MergeError() => Assert.That(() =>
@@ -294,7 +294,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// 暗号化されたファイルの展開に失敗するテストを実行します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [TestCase("")]
         [TestCase("wrong")]
@@ -314,7 +314,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// 暗号化されたファイルの展開に失敗するテストを実行します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [TestCase("")]
         public void Extract_Each_WrongPassword(string password) => Assert.That(() =>
@@ -333,12 +333,12 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// パスワード要求時にキャンセルするテストを実行します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// 0 バイトのファイルはパスワード無しで展開が完了するため、
         /// Extracted イベントが 1 回発生します。
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Extract_PasswordCancel()
@@ -366,7 +366,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// パスワード要求時にキャンセルするテストを実行します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Extract_Each_PasswordCancel() => Assert.That(() =>
@@ -386,7 +386,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// Extracting イベントで例外を送出した時の挙動を確認します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Extracting_Throws() => Assert.That(() =>
@@ -406,7 +406,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// Extracted イベントで例外を送出した時の挙動を確認します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Extraced_Throws() => Assert.That(() =>
@@ -426,7 +426,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// ArchiveItem の拡張メソッドのテストを実行します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void CreateDirectory()
@@ -459,7 +459,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// Items および Extract_* のテスト用データを取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public static IEnumerable<TestCaseData> TestCases
         {
@@ -471,6 +471,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                 yield return new TestCaseData("SampleComma.zip", "");
                 yield return new TestCaseData("SampleMac.zip", "");
                 yield return new TestCaseData("SampleUtf8.zip", "");
+                yield return new TestCaseData("Sample 2018.02.13.zip", "");
                 yield return new TestCaseData("Sample.tar", "");
                 yield return new TestCaseData("Sample.tar.bz2", "");
                 yield return new TestCaseData("Sample.tar.gz", "");
@@ -513,7 +514,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// 期待値を生成します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private IDictionary<string, long> Expect(string filename)
         {
