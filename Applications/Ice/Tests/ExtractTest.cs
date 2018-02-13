@@ -339,6 +339,20 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                 );
 
                 yield return new TestCaseData(
+                    "Sample 2018.02.13.zip",
+                    "",
+                    PresetMenu.Extract.ToArguments(),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = CreateDirectoryMethod.CreateSmart,
+                        Filtering     = true,
+                    },
+                    FullName(@"Others\Sample 2018.02.13"),
+                    8L
+                );
+
+                yield return new TestCaseData(
                     "Password.7z",
                     "password",
                     PresetMenu.Extract.ToArguments(),
