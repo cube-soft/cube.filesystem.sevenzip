@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -22,7 +22,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
     /* --------------------------------------------------------------------- */
     ///
     /// ExtractSettingsViewModel
-    /// 
+    ///
     /// <summary>
     /// ExtractSettings の ViewModel を表すクラスです。
     /// </summary>
@@ -35,13 +35,13 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// ExtractSettingsViewModel
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="model">Model オブジェクト</param>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public ExtractSettingsViewModel(ExtractSettings model) : base(model) { }
 
@@ -52,11 +52,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// CreateDirectory
-        /// 
+        ///
         /// <summary>
         /// フォルダを作成するかどうかを示す値を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool CreateDirectory
         {
@@ -67,12 +67,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// SkipSingleDirectory
-        /// 
+        ///
         /// <summary>
         /// 単一フォルダの場合にはフォルダを作成しないかどうかを示す値を取
         /// 得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool SkipSingleDirectory
         {
@@ -83,17 +83,33 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// DeleteSource
-        /// 
+        ///
         /// <summary>
         /// 解凍処理後に元のファイルを削除するかどうかを示す値を
         /// 取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool DeleteSource
         {
             get => Model.DeleteSource;
             set => Model.DeleteSource = value;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Bursty
+        ///
+        /// <summary>
+        /// 複数の圧縮ファイルを同時に展開するかどうかを示す値を取得または
+        /// 設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public bool Bursty
+        {
+            get => Model.Bursty;
+            set => Model.Bursty = value;
         }
 
         #endregion
@@ -103,12 +119,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// HasFlag
-        /// 
+        ///
         /// <summary>
         /// RootDirectory が指定されたフラグを保持しているかどうかを
         /// 示す値を取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool HasFlag(CreateDirectoryMethod value)
             => Model.RootDirectory.HasFlag(value);
@@ -116,11 +132,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// SetRootDirectory
-        /// 
+        ///
         /// <summary>
         /// RootDirectory の値を設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void SetRootDirectory(CreateDirectoryMethod value, bool check)
         {

@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -28,7 +28,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
     /* --------------------------------------------------------------------- */
     ///
     /// SettingsViewModelTest
-    /// 
+    ///
     /// <summary>
     /// SettingsViewModel のテスト用クラスです。
     /// </summary>
@@ -46,7 +46,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// <summary>
         /// Settings オブジェクトに対応する ViewModel の挙動を確認します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void GeneralSettings()
@@ -109,7 +109,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// ArchiveSettings オブジェクトに対応する ViewModel の挙動を
         /// 確認します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void ArchiveSettings()
@@ -202,7 +202,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// ExtractSettings オブジェクトに対応する ViewModel の挙動を
         /// 確認します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void ExtractSettings()
@@ -299,6 +299,13 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
             dest.DeleteSource = true;
             Assert.That(src.DeleteSource, Is.True);
 
+            src.Bursty = true;
+            Assert.That(dest.Bursty, Is.True);
+            src.Bursty = false;
+            Assert.That(dest.Bursty, Is.False);
+            dest.Bursty = true;
+            Assert.That(src.Bursty, Is.True);
+
             src.Filtering = true;
             Assert.That(dest.Filtering, Is.True);
             src.Filtering = false;
@@ -315,7 +322,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// AssociateSettings オブジェクトに対応する ViewModel の
         /// 挙動を確認します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void AssociateSettings()
@@ -432,7 +439,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// ContextMenuSettings オブジェクトに対応する ViewModel の
         /// 挙動を確認します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void ContextMenuSettings()
@@ -527,7 +534,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// ShortcutSettings オブジェクトに対応する ViewModel の
         /// 挙動を確認します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void ShortcutSettings()
@@ -565,7 +572,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// <summary>
         /// Sync および Update コマンドのテストを実行します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [TestCase(true)]
         [TestCase(false)]
@@ -608,7 +615,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// <summary>
         /// テスト用のレジストリ・サブキー名を取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private static string SubKeyName = @"CubeSoft\CubeIceTest";
 
@@ -619,7 +626,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// <summary>
         /// Model オブジェクトを生成します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private SettingsFolder Create() => new SettingsFolder(
             SettingsType.Registry,
@@ -633,7 +640,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// <summary>
         /// テスト毎に実行される TearDown 処理です。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [TearDown]
         public void TearDown()

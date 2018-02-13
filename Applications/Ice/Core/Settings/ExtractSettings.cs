@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -22,7 +22,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /* --------------------------------------------------------------------- */
     ///
     /// ExtractSettings
-    /// 
+    ///
     /// <summary>
     /// 展開に関するユーザ設定を保持するためのクラスです。
     /// </summary>
@@ -36,11 +36,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// RootDirectory
-        /// 
+        ///
         /// <summary>
         /// ルートディレクトリの扱い方を示す値を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [DataMember]
         public CreateDirectoryMethod RootDirectory
@@ -52,12 +52,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// DeleteSource
-        /// 
+        ///
         /// <summary>
         /// 展開後に元ファイルを削除するかどうかを示す値を取得または
         /// 設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [DataMember]
         public bool DeleteSource
@@ -66,10 +66,28 @@ namespace Cube.FileSystem.SevenZip.Ice
             set => SetProperty(ref _deleteSource, value);
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Bursty
+        ///
+        /// <summary>
+        /// 複数の圧縮ファイルを同時に展開するかどうかを示す値を取得または
+        /// 設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [DataMember]
+        public bool Bursty
+        {
+            get => _bursty;
+            set => SetProperty(ref _bursty, value);
+        }
+
         #endregion
 
         #region Fields
         private bool _deleteSource = false;
+        private bool _bursty = true;
         private CreateDirectoryMethod _rootDirectory = CreateDirectoryMethod.CreateSmart;
         #endregion
     }

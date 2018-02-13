@@ -115,6 +115,7 @@
             this.ExitButton = new System.Windows.Forms.Button();
             this.ExecuteButton = new System.Windows.Forms.Button();
             this.AssociateSettingsBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.BurstyCheckBox = new System.Windows.Forms.CheckBox();
             this.RootPanel.SuspendLayout();
             this.SettingsPanel.SuspendLayout();
             this.SettingsTabControl.SuspendLayout();
@@ -802,13 +803,14 @@
             this.ExtractOptionGroupBox.Location = new System.Drawing.Point(3, 144);
             this.ExtractOptionGroupBox.Name = "ExtractOptionGroupBox";
             this.ExtractOptionGroupBox.Padding = new System.Windows.Forms.Padding(8, 3, 8, 3);
-            this.ExtractOptionGroupBox.Size = new System.Drawing.Size(474, 180);
+            this.ExtractOptionGroupBox.Size = new System.Drawing.Size(474, 205);
             this.ExtractOptionGroupBox.TabIndex = 1;
             this.ExtractOptionGroupBox.TabStop = false;
             this.ExtractOptionGroupBox.Text = "オプション";
             // 
             // ExtractOptionPanel
             // 
+            this.ExtractOptionPanel.Controls.Add(this.BurstyCheckBox);
             this.ExtractOptionPanel.Controls.Add(this.ExtractCreateDirectoryCheckBox);
             this.ExtractOptionPanel.Controls.Add(this.ExtractCreateSmartCheckBox);
             this.ExtractOptionPanel.Controls.Add(this.ExtractFilterCheckBox);
@@ -819,14 +821,14 @@
             this.ExtractOptionPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.ExtractOptionPanel.Location = new System.Drawing.Point(8, 19);
             this.ExtractOptionPanel.Name = "ExtractOptionPanel";
-            this.ExtractOptionPanel.Size = new System.Drawing.Size(458, 158);
+            this.ExtractOptionPanel.Size = new System.Drawing.Size(458, 183);
             this.ExtractOptionPanel.TabIndex = 0;
             // 
             // ExtractCreateDirectoryCheckBox
             // 
             this.ExtractCreateDirectoryCheckBox.AutoSize = true;
             this.ExtractCreateDirectoryCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ExtractSettingsBindingSource, "CreateDirectory", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.ExtractCreateDirectoryCheckBox.Location = new System.Drawing.Point(3, 3);
+            this.ExtractCreateDirectoryCheckBox.Location = new System.Drawing.Point(3, 28);
             this.ExtractCreateDirectoryCheckBox.Name = "ExtractCreateDirectoryCheckBox";
             this.ExtractCreateDirectoryCheckBox.Size = new System.Drawing.Size(158, 19);
             this.ExtractCreateDirectoryCheckBox.TabIndex = 0;
@@ -839,7 +841,7 @@
             this.ExtractCreateSmartCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ExtractSettingsBindingSource, "SkipSingleDirectory", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ExtractCreateSmartCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", this.ExtractSettingsBindingSource, "CreateDirectory", true, System.Windows.Forms.DataSourceUpdateMode.Never));
             this.ExtractCreateSmartCheckBox.Enabled = false;
-            this.ExtractCreateSmartCheckBox.Location = new System.Drawing.Point(15, 28);
+            this.ExtractCreateSmartCheckBox.Location = new System.Drawing.Point(15, 53);
             this.ExtractCreateSmartCheckBox.Margin = new System.Windows.Forms.Padding(15, 3, 3, 3);
             this.ExtractCreateSmartCheckBox.Name = "ExtractCreateSmartCheckBox";
             this.ExtractCreateSmartCheckBox.Size = new System.Drawing.Size(182, 19);
@@ -851,7 +853,7 @@
             // 
             this.ExtractFilterCheckBox.AutoSize = true;
             this.ExtractFilterCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ExtractSettingsBindingSource, "Filtering", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.ExtractFilterCheckBox.Location = new System.Drawing.Point(3, 53);
+            this.ExtractFilterCheckBox.Location = new System.Drawing.Point(3, 78);
             this.ExtractFilterCheckBox.Name = "ExtractFilterCheckBox";
             this.ExtractFilterCheckBox.Size = new System.Drawing.Size(307, 19);
             this.ExtractFilterCheckBox.TabIndex = 2;
@@ -862,7 +864,7 @@
             // 
             this.ExtractOpenDirectoryCheckBox.AutoSize = true;
             this.ExtractOpenDirectoryCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ExtractSettingsBindingSource, "OpenDirectory", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.ExtractOpenDirectoryCheckBox.Location = new System.Drawing.Point(3, 78);
+            this.ExtractOpenDirectoryCheckBox.Location = new System.Drawing.Point(3, 103);
             this.ExtractOpenDirectoryCheckBox.Name = "ExtractOpenDirectoryCheckBox";
             this.ExtractOpenDirectoryCheckBox.Size = new System.Drawing.Size(169, 19);
             this.ExtractOpenDirectoryCheckBox.TabIndex = 3;
@@ -875,7 +877,7 @@
             this.ExtractOpenSmartCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ExtractSettingsBindingSource, "SkipDesktop", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ExtractOpenSmartCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", this.ExtractSettingsBindingSource, "OpenDirectory", true, System.Windows.Forms.DataSourceUpdateMode.Never));
             this.ExtractOpenSmartCheckBox.Enabled = false;
-            this.ExtractOpenSmartCheckBox.Location = new System.Drawing.Point(15, 103);
+            this.ExtractOpenSmartCheckBox.Location = new System.Drawing.Point(15, 128);
             this.ExtractOpenSmartCheckBox.Margin = new System.Windows.Forms.Padding(15, 3, 3, 3);
             this.ExtractOpenSmartCheckBox.Name = "ExtractOpenSmartCheckBox";
             this.ExtractOpenSmartCheckBox.Size = new System.Drawing.Size(163, 19);
@@ -887,7 +889,7 @@
             // 
             this.ExtractDeleteSourceCheckBox.AutoSize = true;
             this.ExtractDeleteSourceCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ExtractSettingsBindingSource, "DeleteSource", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.ExtractDeleteSourceCheckBox.Location = new System.Drawing.Point(3, 128);
+            this.ExtractDeleteSourceCheckBox.Location = new System.Drawing.Point(3, 153);
             this.ExtractDeleteSourceCheckBox.Name = "ExtractDeleteSourceCheckBox";
             this.ExtractDeleteSourceCheckBox.Size = new System.Drawing.Size(179, 19);
             this.ExtractDeleteSourceCheckBox.TabIndex = 5;
@@ -1108,6 +1110,17 @@
             // 
             this.AssociateSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.AssociateSettings);
             // 
+            // BurstyCheckBox
+            // 
+            this.BurstyCheckBox.AutoSize = true;
+            this.BurstyCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ExtractSettingsBindingSource, "Bursty", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.BurstyCheckBox.Location = new System.Drawing.Point(3, 3);
+            this.BurstyCheckBox.Name = "BurstyCheckBox";
+            this.BurstyCheckBox.Size = new System.Drawing.Size(203, 19);
+            this.BurstyCheckBox.TabIndex = 6;
+            this.BurstyCheckBox.Text = "複数の圧縮ファイルを同時に解凍する";
+            this.BurstyCheckBox.UseVisualStyleBackColor = true;
+            // 
             // SettingsForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -1115,6 +1128,7 @@
             this.Controls.Add(this.RootPanel);
             this.Font = new System.Drawing.Font("Meiryo UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(128)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Location = new System.Drawing.Point(0, 0);
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(560, 700);
@@ -1258,6 +1272,7 @@
         private System.Windows.Forms.BindingSource AssociateSettingsBindingSource;
         private System.Windows.Forms.CheckBox UseUtf8CheckBox;
         private System.Windows.Forms.CheckBox OverwritePromptCheckBox;
+        private System.Windows.Forms.CheckBox BurstyCheckBox;
     }
 }
 

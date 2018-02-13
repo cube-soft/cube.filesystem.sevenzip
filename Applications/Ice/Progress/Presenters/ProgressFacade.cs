@@ -579,21 +579,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         protected void SetTmp(string directory)
-            => Tmp = IO.Combine(directory, Guid.NewGuid().ToString("D"));
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// DeleteTmp
-        ///
-        /// <summary>
-        /// 一時フォルダを削除します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected void DeleteTmp()
         {
-            try { if (!string.IsNullOrEmpty(Tmp)) IO.Delete(Tmp); }
-            catch (Exception err) { this.LogWarn(err.ToString(), err); }
+            if (string.IsNullOrEmpty(Tmp))
+            {
+                Tmp = IO.Combine(directory, Guid.NewGuid().ToString("D"));
+            }
         }
 
         #endregion
@@ -644,7 +634,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             }
 
             IO.Failed -= WhenFailed;
-            DeleteTmp();
+            try { if (!string.IsNullOrEmpty(Tmp)) IO.Delete(Tmp); }
+            catch (Exception err) { this.LogWarn(err.ToString(), err); }
         }
 
         #endregion

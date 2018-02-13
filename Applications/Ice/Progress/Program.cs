@@ -73,7 +73,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
                         using (var _ = new ArchivePresenter(v, m, s, e)) Application.Run(v);
                         break;
                     case Mode.Extract:
-                        if (m.Sources.Count() > 1 && !m.SuppressRecursive) Extract(m);
+                        if (m.Sources.Count() > 1 && s.Value.Extract.Bursty && !m.SuppressRecursive) Extract(m);
                         else using (var _ = new ExtractPresenter(v, m, s, e)) Application.Run(v);
                         break;
                 }

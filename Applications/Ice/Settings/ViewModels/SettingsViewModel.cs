@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -23,7 +23,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
     /* --------------------------------------------------------------------- */
     ///
     /// ArchiveSettingsViewModel
-    /// 
+    ///
     /// <summary>
     /// Settings の ViewModel を表すクラスです。
     /// </summary>
@@ -36,13 +36,13 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// SettingsViewModel
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="model">Model オブジェクト</param>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public SettingsViewModel(SettingsFolder model)
         {
@@ -63,18 +63,18 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// Version
-        /// 
+        ///
         /// <summary>
         /// バージョンを表す文字列を取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public string Version => $"Version {_model.Version.ToString(true)}";
 
         /* ----------------------------------------------------------------- */
         ///
         /// CheckUpdate
-        /// 
+        ///
         /// <summary>
         /// 起動時にアップデートの確認を実行するかどうかを示す値を取得
         /// または設定します。
@@ -90,7 +90,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// ErrorReport
-        /// 
+        ///
         /// <summary>
         /// エラーレポートを表示するかどうかを示す値を取得または設定します。
         /// </summary>
@@ -105,7 +105,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// Filtering
-        /// 
+        ///
         /// <summary>
         /// 圧縮・展開時に除外するファイルまたはディレクトリ名の一覧を
         /// 取得または設定します。
@@ -121,7 +121,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// ToolTip
-        /// 
+        ///
         /// <summary>
         /// マウスポインタを圧縮ファイルに指定した時にファイル一覧を表示
         /// するかどうかを示す値を取得または設定します。
@@ -137,12 +137,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// ToolTipCount
-        /// 
+        ///
         /// <summary>
         /// マウスポインタを圧縮ファイルに指定した時に一覧を表示する
         /// ファイル数を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public int ToolTipCount
         {
@@ -153,11 +153,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// InstallMode
-        /// 
+        ///
         /// <summary>
         /// インストールモードかどうかを示す値を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool InstallMode { get; set; } = false;
 
@@ -166,56 +166,56 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// Archive
-        /// 
+        ///
         /// <summary>
         /// 圧縮の設定を扱う ViewModel を取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public ArchiveSettingsViewModel Archive { get; }
 
         /* ----------------------------------------------------------------- */
         ///
         /// Extract
-        /// 
+        ///
         /// <summary>
         /// 解凍の設定を扱う ViewModel を取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public ExtractSettingsViewModel Extract { get; }
 
         /* ----------------------------------------------------------------- */
         ///
         /// Associate
-        /// 
+        ///
         /// <summary>
         /// ファイルの関連付けを扱う ViewModel を取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public AssociateSettingsViewModel Associate { get; }
 
         /* ----------------------------------------------------------------- */
         ///
         /// Context
-        /// 
+        ///
         /// <summary>
         /// コンテキストメニューの設定を扱う ViewModel を取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public ContextSettingsViewModel Context { get; }
 
         /* ----------------------------------------------------------------- */
         ///
         /// Shortcut
-        /// 
+        ///
         /// <summary>
         /// デスクトップのショートカットに関する設定を扱う ViewModel を
         /// 取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public ShortcutSettingsViewModel Shortcut { get; }
 
@@ -228,11 +228,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// Sync
-        /// 
+        ///
         /// <summary>
         /// 実際の状況に応じて設定値を更新します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void Sync()
         {
@@ -242,11 +242,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// Update
-        /// 
+        ///
         /// <summary>
         /// 現在の内容で更新します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void Update()
         {
@@ -262,7 +262,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// Transform
-        /// 
+        ///
         /// <summary>
         /// 文字列の書式を変換します。
         /// </summary>

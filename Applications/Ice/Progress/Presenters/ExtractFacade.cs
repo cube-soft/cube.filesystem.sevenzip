@@ -105,7 +105,6 @@ namespace Cube.FileSystem.SevenZip.App.Ice
                 Source = src;
                 OnProgressReset(EventArgs.Empty);
                 StartCore();
-                DeleteTmp();
             }
         }
 
@@ -115,7 +114,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Start
+        /// StartCore
         ///
         /// <summary>
         /// 展開を開始します。
