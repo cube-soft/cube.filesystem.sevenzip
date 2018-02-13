@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -26,7 +26,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
     /* --------------------------------------------------------------------- */
     ///
     /// ProgressForm
-    /// 
+    ///
     /// <summary>
     /// 圧縮・展開の進捗状況を表示するクラスです。
     /// </summary>
@@ -101,12 +101,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// <summary>
         /// 進捗状況を示す値の単位を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// Unit が決定されるまでは Progress イベントが発生しないため、
         /// キャンセル不可能に設定しています。
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public int Unit
         {
@@ -372,13 +372,13 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// <summary>
         /// Remain の容を更新します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// 表示上のバタつきを抑えるために、残り時間の 10 秒以内の増加に
         /// ついては反映しないようにしています。また、残り時間は 5 秒
         /// 単位で更新します。
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private void UpdateRemainTime()
         {

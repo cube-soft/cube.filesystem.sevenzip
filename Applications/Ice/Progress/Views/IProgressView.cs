@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -23,7 +23,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
     /* --------------------------------------------------------------------- */
     ///
     /// IProgressView
-    /// 
+    ///
     /// <summary>
     /// 圧縮・展開の進捗状況を表示するインターフェースです。
     /// </summary>
@@ -51,7 +51,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// <summary>
         /// 進捗状況を示す値の単位を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// 例えば、パーセント単位であれば 100 が設定されます。
         /// </remarks>

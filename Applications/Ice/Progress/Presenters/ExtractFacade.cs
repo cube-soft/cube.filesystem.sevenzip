@@ -68,7 +68,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Source { get; }
+        public string Source { get; private set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -100,6 +100,30 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         public override void Start()
         {
+            foreach (var src in Request.Sources)
+            {
+                Source = src;
+                OnProgressReset(EventArgs.Empty);
+                StartCore();
+                DeleteTmp();
+            }
+        }
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Start
+        ///
+        /// <summary>
+        /// 展開を開始します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void StartCore()
+        {
             try
             {
                 var query = new Query<string, string>(x => OnPasswordRequested(x));
@@ -120,10 +144,6 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             catch (OperationCanceledException) { /* user cancel */ }
             catch (Exception err) { Error(err); }
         }
-
-        #endregion
-
-        #region Implementations
 
         /* ----------------------------------------------------------------- */
         ///

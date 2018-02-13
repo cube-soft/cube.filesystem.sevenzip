@@ -84,6 +84,38 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Extract_Multiple
+        ///
+        /// <summary>
+        /// OverwriteMode (Rename) の挙動を確認します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Extract_Multiple()
+        {
+            var dest = Result("Multiple");
+            var src  = new[]
+            {
+                Example("Complex.1.0.0.zip"),
+                Example("Single.1.0.0.zip"),
+            };
+
+            using (var p = Create(dest, src))
+            {
+                p.View.Show();
+                Assert.That(Wait(p.View).Result, Is.True, "Timeout");
+            }
+
+            var i0 = IO.Get(IO.Combine(dest, @"Complex.1.0.0\Foo.txt"));
+            var i1 = IO.Get(IO.Combine(dest, @"Single.1.0.0\Sample 00..01.txt"));
+
+            Assert.That(i0.Length, Is.AtLeast(1));
+            Assert.That(i1.Length, Is.AtLeast(1));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Extract_Rename
         ///
         /// <summary>
@@ -101,7 +133,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
             IO.Copy(dummy, Result(@"Overwrite\Foo.txt"));
             IO.Copy(dummy, Result(@"Overwrite\Directory\Empty.txt"));
 
-            using (var p = Create(src, dest))
+            using (var p = Create(dest, src))
             {
                 p.Settings.Value.Extract.RootDirectory = CreateDirectoryMethod.None;
                 p.View.Show();
@@ -130,7 +162,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 
             IO.Copy(Example("Complex.1.0.0.zip"), src);
 
-            using (var p = Create(src, dest))
+            using (var p = Create(dest, src))
             {
                 p.Settings.Value.Extract.DeleteSource = true;
                 p.View.Show();
@@ -163,7 +195,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
             var dest   = Result("Suspend");
             var exists = Result(@"Suspend\Complex.1.0.0");
 
-            using (var p = Create(src, dest))
+            using (var p = Create(dest, src))
             {
                 p.Model.Interval = TimeSpan.FromMilliseconds(50);
                 p.View.Show();
@@ -190,7 +222,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         [Test]
         public void Extract_Cancel()
         {
-            using (var p = Create(Example("Complex.zip"), ""))
+            using (var p = Create("", Example("Complex.zip")))
             {
                 p.View.Show();
                 p.EventHub.GetEvents().Cancel.Publish();
@@ -210,7 +242,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         [Test]
         public void Extract_PasswordCancel()
         {
-            using (var p = Create(Example("Password.7z"), ""))
+            using (var p = Create("", Example("Password.7z")))
             {
                 p.View.Show();
                 Assert.That(Wait(p.View).Result, Is.True, "Timeout");
@@ -229,7 +261,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         [Test]
         public void Extract_ErrorReport()
         {
-            using (var p = Create(Example("Sample.txt"), ""))
+            using (var p = Create("", Example("Sample.txt")))
             {
                 p.Settings.Value.ErrorReport = true;
                 p.View.Show();
@@ -781,9 +813,9 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private ExtractPresenter Create(string src, string dest)
+        private ExtractPresenter Create(string dest, params string[] src)
         {
-            var p = Create(new Request(new[] { "/x", src }));
+            var p = Create(new Request(new[] { "/x" }.Concat(src)));
 
             p.Settings.Value.Extract.SaveLocation      = SaveLocation.Others;
             p.Settings.Value.Extract.SaveDirectoryName = dest;

@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -39,11 +39,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ProgressPresenter
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="view">View オブジェクト</param>
         /// <param name="model">Model オブジェクト</param>
         /// <param name="settings">ユーザ設定</param>
@@ -72,7 +72,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ShowDialog
-        /// 
+        ///
         /// <summary>
         /// 子ウィンドウを開きます。
         /// </summary>
@@ -95,7 +95,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Dispose
-        /// 
+        ///
         /// <summary>
         /// リソースを開放します。
         /// </summary>
@@ -117,7 +117,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// WhenShow
-        /// 
+        ///
         /// <summary>
         /// 画面表示時に実行されるハンドラです。
         /// </summary>
@@ -132,7 +132,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// WhenSuspend
-        /// 
+        ///
         /// <summary>
         /// 一時停止または再開時に実行されるハンドラです。
         /// </summary>
@@ -147,7 +147,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// WhenMessageReceived
-        /// 
+        ///
         /// <summary>
         /// メッセージ受信時に実行されるハンドラです。
         /// </summary>
@@ -159,7 +159,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// WhenOpenDirectoryRequested
-        /// 
+        ///
         /// <summary>
         /// ディレクトリを開く時に実行されるハンドラです。
         /// </summary>

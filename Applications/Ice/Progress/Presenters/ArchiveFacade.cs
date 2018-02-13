@@ -152,6 +152,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         {
             try
             {
+                OnProgressReset(EventArgs.Empty);
                 Archive();
                 ProgressResult();
                 RaiseMailRequested();
