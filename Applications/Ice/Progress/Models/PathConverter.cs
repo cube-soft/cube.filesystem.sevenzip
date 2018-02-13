@@ -187,8 +187,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         {
             var src  = IO.Get(Source);
             var tmp  = IO.Get(src.NameWithoutExtension);
-            var name = tmp.Extension.ToLower() == ".tar" ?
-                       tmp.NameWithoutExtension :
+            var name = src.IsDirectory ? src.Name :
+                       tmp.Extension.ToLower() == ".tar" ? tmp.NameWithoutExtension :
                        tmp.Name;
             var path = IO.Combine(src.DirectoryName, $"{name}{GetExtension()}");
 
