@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -28,11 +28,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
     /* --------------------------------------------------------------------- */
     ///
     /// ExtractTest
-    /// 
+    ///
     /// <summary>
     /// 展開処理のテスト用クラスです。
     /// </summary>
-    /// 
+    ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
     class ExtractTest : MockViewHelper
@@ -42,11 +42,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Extract
-        /// 
+        ///
         /// <summary>
         /// 展開処理のテストを実行します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
         public void Extract(string filename, string password,
@@ -85,11 +85,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Extract_Rename
-        /// 
+        ///
         /// <summary>
         /// OverwriteMode (Rename) の挙動を確認します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Extract_Rename()
@@ -115,11 +115,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Extract_DeleteSource
-        /// 
+        ///
         /// <summary>
         /// 展開後に元の圧縮ファイルを削除するテストを実行します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Extract_DeleteSource()
@@ -144,17 +144,17 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Extract_Suspend
-        /// 
+        ///
         /// <summary>
         /// 処理を一時停止するテストを実行します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// Suspend イベント発行後、実際に展開が一時停止されるまでに
         /// タイムラグが発生する事があるため、チェックする値に多少の
         /// 幅を持たせています。
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Extract_Suspend()
@@ -181,11 +181,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Extract_Cancel
-        /// 
+        ///
         /// <summary>
         /// 展開処理をキャンセルするテストを実行します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Extract_Cancel()
@@ -201,11 +201,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Extract_PasswordCancel
-        /// 
+        ///
         /// <summary>
         /// パスワード入力をキャンセルした時の挙動を確認します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Extract_PasswordCancel()
@@ -220,11 +220,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Extract_ErrorReport
-        /// 
+        ///
         /// <summary>
         /// エラーレポートの表示テストを実行します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Extract_ErrorReport()
@@ -244,11 +244,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// TestCases
-        /// 
+        ///
         /// <summary>
         /// 展開処理のテスト用データを取得します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// テストケースには、以下の順で指定します。
         /// - 展開する圧縮ファイル名
@@ -258,7 +258,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// - 展開成功確認用のパス（存在チェック）
         /// - 展開後に生成されるファイル + ディレクトリ数
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public static IEnumerable<TestCaseData> TestCases
         {
@@ -373,7 +373,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.Create,
                     },
-                    FullName(@"RootDirectory\Single-0x01\Single.1.0"),
+                    FullName(@"RootDirectory\Single-0x01\Single.1.0.0"),
                     1L
                 );
 
@@ -386,7 +386,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
                     },
-                    FullName(@"RootDirectory\Single-0x03\Single.1.0"),
+                    FullName(@"RootDirectory\Single-0x03\Single.1.0.0"),
                     1L
                 );
 
@@ -710,16 +710,16 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// FullName
-        /// 
+        ///
         /// <summary>
         /// 結果を保存するディレクトリへの絶対パスに変換します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// MockViewHelper.Result と同じ内容を返す静的メソッドです。
         /// TestCase は静的に定義する必要があるためこちらを使用しています。
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private static string FullName(string path)
         {
@@ -733,11 +733,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// DropRequest
-        /// 
+        ///
         /// <summary>
         /// ドロップ先のパスを指定した Request オブジェクトを生成します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private static IEnumerable<string> DropRequest(string path)
             => PresetMenu.Extract
@@ -747,11 +747,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Create
-        /// 
+        ///
         /// <summary>
         /// Presenter オブジェクトを生成します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private ExtractPresenter Create(string src, string dest)
         {
@@ -767,11 +767,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Create
-        /// 
+        ///
         /// <summary>
         /// Presenter オブジェクトを生成します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private ExtractPresenter Create(Request request)
         {
@@ -788,11 +788,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// SetUp
-        /// 
+        ///
         /// <summary>
         /// テスト毎に実行される SetUp 処理です。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [SetUp]
         public void SetUp() => Reset();

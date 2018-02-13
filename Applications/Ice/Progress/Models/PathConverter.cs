@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -33,11 +33,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// PathConverter
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="format">変換後のフォーマット</param>
         /// <param name="src">元ファイルのパス</param>
         ///
@@ -48,11 +48,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// PathConverter
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="src">元ファイルのパス</param>
         /// <param name="format">変換後のフォーマット</param>
         /// <param name="io">入出力用のオブジェクト</param>
@@ -64,11 +64,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// PathConverter
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="src">元ファイルのパス</param>
         /// <param name="format">変換後のフォーマット</param>
         /// <param name="method">圧縮方法</param>
@@ -80,11 +80,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// PathConverter
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="src">元ファイルのパス</param>
         /// <param name="format">変換後のフォーマット</param>
         /// <param name="method">圧縮方法</param>
@@ -106,67 +106,67 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Source
-        /// 
+        ///
         /// <summary>
         /// 元ファイルのパスを取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public string Source { get; }
 
         /* ----------------------------------------------------------------- */
         ///
         /// Format
-        /// 
+        ///
         /// <summary>
         /// 変換後のフォーマットを取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public Format Format { get; }
 
         /* ----------------------------------------------------------------- */
         ///
         /// Method
-        /// 
+        ///
         /// <summary>
         /// 変換後の圧縮方法を取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public CompressionMethod CompressionMethod { get; }
 
         /* ----------------------------------------------------------------- */
         ///
         /// IO
-        /// 
+        ///
         /// <summary>
         /// 入出力用オブジェクトを取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public Operator IO { get; }
 
         /* ----------------------------------------------------------------- */
         ///
         /// Result
-        /// 
+        ///
         /// <summary>
         /// 変換結果を取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public IInformation Result => _result = _result ?? Invoke();
 
         /* ----------------------------------------------------------------- */
         ///
         /// ResultFormat
-        /// 
+        ///
         /// <summary>
         /// Format および CompressionMethod の情報を基に変換された
         /// 新たな Format オブジェクトを取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public Format ResultFormat => GetFormat();
 
@@ -177,11 +177,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Invoke
-        /// 
+        ///
         /// <summary>
         /// 変換処理を実行します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private IInformation Invoke()
         {
@@ -198,12 +198,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// GetFormat
-        /// 
+        ///
         /// <summary>
         /// 拡張子フィルタを取得するために必要な Format オブジェクトを
         /// 取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private Format GetFormat()
         {
@@ -222,11 +222,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// GetExtension
-        /// 
+        ///
         /// <summary>
         /// 圧縮ファイル形式に対応する拡張子を取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private string GetExtension()
         {
