@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -19,13 +19,14 @@ using System;
 using System.Reflection;
 using System.Windows.Forms;
 using Cube.FileSystem.SevenZip.Ice;
+using Cube.Log;
 
 namespace Cube.FileSystem.SevenZip.App.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
     /// Program
-    /// 
+    ///
     /// <summary>
     /// メインプログラムを表すクラスです。
     /// </summary>
@@ -36,11 +37,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// Main
-        /// 
+        ///
         /// <summary>
         /// アプリケーションのエントリポイントです。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [STAThread]
         static void Main(string[] args)
@@ -49,9 +50,9 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
 
             try
             {
-                Cube.Log.Operations.Configure();
-                Cube.Log.Operations.ObserveTaskException();
-                Cube.Log.Operations.Info(type, Assembly.GetExecutingAssembly());
+                LogOperator.Configure();
+                LogOperator.ObserveTaskException();
+                LogOperator.Info(type, Assembly.GetExecutingAssembly());
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
@@ -60,7 +61,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
                 model.Load();
 
                 var install = args.Length > 0 && args[0] == "/install";
-                if (install) Cube.Log.Operations.Info(type, "InstallMode");
+                if (install) LogOperator.Info(type, "InstallMode");
 
                 var vm = new SettingsViewModel(model) { InstallMode = install };
                 if (!install) vm.Sync();
@@ -70,7 +71,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
 
                 Application.Run(view);
             }
-            catch (Exception err) { Cube.Log.Operations.Error(type, err.ToString()); }
+            catch (Exception err) { LogOperator.Error(type, err.ToString()); }
         }
     }
 }

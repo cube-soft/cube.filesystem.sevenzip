@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -21,13 +21,14 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using Cube.FileSystem.SevenZip.Ice;
+using Cube.Log;
 
 namespace Cube.FileSystem.SevenZip.App.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
     /// Program
-    /// 
+    ///
     /// <summary>
     /// メインプログラムを表すクラスです。
     /// </summary>
@@ -38,11 +39,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Main
-        /// 
+        ///
         /// <summary>
         /// アプリケーションのエントリポイントです。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [STAThread]
         static void Main(string[] args)
@@ -51,10 +52,10 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             {
                 if (args.Length <= 0) return;
 
-                Cube.Log.Operations.Configure();
-                Cube.Log.Operations.ObserveTaskException();
-                Cube.Log.Operations.Info(typeof(Program), Assembly.GetExecutingAssembly());
-                Cube.Log.Operations.Info(typeof(Program), $"Arguments:{string.Join(" ", args)}");
+                LogOperator.Configure();
+                LogOperator.ObserveTaskException();
+                LogOperator.Info(typeof(Program), Assembly.GetExecutingAssembly());
+                LogOperator.Info(typeof(Program), $"Arguments:{string.Join(" ", args)}");
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
@@ -83,11 +84,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Extract
-        /// 
+        ///
         /// <summary>
         /// 複数の圧縮ファイルを解凍します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         static void Extract(Request request)
         {
@@ -105,13 +106,13 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Log
-        /// 
+        ///
         /// <summary>
         /// エラー内容をログに出力します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         static void Log(Exception err)
-            => Cube.Log.Operations.Error(typeof(Program), err.ToString());
+            => LogOperator.Error(typeof(Program), err.ToString());
     }
 }
