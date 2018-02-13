@@ -105,23 +105,23 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Examples\Sample 2018.02.13.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Packages.config" />
-    <None Include="Examples\Sample 2018.02.13\FilterDirectory\Filter.txt">
+    <None Include="Examples\Sample 00..01\FilterDirectory\Filter.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\Sample 2018.02.13\FilterDirectory\Sample.txt">
+    <None Include="Examples\Sample 00..01\FilterDirectory\Sample.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\Sample 2018.02.13\Empty.txt">
+    <None Include="Examples\Sample 00..01\Dot 2018.02.13.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\Sample 2018.02.13\FileInDirectory.txt">
+    <None Include="Examples\Sample 00..01\Empty.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\Sample 2018.02.13\Filter.txt">
+    <None Include="Examples\Sample 00..01\FileInDirectory.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\Sample 00..01\Filter.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Examples\Expected\InvalidSymbol.zip.txt">
@@ -221,6 +221,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Examples\Expected\SampleUtf8.zip.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\Expected\Sample 2018.02.13.zip.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\Expected\Sample..DoubleDot.zip.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Examples\Expected\SampleVolume.rar.001.txt">
@@ -373,6 +379,12 @@
     <None Include="Examples\SampleUtf8.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Examples\Sample 2018.02.13.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\Sample..DoubleDot.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Examples\SampleVolume.rar.001">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -412,16 +424,6 @@
       <Project>{74c9f388-360e-4c46-a9a6-e131eab2e49c}</Project>
       <Name>Cube.FileSystem.SevenZip</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Examples\Sample 2018.02.13\Dot 2018.02.13.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Examples\Expected\Sample 2018.02.13.zip.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

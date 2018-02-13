@@ -86,7 +86,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             {
                 if (filter) writer.Filters = names;
                 writer.Add(Example("Sample.txt"));
-                writer.Add(Example("Sample 2018.02.13"));
+                writer.Add(Example("Sample 00..01"));
                 writer.Save(dest);
             }
 
@@ -219,7 +219,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             using (var writer = new ArchiveWriter(Format.Zip, io))
             {
                 writer.Add(ignore);
-                writer.Add(Example("Sample 2018.02.13"));
+                writer.Add(Example("Sample 00..01"));
                 writer.Save(dest);
             }
 
@@ -286,7 +286,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     Format.Zip,
                     "ZipDirectory.zip",
                     "",
-                    new[] { "Sample 2018.02.13" },
+                    new[] { "Sample 00..01" },
                     null
                 ).Returns(Format.Zip);
 
@@ -294,7 +294,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     Format.Zip,
                     "ZipFast.zip",
                     "",
-                    new[] { "Sample.txt", "Sample 2018.02.13" },
+                    new[] { "Sample.txt", "Sample 00..01" },
                     new ZipOption { CompressionLevel = CompressionLevel.Fast }
                 ).Returns(Format.Zip);
 
@@ -302,7 +302,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     Format.Zip,
                     "ZipUltra.zip",
                     "",
-                    new[] { "Sample.txt", "Sample 2018.02.13" },
+                    new[] { "Sample.txt", "Sample 00..01" },
                     new ZipOption
                     {
                         CompressionLevel = CompressionLevel.Ultra,
@@ -314,7 +314,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     Format.Zip,
                     "ZipLzma.zip",
                     "",
-                    new[] { "Sample.txt", "Sample 2018.02.13" },
+                    new[] { "Sample.txt", "Sample 00..01" },
                     new ZipOption { CompressionMethod = CompressionMethod.Lzma }
                 ).Returns(Format.Zip);
 
@@ -354,7 +354,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     Format.SevenZip,
                     "7zLzma2.7z",
                     "",
-                    new[] { "Sample.txt", "Sample 2018.02.13" },
+                    new[] { "Sample.txt", "Sample 00..01" },
                     new SevenZipOption
                     {
                         CompressionLevel  = CompressionLevel.High,
@@ -390,7 +390,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     Format.Tar,
                     "TarTest.tar",
                     "",
-                    new[] { "Sample.txt", "Sample 2018.02.13" },
+                    new[] { "Sample.txt", "Sample 00..01" },
                     null
                 ).Returns(Format.Tar);
 
@@ -398,7 +398,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     Format.Tar,
                     "TarTest.tar.gz",
                     "",
-                    new[] { "Sample.txt", "Sample 2018.02.13" },
+                    new[] { "Sample.txt", "Sample 00..01" },
                     new TarOption
                     {
                         CompressionMethod = CompressionMethod.GZip,
@@ -410,7 +410,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     Format.Tar,
                     "TarTest.tar.bz",
                     "",
-                    new[] { "Sample.txt", "Sample 2018.02.13" },
+                    new[] { "Sample.txt", "Sample 00..01" },
                     new TarOption
                     {
                         CompressionMethod = CompressionMethod.BZip2,
@@ -422,7 +422,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     Format.Tar,
                     "TarTest.tar.xz",
                     "",
-                    new[] { "Sample.txt", "Sample 2018.02.13" },
+                    new[] { "Sample.txt", "Sample 00..01" },
                     new TarOption
                     {
                         CompressionMethod = CompressionMethod.XZ,
@@ -434,7 +434,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     Format.Sfx,
                     "ExecutableTest.exe",
                     "",
-                    new[] { "Sample.txt", "Sample 2018.02.13" },
+                    new[] { "Sample.txt", "Sample 00..01" },
                     new SfxOption
                     {
                         CompressionMethod = CompressionMethod.Lzma,

@@ -1,0 +1,8 @@
+"Sample..DoubleDot",0
+"Sample..DoubleDot\Dot 2018.02.13.txt",6
+"Sample..DoubleDot\Empty.txt",0
+"Sample..DoubleDot\FileInDirectory.txt",26
+"Sample..DoubleDot\Filter.txt",6
+"Sample..DoubleDot\FilterDirectory",0
+"Sample..DoubleDot\FilterDirectory\Filter.txt",6
+"Sample..DoubleDot\FilterDirectory\Sample.txt",6

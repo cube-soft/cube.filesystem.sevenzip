@@ -118,23 +118,23 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Examples\Sample 2018.02.13.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Packages.config" />
-    <None Include="Examples\Sample 2018.02.13\FilterDirectory\Filter.txt">
+    <None Include="Examples\Sample 00..01\FilterDirectory\Filter.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\Sample 2018.02.13\FilterDirectory\Sample.txt">
+    <None Include="Examples\Sample 00..01\FilterDirectory\Sample.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\Sample 2018.02.13\Empty.txt">
+    <None Include="Examples\Sample 00..01\Dot 2018.02.13.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\Sample 2018.02.13\FileInDirectory.txt">
+    <None Include="Examples\Sample 00..01\Empty.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\Sample 2018.02.13\Filter.txt">
+    <None Include="Examples\Sample 00..01\FileInDirectory.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\Sample 00..01\Filter.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Examples\Complex.1.0.0.zip">
@@ -176,6 +176,12 @@
     <None Include="Examples\SampleMac.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Examples\Sample 2018.02.13.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\Sample..DoubleDot.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Examples\Single.1.0.0.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -203,11 +209,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Examples\Sample 2018.02.13\Dot 2018.02.13.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

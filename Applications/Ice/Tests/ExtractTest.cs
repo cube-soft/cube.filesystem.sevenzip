@@ -353,6 +353,20 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                 );
 
                 yield return new TestCaseData(
+                    "Sample..DoubleDot.zip",
+                    "",
+                    PresetMenu.Extract.ToArguments(),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = CreateDirectoryMethod.CreateSmart,
+                        Filtering     = true,
+                    },
+                    FullName(@"Others\Sample..DoubleDot"),
+                    8L
+                );
+
+                yield return new TestCaseData(
                     "Password.7z",
                     "password",
                     PresetMenu.Extract.ToArguments(),
@@ -374,7 +388,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.None,
                     },
-                    FullName(@"RootDirectory\Single-0x00\Sample.txt"),
+                    FullName(@"RootDirectory\Single-0x00\Sample 00..01.txt"),
                     1L
                 );
 
@@ -387,7 +401,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.Create,
                     },
-                    FullName(@"RootDirectory\Single-0x01\Single.1.0.0"),
+                    FullName(@"RootDirectory\Single-0x01\Single.1.0.0\Sample 00..01.txt"),
                     1L
                 );
 
@@ -400,7 +414,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
                     },
-                    FullName(@"RootDirectory\Single-0x03\Single.1.0.0"),
+                    FullName(@"RootDirectory\Single-0x03\Single.1.0.0\Sample 00..01.txt"),
                     1L
                 );
 
@@ -414,7 +428,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                         RootDirectory = CreateDirectoryMethod.Create |
                                         CreateDirectoryMethod.SkipSingleFile,
                     },
-                    FullName(@"RootDirectory\Single-0x05\Sample.txt"),
+                    FullName(@"RootDirectory\Single-0x05\Sample 00..01.txt"),
                     1L
                 );
 
@@ -429,7 +443,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                                         CreateDirectoryMethod.SkipSingleFile |
                                         CreateDirectoryMethod.SkipSingleDirectory,
                     },
-                    FullName(@"RootDirectory\Single-0x07\Sample.txt"),
+                    FullName(@"RootDirectory\Single-0x07\Sample 00..01.txt"),
                     1L
                 );
 

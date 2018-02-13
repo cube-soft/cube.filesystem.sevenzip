@@ -245,7 +245,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                 );
 
                 yield return new TestCaseData(
-                    new[] { "Sample 2018.02.13" },
+                    new[] { "Sample 00..01" },
                     PresetMenu.Archive.ToArguments(),
                     new ArchiveSettings
                     {
@@ -253,12 +253,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                         OpenDirectory = OpenDirectoryMethod.None,
                         Filtering     = true,
                     },
-                    FullName(@"Others\Sample 2018.02.13.zip"),
+                    FullName(@"Others\Sample 00..01.zip"),
                     4L
                 );
 
                 yield return new TestCaseData(
-                    new[] { "Sample.txt", "Sample 2018.02.13" },
+                    new[] { "Sample.txt", "Sample 00..01" },
                     PresetMenu.ArchiveSevenZip.ToArguments(),
                     new ArchiveSettings
                     {
@@ -271,7 +271,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                 );
 
                 yield return new TestCaseData(
-                    new[] { "Sample.txt", "Sample 2018.02.13" },
+                    new[] { "Sample.txt", "Sample 00..01" },
                     PresetMenu.ArchiveBZip2.ToArguments(),
                     new ArchiveSettings
                     {
@@ -284,7 +284,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                 );
 
                 yield return new TestCaseData(
-                    new[] { "Sample.txt", "Sample 2018.02.13" },
+                    new[] { "Sample.txt", "Sample 00..01" },
                     PresetMenu.ArchiveSfx.ToArguments(),
                     new ArchiveSettings
                     {
@@ -296,7 +296,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                 );
 
                 yield return new TestCaseData(
-                    new[] { "Sample.txt", "Sample 2018.02.13" },
+                    new[] { "Sample.txt", "Sample 00..01" },
                     PresetMenu.ArchiveDetail.ToArguments(),
                     new ArchiveSettings
                     {
@@ -308,7 +308,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                 );
 
                 yield return new TestCaseData(
-                    new[] { "Sample.txt", "Sample 2018.02.13" },
+                    new[] { "Sample.txt", "Sample 00..01" },
                     PresetMenu.ArchiveSevenZip.ToArguments().Concat(new[] { "/p" }),
                     new ArchiveSettings
                     {
@@ -320,7 +320,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                 );
 
                 yield return new TestCaseData(
-                    new[] { "Sample.txt", "Sample 2018.02.13" },
+                    new[] { "Sample.txt", "Sample 00..01" },
                     PresetMenu.ArchiveBZip2.ToArguments().Concat(new[] { "/o:runtime" }),
                     new ArchiveSettings
                     {
@@ -332,7 +332,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                 );
 
                 yield return new TestCaseData(
-                    new[] { "Sample.txt", "Sample 2018.02.13" },
+                    new[] { "Sample.txt", "Sample 00..01" },
                     DropRequest(PresetMenu.ArchiveGZip, "Drop"),
                     new ArchiveSettings
                     {
@@ -344,7 +344,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                 );
 
                 yield return new TestCaseData(
-                    new[] { "Sample.txt", "Sample 2018.02.13" },
+                    new[] { "Sample.txt", "Sample 00..01" },
                     DropRequest(PresetMenu.ArchiveXZ, "Drop"),
                     new ArchiveSettings
                     {
@@ -356,7 +356,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                 );
 
                 yield return new TestCaseData(
-                    new[] { "Sample.txt", "Sample 2018.02.13" },
+                    new[] { "Sample.txt", "Sample 00..01" },
                     DropRequest(PresetMenu.MailZip, "Mail"),
                     new ArchiveSettings
                     {
