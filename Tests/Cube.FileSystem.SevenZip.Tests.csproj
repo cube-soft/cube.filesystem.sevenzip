@@ -217,6 +217,9 @@
     <None Include="Examples\Expected\SampleEmpty.7z.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Examples\Expected\SampleKanji.zip.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Examples\Expected\SampleMac.zip.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -371,6 +374,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Examples\SampleFilter.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\SampleKanji.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Examples\SampleMac.zip">

@@ -471,6 +471,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                 yield return new TestCaseData("SampleComma.zip", "");
                 yield return new TestCaseData("SampleMac.zip", "");
                 yield return new TestCaseData("SampleUtf8.zip", "");
+                yield return new TestCaseData("SampleKanji.zip", "");
                 yield return new TestCaseData("Sample 2018.02.13.zip", "");
                 yield return new TestCaseData("Sample..DoubleDot.zip", "");
                 yield return new TestCaseData("Sample.tar", "");

@@ -1,0 +1,14 @@
+"RootDirectory",0
+"RootDirectory\SubDirectory",0
+"RootDirectory\SubDirectory\似.txt",25
+"RootDirectory\SubDirectory\僴.txt",25
+"RootDirectory\SubDirectory\冷閉.txt",25
+"RootDirectory\SubDirectory\冷開.txt",25
+"RootDirectory\SubDirectory\埈.txt",25
+"RootDirectory\SubDirectory\柱.txt",25
+"RootDirectory\SubDirectory\榎.txt",25
+"RootDirectory\SubDirectory\潰.txt",25
+"RootDirectory\SubDirectory\礰.txt",25
+"RootDirectory\SubDirectory\蒴.txt",25
+"RootDirectory\SubDirectory\解錠.txt",25
+"RootDirectory\SubDirectory\雷鳴.txt",25
