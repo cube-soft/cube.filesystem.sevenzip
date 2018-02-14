@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -20,11 +20,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
     /* --------------------------------------------------------------------- */
     ///
     /// EventHub
-    /// 
+    ///
     /// <summary>
     /// CubeICE で発生するイベントを集約するクラスです。
     /// </summary>
-    /// 
+    ///
     /* --------------------------------------------------------------------- */
     public class EventHub : IEventHub
     {
@@ -65,11 +65,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
     /* --------------------------------------------------------------------- */
     ///
     /// EventHubConverter
-    /// 
+    ///
     /// <summary>
     /// EventHub クラスに関連する拡張メソッドを定義したクラスです。
     /// </summary>
-    /// 
+    ///
     /* --------------------------------------------------------------------- */
     public static class EventHubConverter
     {
@@ -83,7 +83,6 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public static EventHub GetEvents(this IEventHub e)
-            => e as EventHub;
+        public static EventHub GetEvents(this IEventHub e) => e as EventHub;
     }
 }

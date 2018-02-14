@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -23,11 +23,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
     /* --------------------------------------------------------------------- */
     ///
     /// PathConverterTest
-    /// 
+    ///
     /// <summary>
     /// PathConverter のテスト用クラスです。
     /// </summary>
-    /// 
+    ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
     class PathConverterTest
@@ -37,11 +37,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// CompressionMethod_Default
-        /// 
+        ///
         /// <summary>
         /// CompressionMethod の初期値を確認します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void CompressionMethod_Default()
@@ -53,15 +53,15 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Convert
-        /// 
+        ///
         /// <summary>
         /// 変換処理のテストを実行します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
-        public string Convert(string src, Format format, CompressionMethod method)
-            => new PathConverter(src, format, method).Result.FullName;
+        public string Convert(string src, Format format, CompressionMethod method) =>
+            new PathConverter(src, format, method).Result.FullName;
 
         #endregion
 
@@ -70,11 +70,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// TestCases
-        /// 
+        ///
         /// <summary>
         /// テスト用データを取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private static IEnumerable<TestCaseData> TestCases
         {

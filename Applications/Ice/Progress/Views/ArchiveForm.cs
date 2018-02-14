@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -39,7 +39,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ArchiveForm
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
@@ -79,7 +79,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Format
-        /// 
+        ///
         /// <summary>
         /// 圧縮ファイル形式を取得します。
         /// </summary>
@@ -90,47 +90,47 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// CompressionLevel
-        /// 
+        ///
         /// <summary>
         /// 圧縮レベルを取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressionLevel CompressionLevel
-            => (CompressionLevel)CompressionLevelComboBox.SelectedValue;
+        public CompressionLevel CompressionLevel =>
+            (CompressionLevel)CompressionLevelComboBox.SelectedValue;
 
         /* ----------------------------------------------------------------- */
         ///
         /// CompressionMethod
-        /// 
+        ///
         /// <summary>
         /// 圧縮方法を取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressionMethod CompressionMethod
-            => CompressionMethodComboBox.Enabled ?
-               (CompressionMethod)CompressionMethodComboBox.SelectedValue :
-               CompressionMethod.Default;
+        public CompressionMethod CompressionMethod =>
+            CompressionMethodComboBox.Enabled ?
+            (CompressionMethod)CompressionMethodComboBox.SelectedValue :
+            CompressionMethod.Default;
 
         /* ----------------------------------------------------------------- */
         ///
         /// EncryptionMethod
-        /// 
+        ///
         /// <summary>
         /// 暗号化方法を取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public EncryptionMethod EncryptionMethod
-            => EncryptionMethodComboBox.Enabled ?
-               (EncryptionMethod)EncryptionMethodComboBox.SelectedValue :
-               EncryptionMethod.Default;
+        public EncryptionMethod EncryptionMethod =>
+            EncryptionMethodComboBox.Enabled ?
+            (EncryptionMethod)EncryptionMethodComboBox.SelectedValue :
+            EncryptionMethod.Default;
 
         /* ----------------------------------------------------------------- */
         ///
         /// ThreadCount
-        /// 
+        ///
         /// <summary>
         /// 圧縮方法を取得します。
         /// </summary>
@@ -141,7 +141,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Path
-        /// 
+        ///
         /// <summary>
         /// 保存先パスを取得または設定します。
         /// </summary>
@@ -162,21 +162,21 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Password
-        /// 
+        ///
         /// <summary>
         /// パスワードを取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Password
-            => EncryptionCheckBox.Checked ?
-               PasswordTextBox.Text :
-               null;
+        public string Password =>
+            EncryptionCheckBox.Checked ?
+            PasswordTextBox.Text :
+            null;
 
         /* ----------------------------------------------------------------- */
         ///
         /// PathIsValid
-        /// 
+        ///
         /// <summary>
         /// パス設定が正しいかどうかを取得または設定します。
         /// </summary>
@@ -198,7 +198,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// EncryptionIsValid
-        /// 
+        ///
         /// <summary>
         /// 暗号化設定が正しいかどうかを取得または設定します。
         /// </summary>
@@ -226,7 +226,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// UpdateFormat
-        /// 
+        ///
         /// <summary>
         /// Format を更新します。
         /// </summary>
@@ -242,7 +242,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// UpdateCompressionLevel
-        /// 
+        ///
         /// <summary>
         /// CompressionLevel を更新します。
         /// </summary>
@@ -258,7 +258,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// UpdateCompressionMethod
-        /// 
+        ///
         /// <summary>
         /// CompressionMethod を更新します。
         /// </summary>
@@ -274,7 +274,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// UpdateEncryptionMethod
-        /// 
+        ///
         /// <summary>
         /// EncryptionMethod を更新します。
         /// </summary>
@@ -290,7 +290,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// UpdateThreadCount
-        /// 
+        ///
         /// <summary>
         /// スレッド数に関する設定を更新します。
         /// </summary>
@@ -307,7 +307,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Update
-        /// 
+        ///
         /// <summary>
         /// ComboBox.DataSource オブジェクトを更新します。
         /// </summary>
@@ -369,10 +369,10 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenConfirmEnabledChanged(object sender, EventArgs e)
-            => ConfirmTextBox.BackColor = ConfirmTextBox.Enabled ?
-                                          SystemColors.Window :
-                                          SystemColors.Control;
+        private void WhenConfirmEnabledChanged(object sender, EventArgs e) =>
+            ConfirmTextBox.BackColor = ConfirmTextBox.Enabled ?
+                                       SystemColors.Window :
+                                       SystemColors.Control;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -398,7 +398,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// WhenPathRequested
-        /// 
+        ///
         /// <summary>
         /// 保存パスの要求時に実行されるハンドラです。
         /// </summary>
@@ -416,19 +416,19 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// WhenPathChanged
-        /// 
+        ///
         /// <summary>
         /// 保存パスの変更時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenPathChanged(object sender, EventArgs e)
-            => PathIsValid = OutputTextBox.TextLength > 0;
+        private void WhenPathChanged(object sender, EventArgs e) =>
+            PathIsValid = OutputTextBox.TextLength > 0;
 
         /* ----------------------------------------------------------------- */
         ///
         /// WhenFormatChanged
-        /// 
+        ///
         /// <summary>
         /// Format 変更時に実行されるハンドラです。
         /// </summary>
@@ -444,19 +444,19 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// WhenCompressionMethodChanged
-        /// 
+        ///
         /// <summary>
         /// CompressionMethod 変更時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenCompressionMethodChanged(object sender, EventArgs e)
-            => Path = new PathConverter(Path, Format, CompressionMethod).Result.FullName;
+        private void WhenCompressionMethodChanged(object sender, EventArgs e) =>
+            Path = new PathConverter(Path, Format, CompressionMethod).Result.FullName;
 
         /* ----------------------------------------------------------------- */
         ///
         /// WhenEncryptionChanged
-        /// 
+        ///
         /// <summary>
         /// 暗号化の有効/無効状態が変化した時に実行されるハンドラです。
         /// </summary>
@@ -475,11 +475,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             else WhenShowPasswordChanged(sender, e);
         }
 
+        #endregion
+
         #region Fields
         private bool _path = false;
         private bool _encryption = true;
-        #endregion
-
         #endregion
     }
 }

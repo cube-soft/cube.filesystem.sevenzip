@@ -392,15 +392,15 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private KeyValuePair<string, PresetMenu> Create(string key, PresetMenu value)
-            => new KeyValuePair<string, PresetMenu>(key, value);
+        private KeyValuePair<string, PresetMenu> Create(string key, PresetMenu value) =>
+            new KeyValuePair<string, PresetMenu>(key, value);
+
+        #endregion
 
         #endregion
 
         #region Fields
         private Cube.Forms.VersionControl VersionPanel = new Cube.Forms.VersionControl();
-        #endregion
-
         #endregion
     }
 }

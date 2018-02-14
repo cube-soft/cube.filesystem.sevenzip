@@ -46,7 +46,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [TestCaseSource(nameof(Archive_TestCases))]
+        [TestCaseSource(nameof(TestCases))]
         public Format Archive(Format format, string filename, string password,
             string[] items, ArchiveOption option)
         {
@@ -254,7 +254,7 @@ namespace Cube.FileSystem.SevenZip.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Archive_TestCases
+        /// TestCases
         ///
         /// <summary>
         /// Archive のテスト用データを取得します。
@@ -270,7 +270,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        private static IEnumerable<TestCaseData> Archive_TestCases
+        private static IEnumerable<TestCaseData> TestCases
         {
             get
             {
@@ -322,6 +322,14 @@ namespace Cube.FileSystem.SevenZip.Tests
                     Format.Zip,
                     "ZipPassword.zip",
                     "password",
+                    new[] { "Sample.txt" },
+                    null
+                ).Returns(Format.Zip);
+
+                yield return new TestCaseData(
+                    Format.Zip,
+                    "ZipPasswordSymbol.zip",
+                    "()[]{}<>\\#$%@?!&|+-*/=\"'^~`,._",
                     new[] { "Sample.txt" },
                     null
                 ).Returns(Format.Zip);

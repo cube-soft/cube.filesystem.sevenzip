@@ -112,7 +112,6 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        static void Log(Exception err)
-            => LogOperator.Error(typeof(Program), err.ToString());
+        static void Log(Exception err) => LogOperator.Error(typeof(Program), err.ToString());
     }
 }

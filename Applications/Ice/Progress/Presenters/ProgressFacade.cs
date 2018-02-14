@@ -212,8 +212,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnProgress(ValueEventArgs<ArchiveReport> e)
-            => Progress?.Invoke(this, e);
+        protected virtual void OnProgress(ValueEventArgs<ArchiveReport> e) =>
+            Progress?.Invoke(this, e);
 
         #endregion
 
@@ -239,8 +239,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnProgressReset(EventArgs e)
-            => ProgressReset?.Invoke(this, e);
+        protected virtual void OnProgressReset(EventArgs e) =>
+            ProgressReset?.Invoke(this, e);
 
         #endregion
 
@@ -266,8 +266,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public virtual void OnDestinationRequested(PathQueryEventArgs e)
-            => DestinationRequested?.Invoke(this, e);
+        public virtual void OnDestinationRequested(PathQueryEventArgs e) =>
+            DestinationRequested?.Invoke(this, e);
 
         #endregion
 
@@ -298,8 +298,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnPasswordRequested(QueryEventArgs<string, string> e)
-            => PasswordRequested?.Invoke(this, e);
+        protected virtual void OnPasswordRequested(QueryEventArgs<string, string> e) =>
+            PasswordRequested?.Invoke(this, e);
 
         #endregion
 
@@ -325,8 +325,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnOpenDirectoryRequested(KeyValueEventArgs<string, string> e)
-            => OpenDirectoryRequested?.Invoke(this, e);
+        protected virtual void OnOpenDirectoryRequested(KeyValueEventArgs<string, string> e) =>
+            OpenDirectoryRequested?.Invoke(this, e);
 
         #endregion
 
@@ -352,8 +352,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnOverwriteRequested(OverwriteEventArgs e)
-            => OverwriteRequested?.Invoke(this, e);
+        protected virtual void OnOverwriteRequested(OverwriteEventArgs e) =>
+            OverwriteRequested?.Invoke(this, e);
 
         #endregion
 
@@ -379,8 +379,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnMessageReceived(MessageEventArgs e)
-            => MessageReceived?.Invoke(this, e);
+        protected virtual void OnMessageReceived(MessageEventArgs e) =>
+            MessageReceived?.Invoke(this, e);
 
         #endregion
 
@@ -451,8 +451,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected IProgress<ArchiveReport> CreateInnerProgress(Action<ArchiveReport> action)
-            => new SuspendableProgress<ArchiveReport>(_cancel.Token, _wait, action);
+        protected IProgress<ArchiveReport> CreateInnerProgress(Action<ArchiveReport> action) =>
+            new SuspendableProgress<ArchiveReport>(_cancel.Token, _wait, action);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -710,6 +710,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             if (e.Cancel) throw new OperationCanceledException();
         }
 
+        #endregion
+
         #region Fields
         private OnceAction<bool> _dispose;
         private string _dest;
@@ -717,8 +719,6 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         private System.Timers.Timer _timer = new System.Timers.Timer(100.0);
         private CancellationTokenSource _cancel = new CancellationTokenSource();
         private ManualResetEvent _wait = new ManualResetEvent(true);
-        #endregion
-
         #endregion
     }
 }

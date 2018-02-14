@@ -24,7 +24,7 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     ///
     /// EncryptionException
-    /// 
+    ///
     /// <summary>
     /// パスワードエラーを表す例外クラスです。
     /// </summary>
@@ -40,7 +40,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public EncryptionException() : base() { }
     }

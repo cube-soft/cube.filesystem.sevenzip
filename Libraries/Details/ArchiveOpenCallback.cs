@@ -26,7 +26,7 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     ///
     /// ArchiveOpenCallback
-    /// 
+    ///
     /// <summary>
     /// 圧縮ファイルを開く際のコールバック関数群を定義したクラスです。
     /// </summary>
@@ -44,11 +44,11 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="src">圧縮ファイルのパス</param>
         /// <param name="stream">圧縮ファイルの入力ストリーム</param>
         /// <param name="io">入出力用のオブジェクト</param>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public ArchiveOpenCallback(string src, ArchiveStreamReader stream, Operator io)
             : base(src, io)
@@ -66,11 +66,11 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         ///
         /// SetTotal
-        /// 
+        ///
         /// <summary>
         /// 圧縮ファイルの展開時の合計サイズを取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="count">ファイル数</param>
         /// <param name="bytes">バイト数</param>
         ///
@@ -96,10 +96,10 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// ストリームの読み込み準備が完了したサイズを取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="count">ファイル数</param>
         /// <param name="bytes">バイト数</param>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void SetCompleted(IntPtr count, IntPtr bytes)
         {
@@ -121,10 +121,10 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 圧縮ファイルのプロパティを取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="pid">プロパティ ID</param>
         /// <param name="value">プロパティ ID に対応する値</param>
-        /// 
+        ///
         /// <returns>OperationResult</returns>
         ///
         /* ----------------------------------------------------------------- */
@@ -154,12 +154,12 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 読み込むボリュームに対応するストリームを取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="name">ボリューム名</param>
         /// <param name="stream">読み込みストリーム</param>
-        /// 
+        ///
         /// <returns>OperationResult</returns>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public int GetStream(string name, out IInStream stream)
         {
@@ -192,7 +192,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを破棄します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         ~ArchiveOpenCallback() { _dispose.Invoke(false); }
 
@@ -203,7 +203,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// リソースを開放します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void Dispose()
         {
@@ -218,7 +218,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// リソースを開放します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         void Dispose(bool disposing)
         {

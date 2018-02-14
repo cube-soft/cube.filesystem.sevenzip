@@ -23,7 +23,7 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     ///
     /// ArchivePasswordCallback
-    /// 
+    ///
     /// <summary>
     /// 展開時にパスワードを問い合わせる際のコールバック関数群を定義した
     /// クラスです。
@@ -41,10 +41,10 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="src">圧縮ファイルのパス</param>
         /// <param name="io">入出力用のオブジェクト</param>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         protected ArchivePasswordCallback(string src, Operator io) : base(io)
         {
@@ -62,7 +62,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 圧縮ファイルのパスを取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public string Source { get; }
 
@@ -73,13 +73,13 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         ///
         /// CryptoGetTextPassword
-        /// 
+        ///
         /// <summary>
         /// 圧縮ファイルのパスワードを取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="password">パスワード</param>
-        /// 
+        ///
         /// <returns>OperationResult</returns>
         ///
         /* ----------------------------------------------------------------- */

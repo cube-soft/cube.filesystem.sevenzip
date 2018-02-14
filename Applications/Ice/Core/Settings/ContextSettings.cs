@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -22,7 +22,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /* --------------------------------------------------------------------- */
     ///
     /// ContextSettings
-    /// 
+    ///
     /// <summary>
     /// コンテキストメニューに関するユーザ設定を保持するためのクラスです。
     /// </summary>
@@ -36,12 +36,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Preset
-        /// 
+        ///
         /// <summary>
         /// 予め定義されたコンテキストメニューを示す値を取得または
         /// 設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [DataMember]
         public PresetMenu Preset

@@ -22,14 +22,14 @@ namespace Cube.FileSystem.SevenZip.Archives
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// Archives.Operations
-    /// 
+    /// ArchiveOperator
+    ///
     /// <summary>
     /// 圧縮ファイルに関する拡張メソッドを定義するためのクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public static class Operations
+    public static class ArchiveOperator
     {
         #region Methods
 
@@ -40,17 +40,17 @@ namespace Cube.FileSystem.SevenZip.Archives
         /// <summary>
         /// ディレクトリを生成します。
         /// </summary>
-        /// 
+        ///
         /// <param name="item">圧縮ファイル情報</param>
         /// <param name="root">起点となるディレクトリのパス</param>
-        /// 
+        ///
         /// <remarks>
         /// ArchiveItem.IsDirectory が false の場合、何もせずに終了します。
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public static void CreateDirectory(this ArchiveItem item, string root)
-            => CreateDirectory(item, root, new Operator());
+        public static void CreateDirectory(this ArchiveItem item, string root) =>
+            CreateDirectory(item, root, new Operator());
 
         /* ----------------------------------------------------------------- */
         ///
@@ -59,11 +59,11 @@ namespace Cube.FileSystem.SevenZip.Archives
         /// <summary>
         /// ディレクトリを生成します。
         /// </summary>
-        /// 
+        ///
         /// <param name="item">圧縮ファイル情報</param>
         /// <param name="root">起点となるディレクトリのパス</param>
         /// <param name="io">ファイル操作用オブジェクト</param>
-        /// 
+        ///
         /// <remarks>
         /// ArchiveItem.IsDirectory が false の場合、何もせずに終了します。
         /// </remarks>
@@ -86,13 +86,13 @@ namespace Cube.FileSystem.SevenZip.Archives
         /// ディレクトリに属性、作成日時、最終更新日時、最終アクセス日時を
         /// 設定します。
         /// </summary>
-        /// 
+        ///
         /// <param name="item">圧縮ファイル情報</param>
         /// <param name="root">起点となるディレクトリのパス</param>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
-        public static void SetAttributes(this ArchiveItem item, string root)
-            => SetAttributes(item, root, new Operator());
+        public static void SetAttributes(this ArchiveItem item, string root) =>
+            SetAttributes(item, root, new Operator());
 
         /* ----------------------------------------------------------------- */
         ///
@@ -103,11 +103,11 @@ namespace Cube.FileSystem.SevenZip.Archives
         /// ディレクトリに属性、作成日時、最終更新日時、最終アクセス日時を
         /// 設定します。
         /// </summary>
-        /// 
+        ///
         /// <param name="item">圧縮ファイル情報</param>
         /// <param name="root">起点となるディレクトリのパス</param>
         /// <param name="io">ファイル操作用オブジェクト</param>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public static void SetAttributes(this ArchiveItem item, string root, Operator io)
         {

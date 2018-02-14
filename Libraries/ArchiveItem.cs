@@ -24,7 +24,7 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     ///
     /// ArchiveItem
-    /// 
+    ///
     /// <summary>
     /// 圧縮ファイルの 1 項目を表すクラスです。
     /// </summary>
@@ -41,7 +41,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="format">圧縮ファイル形式</param>
         /// <param name="src">圧縮ファイルのパス</param>
         /// <param name="index">圧縮ファイル中のインデックス</param>
@@ -103,7 +103,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 圧縮ファイル中の相対パスのオリジナルの文字列を取得します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// RawName の内容に対して、Windows で使用不可能な文字列に対する
         /// エスケープ処理を実行した結果が FullName となります。
@@ -303,7 +303,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを最新の状態に更新します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public virtual void Refresh() { }
 
@@ -315,17 +315,17 @@ namespace Cube.FileSystem.SevenZip
         /// 指定されたファイル名またはディレクトリ名のいずれか 1 つでも
         /// パス中のどこかに存在するかどうかを判別します。
         /// </summary>
-        /// 
+        ///
         /// <param name="names">
         /// 判別するファイル名またはディレクトリ名一覧
         /// </param>
-        /// 
+        ///
         /// <returns>存在するかどうかを示す値</returns>
-        /// 
+        ///
         /// <remarks>
         /// 大文字・小文字の違いは無視されます。
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool Match(IEnumerable<string> names) => Filter.MatchAny(names);
 
@@ -336,7 +336,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 展開した内容を保存します。
         /// </summary>
-        /// 
+        ///
         /// <param name="directory">保存ディレクトリ</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -349,7 +349,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 展開した内容を保存します。
         /// </summary>
-        /// 
+        ///
         /// <param name="directory">保存ディレクトリ</param>
         /// <param name="progress">進捗報告用オブジェクト</param>
         ///

@@ -416,6 +416,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             EventHub.GetEvents()?.Suspend.Publish(suspend);
         }
 
+        #endregion
+
         #region Fields
         private string _fileName = string.Empty;
         private long _count = 0;
@@ -423,8 +425,6 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         private Stopwatch _watch = new Stopwatch();
         private Timer _timer = new Timer();
         private TimeSpan _remain = TimeSpan.Zero;
-        #endregion
-
         #endregion
     }
 }

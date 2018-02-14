@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -26,7 +26,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
     /* --------------------------------------------------------------------- */
     ///
     /// AssociateRegistrarTest
-    /// 
+    ///
     /// <summary>
     /// AssociateSettings のテスト用クラスです。
     /// </summary>
@@ -35,18 +35,20 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
     [TestFixture]
     class AssociateRegistrarTest
     {
+        #region Tests
+
         /* --------------------------------------------------------------------- */
         ///
-        /// Command
-        /// 
+        /// Registry_Command
+        ///
         /// <summary>
         /// レジストリに登録されるコマンドライン用文字列を確認します。
         /// </summary>
         ///
         /* --------------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
-        public string Command(string path, IList<string> args)
-            => new AssociateRegistrar(path)
+        public string Registry_Command(string path, IList<string> args) =>
+            new AssociateRegistrar(path)
             {
                 Arguments    = args,
                 IconLocation = "",
@@ -55,12 +57,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
 
         /* --------------------------------------------------------------------- */
         ///
-        /// Update_Throws
-        /// 
+        /// Registry_Update_Throws
+        ///
         /// <summary>
         /// Update 実行時の挙動を確認します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// Update では HKEY_CLASSES_ROOT 下のサブキーを修正をしようとする
         /// ため、通常のアクセス権限では操作に失敗します。管理者権限で
@@ -70,7 +72,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
         ///
         /* --------------------------------------------------------------------- */
         [Test]
-        public void Update_Throws()
+        public void Registry_Update_Throws()
         {
             try
             {
@@ -96,10 +98,14 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
             catch (UnauthorizedAccessException err) { Assert.Pass(err.Message); }
         }
 
+        #endregion
+
+        #region TestCases
+
         /* --------------------------------------------------------------------- */
         ///
         /// TestCases
-        /// 
+        ///
         /// <summary>
         /// Command のテスト用データを取得します。
         /// </summary>
@@ -120,5 +126,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
                 ).Returns("\"C:\\Program Files (x86)\\CubeICE\\cubeice.exe\" \"%1\"");
             }
         }
+
+        #endregion
     }
 }

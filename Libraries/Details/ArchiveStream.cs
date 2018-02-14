@@ -25,7 +25,7 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     ///
     /// ArchiveStreamBase
-    /// 
+    ///
     /// <summary>
     /// 圧縮ファイルを扱うストリームの基底クラスです。
     /// </summary>
@@ -42,11 +42,11 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="baseStream">
         /// ラップ対象となる Stream オブジェクト
         /// </param>
-        /// 
+        ///
         /// <param name="disposeStream">
         /// Dispose 時に BaseStream オブジェクトも破棄するかどうかを示す値
         /// </param>
@@ -85,11 +85,11 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// ストリームの位置を設定します。
         /// </summary>
-        /// 
+        ///
         /// <param name="offset">起点からのオフセット値</param>
         /// <param name="origin">起点となる位置</param>
         /// <param name="result">設定後の位置</param>
-        /// 
+        ///
         /// <remarks>
         /// IInStream.Seek(long, SeekOrigin, IntPtr) の実装です。
         /// </remarks>
@@ -110,7 +110,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを破棄します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         ~ArchiveStreamBase() { _dispose.Invoke(false); }
 
@@ -121,7 +121,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// リソースを破棄します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void Dispose()
         {
@@ -136,7 +136,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// リソースを破棄します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         protected virtual void Dispose(bool disposing)
         {
@@ -156,7 +156,7 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     ///
     /// ArchiveStreamReader
-    /// 
+    ///
     /// <summary>
     /// 圧縮ファイルの読み込み用ストリームを表すクラスです。
     /// </summary>
@@ -173,19 +173,18 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="baseStream">
         /// ラップ対象となる Stream オブジェクト
         /// </param>
-        /// 
+        ///
         /// <remarks>
         /// ArchiveStreamReader.Dispose() 実行時に BaseStream.Dispose() が
         /// 実行されます。
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
-        public ArchiveStreamReader(Stream baseStream)
-            : this(baseStream, true) { }
+        public ArchiveStreamReader(Stream baseStream) : this(baseStream, true) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -194,18 +193,18 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="baseStream">
         /// ラップ対象となる Stream オブジェクト
         /// </param>
-        /// 
+        ///
         /// <param name="disposeStream">
         /// Dispose 時に BaseStream オブジェクトも破棄するかどうかを示す値
         /// </param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveStreamReader(Stream baseStream, bool disposeStream)
-            : base(baseStream, disposeStream) { }
+        public ArchiveStreamReader(Stream baseStream, bool disposeStream) :
+            base(baseStream, disposeStream) { }
 
         #endregion
 
@@ -218,15 +217,14 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// データを読み込みます。
         /// </summary>
-        /// 
+        ///
         /// <param name="buffer">バッファ</param>
         /// <param name="size">読み込むサイズ</param>
-        /// 
+        ///
         /// <returns>実際に読み込まれたサイズ</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public int Read(byte[] buffer, uint size)
-            => BaseStream.Read(buffer, 0, (int)size);
+        public int Read(byte[] buffer, uint size) => BaseStream.Read(buffer, 0, (int)size);
 
         #endregion
     }
@@ -234,7 +232,7 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     ///
     /// ArchiveStreamWriter
-    /// 
+    ///
     /// <summary>
     /// 圧縮ファイルの書き込み用ストリームを表すクラスです。
     /// </summary>
@@ -251,19 +249,18 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="baseStream">
         /// ラップ対象となる Stream オブジェクト
         /// </param>
-        /// 
+        ///
         /// <remarks>
         /// ArchiveStreamWriter.Dispose() 実行時に BaseStream.Dispose() が
         /// 実行されます。
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
-        public ArchiveStreamWriter(Stream baseStream)
-            : this(baseStream, true) { }
+        public ArchiveStreamWriter(Stream baseStream) : this(baseStream, true) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -272,18 +269,18 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="baseStream">
         /// ラップ対象となる Stream オブジェクト
         /// </param>
-        /// 
+        ///
         /// <param name="disposeStream">
         /// Dispose 時に BaseStream オブジェクトも破棄するかどうかを示す値
         /// </param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveStreamWriter(Stream baseStream, bool disposeStream)
-            : base(baseStream, disposeStream) { }
+        public ArchiveStreamWriter(Stream baseStream, bool disposeStream) :
+            base(baseStream, disposeStream) { }
 
         #endregion
 
@@ -296,11 +293,11 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 現在のストリームの長さを設定します。
         /// </summary>
-        /// 
+        ///
         /// <param name="size">設定サイズ</param>
-        /// 
+        ///
         /// <returns>0 (ゼロ)</returns>
-        /// 
+        ///
         /// <remarks>
         /// IOutStream.SetSize(long) の実装です。
         /// </remarks>
@@ -320,13 +317,13 @@ namespace Cube.FileSystem.SevenZip
         /// 現在のストリームにバイトシーケンスを書き込み、書き込んだ
         /// バイト数だけストリームの現在位置を進めます。
         /// </summary>
-        /// 
+        ///
         /// <param name="data">書き込み用データ</param>
         /// <param name="size">書き込むバイト数</param>
         /// <param name="result">実際に書き込まれたバイト数</param>
-        /// 
+        ///
         /// <returns>0 (ゼロ)</returns>
-        /// 
+        ///
         /// <remarks>
         /// IOutStream.Write(byte[], uint, IntPtr) の実装です。
         /// </remarks>

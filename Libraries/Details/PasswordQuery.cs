@@ -21,7 +21,7 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     ///
     /// PasswordQuery
-    /// 
+    ///
     /// <summary>
     /// パスワードの問い合わせ用オブジェクトです。
     /// </summary>
@@ -38,15 +38,15 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="password">パスワード</param>
-        /// 
+        ///
         /// <remarks>
         /// 実行前に既にパスワードを把握している場合に使用します。
         /// コンストラクタでパスワードを指定した場合、Request の結果は
         /// 常にこの値が設定されます。
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public PasswordQuery(string password)
         {
@@ -60,11 +60,11 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="inner">
         /// パスワードの問い合わせ処理の移譲オブジェクト
         /// </param>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public PasswordQuery(IQuery<string, string> inner)
         {
@@ -82,7 +82,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// パスワードを取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public string Password { get; private set; }
 
@@ -93,7 +93,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// パスワードの問い合わせ処理の移譲オブジェクトを取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public IQuery<string, string> InnerQuery { get; private set; }
 
@@ -108,9 +108,9 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 問い合わせを実行します。
         /// </summary>
-        /// 
+        ///
         /// <param name="e">パラメータを保持するオブジェクト</param>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void Request(QueryEventArgs<string, string> e)
         {
@@ -133,17 +133,17 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 内部状態をリセットします。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void Reset()
         {
             _cache = null;
         }
 
-        #region Fields
-        private string _cache;
         #endregion
 
+        #region Fields
+        private string _cache;
         #endregion
     }
 }

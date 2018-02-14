@@ -25,7 +25,7 @@ namespace Cube.FileSystem.SevenZip.Kernel32
     /* --------------------------------------------------------------------- */
     ///
     /// Kernel32.NativeMethods
-    /// 
+    ///
     /// <summary>
     /// kernel32.dll に定義された関数を宣言するためのクラスです。
     /// </summary>

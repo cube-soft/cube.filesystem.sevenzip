@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -37,11 +37,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <summary>
         /// PresetMenu に対応するプログラム引数を取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="menu">メニュー</param>
-        /// 
+        ///
         /// <returns>プログラム引数</returns>
-        /// 
+        ///
         /// <remarks>
         /// 変換可能な PresetMenu が複数存在する場合、最初に見つかった
         /// メニューに対応する引数が返されます。

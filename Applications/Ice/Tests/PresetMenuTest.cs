@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -24,7 +24,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
     /* --------------------------------------------------------------------- */
     ///
     /// PresetMenuTest
-    /// 
+    ///
     /// <summary>
     /// PresetMenu のテスト用クラスです。
     /// </summary>
@@ -59,7 +59,6 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         [TestCase(PresetMenu.MailXZ,             ExpectedResult = 2)]
         [TestCase(PresetMenu.MailSfx,            ExpectedResult = 2)]
         [TestCase(PresetMenu.MailDetail,         ExpectedResult = 2)]
-        public int ToArguments(PresetMenu menu)
-            => menu.ToArguments().Count();
+        public int ToArguments(PresetMenu menu) => menu.ToArguments().Count();
     }
 }

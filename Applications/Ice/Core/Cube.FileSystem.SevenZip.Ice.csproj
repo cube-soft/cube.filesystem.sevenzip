@@ -106,7 +106,7 @@
     <Compile Include="Settings\ExtractSettings.cs" />
     <Compile Include="Settings\GeneralSettings.cs" />
     <Compile Include="Settings\Settings.cs" />
-    <Compile Include="Settings\SettingsOperations.cs" />
+    <Compile Include="Settings\SettingsOperator.cs" />
     <Compile Include="Settings\ShortcutSettings.cs" />
     <Compile Include="AssociateRegistrar.cs" />
     <Compile Include="Parameters.cs" />

@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -23,11 +23,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Mapi32
     /* --------------------------------------------------------------------- */
     ///
     /// MapiMessage
-    /// 
+    ///
     /// <summary>
     /// https://msdn.microsoft.com/ja-jp/library/windows/desktop/dd296732.aspx
     /// </summary>
-    /// 
+    ///
     /* --------------------------------------------------------------------- */
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     internal class MapiMessage
@@ -49,11 +49,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Mapi32
     /* --------------------------------------------------------------------- */
     ///
     /// MapiFileDesc
-    /// 
+    ///
     /// <summary>
     /// https://msdn.microsoft.com/en-us/library/windows/desktop/dd296737.aspx
     /// </summary>
-    /// 
+    ///
     /* --------------------------------------------------------------------- */
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     internal class MapiFileDesc
@@ -69,11 +69,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Mapi32
     /* --------------------------------------------------------------------- */
     ///
     /// MapiRecipDesc
-    /// 
+    ///
     /// <summary>
     /// https://msdn.microsoft.com/en-us/library/windows/desktop/dd296720.aspx
     /// </summary>
-    /// 
+    ///
     /* --------------------------------------------------------------------- */
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     internal class MapiRecipDesc
@@ -89,7 +89,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Mapi32
     /* --------------------------------------------------------------------- */
     ///
     /// Mapi32.NativeMethods
-    /// 
+    ///
     /// <summary>
     /// mapi32.dll に定義された関数を宣言するためのクラスです。
     /// </summary>
@@ -100,7 +100,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Mapi32
         /* ----------------------------------------------------------------- */
         ///
         /// MAPISendMail
-        /// 
+        ///
         /// <summary>
         /// https://msdn.microsoft.com/ja-jp/library/windows/desktop/dd296721.aspx
         /// </summary>

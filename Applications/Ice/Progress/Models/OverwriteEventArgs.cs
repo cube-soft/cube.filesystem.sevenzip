@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -22,7 +22,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
     /* --------------------------------------------------------------------- */
     ///
     /// OverwriteMode
-    /// 
+    ///
     /// <summary>
     /// 上書き方法を示す列挙型です。
     /// </summary>
@@ -57,7 +57,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
     /* --------------------------------------------------------------------- */
     ///
     /// OverwriteInfo
-    /// 
+    ///
     /// <summary>
     /// 上書き対象となる項目の情報を保持するためのクラスです。
     /// </summary>
@@ -70,11 +70,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// OverwriteEventArgs
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="src">上書き元の情報</param>
         /// <param name="dest">上書き先の情報</param>
         ///
@@ -92,33 +92,33 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Source
-        /// 
+        ///
         /// <summary>
         /// 上書き元の情報を取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public IInformation Source { get; }
 
         /* ----------------------------------------------------------------- */
         ///
         /// Destination
-        /// 
+        ///
         /// <summary>
         /// 上書き先の情報を取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public IInformation Destination { get; }
 
         /* ----------------------------------------------------------------- */
         ///
         /// Result
-        /// 
+        ///
         /// <summary>
         /// 上書き方法を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public OverwriteMode Result { get; set; } = OverwriteMode.Cancel;
 
@@ -128,7 +128,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
     /* --------------------------------------------------------------------- */
     ///
     /// OverwriteEventHandler
-    /// 
+    ///
     /// <summary>
     /// 上書き確認ダイアログを表示するための delegate です。
     /// </summary>

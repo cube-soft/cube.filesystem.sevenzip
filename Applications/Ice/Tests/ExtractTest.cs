@@ -813,7 +813,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 
         #endregion
 
-        #region Helper
+        #region Helper methods
 
         /* ----------------------------------------------------------------- */
         ///
@@ -847,10 +847,10 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static IEnumerable<string> DropRequest(string path)
-            => PresetMenu.Extract
-                         .ToArguments()
-                         .Concat(new[] { "/o:source", $"/drop:{FullName(path)}" });
+        private static IEnumerable<string> DropRequest(string path) =>
+            PresetMenu.Extract
+                      .ToArguments()
+                      .Concat(new[] { "/o:source", $"/drop:{FullName(path)}" });
 
         /* ----------------------------------------------------------------- */
         ///

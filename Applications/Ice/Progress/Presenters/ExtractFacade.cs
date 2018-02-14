@@ -49,8 +49,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// <param name="settings">設定情報</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ExtractFacade(Request request, SettingsFolder settings)
-            : base(request, settings)
+        public ExtractFacade(Request request, SettingsFolder settings) :
+            base(request, settings)
         {
             Source = Request.Sources.First();
         }
@@ -478,8 +478,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenExtracting(object sender, ValueEventArgs<ArchiveItem> e)
-            => Current = e.Value.FullName;
+        private void WhenExtracting(object sender, ValueEventArgs<ArchiveItem> e) =>
+            Current = e.Value.FullName;
 
         /* ----------------------------------------------------------------- */
         ///

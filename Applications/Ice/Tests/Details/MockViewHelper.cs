@@ -241,11 +241,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
             }
         }
 
+        #endregion
+
         #region Fields
         private MockViewFactory _mock = new MockViewFactory();
         private string _directory = string.Empty;
-        #endregion
-
         #endregion
     }
 }

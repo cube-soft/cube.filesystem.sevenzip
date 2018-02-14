@@ -49,8 +49,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         public ExtractPresenter(IProgressView view, Request model,
-            SettingsFolder settings, IEventHub events)
-            : base(view, new ExtractFacade(model, settings), settings, events)
+            SettingsFolder settings, IEventHub events) :
+            base(view, new ExtractFacade(model, settings), settings, events)
         {
             var fs = Model.TryCast<ExtractFacade>();
 
@@ -80,8 +80,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenDestinationRequested(object sender, PathQueryEventArgs e)
-            => ShowDialog(() => Views.ShowSaveView(e));
+        private void WhenDestinationRequested(object sender, PathQueryEventArgs e) =>
+            ShowDialog(() => Views.ShowSaveView(e));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -92,8 +92,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenPasswordRequested(object sender, QueryEventArgs<string, string> e)
-            => ShowDialog(() => Views.ShowPasswordView(e, false));
+        private void WhenPasswordRequested(object sender, QueryEventArgs<string, string> e) =>
+            ShowDialog(() => Views.ShowPasswordView(e, false));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -104,8 +104,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenOverwriteRequested(object sender, OverwriteEventArgs e)
-            => ShowDialog(() => Views.ShowOverwriteView(e));
+        private void WhenOverwriteRequested(object sender, OverwriteEventArgs e) =>
+            ShowDialog(() => Views.ShowOverwriteView(e));
 
         /* ----------------------------------------------------------------- */
         ///

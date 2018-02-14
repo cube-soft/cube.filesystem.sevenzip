@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -37,11 +37,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// SuspendableProgress
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="cancel">キャンセル用オブジェクト</param>
         /// <param name="wait">一時停止用オブジェクト</param>
         /// <param name="action">コールバック</param>
@@ -64,7 +64,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ProgressChanged
-        /// 
+        ///
         /// <summary>
         /// 進行状況が更新された時に発生するイベントです。
         /// </summary>
@@ -79,13 +79,13 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Report
-        /// 
+        ///
         /// <summary>
         /// 進行状況の更新を報告します。
         /// </summary>
-        /// 
+        ///
         /// <param name="value">進捗内容</param>
-        /// 
+        ///
         /// <remarks>
         /// WaitHandle のチェック後に CancellationToken のチェックを実行
         /// します。したがって、キャンセル処理を発生させるには、
@@ -104,7 +104,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// OnReport
-        /// 
+        ///
         /// <summary>
         /// 進行状況の更新を報告します。
         /// </summary>

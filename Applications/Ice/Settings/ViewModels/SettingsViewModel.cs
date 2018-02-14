@@ -274,10 +274,10 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
             return string.Join(rep, dest);
         }
 
-        #region Fields
-        private SettingsFolder _model;
         #endregion
 
+        #region Fields
+        private SettingsFolder _model;
         #endregion
     }
 }

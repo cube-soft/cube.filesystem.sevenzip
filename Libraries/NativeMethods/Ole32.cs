@@ -23,7 +23,7 @@ namespace Cube.FileSystem.SevenZip.Ole32
     /* --------------------------------------------------------------------- */
     ///
     /// Ole32.NativeMethods
-    /// 
+    ///
     /// <summary>
     /// ole32.dll に定義された関数を宣言するためのクラスです。
     /// </summary>

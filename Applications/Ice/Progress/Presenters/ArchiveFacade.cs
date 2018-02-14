@@ -47,8 +47,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// <param name="settings">ユーザ設定</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveFacade(Request request, SettingsFolder settings)
-            : base(request, settings) { }
+        public ArchiveFacade(Request request, SettingsFolder settings) :
+            base(request, settings) { }
 
         #endregion
 

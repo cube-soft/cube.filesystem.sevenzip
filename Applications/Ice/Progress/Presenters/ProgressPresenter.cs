@@ -31,8 +31,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ProgressPresenter
-        : Cube.Forms.PresenterBase<IProgressView, ProgressFacade, SettingsFolder>
+    public class ProgressPresenter :
+        Cube.Forms.PresenterBase<IProgressView, ProgressFacade, SettingsFolder>
     {
         #region Constructors
 
@@ -51,8 +51,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         public ProgressPresenter(IProgressView view, ProgressFacade model,
-            SettingsFolder settings, IEventHub events)
-            : base(view, model, settings, events)
+            SettingsFolder settings, IEventHub events) :
+            base(view, model, settings, events)
         {
             View.EventHub = EventHub;
 
@@ -153,8 +153,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenMessageReceived(object sender, MessageEventArgs e)
-            => SyncWait(() => Views.ShowMessageBox(e));
+        private void WhenMessageReceived(object sender, MessageEventArgs e) =>
+            SyncWait(() => Views.ShowMessageBox(e));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -165,8 +165,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenOpenDirectoryRequested(object sender, KeyValueEventArgs<string, string> e)
-            => Views.ShowExplorerView(e);
+        private void WhenOpenDirectoryRequested(object sender, KeyValueEventArgs<string, string> e) =>
+            Views.ShowExplorerView(e);
 
         #endregion
     }

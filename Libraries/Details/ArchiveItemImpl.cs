@@ -25,7 +25,7 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     ///
     /// ArchiveItemImpl
-    /// 
+    ///
     /// <summary>
     /// ArchiveItem の実装クラスです。
     /// </summary>
@@ -42,7 +42,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="archive">実装オブジェクト</param>
         /// <param name="format">圧縮ファイル形式</param>
         /// <param name="src">圧縮ファイルのパス</param>
@@ -99,7 +99,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 展開した内容を保存します。
         /// </summary>
-        /// 
+        ///
         /// <param name="directory">保存ディレクトリ</param>
         /// <param name="progress">進捗報告用オブジェクト</param>
         ///
@@ -155,7 +155,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// パスを取得します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// TAR 系に関してはパスの情報を取得する事ができないため、元の
         /// ファイル名の拡張子を .tar に変更したものをパスにする事として
@@ -185,15 +185,15 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// TAR 系の拡張子かどうかを判別します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// tb2 および t*z と言う文字列の場合に TAR 系の拡張子と判別して
         /// います。
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        private bool IsTarExtension(string ext)
-            => ext == ".tb2" || (ext.Length == 4 && ext[0] == '.' && ext[1] == 't' && ext[3] == 'z');
+        private bool IsTarExtension(string ext) =>
+            ext == ".tb2" || (ext.Length == 4 && ext[0] == '.' && ext[1] == 't' && ext[3] == 'z');
 
         /* ----------------------------------------------------------------- */
         ///
@@ -242,10 +242,10 @@ namespace Cube.FileSystem.SevenZip
             ((PasswordQuery)Password).Reset();
         }
 
-        #region Fields
-        private IInArchive _archive;
         #endregion
 
+        #region Fields
+        private IInArchive _archive;
         #endregion
     }
 }

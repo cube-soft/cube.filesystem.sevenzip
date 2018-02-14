@@ -25,14 +25,14 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     ///
     /// ArchiveUpdateCallback
-    /// 
+    ///
     /// <summary>
     /// 圧縮ファイルを作成する際のコールバック関数群を定義したクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal sealed class ArchiveUpdateCallback
-        : ArchiveCallbackBase, IArchiveUpdateCallback, ICryptoGetTextPassword2, IDisposable
+    internal sealed class ArchiveUpdateCallback : ArchiveCallbackBase,
+        IArchiveUpdateCallback, ICryptoGetTextPassword2, IDisposable
     {
         #region Constructors
 
@@ -43,14 +43,13 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="items">圧縮するファイル一覧</param>
         /// <param name="dest">保存パス</param>
         /// <param name="io">ファイル操作用オブジェクト</param>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
-        public ArchiveUpdateCallback(IList<FileItem> items, string dest, Operator io)
-            : base(io)
+        public ArchiveUpdateCallback(IList<FileItem> items, string dest, Operator io) : base(io)
         {
             _dispose = new OnceAction<bool>(Dispose);
             Items = items;
@@ -68,7 +67,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 圧縮するファイル一覧を取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public IList<FileItem> Items { get; }
 
@@ -79,7 +78,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 圧縮ファイルの保存パスを取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public string Destination { get; }
 
@@ -96,12 +95,12 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 圧縮ファイルに設定するパスワードを取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="enabled">パスワードが有効かどうかを示す値</param>
         /// <param name="password">パスワード</param>
-        /// 
+        ///
         /// <returns>OperationResult</returns>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public int CryptoGetTextPassword2(ref int enabled, out string password)
         {
@@ -133,15 +132,15 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         ///
         /// SetTotal
-        /// 
+        ///
         /// <summary>
         /// 圧縮するファイルの合計バイト数を通知します。
         /// </summary>
-        /// 
+        ///
         /// <param name="bytes">
         /// 圧縮するファイルの合計バイト数
         /// </param>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void SetTotal(ulong bytes)
         {
@@ -152,13 +151,13 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         ///
         /// SetCompleted
-        /// 
+        ///
         /// <summary>
         /// 圧縮処理の終了したバイト数を通知します。
         /// </summary>
-        /// 
+        ///
         /// <param name="bytes">処理の終了したバイト数</param>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void SetCompleted(ref ulong bytes)
         {
@@ -169,22 +168,22 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         ///
         /// GetUpdateItemInfo
-        /// 
+        ///
         /// <summary>
         /// 追加する項目に関する情報を取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="index">インデックス</param>
         /// <param name="newdata">1 if new, 0 if not</param>
         /// <param name="newprop">1 if new, 0 if not</param>
         /// <param name="indexInArchive">-1 if doesn't matter</param>
-        /// 
+        ///
         /// <returns>OperationResult</returns>
-        /// 
+        ///
         /// <remarks>
         /// 追加や修正時の挙動が未実装なので要実装。
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public int GetUpdateItemInfo(uint index, ref int newdata, ref int newprop, ref uint indexInArchive)
         {
@@ -199,17 +198,17 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         ///
         /// GetProperty
-        /// 
+        ///
         /// <summary>
         /// 各種プロパティを取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="index">圧縮ファイル中のインデックス</param>
         /// <param name="pid">プロパティの種類</param>
         /// <param name="value">プロパティの内容</param>
-        /// 
+        ///
         /// <returns>OperationResult</returns>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public int GetProperty(uint index, ItemPropId pid, ref PropVariant value)
         {
@@ -254,16 +253,16 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         ///
         /// GetStream
-        /// 
+        ///
         /// <summary>
         /// ストリームを取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="index">圧縮ファイル中のインデックス</param>
         /// <param name="stream">読み込み用ストリーム</param>
-        /// 
+        ///
         /// <returns>OperationResult</returns>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public int GetStream(uint index, out ISequentialInStream stream)
         {
@@ -280,13 +279,13 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         ///
         /// SetOperationResult
-        /// 
+        ///
         /// <summary>
         /// 処理結果を設定します。
         /// </summary>
-        /// 
+        ///
         /// <param name="result">処理結果</param>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void SetOperationResult(OperationResult result) => Result = result;
 
@@ -297,11 +296,11 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// EnumProperties 7-zip internal function.
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// このメソッドは未実装です。
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public long EnumProperties(IntPtr enumerator) => 0x80004001L; // Not implemented
 
@@ -316,7 +315,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを破棄します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         ~ArchiveUpdateCallback() { _dispose.Invoke(false); }
 
@@ -327,7 +326,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// リソースを開放します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void Dispose()
         {
@@ -342,7 +341,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// リソースを開放します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private void Dispose(bool disposing)
         {
@@ -366,7 +365,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// ストリームを生成します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private ArchiveStreamReader CreateStream(uint index)
         {
@@ -379,11 +378,11 @@ namespace Cube.FileSystem.SevenZip
             return dest;
         }
 
+        #endregion
+
         #region Fields
         private OnceAction<bool> _dispose;
         private IList<ArchiveStreamReader> _streams = new List<ArchiveStreamReader>();
-        #endregion
-
         #endregion
     }
 }

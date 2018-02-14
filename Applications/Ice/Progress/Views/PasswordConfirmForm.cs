@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -122,10 +122,10 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenConfirmEnabledChanged(object sender, EventArgs e)
-            => ConfirmTextBox.BackColor = ConfirmTextBox.Enabled ?
-                                          SystemColors.Window :
-                                          SystemColors.Control;
+        private void WhenConfirmEnabledChanged(object sender, EventArgs e) =>
+            ConfirmTextBox.BackColor = ConfirmTextBox.Enabled ?
+                                       SystemColors.Window :
+                                       SystemColors.Control;
 
         /* ----------------------------------------------------------------- */
         ///

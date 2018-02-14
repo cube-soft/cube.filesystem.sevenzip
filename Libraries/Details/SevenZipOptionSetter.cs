@@ -23,7 +23,7 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     ///
     /// SevenZipOptionSetter
-    /// 
+    ///
     /// <summary>
     /// 7Z 圧縮ファイルのオプション項目を設定するためのクラスです。
     /// </summary>
@@ -40,7 +40,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="option">オプション</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -57,18 +57,17 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 設定可能な圧縮方法一覧を取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
-        public static CompressionMethod[] SupportedMethods
-            => new[]
-            {
-                CompressionMethod.Lzma,
-                CompressionMethod.Lzma2,
-                CompressionMethod.Ppmd,
-                CompressionMethod.BZip2,
-                CompressionMethod.Deflate,
-                CompressionMethod.Copy,
-            };
+        public static CompressionMethod[] SupportedMethods => new[]
+        {
+            CompressionMethod.Lzma,
+            CompressionMethod.Lzma2,
+            CompressionMethod.Ppmd,
+            CompressionMethod.BZip2,
+            CompressionMethod.Deflate,
+            CompressionMethod.Copy,
+        };
 
         #endregion
 
@@ -81,7 +80,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オプションをアーカイブ・オブジェクトに設定します。
         /// </summary>
-        /// 
+        ///
         /// <param name="dest">アーカイブ・オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -105,7 +104,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 圧縮方式を追加します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private void AddCompressionMethod(SevenZipOption so)
         {

@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -37,11 +37,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// CreateProgressView
-        /// 
+        ///
         /// <summary>
         /// 進捗表示用画面を生成します。
         /// </summary>
-        /// 
+        ///
         /// <returns>進捗表示用画面</returns>
         ///
         /* ----------------------------------------------------------------- */
@@ -50,13 +50,13 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ShowSaveView
-        /// 
+        ///
         /// <summary>
         /// 保存パス名を選択する画面を表示します。
         /// </summary>
-        /// 
+        ///
         /// <param name="e">パスを保持するオブジェクト</param>
-        /// 
+        ///
         /// <remarks>
         /// Format.Unknown の場合はディレクトリ選択用ダイアログが表示
         /// されます。
@@ -72,11 +72,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ShowPasswordView
-        /// 
+        ///
         /// <summary>
         /// パスワード入力画面を表示します。
         /// </summary>
-        /// 
+        ///
         /// <param name="e">パスワード情報を保持するオブジェクト</param>
         /// <param name="confirm">確認用入力項目の有無</param>
         ///
@@ -90,11 +90,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ShowOverwriteView
-        /// 
+        ///
         /// <summary>
         /// 上書き確認用画面を表示します。
         /// </summary>
-        /// 
+        ///
         /// <param name="e">ファイル情報を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -112,11 +112,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ShowArchiveView
-        /// 
+        ///
         /// <summary>
         /// 圧縮の詳細設定用画面を表示します。
         /// </summary>
-        /// 
+        ///
         /// <param name="e">詳細設定を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -142,11 +142,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ShowExplorerView
-        /// 
+        ///
         /// <summary>
         /// エクスプローラ画面を表示します。
         /// </summary>
-        /// 
+        ///
         /// <param name="e">情報を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -159,11 +159,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ShowMailView
-        /// 
+        ///
         /// <summary>
         /// メール送信用画面を表示します。
         /// </summary>
-        /// 
+        ///
         /// <param name="e">添付情報を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -177,11 +177,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ShowMessageBox
-        /// 
+        ///
         /// <summary>
         /// メッセージボックスを表示します。
         /// </summary>
-        /// 
+        ///
         /// <param name="e">メッセージ内容を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -204,11 +204,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ShowSaveFileView
-        /// 
+        ///
         /// <summary>
         /// 保存ファイル名を選択する画面を表示します。
         /// </summary>
-        /// 
+        ///
         /// <param name="e">パスを保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -230,11 +230,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ShowSaveDirectoryView
-        /// 
+        ///
         /// <summary>
         /// 保存ディレクトリ名を選択する画面を表示します。
         /// </summary>
-        /// 
+        ///
         /// <param name="e">パスを保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -254,11 +254,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ShowPasswordView
-        /// 
+        ///
         /// <summary>
         /// パスワード入力画面を表示します。
         /// </summary>
-        /// 
+        ///
         /// <param name="e">パスワード情報を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -275,11 +275,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ShowPasswordConfirmView
-        /// 
+        ///
         /// <summary>
         /// 確認項目付パスワード入力画面を表示します。
         /// </summary>
-        /// 
+        ///
         /// <param name="e">パスワード情報を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -303,7 +303,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
     /// <summary>
     /// 各種 View の生成用クラスです。
     /// </summary>
-    /// 
+    ///
     /// <remarks>
     /// Views は ViewFactory のプロキシとして実装されています。
     /// 実際の View 生成コードは ViewFactory および継承クラスで実装して
@@ -316,11 +316,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Configure
-        /// 
+        ///
         /// <summary>
         /// Facotry オブジェクトを設定します。
         /// </summary>
-        /// 
+        ///
         /// <param name="factory">Factory オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -335,120 +335,120 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// CreateProgressView
-        /// 
+        ///
         /// <summary>
         /// 進捗表示用画面を生成します。
         /// </summary>
-        /// 
+        ///
         /// <returns>進捗表示用画面</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static IProgressView CreateProgressView()
-            => _factory.CreateProgressView();
+        public static IProgressView CreateProgressView() =>
+            _factory.CreateProgressView();
 
         /* ----------------------------------------------------------------- */
         ///
         /// ShowSaveView
-        /// 
+        ///
         /// <summary>
         /// 保存パス名を選択する画面を表示します。
         /// </summary>
-        /// 
+        ///
         /// <param name="e">パスを保持するオブジェクト</param>
-        /// 
+        ///
         /// <remarks>
         /// Format.Unknown の場合はディレクトリ選択用ダイアログが表示
         /// されます。
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public static void ShowSaveView(PathQueryEventArgs e)
-            => _factory.ShowSaveView(e);
+        public static void ShowSaveView(PathQueryEventArgs e) =>
+            _factory.ShowSaveView(e);
 
         /* ----------------------------------------------------------------- */
         ///
         /// ShowPasswordView
-        /// 
+        ///
         /// <summary>
         /// パスワード入力画面を表示します。
         /// </summary>
-        /// 
+        ///
         /// <param name="e">パスワード情報を保持するオブジェクト</param>
         /// <param name="confirm">確認用入力項目の有無</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void ShowPasswordView(QueryEventArgs<string, string> e, bool confirm)
-            => _factory.ShowPasswordView(e, confirm);
+        public static void ShowPasswordView(QueryEventArgs<string, string> e, bool confirm) =>
+            _factory.ShowPasswordView(e, confirm);
 
         /* ----------------------------------------------------------------- */
         ///
         /// ShowOverwriteView
-        /// 
+        ///
         /// <summary>
         /// 上書き確認用画面を表示します。
         /// </summary>
-        /// 
+        ///
         /// <param name="e">ファイル情報を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void ShowOverwriteView(OverwriteEventArgs e)
-            => _factory.ShowOverwriteView(e);
+        public static void ShowOverwriteView(OverwriteEventArgs e) =>
+            _factory.ShowOverwriteView(e);
 
         /* ----------------------------------------------------------------- */
         ///
         /// ShowArchiveView
-        /// 
+        ///
         /// <summary>
         /// 圧縮の詳細設定用画面を表示します。
         /// </summary>
-        /// 
+        ///
         /// <param name="e">詳細設定を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void ShowArchiveView(QueryEventArgs<string, ArchiveDetails> e)
-            => _factory.ShowArchiveView(e);
+        public static void ShowArchiveView(QueryEventArgs<string, ArchiveDetails> e) =>
+            _factory.ShowArchiveView(e);
 
         /* ----------------------------------------------------------------- */
         ///
         /// ShowExplorerView
-        /// 
+        ///
         /// <summary>
         /// エクスプローラ画面を表示します。
         /// </summary>
-        /// 
+        ///
         /// <param name="e">情報を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void ShowExplorerView(KeyValueEventArgs<string, string> e)
-            => _factory.ShowExplorerView(e);
+        public static void ShowExplorerView(KeyValueEventArgs<string, string> e) =>
+            _factory.ShowExplorerView(e);
 
         /* ----------------------------------------------------------------- */
         ///
         /// ShowMailView
-        /// 
+        ///
         /// <summary>
         /// メール送信用画面を表示します。
         /// </summary>
-        /// 
+        ///
         /// <param name="e">添付情報を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void ShowMailView(ValueEventArgs<string> e)
-            => _factory.ShowMailView(e);
+        public static void ShowMailView(ValueEventArgs<string> e) =>
+            _factory.ShowMailView(e);
 
         /* ----------------------------------------------------------------- */
         ///
         /// ShowMessageBox
-        /// 
+        ///
         /// <summary>
         /// メッセージボックスを表示します。
         /// </summary>
-        /// 
+        ///
         /// <param name="e">メッセージ内容を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void ShowMessageBox(MessageEventArgs e)
-            => _factory.ShowMessageBox(e);
+        public static void ShowMessageBox(MessageEventArgs e) =>
+            _factory.ShowMessageBox(e);
 
         #endregion
 

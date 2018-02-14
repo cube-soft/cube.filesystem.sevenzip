@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -22,7 +22,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /* --------------------------------------------------------------------- */
     ///
     /// GeneralSettings
-    /// 
+    ///
     /// <summary>
     /// 圧縮・解凍に共通するユーザ設定を保持するためのクラスです。
     /// </summary>
@@ -36,11 +36,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// SaveLocation
-        /// 
+        ///
         /// <summary>
         /// 保存場所に関する情報を取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [DataMember]
         public SaveLocation SaveLocation
@@ -52,15 +52,15 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// SaveDirectoryName
-        /// 
+        ///
         /// <summary>
         /// 保存ディレクトリのパスを取得します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// このプロパティは SaveLocation.Others の場合に参照されます。
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [DataMember]
         public string SaveDirectoryName
@@ -72,12 +72,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Filtering
-        /// 
+        ///
         /// <summary>
         /// 特定のファイルまたはディレクトリをフィルタリングするかどうかを
         /// 示す値を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [DataMember]
         public bool Filtering
@@ -89,12 +89,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// OpenDirectory
-        /// 
+        ///
         /// <summary>
         /// 展開後にディレクトリを開くかどうかを示す値を取得または
         /// 設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [DataMember]
         public OpenDirectoryMethod OpenDirectory

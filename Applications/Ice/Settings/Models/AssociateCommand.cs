@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -17,7 +17,6 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Cube.FileSystem.SevenZip.Ice;
 using Cube.Log;
 
@@ -26,11 +25,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
     /* --------------------------------------------------------------------- */
     ///
     /// AssociateCommand
-    /// 
+    ///
     /// <summary>
     /// ファイルの関連付けの更新を実行するコマンドです。
     /// </summary>
-    /// 
+    ///
     /// <remarks>
     /// 関連付けの更新には管理者権限が必要なため、外部プログラムを
     /// 利用します。
@@ -44,13 +43,13 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// AssociateCommand
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="settings">設定用オブジェクト</param>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public AssociateCommand(AssociateSettings settings)
         {
@@ -65,11 +64,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// Settings
-        /// 
+        ///
         /// <summary>
         /// ファイルの関連付けに関するユーザ設定を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public AssociateSettings Settings { get; }
 
@@ -80,13 +79,13 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// Execute
-        /// 
+        ///
         /// <summary>
         /// ファイルの関連付けを状態を更新します。
         /// </summary>
-        /// 
+        ///
         /// <param name="force">強制的に更新するかどうかを示す値</param>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void Execute(bool force)
         {
@@ -113,12 +112,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// IsChanged
-        /// 
+        ///
         /// <summary>
         /// ファイルの関連付け状態を表す値が変更されたかどうかを判別
         /// します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private bool IsChanged()
         {
@@ -132,11 +131,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// Reset
-        /// 
+        ///
         /// <summary>
         /// 起点となる値を再設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private void Reset()
         {
@@ -144,10 +143,10 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
             foreach (var item in Settings.Value) _prev.Add(item);
         }
 
-        #region Fields
-        private IDictionary<string, bool> _prev = new Dictionary<string, bool>();
         #endregion
 
+        #region Fields
+        private IDictionary<string, bool> _prev = new Dictionary<string, bool>();
         #endregion
     }
 }

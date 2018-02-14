@@ -42,8 +42,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// <param name="src">元ファイルのパス</param>
         ///
         /* ----------------------------------------------------------------- */
-        public PathConverter(string src, Format format)
-            : this(src, format, new Operator()) { }
+        public PathConverter(string src, Format format) : this(src, format, new Operator()) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -58,8 +57,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// <param name="io">入出力用のオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public PathConverter(string src, Format format, Operator io)
-            : this(src, format, CompressionMethod.Default, io) { }
+        public PathConverter(string src, Format format, Operator io) :
+            this(src, format, CompressionMethod.Default, io) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -74,8 +73,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// <param name="method">圧縮方法</param>
         ///
         /* ----------------------------------------------------------------- */
-        public PathConverter(string src, Format format, CompressionMethod method)
-            : this(src, format, method, new Operator()) { }
+        public PathConverter(string src, Format format, CompressionMethod method) :
+            this(src, format, method, new Operator()) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -239,10 +238,10 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             return ResultFormat.ToExtension();
         }
 
-        #region Fields
-        private IInformation _result;
         #endregion
 
+        #region Fields
+        private IInformation _result;
         #endregion
     }
 }

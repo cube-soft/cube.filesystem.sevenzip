@@ -126,8 +126,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool HasFlag(CreateDirectoryMethod value)
-            => Model.RootDirectory.HasFlag(value);
+        public bool HasFlag(CreateDirectoryMethod value) => Model.RootDirectory.HasFlag(value);
 
         /* ----------------------------------------------------------------- */
         ///

@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -23,7 +23,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /* --------------------------------------------------------------------- */
     ///
     /// ShortcutSettings
-    /// 
+    ///
     /// <summary>
     /// デスクトップに作成するショートカットに関するユーザ設定を保持する
     /// ためのクラスです。
@@ -37,12 +37,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Preset
-        /// 
+        ///
         /// <summary>
         /// 予め定義されたショートカットメニューを示す値を取得または
         /// 設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [DataMember]
         public PresetMenu Preset
@@ -54,16 +54,16 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Directory
-        /// 
+        ///
         /// <summary>
         /// ショートカットを作成するディレクトリのパスを取得または
         /// 設定します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// 未設定の場合はデスクトップに作成されます。
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public string Directory { get; set; }
 
@@ -74,12 +74,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Sync
-        /// 
+        ///
         /// <summary>
         /// 実際にショートカットが存在するかどうかの結果に応じて
         /// Preset の値を更新します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void Sync()
         {
@@ -99,11 +99,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Update
-        /// 
+        ///
         /// <summary>
         /// ショートカットを生成または削除します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void Update()
         {
@@ -119,11 +119,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// UpdateArchive
-        /// 
+        ///
         /// <summary>
         /// 圧縮用のショートカットを生成または削除します
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private void UpdateArchive()
         {
@@ -143,11 +143,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// UpdateExtract
-        /// 
+        ///
         /// <summary>
         /// 解凍用のショートカットを生成または削除します
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private void UpdateExtract()
         {
@@ -167,11 +167,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// UpdateSettings
-        /// 
+        ///
         /// <summary>
         /// 設定用のショートカットを生成または削除します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private void UpdateSettings()
         {
@@ -190,11 +190,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// GetFileName
-        /// 
+        ///
         /// <summary>
         /// ショートカットのパスを取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private string GetFileName(string name)
         {
@@ -207,11 +207,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// GetLink
-        /// 
+        ///
         /// <summary>
         /// リンク先のパスを取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private string GetLink(string filename)
         {
@@ -219,10 +219,10 @@ namespace Cube.FileSystem.SevenZip.Ice
             return System.IO.Path.Combine(dir, filename);
         }
 
-        #region Fields
-        private PresetMenu _preset = PresetMenu.DefaultDesktop;
         #endregion
 
+        #region Fields
+        private PresetMenu _preset = PresetMenu.DefaultDesktop;
         #endregion
     }
 }

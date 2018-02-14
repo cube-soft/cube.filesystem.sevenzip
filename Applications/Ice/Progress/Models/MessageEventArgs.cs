@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -23,7 +23,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
     /* --------------------------------------------------------------------- */
     ///
     /// MessageEventArgs
-    /// 
+    ///
     /// <summary>
     /// メッセージボックスに表示する情報を保持するためのクラスです。
     /// </summary>
@@ -34,7 +34,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Title
-        /// 
+        ///
         /// <summary>
         /// メッセージボックスのタイトルを取得または設定します。
         /// </summary>
@@ -45,7 +45,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Message
-        /// 
+        ///
         /// <summary>
         /// メッセージを取得または設定します。
         /// </summary>
@@ -56,7 +56,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Icon
-        /// 
+        ///
         /// <summary>
         /// メッセージボックスに表示するアイコンを取得または設定します。
         /// </summary>
@@ -67,7 +67,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Buttons
-        /// 
+        ///
         /// <summary>
         /// メッセージボックスに表示するボタンを取得または設定します。
         /// </summary>
@@ -78,7 +78,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Result
-        /// 
+        ///
         /// <summary>
         /// ユーザがどのボタンをクリックしたかを示す値を取得または設定
         /// します。
@@ -91,7 +91,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
     /* --------------------------------------------------------------------- */
     ///
     /// MessageEventHandler
-    /// 
+    ///
     /// <summary>
     /// メッセージボックスを表示するための delegate です。
     /// </summary>
