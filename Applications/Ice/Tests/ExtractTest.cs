@@ -126,12 +126,14 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         [Test]
         public void Extract_Rename()
         {
+            Mock.OverwriteMode = OverwriteMode.Rename;
+
             var dummy = Example("Sample.txt");
             var src   = Example("Complex.1.0.0.zip");
             var dest  = Result("Overwrite");
 
-            IO.Copy(dummy, Result(@"Overwrite\Foo.txt"));
-            IO.Copy(dummy, Result(@"Overwrite\Directory\Empty.txt"));
+            IO.Copy(dummy, IO.Combine(dest, @"Foo.txt"));
+            IO.Copy(dummy, IO.Combine(dest, @"Directory\Empty.txt"));
 
             using (var p = Create(dest, src))
             {
@@ -140,8 +142,46 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                 Assert.That(Wait(p.View).Result, Is.True, "Timeout");
             }
 
-            Assert.That(IO.Exists(Result(@"Overwrite\Foo(2).txt")), Is.True);
-            Assert.That(IO.Exists(Result(@"Overwrite\Directory\Empty(2).txt")), Is.True);
+            Assert.That(IO.Exists(IO.Combine(dest, @"Foo(2).txt")), Is.True);
+            Assert.That(IO.Exists(IO.Combine(dest, @"Directory\Empty(2).txt")), Is.True);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract_Overwrite_Cancel
+        ///
+        /// <summary>
+        /// 上書き確認をキャンセルした時の挙動を確認します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Extract_Overwrite_Cancel()
+        {
+            Mock.OverwriteMode = OverwriteMode.Cancel;
+
+            var dummy = Example("Sample.txt");
+            var size  = IO.Get(dummy).Length;
+            var src   = Example("Complex.1.0.0.zip");
+            var dest  = Result("OverwriteCancel");
+            var tmp   = string.Empty;
+
+            IO.Copy(dummy, IO.Combine(dest, "Foo.txt"));
+
+            using (var p = Create(dest, src))
+            {
+                p.Settings.Value.Extract.RootDirectory = CreateDirectoryMethod.None;
+                p.View.Show();
+                Assert.That(Wait(p.View).Result, Is.True, "Timeout");
+
+                tmp = p.Model.Tmp;
+                Assert.That(tmp, Is.Not.Null.And.Not.Empty);
+                Assert.That(IO.Exists(tmp), Is.True);
+                Assert.That(IO.Exists(IO.Combine(tmp, "Foo.txt")), Is.True);
+            }
+
+            Assert.That(IO.Get(IO.Combine(dest, "Foo.txt")).Length, Is.EqualTo(size));
+            Assert.That(IO.Exists(tmp), Is.False);
         }
 
         /* ----------------------------------------------------------------- */
@@ -242,11 +282,19 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         [Test]
         public void Extract_PasswordCancel()
         {
+            var tmp = string.Empty;
+
             using (var p = Create("", Example("Password.7z")))
             {
                 p.View.Show();
                 Assert.That(Wait(p.View).Result, Is.True, "Timeout");
+
+                tmp = p.Model.Tmp;
+                Assert.That(tmp, Is.Not.Null.And.Not.Empty);
+                Assert.That(IO.Exists(tmp), Is.True);
             }
+
+            Assert.That(IO.Exists(tmp), Is.False);
         }
 
         /* ----------------------------------------------------------------- */

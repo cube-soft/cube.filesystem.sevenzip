@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -23,11 +23,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
     /* --------------------------------------------------------------------- */
     ///
     /// MockViewHelper
-    /// 
+    ///
     /// <summary>
     /// テストで MockView を使用するためのクラスです。
     /// </summary>
-    /// 
+    ///
     /* --------------------------------------------------------------------- */
     class MockViewHelper
     {
@@ -51,7 +51,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="io">ファイル操作用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -112,7 +112,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Examples
-        /// 
+        ///
         /// <summary>
         /// テスト用ファイルの存在するフォルダへのパスを取得します。
         /// </summary>
@@ -123,7 +123,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// ExamplesName
-        /// 
+        ///
         /// <summary>
         /// テスト用ファイルの存在するフォルダの名前を取得します。
         /// </summary>
@@ -134,7 +134,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Results
-        /// 
+        ///
         /// <summary>
         /// テスト結果を格納するためのフォルダへのパスを取得します。
         /// </summary>
@@ -145,7 +145,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// ResultsName
-        /// 
+        ///
         /// <summary>
         /// テスト結果を格納するためのフォルダの名前を取得します。
         /// </summary>
@@ -160,12 +160,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Example
-        /// 
+        ///
         /// <summary>
         /// ファイル名に対して Examples フォルダのパスを結合したパスを
         /// 取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="filename">ファイル名</param>
         /// <returns>パス</returns>
         ///
@@ -175,12 +175,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Example
-        /// 
+        ///
         /// <summary>
         /// ファイル名に対して Results フォルダのパスを結合したパスを
         /// 取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="filename">ファイル名</param>
         /// <returns>パス</returns>
         ///
@@ -190,7 +190,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Reset
-        /// 
+        ///
         /// <summary>
         /// 内部状態をリセットします。
         /// </summary>
@@ -201,13 +201,13 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Wait
-        /// 
+        ///
         /// <summary>
         /// View が非表示になるまで待ちます。
         /// </summary>
-        /// 
+        ///
         /// <param name="view">View オブジェクト</param>
-        /// 
+        ///
         /// <returns>正常に終了したかどうか</returns>
         ///
         /* ----------------------------------------------------------------- */
@@ -224,7 +224,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Delete
-        /// 
+        ///
         /// <summary>
         /// 指定されたフォルダ内に存在する全てのファイルおよびフォルダを
         /// 削除します。
