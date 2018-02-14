@@ -26,7 +26,7 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     ///
     /// ArchiveReader
-    /// 
+    ///
     /// <summary>
     /// 圧縮ファイルを読み込み、展開するクラスです。
     /// </summary>
@@ -43,7 +43,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="path">圧縮ファイルのパス</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -56,13 +56,13 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="path">圧縮ファイルのパス</param>
         /// <param name="password">パスワード</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveReader(string path, string password)
-            : this(path, password, new Operator()) { }
+        public ArchiveReader(string path, string password) :
+            this(path, password, new Operator()) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -71,13 +71,13 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="path">圧縮ファイルのパス</param>
         /// <param name="password">パスワード取得用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveReader(string path, IQuery<string, string> password)
-            : this(path, password, new Operator()) { }
+        public ArchiveReader(string path, IQuery<string, string> password) :
+            this(path, password, new Operator()) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -86,7 +86,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="path">圧縮ファイルのパス</param>
         /// <param name="password">パスワード</param>
         /// <param name="io">ファイル操作用オブジェクト</param>
@@ -108,7 +108,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="path">圧縮ファイルのパス</param>
         /// <param name="password">パスワード取得用オブジェクト</param>
         /// <param name="io">ファイル操作用オブジェクト</param>
@@ -134,7 +134,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 圧縮ファイルのパスを取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public string Source { get; }
 
@@ -145,7 +145,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 圧縮ファイルのファイル形式を取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public Format Format { get; private set; } = Format.Unknown;
 
@@ -156,7 +156,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 圧縮ファイルの一覧を取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public IReadOnlyList<ArchiveItem> Items => _items;
 
@@ -168,7 +168,7 @@ namespace Cube.FileSystem.SevenZip
         /// 展開をスキップするファイル名またはディレクトリ名一覧を
         /// 取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public IEnumerable<string> Filters { get; set; }
 
@@ -181,7 +181,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         ///
         /// Extracting
-        /// 
+        ///
         /// <summary>
         /// 圧縮ファイル各項目の展開開始時に発生するイベントです。
         /// </summary>
@@ -192,14 +192,14 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         ///
         /// OnExtracted
-        /// 
+        ///
         /// <summary>
         /// Extracting イベントを発生させます。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnExtracting(ValueEventArgs<ArchiveItem> e)
-            => Extracting?.Invoke(this, e);
+        protected virtual void OnExtracting(ValueEventArgs<ArchiveItem> e) =>
+            Extracting?.Invoke(this, e);
 
         #endregion
 
@@ -208,7 +208,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         ///
         /// Extracted
-        /// 
+        ///
         /// <summary>
         /// 圧縮ファイル各項目の展開完了時に発生するイベントです。
         /// </summary>
@@ -219,14 +219,14 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         ///
         /// OnExtracted
-        /// 
+        ///
         /// <summary>
         /// Extracted イベントを発生させます。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnExtracted(ValueEventArgs<ArchiveItem> e)
-            => Extracted?.Invoke(this, e);
+        protected virtual void OnExtracted(ValueEventArgs<ArchiveItem> e) =>
+            Extracted?.Invoke(this, e);
 
         #endregion
 
@@ -241,7 +241,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 展開した内容を保存します。
         /// </summary>
-        /// 
+        ///
         /// <param name="directory">保存ディレクトリ</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -254,7 +254,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 展開した内容を保存します。
         /// </summary>
-        /// 
+        ///
         /// <param name="directory">保存ディレクトリ</param>
         /// <param name="progress">進捗報告用オブジェクト</param>
         ///
@@ -284,7 +284,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを破棄します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         ~ArchiveReader() { _dispose.Invoke(false); }
 
@@ -295,7 +295,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// リソースを破棄します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void Dispose()
         {
@@ -310,7 +310,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// リソースを破棄します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         protected virtual void Dispose(bool disposing)
         {
@@ -332,7 +332,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 圧縮ファイルを開きます。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private void Open()
         {
@@ -386,6 +386,8 @@ namespace Cube.FileSystem.SevenZip
             else throw new System.IO.IOException($"{result}");
         }
 
+        #endregion
+
         #region Fields
         private OnceAction<bool> _dispose;
         private Operator _io;
@@ -394,8 +396,6 @@ namespace Cube.FileSystem.SevenZip
         private IInArchive _archive;
         private ArchiveOpenCallback _callback;
         private ReadOnlyArchiveList _items;
-        #endregion
-
         #endregion
     }
 }

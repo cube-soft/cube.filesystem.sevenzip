@@ -17,6 +17,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using System.Reflection;
+using Cube.Log;
 using NUnit.Framework;
 
 namespace Cube.FileSystem.SevenZip.Tests
@@ -24,11 +25,11 @@ namespace Cube.FileSystem.SevenZip.Tests
     /* --------------------------------------------------------------------- */
     ///
     /// GlobalSetup
-    /// 
+    ///
     /// <summary>
     /// NUnit で最初に実行する処理を記述するテストです。
     /// </summary>
-    /// 
+    ///
     /* --------------------------------------------------------------------- */
     [SetUpFixture]
     public class GlobalSetup
@@ -45,8 +46,8 @@ namespace Cube.FileSystem.SevenZip.Tests
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
-            Cube.Log.Operations.Configure();
-            Cube.Log.Operations.Info(typeof(GlobalSetup), Assembly.GetExecutingAssembly());
+            LogOperator.Configure();
+            LogOperator.Info(typeof(GlobalSetup), Assembly.GetExecutingAssembly());
         }
     }
 }

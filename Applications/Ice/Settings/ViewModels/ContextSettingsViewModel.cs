@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -23,7 +23,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
     /* --------------------------------------------------------------------- */
     ///
     /// ContextSettingsViewModel
-    /// 
+    ///
     /// <summary>
     /// ContextSettings の ViewModel を表すクラスです。
     /// </summary>
@@ -36,13 +36,13 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// ContextSettingsViewModel
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="model">Model オブジェクト</param>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public ContextSettingsViewModel(ContextSettings model)
         {
@@ -59,11 +59,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// Archive
-        /// 
+        ///
         /// <summary>
         /// 圧縮の項目が有効かどうかを示す値を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool Archive
         {
@@ -74,11 +74,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// ArchiveZip
-        /// 
+        ///
         /// <summary>
         /// Zip で圧縮の項目が有効かどうかを示す値を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool ArchiveZip
         {
@@ -89,12 +89,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// ArchiveZipPassword
-        /// 
+        ///
         /// <summary>
         /// パスワード付 Zip で圧縮の項目が有効かどうかを示す値を取得
         /// または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool ArchiveZipPassword
         {
@@ -105,11 +105,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// ArchiveSevenZip
-        /// 
+        ///
         /// <summary>
         /// 7z で圧縮の項目が有効かどうかを示す値を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool ArchiveSevenZip
         {
@@ -120,11 +120,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// ArchiveGZip
-        /// 
+        ///
         /// <summary>
         /// GZip で圧縮の項目が有効かどうかを示す値を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool ArchiveGZip
         {
@@ -135,11 +135,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// ArchiveBZip2
-        /// 
+        ///
         /// <summary>
         /// BZip2 で圧縮の項目が有効かどうかを示す値を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool ArchiveBZip2
         {
@@ -150,11 +150,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// ArchiveXZ
-        /// 
+        ///
         /// <summary>
         /// XZ で圧縮の項目が有効かどうかを示す値を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool ArchiveXZ
         {
@@ -165,12 +165,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// ArchiveSfx
-        /// 
+        ///
         /// <summary>
         /// 自己解凍形式で圧縮の項目が有効かどうかを示す値を取得または
         /// 設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool ArchiveSfx
         {
@@ -181,12 +181,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// ArchiveDetail
-        /// 
+        ///
         /// <summary>
         /// 詳細を設定して圧縮の項目が有効かどうかを示す値を取得または
         /// 設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool ArchiveDetail
         {
@@ -201,11 +201,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// Extract
-        /// 
+        ///
         /// <summary>
         /// 解凍の項目が有効かどうかを示す値を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool Extract
         {
@@ -216,11 +216,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// ExtractSource
-        /// 
+        ///
         /// <summary>
         /// ここに解凍の項目が有効かどうかを示す値を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool ExtractSource
         {
@@ -231,12 +231,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// ExtractDesktop
-        /// 
+        ///
         /// <summary>
         /// デスクトップに解凍の項目が有効かどうかを示す値を取得または
         /// 設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool ExtractDesktop
         {
@@ -247,12 +247,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// ExtractMyDocuments
-        /// 
+        ///
         /// <summary>
         /// マイドキュメントに解凍の項目が有効かどうかを示す値を取得
         /// または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool ExtractMyDocuments
         {
@@ -263,12 +263,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// ExtractRuntime
-        /// 
+        ///
         /// <summary>
         /// 場所を指定して解凍の項目が有効かどうかを示す値を取得または
         /// 設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool ExtractRuntime
         {
@@ -283,12 +283,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// Mail
-        /// 
+        ///
         /// <summary>
         /// 圧縮してメール送信の項目が有効かどうかを示す値を取得または
         /// 設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool Mail
         {
@@ -299,12 +299,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// MailZip
-        /// 
+        ///
         /// <summary>
         /// Zip で圧縮してメール送信の項目が有効かどうかを示す値を取得
         /// または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool MailZip
         {
@@ -315,12 +315,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// MailZipPassword
-        /// 
+        ///
         /// <summary>
         /// パスワード付 Zip で圧縮してメール送信の項目が有効かどうかを
         /// 示す値を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool MailZipPassword
         {
@@ -331,12 +331,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// MailSevenZip
-        /// 
+        ///
         /// <summary>
         /// 7z で圧縮してメール送信の項目が有効かどうかを示す値を取得
         /// または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool MailSevenZip
         {
@@ -347,12 +347,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// MailGZip
-        /// 
+        ///
         /// <summary>
         /// GZip で圧縮してメール送信の項目が有効かどうかを示す値を取得
         /// または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool MailGZip
         {
@@ -363,12 +363,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// MailBZip2
-        /// 
+        ///
         /// <summary>
         /// BZip2 で圧縮してメール送信の項目が有効かどうかを示す値を取得
         /// または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool MailBZip2
         {
@@ -379,12 +379,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// MailXZ
-        /// 
+        ///
         /// <summary>
         /// XZ で圧縮してメール送信の項目が有効かどうかを示す値を取得
         /// または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool MailXZ
         {
@@ -395,12 +395,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// MailSfx
-        /// 
+        ///
         /// <summary>
         /// 自己解凍形式で圧縮してメール送信の項目が有効かどうかを示す値を
         /// 取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool MailSfx
         {
@@ -411,12 +411,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// MailDetail
-        /// 
+        ///
         /// <summary>
         /// 詳細を設定して圧縮し、メール送信の項目が有効かどうかを示す値を
         /// 取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool MailDetail
         {
@@ -433,11 +433,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// Reset
-        /// 
+        ///
         /// <summary>
         /// コンテキストメニューを規定値に再設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void Reset() => _model.Preset = PresetMenu.DefaultContext;
 
@@ -448,11 +448,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// Set
-        /// 
+        ///
         /// <summary>
         /// PresetMenu に値を設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private void Set(PresetMenu value, bool check)
         {
@@ -460,10 +460,10 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
             else _model.Preset &= ~value;
         }
 
-        #region Fields
-        private ContextSettings _model;
         #endregion
 
+        #region Fields
+        private ContextSettings _model;
         #endregion
     }
 }

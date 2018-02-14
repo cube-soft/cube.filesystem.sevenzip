@@ -24,7 +24,7 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     ///
     /// PropVariant
-    /// 
+    ///
     /// <summary>
     /// https://msdn.microsoft.com/en-us/library/windows/desktop/aa380072.aspx
     /// </summary>
@@ -101,7 +101,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 真偽値を設定します。
         /// </summary>
-        /// 
+        ///
         /// <param name="value">設定値</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -118,7 +118,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 整数値を設定します。
         /// </summary>
-        /// 
+        ///
         /// <param name="value">設定値</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -135,7 +135,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 整数値を設定します。
         /// </summary>
-        /// 
+        ///
         /// <param name="value">設定値</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -152,7 +152,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 文字列を設定します。
         /// </summary>
-        /// 
+        ///
         /// <param name="value">設定値</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -169,7 +169,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// DateTime オブジェクトを設定します。
         /// </summary>
-        /// 
+        ///
         /// <param name="value">設定値</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -190,7 +190,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを生成します。
         /// </summary>
-        /// 
+        ///
         /// <param name="value">設定値</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -208,7 +208,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを生成します。
         /// </summary>
-        /// 
+        ///
         /// <param name="value">設定値</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -226,7 +226,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを生成します。
         /// </summary>
-        /// 
+        ///
         /// <param name="value">設定値</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -254,7 +254,7 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     ///
     /// PropArray
-    /// 
+    ///
     /// <summary>
     /// x86/x64 のサイズの違いを埋める用途で使用するクラスです。
     /// </summary>

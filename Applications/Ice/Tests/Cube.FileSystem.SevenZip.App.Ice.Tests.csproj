@@ -83,16 +83,16 @@
       <HintPath>..\..\..\..\packages\Cube.Backwards.1.4.0\lib\net35\Cube.Backwards.dll</HintPath>
     </Reference>
     <Reference Include="Cube.Core">
-      <HintPath>..\..\..\..\packages\Cube.Core.Net35.1.6.0\lib\net35\Cube.Core.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Cube.Core.Net35.1.7.0\lib\net35\Cube.Core.dll</HintPath>
     </Reference>
     <Reference Include="Cube.FileSystem">
-      <HintPath>..\..\..\..\packages\Cube.FileSystem.Net35.1.6.0\lib\net35\Cube.FileSystem.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Cube.FileSystem.Net35.1.7.0\lib\net35\Cube.FileSystem.dll</HintPath>
     </Reference>
     <Reference Include="Cube.Forms">
-      <HintPath>..\..\..\..\packages\Cube.Forms.Net35.1.6.0\lib\net35\Cube.Forms.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Cube.Forms.Net35.1.7.0\lib\net35\Cube.Forms.dll</HintPath>
     </Reference>
     <Reference Include="Cube.Images">
-      <HintPath>..\..\..\..\packages\Cube.Images.Net35.1.6.0\lib\net35\Cube.Images.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Cube.Images.Net35.1.7.0\lib\net35\Cube.Images.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\..\packages\log4net.2.0.8\lib\net35-full\log4net.dll</HintPath>
@@ -129,19 +129,22 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages.config" />
-    <None Include="Examples\Archive\FilterDirectory\Filter.txt">
+    <None Include="Examples\Sample 00..01\FilterDirectory\Filter.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\Archive\FilterDirectory\Sample.txt">
+    <None Include="Examples\Sample 00..01\FilterDirectory\Sample.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\Archive\Empty.txt">
+    <None Include="Examples\Sample 00..01\Dot 2018.02.13.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\Archive\FileInDirectory.txt">
+    <None Include="Examples\Sample 00..01\Empty.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\Archive\Filter.txt">
+    <None Include="Examples\Sample 00..01\FileInDirectory.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\Sample 00..01\Filter.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Examples\Complex.1.0.0.zip">
@@ -181,6 +184,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Examples\SampleMac.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\Sample 2018.02.13.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\Sample..DoubleDot.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Examples\Single.1.0.0.zip">

@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -42,11 +42,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ProgressFacade
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="request">リクエストオブジェクト</param>
         /// <param name="settings">設定情報</param>
         ///
@@ -69,7 +69,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Request
-        /// 
+        ///
         /// <summary>
         /// リクエストオブジェクトを取得します。
         /// </summary>
@@ -80,7 +80,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Settings
-        /// 
+        ///
         /// <summary>
         /// ユーザ設定を取得します。
         /// </summary>
@@ -91,11 +91,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Destination
-        /// 
+        ///
         /// <summary>
         /// 圧縮または展開したファイルの保存先パスを取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public string Destination
         {
@@ -111,7 +111,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Tmp
-        /// 
+        ///
         /// <summary>
         /// 一時領域用のパスを取得します。
         /// </summary>
@@ -131,7 +131,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Current
-        /// 
+        ///
         /// <summary>
         /// 現在処理中のファイルのパスを取得します。
         /// </summary>
@@ -142,7 +142,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Report
-        /// 
+        ///
         /// <summary>
         /// 進捗状況の内容を取得または設定します。
         /// </summary>
@@ -153,7 +153,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Interval
-        /// 
+        ///
         /// <summary>
         /// 進捗状況の報告間隔を取得または設定します。
         /// </summary>
@@ -168,7 +168,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// OverwriteMode
-        /// 
+        ///
         /// <summary>
         /// 上書き方法を取得します。
         /// </summary>
@@ -179,7 +179,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// IO
-        /// 
+        ///
         /// <summary>
         /// ファイル操作オブジェクトを取得します。
         /// </summary>
@@ -196,7 +196,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Progress
-        /// 
+        ///
         /// <summary>
         /// 進捗状況の更新時に発生するイベントです。
         /// </summary>
@@ -207,14 +207,41 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// OnProgress
-        /// 
+        ///
         /// <summary>
         /// Progress イベントを発生させます。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnProgress(ValueEventArgs<ArchiveReport> e)
-            => Progress?.Invoke(this, e);
+        protected virtual void OnProgress(ValueEventArgs<ArchiveReport> e) =>
+            Progress?.Invoke(this, e);
+
+        #endregion
+
+        #region ProgressReset
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ProgressReset
+        ///
+        /// <summary>
+        /// 進捗状況のリセット時に発生するイベントです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public EventHandler ProgressReset;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OnProgressReset
+        ///
+        /// <summary>
+        /// ProgressReset イベントを発生させます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected virtual void OnProgressReset(EventArgs e) =>
+            ProgressReset?.Invoke(this, e);
 
         #endregion
 
@@ -223,7 +250,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// DestinationRequested
-        /// 
+        ///
         /// <summary>
         /// 保存パス要求時に発生するイベントです。
         /// </summary>
@@ -234,14 +261,14 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// OnDestinationRequested
-        /// 
+        ///
         /// <summary>
         /// DestinationRequested イベントを発生させます。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public virtual void OnDestinationRequested(PathQueryEventArgs e)
-            => DestinationRequested?.Invoke(this, e);
+        public virtual void OnDestinationRequested(PathQueryEventArgs e) =>
+            DestinationRequested?.Invoke(this, e);
 
         #endregion
 
@@ -250,7 +277,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// PasswordRequested
-        /// 
+        ///
         /// <summary>
         /// パスワード要求時に発生するイベントです。
         /// </summary>
@@ -261,19 +288,19 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// OnPasswordRequested
-        /// 
+        ///
         /// <summary>
         /// PasswordRequested イベントを発生させます。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// PasswordRequested イベントにハンドラが設定されていない場合、
         /// SevenZip.EncryptionException 例外が送出されます。
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnPasswordRequested(QueryEventArgs<string, string> e)
-            => PasswordRequested?.Invoke(this, e);
+        protected virtual void OnPasswordRequested(QueryEventArgs<string, string> e) =>
+            PasswordRequested?.Invoke(this, e);
 
         #endregion
 
@@ -282,7 +309,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// OpenDirectoryRequested
-        /// 
+        ///
         /// <summary>
         /// ディレクトリを開く時に発生するイベントです。
         /// </summary>
@@ -293,14 +320,14 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// OnOpenDirectoryRequested
-        /// 
+        ///
         /// <summary>
         /// OpenDirectoryRequested を発生させます。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnOpenDirectoryRequested(KeyValueEventArgs<string, string> e)
-            => OpenDirectoryRequested?.Invoke(this, e);
+        protected virtual void OnOpenDirectoryRequested(KeyValueEventArgs<string, string> e) =>
+            OpenDirectoryRequested?.Invoke(this, e);
 
         #endregion
 
@@ -309,7 +336,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// OverwriteRequested
-        /// 
+        ///
         /// <summary>
         /// ファイルの上書き時に発生するイベントです。
         /// </summary>
@@ -320,14 +347,14 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// OnOverwriteRequested
-        /// 
+        ///
         /// <summary>
         /// OverwriteRequested イベントを発生させます。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnOverwriteRequested(OverwriteEventArgs e)
-            => OverwriteRequested?.Invoke(this, e);
+        protected virtual void OnOverwriteRequested(OverwriteEventArgs e) =>
+            OverwriteRequested?.Invoke(this, e);
 
         #endregion
 
@@ -336,7 +363,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// MessageReceived
-        /// 
+        ///
         /// <summary>
         /// メッセージ受信時に発生するイベントです。
         /// </summary>
@@ -347,14 +374,14 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// OnMessageReceived
-        /// 
+        ///
         /// <summary>
         /// MessageReceived を発生させます。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnMessageReceived(MessageEventArgs e)
-            => MessageReceived?.Invoke(this, e);
+        protected virtual void OnMessageReceived(MessageEventArgs e) =>
+            MessageReceived?.Invoke(this, e);
 
         #endregion
 
@@ -365,7 +392,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Start
-        /// 
+        ///
         /// <summary>
         /// 処理をを開始します。
         /// </summary>
@@ -376,11 +403,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Cancel
-        /// 
+        ///
         /// <summary>
         /// 処理をキャンセルします。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// 一時停止状態になっている場合は、その状態を解除します。
         /// </remarks>
@@ -395,7 +422,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Suspend
-        /// 
+        ///
         /// <summary>
         /// 処理を一時停止します。
         /// </summary>
@@ -406,7 +433,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Resume
-        /// 
+        ///
         /// <summary>
         /// 処理を再開します。
         /// </summary>
@@ -419,19 +446,19 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// CreateInnerProgress
-        /// 
+        ///
         /// <summary>
         /// 内部処理用の IProgress(T) オブジェクトを生成します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected IProgress<ArchiveReport> CreateInnerProgress(Action<ArchiveReport> action)
-            => new SuspendableProgress<ArchiveReport>(_cancel.Token, _wait, action);
+        protected IProgress<ArchiveReport> CreateInnerProgress(Action<ArchiveReport> action) =>
+            new SuspendableProgress<ArchiveReport>(_cancel.Token, _wait, action);
 
         /* ----------------------------------------------------------------- */
         ///
         /// ProgressStart
-        /// 
+        ///
         /// <summary>
         /// 進捗状況の報告を開始します。
         /// </summary>
@@ -442,7 +469,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ProgressEnd
-        /// 
+        ///
         /// <summary>
         /// 進捗状況の報告を停止します。
         /// </summary>
@@ -453,11 +480,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ProgressResult
-        /// 
+        ///
         /// <summary>
         /// 結果を設定します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// タイミングの関係で全ての結果が取り切れていない事があるので、
         /// 完了した結果を手動で設定しています。
@@ -477,11 +504,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Open
-        /// 
+        ///
         /// <summary>
         /// ディレクトリを開きます。
         /// </summary>
-        /// 
+        ///
         /// <param name="path">圧縮・展開先のパス</param>
         /// <param name="mode">ポストプロセスの種類</param>
         ///
@@ -507,11 +534,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Error
-        /// 
+        ///
         /// <summary>
         /// エラー発生時の処理を実行します。
         /// </summary>
-        /// 
+        ///
         /// <param name="err">例外オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -525,7 +552,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// GetSaveLocation
-        /// 
+        ///
         /// <summary>
         /// SaveLocation および保存場所を示すパスを取得します。
         /// </summary>
@@ -546,14 +573,19 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// SetTmp
-        /// 
+        ///
         /// <summary>
         /// Tmp にパスを設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         protected void SetTmp(string directory)
-            => Tmp = IO.Combine(directory, Guid.NewGuid().ToString("D"));
+        {
+            if (string.IsNullOrEmpty(Tmp))
+            {
+                Tmp = IO.Combine(directory, Guid.NewGuid().ToString("D"));
+            }
+        }
 
         #endregion
 
@@ -562,7 +594,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ~ProgressFacade
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを破棄します。
         /// </summary>
@@ -573,7 +605,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Dispose
-        /// 
+        ///
         /// <summary>
         /// リソースを解放します。
         /// </summary>
@@ -588,7 +620,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Dispose
-        /// 
+        ///
         /// <summary>
         /// リソースを解放します。
         /// </summary>
@@ -596,17 +628,14 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         protected virtual void Dispose(bool disposing)
         {
-            try
+            if (disposing)
             {
-                if (disposing)
-                {
-                    _timer.Dispose();
-                    // _wait.Dispose();
-                }
-
-                IO.Failed -= WhenFailed;
-                if (!string.IsNullOrEmpty(Tmp)) IO.Delete(Tmp);
+                _timer.Dispose();
+                // _wait.Dispose();
             }
+
+            IO.Failed -= WhenFailed;
+            try { if (!string.IsNullOrEmpty(Tmp)) IO.Delete(Tmp); }
             catch (Exception err) { this.LogWarn(err.ToString(), err); }
         }
 
@@ -619,7 +648,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// GetSavePath
-        /// 
+        ///
         /// <summary>
         /// 保存場所を示すパスを取得します。
         /// </summary>
@@ -655,7 +684,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// WhenFailed
-        /// 
+        ///
         /// <summary>
         /// Failed イベント発生時に実行されるハンドラです。
         /// </summary>
@@ -682,6 +711,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             if (e.Cancel) throw new OperationCanceledException();
         }
 
+        #endregion
+
         #region Fields
         private OnceAction<bool> _dispose;
         private string _dest;
@@ -689,8 +720,6 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         private System.Timers.Timer _timer = new System.Timers.Timer(100.0);
         private CancellationTokenSource _cancel = new CancellationTokenSource();
         private ManualResetEvent _wait = new ManualResetEvent(true);
-        #endregion
-
         #endregion
     }
 }

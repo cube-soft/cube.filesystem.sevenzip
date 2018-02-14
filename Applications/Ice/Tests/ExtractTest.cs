@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -28,11 +28,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
     /* --------------------------------------------------------------------- */
     ///
     /// ExtractTest
-    /// 
+    ///
     /// <summary>
     /// 展開処理のテスト用クラスです。
     /// </summary>
-    /// 
+    ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
     class ExtractTest : MockViewHelper
@@ -42,11 +42,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Extract
-        /// 
+        ///
         /// <summary>
         /// 展開処理のテストを実行します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
         public void Extract(string filename, string password,
@@ -84,42 +84,114 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract_Rename
-        /// 
+        /// Extract_Multiple
+        ///
         /// <summary>
         /// OverwriteMode (Rename) の挙動を確認します。
         /// </summary>
-        /// 
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Extract_Multiple()
+        {
+            var dest = Result("Multiple");
+            var src  = new[]
+            {
+                Example("Complex.1.0.0.zip"),
+                Example("Single.1.0.0.zip"),
+            };
+
+            using (var p = Create(dest, src))
+            {
+                p.View.Show();
+                Assert.That(Wait(p.View).Result, Is.True, "Timeout");
+            }
+
+            var i0 = IO.Get(IO.Combine(dest, @"Complex.1.0.0\Foo.txt"));
+            var i1 = IO.Get(IO.Combine(dest, @"Single.1.0.0\Sample 00..01.txt"));
+
+            Assert.That(i0.Length, Is.AtLeast(1));
+            Assert.That(i1.Length, Is.AtLeast(1));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract_Rename
+        ///
+        /// <summary>
+        /// OverwriteMode (Rename) の挙動を確認します。
+        /// </summary>
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Extract_Rename()
         {
+            Mock.OverwriteMode = OverwriteMode.Rename;
+
             var dummy = Example("Sample.txt");
             var src   = Example("Complex.1.0.0.zip");
             var dest  = Result("Overwrite");
 
-            IO.Copy(dummy, Result(@"Overwrite\Foo.txt"));
-            IO.Copy(dummy, Result(@"Overwrite\Directory\Empty.txt"));
+            IO.Copy(dummy, IO.Combine(dest, @"Foo.txt"));
+            IO.Copy(dummy, IO.Combine(dest, @"Directory\Empty.txt"));
 
-            using (var p = Create(src, dest))
+            using (var p = Create(dest, src))
             {
                 p.Settings.Value.Extract.RootDirectory = CreateDirectoryMethod.None;
                 p.View.Show();
                 Assert.That(Wait(p.View).Result, Is.True, "Timeout");
             }
 
-            Assert.That(IO.Exists(Result(@"Overwrite\Foo(2).txt")), Is.True);
-            Assert.That(IO.Exists(Result(@"Overwrite\Directory\Empty(2).txt")), Is.True);
+            Assert.That(IO.Exists(IO.Combine(dest, @"Foo(2).txt")), Is.True);
+            Assert.That(IO.Exists(IO.Combine(dest, @"Directory\Empty(2).txt")), Is.True);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract_Overwrite_Cancel
+        ///
+        /// <summary>
+        /// 上書き確認をキャンセルした時の挙動を確認します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Extract_Overwrite_Cancel()
+        {
+            Mock.OverwriteMode = OverwriteMode.Cancel;
+
+            var dummy = Example("Sample.txt");
+            var size  = IO.Get(dummy).Length;
+            var src   = Example("Complex.1.0.0.zip");
+            var dest  = Result("OverwriteCancel");
+            var tmp   = string.Empty;
+
+            IO.Copy(dummy, IO.Combine(dest, "Foo.txt"));
+
+            using (var p = Create(dest, src))
+            {
+                p.Settings.Value.Extract.RootDirectory = CreateDirectoryMethod.None;
+                p.View.Show();
+                Assert.That(Wait(p.View).Result, Is.True, "Timeout");
+
+                tmp = p.Model.Tmp;
+                Assert.That(tmp, Is.Not.Null.And.Not.Empty);
+                Assert.That(IO.Exists(tmp), Is.True);
+                Assert.That(IO.Exists(IO.Combine(tmp, "Foo.txt")), Is.True);
+            }
+
+            Assert.That(IO.Get(IO.Combine(dest, "Foo.txt")).Length, Is.EqualTo(size));
+            Assert.That(IO.Exists(tmp), Is.False);
         }
 
         /* ----------------------------------------------------------------- */
         ///
         /// Extract_DeleteSource
-        /// 
+        ///
         /// <summary>
         /// 展開後に元の圧縮ファイルを削除するテストを実行します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Extract_DeleteSource()
@@ -130,7 +202,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 
             IO.Copy(Example("Complex.1.0.0.zip"), src);
 
-            using (var p = Create(src, dest))
+            using (var p = Create(dest, src))
             {
                 p.Settings.Value.Extract.DeleteSource = true;
                 p.View.Show();
@@ -144,17 +216,17 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Extract_Suspend
-        /// 
+        ///
         /// <summary>
         /// 処理を一時停止するテストを実行します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// Suspend イベント発行後、実際に展開が一時停止されるまでに
         /// タイムラグが発生する事があるため、チェックする値に多少の
         /// 幅を持たせています。
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Extract_Suspend()
@@ -163,7 +235,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
             var dest   = Result("Suspend");
             var exists = Result(@"Suspend\Complex.1.0.0");
 
-            using (var p = Create(src, dest))
+            using (var p = Create(dest, src))
             {
                 p.Model.Interval = TimeSpan.FromMilliseconds(50);
                 p.View.Show();
@@ -181,16 +253,16 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Extract_Cancel
-        /// 
+        ///
         /// <summary>
         /// 展開処理をキャンセルするテストを実行します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Extract_Cancel()
         {
-            using (var p = Create(Example("Complex.zip"), ""))
+            using (var p = Create("", Example("Complex.zip")))
             {
                 p.View.Show();
                 p.EventHub.GetEvents().Cancel.Publish();
@@ -201,35 +273,43 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Extract_PasswordCancel
-        /// 
+        ///
         /// <summary>
         /// パスワード入力をキャンセルした時の挙動を確認します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Extract_PasswordCancel()
         {
-            using (var p = Create(Example("Password.7z"), ""))
+            var tmp = string.Empty;
+
+            using (var p = Create("", Example("Password.7z")))
             {
                 p.View.Show();
                 Assert.That(Wait(p.View).Result, Is.True, "Timeout");
+
+                tmp = p.Model.Tmp;
+                Assert.That(tmp, Is.Not.Null.And.Not.Empty);
+                Assert.That(IO.Exists(tmp), Is.True);
             }
+
+            Assert.That(IO.Exists(tmp), Is.False);
         }
 
         /* ----------------------------------------------------------------- */
         ///
         /// Extract_ErrorReport
-        /// 
+        ///
         /// <summary>
         /// エラーレポートの表示テストを実行します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Extract_ErrorReport()
         {
-            using (var p = Create(Example("Sample.txt"), ""))
+            using (var p = Create("", Example("Sample.txt")))
             {
                 p.Settings.Value.ErrorReport = true;
                 p.View.Show();
@@ -244,11 +324,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// TestCases
-        /// 
+        ///
         /// <summary>
         /// 展開処理のテスト用データを取得します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// テストケースには、以下の順で指定します。
         /// - 展開する圧縮ファイル名
@@ -258,7 +338,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// - 展開成功確認用のパス（存在チェック）
         /// - 展開後に生成されるファイル + ディレクトリ数
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public static IEnumerable<TestCaseData> TestCases
         {
@@ -339,6 +419,34 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                 );
 
                 yield return new TestCaseData(
+                    "Sample 2018.02.13.zip",
+                    "",
+                    PresetMenu.Extract.ToArguments(),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = CreateDirectoryMethod.CreateSmart,
+                        Filtering     = true,
+                    },
+                    FullName(@"Others\Sample 2018.02.13"),
+                    8L
+                );
+
+                yield return new TestCaseData(
+                    "Sample..DoubleDot.zip",
+                    "",
+                    PresetMenu.Extract.ToArguments(),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = CreateDirectoryMethod.CreateSmart,
+                        Filtering     = true,
+                    },
+                    FullName(@"Others\Sample..DoubleDot"),
+                    8L
+                );
+
+                yield return new TestCaseData(
                     "Password.7z",
                     "password",
                     PresetMenu.Extract.ToArguments(),
@@ -360,7 +468,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.None,
                     },
-                    FullName(@"RootDirectory\Single-0x00\Sample.txt"),
+                    FullName(@"RootDirectory\Single-0x00\Sample 00..01.txt"),
                     1L
                 );
 
@@ -373,7 +481,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.Create,
                     },
-                    FullName(@"RootDirectory\Single-0x01\Single.1.0"),
+                    FullName(@"RootDirectory\Single-0x01\Single.1.0.0\Sample 00..01.txt"),
                     1L
                 );
 
@@ -386,7 +494,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                         SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
                     },
-                    FullName(@"RootDirectory\Single-0x03\Single.1.0"),
+                    FullName(@"RootDirectory\Single-0x03\Single.1.0.0\Sample 00..01.txt"),
                     1L
                 );
 
@@ -400,7 +508,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                         RootDirectory = CreateDirectoryMethod.Create |
                                         CreateDirectoryMethod.SkipSingleFile,
                     },
-                    FullName(@"RootDirectory\Single-0x05\Sample.txt"),
+                    FullName(@"RootDirectory\Single-0x05\Sample 00..01.txt"),
                     1L
                 );
 
@@ -415,7 +523,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                                         CreateDirectoryMethod.SkipSingleFile |
                                         CreateDirectoryMethod.SkipSingleDirectory,
                     },
-                    FullName(@"RootDirectory\Single-0x07\Sample.txt"),
+                    FullName(@"RootDirectory\Single-0x07\Sample 00..01.txt"),
                     1L
                 );
 
@@ -705,21 +813,21 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 
         #endregion
 
-        #region Helper
+        #region Helper methods
 
         /* ----------------------------------------------------------------- */
         ///
         /// FullName
-        /// 
+        ///
         /// <summary>
         /// 結果を保存するディレクトリへの絶対パスに変換します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// MockViewHelper.Result と同じ内容を返す静的メソッドです。
         /// TestCase は静的に定義する必要があるためこちらを使用しています。
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private static string FullName(string path)
         {
@@ -733,29 +841,29 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// DropRequest
-        /// 
+        ///
         /// <summary>
         /// ドロップ先のパスを指定した Request オブジェクトを生成します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
-        private static IEnumerable<string> DropRequest(string path)
-            => PresetMenu.Extract
-                         .ToArguments()
-                         .Concat(new[] { "/o:source", $"/drop:{FullName(path)}" });
+        private static IEnumerable<string> DropRequest(string path) =>
+            PresetMenu.Extract
+                      .ToArguments()
+                      .Concat(new[] { "/o:source", $"/drop:{FullName(path)}" });
 
         /* ----------------------------------------------------------------- */
         ///
         /// Create
-        /// 
+        ///
         /// <summary>
         /// Presenter オブジェクトを生成します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
-        private ExtractPresenter Create(string src, string dest)
+        private ExtractPresenter Create(string dest, params string[] src)
         {
-            var p = Create(new Request(new[] { "/x", src }));
+            var p = Create(new Request(new[] { "/x" }.Concat(src)));
 
             p.Settings.Value.Extract.SaveLocation      = SaveLocation.Others;
             p.Settings.Value.Extract.SaveDirectoryName = dest;
@@ -767,11 +875,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Create
-        /// 
+        ///
         /// <summary>
         /// Presenter オブジェクトを生成します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private ExtractPresenter Create(Request request)
         {
@@ -788,11 +896,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// SetUp
-        /// 
+        ///
         /// <summary>
         /// テスト毎に実行される SetUp 処理です。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [SetUp]
         public void SetUp() => Reset();

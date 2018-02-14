@@ -20,7 +20,6 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace Cube.FileSystem.SevenZip
@@ -28,7 +27,7 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     ///
     /// SevenZipLibrary
-    /// 
+    ///
     /// <summary>
     /// 7z.dll を扱うためのクラスです。
     /// </summary>
@@ -66,9 +65,9 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// InArchive オブジェクトを取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="format">フォーマット</param>
-        /// 
+        ///
         /// <returns>InArchive オブジェクト</returns>
         ///
         /* ----------------------------------------------------------------- */
@@ -81,9 +80,9 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// InArchive オブジェクトを取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="clsid">Class ID</param>
-        /// 
+        ///
         /// <returns>InArchive オブジェクト</returns>
         ///
         /* ----------------------------------------------------------------- */
@@ -108,9 +107,9 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// OutArchive オブジェクトを取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="format">フォーマット</param>
-        /// 
+        ///
         /// <returns>OutArchive オブジェクト</returns>
         ///
         /* ----------------------------------------------------------------- */
@@ -123,9 +122,9 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// OutArchive オブジェクトを取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="clsid">Class ID</param>
-        /// 
+        ///
         /// <returns>OutArchive オブジェクト</returns>
         ///
         /* ----------------------------------------------------------------- */
@@ -207,11 +206,11 @@ namespace Cube.FileSystem.SevenZip
             [MarshalAs(UnmanagedType.Interface)] out object outObject
         );
 
+        #endregion
+
         #region Fields
         private OnceAction<bool> _dispose;
         private SafeLibraryHandle _handle;
-        #endregion
-
         #endregion
     }
 }

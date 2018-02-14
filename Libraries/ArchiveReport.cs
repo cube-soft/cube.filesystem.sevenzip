@@ -23,11 +23,11 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     ///
     /// ArchiveReport
-    /// 
+    ///
     /// <summary>
     /// 進捗状況を保持するためのクラスです。
     /// </summary>
-    /// 
+    ///
     /* --------------------------------------------------------------------- */
     public class ArchiveReport : EventArgs
     {
@@ -40,7 +40,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 処理の終了したファイル数を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public long Count { get; set; }
 
@@ -51,7 +51,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 処理対象となるファイル数を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public long TotalCount { get; set; }
 
@@ -62,7 +62,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 処理の終了したとなるバイト数を取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public long Bytes { get; set; }
 
@@ -73,7 +73,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 処理対象となるバイト数を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public long TotalBytes { get; set; }
 
@@ -84,7 +84,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 進捗状況を示す値を [0, 1] の範囲で取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public double Ratio => TotalBytes > 0 ? Bytes / (double)TotalBytes : 0.0;
 

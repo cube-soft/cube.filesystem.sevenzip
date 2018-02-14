@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -38,17 +38,17 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ArchiveFacade
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="request">コマンドライン</param>
         /// <param name="settings">ユーザ設定</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveFacade(Request request, SettingsFolder settings)
-            : base(request, settings) { }
+        public ArchiveFacade(Request request, SettingsFolder settings) :
+            base(request, settings) { }
 
         #endregion
 
@@ -57,7 +57,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Details
-        /// 
+        ///
         /// <summary>
         /// 圧縮処理の実行時詳細設定を取得します。
         /// </summary>
@@ -74,7 +74,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// DetailsRequested
-        /// 
+        ///
         /// <summary>
         /// 圧縮の詳細設定が要求された時に発生するイベントです。
         /// </summary>
@@ -85,7 +85,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// RaiseDetailsRequested
-        /// 
+        ///
         /// <summary>
         /// DetailsRequested イベントを発生させます。
         /// </summary>
@@ -110,7 +110,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// MailRequested
-        /// 
+        ///
         /// <summary>
         /// メール画面の表示が要求された時に発生するイベントです。
         /// </summary>
@@ -121,7 +121,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// RaiseMailRequested
-        /// 
+        ///
         /// <summary>
         /// MailRequested イベントを発生させます。
         /// </summary>
@@ -142,7 +142,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Start
-        /// 
+        ///
         /// <summary>
         /// 圧縮を開始します。
         /// </summary>
@@ -152,6 +152,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         {
             try
             {
+                OnProgressReset(EventArgs.Empty);
                 Archive();
                 ProgressResult();
                 RaiseMailRequested();
@@ -169,7 +170,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Archive
-        /// 
+        ///
         /// <summary>
         /// 圧縮処理を実行します。
         /// </summary>
@@ -203,7 +204,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// GetFormat
-        /// 
+        ///
         /// <summary>
         /// 圧縮フォーマットを取得します。
         /// </summary>
@@ -238,7 +239,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// GetTmp
-        /// 
+        ///
         /// <summary>
         /// 保存先パスを決定後、一時ファイルのパスを取得します。
         /// </summary>
@@ -255,7 +256,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// GetDestination
-        /// 
+        ///
         /// <summary>
         /// 保存先パスを取得します。
         /// </summary>
@@ -283,7 +284,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// RaisePasswordRequested
-        /// 
+        ///
         /// <summary>
         /// 必要に応じて PasswordRequested イベントを発生させます。
         /// </summary>

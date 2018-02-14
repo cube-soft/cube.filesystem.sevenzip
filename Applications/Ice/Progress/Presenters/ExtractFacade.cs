@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -41,17 +41,17 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ExtractFacade
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="request">コマンドライン</param>
         /// <param name="settings">設定情報</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ExtractFacade(Request request, SettingsFolder settings)
-            : base(request, settings)
+        public ExtractFacade(Request request, SettingsFolder settings) :
+            base(request, settings)
         {
             Source = Request.Sources.First();
         }
@@ -63,26 +63,26 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Source
-        /// 
+        ///
         /// <summary>
         /// 解凍するファイルのパスを取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Source { get; }
+        public string Source { get; private set; }
 
         /* ----------------------------------------------------------------- */
         ///
         /// OpenDirectoryName
-        /// 
+        ///
         /// <summary>
         /// 保存後に開くディレクトリ名を取得します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// 取得できる値は Destination からの相対パスとなります。
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public string OpenDirectoryName { get; private set; }
 
@@ -93,13 +93,36 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Start
-        /// 
+        ///
         /// <summary>
         /// 展開を開始します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public override void Start()
+        {
+            foreach (var src in Request.Sources)
+            {
+                Source = src;
+                OnProgressReset(EventArgs.Empty);
+                StartCore();
+            }
+        }
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// StartCore
+        ///
+        /// <summary>
+        /// 展開を開始します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void StartCore()
         {
             try
             {
@@ -111,7 +134,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
                     var dest = GetSaveLocation(Settings.Value.Extract, Format.Unknown, Source);
                     SetTmp(dest.Value);
 
-                    if (reader.Items.Count == 1) ExtractTar(reader, dest);
+                    if (reader.Items.Count == 1) ExtractOne(reader, dest);
                     else Extract(reader, dest);
 
                     Open(IO.Combine(Destination, OpenDirectoryName), Settings.Value.Extract.OpenDirectory);
@@ -122,14 +145,10 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             catch (Exception err) { Error(err); }
         }
 
-        #endregion
-
-        #region Implementations
-
         /* ----------------------------------------------------------------- */
         ///
         /// SetDirectories
-        /// 
+        ///
         /// <summary>
         /// Destination, Tmp および OpenDirectoryName を設定します。
         /// </summary>
@@ -166,14 +185,15 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ExtractTar
-        /// 
+        /// ExtractOne
+        ///
         /// <summary>
-        /// TAR 形式の圧縮ファイルを展開します。
+        /// 1 項目のみの圧縮ファイルを展開します。展開後のファイルが TAR
+        /// 形式の場合、さらに展開を試みます。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void ExtractTar(ArchiveReader reader, KeyValuePair<SaveLocation, string> dest)
+        private void ExtractOne(ArchiveReader reader, KeyValuePair<SaveLocation, string> dest)
         {
             try
             {
@@ -192,7 +212,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
                 else
                 {
                     Report.TotalBytes = IO.Get(path).Length;
-                    SetDirectories(reader, dest, true);
+                    SetDirectories(reader, dest, IsTrimExtension(reader.Format));
                     WhenExtracted(this, ValueEventArgs.Create(item));
                     ProgressResult();
                 }
@@ -203,7 +223,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Extract
-        /// 
+        ///
         /// <summary>
         /// 圧縮ファイルを展開します。
         /// </summary>
@@ -233,11 +253,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ExtractCore
-        /// 
+        ///
         /// <summary>
         /// 展開処理を実行します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// ArchiveItem.Extract は、入力されたパスワードが間違っていた場合
         /// には EncryptionException を送出し、ユーザがパスワード入力を
@@ -265,7 +285,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// SetOpenDirectoryName
-        /// 
+        ///
         /// <summary>
         /// OpenDirectoryName を設定します。
         /// </summary>
@@ -282,7 +302,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Move
-        /// 
+        ///
         /// <summary>
         /// ファイルを移動します。
         /// </summary>
@@ -307,7 +327,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Overwrite
-        /// 
+        ///
         /// <summary>
         /// ファイルを上書きコピーします。
         /// </summary>
@@ -329,7 +349,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// DeleteSource
-        /// 
+        ///
         /// <summary>
         /// 展開対象となった圧縮ファイルを削除します。
         /// </summary>
@@ -344,16 +364,16 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// SeekRootDirectories
-        /// 
+        ///
         /// <summary>
         /// 各項目のルートディレクトリを検索します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// ルートディレクトリの名前が必要となるのは単一フォルダの場合
         /// なので、複数フォルダが見つかった時点で検索を終了します。
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private IEnumerable<string> SeekRootDirectories(ArchiveReader reader)
         {
@@ -379,7 +399,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// GetRootDirectory
-        /// 
+        ///
         /// <summary>
         /// ルートディレクトリにあたる文字列を取得します。
         /// </summary>
@@ -398,7 +418,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// IsSingleFileOrDirectory
-        /// 
+        ///
         /// <summary>
         /// 単一ファイルまたは単一ディレクトリであるかどうかを判別します。
         /// </summary>
@@ -418,8 +438,25 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// IsTrimExtension
+        ///
+        /// <summary>
+        /// 拡張子を除去すべきかどうかを判別します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private bool IsTrimExtension(Format src) =>
+            new List<Format>
+            {
+                Format.BZip2,
+                Format.GZip,
+                Format.XZ,
+            }.Contains(src);
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// RaiseOverwriteRequested
-        /// 
+        ///
         /// <summary>
         /// OverwriteRequested イベントを発生させます。
         /// </summary>
@@ -436,19 +473,19 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// WhenExtracting
-        /// 
+        ///
         /// <summary>
         /// Extracting イベント発生時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenExtracting(object sender, ValueEventArgs<ArchiveItem> e)
-            => Current = e.Value.FullName;
+        private void WhenExtracting(object sender, ValueEventArgs<ArchiveItem> e) =>
+            Current = e.Value.FullName;
 
         /* ----------------------------------------------------------------- */
         ///
         /// WhenExtracted
-        /// 
+        ///
         /// <summary>
         /// Extracted イベント発生時に実行されるハンドラです。
         /// </summary>

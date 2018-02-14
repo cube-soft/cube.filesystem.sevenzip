@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -36,120 +36,124 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Formats
-        /// 
+        ///
         /// <summary>
         /// 表示文字列と Format オブジェクトの対応関係を取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public static IList<KeyValuePair<string, Format>> Formats
-            => _formats = _formats ?? new List<KeyValuePair<string, Format>>
-        {
-            Pair("Zip",                          Format.Zip),
-            Pair("7z",                           Format.SevenZip),
-            Pair("Tar",                          Format.Tar),
-            Pair(Properties.Resources.FormatSfx, Format.Sfx),
-        };
+        public static IList<KeyValuePair<string, Format>> Formats => _formats ?? (
+            _formats = new List<KeyValuePair<string, Format>>
+            {
+                Pair("Zip",                          Format.Zip),
+                Pair("7z",                           Format.SevenZip),
+                Pair("Tar",                          Format.Tar),
+                Pair(Properties.Resources.FormatSfx, Format.Sfx),
+            }
+        );
 
         /* ----------------------------------------------------------------- */
         ///
         /// CompressionLevels
-        /// 
+        ///
         /// <summary>
         /// 表示文字列と CompressionLevel オブジェクトの対応関係を
         /// 取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public static IList<KeyValuePair<string, CompressionLevel>> CompressionLevels
-            => _compressionLevels = _compressionLevels ??
-            new List<KeyValuePair<string, CompressionLevel>>
-        {
-            Pair(Properties.Resources.LevelNone,   CompressionLevel.None),
-            Pair(Properties.Resources.LevelFast,   CompressionLevel.Fast),
-            Pair(Properties.Resources.LevelLow,    CompressionLevel.Low),
-            Pair(Properties.Resources.LevelNormal, CompressionLevel.Normal),
-            Pair(Properties.Resources.LevelHigh,   CompressionLevel.High),
-            Pair(Properties.Resources.LevelUltra,  CompressionLevel.Ultra)
-        };
+        public static IList<KeyValuePair<string, CompressionLevel>> CompressionLevels =>
+            _compressionLevels ?? ( _compressionLevels =
+                new List<KeyValuePair<string, CompressionLevel>>
+                {
+                    Pair(Properties.Resources.LevelNone,   CompressionLevel.None),
+                    Pair(Properties.Resources.LevelFast,   CompressionLevel.Fast),
+                    Pair(Properties.Resources.LevelLow,    CompressionLevel.Low),
+                    Pair(Properties.Resources.LevelNormal, CompressionLevel.Normal),
+                    Pair(Properties.Resources.LevelHigh,   CompressionLevel.High),
+                    Pair(Properties.Resources.LevelUltra,  CompressionLevel.Ultra)
+                }
+            );
 
         /* ----------------------------------------------------------------- */
         ///
         /// CompressionMethods
-        /// 
+        ///
         /// <summary>
         /// 表示文字列と CompressionMethod オブジェクトの対応関係を
         /// 取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public static IDictionary<Format, IList<KeyValuePair<string, CompressionMethod>>> CompressionMethods
-            => _compressionMethods = _compressionMethods ?? 
-            new Dictionary<Format, IList<KeyValuePair<string, CompressionMethod>>>
-        {
-            {
-                Format.Zip, new List<KeyValuePair<string, CompressionMethod>>
+        public static IDictionary<Format, IList<KeyValuePair<string, CompressionMethod>>> CompressionMethods =>
+            _compressionMethods ?? (_compressionMethods =
+                new Dictionary<Format, IList<KeyValuePair<string, CompressionMethod>>>
                 {
-                    Pair("Deflate",   CompressionMethod.Deflate),
-                    Pair("Deflate64", CompressionMethod.Deflate64),
-                    Pair("BZip2",     CompressionMethod.BZip2),
-                    Pair("LZMA",      CompressionMethod.Lzma),
-                    Pair("PPMd",      CompressionMethod.Ppmd),
-                    Pair("Copy",      CompressionMethod.Copy),
+                    {
+                        Format.Zip, new List<KeyValuePair<string, CompressionMethod>>
+                        {
+                            Pair("Deflate",   CompressionMethod.Deflate),
+                            Pair("Deflate64", CompressionMethod.Deflate64),
+                            Pair("BZip2",     CompressionMethod.BZip2),
+                            Pair("LZMA",      CompressionMethod.Lzma),
+                            Pair("PPMd",      CompressionMethod.Ppmd),
+                            Pair("Copy",      CompressionMethod.Copy),
+                        }
+                    },
+                    {
+                        Format.SevenZip, new List<KeyValuePair<string, CompressionMethod>>
+                        {
+                            Pair("LZMA",      CompressionMethod.Lzma),
+                            Pair("LZMA2",     CompressionMethod.Lzma2),
+                            Pair("PPMd",      CompressionMethod.Ppmd),
+                            Pair("BZip2",     CompressionMethod.BZip2),
+                            Pair("Deflate",   CompressionMethod.Deflate),
+                            Pair("Copy",      CompressionMethod.Copy),
+                        }
+                    },
+                    {
+                        Format.Tar, new List<KeyValuePair<string, CompressionMethod>>
+                        {
+                            Pair("GZip",      CompressionMethod.GZip),
+                            Pair("BZip2",     CompressionMethod.BZip2),
+                            Pair("XZ",        CompressionMethod.XZ),
+                            Pair("Copy",      CompressionMethod.Copy),
+                        }
+                    },
+                    {
+                        Format.Sfx, new List<KeyValuePair<string, CompressionMethod>>
+                        {
+                            Pair("LZMA",      CompressionMethod.Lzma),
+                            Pair("LZMA2",     CompressionMethod.Lzma2),
+                            Pair("PPMd",      CompressionMethod.Ppmd),
+                            Pair("BZip2",     CompressionMethod.BZip2),
+                            Pair("Deflate",   CompressionMethod.Deflate),
+                            Pair("Copy",      CompressionMethod.Copy),
+                        }
+                    }
                 }
-            },
-            {
-                Format.SevenZip, new List<KeyValuePair<string, CompressionMethod>>
-                {
-                    Pair("LZMA",      CompressionMethod.Lzma),
-                    Pair("LZMA2",     CompressionMethod.Lzma2),
-                    Pair("PPMd",      CompressionMethod.Ppmd),
-                    Pair("BZip2",     CompressionMethod.BZip2),
-                    Pair("Deflate",   CompressionMethod.Deflate),
-                    Pair("Copy",      CompressionMethod.Copy),
-                }
-            },
-            {
-                Format.Tar, new List<KeyValuePair<string, CompressionMethod>>
-                {
-                    Pair("GZip",      CompressionMethod.GZip),
-                    Pair("BZip2",     CompressionMethod.BZip2),
-                    Pair("XZ",        CompressionMethod.XZ),
-                    Pair("Copy",      CompressionMethod.Copy),
-                }
-            },
-            {
-                Format.Sfx, new List<KeyValuePair<string, CompressionMethod>>
-                {
-                    Pair("LZMA",      CompressionMethod.Lzma),
-                    Pair("LZMA2",     CompressionMethod.Lzma2),
-                    Pair("PPMd",      CompressionMethod.Ppmd),
-                    Pair("BZip2",     CompressionMethod.BZip2),
-                    Pair("Deflate",   CompressionMethod.Deflate),
-                    Pair("Copy",      CompressionMethod.Copy),
-                }
-            }
-        };
+            );
 
         /* ----------------------------------------------------------------- */
         ///
         /// EncryptionMethods
-        /// 
+        ///
         /// <summary>
         /// 表示文字列と EncryptionMethod オブジェクトの対応関係を
         /// 取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public static IList<KeyValuePair<string, EncryptionMethod>> EncryptionMethods
-            => _encryptionMethods = _encryptionMethods ??
-            new List<KeyValuePair<string, EncryptionMethod>>
-        {
-            Pair("ZipCrypto", EncryptionMethod.ZipCrypto),
-            Pair("AES128",    EncryptionMethod.Aes128),
-            Pair("AES192",    EncryptionMethod.Aes192),
-            Pair("AES256",    EncryptionMethod.Aes256),
-        };
+        public static IList<KeyValuePair<string, EncryptionMethod>> EncryptionMethods =>
+            _encryptionMethods ?? (_encryptionMethods =
+                new List<KeyValuePair<string, EncryptionMethod>>
+                {
+                    Pair("ZipCrypto", EncryptionMethod.ZipCrypto),
+                    Pair("AES128",    EncryptionMethod.Aes128),
+                    Pair("AES192",    EncryptionMethod.Aes192),
+                    Pair("AES256",    EncryptionMethod.Aes256),
+                }
+            );
 
         #endregion
 
@@ -158,50 +162,50 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// IsEncryptionSupported
-        /// 
+        ///
         /// <summary>
         /// 暗号化に対応しているかどうかを判別します。
         /// </summary>
-        /// 
+        ///
         /// <param name="format">圧縮ファイル形式</param>
-        /// 
+        ///
         /// <returns>暗号化に対応しているかどうか</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static bool IsEncryptionSupported(Format format)
-            => format == Format.Zip ||
-               format == Format.SevenZip ||
-               format == Format.Sfx;
+        public static bool IsEncryptionSupported(Format format) =>
+            format == Format.Zip ||
+            format == Format.SevenZip ||
+            format == Format.Sfx;
 
         /* ----------------------------------------------------------------- */
         ///
         /// GetCompressionMethod
-        /// 
+        ///
         /// <summary>
         /// 圧縮ファイル形式が対応している CompressionMethod とその表示
         /// 文字列一覧を取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="format">圧縮ファイル形式</param>
-        /// 
+        ///
         /// <returns>
         /// 表示文字列と CompressionMethod オブジェクトの対応関係
         /// </returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static IList<KeyValuePair<string, CompressionMethod>> GetCompressionMethod(Format format)
-            => CompressionMethods.ContainsKey(format) ? CompressionMethods[format] : null;
+        public static IList<KeyValuePair<string, CompressionMethod>> GetCompressionMethod(Format format) =>
+            CompressionMethods.ContainsKey(format) ? CompressionMethods[format] : null;
 
         /* ----------------------------------------------------------------- */
         ///
         /// GetFilter
-        /// 
+        ///
         /// <summary>
         /// 圧縮ファイル形式に対応する拡張子フィルタを取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="format">圧縮ファイル形式</param>
-        /// 
+        ///
         /// <returns>拡張子フィルタ</returns>
         ///
         /* ----------------------------------------------------------------- */
@@ -210,13 +214,13 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// GetFilter
-        /// 
+        ///
         /// <summary>
         /// 圧縮ファイル形式に対応する拡張子フィルタを取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="format">圧縮ファイル形式</param>
-        /// 
+        ///
         /// <returns>拡張子フィルタ</returns>
         ///
         /* ----------------------------------------------------------------- */
@@ -241,18 +245,18 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// GetTimeString
-        /// 
+        ///
         /// <summary>
         /// TimeSpan オブジェクトを文字列に変換します。
         /// </summary>
-        /// 
+        ///
         /// <param name="src">時間</param>
-        /// 
+        ///
         /// <returns>整形された文字列</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static string GetTimeString(TimeSpan src)
-            => $"{(int)src.TotalHours:00}:{src.Minutes:00}:{src.Seconds:00}";
+        public static string GetTimeString(TimeSpan src) =>
+            $"{(int)src.TotalHours:00}:{src.Minutes:00}:{src.Seconds:00}";
 
         #endregion
 
@@ -261,14 +265,14 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Pair(T, U)
-        /// 
+        ///
         /// <summary>
         /// KeyValuePair(T, U) を生成します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static KeyValuePair<K, V> Pair<K, V>(K key, V value)
-            => new KeyValuePair<K, V>(key, value);
+        private static KeyValuePair<K, V> Pair<K, V>(K key, V value) =>
+            new KeyValuePair<K, V>(key, value);
 
         #region Fields
         private static IList<KeyValuePair<string, Format>> _formats;

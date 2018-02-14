@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -22,7 +22,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
     /* --------------------------------------------------------------------- */
     ///
     /// PathQueryEventArgs
-    /// 
+    ///
     /// <summary>
     /// パス情報を保持するためのクラスです。
     /// </summary>
@@ -33,18 +33,18 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// PathQueryEventArgs
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="query">ソースファイルのパス</param>
         /// <param name="format">圧縮フォーマット</param>
         /// <param name="cancel">キャンセル状態</param>
         ///
         /* ----------------------------------------------------------------- */
-        public PathQueryEventArgs(string query, Format format, bool cancel)
-            : base(query, cancel)
+        public PathQueryEventArgs(string query, Format format, bool cancel) :
+            base(query, cancel)
         {
             Format = format;
         }
@@ -54,11 +54,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Format
-        /// 
+        ///
         /// <summary>
         /// 圧縮ファイルのフォーマットを取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public Format Format { get; }
 
@@ -68,7 +68,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
     /* --------------------------------------------------------------------- */
     ///
     /// PathQueryEventHandler
-    /// 
+    ///
     /// <summary>
     /// 保存パスを指定するダイアログを表示するための delegate です。
     /// </summary>

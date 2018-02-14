@@ -19,7 +19,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using NUnit.Framework;
 
 namespace Cube.FileSystem.SevenZip.Tests
@@ -27,7 +26,7 @@ namespace Cube.FileSystem.SevenZip.Tests
     /* --------------------------------------------------------------------- */
     ///
     /// ArchiveWriterTest
-    /// 
+    ///
     /// <summary>
     /// ArchiveWriter のテスト用クラスです。
     /// </summary>
@@ -45,9 +44,9 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// 圧縮ファイルを作成するテストを実行します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
-        [TestCaseSource(nameof(Archive_TestCases))]
+        [TestCaseSource(nameof(TestCases))]
         public Format Archive(Format format, string filename, string password,
             string[] items, ArchiveOption option)
         {
@@ -73,10 +72,10 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// フィルタ設定の結果を確認します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
-        [TestCase(true,  ExpectedResult = 4)]
-        [TestCase(false, ExpectedResult = 8)]
+        [TestCase(true,  ExpectedResult = 5)]
+        [TestCase(false, ExpectedResult = 9)]
         public int Archive_Filter(bool filter)
         {
             var names = new[] { "Filter.txt", "FilterDirectory" };
@@ -87,7 +86,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             {
                 if (filter) writer.Filters = names;
                 writer.Add(Example("Sample.txt"));
-                writer.Add(Example("Archive"));
+                writer.Add(Example("Sample 00..01"));
                 writer.Save(dest);
             }
 
@@ -101,7 +100,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// 日本語のファイル名を含むファイルを圧縮するテストを実行します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [TestCase(true)]
         [TestCase(false)]
@@ -131,11 +130,11 @@ namespace Cube.FileSystem.SevenZip.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Archive_PasswordCancel
-        /// 
+        ///
         /// <summary>
         /// パスワードの設定をキャンセルした時の挙動を確認します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Archive_PasswordCancel() => Assert.That(() =>
@@ -152,11 +151,11 @@ namespace Cube.FileSystem.SevenZip.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Archive_SfxNotFound
-        /// 
+        ///
         /// <summary>
         /// 存在しない SFX モジュールを設定した時の挙動を確認します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Archive_SfxNotFound() => Assert.That(() =>
@@ -177,7 +176,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// 読み込みできないファイルを指定した時の挙動を確認します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Archive_PermissionError() => Assert.That(() =>
@@ -202,7 +201,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// 一部のファイルを無視して圧縮するテストを実行します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Archive_Skip()
@@ -220,13 +219,13 @@ namespace Cube.FileSystem.SevenZip.Tests
             using (var writer = new ArchiveWriter(Format.Zip, io))
             {
                 writer.Add(ignore);
-                writer.Add(Example("Archive"));
+                writer.Add(Example("Sample 00..01"));
                 writer.Save(dest);
             }
 
             using (var reader = new ArchiveReader(dest))
             {
-                Assert.That(reader.Items.Count, Is.EqualTo(7));
+                Assert.That(reader.Items.Count, Is.EqualTo(8));
                 Assert.That(reader.Items.Any(x => x.FullName == "Sample.txt"), Is.False);
             }
         }
@@ -238,7 +237,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// 存在しないファイルを指定した時の挙動を確認します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Add_NotFound() => Assert.That(() =>
@@ -255,7 +254,7 @@ namespace Cube.FileSystem.SevenZip.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Archive_TestCases
+        /// TestCases
         ///
         /// <summary>
         /// Archive のテスト用データを取得します。
@@ -271,7 +270,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        private static IEnumerable<TestCaseData> Archive_TestCases
+        private static IEnumerable<TestCaseData> TestCases
         {
             get
             {
@@ -287,7 +286,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     Format.Zip,
                     "ZipDirectory.zip",
                     "",
-                    new[] { "Archive" },
+                    new[] { "Sample 00..01" },
                     null
                 ).Returns(Format.Zip);
 
@@ -295,7 +294,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     Format.Zip,
                     "ZipFast.zip",
                     "",
-                    new[] { "Sample.txt", "Archive" },
+                    new[] { "Sample.txt", "Sample 00..01" },
                     new ZipOption { CompressionLevel = CompressionLevel.Fast }
                 ).Returns(Format.Zip);
 
@@ -303,7 +302,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     Format.Zip,
                     "ZipUltra.zip",
                     "",
-                    new[] { "Sample.txt", "Archive" },
+                    new[] { "Sample.txt", "Sample 00..01" },
                     new ZipOption
                     {
                         CompressionLevel = CompressionLevel.Ultra,
@@ -315,7 +314,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     Format.Zip,
                     "ZipLzma.zip",
                     "",
-                    new[] { "Sample.txt", "Archive" },
+                    new[] { "Sample.txt", "Sample 00..01" },
                     new ZipOption { CompressionMethod = CompressionMethod.Lzma }
                 ).Returns(Format.Zip);
 
@@ -323,6 +322,14 @@ namespace Cube.FileSystem.SevenZip.Tests
                     Format.Zip,
                     "ZipPassword.zip",
                     "password",
+                    new[] { "Sample.txt" },
+                    null
+                ).Returns(Format.Zip);
+
+                yield return new TestCaseData(
+                    Format.Zip,
+                    "ZipPasswordSymbol.zip",
+                    "()[]{}<>\\#$%@?!&|+-*/=\"'^~`,._",
                     new[] { "Sample.txt" },
                     null
                 ).Returns(Format.Zip);
@@ -355,7 +362,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     Format.SevenZip,
                     "7zLzma2.7z",
                     "",
-                    new[] { "Sample.txt", "Archive" },
+                    new[] { "Sample.txt", "Sample 00..01" },
                     new SevenZipOption
                     {
                         CompressionLevel  = CompressionLevel.High,
@@ -391,7 +398,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     Format.Tar,
                     "TarTest.tar",
                     "",
-                    new[] { "Sample.txt", "Archive" },
+                    new[] { "Sample.txt", "Sample 00..01" },
                     null
                 ).Returns(Format.Tar);
 
@@ -399,7 +406,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     Format.Tar,
                     "TarTest.tar.gz",
                     "",
-                    new[] { "Sample.txt", "Archive" },
+                    new[] { "Sample.txt", "Sample 00..01" },
                     new TarOption
                     {
                         CompressionMethod = CompressionMethod.GZip,
@@ -411,7 +418,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     Format.Tar,
                     "TarTest.tar.bz",
                     "",
-                    new[] { "Sample.txt", "Archive" },
+                    new[] { "Sample.txt", "Sample 00..01" },
                     new TarOption
                     {
                         CompressionMethod = CompressionMethod.BZip2,
@@ -423,7 +430,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     Format.Tar,
                     "TarTest.tar.xz",
                     "",
-                    new[] { "Sample.txt", "Archive" },
+                    new[] { "Sample.txt", "Sample 00..01" },
                     new TarOption
                     {
                         CompressionMethod = CompressionMethod.XZ,
@@ -435,7 +442,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     Format.Sfx,
                     "ExecutableTest.exe",
                     "",
-                    new[] { "Sample.txt", "Archive" },
+                    new[] { "Sample.txt", "Sample 00..01" },
                     new SfxOption
                     {
                         CompressionMethod = CompressionMethod.Lzma,
@@ -457,7 +464,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// カレントディレクトリとパス結合を実行します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private static string Current(string filename)
         {
@@ -473,7 +480,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// ファイルを排他モードで開きます。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private System.IO.Stream OpenExclude(string path)
             => System.IO.File.Open(path,

@@ -27,14 +27,14 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     ///
     /// ArchiveExtractCallback
-    /// 
+    ///
     /// <summary>
     /// 圧縮ファイルを展開する際のコールバック関数群を定義したクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal sealed class ArchiveExtractCallback
-        : ArchivePasswordCallback, IArchiveExtractCallback, IDisposable
+    internal sealed class ArchiveExtractCallback :
+        ArchivePasswordCallback, IArchiveExtractCallback, IDisposable
     {
         #region Constructors
 
@@ -45,12 +45,12 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="src">圧縮ファイルのパス</param>
         /// <param name="dest">展開先ディレクトリ</param>
         /// <param name="items">展開項目一覧</param>
         /// <param name="io">ファイル操作用オブジェクト</param>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public ArchiveExtractCallback(string src, string dest, IEnumerable<ArchiveItem> items, Operator io)
             : base(src, io)
@@ -76,7 +76,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 展開先ディレクトリのパスを取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public string Destination { get; }
 
@@ -87,7 +87,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 展開する項目一覧を取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public IEnumerable<ArchiveItem> Items { get; }
 
@@ -99,7 +99,7 @@ namespace Cube.FileSystem.SevenZip
         /// 展開をスキップするファイル名またはディレクトリ名一覧を
         /// 取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public IEnumerable<string> Filters { get; set; }
 
@@ -111,11 +111,11 @@ namespace Cube.FileSystem.SevenZip
         /// 展開後のファイルおよびディレクトリの合計を取得または
         /// 設定します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// 設定値が負の値の場合、Items.Count() の結果で上書きします。
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public long TotalCount
         {
@@ -130,11 +130,11 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 展開後の総バイト数を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// 設定値が負の値の場合、SetTotal の結果で上書きします。
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public long TotalBytes
         {
@@ -149,7 +149,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         ///
         /// Extracting
-        /// 
+        ///
         /// <summary>
         /// 圧縮ファイル各項目の展開開始時に発生するイベントです。
         /// </summary>
@@ -160,7 +160,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         ///
         /// Extracted
-        /// 
+        ///
         /// <summary>
         /// 圧縮ファイル各項目の展開完了時に発生するイベントです。
         /// </summary>
@@ -177,13 +177,13 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         ///
         /// SetTotal
-        /// 
+        ///
         /// <summary>
         /// 展開後のバイト数を通知します。
         /// </summary>
-        /// 
+        ///
         /// <param name="bytes">バイト数</param>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void SetTotal(ulong bytes)
         {
@@ -197,13 +197,13 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         ///
         /// SetCompleted
-        /// 
+        ///
         /// <summary>
         /// 展開の完了したバイトサイズを通知します。
         /// </summary>
-        /// 
+        ///
         /// <param name="bytes">展開の完了したバイト数</param>
-        /// 
+        ///
         /// <remarks>
         /// IInArchive.Extract を複数回実行する場合、SetTotal および
         /// SetCompleted で取得できる値が Format によって異なります。
@@ -212,7 +212,7 @@ namespace Cube.FileSystem.SevenZip
         /// バイト数となります。ArchiveExtractCallback では Format 毎の
         /// 違いをなくすために正規化しています。
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void SetCompleted(ref ulong bytes)
         {
@@ -224,17 +224,17 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         ///
         /// GetStream
-        /// 
+        ///
         /// <summary>
         /// 展開した内容を保存するためのストリームを取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="index">圧縮ファイル中のインデックス</param>
         /// <param name="stream">出力ストリーム</param>
         /// <param name="mode">展開モード</param>
-        /// 
+        ///
         /// <returns>OperationResult</returns>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public int GetStream(uint index, out ISequentialOutStream stream, AskMode mode)
         {
@@ -251,11 +251,11 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         ///
         /// PrepareOperation
-        /// 
+        ///
         /// <summary>
         /// 展開処理の直前に実行されます。
         /// </summary>
-        /// 
+        ///
         /// <param name="mode">展開モード</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -275,9 +275,9 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 処理結果を通知します。
         /// </summary>
-        /// 
+        ///
         /// <param name="result">処理結果</param>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void SetOperationResult(OperationResult result) => CallbackAction(() =>
         {
@@ -305,7 +305,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを破棄します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         ~ArchiveExtractCallback() { _dispose.Invoke(false); }
 
@@ -316,7 +316,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// リソースを開放します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void Dispose()
         {
@@ -331,7 +331,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// リソースを開放します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private void Dispose(bool disposing)
         {
@@ -359,7 +359,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// ストリームを生成します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private ArchiveStreamWriter CreateStream(uint index)
         {
@@ -386,7 +386,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// ディレクトリを生成します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private ArchiveStreamWriter CreateDirectory()
         {
@@ -408,7 +408,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 展開処理をスキップします。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private ArchiveStreamWriter Skip()
         {
@@ -435,13 +435,13 @@ namespace Cube.FileSystem.SevenZip
             Extracted?.Invoke(this, ValueEventArgs.Create(item));
         }
 
+        #endregion
+
         #region Fields
         private OnceAction<bool> _dispose;
         private IEnumerator<ArchiveItem> _inner;
         private IDictionary<ArchiveItem, ArchiveStreamWriter> _streams = new Dictionary<ArchiveItem, ArchiveStreamWriter>();
         private long _hack = 0;
-        #endregion
-
         #endregion
     }
 }

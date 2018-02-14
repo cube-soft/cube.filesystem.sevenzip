@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -25,7 +25,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /* --------------------------------------------------------------------- */
     ///
     /// Settings
-    /// 
+    ///
     /// <summary>
     /// ユーザ設定を保持するためのクラスです。
     /// </summary>
@@ -39,7 +39,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// CheckUpdate
-        /// 
+        ///
         /// <summary>
         /// 起動時にアップデートの確認を実行するかどうかを示す値を取得
         /// または設定します。
@@ -56,7 +56,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ErrorReport
-        /// 
+        ///
         /// <summary>
         /// エラーレポートを表示するかどうかを示す値を取得または設定します。
         /// </summary>
@@ -72,11 +72,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Explorer
-        /// 
+        ///
         /// <summary>
         /// ファイル一覧を表示するプログラムのパスを取得または設定します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// 設定値が空文字列の場合 explorer.exe が使用されます。
         /// </remarks>
@@ -92,7 +92,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Filters
-        /// 
+        ///
         /// <summary>
         /// 圧縮・展開時に除外するファイルまたはディレクトリ名の一覧を
         /// 取得または設定します。
@@ -109,7 +109,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ToolTip
-        /// 
+        ///
         /// <summary>
         /// マウスポインタを圧縮ファイルに指定した時にファイル一覧を表示
         /// するかどうかを示す値を取得または設定します。
@@ -126,12 +126,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ToolTipCount
-        /// 
+        ///
         /// <summary>
         /// マウスポインタを圧縮ファイルに指定した時に一覧を表示する
         /// ファイル数を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// この値は ToolTip が有効な場合にのみ適用されます。
         /// </remarks>
@@ -147,11 +147,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Archive
-        /// 
+        ///
         /// <summary>
         /// 圧縮に関する設定を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [DataMember]
         public ArchiveSettings Archive
@@ -163,11 +163,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Extract
-        /// 
+        ///
         /// <summary>
         /// 展開に関する設定を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [DataMember]
         public ExtractSettings Extract
@@ -179,11 +179,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Associate
-        /// 
+        ///
         /// <summary>
         /// ファイルの関連付けに関する設定を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [DataMember]
         public AssociateSettings Associate
@@ -195,11 +195,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Context
-        /// 
+        ///
         /// <summary>
         /// コンテキストメニューに関する設定を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [DataMember]
         public ContextSettings Context
@@ -211,12 +211,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Shortcut
-        /// 
+        ///
         /// <summary>
         /// デスクトップに作成するショートカットメニューに関する設定を
         /// 取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [DataMember]
         public ShortcutSettings Shortcut
@@ -232,21 +232,21 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// GetFilters
-        /// 
+        ///
         /// <summary>
         /// 圧縮・展開時に除外するファイルまたはディレクトリ名の一覧を
         /// 取得します。
         /// </summary>
-        /// 
+        ///
         /// <returns>
         /// 除外するファイルまたはディレクトリ名一覧
         /// </returns>
         ///
         /* ----------------------------------------------------------------- */
-        public IEnumerable<string> GetFilters()
-            => string.IsNullOrEmpty(Filters) ?
-               new string[0] :
-               Filters.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+        public IEnumerable<string> GetFilters() =>
+            string.IsNullOrEmpty(Filters) ?
+            new string[0] :
+            Filters.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
 
         #endregion
 
@@ -268,11 +268,11 @@ namespace Cube.FileSystem.SevenZip.Ice
     /* --------------------------------------------------------------------- */
     ///
     /// SettingsFolder
-    /// 
+    ///
     /// <summary>
     /// 各種設定を保持するためのクラスです。
     /// </summary>
-    /// 
+    ///
     /* --------------------------------------------------------------------- */
     public class SettingsFolder : SettingsFolder<Settings>
     {
@@ -281,23 +281,22 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// SettingsFolder
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public SettingsFolder()
-            : this(SettingsType.Registry, @"Software\CubeSoft\CubeICE\v3") { }
+        public SettingsFolder() : this(SettingsType.Registry, @"Software\CubeSoft\CubeICE\v3") { }
 
         /* ----------------------------------------------------------------- */
         ///
         /// SettingsFolder
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="type">設定情報の保存方法</param>
         /// <param name="path">設定情報の保存パス</param>
         ///
@@ -320,7 +319,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// OnSaved
-        /// 
+        ///
         /// <summary>
         /// 保存時に実行されます。
         /// </summary>

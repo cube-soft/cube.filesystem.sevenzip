@@ -25,7 +25,7 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     ///
     /// ReadOnlyArchiveList
-    /// 
+    ///
     /// <summary>
     /// 圧縮ファイルの読み取り専用コレクションクラスです。
     /// </summary>
@@ -42,7 +42,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="archive">実装オブジェクト</param>
         /// <param name="format">圧縮形式</param>
         /// <param name="src">圧縮ファイルのパス</param>
@@ -82,7 +82,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// コレクションの個数を取得します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// BZip2, GZip など一部の圧縮形式で項目数を取得出来ていないため、
         /// 暫定的に初期値を 1 に設定しています。
@@ -98,14 +98,14 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 指定したインデックスに対応するオブジェクトを取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="index">インデックス</param>
-        /// 
+        ///
         /// <returns>ArchiveItem オブジェクト</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveItem this[int index]
-            => new ArchiveItemImpl(_archive, Format, Source, index, Password, _io);
+        public ArchiveItem this[int index] =>
+            new ArchiveItemImpl(_archive, Format, Source, index, Password, _io);
 
         /* ----------------------------------------------------------------- */
         ///

@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -23,7 +23,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
     /* --------------------------------------------------------------------- */
     ///
     /// GeneralSettingsViewModel
-    /// 
+    ///
     /// <summary>
     /// GeneralSettings の ViewModel を表すクラスです。
     /// </summary>
@@ -37,13 +37,13 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// GeneralSettingsViewModel
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="model">Model オブジェクト</param>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public GeneralSettingsViewModel(TModel model)
         {
@@ -58,11 +58,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// SaveOthers
-        /// 
+        ///
         /// <summary>
         /// SaveLocation.Others かどうかを示す値を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool SaveOthers
         {
@@ -73,11 +73,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// SaveSource
-        /// 
+        ///
         /// <summary>
         /// SaveLocation.Source かどうかを示す値を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool SaveSource
         {
@@ -88,11 +88,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// SaveRuntime
-        /// 
+        ///
         /// <summary>
         /// SaveLocation.Runtime かどうかを示す値を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool SaveRuntime
         {
@@ -103,11 +103,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// SaveDirectory
-        /// 
+        ///
         /// <summary>
         /// 保存ディレクトリのパスを取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public string SaveDirectoryName
         {
@@ -118,12 +118,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// Filtering
-        /// 
+        ///
         /// <summary>
         /// 特定のファイルまたはディレクトリをフィルタリングするかどうかを
         /// 示す値を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool Filtering
         {
@@ -134,12 +134,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// OpenDirectory
-        /// 
+        ///
         /// <summary>
         /// 圧縮処理終了後にフォルダを開くかどうかを示す値を取得
         /// または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool OpenDirectory
         {
@@ -154,12 +154,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// SkipDesktop
-        /// 
+        ///
         /// <summary>
         /// 後処理時に対象がデスクトップの場合にスキップするかどうかを
         /// 示す値を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool SkipDesktop
         {
@@ -174,11 +174,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// Model
-        /// 
+        ///
         /// <summary>
         /// Model オブジェクトを取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         protected TModel Model { get; }
 
@@ -189,17 +189,17 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// SetSaveLocation
-        /// 
+        ///
         /// <summary>
         /// SaveLocation の値を設定します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// SaveLocation は GUI 上は RadioButton で表現されています。
         /// そこで、SetSaveLocation() では Checked = true のタイミングで
         /// 値の内容を更新する事とします。
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private void SetSaveLocation(SaveLocation value, bool check)
         {

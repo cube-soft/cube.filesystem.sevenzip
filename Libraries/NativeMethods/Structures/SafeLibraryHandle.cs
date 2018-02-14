@@ -24,7 +24,7 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     ///
     /// SafeLibraryHandle
-    /// 
+    ///
     /// <summary>
     /// DLL のハンドルを保持するためのクラスです。
     /// </summary>
@@ -53,7 +53,6 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
-        protected override bool ReleaseHandle()
-            => Kernel32.NativeMethods.FreeLibrary(handle);
+        protected override bool ReleaseHandle() => Kernel32.NativeMethods.FreeLibrary(handle);
     }
 }

@@ -26,7 +26,7 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     ///
     /// ArchiveOptionSetter
-    /// 
+    ///
     /// <summary>
     /// 圧縮ファイルのオプション項目を設定するためのクラスです。
     /// </summary>
@@ -43,7 +43,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="option">オプション</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -78,7 +78,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オプションをアーカイブ・オブジェクトに設定します。
         /// </summary>
-        /// 
+        ///
         /// <param name="dest">アーカイブ・オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -105,7 +105,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オプションを追加します。
         /// </summary>
-        /// 
+        ///
         /// <param name="name">名前</param>
         /// <param name="value">値</param>
         ///
@@ -125,12 +125,11 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string[] CreateNames()
-            => new[]
-            {
-                "x",
-                "mt",
-            }.Concat(_dic.Keys).ToArray();
+        private string[] CreateNames() => new[]
+        {
+            "x",
+            "mt",
+        }.Concat(_dic.Keys).ToArray();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -141,14 +140,14 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private GCHandle CreateValues()
-            => GCHandle.Alloc(new[]
-                {
-                    PropVariant.Create((uint)Option.CompressionLevel),
-                    PropVariant.Create((uint)Option.ThreadCount),
-                }.Concat(_dic.Values).ToArray(),
-                GCHandleType.Pinned
-            );
+        private GCHandle CreateValues() => GCHandle.Alloc(
+            new[]
+            {
+                PropVariant.Create((uint)Option.CompressionLevel),
+                PropVariant.Create((uint)Option.ThreadCount),
+            }.Concat(_dic.Values).ToArray(),
+            GCHandleType.Pinned
+        );
 
         #endregion
 

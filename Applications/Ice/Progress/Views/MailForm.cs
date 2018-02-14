@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -24,11 +24,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
     /* --------------------------------------------------------------------- */
     ///
     /// MailForm
-    /// 
+    ///
     /// <summary>
     /// メール送信用クライアントを表すクラスです。
     /// </summary>
-    /// 
+    ///
     /* --------------------------------------------------------------------- */
     public class MailForm
     {

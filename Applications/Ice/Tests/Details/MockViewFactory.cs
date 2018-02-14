@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -37,7 +37,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Destination
-        /// 
+        ///
         /// <summary>
         /// 保存場所を示すパスを取得または設定します。
         /// </summary>
@@ -48,13 +48,24 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Password
-        /// 
+        ///
         /// <summary>
         /// パスワードを取得または設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public string Password { get; set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OverwriteMode
+        ///
+        /// <summary>
+        /// 上書きモードを取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public OverwriteMode OverwriteMode { get; set; }
 
         #endregion
     }
@@ -75,7 +86,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// MockViewFactory
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
@@ -96,7 +107,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Settings
-        /// 
+        ///
         /// <summary>
         /// テスト時設定を取得または設定します。
         /// </summary>
@@ -111,7 +122,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// CreateProgressView
-        /// 
+        ///
         /// <summary>
         /// IProgressView オブジェクトを生成します。
         /// </summary>
@@ -123,11 +134,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// ShowSaveView
-        /// 
+        ///
         /// <summary>
         /// 保存パス名を選択する画面を表示します。
         /// </summary>
-        /// 
+        ///
         /// <param name="e">パスを保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -143,11 +154,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// ShowPasswordView
-        /// 
+        ///
         /// <summary>
         /// パスワード入力画面を表示します。
         /// </summary>
-        /// 
+        ///
         /// <param name="e">パスワード情報を保持するオブジェクト</param>
         /// <param name="confirm">確認用入力項目の有無</param>
         ///
@@ -161,11 +172,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// ShowOverwriteView
-        /// 
+        ///
         /// <summary>
         /// 上書き確認用画面を表示します。
         /// </summary>
-        /// 
+        ///
         /// <param name="e">情報を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -174,17 +185,17 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
             Assert.That(e.Source,      Is.Not.Null);
             Assert.That(e.Destination, Is.Not.Null);
 
-            e.Result = OverwriteMode.Rename;
+            e.Result = Settings.OverwriteMode;
         }
 
         /* ----------------------------------------------------------------- */
         ///
         /// ShowArchiveView
-        /// 
+        ///
         /// <summary>
         /// 圧縮の詳細設定用画面を表示します。
         /// </summary>
-        /// 
+        ///
         /// <param name="e">詳細設定を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -206,11 +217,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// ShowExplorerView
-        /// 
+        ///
         /// <summary>
         /// エクスプローラ画面を表示します。
         /// </summary>
-        /// 
+        ///
         /// <param name="e">情報を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -223,11 +234,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// ShowMailView
-        /// 
+        ///
         /// <summary>
         /// メール送信用画面を表示します。
         /// </summary>
-        /// 
+        ///
         /// <param name="e">添付情報を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -239,11 +250,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// ShowMessageBox
-        /// 
+        ///
         /// <summary>
         /// メッセージボックスを表示します。
         /// </summary>
-        /// 
+        ///
         /// <param name="e">メッセージ内容を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */

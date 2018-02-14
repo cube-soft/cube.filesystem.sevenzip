@@ -16,14 +16,12 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-using System.IO;
-
 namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
     /// FileItem
-    /// 
+    ///
     /// <summary>
     /// 圧縮予定ファイルの 1 項目を表すインターフェースです。
     /// </summary>
@@ -40,7 +38,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="path">ファイルまたはディレクトリのパス</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -56,7 +54,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="path">ファイルまたはディレクトリのパス</param>
         /// <param name="pathInArchive">圧縮ファイル中の相対パス</param>
         ///

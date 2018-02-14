@@ -25,7 +25,7 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     ///
     /// Format
-    /// 
+    ///
     /// <summary>
     /// 対応している圧縮形式一覧を表す列挙型です。
     /// </summary>
@@ -148,11 +148,11 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     ///
     /// CompressionLevel
-    /// 
+    ///
     /// <summary>
     /// 圧縮レベルを表す列挙型です。
     /// </summary>
-    /// 
+    ///
     /* --------------------------------------------------------------------- */
     public enum CompressionLevel
     {
@@ -173,11 +173,11 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     ///
     /// CompressionMethod
-    /// 
+    ///
     /// <summary>
     /// 圧縮アルゴリズムを表す列挙型です。
     /// </summary>
-    /// 
+    ///
     /* --------------------------------------------------------------------- */
     public enum CompressionMethod
     {
@@ -206,7 +206,7 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     ///
     /// EncryptionMethod
-    /// 
+    ///
     /// <summary>
     /// Format に対する拡張メソッドを定義したクラスです。
     /// </summary>
@@ -229,7 +229,7 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     ///
     /// Formats
-    /// 
+    ///
     /// <summary>
     /// Format に対する拡張メソッドを定義したクラスです。
     /// </summary>
@@ -248,9 +248,9 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// Format に対応する Class ID を取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="format">Format オブジェクト</param>
-        /// 
+        ///
         /// <returns>Class ID</returns>
         ///
         /// <remarks>
@@ -258,10 +258,10 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public static Guid ToClassId(this Format format)
-            => format != Format.Unknown ?
-               new Guid($"23170f69-40c1-278a-1000-000110{((int)format):x2}0000") :
-               Guid.Empty;
+        public static Guid ToClassId(this Format format) =>
+            format != Format.Unknown ?
+            new Guid($"23170f69-40c1-278a-1000-000110{((int)format):x2}0000") :
+            Guid.Empty;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -270,9 +270,9 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// Format に対応する拡張子を取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="format">Format オブジェクト</param>
-        /// 
+        ///
         /// <returns>拡張子</returns>
         ///
         /* ----------------------------------------------------------------- */
@@ -297,9 +297,9 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// CompressionMethod に対応する拡張子を取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="method">CompressionMethod オブジェクト</param>
-        /// 
+        ///
         /// <returns>拡張子</returns>
         ///
         /* ----------------------------------------------------------------- */
@@ -321,9 +321,9 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// Format に対応する CompressionMethod を取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="format">Format オブジェクト</param>
-        /// 
+        ///
         /// <returns>CompressionMethod オブジェクト</returns>
         ///
         /// <remarks>
@@ -354,9 +354,9 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// CompressionMethod に対応する Format を取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="method">CompressionMethod</param>
-        /// 
+        ///
         /// <returns>Format オブジェクト</returns>
         ///
         /* ----------------------------------------------------------------- */
@@ -378,9 +378,9 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 文字列に対応する Format を取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="format">Format を表す文字列</param>
-        /// 
+        ///
         /// <returns>Format オブジェクト</returns>
         ///
         /* ----------------------------------------------------------------- */
@@ -403,9 +403,9 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 拡張子に対応する Format を取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="ext">拡張子</param>
-        /// 
+        ///
         /// <returns>Format オブジェクト</returns>
         ///
         /* ----------------------------------------------------------------- */
@@ -423,9 +423,9 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// ストリームの内容に対応する Format を取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="stream">ストリーム</param>
-        /// 
+        ///
         /// <returns>Format オブジェクト</returns>
         ///
         /* ----------------------------------------------------------------- */
@@ -462,14 +462,13 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// ファイルに対応する Format を取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="path">ファイル名</param>
-        /// 
+        ///
         /// <returns>Format オブジェクト</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static Format FromFile(string path)
-            => FromFile(path, new Operator());
+        public static Format FromFile(string path) => FromFile(path, new Operator());
 
         /* ----------------------------------------------------------------- */
         ///
@@ -478,10 +477,10 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// ファイルに対応する Format を取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="path">ファイル名</param>
         /// <param name="io">ファイル操作用オブジェクト</param>
-        /// 
+        ///
         /// <returns>Format オブジェクト</returns>
         ///
         /* ----------------------------------------------------------------- */
@@ -562,45 +561,45 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// Format と Signature の対応関係を示すオブジェクトを取得します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// このマップでは、ファイルの先頭に Signature が記載されている
         /// もののみを対象としています。
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        private static IDictionary<string, Format> CreateSignatureMap()
-            => new Dictionary<string, Format>
-        {
-            { "50-4B-03-04",                Format.Zip      },
-            { "42-5A-68",                   Format.BZip2    },
-            { "52-61-72-21-1A-07-00",       Format.Rar      },
-            { "60-EA",                      Format.Arj      },
-            { "1F-9D-90",                   Format.Lzw      },
-            { "37-7A-BC-AF-27-1C",          Format.SevenZip },
-            { "4D-53-43-46",                Format.Cab      },
-            { "5D-00-00-40-00",             Format.Lzma     },
-            { "FD-37-7A-58-5A",             Format.XZ       },
-            { "52-61-72-21-1A-07-01-00",    Format.Rar5     },
-            { "46-4C-56",                   Format.Flv      },
-            { "46-57-53",                   Format.Swf      },
-            { "63-6F-6E-65-63-74-69-78",    Format.Vhd      },
-            { "4D-5A",                      Format.PE       },
-            { "7F-45-4C-46",                Format.Elf      },
-            { "78-61-72-21",                Format.Xar      },
-            { "78",                         Format.Dmg      },
-            { "4D-53-57-49-4D-00-00-00",    Format.Wim      },
-            { "43-44-30-30-31",             Format.Iso      },
-            { "49-54-53-46",                Format.Chm      },
-            { "ED-AB-EE-DB",                Format.Rpm      },
-            { "1F-8B-08",                   Format.GZip     },
-        };
+        private static IDictionary<string, Format> CreateSignatureMap() =>
+            new Dictionary<string, Format>
+            {
+                { "50-4B-03-04",                Format.Zip      },
+                { "42-5A-68",                   Format.BZip2    },
+                { "52-61-72-21-1A-07-00",       Format.Rar      },
+                { "60-EA",                      Format.Arj      },
+                { "1F-9D-90",                   Format.Lzw      },
+                { "37-7A-BC-AF-27-1C",          Format.SevenZip },
+                { "4D-53-43-46",                Format.Cab      },
+                { "5D-00-00-40-00",             Format.Lzma     },
+                { "FD-37-7A-58-5A",             Format.XZ       },
+                { "52-61-72-21-1A-07-01-00",    Format.Rar5     },
+                { "46-4C-56",                   Format.Flv      },
+                { "46-57-53",                   Format.Swf      },
+                { "63-6F-6E-65-63-74-69-78",    Format.Vhd      },
+                { "4D-5A",                      Format.PE       },
+                { "7F-45-4C-46",                Format.Elf      },
+                { "78-61-72-21",                Format.Xar      },
+                { "78",                         Format.Dmg      },
+                { "4D-53-57-49-4D-00-00-00",    Format.Wim      },
+                { "43-44-30-30-31",             Format.Iso      },
+                { "49-54-53-46",                Format.Chm      },
+                { "ED-AB-EE-DB",                Format.Rpm      },
+                { "1F-8B-08",                   Format.GZip     },
+            };
+
+        #endregion
 
         #region Fields
         private static IDictionary<string, Format> _ext;
         private static IDictionary<string, Format> _sig;
-        #endregion
-
         #endregion
     }
 }

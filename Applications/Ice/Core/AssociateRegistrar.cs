@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -26,11 +26,11 @@ namespace Cube.FileSystem.SevenZip.Ice
     /* --------------------------------------------------------------------- */
     ///
     /// AssociateRegistrar
-    /// 
+    ///
     /// <summary>
     /// ファイルの関連付けに関するレジストリの更新を行うクラスです。
     /// </summary>
-    /// 
+    ///
     /// <remarks>
     /// このクラスはレジストリの KEY_CLASSES_ROOT を編集します。
     /// したがって、実行するためには管理者権限が必要となります。
@@ -44,13 +44,13 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// AssociateRegistrar
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="file">ダブルクリック時に実行するファイル</param>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public AssociateRegistrar(string file)
         {
@@ -64,68 +64,68 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// FileName
-        /// 
+        ///
         /// <summary>
         /// ダブルクリック時に実行されるファイルを取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public string FileName { get; }
 
         /* ----------------------------------------------------------------- */
         ///
         /// Arguments
-        /// 
+        ///
         /// <summary>
         /// ダブルクリック時に実行されるファイルの引数一覧を取得または
         /// 設定します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// Arguments で設定されたものに "%1" を加えたものが実際の
         /// 引数となります。
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public IEnumerable<string> Arguments { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
         /// IconLocation
-        /// 
+        ///
         /// <summary>
         /// 表示されるアイコンのパスを取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public string IconLocation { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
         /// ToolTip
-        /// 
+        ///
         /// <summary>
         /// マウスオーバ時のツールチップ表示をカスタマイズするかどうかを
         /// 示す値を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool ToolTip { get; set; } = false;
 
         /* ----------------------------------------------------------------- */
         ///
         /// Command
-        /// 
+        ///
         /// <summary>
         /// レジストリに登録されるコマンドラインを取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
-        public string Command
-            => string.Format("{0}{1}\"%1\"",
-                $"\"{FileName}\"",
-                Arguments.Aggregate(" ", (s, o) => s + $"\"{o}\" ")
-            );
+        public string Command => string.Format(
+            "{0}{1}\"%1\"",
+            $"\"{FileName}\"",
+            Arguments.Aggregate(" ", (s, o) => s + $"\"{o}\" ")
+        );
 
         #endregion
 
@@ -134,15 +134,15 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Update
-        /// 
+        ///
         /// <summary>
         /// ファイルの関連付けを更新します。
         /// </summary>
-        /// 
+        ///
         /// <param name="extensions">
         /// ファイルの関連付けを定義したオブジェクト
         /// </param>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void Update(IDictionary<string, bool> extensions)
         {
@@ -156,11 +156,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Update
-        /// 
+        ///
         /// <summary>
         /// ファイルの関連付けを更新します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private void Update(string extension, bool enabled)
         {
@@ -172,12 +172,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// UpdateToolTip
-        /// 
+        ///
         /// <summary>
         /// マウスオーバ時に表示されるツールチップ表示に関する設定を
         /// 更新します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private void UpdateToolTip(RegistryKey key, bool enabled)
         {
@@ -195,11 +195,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Create
-        /// 
+        ///
         /// <summary>
         /// ファイルの関連付け用のレジストリ項目を作成して登録します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private void Create(string extension)
         {
@@ -216,11 +216,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Create
-        /// 
+        ///
         /// <summary>
         /// ファイルの関連付け用のレジストリ項目を作成して登録します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private void Create(RegistryKey key, string id)
         {
@@ -241,17 +241,17 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Create
-        /// 
+        ///
         /// <summary>
         /// 拡張子を表すレジストリ項目と CubeICE を関連付けるための設定を
         /// 作成します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// ToolTip の処理が未実装なため、現在は ToolTip に関連する項目は
         /// 強制的に削除しています。
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private void Create(string extension, string name)
         {
@@ -272,11 +272,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Delete
-        /// 
+        ///
         /// <summary>
         /// ファイルの関連付け用のレジストリ項目を削除します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private void Delete(string extension)
         {
@@ -288,12 +288,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Delete
-        /// 
+        ///
         /// <summary>
         /// 拡張子を表すレジストリ項目と CubeICE を関連付けるための設定を
         /// 削除します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private void Delete(string extension, string name)
         {
@@ -315,14 +315,14 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// GetSubKeyName
-        /// 
+        ///
         /// <summary>
         /// サブキー名を取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
-        private string GetSubKeyName(string id)
-            => $"{System.IO.Path.GetFileNameWithoutExtension(FileName)}_{id}".ToLower();
+        private string GetSubKeyName(string id) =>
+            $"{System.IO.Path.GetFileNameWithoutExtension(FileName)}_{id}".ToLower();
 
         #endregion
 

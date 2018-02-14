@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -39,7 +39,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// SettingsForm
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
@@ -58,11 +58,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// SettingsForm
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="install">
         /// インストールモードかどうかを示す値
         /// </param>
@@ -87,7 +87,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /// <summary>
         /// オブジェクトを関連付けます。
         /// </summary>
-        /// 
+        ///
         /// <param name="vm">ViewModel オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -102,7 +102,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
             ArchiveSettingsBindingSource.DataSource   = vm.Archive;
             ExtractSettingsBindingSource.DataSource   = vm.Extract;
             VersionPanel.Version                      = vm.Version;
-            
+
             Enable(ArchiveSaveOthersRadioButton, ArchiveSaveTextBox, ArchiveSaveButton);
             Enable(ExtractSaveOthersRadioButton, ExtractSaveTextBox, ExtractSaveButton);
 
@@ -170,7 +170,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// Enable
-        /// 
+        ///
         /// <summary>
         /// 指定されたコントロールの Enabled を更新します。
         /// </summary>
@@ -210,7 +210,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// InitializeAssociate
-        /// 
+        ///
         /// <summary>
         /// 関連付けの項目を初期化します。
         /// </summary>
@@ -258,7 +258,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// InitializeContext
-        /// 
+        ///
         /// <summary>
         /// コンテキストメニューの項目を初期化します。
         /// </summary>
@@ -304,7 +304,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// InitializeShortcut
-        /// 
+        ///
         /// <summary>
         /// ショートカットメニューを初期化します。
         /// </summary>
@@ -329,7 +329,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// Create
-        /// 
+        ///
         /// <summary>
         /// 関連付け用のチェックボックスを生成します。
         /// </summary>
@@ -358,7 +358,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// Create
-        /// 
+        ///
         /// <summary>
         /// コンテキストメニュー用のチェックボックスを生成します。
         /// </summary>
@@ -386,21 +386,21 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// Create
-        /// 
+        ///
         /// <summary>
         /// KeyValuePaier オブジェクトを生成します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private KeyValuePair<string, PresetMenu> Create(string key, PresetMenu value)
-            => new KeyValuePair<string, PresetMenu>(key, value);
+        private KeyValuePair<string, PresetMenu> Create(string key, PresetMenu value) =>
+            new KeyValuePair<string, PresetMenu>(key, value);
+
+        #endregion
 
         #endregion
 
         #region Fields
         private Cube.Forms.VersionControl VersionPanel = new Cube.Forms.VersionControl();
-        #endregion
-
         #endregion
     }
 }

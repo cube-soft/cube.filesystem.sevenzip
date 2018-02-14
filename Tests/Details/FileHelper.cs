@@ -23,11 +23,11 @@ namespace Cube.FileSystem.SevenZip.Tests
     /* --------------------------------------------------------------------- */
     ///
     /// FileHelper
-    /// 
+    ///
     /// <summary>
     /// テストでファイルを使用するためのクラスです。
     /// </summary>
-    /// 
+    ///
     /* --------------------------------------------------------------------- */
     class FileHelper
     {
@@ -51,7 +51,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="io">ファイル操作用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -95,7 +95,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Examples
-        /// 
+        ///
         /// <summary>
         /// テスト用ファイルの存在するフォルダへのパスを取得します。
         /// </summary>
@@ -106,7 +106,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Results
-        /// 
+        ///
         /// <summary>
         /// テスト結果を格納するためのフォルダへのパスを取得します。
         /// </summary>
@@ -121,34 +121,32 @@ namespace Cube.FileSystem.SevenZip.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Example
-        /// 
+        ///
         /// <summary>
         /// ファイル名に対して Examples フォルダのパスを結合したパスを
         /// 取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="filename">ファイル名</param>
         /// <returns>パス</returns>
         ///
         /* ----------------------------------------------------------------- */
-        protected string Example(string filename)
-            => IO.Combine(Examples, filename);
+        protected string Example(string filename) => IO.Combine(Examples, filename);
 
         /* ----------------------------------------------------------------- */
         ///
         /// Example
-        /// 
+        ///
         /// <summary>
         /// ファイル名に対して Results フォルダのパスを結合したパスを
         /// 取得します。
         /// </summary>
-        /// 
+        ///
         /// <param name="filename">ファイル名</param>
         /// <returns>パス</returns>
         ///
         /* ----------------------------------------------------------------- */
-        protected string Result(string filename)
-            => IO.Combine(Results, filename);
+        protected string Result(string filename) => IO.Combine(Results, filename);
 
         #endregion
 
@@ -157,7 +155,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Delete
-        /// 
+        ///
         /// <summary>
         /// 指定されたフォルダ内に存在する全てのファイルおよびフォルダを
         /// 削除します。
@@ -174,10 +172,10 @@ namespace Cube.FileSystem.SevenZip.Tests
             }
         }
 
-        #region Fields
-        private string _directory = string.Empty;
         #endregion
 
+        #region Fields
+        private string _directory = string.Empty;
         #endregion
     }
 }

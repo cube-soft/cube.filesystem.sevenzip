@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -37,11 +37,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ArchivePresenter
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="view">View オブジェクト</param>
         /// <param name="args">コマンドライン</param>
         /// <param name="settings">ユーザ設定</param>
@@ -49,8 +49,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         public ArchivePresenter(IProgressView view, Request args,
-            SettingsFolder settings, IEventHub events)
-            : base(view, new ArchiveFacade(args, settings), settings, events)
+            SettingsFolder settings, IEventHub events) :
+            base(view, new ArchiveFacade(args, settings), settings, events)
         {
             // View
             View.Logo   = Properties.Resources.HeaderArchive;
@@ -72,62 +72,61 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// WhenDetailsRequested
-        /// 
+        ///
         /// <summary>
         /// 詳細設定要求時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenDetailsRequested(object sender, QueryEventArgs<string, ArchiveDetails> e)
-            => ShowDialog(() => Views.ShowArchiveView(e));
+        private void WhenDetailsRequested(object sender, QueryEventArgs<string, ArchiveDetails> e) =>
+            ShowDialog(() => Views.ShowArchiveView(e));
 
         /* ----------------------------------------------------------------- */
         ///
         /// WhenDestinationRequested
-        /// 
+        ///
         /// <summary>
         /// 保存パス要求時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenDestinationRequested(object sender, PathQueryEventArgs e)
-            => ShowDialog(() => Views.ShowSaveView(e));
+        private void WhenDestinationRequested(object sender, PathQueryEventArgs e) =>
+            ShowDialog(() => Views.ShowSaveView(e));
 
         /* ----------------------------------------------------------------- */
         ///
         /// WhenPasswordRequested
-        /// 
+        ///
         /// <summary>
         /// パスワード要求時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenPasswordRequested(object sender, QueryEventArgs<string, string> e)
-            => ShowDialog(() => Views.ShowPasswordView(e, true));
+        private void WhenPasswordRequested(object sender, QueryEventArgs<string, string> e) =>
+            ShowDialog(() => Views.ShowPasswordView(e, true));
 
         /* ----------------------------------------------------------------- */
         ///
         /// WhenMailRequested
-        /// 
+        ///
         /// <summary>
         /// メール画面表示要求時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenMailRequested(object sender, ValueEventArgs<string> e)
-            => Views.ShowMailView(e);
+        private void WhenMailRequested(object sender, ValueEventArgs<string> e) =>
+            Views.ShowMailView(e);
 
         /* ----------------------------------------------------------------- */
         ///
         /// WhenProgress
-        /// 
+        ///
         /// <summary>
         /// 進捗状況の更新時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenProgress(object sender, ValueEventArgs<ArchiveReport> e)
-            => Sync(() =>
+        private void WhenProgress(object sender, ValueEventArgs<ArchiveReport> e) => Sync(() =>
         {
             View.FileName   = Model.IO.Get(Model.Destination).Name;
             View.TotalCount = e.Value.TotalCount;

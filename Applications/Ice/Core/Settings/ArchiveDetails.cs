@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -16,7 +16,6 @@
 //
 /* ------------------------------------------------------------------------- */
 using System;
-using System.Reflection;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -36,7 +35,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ArchiveDetails
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
@@ -51,11 +50,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ArchiveDetails
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="format">圧縮形式</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -71,7 +70,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Format
-        /// 
+        ///
         /// <summary>
         /// ファイル形式を取得または設定します。
         /// </summary>
@@ -82,7 +81,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Path
-        /// 
+        ///
         /// <summary>
         /// 保存先パスを取得または設定します。
         /// </summary>
@@ -93,7 +92,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// Password
-        /// 
+        ///
         /// <summary>
         /// パスワードを取得または設定します。
         /// </summary>
@@ -104,7 +103,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// SfxModule
-        /// 
+        ///
         /// <summary>
         /// 自己解凍形式モジュールのパスを取得または設定します。
         /// </summary>
@@ -115,7 +114,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// CompressionLevel
-        /// 
+        ///
         /// <summary>
         /// 圧縮レベルを取得または設定します。
         /// </summary>
@@ -126,7 +125,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// CompressionMethod
-        /// 
+        ///
         /// <summary>
         /// 圧縮方法を取得または設定します。
         /// </summary>
@@ -137,7 +136,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// EncryptionMethod
-        /// 
+        ///
         /// <summary>
         /// 暗号化方法を取得または設定します。
         /// </summary>
@@ -148,7 +147,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ThreadCount
-        /// 
+        ///
         /// <summary>
         /// 圧縮処理時の最大スレッド数を取得または設定します。
         /// </summary>

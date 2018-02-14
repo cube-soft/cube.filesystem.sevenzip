@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -24,7 +24,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
     /* --------------------------------------------------------------------- */
     ///
     /// RequestTest
-    /// 
+    ///
     /// <summary>
     /// Request のテスト用クラスです。
     /// </summary>
@@ -36,11 +36,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Create_Empty
-        /// 
+        ///
         /// <summary>
         /// 空の引数で初期化した時の挙動を確認します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Create_Empty()
@@ -53,11 +53,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Create_Wrong
-        /// 
+        ///
         /// <summary>
         /// 無効な引数で初期化した時の挙動を確認します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [TestCase("c")]
         [TestCase("/dummy")]
@@ -71,11 +71,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Create_ArchiveDefault
-        /// 
+        ///
         /// <summary>
         /// "/c" を引数に指定した時の挙動を確認します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Create_ArchiveDefault()
@@ -88,11 +88,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Create_WrongLocation
-        /// 
+        ///
         /// <summary>
         /// 無効な "/o" 引数を指定した時の挙動を確認します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [TestCase("/o")]
         [TestCase("/o:wrong")]
@@ -106,11 +106,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         ///
         /// Create_WrongDrop
-        /// 
+        ///
         /// <summary>
         /// 無効な "/drop" 引数を指定した時の挙動を確認します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Create_WrongDrop()

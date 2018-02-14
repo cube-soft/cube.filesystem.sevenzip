@@ -27,7 +27,7 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     ///
     /// ArchiveWriter
-    /// 
+    ///
     /// <summary>
     /// 圧縮ファイルを作成するクラスです。
     /// </summary>
@@ -44,9 +44,9 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="format">圧縮フォーマット</param>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public ArchiveWriter(Format format) : this(format, new Operator()) { }
 
@@ -57,10 +57,10 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="format">圧縮フォーマット</param>
         /// <param name="io">ファイル操作用オブジェクト</param>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public ArchiveWriter(Format format, Operator io)
         {
@@ -82,7 +82,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 圧縮ファイルのフォーマットを取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public Format Format { get; }
 
@@ -93,7 +93,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 圧縮ファイルのフォーマットを取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public ArchiveOption Option { get; set; }
 
@@ -105,7 +105,7 @@ namespace Cube.FileSystem.SevenZip
         /// 圧縮ファイルに含めないファイル名またはディレクトリ名一覧を
         /// 取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public IEnumerable<string> Filters { get; set; }
 
@@ -120,10 +120,9 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// ファイルまたはディレクトリを圧縮ファイルに追加します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
-        public void Add(string path)
-            => Add(path, _io.Get(path).Name);
+        public void Add(string path) => Add(path, _io.Get(path).Name);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -132,7 +131,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// ファイルまたはフォルダを圧縮ファイルに追加します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void Add(string path, string pathInArchive)
         {
@@ -148,9 +147,9 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 圧縮ファイルを作成し保存します。
         /// </summary>
-        /// 
+        ///
         /// <param name="path">保存パス</param>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void Save(string path) => Save(path, string.Empty);
 
@@ -161,10 +160,10 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 圧縮ファイルを作成し保存します。
         /// </summary>
-        /// 
+        ///
         /// <param name="path">保存パス</param>
         /// <param name="password">パスワード</param>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void Save(string path, string password)
         {
@@ -184,11 +183,11 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 圧縮ファイルを作成し保存します。
         /// </summary>
-        /// 
+        ///
         /// <param name="path">保存パス</param>
         /// <param name="password">パスワード取得用オブジェクト</param>
         /// <param name="progress">進捗状況報告用オブジェクト</param>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void Save(string path, IQuery<string, string> password, IProgress<ArchiveReport> progress)
         {
@@ -210,7 +209,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// オブジェクトを破棄します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         ~ArchiveWriter() { _dispose.Invoke(false); }
 
@@ -221,7 +220,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// リソースを破棄します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void Dispose()
         {
@@ -236,7 +235,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// リソースを破棄します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         protected virtual void Dispose(bool disposing)
         {
@@ -256,7 +255,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 自己解凍形式ファイルを作成し保存します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private void SaveCoreSfx(string path, IQuery<string, string> password,
             IProgress<ArchiveReport> progress, IList<FileItem> items)
@@ -290,7 +289,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// Tar ファイルを作成し保存します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private void SaveCoreTar(string path, IQuery<string, string> password,
             IProgress<ArchiveReport> progress, IList<FileItem> items)
@@ -330,7 +329,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 圧縮ファイルを作成し保存します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private void SaveCore(Format format, string path, IQuery<string, string> password,
             IProgress<ArchiveReport> progress, IList<FileItem> items)
@@ -368,7 +367,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// ファイルまたはディレクトリを圧縮ファイルに追加します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private void AddItem(IInformation info, string name)
         {
@@ -396,12 +395,12 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 圧縮項目一覧を取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
-        private IList<FileItem> GetItems()
-            => Filters == null ?
-               _items :
-               _items.Where(x => !new PathFilter(x.FullName).MatchAny(Filters)).ToList();
+        private IList<FileItem> GetItems() =>
+            Filters == null ?
+            _items :
+            _items.Where(x => !new PathFilter(x.FullName).MatchAny(Filters)).ToList();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -410,11 +409,11 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// 読み込み可能なファイルかどうかを判別します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// ディレクトリの場合は true が返ります。
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private bool CanRead(IInformation info)
         {
@@ -429,7 +428,7 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// ArchiveOptionSetter オブジェクトを取得します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private ArchiveOptionSetter GetSetter()
         {
@@ -472,13 +471,13 @@ namespace Cube.FileSystem.SevenZip
             else throw new System.IO.IOException($"{result}");
         }
 
+        #endregion
+
         #region Fields
         private OnceAction<bool> _dispose;
         private SevenZipLibrary _7z;
         private Operator _io;
         private IList<FileItem> _items = new List<FileItem>();
-        #endregion
-
         #endregion
     }
 }

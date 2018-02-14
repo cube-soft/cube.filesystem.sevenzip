@@ -24,7 +24,7 @@ namespace Cube.FileSystem.SevenZip.Tests
     /* --------------------------------------------------------------------- */
     ///
     /// FormatTest
-    /// 
+    ///
     /// <summary>
     /// Format に関わる機能のテスト用クラスです。
     /// </summary>
@@ -42,7 +42,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// 圧縮ファイル形式を判別するテストを実行します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [TestCase("Sample.txt",      ExpectedResult = Format.Unknown)]
         [TestCase("Empty.txt",       ExpectedResult = Format.Unknown)]
@@ -80,18 +80,17 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// 存在しないファイルを指定した時の挙動を確認します。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// ファイルが存在しなかった場合、拡張子から判断します。
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void FromFile_NotFound()
-            => Assert.That(
-                Formats.FromFile(Example("NotFound.rar")),
-                Is.EqualTo(Format.Rar)
-            );
+        public void FromFile_NotFound()=> Assert.That(
+            Formats.FromFile(Example("NotFound.rar")),
+            Is.EqualTo(Format.Rar)
+        );
 
         /* ----------------------------------------------------------------- */
         ///
@@ -100,14 +99,13 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// 書き込み専用のストリームを指定した時の挙動を確認します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void FromStream_CannotRead()
-            => Assert.That(
-                () => Formats.FromStream(IO.OpenWrite(Example("Sample.zip"))),
-                Throws.TypeOf<NotSupportedException>()
-            );
+        public void FromStream_CannotRead() => Assert.That(
+            () => Formats.FromStream(IO.OpenWrite(Example("Sample.zip"))),
+            Throws.TypeOf<NotSupportedException>()
+        );
 
         /* ----------------------------------------------------------------- */
         ///
@@ -116,12 +114,11 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// CompressionMethod から Format に変換するテストを実行します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [TestCase(CompressionMethod.GZip, ExpectedResult = Format.GZip)]
         [TestCase(CompressionMethod.Lzma, ExpectedResult = Format.Unknown)]
-        public Format FromMethod(CompressionMethod method)
-            => Formats.FromMethod(method);
+        public Format FromMethod(CompressionMethod method) => Formats.FromMethod(method);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -130,12 +127,11 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// Class ID に変換するテストを実行します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [TestCase(Format.Zip,     ExpectedResult = "23170f69-40c1-278a-1000-000110010000")]
         [TestCase(Format.Unknown, ExpectedResult = "00000000-0000-0000-0000-000000000000")]
-        public string ToClassId(Format format)
-            => format.ToClassId().ToString("D").ToLower();
+        public string ToClassId(Format format) => format.ToClassId().ToString("D").ToLower();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -144,7 +140,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// 拡張子に変換するテストを実行します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [TestCase(Format.Zip,      ExpectedResult = ".zip")]
         [TestCase(Format.SevenZip, ExpectedResult = ".7z")]
@@ -153,8 +149,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         [TestCase(Format.Lzw,      ExpectedResult = ".z")]
         [TestCase(Format.Sfx,      ExpectedResult = ".exe")]
         [TestCase(Format.Unknown,  ExpectedResult = "")]
-        public string ToExtension(Format format)
-            => format.ToExtension();
+        public string ToExtension(Format format) => format.ToExtension();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -163,12 +158,11 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// <summary>
         /// Format から CompressionMethod に変換するテストを実行します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [TestCase(Format.BZip2, ExpectedResult = CompressionMethod.BZip2)]
         [TestCase(Format.Zip,   ExpectedResult = CompressionMethod.Default)]
-        public CompressionMethod ToMethod(Format format)
-            => format.ToMethod();
+        public CompressionMethod ToMethod(Format format) => format.ToMethod();
 
         #endregion
     }

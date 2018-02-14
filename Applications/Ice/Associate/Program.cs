@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -19,13 +19,14 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Cube.FileSystem.SevenZip.Ice;
+using Cube.Log;
 
 namespace Cube.FileSystem.SevenZip.App.Ice.Associate
 {
     /* --------------------------------------------------------------------- */
     ///
     /// Program
-    /// 
+    ///
     /// <summary>
     /// メインプログラムを表すクラスです。
     /// </summary>
@@ -36,11 +37,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Associate
         /* ----------------------------------------------------------------- */
         ///
         /// Main
-        /// 
+        ///
         /// <summary>
         /// アプリケーションのエントリポイントです。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         [STAThread]
         static void Main(string[] args)
@@ -49,21 +50,21 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Associate
 
             try
             {
-                Cube.Log.Operations.Configure();
-                Cube.Log.Operations.Info(type, Assembly.GetExecutingAssembly());
-                Cube.Log.Operations.Info(type, string.Join(" ", args));
-
-                var asm  = AssemblyReader.Default.Location;
-                var dir  = System.IO.Path.GetDirectoryName(asm);
-                var exe  = System.IO.Path.Combine(dir, "cubeice.exe");
-                var icon = $"{exe},3";
-
-                Cube.Log.Operations.Info(type, $"FileName:{exe}");
-                Cube.Log.Operations.Info(type, $"IconLocation:{icon}");
+                LogOperator.Configure();
+                LogOperator.Info(type, Assembly.GetExecutingAssembly());
+                LogOperator.Info(type, string.Join(" ", args));
 
                 var settings = new SettingsFolder();
                 if (args.Length > 0 && args[0].ToLower() == "/uninstall") Clear(settings);
                 else settings.Load();
+
+                var asm  = AssemblyReader.Default.Location;
+                var dir  = System.IO.Path.GetDirectoryName(asm);
+                var exe  = System.IO.Path.Combine(dir, "cubeice.exe");
+                var icon = $"{exe},{settings.Value.Associate.IconIndex}";
+
+                LogOperator.Info(type, $"FileName:{exe}");
+                LogOperator.Info(type, $"IconLocation:{icon}");
 
                 var registrar = new AssociateRegistrar(exe)
                 {
@@ -81,21 +82,21 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Associate
                     IntPtr.Zero
                 );
             }
-            catch (Exception err) { Cube.Log.Operations.Error(type, err.ToString()); }
+            catch (Exception err) { LogOperator.Error(type, err.ToString()); }
         }
 
         /* ----------------------------------------------------------------- */
         ///
         /// Clear
-        /// 
+        ///
         /// <summary>
         /// 全ての関連付けを設定を無効にします。
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         /// アンインストール時に使用します。
         /// </remarks>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         static void Clear(SettingsFolder settings)
         {

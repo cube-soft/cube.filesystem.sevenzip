@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -23,7 +23,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
     /* --------------------------------------------------------------------- */
     ///
     /// ShortcutSettingsViewModel
-    /// 
+    ///
     /// <summary>
     /// ShortcutSettings の ViewModel を表すクラスです。
     /// </summary>
@@ -36,13 +36,13 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// ShortcutSettingsViewModel
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="model">Model オブジェクト</param>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public ShortcutSettingsViewModel(ShortcutSettings model)
         {
@@ -57,11 +57,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// Archive
-        /// 
+        ///
         /// <summary>
         /// 圧縮の項目が有効かどうかを示す値を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool Archive
         {
@@ -72,11 +72,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// Extract
-        /// 
+        ///
         /// <summary>
         /// 解凍の項目が有効かどうかを示す値を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool Extract
         {
@@ -87,11 +87,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// Settings
-        /// 
+        ///
         /// <summary>
         /// 設定の項目が有効かどうかを示す値を取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public bool Settings
         {
@@ -102,11 +102,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// ArchiveOption
-        /// 
+        ///
         /// <summary>
         /// 圧縮オプションを取得または設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public PresetMenu ArchiveOption
         {
@@ -125,23 +125,23 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// Sync
-        /// 
+        ///
         /// <summary>
         /// ショートカットが実際に存在するかどうかの結果を設定値に反映
         /// させます。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void Sync() => _model.Sync();
 
         /* ----------------------------------------------------------------- */
         ///
         /// Update
-        /// 
+        ///
         /// <summary>
         /// ユーザ設定に関わる処理を実行します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         public void Update() => _model.Update();
 
@@ -152,11 +152,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /* ----------------------------------------------------------------- */
         ///
         /// Set
-        /// 
+        ///
         /// <summary>
         /// PresetMenu に値を設定します。
         /// </summary>
-        /// 
+        ///
         /* ----------------------------------------------------------------- */
         private void Set(PresetMenu value, bool check)
         {
@@ -164,10 +164,10 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
             else _model.Preset &= ~value;
         }
 
-        #region Fields
-        private ShortcutSettings _model;
         #endregion
 
+        #region Fields
+        private ShortcutSettings _model;
         #endregion
     }
 }

@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -16,7 +16,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using System;
-using System.Linq;
+using Cube.Generics;
 using Cube.FileSystem.SevenZip.Ice;
 
 namespace Cube.FileSystem.SevenZip.App.Ice
@@ -37,11 +37,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// ExtractPresenter
-        /// 
+        ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
-        /// 
+        ///
         /// <param name="view">View オブジェクト</param>
         /// <param name="model">コマンドライン</param>
         /// <param name="settings">ユーザ設定</param>
@@ -49,19 +49,22 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         public ExtractPresenter(IProgressView view, Request model,
-            SettingsFolder settings, IEventHub events)
-            : base(view, new ExtractFacade(model, settings), settings, events)
+            SettingsFolder settings, IEventHub events) :
+            base(view, new ExtractFacade(model, settings), settings, events)
         {
+            var fs = Model.TryCast<ExtractFacade>();
+
             // View
-            View.FileName = Model.IO.Get(model.Sources.First()).Name;
+            View.FileName = Model.IO.Get(fs.Source).Name;
             View.Logo     = Properties.Resources.HeaderExtract;
             View.Status   = Properties.Resources.MessagePreExtract;
 
             // Model
-            Model.DestinationRequested += WhenDestinationRequested;
-            Model.PasswordRequested    += WhenPasswordRequested;
-            Model.OverwriteRequested   += WhenOverwriteRequested;
-            Model.Progress             += WhenProgress;
+            fs.DestinationRequested += WhenDestinationRequested;
+            fs.PasswordRequested    += WhenPasswordRequested;
+            fs.OverwriteRequested   += WhenOverwriteRequested;
+            fs.Progress             += WhenProgress;
+            fs.ProgressReset        += WhenProgressReset;
         }
 
         #endregion
@@ -71,55 +74,72 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         ///
         /// WhenDestinationRequested
-        /// 
+        ///
         /// <summary>
         /// 保存パス要求時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenDestinationRequested(object sender, PathQueryEventArgs e)
-            => ShowDialog(() => Views.ShowSaveView(e));
+        private void WhenDestinationRequested(object sender, PathQueryEventArgs e) =>
+            ShowDialog(() => Views.ShowSaveView(e));
 
         /* ----------------------------------------------------------------- */
         ///
         /// WhenPasswordRequested
-        /// 
+        ///
         /// <summary>
         /// パスワード要求時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenPasswordRequested(object sender, QueryEventArgs<string, string> e)
-            => ShowDialog(() => Views.ShowPasswordView(e, false));
+        private void WhenPasswordRequested(object sender, QueryEventArgs<string, string> e) =>
+            ShowDialog(() => Views.ShowPasswordView(e, false));
 
         /* ----------------------------------------------------------------- */
         ///
         /// WhenOverwriteRequested
-        /// 
+        ///
         /// <summary>
         /// 上書き確認時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenOverwriteRequested(object sender, OverwriteEventArgs e)
-            => ShowDialog(() => Views.ShowOverwriteView(e));
+        private void WhenOverwriteRequested(object sender, OverwriteEventArgs e) =>
+            ShowDialog(() => Views.ShowOverwriteView(e));
 
         /* ----------------------------------------------------------------- */
         ///
         /// WhenProgress
-        /// 
+        ///
         /// <summary>
         /// 進捗状況の更新時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenProgress(object sender, ValueEventArgs<ArchiveReport> e)
-            => Sync(() =>
+        private void WhenProgress(object sender, ValueEventArgs<ArchiveReport> e) => Sync(() =>
         {
-            View.TotalCount = e.Value.TotalCount;
-            View.Count      = e.Value.Count;
             View.Status     = Model.Current;
             View.Value      = Math.Max(Math.Max((int)(e.Value.Ratio * View.Unit), 1), View.Value);
+            View.Count      = e.Value.Count;
+            View.TotalCount = e.Value.TotalCount;
+        });
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenProgressReset
+        ///
+        /// <summary>
+        /// 進捗状況のリセット時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenProgressReset(object sender, EventArgs e) => Sync(() =>
+        {
+            View.FileName   = Model.IO.Get(Model.TryCast<ExtractFacade>().Source).Name;
+            View.Status     = Properties.Resources.MessagePreExtract;
+            View.Value      = 0;
+            View.Count      = 0;
+            View.TotalCount = 0;
         });
 
         #endregion
