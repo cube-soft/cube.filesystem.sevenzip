@@ -437,8 +437,10 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         private void WhenFormatChanged(object sender, EventArgs e)
         {
             UpdateCompressionMethod();
-            EncryptionMethodComboBox.Enabled &= (Format == Format.Zip);
-            EncryptionGroupBox.Enabled = ViewResource.IsEncryptionSupported(Format);
+
+            var enabled = ViewResource.IsEncryptionSupported(Format);
+            EncryptionGroupBox.Enabled = enabled;
+            if (enabled) WhenEncryptionChanged(sender, e);
         }
 
         /* ----------------------------------------------------------------- */
