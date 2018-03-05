@@ -12,10 +12,11 @@ The Cube.FileSystem.SevenZip project (files in the Libraries directory) is licen
 Note that ArchiveWriter and ArchiveReader classes need to execute in the same thread from constructing to destroying.
 Use Task.Run() in the whole transaction if you need to archive or extract files asynchronously.
 
-```cs
-using Cube.FileSystem.SevenZip;
+### Example for archiving files
 
-// 1-1. Example for archiving files.
+The simplest example for archiving files is as follows.
+
+```cs
 using (var writer = new ArchiveWriter(Format.Zip))
 {
     writer.Option = new ZipOption(); // optional
@@ -23,8 +24,13 @@ using (var writer = new ArchiveWriter(Format.Zip))
     writer.Add(@"path\to\directory_including_files");
     writer.Save(@"path\to\save.zip", "password");
 }
+```
 
-// 1-2. Example for archiving files to *.tar.*
+You create an ArchiveWriter object with an archiving format (e.g. Zip, SevenZip, ...), 
+add files and/or directories you want to archive, and finally call the Save method.
+When you create Tar based archives, you can use a TarOption object for selecting a compression method.
+
+```cs
 using (var writer = new ArchiveWriter(Format.Tar))
 {
     writer.Option = new TarOption
@@ -37,16 +43,28 @@ using (var writer = new ArchiveWriter(Format.Tar))
     writer.Add(@"path\to\directory_including_files");
     writer.Save(@"path\to\save.tar.gz");
 }
+```
 
-// 2-1. Example for extracting all files.
+### Example for extracting archives
+
+If you want to extract all files from the archive, you create an ArchiveReader object
+and call the Extract method. The 2nd argument of the constructor, that means the
+password of the archive, can be set string or Cube.Query<string, string> object.
+The latter is mainly used for implementing the interactive mode.
+
+```cs
 // Set password directly or using Query<string, string>
 var password = new Cube.Query<string, string>(e => e.Result = "password");
 using (var reader = new ArchiveReader(@"path\to\archive", password))
 {
     reader.Extract(@"path\to\directory");
 }
+```
 
-// 2-2. Example for extracting some files.
+ArchvieReader.Items property can access the each item of the archive.
+If you want to extract only the specific files, write as follows.
+
+```cs
 using (var reader = new ArchiveReader(@"path\to\archive", "password"))
 {
     var directory = @"path\to\directory";

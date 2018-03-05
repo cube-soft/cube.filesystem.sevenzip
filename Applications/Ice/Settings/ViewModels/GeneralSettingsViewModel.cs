@@ -28,8 +28,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class GeneralSettingsViewModel<TModel> : ObservableProperty
-        where TModel : GeneralSettings
+    public class GeneralSettingsViewModel<T> : ObservableProperty where T : GeneralSettings
     {
         #region Constructors
 
@@ -44,7 +43,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /// <param name="model">Model オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public GeneralSettingsViewModel(TModel model)
+        public GeneralSettingsViewModel(T model)
         {
             Model = model;
             Model.PropertyChanged += (s, e) => OnPropertyChanged(e);
@@ -179,7 +178,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected TModel Model { get; }
+        protected T Model { get; }
 
         #endregion
 
