@@ -15,6 +15,7 @@ Use Task.Run() in the whole transaction if you need to archive or extract files 
 ### Example for archiving files
 
 The simplest example for archiving files is as follows.
+Note that all the samples need the "using Cube.FileSystem.SevenZip;" statement.
 
 ```cs
 using (var writer = new ArchiveWriter(Format.Zip))
