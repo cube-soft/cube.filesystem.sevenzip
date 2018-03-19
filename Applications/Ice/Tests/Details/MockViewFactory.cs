@@ -15,9 +15,9 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.Threading;
 using Cube.FileSystem.SevenZip.Ice;
 using NUnit.Framework;
+using System.Threading;
 
 namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 {
@@ -227,7 +227,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         public override void ShowExplorerView(KeyValueEventArgs<string, string> e)
         {
-            Assert.That(e.Key, Is.EqualTo("explorer.exe"));
+            Assert.That(e.Key, Is.Not.Null.And.Not.Empty);
             Assert.That(System.IO.Directory.Exists(e.Value), Is.True);
         }
 
