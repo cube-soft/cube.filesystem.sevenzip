@@ -41,9 +41,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.IconPictureBox)).BeginInit();
             this.ButtonsPanel.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // RootPanel
-            // 
+            //
             this.RootPanel.ColumnCount = 2;
             this.RootPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
             this.RootPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -62,9 +62,9 @@
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.RootPanel.Size = new System.Drawing.Size(384, 151);
             this.RootPanel.TabIndex = 0;
-            // 
+            //
             // IconPictureBox
-            // 
+            //
             this.IconPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.IconPictureBox.Location = new System.Drawing.Point(3, 3);
             this.IconPictureBox.Name = "IconPictureBox";
@@ -73,9 +73,9 @@
             this.IconPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.IconPictureBox.TabIndex = 0;
             this.IconPictureBox.TabStop = false;
-            // 
+            //
             // DescriptionLabel
-            // 
+            //
             this.DescriptionLabel.AutoSize = true;
             this.DescriptionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DescriptionLabel.Location = new System.Drawing.Point(83, 0);
@@ -85,9 +85,9 @@
             this.DescriptionLabel.TabIndex = 1;
             this.DescriptionLabel.Text = "パスワードを入力して下さい。";
             this.DescriptionLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            // 
+            //
             // PasswordTextBox
-            // 
+            //
             this.PasswordTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PasswordTextBox.Location = new System.Drawing.Point(83, 43);
             this.PasswordTextBox.Margin = new System.Windows.Forms.Padding(3, 3, 20, 3);
@@ -95,9 +95,9 @@
             this.PasswordTextBox.Size = new System.Drawing.Size(281, 23);
             this.PasswordTextBox.TabIndex = 2;
             this.PasswordTextBox.UseSystemPasswordChar = true;
-            // 
+            //
             // VisibleCheckBox
-            // 
+            //
             this.VisibleCheckBox.AutoSize = true;
             this.VisibleCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.VisibleCheckBox.Location = new System.Drawing.Point(83, 72);
@@ -106,9 +106,9 @@
             this.VisibleCheckBox.TabIndex = 3;
             this.VisibleCheckBox.Text = "パスワードを表示する";
             this.VisibleCheckBox.UseVisualStyleBackColor = true;
-            // 
+            //
             // ButtonsPanel
-            // 
+            //
             this.RootPanel.SetColumnSpan(this.ButtonsPanel, 2);
             this.ButtonsPanel.Controls.Add(this.ExitButton);
             this.ButtonsPanel.Controls.Add(this.ExecButton);
@@ -118,9 +118,9 @@
             this.ButtonsPanel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.ButtonsPanel.Size = new System.Drawing.Size(378, 50);
             this.ButtonsPanel.TabIndex = 4;
-            // 
+            //
             // ExitButton
-            // 
+            //
             this.ExitButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.ExitButton.Location = new System.Drawing.Point(258, 12);
             this.ExitButton.Margin = new System.Windows.Forms.Padding(20, 12, 6, 0);
@@ -129,9 +129,9 @@
             this.ExitButton.TabIndex = 0;
             this.ExitButton.Text = "キャンセル";
             this.ExitButton.UseVisualStyleBackColor = true;
-            // 
+            //
             // ExecButton
-            // 
+            //
             this.ExecButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.ExecButton.Enabled = false;
             this.ExecButton.Location = new System.Drawing.Point(146, 12);
@@ -141,9 +141,9 @@
             this.ExecButton.TabIndex = 1;
             this.ExecButton.Text = "OK";
             this.ExecButton.UseVisualStyleBackColor = true;
-            // 
+            //
             // PasswordForm
-            // 
+            //
             this.AcceptButton = this.ExecButton;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(384, 151);

@@ -15,10 +15,10 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Forms.Behaviors;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace Cube.FileSystem.SevenZip.App.Ice
@@ -49,27 +49,26 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         {
             InitializeComponent();
 
+            _password = new PasswordBehavior(PasswordTextBox, ConfirmTextBox, ShowPasswordCheckBox);
+            _password.Updated += (s, e) => UpdateEncryptionCondition();
+
             UpdateThreadCount();
             UpdateFormat();
             UpdateCompressionLevel();
             UpdateCompressionMethod();
             UpdateEncryptionMethod();
+            UpdateEncryptionCondition();
 
-            EncryptionMethodComboBox.Enabled = false;
             ExecuteButton.Enabled = false;
 
             ExecuteButton.Click += (s, e) => Close();
-            ExitButton.Click    += (s, e) => Close();
+            ExitButton.Click += (s, e) => Close();
+            EncryptionCheckBox.CheckedChanged += (s, e) => UpdateEncryptionCondition();
 
             OutputButton.Click                             += WhenPathRequested;
             OutputTextBox.TextChanged                      += WhenPathChanged;
             FormatComboBox.SelectedValueChanged            += WhenFormatChanged;
             CompressionMethodComboBox.SelectedValueChanged += WhenCompressionMethodChanged;
-            EncryptionCheckBox.CheckedChanged              += WhenEncryptionChanged;
-            PasswordTextBox.TextChanged                    += WhenPasswordChanged;
-            ConfirmTextBox.TextChanged                     += WhenConfirmChanged;
-            ConfirmTextBox.EnabledChanged                  += WhenConfirmEnabledChanged;
-            ShowPasswordCheckBox.CheckedChanged            += WhenShowPasswordChanged;
         }
 
         #endregion
@@ -169,13 +168,13 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         public string Password =>
-            EncryptionCheckBox.Checked ?
+            EncryptionGroupBox.Enabled && EncryptionPanel.Enabled ?
             PasswordTextBox.Text :
             null;
 
         /* ----------------------------------------------------------------- */
         ///
-        /// PathIsValid
+        /// IsValidPath
         ///
         /// <summary>
         /// パス設定が正しいかどうかを取得または設定します。
@@ -184,20 +183,20 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        private bool PathIsValid
+        private bool IsValidPath
         {
             get => _path;
             set
             {
                 if (_path == value) return;
                 _path = value;
-                ExecuteButton.Enabled = value & EncryptionIsValid;
+                ExecuteButton.Enabled = value & IsValidEncryption;
             }
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// EncryptionIsValid
+        /// IsValidEncryption
         ///
         /// <summary>
         /// 暗号化設定が正しいかどうかを取得または設定します。
@@ -206,14 +205,14 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        private bool EncryptionIsValid
+        private bool IsValidEncryption
         {
             get => _encryption;
             set
             {
                 if (_encryption == value) return;
                 _encryption = value;
-                ExecuteButton.Enabled = value & PathIsValid;
+                ExecuteButton.Enabled = value & IsValidPath;
             }
         }
 
@@ -289,6 +288,25 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// UpdateEncryptionCondition
+        ///
+        /// <summary>
+        /// 暗号化設定に関する状態を更新します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void UpdateEncryptionCondition()
+        {
+            EncryptionGroupBox.Enabled       = ViewResource.IsEncryptionSupported(Format);
+            EncryptionPanel.Enabled          = EncryptionCheckBox.Checked;
+            EncryptionMethodComboBox.Enabled = (Format == Format.Zip);
+            IsValidEncryption                = !EncryptionGroupBox.Enabled ||
+                                               !EncryptionPanel.Enabled ||
+                                               _password.IsValid;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// UpdateThreadCount
         ///
         /// <summary>
@@ -323,77 +341,20 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
         #endregion
 
-        #region Password gimmick
-
         /* ----------------------------------------------------------------- */
         ///
-        /// WhenPasswordChanged
+        /// WhenFormatChanged
         ///
         /// <summary>
-        /// パスワード入力が変更された時に実行されるハンドラです。
+        /// Format 変更時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenPasswordChanged(object sender, EventArgs e)
+        private void WhenFormatChanged(object sender, EventArgs e)
         {
-            if (ShowPasswordCheckBox.Checked) EncryptionIsValid = PasswordTextBox.TextLength > 0;
-            else ConfirmTextBox.Text = string.Empty;
+            UpdateCompressionMethod();
+            UpdateEncryptionCondition();
         }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenConfirmChanged
-        ///
-        /// <summary>
-        /// 確認項目のテキストが変更された時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenConfirmChanged(object sender, EventArgs e)
-        {
-            if (!ConfirmTextBox.Enabled) return;
-
-            var eq = PasswordTextBox.Text.Equals(ConfirmTextBox.Text);
-            EncryptionIsValid = eq && PasswordTextBox.TextLength > 0;
-            ConfirmTextBox.BackColor = eq || ConfirmTextBox.TextLength <= 0 ?
-                                       SystemColors.Window :
-                                       Color.FromArgb(255, 102, 102);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenConfirmEnabledChanged
-        ///
-        /// <summary>
-        /// 確認項目の Enabled が変更された時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenConfirmEnabledChanged(object sender, EventArgs e) =>
-            ConfirmTextBox.BackColor = ConfirmTextBox.Enabled ?
-                                       SystemColors.Window :
-                                       SystemColors.Control;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenShowPasswordChanged
-        ///
-        /// <summary>
-        /// パスワードを表示の状態が変更された時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenShowPasswordChanged(object sender, EventArgs e)
-        {
-            var show = ShowPasswordCheckBox.Checked;
-
-            PasswordTextBox.UseSystemPasswordChar = !show;
-            ConfirmTextBox.Enabled = !show;
-            ConfirmTextBox.Text = string.Empty;
-            EncryptionIsValid = show & (PasswordTextBox.TextLength > 0);
-        }
-
-        #endregion
 
         /* ----------------------------------------------------------------- */
         ///
@@ -423,25 +384,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         private void WhenPathChanged(object sender, EventArgs e) =>
-            PathIsValid = OutputTextBox.TextLength > 0;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenFormatChanged
-        ///
-        /// <summary>
-        /// Format 変更時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenFormatChanged(object sender, EventArgs e)
-        {
-            UpdateCompressionMethod();
-
-            var enabled = ViewResource.IsEncryptionSupported(Format);
-            EncryptionGroupBox.Enabled = enabled;
-            if (enabled) WhenEncryptionChanged(sender, e);
-        }
+            IsValidPath = OutputTextBox.TextLength > 0;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -455,33 +398,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         private void WhenCompressionMethodChanged(object sender, EventArgs e) =>
             Path = new PathConverter(Path, Format, CompressionMethod).Result.FullName;
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenEncryptionChanged
-        ///
-        /// <summary>
-        /// 暗号化の有効/無効状態が変化した時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenEncryptionChanged(object sender, EventArgs e)
-        {
-            var enabled = EncryptionCheckBox.Checked;
-
-            PasswordTextBox.Enabled          =
-            ConfirmTextBox.Enabled           =
-            ShowPasswordCheckBox.Enabled     = enabled;
-            EncryptionMethodComboBox.Enabled = enabled & (Format == Format.Zip);
-
-            if (!enabled) ExecuteButton.Enabled = true;
-            else WhenShowPasswordChanged(sender, e);
-        }
-
         #endregion
 
         #region Fields
         private bool _path = false;
         private bool _encryption = true;
+        private PasswordBehavior _password;
         #endregion
     }
 }
