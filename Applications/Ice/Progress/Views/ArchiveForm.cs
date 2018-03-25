@@ -231,12 +231,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void UpdateFormat()
-        {
-            Update(FormatComboBox, ViewResource.Formats);
-            if (!FormatComboBox.Enabled) return;
-            FormatComboBox.SelectedValue = Format.Zip;
-        }
+        private void UpdateFormat() =>
+            Update(FormatComboBox, ViewResource.Formats, 0);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -247,12 +243,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void UpdateCompressionLevel()
-        {
-            Update(CompressionLevelComboBox, ViewResource.CompressionLevels);
-            if (!CompressionLevelComboBox.Enabled) return;
-            CompressionLevelComboBox.SelectedValue = CompressionLevel.Ultra;
-        }
+        private void UpdateCompressionLevel() =>
+            Update(CompressionLevelComboBox, ViewResource.CompressionLevels, 5);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -263,12 +255,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void UpdateCompressionMethod()
-        {
-            Update(CompressionMethodComboBox, ViewResource.GetCompressionMethod(Format));
-            if (!CompressionMethodComboBox.Enabled) return;
-            CompressionMethodComboBox.SelectedIndex = 0;
-        }
+        private void UpdateCompressionMethod() =>
+            Update(CompressionMethodComboBox, ViewResource.GetCompressionMethod(Format), 0);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -279,12 +267,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void UpdateEncryptionMethod()
-        {
-            Update(EncryptionMethodComboBox, ViewResource.EncryptionMethods);
-            if (!EncryptionMethodComboBox.Enabled) return;
-            EncryptionMethodComboBox.SelectedIndex = 0;
-        }
+        private void UpdateEncryptionMethod() =>
+            Update(EncryptionMethodComboBox, ViewResource.EncryptionMethods, 0);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -331,12 +315,13 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Update<T>(ComboBox src, IList<KeyValuePair<string, T>> data)
+        private void Update<T>(ComboBox src, IList<KeyValuePair<string, T>> data, int index)
         {
             src.Enabled       = (data != null);
             src.DataSource    = data;
             src.DisplayMember = "Key";
             src.ValueMember   = "Value";
+            if (src.Enabled) src.SelectedIndex = index;
         }
 
         #endregion
