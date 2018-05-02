@@ -15,11 +15,11 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.FileSystem.SevenZip.Ice;
+using Cube.Log;
 using System;
 using System.Reflection;
 using System.Windows.Forms;
-using Cube.FileSystem.SevenZip.Ice;
-using Cube.Log;
 
 namespace Cube.FileSystem.SevenZip.App.Ice.Settings
 {
@@ -50,9 +50,9 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
 
             try
             {
-                LogOperator.Configure();
-                LogOperator.ObserveTaskException();
-                LogOperator.Info(type, Assembly.GetExecutingAssembly());
+                Logger.Configure();
+                Logger.ObserveTaskException();
+                Logger.Info(type, Assembly.GetExecutingAssembly());
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
@@ -61,7 +61,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
                 model.Load();
 
                 var install = args.Length > 0 && args[0] == "/install";
-                if (install) LogOperator.Info(type, "InstallMode");
+                if (install) Logger.Info(type, "InstallMode");
 
                 var vm = new SettingsViewModel(model) { InstallMode = install };
                 if (!install) vm.Sync();
@@ -71,7 +71,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
 
                 Application.Run(view);
             }
-            catch (Exception err) { LogOperator.Error(type, err.ToString()); }
+            catch (Exception err) { Logger.Error(type, err.ToString()); }
         }
     }
 }

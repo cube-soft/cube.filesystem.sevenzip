@@ -46,7 +46,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="io">入出力用のオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected ArchivePasswordCallback(string src, Operator io) : base(io)
+        protected ArchivePasswordCallback(string src, IO io) : base(io)
         {
             Source = src;
         }

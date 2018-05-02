@@ -51,7 +51,7 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public ReadOnlyArchiveList(IInArchive archive, Format format,
-            string src, IQuery<string, string> password, Operator io)
+            string src, IQuery<string, string> password, IO io)
         {
             Format   = format;
             Source   = src;
@@ -162,7 +162,7 @@ namespace Cube.FileSystem.SevenZip
 
         #region Fields
         private IInArchive _archive;
-        private Operator _io;
+        private IO _io;
         #endregion
     }
 }

@@ -16,10 +16,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Log;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using Cube.Log;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -50,7 +50,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="io">入出力用のオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveOpenCallback(string src, ArchiveStreamReader stream, Operator io)
+        public ArchiveOpenCallback(string src, ArchiveStreamReader stream, IO io)
             : base(src, io)
         {
             _dispose = new OnceAction<bool>(Dispose);

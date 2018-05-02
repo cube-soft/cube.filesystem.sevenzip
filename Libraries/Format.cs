@@ -468,7 +468,7 @@ namespace Cube.FileSystem.SevenZip
         /// <returns>Format オブジェクト</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static Format FromFile(string path) => FromFile(path, new Operator());
+        public static Format FromFile(string path) => FromFile(path, new IO());
 
         /* ----------------------------------------------------------------- */
         ///
@@ -484,7 +484,7 @@ namespace Cube.FileSystem.SevenZip
         /// <returns>Format オブジェクト</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static Format FromFile(string path, Operator io)
+        public static Format FromFile(string path, IO io)
         {
             var info = io.Get(path);
 

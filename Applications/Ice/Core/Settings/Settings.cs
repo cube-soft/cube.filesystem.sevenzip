@@ -18,7 +18,6 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Cube.Settings;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -287,7 +286,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public SettingsFolder() : this(SettingsType.Registry, @"Software\CubeSoft\CubeICE\v3") { }
+        public SettingsFolder() : this(
+            Cube.DataContract.Format.Registry,
+            @"Software\CubeSoft\CubeICE\v3"
+        ) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -297,11 +299,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// オブジェクトを初期化します。
         /// </summary>
         ///
-        /// <param name="type">設定情報の保存方法</param>
+        /// <param name="format">設定情報の保存方法</param>
         /// <param name="path">設定情報の保存パス</param>
         ///
         /* ----------------------------------------------------------------- */
-        public SettingsFolder(SettingsType type, string path) : base(type, path)
+        public SettingsFolder(Cube.DataContract.Format format, string path) : base(format, path)
         {
             AutoSave       = false;
             Version.Digit  = 3;
@@ -325,7 +327,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected override void OnSaved(KeyValueEventArgs<SettingsType, string> e)
+        protected override void OnSaved(KeyValueEventArgs<Cube.DataContract.Format, string> e)
         {
             if (Value != null) Startup.Enabled = Value.CheckUpdate;
             base.OnSaved(e);

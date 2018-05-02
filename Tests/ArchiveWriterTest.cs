@@ -16,10 +16,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
 
 namespace Cube.FileSystem.SevenZip.Tests
 {
@@ -209,7 +209,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             var dir    = Result("Ignore");
             var ignore = IO.Combine(dir, "Sample.txt");
 
-            var io = new Operator();
+            var io = new IO();
             io.Failed += (s, e) => e.Cancel = true;
             io.Copy(Example("Sample.txt"), ignore);
 

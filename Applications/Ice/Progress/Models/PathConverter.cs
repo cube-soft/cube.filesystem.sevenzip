@@ -42,7 +42,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// <param name="src">元ファイルのパス</param>
         ///
         /* ----------------------------------------------------------------- */
-        public PathConverter(string src, Format format) : this(src, format, new Operator()) { }
+        public PathConverter(string src, Format format) : this(src, format, new IO()) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -57,7 +57,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// <param name="io">入出力用のオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public PathConverter(string src, Format format, Operator io) :
+        public PathConverter(string src, Format format, IO io) :
             this(src, format, CompressionMethod.Default, io) { }
 
         /* ----------------------------------------------------------------- */
@@ -74,7 +74,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         ///
         /* ----------------------------------------------------------------- */
         public PathConverter(string src, Format format, CompressionMethod method) :
-            this(src, format, method, new Operator()) { }
+            this(src, format, method, new IO()) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -90,7 +90,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// <param name="io">入出力用のオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public PathConverter(string src, Format format, CompressionMethod method, Operator io)
+        public PathConverter(string src, Format format, CompressionMethod method, IO io)
         {
             Source = src;
             Format = format;
@@ -144,7 +144,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Operator IO { get; }
+        public IO IO { get; }
 
         /* ----------------------------------------------------------------- */
         ///

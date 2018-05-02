@@ -42,7 +42,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected MockViewHelper() : this(new Operator()) { }
+        protected MockViewHelper() : this(new IO()) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -55,7 +55,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// <param name="io">ファイル操作用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected MockViewHelper(Operator io)
+        protected MockViewHelper(IO io)
         {
             IO = io;
             Root = IO.Get(Assembly.GetExecutingAssembly().Location).DirectoryName;
@@ -95,7 +95,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected Operator IO { get; }
+        protected IO IO { get; }
 
         /* ----------------------------------------------------------------- */
         ///

@@ -15,13 +15,13 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.FileSystem.SevenZip.Ice;
+using Cube.Log;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using Cube.FileSystem.SevenZip.Ice;
-using Cube.Log;
 
 namespace Cube.FileSystem.SevenZip.App.Ice
 {
@@ -55,7 +55,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             _dispose = new OnceAction<bool>(Dispose);
             Request  = request;
             Settings = settings;
-            IO       = new AfsOperator();
+            IO       = new AfsIO();
 
             IO.Failed += WhenFailed;
             _timer.Elapsed += (s, e) => OnProgress(ValueEventArgs.Create(Report));
@@ -184,7 +184,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Operator IO { get; }
+        public IO IO { get; }
 
         #endregion
 

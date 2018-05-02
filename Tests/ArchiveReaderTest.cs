@@ -16,12 +16,12 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.FileSystem.SevenZip.Archives;
+using Microsoft.VisualBasic.FileIO;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualBasic.FileIO;
-using Cube.FileSystem.SevenZip.Archives;
-using NUnit.Framework;
 
 namespace Cube.FileSystem.SevenZip.Tests
 {
@@ -252,7 +252,7 @@ namespace Cube.FileSystem.SevenZip.Tests
 
             IO.Copy(Example("Sample.txt"), dest);
 
-            var io = new Operator();
+            var io = new IO();
             io.Failed += (s, e) => throw new OperationCanceledException();
 
             using (var _ = io.OpenRead(dest))

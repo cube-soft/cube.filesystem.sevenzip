@@ -16,9 +16,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-using System.Reflection;
 using Cube.Log;
 using NUnit.Framework;
+using System.Reflection;
 
 namespace Cube.FileSystem.SevenZip.Tests
 {
@@ -46,8 +46,8 @@ namespace Cube.FileSystem.SevenZip.Tests
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
-            LogOperator.Configure();
-            LogOperator.Info(typeof(GlobalSetup), Assembly.GetExecutingAssembly());
+            Logger.Configure();
+            Logger.Info(typeof(GlobalSetup), Assembly.GetExecutingAssembly());
         }
     }
 }

@@ -15,13 +15,12 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.FileSystem.SevenZip.App.Ice.Settings;
+using Cube.FileSystem.SevenZip.Ice;
+using Microsoft.Win32;
+using NUnit.Framework;
 using System;
 using System.Linq;
-using Microsoft.Win32;
-using Cube.FileSystem.SevenZip.Ice;
-using Cube.FileSystem.SevenZip.App.Ice.Settings;
-using Cube.Settings;
-using NUnit.Framework;
 
 namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 {
@@ -629,7 +628,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         private SettingsFolder Create() => new SettingsFolder(
-            SettingsType.Registry,
+            Cube.DataContract.Format.Registry,
             $@"Software\{SubKeyName}"
         ) { AutoSave = false };
 

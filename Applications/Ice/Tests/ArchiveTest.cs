@@ -15,12 +15,12 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.FileSystem.SevenZip.Ice;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Cube.FileSystem.SevenZip.Ice;
-using NUnit.Framework;
 
 namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 {
@@ -389,7 +389,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         private static string FullName(string path)
         {
-            var io   = new Operator();
+            var io   = new IO();
             var asm  = Assembly.GetExecutingAssembly().Location;
             var root = io.Get(asm).DirectoryName;
             var dir  = typeof(ArchiveTest).FullName;

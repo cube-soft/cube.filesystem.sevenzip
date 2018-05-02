@@ -16,11 +16,11 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.FileSystem.SevenZip.Archives;
+using Cube.Log;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Cube.FileSystem.SevenZip.Archives;
-using Cube.Log;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -52,7 +52,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="io">ファイル操作用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveExtractCallback(string src, string dest, IEnumerable<ArchiveItem> items, Operator io)
+        public ArchiveExtractCallback(string src, string dest, IEnumerable<ArchiveItem> items, IO io)
             : base(src, io)
         {
             _dispose     = new OnceAction<bool>(Dispose);

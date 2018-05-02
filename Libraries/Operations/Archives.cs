@@ -50,7 +50,7 @@ namespace Cube.FileSystem.SevenZip.Archives
         ///
         /* ----------------------------------------------------------------- */
         public static void CreateDirectory(this ArchiveItem item, string root) =>
-            CreateDirectory(item, root, new Operator());
+            CreateDirectory(item, root, new IO());
 
         /* ----------------------------------------------------------------- */
         ///
@@ -69,7 +69,7 @@ namespace Cube.FileSystem.SevenZip.Archives
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public static void CreateDirectory(this ArchiveItem item, string root, Operator io)
+        public static void CreateDirectory(this ArchiveItem item, string root, IO io)
         {
             if (!item.IsDirectory) return;
             var path = io.Combine(root, item.FullName);
@@ -92,7 +92,7 @@ namespace Cube.FileSystem.SevenZip.Archives
         ///
         /* ----------------------------------------------------------------- */
         public static void SetAttributes(this ArchiveItem item, string root) =>
-            SetAttributes(item, root, new Operator());
+            SetAttributes(item, root, new IO());
 
         /* ----------------------------------------------------------------- */
         ///
@@ -109,7 +109,7 @@ namespace Cube.FileSystem.SevenZip.Archives
         /// <param name="io">ファイル操作用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void SetAttributes(this ArchiveItem item, string root, Operator io)
+        public static void SetAttributes(this ArchiveItem item, string root, IO io)
         {
             var path = io.Combine(root, item.FullName);
             if (!io.Exists(path)) return;
@@ -133,7 +133,7 @@ namespace Cube.FileSystem.SevenZip.Archives
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static void SetCreationTime(this ArchiveItem item, string path, Operator io)
+        private static void SetCreationTime(this ArchiveItem item, string path, IO io)
         {
             var time = item.CreationTime  != DateTime.MinValue ? item.CreationTime :
                        item.LastWriteTime != DateTime.MinValue ? item.LastWriteTime :
@@ -150,7 +150,7 @@ namespace Cube.FileSystem.SevenZip.Archives
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static void SetLastWriteTime(this ArchiveItem item, string path, Operator io)
+        private static void SetLastWriteTime(this ArchiveItem item, string path, IO io)
         {
             var time = item.LastWriteTime  != DateTime.MinValue ? item.LastWriteTime :
                        item.LastAccessTime != DateTime.MinValue ? item.LastAccessTime :
@@ -167,7 +167,7 @@ namespace Cube.FileSystem.SevenZip.Archives
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static void SetLastAccessTime(this ArchiveItem item, string path, Operator io)
+        private static void SetLastAccessTime(this ArchiveItem item, string path, IO io)
         {
             var time = item.LastAccessTime != DateTime.MinValue ? item.LastAccessTime :
                        item.LastWriteTime  != DateTime.MinValue ? item.LastWriteTime :
