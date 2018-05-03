@@ -90,6 +90,7 @@ STDAPI DllCanUnloadNow()
 ///
 /* ------------------------------------------------------------------------- */
 STDAPI DllGetClassObject(REFCLSID clsid, REFIID iid, LPVOID *obj) {
+    *obj = nullptr;
     if (IsEqualCLSID(clsid, CUBEICE_INFOTIP_CLSID)) {
         auto info = new Cube::FileSystem::Ice::QueryInfoFactory(kInstance, kReferenceCount);
         if (!info) return E_OUTOFMEMORY;
@@ -98,7 +99,5 @@ STDAPI DllGetClassObject(REFCLSID clsid, REFIID iid, LPVOID *obj) {
         info->Release();
         return result;
     }
-    else obj = nullptr;
-
     return CLASS_E_CLASSNOTAVAILABLE;
 }

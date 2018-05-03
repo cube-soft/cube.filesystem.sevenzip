@@ -32,6 +32,24 @@ namespace Cube.FileSystem.SevenZip.Ice
     /* --------------------------------------------------------------------- */
     public class ShortcutSettings : ObservableProperty
     {
+        #region Constructors
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ShortcutSettings
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ShortcutSettings()
+        {
+            Reset();
+        }
+
+        #endregion
+
         #region Properties
 
         /* ----------------------------------------------------------------- */
@@ -115,6 +133,32 @@ namespace Cube.FileSystem.SevenZip.Ice
         #endregion
 
         #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OnDeserializing
+        ///
+        /// <summary>
+        /// デシリアライズ直前に実行されます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [OnDeserializing]
+        private void OnDeserializing(StreamingContext context) => Reset();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Reset
+        ///
+        /// <summary>
+        /// 設定をリセットします。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Reset()
+        {
+            _preset = PresetMenu.DefaultDesktop;
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -222,7 +266,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         #endregion
 
         #region Fields
-        private PresetMenu _preset = PresetMenu.DefaultDesktop;
+        private PresetMenu _preset;
         #endregion
     }
 }

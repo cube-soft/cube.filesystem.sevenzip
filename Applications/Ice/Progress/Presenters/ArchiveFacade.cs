@@ -63,7 +63,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveDetails Details { get; private set; }
+        public ArchiveRuntimeSettings Details { get; private set; }
 
         #endregion
 
@@ -80,7 +80,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public event QueryEventHandler<string, ArchiveDetails> DetailsRequested;
+        public event QueryEventHandler<string, ArchiveRuntimeSettings> DetailsRequested;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -96,7 +96,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             var info = IO.Get(Request.Sources.First());
             var path = IO.Combine(info.DirectoryName, $"{info.NameWithoutExtension}.zip");
 
-            var e = new QueryEventArgs<string, ArchiveDetails>(path, true);
+            var e = new QueryEventArgs<string, ArchiveRuntimeSettings>(path, true);
             DetailsRequested?.Invoke(this, e);
             if (e.Cancel) throw new OperationCanceledException();
 
@@ -220,12 +220,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice
                 case Format.Zip:
                 case Format.SevenZip:
                 case Format.Sfx:
-                    Details = new ArchiveDetails(f);
+                    Details = new ArchiveRuntimeSettings(f);
                     break;
                 case Format.BZip2:
                 case Format.GZip:
                 case Format.XZ:
-                    Details = new ArchiveDetails(Format.Tar);
+                    Details = new ArchiveRuntimeSettings(Format.Tar);
                     Details.CompressionMethod = f.ToMethod();
                     break;
                 default:

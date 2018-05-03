@@ -31,6 +31,24 @@ namespace Cube.FileSystem.SevenZip.Ice
     [DataContract]
     public class ContextSettings : ObservableProperty
     {
+        #region Constructors
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ContextSettings
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ContextSettings()
+        {
+            Reset();
+        }
+
+        #endregion
+
         #region Properties
 
         /* ----------------------------------------------------------------- */
@@ -52,8 +70,38 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         #endregion
 
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OnDeserializing
+        ///
+        /// <summary>
+        /// デシリアライズ直前に実行されます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [OnDeserializing]
+        private void OnDeserializing(StreamingContext context) => Reset();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Reset
+        ///
+        /// <summary>
+        /// 設定をリセットします。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Reset()
+        {
+            _preset = PresetMenu.DefaultContext;
+        }
+
+        #endregion
+
         #region Fields
-        private PresetMenu _preset = PresetMenu.DefaultContext;
+        private PresetMenu _preset;
         #endregion
     }
 }

@@ -40,7 +40,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveSettings() : base() { }
+        public ArchiveSettings()
+        {
+            Reset();
+        }
 
         #region Properties
 
@@ -81,9 +84,30 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         #endregion
 
+        #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Reset
+        ///
+        /// <summary>
+        /// 設定をリセットします。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected override void Reset()
+        {
+            _useUtf8         = false;
+            _overwritePrompt = true;
+
+            base.Reset();
+        }
+
+        #endregion
+
         #region Fields
-        private bool _useUtf8 = false;
-        private bool _overwritePrompt = true;
+        private bool _useUtf8;
+        private bool _overwritePrompt;
         #endregion
     }
 }

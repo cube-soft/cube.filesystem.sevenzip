@@ -29,8 +29,26 @@ namespace Cube.FileSystem.SevenZip.Ice
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public class GeneralSettings : ObservableProperty
+    public abstract class GeneralSettings : ObservableProperty
     {
+        #region Constructors
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GeneralSettings
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected GeneralSettings()
+        {
+            Reset();
+        }
+
+        #endregion
+
         #region Properties
 
         /* ----------------------------------------------------------------- */
@@ -105,11 +123,44 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         #endregion
 
+        #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OnDeserializing
+        ///
+        /// <summary>
+        /// デシリアライズ直前に実行されます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [OnDeserializing]
+        protected void OnDeserializing(StreamingContext context) => Reset();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Reset
+        ///
+        /// <summary>
+        /// 設定をリセットします。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected virtual void Reset()
+        {
+            _saveLocation      = SaveLocation.Others;
+            _saveDirectoryName = string.Empty;
+            _filtering         = true;
+            _openDirectory     = OpenDirectoryMethod.OpenNotDesktop;
+        }
+
+        #endregion
+
         #region Fields
-        private SaveLocation _saveLocation = SaveLocation.Others;
-        private string _saveDirectoryName = string.Empty;
-        private bool _filtering = true;
-        private OpenDirectoryMethod _openDirectory = OpenDirectoryMethod.OpenNotDesktop;
+        private SaveLocation _saveLocation;
+        private string _saveDirectoryName;
+        private bool _filtering;
+        private OpenDirectoryMethod _openDirectory;
         #endregion
     }
 }

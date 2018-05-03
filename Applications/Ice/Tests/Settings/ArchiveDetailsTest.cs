@@ -45,7 +45,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         [Test]
         public void ToOption()
         {
-            var actual = new ArchiveDetails
+            var actual = new ArchiveRuntimeSettings
             {
                 CompressionLevel  = CompressionLevel.High,
                 CompressionMethod = CompressionMethod.Ppmd,

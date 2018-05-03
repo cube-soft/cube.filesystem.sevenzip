@@ -120,13 +120,13 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// <param name="e">詳細設定を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public virtual void ShowArchiveView(QueryEventArgs<string, ArchiveDetails> e)
+        public virtual void ShowArchiveView(QueryEventArgs<string, ArchiveRuntimeSettings> e)
         {
             using (var view = new ArchiveForm { Path = e.Query })
             {
                 e.Cancel = view.ShowDialog() == DialogResult.Cancel;
                 if (e.Cancel) return;
-                e.Result = new ArchiveDetails
+                e.Result = new ArchiveRuntimeSettings
                 {
                     Format            = view.Format,
                     Path              = view.Path,
@@ -405,7 +405,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// <param name="e">詳細設定を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void ShowArchiveView(QueryEventArgs<string, ArchiveDetails> e) =>
+        public static void ShowArchiveView(QueryEventArgs<string, ArchiveRuntimeSettings> e) =>
             _factory.ShowArchiveView(e);
 
         /* ----------------------------------------------------------------- */

@@ -33,6 +33,24 @@ namespace Cube.FileSystem.SevenZip.Ice
     [DataContract]
     public class Settings : ObservableProperty
     {
+        #region Constructors
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Settings
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public Settings()
+        {
+            Reset();
+        }
+
+        #endregion
+
         #region Properties
 
         /* ----------------------------------------------------------------- */
@@ -249,18 +267,58 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         #endregion
 
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OnDeserializing
+        ///
+        /// <summary>
+        /// デシリアライズ直前に実行されます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [OnDeserializing]
+        private void OnDeserializing(StreamingContext context) => Reset();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Reset
+        ///
+        /// <summary>
+        /// 設定をリセットします。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Reset()
+        {
+            _checkUpdate  = true;
+            _errorReport  = true;
+            _explorer     = string.Empty;
+            _filtering    = ".DS_Store|Thumbs.db|__MACOSX|desktop.ini";
+            _toolTip      = true;
+            _toolTipCount = 5;
+            _archive      = new ArchiveSettings();
+            _extract      = new ExtractSettings();
+            _associate    = new AssociateSettings();
+            _context      = new ContextSettings();
+            _shortcut     = new ShortcutSettings();
+        }
+
+        #endregion
+
         #region Fields
-        private bool _checkUpdate = true;
-        private bool _errorReport = true;
-        private string _explorer = string.Empty;
-        private string _filtering = ".DS_Store|Thumbs.db|__MACOSX|desktop.ini";
-        private bool _toolTip = true;
-        private int _toolTipCount = 5;
-        private ArchiveSettings _archive = new ArchiveSettings();
-        private ExtractSettings _extract = new ExtractSettings();
-        private AssociateSettings _associate = new AssociateSettings();
-        private ContextSettings _context = new ContextSettings();
-        private ShortcutSettings _shortcut = new ShortcutSettings();
+        private bool _checkUpdate;
+        private bool _errorReport;
+        private string _explorer;
+        private string _filtering;
+        private bool _toolTip;
+        private int _toolTipCount;
+        private ArchiveSettings _archive;
+        private ExtractSettings _extract;
+        private AssociateSettings _associate;
+        private ContextSettings _context;
+        private ShortcutSettings _shortcut;
         #endregion
     }
 

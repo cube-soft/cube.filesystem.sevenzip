@@ -15,8 +15,8 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.ComponentModel;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
@@ -47,38 +47,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         public AssociateSettings()
         {
-            Value = new Dictionary<string, bool>
-            {
-                { "7z",          true  },
-                { nameof(Arj),   false },
-                { nameof(BZ2),   true  },
-                { nameof(Cab),   false },
-                { nameof(Chm),   false },
-                { nameof(Cpio),  false },
-                { nameof(Deb),   false },
-                { nameof(Dmg),   false },
-                { nameof(Flv),   false },
-                { nameof(GZ),    true  },
-                { nameof(Hfs),   false },
-                { nameof(Iso),   false },
-                { nameof(Jar),   false },
-                { nameof(Lzh),   true  },
-                { nameof(Nupkg), false },
-                { nameof(Rar),   true  },
-                { nameof(Rpm),   false },
-                { nameof(Swf),   false },
-                { nameof(Tar),   true  },
-                { nameof(Tbz),   true  },
-                { nameof(Tgz),   true  },
-                { nameof(Txz),   true  },
-                { nameof(Vhd),   false },
-                { nameof(Vmdk),  false },
-                { nameof(Wim),   false },
-                { nameof(Xar),   false },
-                { nameof(XZ),    true  },
-                { nameof(Z),     false },
-                { nameof(Zip),   true  },
-            };
+            Reset();
         }
 
         #endregion
@@ -94,7 +63,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IDictionary<string, bool> Value { get; }
+        public IDictionary<string, bool> Value { get; private set; }
 
         #region DataMember
 
@@ -587,6 +556,65 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// OnDeserializing
+        ///
+        /// <summary>
+        /// デシリアライズ直前に実行されます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [OnDeserializing]
+        private void OnDeserializing(StreamingContext context) => Reset();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Reset
+        ///
+        /// <summary>
+        /// 設定をリセットします。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Reset()
+        {
+            _index = 3;
+
+            Value = new Dictionary<string, bool>
+            {
+                { "7z",          true  },
+                { nameof(Arj),   false },
+                { nameof(BZ2),   true  },
+                { nameof(Cab),   false },
+                { nameof(Chm),   false },
+                { nameof(Cpio),  false },
+                { nameof(Deb),   false },
+                { nameof(Dmg),   false },
+                { nameof(Flv),   false },
+                { nameof(GZ),    true  },
+                { nameof(Hfs),   false },
+                { nameof(Iso),   false },
+                { nameof(Jar),   false },
+                { nameof(Lzh),   true  },
+                { nameof(Nupkg), false },
+                { nameof(Rar),   true  },
+                { nameof(Rpm),   false },
+                { nameof(Swf),   false },
+                { nameof(Tar),   true  },
+                { nameof(Tbz),   true  },
+                { nameof(Tgz),   true  },
+                { nameof(Txz),   true  },
+                { nameof(Vhd),   false },
+                { nameof(Vmdk),  false },
+                { nameof(Wim),   false },
+                { nameof(Xar),   false },
+                { nameof(XZ),    true  },
+                { nameof(Z),     false },
+                { nameof(Zip),   true  },
+            };
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// GetProperty
         ///
         /// <summary>
@@ -621,7 +649,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         #endregion
 
         #region Fields
-        private int _index = 3;
+        private int _index;
         #endregion
     }
 }

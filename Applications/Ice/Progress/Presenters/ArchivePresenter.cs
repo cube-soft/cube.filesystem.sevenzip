@@ -78,7 +78,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenDetailsRequested(object sender, QueryEventArgs<string, ArchiveDetails> e) =>
+        private void WhenDetailsRequested(object sender, QueryEventArgs<string, ArchiveRuntimeSettings> e) =>
             ShowDialog(() => Views.ShowArchiveView(e));
 
         /* ----------------------------------------------------------------- */

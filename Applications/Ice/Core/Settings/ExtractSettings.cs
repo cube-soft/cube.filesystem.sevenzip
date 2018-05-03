@@ -31,6 +31,24 @@ namespace Cube.FileSystem.SevenZip.Ice
     [DataContract]
     public class ExtractSettings : GeneralSettings
     {
+        #region Constructors
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ExtractSettings
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ExtractSettings()
+        {
+            Reset();
+        }
+
+        #endregion
+
         #region Properties
 
         /* ----------------------------------------------------------------- */
@@ -85,10 +103,32 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         #endregion
 
+        #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Reset
+        ///
+        /// <summary>
+        /// 設定をリセットします。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected override void Reset()
+        {
+            _deleteSource  = false;
+            _bursty        = true;
+            _rootDirectory = CreateDirectoryMethod.CreateSmart;
+
+            base.Reset();
+        }
+
+        #endregion
+
         #region Fields
-        private bool _deleteSource = false;
-        private bool _bursty = true;
-        private CreateDirectoryMethod _rootDirectory = CreateDirectoryMethod.CreateSmart;
+        private bool _deleteSource;
+        private bool _bursty;
+        private CreateDirectoryMethod _rootDirectory;
         #endregion
     }
 }

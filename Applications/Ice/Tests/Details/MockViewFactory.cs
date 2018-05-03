@@ -199,12 +199,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /// <param name="e">詳細設定を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public override void ShowArchiveView(QueryEventArgs<string, ArchiveDetails> e)
+        public override void ShowArchiveView(QueryEventArgs<string, ArchiveRuntimeSettings> e)
         {
             var format = Formats.FromExtension(System.IO.Path.GetExtension(e.Query));
 
             e.Cancel = false;
-            e.Result = new ArchiveDetails(format)
+            e.Result = new ArchiveRuntimeSettings(format)
             {
                 Path              = Settings.Destination,
                 Password          = Settings.Password,
