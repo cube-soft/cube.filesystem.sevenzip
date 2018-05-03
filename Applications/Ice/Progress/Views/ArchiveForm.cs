@@ -301,7 +301,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         private void UpdateThreadCount()
         {
             var count = Environment.ProcessorCount;
-            ThreadNumericUpDown.Maximum =
+            ThreadNumericUpDown.Maximum = count;
             ThreadNumericUpDown.Value   = count;
             ThreadNumericUpDown.Enabled = count > 1;
         }

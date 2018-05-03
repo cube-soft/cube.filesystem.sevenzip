@@ -86,7 +86,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
                 var max = MainProgressBar.Maximum;
                 MainProgressBar.Value = Math.Min(Math.Max(value, min), max);
 
-                ExitButton.Enabled    =
+                ExitButton.Enabled    = value > 0;
                 SuspendButton.Enabled = value > 0;
 
                 UpdateTitle();

@@ -213,6 +213,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
                     case CompressionMethod.BZip2: return Format.BZip2;
                     case CompressionMethod.GZip:  return Format.GZip;
                     case CompressionMethod.XZ:    return Format.XZ;
+                    default: break;
                 }
             }
             return Format;
@@ -234,6 +235,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
                 case Format.BZip2: return ".tar.bz2";
                 case Format.GZip:  return ".tar.gz";
                 case Format.XZ:    return ".tar.xz";
+                default: break;
             }
             return ResultFormat.ToExtension();
         }

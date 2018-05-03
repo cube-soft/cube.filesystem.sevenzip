@@ -76,6 +76,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
                         if (m.Sources.Count() > 1 && s.Value.Extract.Bursty && !m.SuppressRecursive) Extract(m);
                         else using (var _ = new ExtractPresenter(v, m, s, e)) Application.Run(v);
                         break;
+                    default:
+                        break;
                 }
             }
             catch (Exception err) { Log(err); }

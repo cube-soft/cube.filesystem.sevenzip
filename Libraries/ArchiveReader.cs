@@ -380,6 +380,8 @@ namespace Cube.FileSystem.SevenZip
                     throw new EncryptionException();
                 case OperationResult.UserCancel:
                     throw new OperationCanceledException();
+                default:
+                    break;
             }
 
             if (err != null) throw err;

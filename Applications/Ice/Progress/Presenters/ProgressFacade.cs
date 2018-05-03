@@ -201,7 +201,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ValueEventHandler<ArchiveReport> Progress;
+        public event ValueEventHandler<ArchiveReport> Progress;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -228,7 +228,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public EventHandler ProgressReset;
+        public event EventHandler ProgressReset;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -255,7 +255,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public PathQueryEventHandler DestinationRequested;
+        public event PathQueryEventHandler DestinationRequested;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -282,7 +282,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public QueryEventHandler<string, string> PasswordRequested;
+        public event QueryEventHandler<string, string> PasswordRequested;
 
         /* ----------------------------------------------------------------- */
         ///
