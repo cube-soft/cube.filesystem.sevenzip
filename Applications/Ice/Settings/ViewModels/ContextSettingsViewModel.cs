@@ -462,7 +462,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         #endregion
 
         #region Fields
-        private ContextSettings _model;
+        private readonly ContextSettings _model;
         #endregion
     }
 }

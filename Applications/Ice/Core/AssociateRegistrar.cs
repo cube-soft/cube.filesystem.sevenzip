@@ -180,7 +180,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void UpdateToolTip(RegistryKey key, bool enabled)
         {
-            var guid = TooTipKey.ToString("B").ToUpper();
+            var guid = TooTipKey.ToString("B").ToUpperInvariant();
             var name = $@"shellex\{guid}";
 
             if (enabled)
@@ -303,7 +303,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         private string GetSubKeyName(string id) =>
-            $"{System.IO.Path.GetFileNameWithoutExtension(FileName)}_{id}".ToLower();
+            $"{System.IO.Path.GetFileNameWithoutExtension(FileName)}_{id}".ToLowerInvariant();
 
         #endregion
 

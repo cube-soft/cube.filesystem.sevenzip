@@ -15,8 +15,8 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System;
 using NUnit.Framework;
+using System;
 
 namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 {
@@ -169,10 +169,10 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         [TestCase(Format.Sfx,      "*.exe")]
         public void GetFilter(Format format, string piece)
         {
-            var result = ViewResource.GetFilter(format);
-            Assert.That(result.Contains("*.*"),           Is.True);
-            Assert.That(result.Contains(piece),           Is.True);
-            Assert.That(result.Contains(piece.ToUpper()), Is.True);
+            var dest = ViewResource.GetFilter(format);
+            Assert.That(dest.Contains("*.*"),                    Is.True);
+            Assert.That(dest.Contains(piece),                    Is.True);
+            Assert.That(dest.Contains(piece.ToUpperInvariant()), Is.True);
         }
 
         /* ----------------------------------------------------------------- */
@@ -187,10 +187,10 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         [Test]
         public void GetFilter_7z()
         {
-            var result = ViewResource.GetFilter("7z");
-            Assert.That(result.Contains("*.*"),  Is.True);
-            Assert.That(result.Contains("*.7z"), Is.True);
-            Assert.That(result.Contains("*.7Z"), Is.True);
+            var dest = ViewResource.GetFilter("7z");
+            Assert.That(dest.Contains("*.*"),  Is.True);
+            Assert.That(dest.Contains("*.7z"), Is.True);
+            Assert.That(dest.Contains("*.7Z"), Is.True);
         }
 
         /* ----------------------------------------------------------------- */

@@ -152,7 +152,7 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Fields
-        private IDictionary<string, PropVariant> _dic = new Dictionary<string, PropVariant>();
+        private readonly IDictionary<string, PropVariant> _dic = new Dictionary<string, PropVariant>();
         #endregion
     }
 }

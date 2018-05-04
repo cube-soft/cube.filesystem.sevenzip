@@ -49,7 +49,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
         public void Archive(string[] files, IEnumerable<string> args,
-            ArchiveSettings archive, string dest, long count)
+            ArchiveSettings settings, string dest, long count)
         {
             var filename = GetFileName(Example(files.First()), dest);
             var request  = new Request(args.Concat(files.Select(s => Example(s))));
@@ -59,7 +59,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 
             using (var p = Create(request))
             {
-                p.Settings.Value.Archive = archive;
+                p.Settings.Value.Archive = settings;
                 p.Settings.Value.Archive.SaveDirectoryName = Result("Others");
                 p.View.Show();
 

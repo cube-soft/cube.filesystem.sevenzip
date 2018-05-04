@@ -419,11 +419,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         #endregion
 
         #region Fields
+        private readonly Stopwatch _watch = new Stopwatch();
+        private readonly Timer _timer = new Timer();
         private string _fileName = string.Empty;
         private long _count = 0;
         private long _totalCount = 0;
-        private Stopwatch _watch = new Stopwatch();
-        private Timer _timer = new Timer();
         private TimeSpan _remain = TimeSpan.Zero;
         #endregion
     }

@@ -400,7 +400,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         #endregion
 
         #region Fields
-        private Cube.Forms.VersionControl VersionPanel = new Cube.Forms.VersionControl();
+        private readonly Cube.Forms.VersionControl VersionPanel = new Cube.Forms.VersionControl();
         #endregion
     }
 }

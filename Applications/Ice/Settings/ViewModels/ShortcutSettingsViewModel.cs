@@ -166,7 +166,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         #endregion
 
         #region Fields
-        private ShortcutSettings _model;
+        private readonly ShortcutSettings _model;
         #endregion
     }
 }

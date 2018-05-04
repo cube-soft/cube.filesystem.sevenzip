@@ -561,7 +561,7 @@ namespace Cube.FileSystem.SevenZip
 
             foreach (Format item in Enum.GetValues(typeof(Format)))
             {
-                var ext = $".{item.ToString().ToLower()}";
+                var ext = $".{item.ToString().ToLowerInvariant()}";
                 if (!dest.ContainsKey(ext)) dest.Add(ext, item);
             }
 

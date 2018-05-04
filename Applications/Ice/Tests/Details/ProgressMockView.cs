@@ -167,7 +167,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         #endregion
 
         #region Fields
-        private Stopwatch _watch = new Stopwatch();
+        private readonly Stopwatch _watch = new Stopwatch();
         #endregion
     }
 }

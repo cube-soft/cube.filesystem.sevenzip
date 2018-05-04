@@ -42,6 +42,6 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public EncryptionException() : base() { }
+        public EncryptionException() { }
     }
 }

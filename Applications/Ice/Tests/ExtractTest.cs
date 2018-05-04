@@ -50,7 +50,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
         public void Extract(string filename, string password,
-            IEnumerable<string> args, ExtractSettings extract, string exists, long count)
+            IEnumerable<string> args, ExtractSettings settings, string exists, long count)
         {
             var request = new Request(args.Concat(new[] { Example(filename) }));
             var tmp     = string.Empty;
@@ -61,7 +61,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
             using (var p = Create(request))
             {
                 p.Settings.Value.Explorer = "dummy.exe";
-                p.Settings.Value.Extract = extract;
+                p.Settings.Value.Extract = settings;
                 p.Settings.Value.Extract.SaveDirectoryName = Result("Others");
                 p.View.Show();
 

@@ -48,7 +48,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
             var extract  = new Shortcut(Result("CubeICE 解凍"));
             var settings = new Shortcut(Result("CubeICE 設定"));
 
-            var src  = new ShortcutSettings() { Directory = Results };
+            var src  = new ShortcutSettings { Directory = Results };
             var menu = PresetMenu.Archive |
                        PresetMenu.ArchiveDetail |
                        PresetMenu.Extract |

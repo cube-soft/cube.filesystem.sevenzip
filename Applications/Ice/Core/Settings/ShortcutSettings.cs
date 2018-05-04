@@ -83,7 +83,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public string Directory { get; set; }
+        public string Directory { get; set; } = string.Empty;
 
         #endregion
 

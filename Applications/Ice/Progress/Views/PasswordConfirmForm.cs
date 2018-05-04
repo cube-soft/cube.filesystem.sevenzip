@@ -74,7 +74,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         #endregion
 
         #region Fields
-        private PasswordBehavior _behavior;
+        private readonly PasswordBehavior _behavior;
         #endregion
     }
 }

@@ -245,7 +245,7 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Fields
-        private IInArchive _archive;
+        private readonly IInArchive _archive;
         #endregion
     }
 }

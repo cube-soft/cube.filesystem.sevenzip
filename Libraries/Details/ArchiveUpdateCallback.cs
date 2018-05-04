@@ -381,8 +381,8 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Fields
-        private OnceAction<bool> _dispose;
-        private IList<ArchiveStreamReader> _streams = new List<ArchiveStreamReader>();
+        private readonly OnceAction<bool> _dispose;
+        private readonly IList<ArchiveStreamReader> _streams = new List<ArchiveStreamReader>();
         #endregion
     }
 }

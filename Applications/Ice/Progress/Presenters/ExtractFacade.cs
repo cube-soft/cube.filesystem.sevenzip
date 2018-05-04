@@ -388,7 +388,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             {
                 if (string.IsNullOrEmpty(item.FullName)) continue;
                 var root = GetRootDirectory(item, "*"); // Count all files as "*"
-                var key = root.ToLower();
+                var key = root.ToLowerInvariant();
                 if (!dest.ContainsKey(key)) dest.Add(key, root);
 
                 if (dest.Count >= 2) break;

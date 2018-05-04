@@ -270,7 +270,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         private SaveLocation GetLocation(string s)
         {
-            var query = GetTail(s).ToLower();
+            var query = GetTail(s).ToLowerInvariant();
             if (string.IsNullOrEmpty(query)) return SaveLocation.Unknown;
 
             foreach (SaveLocation item in Enum.GetValues(typeof(SaveLocation)))

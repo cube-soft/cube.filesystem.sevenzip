@@ -50,7 +50,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// <param name="settings">設定情報</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ProgressFacade(Request request, SettingsFolder settings)
+        protected ProgressFacade(Request request, SettingsFolder settings)
         {
             _dispose = new OnceAction<bool>(Dispose);
             Request  = request;
@@ -518,8 +518,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
             var info = IO.Get(path);
             var src  = info.IsDirectory ? info.FullName : info.DirectoryName;
-            var cmp  = Environment.GetFolderPath(Environment.SpecialFolder.Desktop).ToLower();
-            if (mode == OpenDirectoryMethod.OpenNotDesktop && src.ToLower().CompareTo(cmp) == 0) return;
+            var cmp  = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            var skip = mode == OpenDirectoryMethod.OpenNotDesktop &&
+                       src.Equals(cmp, StringComparison.InvariantCultureIgnoreCase);
+
+            if (skip) return;
 
             var exec = !string.IsNullOrEmpty(Settings.Value.Explorer) ?
                        Settings.Value.Explorer :
@@ -713,12 +716,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         #endregion
 
         #region Fields
-        private OnceAction<bool> _dispose;
+        private readonly OnceAction<bool> _dispose;
+        private readonly System.Timers.Timer _timer = new System.Timers.Timer(100.0);
+        private readonly CancellationTokenSource _cancel = new CancellationTokenSource();
+        private readonly ManualResetEvent _wait = new ManualResetEvent(true);
         private string _dest;
         private string _tmp;
-        private System.Timers.Timer _timer = new System.Timers.Timer(100.0);
-        private CancellationTokenSource _cancel = new CancellationTokenSource();
-        private ManualResetEvent _wait = new ManualResetEvent(true);
         #endregion
     }
 }
