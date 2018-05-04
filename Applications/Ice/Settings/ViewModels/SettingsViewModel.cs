@@ -15,8 +15,8 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System;
 using Cube.FileSystem.SevenZip.Ice;
+using System;
 
 namespace Cube.FileSystem.SevenZip.App.Ice.Settings
 {
@@ -277,7 +277,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         #endregion
 
         #region Fields
-        private SettingsFolder _model;
+        private readonly SettingsFolder _model;
         #endregion
     }
 }

@@ -623,7 +623,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         private bool GetProperty([CallerMemberName] string name = null)
-            => Value.ContainsKey(name) ? Value[name] : false;
+            => Value.TryGetValue(name, out bool dest) ? dest : false;
 
         /* ----------------------------------------------------------------- */
         ///

@@ -15,10 +15,10 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.FileSystem.SevenZip.Ice;
+using Cube.Tasks;
 using System;
 using System.Diagnostics;
-using Cube.Tasks;
-using Cube.FileSystem.SevenZip.Ice;
 
 namespace Cube.FileSystem.SevenZip.App.Ice
 {
@@ -153,7 +153,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenMessageReceived(object sender, MessageEventArgs e) =>
+        private void WhenMessageReceived(object s, MessageEventArgs e) =>
             SyncWait(() => Views.ShowMessageBox(e));
 
         /* ----------------------------------------------------------------- */
@@ -165,7 +165,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenOpenDirectoryRequested(object sender, KeyValueEventArgs<string, string> e) =>
+        private void WhenOpenDirectoryRequested(object s, KeyValueEventArgs<string, string> e) =>
             Views.ShowExplorerView(e);
 
         #endregion

@@ -480,7 +480,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenExtracting(object sender, ValueEventArgs<ArchiveItem> e) =>
+        private void WhenExtracting(object s, ValueEventArgs<ArchiveItem> e) =>
             Current = e.Value.FullName;
 
         /* ----------------------------------------------------------------- */
@@ -492,7 +492,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenExtracted(object sender, ValueEventArgs<ArchiveItem> e)
+        private void WhenExtracted(object s, ValueEventArgs<ArchiveItem> e)
         {
             var src  = IO.Get(IO.Combine(Tmp, e.Value.FullName));
             var dest = IO.Get(IO.Combine(Destination, e.Value.FullName));

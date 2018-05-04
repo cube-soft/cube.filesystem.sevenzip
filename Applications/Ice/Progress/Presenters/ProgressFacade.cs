@@ -689,7 +689,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenFailed(object sender, FailedEventArgs e)
+        private void WhenFailed(object s, FailedEventArgs e)
         {
             var sb = new System.Text.StringBuilder();
             foreach (var path in e.Paths) sb.AppendLine(path);

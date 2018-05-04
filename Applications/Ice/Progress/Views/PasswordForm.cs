@@ -15,9 +15,9 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Images.Icons;
 using System;
 using System.Windows.Forms;
-using Cube.Images.Icons;
 
 namespace Cube.FileSystem.SevenZip.App.Ice
 {
@@ -83,7 +83,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenTextChanged(object sender, EventArgs e) =>
+        private void WhenTextChanged(object s, EventArgs e) =>
             ExecButton.Enabled = PasswordTextBox.TextLength > 0;
 
         /* ----------------------------------------------------------------- */
@@ -95,7 +95,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenCheckedChanged(object sender, EventArgs e) =>
+        private void WhenCheckedChanged(object s, EventArgs e) =>
             PasswordTextBox.UseSystemPasswordChar = !VisibleCheckBox.Checked;
 
         #endregion

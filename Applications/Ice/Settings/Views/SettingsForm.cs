@@ -15,11 +15,11 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.FileSystem.SevenZip.Ice;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using Cube.FileSystem.SevenZip.Ice;
 
 namespace Cube.FileSystem.SevenZip.App.Ice.Settings
 {
@@ -176,9 +176,9 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Enable(object sender, params Control[] controls)
+        private void Enable(object s, params Control[] controls)
         {
-            var src = sender as RadioButton;
+            var src = s as RadioButton;
             if (src == null) return;
             foreach (var c in controls) c.Enabled = src.Checked;
         }

@@ -335,7 +335,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenFormatChanged(object sender, EventArgs e)
+        private void WhenFormatChanged(object s, EventArgs e)
         {
             UpdateCompressionMethod();
             UpdateEncryptionCondition();
@@ -350,7 +350,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenPathRequested(object sender, EventArgs e)
+        private void WhenPathRequested(object s, EventArgs e)
         {
             var cvt  = new PathConverter(Path, Format, CompressionMethod);
             var args = new PathQueryEventArgs(cvt.Result.FullName, cvt.ResultFormat, true);
@@ -368,7 +368,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenPathChanged(object sender, EventArgs e) =>
+        private void WhenPathChanged(object s, EventArgs e) =>
             IsValidPath = OutputTextBox.TextLength > 0;
 
         /* ----------------------------------------------------------------- */
@@ -380,7 +380,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenCompressionMethodChanged(object sender, EventArgs e) =>
+        private void WhenCompressionMethodChanged(object s, EventArgs e) =>
             Path = new PathConverter(Path, Format, CompressionMethod).Result.FullName;
 
         #endregion

@@ -276,24 +276,9 @@ namespace Cube.FileSystem.SevenZip.Ice
         private void Delete(string extension)
         {
             var name = GetSubKeyName(extension);
-            Delete(extension, name);
-            Registry.ClassesRoot.DeleteSubKeyTree(name, false);
-        }
+            var cvt  = (extension[0] == '.') ? extension : $".{extension}";
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Delete
-        ///
-        /// <summary>
-        /// 拡張子を表すレジストリ項目と CubeICE を関連付けるための設定を
-        /// 削除します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Delete(string extension, string name)
-        {
-            var s = (extension[0] == '.') ? extension : $".{extension}";
-            using (var key = Registry.ClassesRoot.CreateSubKey(s.ToLower()))
+            using (var key = Registry.ClassesRoot.CreateSubKey(cvt.ToLowerInvariant()))
             {
                 var prev = key.GetValue(PreArchiver, "") as string;
                 if (!string.IsNullOrEmpty(prev))
@@ -305,6 +290,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 
                 UpdateToolTip(key, false);
             }
+            Registry.ClassesRoot.DeleteSubKeyTree(name, false);
         }
 
         /* ----------------------------------------------------------------- */

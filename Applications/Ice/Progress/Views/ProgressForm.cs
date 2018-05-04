@@ -402,7 +402,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenSuspendOrResume(object sender, EventArgs e)
+        private void WhenSuspendOrResume(object s, EventArgs e)
         {
             var suspend = !(bool)SuspendButton.Tag;
             SuspendButton.Tag  = suspend;

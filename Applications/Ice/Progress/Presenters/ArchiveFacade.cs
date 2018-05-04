@@ -15,10 +15,10 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System;
-using System.Linq;
 using Cube.FileSystem.SevenZip.Ice;
 using Cube.Log;
+using System;
+using System.Linq;
 
 namespace Cube.FileSystem.SevenZip.App.Ice
 {
@@ -179,7 +179,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         private void Archive()
         {
             var fmt   = GetFormat();
-            var dest  = GetTmp(fmt);
+            var dest  = GetTmp();
             var query = !string.IsNullOrEmpty(Details.Password) || Request.Password ?
                         new Query<string, string>(x => RaisePasswordRequested(x)) :
                         null;
@@ -245,9 +245,9 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetTmp(Format format)
+        private string GetTmp()
         {
-            Destination = GetDestination(format);
+            Destination = GetDestination();
             var info = IO.Get(Destination);
             SetTmp(info.DirectoryName);
             return Tmp;
@@ -262,7 +262,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetDestination(Format format)
+        private string GetDestination()
         {
             if (!string.IsNullOrEmpty(Details?.Path)) return Details.Path;
 

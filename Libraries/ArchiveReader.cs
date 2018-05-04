@@ -391,9 +391,9 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Fields
-        private OnceAction<bool> _dispose;
-        private IO _io;
-        private PasswordQuery _password;
+        private readonly OnceAction<bool> _dispose;
+        private readonly IO _io;
+        private readonly PasswordQuery _password;
         private SevenZipLibrary _7z;
         private IInArchive _archive;
         private ArchiveOpenCallback _callback;
