@@ -438,9 +438,9 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Fields
-        private OnceAction<bool> _dispose;
-        private IEnumerator<ArchiveItem> _inner;
-        private IDictionary<ArchiveItem, ArchiveStreamWriter> _streams = new Dictionary<ArchiveItem, ArchiveStreamWriter>();
+        private readonly OnceAction<bool> _dispose;
+        private readonly IEnumerator<ArchiveItem> _inner;
+        private readonly IDictionary<ArchiveItem, ArchiveStreamWriter> _streams = new Dictionary<ArchiveItem, ArchiveStreamWriter>();
         private long _hack = 0;
         #endregion
     }

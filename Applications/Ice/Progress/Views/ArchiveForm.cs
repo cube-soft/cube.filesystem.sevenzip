@@ -388,7 +388,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         #region Fields
         private bool _path = false;
         private bool _encryption = true;
-        private PasswordBehavior _password;
+        private readonly PasswordBehavior _password;
         #endregion
     }
 }

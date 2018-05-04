@@ -15,10 +15,10 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.FileSystem.SevenZip.Ice;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Cube.FileSystem.SevenZip.Ice;
 
 namespace Cube.FileSystem.SevenZip.App.Ice
 {
@@ -255,7 +255,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             var index = s.IndexOf(':');
             if (index < 0 || index >= s.Length - 1) return Format.Zip;
 
-            var query = s.Substring(index + 1).ToLower();
+            var query = s.Substring(index + 1).ToLowerInvariant();
             return Formats.FromString(query);
         }
 
@@ -275,7 +275,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
             foreach (SaveLocation item in Enum.GetValues(typeof(SaveLocation)))
             {
-                if (item.ToString().ToLower() == query) return item;
+                if (item.ToString().ToLowerInvariant() == query) return item;
             }
             return SaveLocation.Unknown;
         }

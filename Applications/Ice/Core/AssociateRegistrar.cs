@@ -15,10 +15,10 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Win32;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -223,7 +223,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void Create(RegistryKey key, string id)
         {
-            key.SetValue("", $"{id} {Properties.Resources.FileSuffix}".ToUpper());
+            key.SetValue("", $"{id} {Properties.Resources.FileSuffix}".ToUpperInvariant());
 
             using (var k = key.CreateSubKey("shell"))
             {
@@ -255,15 +255,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         private void Create(string extension, string name)
         {
             var s = (extension[0] == '.') ? extension : $".{extension}";
-            using (var key = Registry.ClassesRoot.CreateSubKey(s.ToLower()))
+            using (var key = Registry.ClassesRoot.CreateSubKey(s.ToLowerInvariant()))
             {
                 var prev = key.GetValue("") as string;
-                if (!string.IsNullOrEmpty(prev) && prev != name)
-                {
-                    key.SetValue(nameof(PreArchiver), prev);
-                }
+                if (!string.IsNullOrEmpty(prev) && prev != name) key.SetValue(PreArchiver, prev);
                 key.SetValue("", name);
-
                 UpdateToolTip(key, ToolTip);
             }
         }
@@ -299,11 +295,11 @@ namespace Cube.FileSystem.SevenZip.Ice
             var s = (extension[0] == '.') ? extension : $".{extension}";
             using (var key = Registry.ClassesRoot.CreateSubKey(s.ToLower()))
             {
-                var prev = key.GetValue(nameof(PreArchiver), "") as string;
+                var prev = key.GetValue(PreArchiver, "") as string;
                 if (!string.IsNullOrEmpty(prev))
                 {
                     key.SetValue("", prev);
-                    key.DeleteValue(nameof(PreArchiver), false);
+                    key.DeleteValue(PreArchiver, false);
                 }
                 else key.DeleteValue("", false);
 
@@ -326,7 +322,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         #endregion
 
         #region Fields
-        private static readonly object PreArchiver = null;
+        private static readonly string PreArchiver = "PreArchiver";
         private static readonly Guid TooTipKey = new Guid("{00021500-0000-0000-c000-000000000046}");
         private static readonly Guid ToolTipHandler = new Guid("{cb8641a3-ebc7-4758-a302-aa6667b817c8}");
         #endregion

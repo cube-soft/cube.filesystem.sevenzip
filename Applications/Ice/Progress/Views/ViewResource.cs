@@ -226,18 +226,19 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         public static string GetFilter(string format)
         {
-            var cvt  = format.ToLower();
-            var dest = cvt == "zip"      ? Properties.Resources.FilterZip :
-                       cvt == "7z"       ? Properties.Resources.FilterSevenZip :
-                       cvt == "sevenzip" ? Properties.Resources.FilterSevenZip :
-                       cvt == "tar"      ? Properties.Resources.FilterTar :
-                       cvt == "gzip"     ? Properties.Resources.FilterGzip :
-                       cvt == "bzip2"    ? Properties.Resources.FilterBzip2 :
-                       cvt == "xz"       ? Properties.Resources.FilterXZ :
-                       cvt == "sfx"      ? Properties.Resources.FilterSfx :
-                       string.Empty;
+            var src = new Dictionary<string, string>
+            {
+                { "zip",      Properties.Resources.FilterZip      },
+                { "7z",       Properties.Resources.FilterSevenZip },
+                { "sevenzip", Properties.Resources.FilterSevenZip },
+                { "tar",      Properties.Resources.FilterTar      },
+                { "gzip",     Properties.Resources.FilterGzip     },
+                { "bzip2",    Properties.Resources.FilterBzip2    },
+                { "xz",       Properties.Resources.FilterXZ       },
+                { "sfx",      Properties.Resources.FilterSfx      },
+            };
 
-            return !string.IsNullOrEmpty(dest) ?
+            return src.TryGetValue(format.ToLowerInvariant(), out string dest) ?
                    $"{dest}|{Properties.Resources.FilterAll}" :
                    Properties.Resources.FilterAll;
         }

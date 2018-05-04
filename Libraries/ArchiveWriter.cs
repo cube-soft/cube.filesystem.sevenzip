@@ -475,10 +475,10 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Fields
-        private OnceAction<bool> _dispose;
-        private SevenZipLibrary _7z;
-        private IO _io;
-        private IList<FileItem> _items = new List<FileItem>();
+        private readonly OnceAction<bool> _dispose;
+        private readonly SevenZipLibrary _7z;
+        private readonly IO _io;
+        private readonly IList<FileItem> _items = new List<FileItem>();
         #endregion
     }
 }

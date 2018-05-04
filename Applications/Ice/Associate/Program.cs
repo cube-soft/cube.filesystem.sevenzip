@@ -55,7 +55,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Associate
                 Logger.Info(type, string.Join(" ", args));
 
                 var settings = new SettingsFolder();
-                if (args.Length > 0 && args[0].ToLower() == "/uninstall") Clear(settings);
+                if (args.Length > 0 && args[0].ToLowerInvariant() == "/uninstall") Clear(settings);
                 else settings.Load();
 
                 var asm  = AssemblyReader.Default.Location;

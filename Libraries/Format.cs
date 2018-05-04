@@ -231,7 +231,7 @@ namespace Cube.FileSystem.SevenZip
     /// Formats
     ///
     /// <summary>
-    /// Format に対する拡張メソッドを定義したクラスです。
+    /// Format に対する拡張用クラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -249,7 +249,7 @@ namespace Cube.FileSystem.SevenZip
         /// Format に対応する Class ID を取得します。
         /// </summary>
         ///
-        /// <param name="format">Format オブジェクト</param>
+        /// <param name="src">Format オブジェクト</param>
         ///
         /// <returns>Class ID</returns>
         ///
@@ -258,9 +258,9 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public static Guid ToClassId(this Format format) =>
-            format != Format.Unknown ?
-            new Guid($"23170f69-40c1-278a-1000-000110{((int)format):x2}0000") :
+        public static Guid ToClassId(this Format src) =>
+            src != Format.Unknown ?
+            new Guid($"23170f69-40c1-278a-1000-000110{((int)src):x2}0000") :
             Guid.Empty;
 
         /* ----------------------------------------------------------------- */
@@ -271,23 +271,26 @@ namespace Cube.FileSystem.SevenZip
         /// Format に対応する拡張子を取得します。
         /// </summary>
         ///
-        /// <param name="format">Format オブジェクト</param>
+        /// <param name="src">Format オブジェクト</param>
         ///
         /// <returns>拡張子</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static string ToExtension(this Format format)
+        public static string ToExtension(this Format src)
         {
-            switch (format)
+            var map = new Dictionary<Format, string>
             {
-                case Format.SevenZip: return ".7z";
-                case Format.BZip2:    return ".bz2";
-                case Format.GZip:     return ".gz";
-                case Format.Lzw:      return ".z";
-                case Format.Sfx:      return ".exe";
-                case Format.Unknown:  return string.Empty;
-                default: return $".{format.ToString().ToLower()}";
-            }
+                { Format.SevenZip, ".7z"  },
+                { Format.BZip2,    ".bz2" },
+                { Format.GZip,     ".gz"  },
+                { Format.Lzw,      ".z"   },
+                { Format.Sfx,      ".exe" },
+                { Format.Unknown,  ""     },
+            };
+
+            return map.TryGetValue(src, out string dest) ?
+                   dest :
+                   $".{src.ToString().ToLowerInvariant()}";
         }
 
         /* ----------------------------------------------------------------- */
@@ -298,20 +301,23 @@ namespace Cube.FileSystem.SevenZip
         /// CompressionMethod に対応する拡張子を取得します。
         /// </summary>
         ///
-        /// <param name="method">CompressionMethod オブジェクト</param>
+        /// <param name="src">CompressionMethod オブジェクト</param>
         ///
         /// <returns>拡張子</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static string ToExtension(this CompressionMethod method)
+        public static string ToExtension(this CompressionMethod src)
         {
-            switch (method)
+            var map = new Dictionary<CompressionMethod, string>
             {
-                case CompressionMethod.BZip2: return ".bz2";
-                case CompressionMethod.GZip:  return ".gz";
-                case CompressionMethod.XZ:    return ".xz";
-                default: return string.Empty;
-            }
+                { CompressionMethod.BZip2, ".bz2" },
+                { CompressionMethod.GZip,  ".gz"  },
+                { CompressionMethod.XZ,    ".xz"  },
+            };
+
+            return map.TryGetValue(src, out string dest) ?
+                   dest :
+                   string.Empty;
         }
 
         /* ----------------------------------------------------------------- */
@@ -322,7 +328,7 @@ namespace Cube.FileSystem.SevenZip
         /// Format に対応する CompressionMethod を取得します。
         /// </summary>
         ///
-        /// <param name="format">Format オブジェクト</param>
+        /// <param name="src">Format オブジェクト</param>
         ///
         /// <returns>CompressionMethod オブジェクト</returns>
         ///
@@ -332,15 +338,18 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public static CompressionMethod ToMethod(this Format format)
+        public static CompressionMethod ToMethod(this Format src)
         {
-            switch (format)
+            var map = new Dictionary<Format, CompressionMethod>
             {
-                case Format.BZip2: return CompressionMethod.BZip2;
-                case Format.GZip:  return CompressionMethod.GZip;
-                case Format.XZ:    return CompressionMethod.XZ;
-                default: return CompressionMethod.Default;
-            }
+                { Format.BZip2, CompressionMethod.BZip2 },
+                { Format.GZip,  CompressionMethod.GZip  },
+                { Format.XZ,    CompressionMethod.XZ    },
+            };
+
+            return map.TryGetValue(src, out CompressionMethod dest) ?
+                   dest :
+                   CompressionMethod.Default;
         }
 
         #endregion
@@ -355,20 +364,23 @@ namespace Cube.FileSystem.SevenZip
         /// CompressionMethod に対応する Format を取得します。
         /// </summary>
         ///
-        /// <param name="method">CompressionMethod</param>
+        /// <param name="src">CompressionMethod</param>
         ///
         /// <returns>Format オブジェクト</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static Format FromMethod(CompressionMethod method)
+        public static Format FromMethod(CompressionMethod src)
         {
-            switch (method)
+            var map = new Dictionary<CompressionMethod, Format>
             {
-                case CompressionMethod.GZip:  return Format.GZip;
-                case CompressionMethod.BZip2: return Format.BZip2;
-                case CompressionMethod.XZ:    return Format.XZ;
-                default: return Format.Unknown;
-            }
+                { CompressionMethod.BZip2, Format.BZip2 },
+                { CompressionMethod.GZip,  Format.GZip  },
+                { CompressionMethod.XZ,    Format.XZ    },
+            };
+
+            return map.TryGetValue(src, out Format dest) ?
+                   dest :
+                   Format.Unknown;
         }
 
         /* ----------------------------------------------------------------- */
@@ -379,19 +391,19 @@ namespace Cube.FileSystem.SevenZip
         /// 文字列に対応する Format を取得します。
         /// </summary>
         ///
-        /// <param name="format">Format を表す文字列</param>
+        /// <param name="src">Format を表す文字列</param>
         ///
         /// <returns>Format オブジェクト</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static Format FromString(string format)
+        public static Format FromString(string src)
         {
-            var cvt = format.ToLower();
+            var cvt = src.ToLowerInvariant();
             if (cvt == "7z")  return Format.SevenZip;
             if (cvt == "exe") return Format.Sfx;
             foreach (Format item in Enum.GetValues(typeof(Format)))
             {
-                if (item.ToString().ToLower() == cvt) return item;
+                if (item.ToString().ToLowerInvariant() == cvt) return item;
             }
             return Format.Unknown;
         }
@@ -404,16 +416,18 @@ namespace Cube.FileSystem.SevenZip
         /// 拡張子に対応する Format を取得します。
         /// </summary>
         ///
-        /// <param name="ext">拡張子</param>
+        /// <param name="src">拡張子</param>
         ///
         /// <returns>Format オブジェクト</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static Format FromExtension(string ext)
+        public static Format FromExtension(string src)
         {
             if (_ext == null) _ext = CreateExtensionMap();
-            var cvt = ext.ToLower();
-            return _ext.ContainsKey(cvt) ? _ext[cvt] : Format.Unknown;
+
+            return _ext.TryGetValue(src.ToLowerInvariant(), out Format dest) ?
+                   dest :
+                   Format.Unknown;
         }
 
         /* ----------------------------------------------------------------- */
@@ -424,35 +438,35 @@ namespace Cube.FileSystem.SevenZip
         /// ストリームの内容に対応する Format を取得します。
         /// </summary>
         ///
-        /// <param name="stream">ストリーム</param>
+        /// <param name="src">ストリーム</param>
         ///
         /// <returns>Format オブジェクト</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static Format FromStream(Stream stream)
+        public static Format FromStream(Stream src)
         {
             if (_sig == null) _sig = CreateSignatureMap();
 
-            var preserve = stream.Position;
+            var preserve = src.Position;
             try
             {
                 var bytes = new byte[16];
-                var count = stream.Read(bytes, 0, 16);
+                var count = src.Read(bytes, 0, 16);
                 if (count <= 0) return Format.Unknown;
 
-                var src = BitConverter.ToString(bytes, 0, count);
+                var cvt = BitConverter.ToString(bytes, 0, count);
                 foreach (var cmp in _sig)
                 {
-                    if (src.StartsWith(cmp.Key, StringComparison.OrdinalIgnoreCase)) return cmp.Value;
+                    if (cvt.StartsWith(cmp.Key, StringComparison.OrdinalIgnoreCase)) return cmp.Value;
                 }
 
                 // for special signature
-                if (Match(stream, 0x101, 5, "75-73-74-61-72")) return Format.Tar;
-                if (Match(stream, 0x002, 3, "2D-6C-68"))       return Format.Lzh;
+                if (Match(src, 0x101, 5, "75-73-74-61-72")) return Format.Tar;
+                if (Match(src, 0x002, 3, "2D-6C-68"))       return Format.Lzh;
 
                 return Format.Unknown;
             }
-            finally { stream.Seek(preserve, SeekOrigin.Begin); }
+            finally { src.Seek(preserve, SeekOrigin.Begin); }
         }
 
         /* ----------------------------------------------------------------- */
@@ -463,12 +477,12 @@ namespace Cube.FileSystem.SevenZip
         /// ファイルに対応する Format を取得します。
         /// </summary>
         ///
-        /// <param name="path">ファイル名</param>
+        /// <param name="src">ファイル名</param>
         ///
         /// <returns>Format オブジェクト</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static Format FromFile(string path) => FromFile(path, new IO());
+        public static Format FromFile(string src) => FromFile(src, new IO());
 
         /* ----------------------------------------------------------------- */
         ///
@@ -478,19 +492,19 @@ namespace Cube.FileSystem.SevenZip
         /// ファイルに対応する Format を取得します。
         /// </summary>
         ///
-        /// <param name="path">ファイル名</param>
+        /// <param name="src">ファイル名</param>
         /// <param name="io">ファイル操作用オブジェクト</param>
         ///
         /// <returns>Format オブジェクト</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static Format FromFile(string path, IO io)
+        public static Format FromFile(string src, IO io)
         {
-            var info = io.Get(path);
+            var info = io.Get(src);
 
             if (info.Exists)
             {
-                using (var stream = io.OpenRead(path))
+                using (var stream = io.OpenRead(src))
                 {
                     var dest = FromStream(stream);
                     if (dest != Format.Unknown) return dest;

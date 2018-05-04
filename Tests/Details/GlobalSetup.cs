@@ -47,6 +47,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         public void OneTimeSetup()
         {
             Logger.Configure();
+            Logger.ObserveTaskException();
             Logger.Info(typeof(GlobalSetup), Assembly.GetExecutingAssembly());
         }
     }
