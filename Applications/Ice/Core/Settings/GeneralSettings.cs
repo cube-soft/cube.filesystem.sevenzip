@@ -31,24 +31,6 @@ namespace Cube.FileSystem.SevenZip.Ice
     [DataContract]
     public abstract class GeneralSettings : ObservableProperty
     {
-        #region Constructors
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GeneralSettings
-        ///
-        /// <summary>
-        /// オブジェクトを初期化します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected GeneralSettings()
-        {
-            Reset();
-        }
-
-        #endregion
-
         #region Properties
 
         /* ----------------------------------------------------------------- */
@@ -124,18 +106,6 @@ namespace Cube.FileSystem.SevenZip.Ice
         #endregion
 
         #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnDeserializing
-        ///
-        /// <summary>
-        /// デシリアライズ直前に実行されます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [OnDeserializing]
-        protected void OnDeserializing(StreamingContext context) => Reset();
 
         /* ----------------------------------------------------------------- */
         ///

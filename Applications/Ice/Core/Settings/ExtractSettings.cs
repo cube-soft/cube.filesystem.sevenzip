@@ -29,7 +29,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public class ExtractSettings : GeneralSettings
+    public sealed class ExtractSettings : GeneralSettings
     {
         #region Constructors
 
@@ -104,6 +104,18 @@ namespace Cube.FileSystem.SevenZip.Ice
         #endregion
 
         #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OnDeserializing
+        ///
+        /// <summary>
+        /// デシリアライズ直前に実行されます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [OnDeserializing]
+        private void OnDeserializing(StreamingContext context) => Reset();
 
         /* ----------------------------------------------------------------- */
         ///

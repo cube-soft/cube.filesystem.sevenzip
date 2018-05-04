@@ -30,7 +30,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ShortcutSettings : ObservableProperty
+    public sealed class ShortcutSettings : ObservableProperty
     {
         #region Constructors
 

@@ -32,7 +32,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public class AssociateSettings : ObservableProperty
+    public sealed class AssociateSettings : ObservableProperty
     {
         #region Constructors
 
