@@ -56,51 +56,51 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Details
+        /// RuntimeSettings
         ///
         /// <summary>
         /// 圧縮処理の実行時詳細設定を取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveRuntimeSettings Details { get; private set; }
+        public ArchiveRuntimeSettings RuntimeSettings { get; private set; }
 
         #endregion
 
         #region Events
 
-        #region DetailsRequested
+        #region RuntimeSettingsRequested
 
         /* ----------------------------------------------------------------- */
         ///
-        /// DetailsRequested
+        /// RuntimeSettingsRequested
         ///
         /// <summary>
         /// 圧縮の詳細設定が要求された時に発生するイベントです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public event QueryEventHandler<string, ArchiveRuntimeSettings> DetailsRequested;
+        public event QueryEventHandler<string, ArchiveRuntimeSettings> RuntimeSettingsRequested;
 
         /* ----------------------------------------------------------------- */
         ///
-        /// RaiseDetailsRequested
+        /// RaiseRuntimeSettingsRequested
         ///
         /// <summary>
-        /// DetailsRequested イベントを発生させます。
+        /// RuntimeSettingsRequested イベントを発生させます。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void RaiseDetailsRequested()
+        private void RaiseRuntimeSettingsRequested()
         {
             var info = IO.Get(Request.Sources.First());
             var path = IO.Combine(info.DirectoryName, $"{info.NameWithoutExtension}.zip");
 
             var e = new QueryEventArgs<string, ArchiveRuntimeSettings>(path, true);
-            DetailsRequested?.Invoke(this, e);
+            RuntimeSettingsRequested?.Invoke(this, e);
             if (e.Cancel) throw new OperationCanceledException();
 
-            Details = e.Result;
+            RuntimeSettings = e.Result;
         }
 
         #endregion
@@ -180,16 +180,16 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         {
             var fmt   = GetFormat();
             var dest  = GetTmp();
-            var query = !string.IsNullOrEmpty(Details.Password) || Request.Password ?
+            var query = !string.IsNullOrEmpty(RuntimeSettings.Password) || Request.Password ?
                         new Query<string, string>(x => RaisePasswordRequested(x)) :
                         null;
 
-            System.Diagnostics.Debug.Assert(Details != null);
-            this.LogDebug(string.Format("Format:{0}\tMethod:{1}", fmt, Details.CompressionMethod));
+            System.Diagnostics.Debug.Assert(RuntimeSettings != null);
+            this.LogDebug(string.Format("Format:{0}\tMethod:{1}", fmt, RuntimeSettings.CompressionMethod));
 
             using (var writer = new ArchiveWriter(fmt, IO))
             {
-                writer.Option = Details.ToOption(Settings);
+                writer.Option = RuntimeSettings.ToOption(Settings);
                 if (Settings.Value.Archive.Filtering) writer.Filters = Settings.Value.GetFilters();
                 foreach (var item in Request.Sources) writer.Add(item);
                 ProgressStart();
@@ -220,20 +220,20 @@ namespace Cube.FileSystem.SevenZip.App.Ice
                 case Format.Zip:
                 case Format.SevenZip:
                 case Format.Sfx:
-                    Details = new ArchiveRuntimeSettings(f);
+                    RuntimeSettings = new ArchiveRuntimeSettings(f);
                     break;
                 case Format.BZip2:
                 case Format.GZip:
                 case Format.XZ:
-                    Details = new ArchiveRuntimeSettings(Format.Tar);
-                    Details.CompressionMethod = f.ToMethod();
+                    RuntimeSettings = new ArchiveRuntimeSettings(Format.Tar);
+                    RuntimeSettings.CompressionMethod = f.ToMethod();
                     break;
                 default:
-                    RaiseDetailsRequested();
+                    RaiseRuntimeSettingsRequested();
                     break;
             }
 
-            return Details.Format;
+            return RuntimeSettings.Format;
         }
 
         /* ----------------------------------------------------------------- */
@@ -264,7 +264,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         private string GetDestination()
         {
-            if (!string.IsNullOrEmpty(Details?.Path)) return Details.Path;
+            if (!string.IsNullOrEmpty(RuntimeSettings?.Path)) return RuntimeSettings.Path;
 
             var cvt = new PathConverter(Request.Sources.First(), Request.Format, IO);
             var kv = GetSaveLocation(Settings.Value.Archive, cvt.ResultFormat, cvt.Result.FullName);
@@ -292,9 +292,9 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         private void RaisePasswordRequested(QueryEventArgs<string, string> e)
         {
-            if (!string.IsNullOrEmpty(Details.Password))
+            if (!string.IsNullOrEmpty(RuntimeSettings.Password))
             {
-                e.Result = Details.Password;
+                e.Result = RuntimeSettings.Password;
                 e.Cancel = false;
             }
             else OnPasswordRequested(e);

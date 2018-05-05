@@ -22,22 +22,22 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveDetailsTest
+    /// ArchiveRuntimeSettingsTest
     ///
     /// <summary>
-    /// ArchiveDetails のテスト用クラスです。
+    /// ArchiveRuntimeSettings のテスト用クラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ArchiveDetailsTest
+    class ArchiveRuntimeSettingsTest
     {
         /* ----------------------------------------------------------------- */
         ///
         /// ToOption
         ///
         /// <summary>
-        /// ArchiveDetails を ArchiveOption オブジェクトに変換する
+        /// ArchiveRuntimeSettings を ArchiveOption オブジェクトに変換する
         /// テストを実行します。
         /// </summary>
         ///
