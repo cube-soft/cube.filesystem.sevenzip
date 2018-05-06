@@ -276,22 +276,10 @@ namespace Cube.FileSystem.SevenZip
         /// <returns>拡張子</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static string ToExtension(this Format src)
-        {
-            var map = new Dictionary<Format, string>
-            {
-                { Format.SevenZip, ".7z"  },
-                { Format.BZip2,    ".bz2" },
-                { Format.GZip,     ".gz"  },
-                { Format.Lzw,      ".z"   },
-                { Format.Sfx,      ".exe" },
-                { Format.Unknown,  ""     },
-            };
-
-            return map.TryGetValue(src, out string dest) ?
-                   dest :
-                   $".{src.ToString().ToLowerInvariant()}";
-        }
+        public static string ToExtension(this Format src) =>
+            GetFormatToExtensionMap().TryGetValue(src, out string dest) ?
+            dest :
+            $".{src.ToString().ToLowerInvariant()}";
 
         /* ----------------------------------------------------------------- */
         ///
@@ -306,19 +294,10 @@ namespace Cube.FileSystem.SevenZip
         /// <returns>拡張子</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static string ToExtension(this CompressionMethod src)
-        {
-            var map = new Dictionary<CompressionMethod, string>
-            {
-                { CompressionMethod.BZip2, ".bz2" },
-                { CompressionMethod.GZip,  ".gz"  },
-                { CompressionMethod.XZ,    ".xz"  },
-            };
-
-            return map.TryGetValue(src, out string dest) ?
-                   dest :
-                   string.Empty;
-        }
+        public static string ToExtension(this CompressionMethod src) =>
+            GetMethodToExtensionMap().TryGetValue(src, out string dest) ?
+            dest :
+            string.Empty;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -338,19 +317,10 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public static CompressionMethod ToMethod(this Format src)
-        {
-            var map = new Dictionary<Format, CompressionMethod>
-            {
-                { Format.BZip2, CompressionMethod.BZip2 },
-                { Format.GZip,  CompressionMethod.GZip  },
-                { Format.XZ,    CompressionMethod.XZ    },
-            };
-
-            return map.TryGetValue(src, out CompressionMethod dest) ?
-                   dest :
-                   CompressionMethod.Default;
-        }
+        public static CompressionMethod ToMethod(this Format src) =>
+            GetFormatToMethodMap().TryGetValue(src, out CompressionMethod dest) ?
+            dest :
+            CompressionMethod.Default;
 
         #endregion
 
@@ -369,19 +339,10 @@ namespace Cube.FileSystem.SevenZip
         /// <returns>Format オブジェクト</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static Format FromMethod(CompressionMethod src)
-        {
-            var map = new Dictionary<CompressionMethod, Format>
-            {
-                { CompressionMethod.BZip2, Format.BZip2 },
-                { CompressionMethod.GZip,  Format.GZip  },
-                { CompressionMethod.XZ,    Format.XZ    },
-            };
-
-            return map.TryGetValue(src, out Format dest) ?
-                   dest :
-                   Format.Unknown;
-        }
+        public static Format FromMethod(CompressionMethod src) =>
+            GetMethodToFormatMap().TryGetValue(src, out Format dest) ?
+            dest :
+            Format.Unknown;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -421,14 +382,10 @@ namespace Cube.FileSystem.SevenZip
         /// <returns>Format オブジェクト</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static Format FromExtension(string src)
-        {
-            if (_ext == null) _ext = CreateExtensionMap();
-
-            return _ext.TryGetValue(src.ToLowerInvariant(), out Format dest) ?
-                   dest :
-                   Format.Unknown;
-        }
+        public static Format FromExtension(string src) =>
+            GetExtensionToFormatMap().TryGetValue(src.ToLowerInvariant(), out Format dest) ?
+            dest :
+            Format.Unknown;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -445,9 +402,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public static Format FromStream(Stream src)
         {
-            if (_sig == null) _sig = CreateSignatureMap();
+            var origin = src.Position;
 
-            var preserve = src.Position;
             try
             {
                 var bytes = new byte[16];
@@ -455,7 +411,7 @@ namespace Cube.FileSystem.SevenZip
                 if (count <= 0) return Format.Unknown;
 
                 var cvt = BitConverter.ToString(bytes, 0, count);
-                foreach (var cmp in _sig)
+                foreach (var cmp in GetSignatureMap())
                 {
                     if (cvt.StartsWith(cmp.Key, StringComparison.OrdinalIgnoreCase)) return cmp.Value;
                 }
@@ -466,7 +422,7 @@ namespace Cube.FileSystem.SevenZip
 
                 return Format.Unknown;
             }
-            finally { src.Seek(preserve, SeekOrigin.Begin); }
+            finally { src.Seek(origin, SeekOrigin.Begin); }
         }
 
         /* ----------------------------------------------------------------- */
@@ -538,35 +494,120 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CreateExtensionMap
+        /// GetExtensionToFormatMap
         ///
         /// <summary>
         /// Format と拡張子の対応関係を示すオブジェクトを取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static IDictionary<string, Format> CreateExtensionMap()
+        private static IDictionary<string, Format> GetExtensionToFormatMap()
         {
-            var dest = new Dictionary<string, Format>
+            if (_extensionToFormat == null)
             {
-                { ".7z",  Format.SevenZip },
-                { ".bz2", Format.BZip2    },
-                { ".tbz", Format.BZip2    },
-                { ".gz",  Format.GZip     },
-                { ".tgz", Format.GZip     },
-                { ".xz",  Format.XZ       },
-                { ".txz", Format.XZ       },
-                { ".z",   Format.Lzw      },
-            };
+                _extensionToFormat = new Dictionary<string, Format>
+                {
+                    { ".7z",  Format.SevenZip },
+                    { ".bz2", Format.BZip2    },
+                    { ".tbz", Format.BZip2    },
+                    { ".gz",  Format.GZip     },
+                    { ".tgz", Format.GZip     },
+                    { ".xz",  Format.XZ       },
+                    { ".txz", Format.XZ       },
+                    { ".z",   Format.Lzw      },
+                };
 
-            foreach (Format item in Enum.GetValues(typeof(Format)))
-            {
-                var ext = $".{item.ToString().ToLowerInvariant()}";
-                if (!dest.ContainsKey(ext)) dest.Add(ext, item);
+                foreach (Format item in Enum.GetValues(typeof(Format)))
+                {
+                    var ext = $".{item.ToString().ToLowerInvariant()}";
+                    if (!_extensionToFormat.ContainsKey(ext)) _extensionToFormat.Add(ext, item);
+                }
+
             }
-
-            return dest;
+            return _extensionToFormat;
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetFormatToExtensionMap
+        ///
+        /// <summary>
+        /// Format と拡張子の対応関係を示すオブジェクトを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private static IDictionary<Format, string> GetFormatToExtensionMap() =>
+            _formatToExtension ?? (
+                _formatToExtension = new Dictionary<Format, string>
+                {
+                    { Format.SevenZip, ".7z"  },
+                    { Format.BZip2,    ".bz2" },
+                    { Format.GZip,     ".gz"  },
+                    { Format.Lzw,      ".z"   },
+                    { Format.Sfx,      ".exe" },
+                    { Format.Unknown,  ""     },
+                }
+        );
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetMethodToExtensionMap
+        ///
+        /// <summary>
+        /// CompressionMethod と拡張子の対応関係を示すオブジェクトを
+        /// 取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private static IDictionary<CompressionMethod, string> GetMethodToExtensionMap() =>
+            _methodToExtension ?? (
+                _methodToExtension = new Dictionary<CompressionMethod, string>
+                {
+                    { CompressionMethod.BZip2, ".bz2" },
+                    { CompressionMethod.GZip,  ".gz"  },
+                    { CompressionMethod.XZ,    ".xz"  },
+                }
+            );
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetMethodToFormatMap
+        ///
+        /// <summary>
+        /// CompressionMethod と Format の対応関係を示すオブジェクトを
+        /// 取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private static IDictionary<CompressionMethod, Format> GetMethodToFormatMap() =>
+            _methodToFormat ?? (
+                _methodToFormat = new Dictionary<CompressionMethod, Format>
+                {
+                    { CompressionMethod.BZip2, Format.BZip2 },
+                    { CompressionMethod.GZip,  Format.GZip  },
+                    { CompressionMethod.XZ,    Format.XZ    },
+                }
+            );
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetFormatToMethodMap
+        ///
+        /// <summary>
+        /// Format と CompressionMethod の対応関係を示すオブジェクトを
+        /// 取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private static IDictionary<Format, CompressionMethod> GetFormatToMethodMap() =>
+            _formatToMethod ?? (
+                _formatToMethod = new Dictionary<Format, CompressionMethod>
+                {
+                    { Format.BZip2, CompressionMethod.BZip2 },
+                    { Format.GZip,  CompressionMethod.GZip  },
+                    { Format.XZ,    CompressionMethod.XZ    },
+                }
+            );
 
         /* ----------------------------------------------------------------- */
         ///
@@ -582,8 +623,8 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        private static IDictionary<string, Format> CreateSignatureMap() =>
-            new Dictionary<string, Format>
+        private static IDictionary<string, Format> GetSignatureMap() => _signature ?? (
+            _signature = new Dictionary<string, Format>
             {
                 { "50-4B-03-04",                Format.Zip      },
                 { "42-5A-68",                   Format.BZip2    },
@@ -607,13 +648,18 @@ namespace Cube.FileSystem.SevenZip
                 { "49-54-53-46",                Format.Chm      },
                 { "ED-AB-EE-DB",                Format.Rpm      },
                 { "1F-8B-08",                   Format.GZip     },
-            };
+            }
+        );
 
         #endregion
 
         #region Fields
-        private static IDictionary<string, Format> _ext;
-        private static IDictionary<string, Format> _sig;
+        private static IDictionary<string, Format> _signature;
+        private static IDictionary<string, Format> _extensionToFormat;
+        private static IDictionary<Format, string> _formatToExtension;
+        private static IDictionary<CompressionMethod, string> _methodToExtension;
+        private static IDictionary<CompressionMethod, Format> _methodToFormat;
+        private static IDictionary<Format, CompressionMethod> _formatToMethod;
         #endregion
     }
 }
