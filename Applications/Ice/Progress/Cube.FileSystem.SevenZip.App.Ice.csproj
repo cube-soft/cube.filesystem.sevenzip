@@ -167,14 +167,14 @@
     <EmbeddedResource Include="Views\ProgressForm.resx">
       <DependentUpon>ProgressForm.cs</DependentUpon>
     </EmbeddedResource>
-    <Compile Include="Views\ArchiveForm.cs">
+    <Compile Include="Views\ArchiveRtSettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\ArchiveForm.Designer.cs">
-      <DependentUpon>ArchiveForm.cs</DependentUpon>
+    <Compile Include="Views\ArchiveRtSettingsForm.Designer.cs">
+      <DependentUpon>ArchiveRtSettingsForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Views\ArchiveForm.resx">
-      <DependentUpon>ArchiveForm.cs</DependentUpon>
+    <EmbeddedResource Include="Views\ArchiveRtSettingsForm.resx">
+      <DependentUpon>ArchiveRtSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

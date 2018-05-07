@@ -238,6 +238,21 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     public static class Formats
     {
+        #region Properteis
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SfxName
+        ///
+        /// <summary>
+        /// 自己解凍形式 (SFX) モジュールの名前を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static string SfxName { get; } = "7z.sfx";
+
+        #endregion
+
         #region Methods
 
         #region ToXxx
@@ -505,7 +520,7 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         private static Format Convert(Format src, string path) =>
-            src == Format.PE && FileVersionInfo.GetVersionInfo(path).InternalName == "7z.sfx" ?
+            src == Format.PE && FileVersionInfo.GetVersionInfo(path).InternalName == SfxName ?
             Format.Sfx :
             src;
 

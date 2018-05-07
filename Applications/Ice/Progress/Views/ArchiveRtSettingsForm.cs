@@ -25,27 +25,27 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveForm
+    /// ArchiveRtSettingsForm
     ///
     /// <summary>
-    /// 圧縮処理の詳細画面を表示するクラスです。
+    /// 圧縮処理の実行時詳細設定画面を表示するクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class ArchiveForm : Form
+    public partial class ArchiveRtSettingsForm : Form
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveForm
+        /// ArchiveRtSettingsForm
         ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveForm()
+        public ArchiveRtSettingsForm()
         {
             InitializeComponent();
 

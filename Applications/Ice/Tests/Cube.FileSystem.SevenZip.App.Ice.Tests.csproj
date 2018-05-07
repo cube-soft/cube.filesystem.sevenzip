@@ -105,7 +105,7 @@
     <Compile Include="Details\MockViewFactory.cs" />
     <Compile Include="Details\MockViewHelper.cs" />
     <Compile Include="Details\ProgressMockView.cs" />
-    <Compile Include="Settings\ArchiveDetailsTest.cs" />
+    <Compile Include="Settings\ArchiveRtSettingsTest.cs" />
     <Compile Include="Settings\AssociateRegistrarTest.cs" />
     <Compile Include="Settings\SettingsViewModelTest.cs" />
     <Compile Include="Settings\ShortcutSettingsTest.cs" />

@@ -15,9 +15,9 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.Windows.Forms;
 using Cube.FileSystem.SevenZip.Ice;
 using Cube.Forms.Processes;
+using System.Windows.Forms;
 
 namespace Cube.FileSystem.SevenZip.App.Ice
 {
@@ -111,22 +111,22 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ShowArchiveView
+        /// ShowArchiveRtSettingsView
         ///
         /// <summary>
-        /// 圧縮の詳細設定用画面を表示します。
+        /// 圧縮処理の実行時詳細設定用画面を表示します。
         /// </summary>
         ///
         /// <param name="e">詳細設定を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public virtual void ShowArchiveView(QueryEventArgs<string, ArchiveRuntimeSettings> e)
+        public virtual void ShowArchiveRtSettingsView(QueryEventArgs<string, ArchiveRtSettings> e)
         {
-            using (var view = new ArchiveForm { Path = e.Query })
+            using (var view = new ArchiveRtSettingsForm { Path = e.Query })
             {
                 e.Cancel = view.ShowDialog() == DialogResult.Cancel;
                 if (e.Cancel) return;
-                e.Result = new ArchiveRuntimeSettings
+                e.Result = new ArchiveRtSettings
                 {
                     Format            = view.Format,
                     Path              = view.Path,
@@ -396,7 +396,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ShowArchiveView
+        /// ShowArchiveRtSettingsView
         ///
         /// <summary>
         /// 圧縮の詳細設定用画面を表示します。
@@ -405,8 +405,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// <param name="e">詳細設定を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void ShowArchiveView(QueryEventArgs<string, ArchiveRuntimeSettings> e) =>
-            _factory.ShowArchiveView(e);
+        public static void ShowArchiveRtSettingsView(QueryEventArgs<string, ArchiveRtSettings> e) =>
+            _factory.ShowArchiveRtSettingsView(e);
 
         /* ----------------------------------------------------------------- */
         ///

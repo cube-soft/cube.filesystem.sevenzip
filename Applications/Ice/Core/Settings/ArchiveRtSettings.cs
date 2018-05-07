@@ -21,35 +21,37 @@ namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveRuntimeSettings
+    /// ArchiveRtSettings
     ///
     /// <summary>
     /// 圧縮処理の実行時詳細設定を保持するクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveRuntimeSettings
+    public class ArchiveRtSettings
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveRuntimeSettings
+        /// ArchiveRtSettings
         ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveRuntimeSettings()
+        public ArchiveRtSettings()
         {
-            var dir = System.IO.Path.GetDirectoryName(AssemblyReader.Default.Location);
-            SfxModule = System.IO.Path.Combine(dir, "7z.sfx");
+            SfxModule = System.IO.Path.Combine(
+                System.IO.Path.GetDirectoryName(AssemblyReader.Default.Location),
+                Formats.SfxName
+            );
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveRuntimeSettings
+        /// ArchiveRtSettings
         ///
         /// <summary>
         /// オブジェクトを初期化します。
@@ -58,7 +60,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="format">圧縮形式</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveRuntimeSettings(Format format) : this()
+        public ArchiveRtSettings(Format format) : this()
         {
             Format = format;
         }

@@ -190,21 +190,21 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ShowArchiveView
+        /// ShowArchiveRtSettingsView
         ///
         /// <summary>
-        /// 圧縮の詳細設定用画面を表示します。
+        /// 圧縮処理の実行時詳細設定用画面を表示します。
         /// </summary>
         ///
         /// <param name="e">詳細設定を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public override void ShowArchiveView(QueryEventArgs<string, ArchiveRuntimeSettings> e)
+        public override void ShowArchiveRtSettingsView(QueryEventArgs<string, ArchiveRtSettings> e)
         {
             var format = Formats.FromExtension(System.IO.Path.GetExtension(e.Query));
 
             e.Cancel = false;
-            e.Result = new ArchiveRuntimeSettings(format)
+            e.Result = new ArchiveRtSettings(format)
             {
                 Path              = Settings.Destination,
                 Password          = Settings.Password,

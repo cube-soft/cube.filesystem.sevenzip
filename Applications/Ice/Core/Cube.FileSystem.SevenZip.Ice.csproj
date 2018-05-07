@@ -99,7 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Conversions\PresetMenu.cs" />
-    <Compile Include="Settings\Runtime\ArchiveRuntimeSettings.cs" />
+    <Compile Include="Settings\ArchiveRtSettings.cs" />
     <Compile Include="Settings\ArchiveSettings.cs" />
     <Compile Include="Settings\AssociateSettings.cs" />
     <Compile Include="Settings\ContextSettings.cs" />

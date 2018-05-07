@@ -22,15 +22,15 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveRuntimeSettingsTest
+    /// ArchiveRtSettingsTest
     ///
     /// <summary>
-    /// ArchiveRuntimeSettings のテスト用クラスです。
+    /// ArchiveRtSettings のテスト用クラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ArchiveRuntimeSettingsTest
+    class ArchiveRtSettingsTest
     {
         /* ----------------------------------------------------------------- */
         ///
@@ -45,7 +45,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         [Test]
         public void ToOption()
         {
-            var actual = new ArchiveRuntimeSettings
+            var actual = new ArchiveRtSettings
             {
                 CompressionLevel  = CompressionLevel.High,
                 CompressionMethod = CompressionMethod.Ppmd,

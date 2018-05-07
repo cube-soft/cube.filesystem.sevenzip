@@ -57,11 +57,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
             // Model
             var model = Model as ArchiveFacade;
-            model.DestinationRequested     += WhenDestinationRequested;
-            model.PasswordRequested        += WhenPasswordRequested;
-            model.Progress                 += WhenProgress;
-            model.RuntimeSettingsRequested += WhenRuntimeSettingsRequested;
-            model.MailRequested            += WhenMailRequested;
+            model.DestinationRequested += WhenDestinationRequested;
+            model.PasswordRequested    += WhenPasswordRequested;
+            model.Progress             += WhenProgress;
+            model.RtSettingsRequested  += WhenRtSettingsRequested;
+            model.MailRequested        += WhenMailRequested;
         }
 
         #endregion
@@ -70,16 +70,16 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// WhenRuntimeSettingsRequested
+        /// WhenRtSettingsRequested
         ///
         /// <summary>
         /// 詳細設定要求時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenRuntimeSettingsRequested(object s,
-            QueryEventArgs<string, ArchiveRuntimeSettings> e) =>
-            ShowDialog(() => Views.ShowArchiveView(e));
+        private void WhenRtSettingsRequested(object s,
+            QueryEventArgs<string, ArchiveRtSettings> e) =>
+            ShowDialog(() => Views.ShowArchiveRtSettingsView(e));
 
         /* ----------------------------------------------------------------- */
         ///

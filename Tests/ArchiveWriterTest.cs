@@ -447,7 +447,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     {
                         CompressionMethod = CompressionMethod.Lzma,
                         CompressionLevel  = CompressionLevel.Ultra,
-                        Module            = Current("7z.sfx"),
+                        Module            = Current(Formats.SfxName),
                     }
                 ).Returns(Format.PE);
             }
