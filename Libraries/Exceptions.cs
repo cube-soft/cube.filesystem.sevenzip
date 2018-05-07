@@ -31,17 +31,5 @@ namespace Cube.FileSystem.SevenZip
     ///
     /* --------------------------------------------------------------------- */
     [Serializable]
-    public class EncryptionException : IOException
-    {
-        /* ----------------------------------------------------------------- */
-        ///
-        /// EncryptionException
-        ///
-        /// <summary>
-        /// オブジェクトを初期化します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public EncryptionException() { }
-    }
+    public class EncryptionException : IOException { }
 }

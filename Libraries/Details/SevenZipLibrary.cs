@@ -209,8 +209,8 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Fields
-        private OnceAction<bool> _dispose;
-        private SafeLibraryHandle _handle;
+        private readonly OnceAction<bool> _dispose;
+        private readonly SafeLibraryHandle _handle;
         #endregion
     }
 }
