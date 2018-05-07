@@ -802,11 +802,24 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                     DropRequest("Bz2Sample"),
                     new ExtractSettings
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
                     },
                     FullName(@"Bz2Sample\Sample\Sample.txt"),
                     1L
+                );
+
+                yield return new TestCaseData(
+                    "SampleSfx.exe",
+                    "",
+                    DropRequest("SfxSample"),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = CreateDirectoryMethod.CreateSmart,
+                    },
+                    FullName(@"SfxSample\Sample\Foo.txt"),
+                    4L
                 );
             }
         }
