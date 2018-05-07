@@ -18,6 +18,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 
 namespace Cube.FileSystem.SevenZip
@@ -258,10 +259,12 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public static Guid ToClassId(this Format src) =>
-            src != Format.Unknown ?
-            new Guid($"23170f69-40c1-278a-1000-000110{((int)src):x2}0000") :
-            Guid.Empty;
+        public static Guid ToClassId(this Format src)
+        {
+            if (src == Format.Unknown) return Guid.Empty;
+            var cvt = (src == Format.Sfx) ? Format.SevenZip : src;
+            return new Guid($"23170f69-40c1-278a-1000-000110{((int)cvt):x2}0000");
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -463,7 +466,7 @@ namespace Cube.FileSystem.SevenZip
                 using (var stream = io.OpenRead(src))
                 {
                     var dest = FromStream(stream);
-                    if (dest != Format.Unknown) return dest;
+                    if (dest != Format.Unknown) return Convert(dest, src);
                 }
             }
             return FromExtension(info.Extension);
@@ -491,6 +494,20 @@ namespace Cube.FileSystem.SevenZip
             if (stream.Read(bytes, 0, count) < count) return false;
             return BitConverter.ToString(bytes).StartsWith(compared, StringComparison.OrdinalIgnoreCase);
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Convert
+        ///
+        /// <summary>
+        /// Format をファイルの内容に応じて変更します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private static Format Convert(Format src, string path) =>
+            src == Format.PE && FileVersionInfo.GetVersionInfo(path).InternalName == "7z.sfx" ?
+            Format.Sfx :
+            src;
 
         /* ----------------------------------------------------------------- */
         ///

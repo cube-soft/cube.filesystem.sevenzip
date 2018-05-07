@@ -16,8 +16,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-using System;
 using NUnit.Framework;
+using System;
 
 namespace Cube.FileSystem.SevenZip.Tests
 {
@@ -50,6 +50,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         [TestCase("Sample.cab",      ExpectedResult = Format.Cab)]
         [TestCase("Sample.chm",      ExpectedResult = Format.Chm)]
         [TestCase("Sample.docx",     ExpectedResult = Format.Zip)]
+        [TestCase("Sample.exe",      ExpectedResult = Format.PE)]
         [TestCase("Sample.flv",      ExpectedResult = Format.Flv)]
         [TestCase("Sample.jar",      ExpectedResult = Format.Zip)]
         [TestCase("Sample.lha",      ExpectedResult = Format.Lzh)]
@@ -65,6 +66,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         [TestCase("Sample.txz",      ExpectedResult = Format.XZ)]
         [TestCase("Sample.xlsx",     ExpectedResult = Format.Zip)]
         [TestCase("Sample.zip",      ExpectedResult = Format.Zip)]
+        [TestCase("SampleSfx.exe",   ExpectedResult = Format.Sfx)]
         public Format Detect(string filename)
         {
             var src  = Example(filename);

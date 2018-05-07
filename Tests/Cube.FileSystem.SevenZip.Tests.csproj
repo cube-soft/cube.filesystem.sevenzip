@@ -289,6 +289,9 @@
     <None Include="Examples\Sample.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Examples\Sample.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Examples\Sample.flv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -382,6 +385,9 @@
     <None Include="Examples\SampleMac.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Examples\SampleSfx.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Examples\SampleUtf8.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -432,8 +438,4 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
 </Project>

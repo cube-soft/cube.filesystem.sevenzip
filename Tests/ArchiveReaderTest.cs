@@ -166,12 +166,14 @@ namespace Cube.FileSystem.SevenZip.Tests
         [TestCase("Sample.chm",     ExpectedResult = 89)]
         [TestCase("Sample.cpio",    ExpectedResult =  4)]
         [TestCase("Sample.docx",    ExpectedResult = 13)]
+        [TestCase("Sample.exe",     ExpectedResult =  4)]
         [TestCase("Sample.nupkg",   ExpectedResult =  5)]
         [TestCase("Sample.pptx",    ExpectedResult = 40)]
         [TestCase("Sample.rar",     ExpectedResult =  4)]
         [TestCase("Sample.rar5",    ExpectedResult =  4)]
         [TestCase("Sample.xlsx",    ExpectedResult = 14)]
         [TestCase("SampleEmpty.7z", ExpectedResult =  7)]
+        [TestCase("SampleSfx.exe",  ExpectedResult =  4)]
         public int Extract_Count(string filename)
         {
             var src        = Example(filename);
