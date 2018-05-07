@@ -102,6 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -120,12 +121,21 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Views\ContextSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\ContextSettingsForm.Designer.cs">
+      <DependentUpon>ContextSettingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Views\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Views\ContextSettingsForm.resx">
+      <DependentUpon>ContextSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
