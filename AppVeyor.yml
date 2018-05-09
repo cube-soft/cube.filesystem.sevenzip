@@ -26,9 +26,9 @@ build:
     publish_nuget: true
     verbosity: minimal
 after_build:
-    - xcopy /Y /I Applications\Ice\Progress\bin\Release\* CubeIce
-    - xcopy /Y /I Applications\Ice\Settings\bin\Release\* CubeIce.Settings
-    - xcopy /Y /I Applications\Ice\Associate\bin\Release\* CubeIce.Settings.Associate
+    - xcopy /Y /I Applications\Ice\Progress\bin\Release CubeIce
+    - xcopy /Y /I Applications\Ice\Settings\bin\Release CubeIce.Settings
+    - xcopy /Y /I Applications\Ice\Associate\bin\Release CubeIce.Settings.Associate
     - xcopy /Y /I Thirdparty\x86\7z.* CubeIce\x86
     - xcopy /Y /I Thirdparty\x64\7z.* CubeIce\x64
     - xcopy /Y /I Thirdparty\x64\7z.* Tests\bin\Release
