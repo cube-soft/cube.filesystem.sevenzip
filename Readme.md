@@ -94,6 +94,15 @@ We will implement to add and/or modify files to existed archives in the future.
 * [babel](http://tricklib.com/cxx/ex/babel/) ... Used in the customized version of 7-Zip
 * [SevenZipSharp](https://www.nuget.org/packages/SevenZipSharp/)
 
+## Contributing
+
+1. Fork [Cube.FileSystem.SevenZip](https://github.com/cube-soft/Cube.FileSystem.SevenZip/fork) repository.
+2. Create a feature branch from the [stable](https://github.com/cube-soft/Cube.FileSystem.SevenZip/tree/stable) branch (git checkout -b my-new-feature origin/stable). The [master](https://github.com/cube-soft/Cube.FileSystem.SevenZip/tree/master) branch may refer some pre-released NuGet packages. See [AppVeyor.yml](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/AppVeyor.yml) if you want to build and commit in the master branch.
+3. Commit your changes.
+4. Rebase your local changes against the stable (or master) branch.
+5. Run test suite with the [NUnit](http://nunit.org/) console or the Visual Studio (NUnit 3 test adapter) and confirm that it passes.
+6. Create new Pull Request.
+
 ## License
  
 Copyright (c) 2010 [CubeSoft, Inc.](http://www.cube-soft.jp/)
