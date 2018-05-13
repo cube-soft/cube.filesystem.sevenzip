@@ -22,14 +22,14 @@ namespace Cube.FileSystem.SevenZip.Archives
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveOperator
+    /// ArchiveExtension
     ///
     /// <summary>
     /// 圧縮ファイルに関する拡張メソッドを定義するためのクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public static class ArchiveOperator
+    public static class ArchiveExtension
     {
         #region Methods
 

@@ -117,7 +117,7 @@
     <Compile Include="NativeMethods\Structures\SafeLibraryHandle.cs" />
     <Compile Include="NativeMethods\Kernel32.cs" />
     <Compile Include="NativeMethods\Ole32.cs" />
-    <Compile Include="Operations\Archives.cs" />
+    <Compile Include="ArchiveExtension.cs" />
     <Compile Include="ArchiveItem.cs" />
     <Compile Include="ArchiveOption.cs" />
     <Compile Include="ArchiveReport.cs" />
