@@ -21,14 +21,14 @@ namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// PresetMenuConversions
+    /// PresetMenuExtension
     ///
     /// <summary>
-    /// PresetMenu に関する拡張メソッドを定義するクラスです。
+    /// PresetMenu の拡張用クラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public static class PresetMenuConversions
+    public static class PresetMenuExtension
     {
         /* --------------------------------------------------------------------- */
         ///

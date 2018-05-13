@@ -29,7 +29,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public sealed class ArchiveSettings : GeneralSettings
+    public sealed class ArchiveSettings : ArchiveSettingsBase
     {
         /* ----------------------------------------------------------------- */
         ///
@@ -84,7 +84,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         #endregion
 
-        #region Methods
+        #region Implementations
 
         /* ----------------------------------------------------------------- */
         ///

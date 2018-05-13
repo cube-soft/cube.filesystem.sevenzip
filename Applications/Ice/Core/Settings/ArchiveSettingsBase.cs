@@ -21,7 +21,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// GeneralSettings
+    /// ArchiveSettingsBase
     ///
     /// <summary>
     /// 圧縮・解凍に共通するユーザ設定を保持するためのクラスです。
@@ -29,7 +29,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public abstract class GeneralSettings : ObservableProperty
+    public abstract class ArchiveSettingsBase : ObservableProperty
     {
         #region Properties
 

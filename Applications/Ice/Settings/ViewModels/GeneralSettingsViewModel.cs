@@ -28,7 +28,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class GeneralSettingsViewModel<T> : ObservableProperty where T : GeneralSettings
+    public class GeneralSettingsViewModel<T> : ObservableProperty where T : ArchiveSettingsBase
     {
         #region Constructors
 

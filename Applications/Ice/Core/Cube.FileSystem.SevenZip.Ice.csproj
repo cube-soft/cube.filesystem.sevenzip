@@ -98,18 +98,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Conversions\PresetMenu.cs" />
     <Compile Include="Settings\ArchiveRtSettings.cs" />
     <Compile Include="Settings\ArchiveSettings.cs" />
+    <Compile Include="Settings\ArchiveSettingsBase.cs" />
     <Compile Include="Settings\AssociateSettings.cs" />
     <Compile Include="Settings\ContextSettings.cs" />
     <Compile Include="Settings\ExtractSettings.cs" />
-    <Compile Include="Settings\GeneralSettings.cs" />
     <Compile Include="Settings\Settings.cs" />
     <Compile Include="Settings\SettingsExtension.cs" />
+    <Compile Include="Settings\SettingsFolder.cs" />
     <Compile Include="Settings\ShortcutSettings.cs" />
     <Compile Include="AssociateRegistrar.cs" />
+    <Compile Include="ContextMenu.cs" />
     <Compile Include="Parameters.cs" />
+    <Compile Include="PresetMenu.cs" />
+    <Compile Include="PresetMenuExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

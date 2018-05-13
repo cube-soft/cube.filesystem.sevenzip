@@ -560,7 +560,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected KeyValuePair<SaveLocation, string> GetSaveLocation(GeneralSettings settings, Format format, string query)
+        protected KeyValuePair<SaveLocation, string> GetSaveLocation(ArchiveSettingsBase settings, Format format, string query)
         {
             var key = Request.Location != SaveLocation.Unknown ?
                       Request.Location :
@@ -656,7 +656,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetSavePath(SaveLocation key, GeneralSettings settings, Format format, string query)
+        private string GetSavePath(SaveLocation key, ArchiveSettingsBase settings, Format format, string query)
         {
             switch (key)
             {
