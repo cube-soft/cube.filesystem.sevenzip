@@ -53,6 +53,17 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int ThreadCount { get; set; } = 1;
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CodePage
+        ///
+        /// <summary>
+        /// 文字コードを取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public CodePage CodePage { get; set; } = CodePage.Oem;
+
         #endregion
     }
 
@@ -121,18 +132,6 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public EncryptionMethod EncryptionMethod { get; set; } = EncryptionMethod.Default;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// UseUtf8
-        ///
-        /// <summary>
-        /// ファイル名を UTF-8 に変換するかどうかを示す値を取得または
-        /// 設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public bool UseUtf8 { get; set; } = false;
 
         #endregion
     }

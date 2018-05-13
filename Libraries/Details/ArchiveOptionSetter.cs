@@ -86,11 +86,17 @@ namespace Cube.FileSystem.SevenZip
         {
             Debug.Assert(Option != null && dest != null);
 
-            var values = CreateValues();
+            var src = new Dictionary<string, PropVariant>(_dic);
+            if (Option.CodePage != CodePage.Oem)
+            {
+                src.Add("cp", PropVariant.Create((uint)Option.CodePage));
+            }
+
+            var values = CreateValues(src.Values);
 
             try
             {
-                var k = CreateNames();
+                var k = CreateNames(src.Keys);
                 var v = values.AddrOfPinnedObject();
                 var result = dest.SetProperties(k, v, (uint)k.Length);
                 Debug.Assert(result == 0);
@@ -125,11 +131,11 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string[] CreateNames() => new[]
+        private string[] CreateNames(IEnumerable<string> src) => new[]
         {
             "x",
             "mt",
-        }.Concat(_dic.Keys).ToArray();
+        }.Concat(src).ToArray();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -140,12 +146,12 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private GCHandle CreateValues() => GCHandle.Alloc(
+        private GCHandle CreateValues(IEnumerable<PropVariant> src) => GCHandle.Alloc(
             new[]
             {
                 PropVariant.Create((uint)Option.CompressionLevel),
                 PropVariant.Create((uint)Option.ThreadCount),
-            }.Concat(_dic.Values).ToArray(),
+            }.Concat(src).ToArray(),
             GCHandleType.Pinned
         );
 

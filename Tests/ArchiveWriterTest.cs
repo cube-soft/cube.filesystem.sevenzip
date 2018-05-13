@@ -116,7 +116,7 @@ namespace Cube.FileSystem.SevenZip.Tests
 
             using (var writer = new ArchiveWriter(fmt))
             {
-                writer.Option = new ZipOption { UseUtf8 = utf8 };
+                writer.Option = new ZipOption { CodePage = utf8 ? CodePage.Utf8 : CodePage.Japanese };
                 writer.Add(src);
                 writer.Save(dest);
             }

@@ -89,7 +89,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                 CompressionMethod = src.CompressionMethod,
                 EncryptionMethod  = src.EncryptionMethod,
                 ThreadCount       = src.ThreadCount,
-                UseUtf8           = common.UseUtf8,
+                CodePage          = common.UseUtf8 ? CodePage.Utf8 : CodePage.Oem,
             };
 
         /* ----------------------------------------------------------------- */

@@ -126,6 +126,7 @@
     <Compile Include="Exceptions.cs" />
     <Compile Include="FileItem.cs" />
     <Compile Include="Format.cs" />
+    <Compile Include="FormatExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
