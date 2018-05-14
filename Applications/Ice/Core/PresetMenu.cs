@@ -64,11 +64,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <summary>GZip に圧縮</summary>
         ArchiveGZip = 0x00001000,
         /// <summary>詳細を設定して圧縮</summary>
-        ArchiveDetail = 0x00002000,
+        ArchiveDetails = 0x00002000,
         /// <summary>自己解凍形式に圧縮</summary>
         ArchiveSfx = 0x00004000,
         /// <summary>XZ に圧縮</summary>
-        ArchiveXZ = 0x00008000,
+        ArchiveXz = 0x00008000,
         /// <summary>圧縮オプション用マスク</summary>
         ArchiveOptions = 0x0000ff00,
 
@@ -83,11 +83,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <summary>GZip に圧縮してメール添付</summary>
         MailGZip = 0x00100000,
         /// <summary>詳細を設定して圧縮してメール添付</summary>
-        MailDetail = 0x00200000,
+        MailDetails = 0x00200000,
         /// <summary>自己解凍形式に圧縮してメール添付</summary>
         MailSfx = 0x00400000,
         /// <summary>XZ に圧縮してメール添付</summary>
-        MailXZ = 0x00800000,
+        MailXz = 0x00800000,
         /// <summary>圧縮してメール添付オプション用マスク</summary>
         MailOptions = 0x00ff0000,
 

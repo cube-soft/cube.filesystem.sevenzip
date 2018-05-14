@@ -15,7 +15,9 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -32,97 +34,326 @@ namespace Cube.FileSystem.SevenZip.Ice
     {
         /* --------------------------------------------------------------------- */
         ///
+        /// ToContextMenuGroup
+        ///
+        /// <summary>
+        /// PresetMenu を表す ContextMenu オブジェクト一覧を取得します。
+        /// </summary>
+        ///
+        /// <param name="src">PresetMenu オブジェクト</param>
+        ///
+        /// <returns>ContextMenu コレクション</returns>
+        ///
+        /* --------------------------------------------------------------------- */
+        public static IEnumerable<ContextMenu> ToContextMenuGroup(this PresetMenu src)
+        {
+            var dest = new List<ContextMenu>();
+            Add(src, PresetMenu.ArchiveOptions, ToContextMenu(PresetMenu.Archive), dest);
+            Add(src, PresetMenu.ExtractOptions, ToContextMenu(PresetMenu.Extract), dest);
+            Add(src, PresetMenu.MailOptions,    ToContextMenu(PresetMenu.Mail),    dest);
+            return dest;
+        }
+
+        /* --------------------------------------------------------------------- */
+        ///
+        /// ToContextMenu
+        ///
+        /// <summary>
+        /// PresetMenu を表す ContextMenu オブジェクトを取得します。
+        /// </summary>
+        ///
+        /// <param name="src">PresetMenu オブジェクト</param>
+        ///
+        /// <returns>ContextMenu オブジェクト</returns>
+        ///
+        /// <remarks>
+        /// ToContextMenu メソッドは、指定された PresetMenu オブジェクトが複数の
+        /// メニューを表している場合、最初に合致したメニューに対応する
+        /// ContextMenu オブジェクトを返します。全てのメニューに合致する
+        /// ContextMenu オブジェクトのコレクションを取得する場合は
+        /// ToContextMenuGroup メソッドを使用して下さい。
+        /// </remarks>
+        ///
+        /* --------------------------------------------------------------------- */
+        public static ContextMenu ToContextMenu(this PresetMenu src) => new ContextMenu
+        {
+            Name         = ToName(src),
+            Arguments    = string.Join(" ", ToArguments(src)),
+            IconLocation = ToIconLocation(src),
+            IconIndex    = ToIconIndex(src),
+        };
+
+        /* --------------------------------------------------------------------- */
+        ///
+        /// ToName
+        ///
+        /// <summary>
+        /// PresetMenu に対応する名前を取得します。
+        /// </summary>
+        ///
+        /// <param name="src">PresetMenu オブジェクト</param>
+        ///
+        /// <returns>名前</returns>
+        ///
+        /* --------------------------------------------------------------------- */
+        public static string ToName(this PresetMenu src)
+        {
+            if ((src & PresetMenu.ArchiveOptions) != 0) return Find(src, ArchiveNames);
+            if ((src & PresetMenu.ExtractOptions) != 0) return Find(src, ExtractNames);
+            if ((src & PresetMenu.MailOptions)    != 0) return Find(src, MailNames);
+            if ((src & PresetMenu.Archive)        != 0) return Properties.Resources.CtxArchive;
+            if ((src & PresetMenu.Extract)        != 0) return Properties.Resources.CtxExtract;
+            if ((src & PresetMenu.Mail)           != 0) return Properties.Resources.CtxMail;
+            return string.Empty;
+        }
+
+        /* --------------------------------------------------------------------- */
+        ///
         /// ToArguments
         ///
         /// <summary>
         /// PresetMenu に対応するプログラム引数を取得します。
         /// </summary>
         ///
-        /// <param name="menu">メニュー</param>
+        /// <param name="src">PresetMenu オブジェクト</param>
         ///
         /// <returns>プログラム引数</returns>
         ///
-        /// <remarks>
-        /// 変換可能な PresetMenu が複数存在する場合、最初に見つかった
-        /// メニューに対応する引数が返されます。
-        /// </remarks>
+        /* --------------------------------------------------------------------- */
+        public static IEnumerable<string> ToArguments(this PresetMenu src)
+        {
+            if ((src & PresetMenu.ArchiveOptions) != 0) return Find(src, ArchiveArguments);
+            if ((src & PresetMenu.ExtractOptions) != 0) return Find(src, ExtractArguments);
+            if ((src & PresetMenu.MailOptions)    != 0) return Find(src, MailArguments);
+            if ((src & PresetMenu.Archive)        != 0) return Find(PresetMenu.ArchiveZip, ArchiveArguments);
+            if ((src & PresetMenu.Extract)        != 0) return new[] { "/x" };
+            if ((src & PresetMenu.Mail)           != 0) return Find(PresetMenu.MailZip, MailArguments);
+            return new string[0];
+        }
+
+        /* --------------------------------------------------------------------- */
+        ///
+        /// ToIconLocation
+        ///
+        /// <summary>
+        /// PresetMenu に対応するアイコンのパスを取得します。
+        /// </summary>
+        ///
+        /// <param name="src">PresetMenu オブジェクト</param>
+        ///
+        /// <returns>アイコンのパス</returns>
         ///
         /* --------------------------------------------------------------------- */
-        public static IEnumerable<string> ToArguments(this PresetMenu menu)
+        public static string ToIconLocation(this PresetMenu src)
         {
-            if ((menu & PresetMenu.ArchiveOptions) != 0) return ToArchive(menu);
-            if ((menu & PresetMenu.ExtractOptions) != 0) return ToExtract(menu);
-            if ((menu & PresetMenu.MailOptions) != 0) return ToMail(menu);
-            if ((menu & PresetMenu.Archive) != 0) return ToArchive(PresetMenu.ArchiveZip);
-            if ((menu & PresetMenu.Extract) != 0) return new[] { "/x" };
-            if ((menu & PresetMenu.Mail) != 0) return ToMail(PresetMenu.MailZip);
-            return new string[0];
+            var mask = PresetMenu.Archive        |
+                       PresetMenu.ArchiveOptions |
+                       PresetMenu.Extract        |
+                       PresetMenu.ExtractOptions |
+                       PresetMenu.Mail           |
+                       PresetMenu.MailOptions    ;
+            var dir  = System.IO.Path.GetDirectoryName(AssemblyReader.Default.Location);
+            var dest = System.IO.Path.Combine(dir, "cubeice.exe");
+            return ((src & mask) != 0) ? dest : string.Empty;
+        }
+
+        /* --------------------------------------------------------------------- */
+        ///
+        /// ToIconLocation
+        ///
+        /// <summary>
+        /// PresetMenu に対応するアイコンのインデックスを取得します。
+        /// </summary>
+        ///
+        /// <param name="src">PresetMenu オブジェクト</param>
+        ///
+        /// <returns>アイコンのインデックス</returns>
+        ///
+        /* --------------------------------------------------------------------- */
+        public static int ToIconIndex(this PresetMenu src)
+        {
+            var m0 = PresetMenu.Archive | PresetMenu.ArchiveOptions;
+            if ((src & m0) != 0) return 1;
+            var m1 = PresetMenu.Extract | PresetMenu.ExtractOptions;
+            if ((src & m1) != 0) return 2;
+            var m2 = PresetMenu.Mail | PresetMenu.MailOptions;
+            if ((src & m2) != 0) return 1;
+
+            return 0;
         }
 
         #region Implementations
 
         /* --------------------------------------------------------------------- */
         ///
-        /// ToArchive
+        /// Find
         ///
         /// <summary>
-        /// 圧縮に関する PresetMenu に対応するプログラム引数を取得します。
+        /// メニューに対応する値を取得します。
         /// </summary>
         ///
         /* --------------------------------------------------------------------- */
-        private static IEnumerable<string> ToArchive(PresetMenu m)
-        {
-            if (m.HasFlag(PresetMenu.ArchiveZip)) return new[] { "/c:zip" };
-            if (m.HasFlag(PresetMenu.ArchiveZipPassword)) return new[] { "/c:zip", "/p" };
-            if (m.HasFlag(PresetMenu.ArchiveSevenZip)) return new[] { "/c:7z" };
-            if (m.HasFlag(PresetMenu.ArchiveBZip2)) return new[] { "/c:bzip2" };
-            if (m.HasFlag(PresetMenu.ArchiveGZip)) return new[] { "/c:gzip" };
-            if (m.HasFlag(PresetMenu.ArchiveXZ)) return new[] { "/c:xz" };
-            if (m.HasFlag(PresetMenu.ArchiveSfx)) return new[] { "/c:exe" };
-            if (m.HasFlag(PresetMenu.ArchiveDetail)) return new[] { "/c:detail" };
-            return new string[0];
-        }
+        private static T Find<T>(PresetMenu src, IDictionary<PresetMenu, T> cmp) =>
+            cmp.FirstOrDefault(e => src.HasFlag(e.Key)).Value;
 
         /* --------------------------------------------------------------------- */
         ///
-        /// ToExtract
+        /// Add
         ///
         /// <summary>
-        /// 解凍に関する PresetMenu に対応するプログラム引数を取得します。
+        /// PresetMenu を解析し、必要な ContextMenu オブジェクトを追加します。
+        /// </summary>
+        ///
+        /// <param name="src">変換元オブジェクト</param>
+        /// <param name="mask">変換対象を表すマスク</param>
+        /// <param name="root">変換後のルートとなるオブジェクト</param>
+        /// <param name="dest">結果を格納するコレクション</param>
+        ///
+        /* --------------------------------------------------------------------- */
+        private static void Add(PresetMenu src, PresetMenu mask, ContextMenu root, ICollection<ContextMenu> dest)
+        {
+            var cvt  = src & mask;
+            var menu = Enum.GetValues(typeof(PresetMenu))
+                           .Cast<PresetMenu>()
+                           .Where(e => e != PresetMenu.None && e != mask && cvt.HasFlag(e));
+
+            foreach (var m in menu) root.Children.Add(ToContextMenu(m));
+            if (root.Children.Count > 0) dest.Add(root);
+        }
+
+        #region Name
+
+        /* --------------------------------------------------------------------- */
+        ///
+        /// ArchiveNames
+        ///
+        /// <summary>
+        /// 圧縮に関連するメニューと名前の対応関係一覧を取得します。
         /// </summary>
         ///
         /* --------------------------------------------------------------------- */
-        private static IEnumerable<string> ToExtract(PresetMenu m)
-        {
-            if (m.HasFlag(PresetMenu.ExtractDesktop)) return new[] { "/x", "/out:desktop" };
-            if (m.HasFlag(PresetMenu.ExtractMyDocuments)) return new[] { "/x", "/out:mydocuments" };
-            if (m.HasFlag(PresetMenu.ExtractRuntime)) return new[] { "/x", "/out:runtime" };
-            if (m.HasFlag(PresetMenu.ExtractSource)) return new[] { "/x", "/out:source" };
-            return new string[0];
-        }
+        private static IDictionary<PresetMenu, string> ArchiveNames { get; } =
+            new Dictionary<PresetMenu, string>
+            {
+                { PresetMenu.ArchiveZip,         Properties.Resources.CtxZip         },
+                { PresetMenu.ArchiveZipPassword, Properties.Resources.CtxZipPassword },
+                { PresetMenu.ArchiveSevenZip,    Properties.Resources.CtxSevenZip    },
+                { PresetMenu.ArchiveBZip2,       Properties.Resources.CtxBZip2       },
+                { PresetMenu.ArchiveGZip,        Properties.Resources.CtxGZip        },
+                { PresetMenu.ArchiveXz,          Properties.Resources.CtxXz          },
+                { PresetMenu.ArchiveSfx,         Properties.Resources.CtxSfx         },
+                { PresetMenu.ArchiveDetails,     Properties.Resources.CtxDetails     },
+            };
 
         /* --------------------------------------------------------------------- */
         ///
-        /// ToMail
+        /// MailNames
         ///
         /// <summary>
-        /// 圧縮してメール送信に関する PresetMenu に対応するプログラム引数を
+        /// 圧縮してメール送信に関連するメニューと名前の対応関係一覧を
         /// 取得します。
         /// </summary>
         ///
         /* --------------------------------------------------------------------- */
-        private static IEnumerable<string> ToMail(PresetMenu m)
-        {
-            if (m.HasFlag(PresetMenu.MailZip)) return new[] { "/c:zip", "/m" };
-            if (m.HasFlag(PresetMenu.MailZipPassword)) return new[] { "/c:zip", "/p", "/m" };
-            if (m.HasFlag(PresetMenu.MailSevenZip)) return new[] { "/c:7z", "/m" };
-            if (m.HasFlag(PresetMenu.MailBZip2)) return new[] { "/c:bzip2", "/m" };
-            if (m.HasFlag(PresetMenu.MailGZip)) return new[] { "/c:gzip", "/m" };
-            if (m.HasFlag(PresetMenu.MailXZ)) return new[] { "/c:xz", "/m" };
-            if (m.HasFlag(PresetMenu.MailSfx)) return new[] { "/c:exe", "/m" };
-            if (m.HasFlag(PresetMenu.MailDetail)) return new[] { "/c:detail", "/m" };
-            return new string[0];
-        }
+        private static IDictionary<PresetMenu, string> MailNames { get; } =
+            new Dictionary<PresetMenu, string>
+            {
+                { PresetMenu.MailZip,         Properties.Resources.CtxZip         },
+                { PresetMenu.MailZipPassword, Properties.Resources.CtxZipPassword },
+                { PresetMenu.MailSevenZip,    Properties.Resources.CtxSevenZip    },
+                { PresetMenu.MailBZip2,       Properties.Resources.CtxBZip2       },
+                { PresetMenu.MailGZip,        Properties.Resources.CtxGZip        },
+                { PresetMenu.MailXz,          Properties.Resources.CtxXz          },
+                { PresetMenu.MailSfx,         Properties.Resources.CtxSfx         },
+                { PresetMenu.MailDetails,     Properties.Resources.CtxDetails     },
+            };
+
+        /* --------------------------------------------------------------------- */
+        ///
+        /// ExtractNames
+        ///
+        /// <summary>
+        /// 解凍に関連するメニューと名前の対応関係一覧を取得します。
+        /// </summary>
+        ///
+        /* --------------------------------------------------------------------- */
+        private static IDictionary<PresetMenu, string> ExtractNames { get; } =
+            new Dictionary<PresetMenu, string>
+            {
+                { PresetMenu.ExtractSource,      Properties.Resources.CtxSource      },
+                { PresetMenu.ExtractDesktop,     Properties.Resources.CtxDesktop     },
+                { PresetMenu.ExtractMyDocuments, Properties.Resources.CtxMyDocuments },
+                { PresetMenu.ExtractRuntime,     Properties.Resources.CtxRuntime     },
+            };
+
+        #endregion
+
+        #region Arguments
+
+        /* --------------------------------------------------------------------- */
+        ///
+        /// ArchiveArguments
+        ///
+        /// <summary>
+        /// 圧縮に関連するメニューとプログラム引数の対応関係一覧を取得します。
+        /// </summary>
+        ///
+        /* --------------------------------------------------------------------- */
+        private static IDictionary<PresetMenu, IEnumerable<string>> ArchiveArguments { get; } =
+            new Dictionary<PresetMenu, IEnumerable<string>>
+            {
+                { PresetMenu.ArchiveZip,         new[] { "/c:zip" }       },
+                { PresetMenu.ArchiveZipPassword, new[] { "/c:zip", "/p" } },
+                { PresetMenu.ArchiveSevenZip,    new[] { "/c:7z" }        },
+                { PresetMenu.ArchiveBZip2,       new[] { "/c:bzip2" }     },
+                { PresetMenu.ArchiveGZip,        new[] { "/c:gzip" }      },
+                { PresetMenu.ArchiveXz,          new[] { "/c:xz" }        },
+                { PresetMenu.ArchiveSfx,         new[] { "/c:exe" }       },
+                { PresetMenu.ArchiveDetails,     new[] { "/c:detail" }    },
+            };
+
+        /* --------------------------------------------------------------------- */
+        ///
+        /// MailArguments
+        ///
+        /// <summary>
+        /// 圧縮してメール送信に関連するメニューとプログラム引数の対応関係
+        /// 一覧を取得します。
+        /// </summary>
+        ///
+        /* --------------------------------------------------------------------- */
+        private static IDictionary<PresetMenu, IEnumerable<string>> MailArguments { get; } =
+            new Dictionary<PresetMenu, IEnumerable<string>>
+            {
+                { PresetMenu.MailZip,         new[] { "/c:zip", "/m" }       },
+                { PresetMenu.MailZipPassword, new[] { "/c:zip", "/p", "/m" } },
+                { PresetMenu.MailSevenZip,    new[] { "/c:7z", "/m" }        },
+                { PresetMenu.MailBZip2,       new[] { "/c:bzip2", "/m" }     },
+                { PresetMenu.MailGZip,        new[] { "/c:gzip", "/m" }      },
+                { PresetMenu.MailXz,          new[] { "/c:xz", "/m" }        },
+                { PresetMenu.MailSfx,         new[] { "/c:exe", "/m" }       },
+                { PresetMenu.MailDetails,     new[] { "/c:detail", "/m" }    },
+            };
+
+        /* --------------------------------------------------------------------- */
+        ///
+        /// ExtractArguments
+        ///
+        /// <summary>
+        /// 解凍に関連するメニューとプログラム引数の対応関係一覧を取得します。
+        /// </summary>
+        ///
+        /* --------------------------------------------------------------------- */
+        private static IDictionary<PresetMenu, IEnumerable<string>> ExtractArguments { get; } =
+            new Dictionary<PresetMenu, IEnumerable<string>>
+            {
+                { PresetMenu.ExtractSource,      new[] { "/x", "/out:source" }      },
+                { PresetMenu.ExtractDesktop,     new[] { "/x", "/out:desktop" }     },
+                { PresetMenu.ExtractMyDocuments, new[] { "/x", "/out:mydocuments" } },
+                { PresetMenu.ExtractRuntime,     new[] { "/x", "/out:runtime" }     },
+            };
+
+        #endregion
 
         #endregion
     }

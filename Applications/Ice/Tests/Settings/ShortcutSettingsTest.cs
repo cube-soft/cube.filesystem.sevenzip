@@ -49,7 +49,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
             var src  = new ShortcutSettings { Directory = Results };
             var menu = PresetMenu.Archive |
-                       PresetMenu.ArchiveDetail |
+                       PresetMenu.ArchiveDetails |
                        PresetMenu.Extract |
                        PresetMenu.Settings;
 
@@ -58,7 +58,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
             src.Sync();
             Assert.That(src.Preset.HasFlag(PresetMenu.Archive),       Is.False);
-            Assert.That(src.Preset.HasFlag(PresetMenu.ArchiveDetail), Is.True);
+            Assert.That(src.Preset.HasFlag(PresetMenu.ArchiveDetails), Is.True);
             Assert.That(src.Preset.HasFlag(PresetMenu.Extract),       Is.False);
             Assert.That(src.Preset.HasFlag(PresetMenu.Settings),      Is.False);
 

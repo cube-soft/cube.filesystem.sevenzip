@@ -61,6 +61,141 @@ namespace Cube.FileSystem.SevenZip.Ice.Properties {
         }
         
         /// <summary>
+        ///   圧縮 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string CtxArchive {
+            get {
+                return ResourceManager.GetString("CtxArchive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   BZip2 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string CtxBZip2 {
+            get {
+                return ResourceManager.GetString("CtxBZip2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   デスクトップに解凍 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string CtxDesktop {
+            get {
+                return ResourceManager.GetString("CtxDesktop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   詳細設定 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string CtxDetails {
+            get {
+                return ResourceManager.GetString("CtxDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   解凍 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string CtxExtract {
+            get {
+                return ResourceManager.GetString("CtxExtract", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   GZip に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string CtxGZip {
+            get {
+                return ResourceManager.GetString("CtxGZip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   圧縮してメール送信 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string CtxMail {
+            get {
+                return ResourceManager.GetString("CtxMail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   マイドキュメントに解凍 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string CtxMyDocuments {
+            get {
+                return ResourceManager.GetString("CtxMyDocuments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   場所を指定して解凍 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string CtxRuntime {
+            get {
+                return ResourceManager.GetString("CtxRuntime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   7-Zip に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string CtxSevenZip {
+            get {
+                return ResourceManager.GetString("CtxSevenZip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   自己解凍形式 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string CtxSfx {
+            get {
+                return ResourceManager.GetString("CtxSfx", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   ここに解凍 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string CtxSource {
+            get {
+                return ResourceManager.GetString("CtxSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Xz に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string CtxXz {
+            get {
+                return ResourceManager.GetString("CtxXz", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Zip に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string CtxZip {
+            get {
+                return ResourceManager.GetString("CtxZip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Zip (パスワード) に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string CtxZipPassword {
+            get {
+                return ResourceManager.GetString("CtxZipPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   ファイル に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string FileSuffix {

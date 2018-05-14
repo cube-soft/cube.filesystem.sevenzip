@@ -297,7 +297,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
                 yield return new TestCaseData(
                     new[] { "Sample.txt", "Sample 00..01" },
-                    PresetMenu.ArchiveDetail.ToArguments(),
+                    PresetMenu.ArchiveDetails.ToArguments(),
                     new ArchiveSettings
                     {
                         SaveLocation  = SaveLocation.Others,
@@ -345,7 +345,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
                 yield return new TestCaseData(
                     new[] { "Sample.txt", "Sample 00..01" },
-                    DropRequest(PresetMenu.ArchiveXZ, "Drop"),
+                    DropRequest(PresetMenu.ArchiveXz, "Drop"),
                     new ArchiveSettings
                     {
                         SaveLocation = SaveLocation.Others,

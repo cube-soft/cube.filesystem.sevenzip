@@ -155,8 +155,8 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /* ----------------------------------------------------------------- */
         public bool ArchiveXZ
         {
-            get => _model.Preset.HasFlag(PresetMenu.ArchiveXZ);
-            set => Set(PresetMenu.ArchiveXZ, value);
+            get => _model.Preset.HasFlag(PresetMenu.ArchiveXz);
+            set => Set(PresetMenu.ArchiveXz, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -187,8 +187,8 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /* ----------------------------------------------------------------- */
         public bool ArchiveDetail
         {
-            get => _model.Preset.HasFlag(PresetMenu.ArchiveDetail);
-            set => Set(PresetMenu.ArchiveDetail, value);
+            get => _model.Preset.HasFlag(PresetMenu.ArchiveDetails);
+            set => Set(PresetMenu.ArchiveDetails, value);
         }
 
         #endregion
@@ -385,8 +385,8 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /* ----------------------------------------------------------------- */
         public bool MailXZ
         {
-            get => _model.Preset.HasFlag(PresetMenu.MailXZ);
-            set => Set(PresetMenu.MailXZ, value);
+            get => _model.Preset.HasFlag(PresetMenu.MailXz);
+            set => Set(PresetMenu.MailXz, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -417,8 +417,8 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /* ----------------------------------------------------------------- */
         public bool MailDetail
         {
-            get => _model.Preset.HasFlag(PresetMenu.MailDetail);
-            set => Set(PresetMenu.MailDetail, value);
+            get => _model.Preset.HasFlag(PresetMenu.MailDetails);
+            set => Set(PresetMenu.MailDetails, value);
         }
 
         #endregion
