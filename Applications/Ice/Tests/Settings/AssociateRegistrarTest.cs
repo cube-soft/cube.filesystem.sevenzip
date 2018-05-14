@@ -15,13 +15,12 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Cube.FileSystem.SevenZip.Ice;
-using NUnit.Framework;
 
-namespace Cube.FileSystem.SevenZip.App.Ice.Tests.Settings
+namespace Cube.FileSystem.SevenZip.Ice.Tests.Settings
 {
     /* --------------------------------------------------------------------- */
     ///

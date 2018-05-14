@@ -9,13 +9,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.SevenZip.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.SevenZip.Ice", "Applications\Ice\Core\Cube.FileSystem.SevenZip.Ice.csproj", "{1BADAB3F-38B5-4ACF-ADDF-036918BFC51C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.SevenZip.App.Ice", "Applications\Ice\Progress\Cube.FileSystem.SevenZip.App.Ice.csproj", "{E14092D2-266A-4CC7-B1CE-2ADD0CB8E65B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.SevenZip.Ice.App", "Applications\Ice\Progress\Cube.FileSystem.SevenZip.Ice.App.csproj", "{E14092D2-266A-4CC7-B1CE-2ADD0CB8E65B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.SevenZip.App.Ice.Associate", "Applications\Ice\Associate\Cube.FileSystem.SevenZip.App.Ice.Associate.csproj", "{DC0D85B9-13D1-49BB-B462-AD66287D3181}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.SevenZip.Ice.App.Associate", "Applications\Ice\Associate\Cube.FileSystem.SevenZip.Ice.App.Associate.csproj", "{DC0D85B9-13D1-49BB-B462-AD66287D3181}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.SevenZip.App.Ice.Settings", "Applications\Ice\Settings\Cube.FileSystem.SevenZip.App.Ice.Settings.csproj", "{42B72A9A-C752-4D99-97D0-D341F1BD2A45}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.SevenZip.Ice.App.Settings", "Applications\Ice\Settings\Cube.FileSystem.SevenZip.Ice.App.Settings.csproj", "{42B72A9A-C752-4D99-97D0-D341F1BD2A45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.SevenZip.App.Ice.Tests", "Applications\Ice\Tests\Cube.FileSystem.SevenZip.App.Ice.Tests.csproj", "{7CBF700C-6F9D-49B5-A905-E5C37302DA93}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.SevenZip.Ice.Tests", "Applications\Ice\Tests\Cube.FileSystem.SevenZip.Ice.Tests.csproj", "{7CBF700C-6F9D-49B5-A905-E5C37302DA93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

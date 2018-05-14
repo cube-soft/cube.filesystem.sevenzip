@@ -113,6 +113,7 @@
     <Compile Include="Parameters.cs" />
     <Compile Include="PresetMenu.cs" />
     <Compile Include="PresetMenuExtension.cs" />
+    <Compile Include="Request.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

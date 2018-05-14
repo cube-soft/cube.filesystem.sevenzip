@@ -18,7 +18,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace Cube.FileSystem.SevenZip.App.Ice.Associate.Shell32
+namespace Cube.FileSystem.SevenZip.Ice.App.Associate.Shell32
 {
     /* --------------------------------------------------------------------- */
     ///

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // アセンブリに関する一般情報は以下の属性セットをとおして制御されます。
 // アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
-[assembly: AssemblyTitle("Cube.FileSystem.SevenZip.App.Ice.Tests")]
+[assembly: AssemblyTitle("Cube.FileSystem.SevenZip.Ice.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("CubeSoft")]
-[assembly: AssemblyProduct("Cube.FileSystem.SevenZip.App.Ice.Tests")]
+[assembly: AssemblyProduct("Cube.FileSystem.SevenZip.Ice.Tests")]
 [assembly: AssemblyCopyright("Copyright © 2010 CubeSoft, Inc.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

@@ -16,13 +16,12 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.FileSystem.Files;
-using Cube.FileSystem.SevenZip.Ice;
 using Cube.Log;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Cube.FileSystem.SevenZip.App.Ice
+namespace Cube.FileSystem.SevenZip.Ice.App
 {
     /* --------------------------------------------------------------------- */
     ///
