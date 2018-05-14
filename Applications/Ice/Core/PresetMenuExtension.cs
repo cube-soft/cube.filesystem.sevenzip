@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System;
+using Cube.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -48,9 +48,9 @@ namespace Cube.FileSystem.SevenZip.Ice
         public static IEnumerable<ContextMenu> ToContextMenuGroup(this PresetMenu src)
         {
             var dest = new List<ContextMenu>();
-            Add(src, PresetMenu.ArchiveOptions, ToContextMenu(PresetMenu.Archive), dest);
-            Add(src, PresetMenu.ExtractOptions, ToContextMenu(PresetMenu.Extract), dest);
-            Add(src, PresetMenu.MailOptions,    ToContextMenu(PresetMenu.Mail),    dest);
+            Add(src, PresetMenu.Archive, ArchiveMenu, dest);
+            Add(src, PresetMenu.Extract, ExtractMenu, dest);
+            Add(src, PresetMenu.Mail,    MailMenu,    dest);
             return dest;
         }
 
@@ -205,19 +205,21 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /// <param name="src">変換元オブジェクト</param>
-        /// <param name="mask">変換対象を表すマスク</param>
-        /// <param name="root">変換後のルートとなるオブジェクト</param>
+        /// <param name="category">メニューのカテゴリ</param>
+        /// <param name="cmp">変換対象となるメニュー一覧</param>
         /// <param name="dest">結果を格納するコレクション</param>
         ///
         /* --------------------------------------------------------------------- */
-        private static void Add(PresetMenu src, PresetMenu mask, ContextMenu root, ICollection<ContextMenu> dest)
+        private static void Add(PresetMenu src, PresetMenu category,
+            IDictionary<PresetMenu, ContextMenu> cmp, ICollection<ContextMenu> dest)
         {
-            var cvt  = src & mask;
-            var menu = Enum.GetValues(typeof(PresetMenu))
-                           .Cast<PresetMenu>()
-                           .Where(e => e != PresetMenu.None && e != mask && cvt.HasFlag(e));
+            if (!src.HasFlag(category)) return;
 
-            foreach (var m in menu) root.Children.Add(ToContextMenu(m));
+            var root = ToContextMenu(category);
+            foreach (var kv in cmp)
+            {
+                if (src.HasFlag(kv.Key)) root.Children.Add(kv.Value);
+            }
             if (root.Children.Count > 0) dest.Add(root);
         }
 
@@ -351,6 +353,75 @@ namespace Cube.FileSystem.SevenZip.Ice
                 { PresetMenu.ExtractDesktop,     new[] { "/x", "/out:desktop" }     },
                 { PresetMenu.ExtractMyDocuments, new[] { "/x", "/out:mydocuments" } },
                 { PresetMenu.ExtractRuntime,     new[] { "/x", "/out:runtime" }     },
+            };
+
+        #endregion
+
+        #region ContextMenu
+
+        /* --------------------------------------------------------------------- */
+        ///
+        /// ArchiveMenu
+        ///
+        /// <summary>
+        /// 圧縮に関連するメニューと ContextMenu オブジェクトの対応関係一覧を
+        /// 取得します。
+        /// </summary>
+        ///
+        /* --------------------------------------------------------------------- */
+        private static IDictionary<PresetMenu, ContextMenu> ArchiveMenu { get; } =
+            new OrderedDictionary<PresetMenu, ContextMenu>
+            {
+                { PresetMenu.ArchiveZip,         ToContextMenu(PresetMenu.ArchiveZip)         },
+                { PresetMenu.ArchiveZipPassword, ToContextMenu(PresetMenu.ArchiveZipPassword) },
+                { PresetMenu.ArchiveSevenZip,    ToContextMenu(PresetMenu.ArchiveSevenZip)    },
+                { PresetMenu.ArchiveBZip2,       ToContextMenu(PresetMenu.ArchiveBZip2)       },
+                { PresetMenu.ArchiveGZip,        ToContextMenu(PresetMenu.ArchiveGZip)        },
+                { PresetMenu.ArchiveXz,          ToContextMenu(PresetMenu.ArchiveXz)          },
+                { PresetMenu.ArchiveSfx,         ToContextMenu(PresetMenu.ArchiveSfx)         },
+                { PresetMenu.ArchiveDetails,     ToContextMenu(PresetMenu.ArchiveDetails)     },
+            };
+
+        /* --------------------------------------------------------------------- */
+        ///
+        /// MailMenu
+        ///
+        /// <summary>
+        /// 圧縮してメール送信に関連するメニューと ContextMenu オブジェクトの
+        /// 対応関係一覧を取得します。
+        /// </summary>
+        ///
+        /* --------------------------------------------------------------------- */
+        private static IDictionary<PresetMenu, ContextMenu> MailMenu { get; } =
+            new OrderedDictionary<PresetMenu, ContextMenu>
+            {
+                { PresetMenu.MailZip,         ToContextMenu(PresetMenu.MailZip)         },
+                { PresetMenu.MailZipPassword, ToContextMenu(PresetMenu.MailZipPassword) },
+                { PresetMenu.MailSevenZip,    ToContextMenu(PresetMenu.MailSevenZip)    },
+                { PresetMenu.MailBZip2,       ToContextMenu(PresetMenu.MailBZip2)       },
+                { PresetMenu.MailGZip,        ToContextMenu(PresetMenu.MailGZip)        },
+                { PresetMenu.MailXz,          ToContextMenu(PresetMenu.MailXz)          },
+                { PresetMenu.MailSfx,         ToContextMenu(PresetMenu.MailSfx)         },
+                { PresetMenu.MailDetails,     ToContextMenu(PresetMenu.MailDetails)     },
+            };
+
+        /* --------------------------------------------------------------------- */
+        ///
+        /// ExtractMenu
+        ///
+        /// <summary>
+        /// 解凍に関連するメニューと ContextMenu オブジェクトの対応関係一覧を
+        /// 取得します。
+        /// </summary>
+        ///
+        /* --------------------------------------------------------------------- */
+        private static IDictionary<PresetMenu, ContextMenu> ExtractMenu { get; } =
+            new OrderedDictionary<PresetMenu, ContextMenu>
+            {
+                { PresetMenu.ExtractSource,      ToContextMenu(PresetMenu.ExtractSource) },
+                { PresetMenu.ExtractDesktop,     ToContextMenu(PresetMenu.ExtractDesktop) },
+                { PresetMenu.ExtractMyDocuments, ToContextMenu(PresetMenu.ExtractMyDocuments) },
+                { PresetMenu.ExtractRuntime,     ToContextMenu(PresetMenu.ExtractRuntime) },
             };
 
         #endregion

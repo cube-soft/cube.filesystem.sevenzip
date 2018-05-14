@@ -57,15 +57,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             Assert.That(d0[2].Name, Is.EqualTo("7-Zip"));
             Assert.That(d0[3].Name, Is.EqualTo("BZip2"));
             Assert.That(d0[4].Name, Is.EqualTo("GZip"));
-            Assert.That(d0[5].Name, Is.EqualTo("詳細設定"));
-            Assert.That(d0[6].Name, Is.EqualTo("自己解凍形式"));
+            Assert.That(d0[5].Name, Is.EqualTo("自己解凍形式"));
+            Assert.That(d0[6].Name, Is.EqualTo("詳細設定"));
 
             var d1 = dest[1].Children;
             Assert.That(d1.Count, Is.EqualTo(4));
             Assert.That(d1[0].Name, Is.EqualTo("ここに解凍"));
             Assert.That(d1[1].Name, Is.EqualTo("デスクトップに解凍"));
-            Assert.That(d1[2].Name, Is.EqualTo("場所を指定して解凍"));
-            Assert.That(d1[3].Name, Is.EqualTo("マイドキュメントに解凍"));
+            Assert.That(d1[2].Name, Is.EqualTo("マイドキュメントに解凍"));
+            Assert.That(d1[3].Name, Is.EqualTo("場所を指定して解凍"));
 
             foreach (var m in d0)
             {
