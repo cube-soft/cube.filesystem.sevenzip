@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Cube.FileSystem.SevenZip.Ice
@@ -68,6 +69,40 @@ namespace Cube.FileSystem.SevenZip.Ice
             set => SetProperty(ref _preset, value);
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Customization
+        ///
+        /// <summary>
+        /// カスタマイズされたコンテキストメニュー一覧を取得または
+        /// 設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [DataMember]
+        public IList<ContextMenu> Customization
+        {
+            get => _customization;
+            set => SetProperty(ref _customization, value);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// UseCustomization
+        ///
+        /// <summary>
+        /// カスタマイズされたコンテキストメニューを使用するかどうかを示す
+        /// 値を取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [DataMember]
+        public bool UseCustomization
+        {
+            get => _useCustomization;
+            set => SetProperty(ref _useCustomization, value);
+        }
+
         #endregion
 
         #region Implementations
@@ -95,13 +130,17 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void Reset()
         {
-            _preset = PresetMenu.DefaultContext;
+            _preset           = PresetMenu.DefaultContext;
+            _customization    = new List<ContextMenu>();
+            _useCustomization = false;
         }
 
         #endregion
 
         #region Fields
         private PresetMenu _preset;
+        private IList<ContextMenu> _customization;
+        private bool _useCustomization;
         #endregion
     }
 }
