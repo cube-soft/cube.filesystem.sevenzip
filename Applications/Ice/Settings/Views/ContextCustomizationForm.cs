@@ -19,14 +19,14 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ContextSettingsForm
+    /// ContextCustomizationFrom
     ///
     /// <summary>
     /// コンテキストメニューのカスタマイズ画面を表すクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class ContextSettingsForm : Cube.Forms.StandardForm
+    public partial class ContextCustomizationFrom : Cube.Forms.StandardForm
     {
         #region Constructors
 
@@ -39,7 +39,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ContextSettingsForm()
+        public ContextCustomizationFrom()
         {
             InitializeComponent();
         }
