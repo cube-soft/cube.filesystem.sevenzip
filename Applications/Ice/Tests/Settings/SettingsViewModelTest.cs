@@ -449,7 +449,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
             src.Archive            = true;
             src.ArchiveBZip2       = true;
-            src.ArchiveDetail      = true;
+            src.ArchiveDetails     = true;
             src.ArchiveGZip        = true;
             src.ArchiveXZ          = true;
             src.ArchiveSevenZip    = true;
@@ -463,7 +463,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             src.ExtractSource      = true;
             src.Mail               = true;
             src.MailBZip2          = true;
-            src.MailDetail         = true;
+            src.MailDetails        = true;
             src.MailGZip           = true;
             src.MailXZ             = true;
             src.MailSevenZip       = true;
@@ -474,7 +474,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
             src.Archive            = false;
             src.ArchiveBZip2       = false;
-            src.ArchiveDetail      = false;
+            src.ArchiveDetails     = false;
             src.ArchiveGZip        = false;
             src.ArchiveXZ          = false;
             src.ArchiveSevenZip    = false;
@@ -488,7 +488,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             src.ExtractSource      = false;
             src.Mail               = false;
             src.MailBZip2          = false;
-            src.MailDetail         = false;
+            src.MailDetails        = false;
             src.MailGZip           = false;
             src.MailXZ             = false;
             src.MailSevenZip       = false;
@@ -500,7 +500,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             src.Reset();
             Assert.That(src.Archive,            Is.True);
             Assert.That(src.ArchiveBZip2,       Is.True);
-            Assert.That(src.ArchiveDetail,      Is.True);
+            Assert.That(src.ArchiveDetails,     Is.True);
             Assert.That(src.ArchiveGZip,        Is.True);
             Assert.That(src.ArchiveXZ,          Is.False);
             Assert.That(src.ArchiveSevenZip,    Is.True);
@@ -514,7 +514,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             Assert.That(src.ExtractSource,      Is.True);
             Assert.That(src.Mail,               Is.False);
             Assert.That(src.MailBZip2,          Is.False);
-            Assert.That(src.MailDetail,         Is.False);
+            Assert.That(src.MailDetails,        Is.False);
             Assert.That(src.MailGZip,           Is.False);
             Assert.That(src.MailXZ,             Is.False);
             Assert.That(src.MailSevenZip,       Is.False);
@@ -615,7 +615,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static string SubKeyName = @"CubeSoft\CubeIceTest";
+        private static readonly string SubKeyName = @"CubeSoft\CubeIceTest";
 
         /* ----------------------------------------------------------------- */
         ///
