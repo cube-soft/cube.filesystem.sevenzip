@@ -15,7 +15,9 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Images.Icons;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 {
@@ -24,12 +26,32 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
     /// ContextCustomizationViewModel
     ///
     /// <summary>
-    /// ContextSettings の ViewModel を表すクラスです。
+    /// ContextSettings.Customization の ViewModel を表すクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     public class ContextCustomizationViewModel : ObservableProperty
     {
+        #region Constructors
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ContextMenuViewModel
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        ///
+        /// <param name="current">現在のメニュー一覧</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ContextCustomizationViewModel(IEnumerable<ContextMenu> current)
+        {
+            Current = current;
+        }
+
+        #endregion
+
         #region Properties
 
         /* ----------------------------------------------------------------- */
@@ -47,6 +69,34 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
                 PresetMenu.Extract | PresetMenu.ExtractOptions |
                 PresetMenu.Mail    | PresetMenu.MailOptions
             );
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Current
+        ///
+        /// <summary>
+        /// 現在のメニュー一覧を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public IEnumerable<ContextMenu> Current { get; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Images
+        ///
+        /// <summary>
+        /// 表示イメージ一覧を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public IList<Image> Images { get; } = new List<Image>
+        {
+            IconFactory.Create(StockIcons.Folder, IconSize.Small).ToBitmap(),
+            Properties.Resources.Archive,
+            Properties.Resources.Extract,
+            IconFactory.Create(StockIcons.FolderOpen, IconSize.Small).ToBitmap(),
+        };
 
         #endregion
     }

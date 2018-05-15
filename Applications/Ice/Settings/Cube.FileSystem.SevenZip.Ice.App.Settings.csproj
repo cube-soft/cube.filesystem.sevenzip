@@ -112,7 +112,7 @@
     <Compile Include="Models\AssociateCommand.cs" />
     <Compile Include="ViewModels\ArchiveSettingsViewModel.cs" />
     <Compile Include="ViewModels\AssociateSettingsViewModel.cs" />
-    <Compile Include="ViewModels\ContextCustomizationViewModel.cs" />
+    <Compile Include="ViewModels\ContextMenuViewModel.cs" />
     <Compile Include="ViewModels\ContextSettingsViewModel.cs" />
     <Compile Include="ViewModels\ExtractSettingsViewModel.cs" />
     <Compile Include="ViewModels\GeneralSettingsViewModel.cs" />
@@ -122,11 +122,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Views\ContextCustomizationForm.cs">
+    <Compile Include="Views\ContextForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\ContextCustomizationForm.Designer.cs">
-      <DependentUpon>ContextCustomizationForm.cs</DependentUpon>
+    <Compile Include="Views\ContextForm.Designer.cs">
+      <DependentUpon>ContextForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsForm.cs">
       <SubType>Form</SubType>
@@ -134,8 +134,8 @@
     <Compile Include="Views\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Views\ContextCustomizationForm.resx">
-      <DependentUpon>ContextCustomizationForm.cs</DependentUpon>
+    <EmbeddedResource Include="Views\ContextForm.resx">
+      <DependentUpon>ContextForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
@@ -170,6 +170,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.ico" />
+    <None Include="Resources\Extract.png" />
+    <None Include="Resources\Archive.png" />
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>

@@ -105,10 +105,11 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
             Enable(ArchiveSaveOthersRadioButton, ArchiveSaveTextBox, ArchiveSaveButton);
             Enable(ExtractSaveOthersRadioButton, ExtractSaveTextBox, ExtractSaveButton);
 
-            SettingsPanel.Apply        += (s, e) => vm.Update();
-            ContextResetButton.Click   += (s, e) => vm.Context.Reset();
-            AssociateAllButton.Click   += (s, e) => vm.Associate.SelectAll();
-            AssociateClearButton.Click += (s, e) => vm.Associate.Clear();
+            SettingsPanel.Apply          += (s, e) => vm.Update();
+            ContextResetButton.Click     += (s, e) => vm.Context.Reset();
+            AssociateAllButton.Click     += (s, e) => vm.Associate.SelectAll();
+            AssociateClearButton.Click   += (s, e) => vm.Associate.Clear();
+            CustomizeContextButton.Click += (s, e) => vm.Context.Customize();
         }
 
         #endregion
@@ -276,7 +277,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
                 Create(PresetMenu.ArchiveGZip,        Properties.Resources.MenuGZip,        index++),
                 Create(PresetMenu.ArchiveXz,          Properties.Resources.MenuXZ,          index++),
                 Create(PresetMenu.ArchiveSfx,         Properties.Resources.MenuSfx,         index++),
-                Create(PresetMenu.ArchiveDetails,      Properties.Resources.MenuDetail,      index++),
+                Create(PresetMenu.ArchiveDetails,     Properties.Resources.MenuDetails,      index++),
             });
 
             ContextExtractPanel.Controls.AddRange(new[]
@@ -296,7 +297,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
                 Create(PresetMenu.MailGZip,           Properties.Resources.MenuGZip,        index++),
                 Create(PresetMenu.MailXz,             Properties.Resources.MenuXZ,          index++),
                 Create(PresetMenu.MailSfx,            Properties.Resources.MenuSfx,         index++),
-                Create(PresetMenu.MailDetails,         Properties.Resources.MenuDetail,      index++),
+                Create(PresetMenu.MailDetails,        Properties.Resources.MenuDetails,      index++),
             });
         }
 
@@ -321,7 +322,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
                 Create(Properties.Resources.MenuBZip2,       PresetMenu.ArchiveBZip2),
                 Create(Properties.Resources.MenuGZip,        PresetMenu.ArchiveGZip),
                 Create(Properties.Resources.MenuSfx,         PresetMenu.ArchiveSfx),
-                Create(Properties.Resources.MenuDetail,      PresetMenu.ArchiveDetails),
+                Create(Properties.Resources.MenuDetails,      PresetMenu.ArchiveDetails),
             };
         }
 

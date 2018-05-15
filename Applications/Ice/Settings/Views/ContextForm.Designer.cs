@@ -1,6 +1,6 @@
 ﻿namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 {
-    partial class ContextCustomizationFrom
+    partial class ContextForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ContextCustomizationFrom));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ContextForm));
             this.RootPanel = new System.Windows.Forms.TableLayoutPanel();
             this.AddButton = new System.Windows.Forms.Button();
             this.DestinationTreeView = new System.Windows.Forms.TreeView();
@@ -90,6 +90,8 @@
             // DestinationTreeView
             //
             this.DestinationTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DestinationTreeView.HideSelection = false;
+            this.DestinationTreeView.LabelEdit = true;
             this.DestinationTreeView.Location = new System.Drawing.Point(295, 36);
             this.DestinationTreeView.Name = "DestinationTreeView";
             this.DestinationTreeView.Size = new System.Drawing.Size(221, 215);
@@ -98,6 +100,7 @@
             // SourceTreeView
             //
             this.SourceTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SourceTreeView.HideSelection = false;
             this.SourceTreeView.Location = new System.Drawing.Point(12, 36);
             this.SourceTreeView.Name = "SourceTreeView";
             this.SourceTreeView.Size = new System.Drawing.Size(221, 215);
@@ -238,15 +241,16 @@
             this.ApplyButton.Text = "OK";
             this.ApplyButton.UseVisualStyleBackColor = true;
             //
-            // ContextSettingsForm
+            // ContextCustomizationFrom
             //
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(634, 311);
             this.Controls.Add(this.RootPanel);
             this.Font = new System.Drawing.Font("Meiryo UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Location = new System.Drawing.Point(0, 0);
             this.MinimumSize = new System.Drawing.Size(540, 320);
-            this.Name = "ContextSettingsForm";
+            this.Name = "ContextCustomizationFrom";
             this.Text = "コンテキストメニューのカスタマイズ";
             this.RootPanel.ResumeLayout(false);
             this.RootPanel.PerformLayout();

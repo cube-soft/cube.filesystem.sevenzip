@@ -177,7 +177,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveDetail
+        /// ArchiveDetails
         ///
         /// <summary>
         /// 詳細を設定して圧縮の項目が有効かどうかを示す値を取得または
@@ -185,7 +185,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool ArchiveDetail
+        public bool ArchiveDetails
         {
             get => _model.Preset.HasFlag(PresetMenu.ArchiveDetails);
             set => Set(PresetMenu.ArchiveDetails, value);
@@ -407,7 +407,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// MailDetail
+        /// MailDetails
         ///
         /// <summary>
         /// 詳細を設定して圧縮し、メール送信の項目が有効かどうかを示す値を
@@ -415,7 +415,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool MailDetail
+        public bool MailDetails
         {
             get => _model.Preset.HasFlag(PresetMenu.MailDetails);
             set => Set(PresetMenu.MailDetails, value);
@@ -437,6 +437,23 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         ///
         /* ----------------------------------------------------------------- */
         public void Reset() => _model.Preset = PresetMenu.DefaultContext;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Customize
+        ///
+        /// <summary>
+        /// カスタマイズを実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Customize()
+        {
+            var view = new ContextForm();
+            var vm   = new ContextCustomizationViewModel(_model.Preset.ToContextMenuGroup());
+            view.Bind(vm);
+            view.ShowDialog();
+        }
 
         #endregion
 
