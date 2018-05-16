@@ -76,7 +76,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// <param name="vm">ViewModel オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Bind(ContextCustomizationViewModel vm)
+        public void Bind(CustomContextViewModel vm)
         {
             new TreeViewAction(SourceTreeView, false).Register(vm.Source, vm.Images);
             _tv.Register(vm.Current, vm.Images);

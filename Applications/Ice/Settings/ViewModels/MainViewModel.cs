@@ -21,20 +21,20 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveSettingsViewModel
+    /// MainViewModel
     ///
     /// <summary>
-    /// Settings の ViewModel を表すクラスです。
+    /// Settings とメイン画面を関連付ける ViewModel を表すクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class SettingsViewModel : ObservableProperty
+    public class MainViewModel : ObservableProperty
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SettingsViewModel
+        /// MainViewModel
         ///
         /// <summary>
         /// オブジェクトを初期化します。
@@ -43,16 +43,16 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// <param name="model">Model オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public SettingsViewModel(SettingsFolder model)
+        public MainViewModel(SettingsFolder model)
         {
             _model = model;
             _model.PropertyChanged += (s, e) => OnPropertyChanged(e);
 
-            Archive   = new ArchiveSettingsViewModel(model.Value.Archive);
-            Extract   = new ExtractSettingsViewModel(model.Value.Extract);
-            Associate = new AssociateSettingsViewModel(model.Value.Associate);
-            Context   = new ContextSettingsViewModel(model.Value.Context);
-            Shortcut  = new ShortcutSettingsViewModel(model.Value.Shortcut);
+            Archive   = new ArchiveViewModel(model.Value.Archive);
+            Extract   = new ExtractViewModel(model.Value.Extract);
+            Associate = new AssociateViewModel(model.Value.Associate);
+            Context   = new ContextViewModel(model.Value.Context);
+            Shortcut  = new ShortcutViewModel(model.Value.Shortcut);
         }
 
         #endregion
@@ -171,7 +171,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveSettingsViewModel Archive { get; }
+        public ArchiveViewModel Archive { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -182,7 +182,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ExtractSettingsViewModel Extract { get; }
+        public ExtractViewModel Extract { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -193,7 +193,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public AssociateSettingsViewModel Associate { get; }
+        public AssociateViewModel Associate { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -204,7 +204,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ContextSettingsViewModel Context { get; }
+        public ContextViewModel Context { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -216,7 +216,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ShortcutSettingsViewModel Shortcut { get; }
+        public ShortcutViewModel Shortcut { get; }
 
         #endregion
 

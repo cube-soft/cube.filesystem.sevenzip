@@ -22,20 +22,20 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// AssociateSettingsViewModel
+    /// AssociateViewModel
     ///
     /// <summary>
     /// AssociateSettings の ViewModel を表すクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class AssociateSettingsViewModel : ObservableProperty
+    public class AssociateViewModel : ObservableProperty
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// AssociateSettingsViewModel
+        /// AssociateViewModel
         ///
         /// <summary>
         /// オブジェクトを初期化します。
@@ -44,7 +44,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// <param name="model">Model オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public AssociateSettingsViewModel(AssociateSettings model)
+        public AssociateViewModel(AssociateSettings model)
         {
             _model = new AssociateCommand(model);
             _model.Settings.PropertyChanged += (s, e) => OnPropertyChanged(e);

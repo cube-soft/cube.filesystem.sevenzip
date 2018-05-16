@@ -24,27 +24,27 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// SettingsForm
+    /// MainForm
     ///
     /// <summary>
     /// 設定画面を表示するクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class SettingsForm : Cube.Forms.StandardForm
+    public partial class MainForm : Cube.Forms.StandardForm
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SettingsForm
+        /// MainForm
         ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public SettingsForm()
+        public MainForm()
         {
             InitializeComponent();
             InitializeAssociate();
@@ -56,18 +56,16 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SettingsForm
+        /// MainForm
         ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         ///
-        /// <param name="install">
-        /// インストールモードかどうかを示す値
-        /// </param>
+        /// <param name="install">インストールモードかどうか</param>
         ///
         /* ----------------------------------------------------------------- */
-        public SettingsForm(bool install) : this()
+        public MainForm(bool install) : this()
         {
             if (!install) return;
 
@@ -90,7 +88,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// <param name="vm">ViewModel オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Bind(SettingsViewModel vm)
+        public void Bind(MainViewModel vm)
         {
             if (vm == null) return;
 
@@ -178,8 +176,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /* ----------------------------------------------------------------- */
         private void Enable(object s, params Control[] controls)
         {
-            var src = s as RadioButton;
-            if (src == null) return;
+            if (!(s is RadioButton src)) return;
             foreach (var c in controls) c.Enabled = src.Checked;
         }
 

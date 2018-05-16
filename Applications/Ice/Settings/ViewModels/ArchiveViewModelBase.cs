@@ -19,20 +19,20 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// GeneralSettingsViewModel
+    /// ArchiveViewModelBase
     ///
     /// <summary>
-    /// GeneralSettings の ViewModel を表すクラスです。
+    /// ArchiveSettingsBase の ViewModel を表すクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class GeneralSettingsViewModel<T> : ObservableProperty where T : ArchiveSettingsBase
+    public class ArchiveViewModelBase<T> : ObservableProperty where T : ArchiveSettingsBase
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GeneralSettingsViewModel
+        /// ArchiveViewModelBase
         ///
         /// <summary>
         /// オブジェクトを初期化します。
@@ -41,7 +41,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// <param name="model">Model オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public GeneralSettingsViewModel(T model)
+        public ArchiveViewModelBase(T model)
         {
             Model = model;
             Model.PropertyChanged += (s, e) => OnPropertyChanged(e);

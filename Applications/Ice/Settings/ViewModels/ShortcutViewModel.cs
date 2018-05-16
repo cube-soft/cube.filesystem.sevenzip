@@ -19,20 +19,20 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ShortcutSettingsViewModel
+    /// ShortcutViewModel
     ///
     /// <summary>
     /// ShortcutSettings の ViewModel を表すクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ShortcutSettingsViewModel : ObservableProperty
+    public class ShortcutViewModel : ObservableProperty
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ShortcutSettingsViewModel
+        /// ShortcutViewModel
         ///
         /// <summary>
         /// オブジェクトを初期化します。
@@ -41,7 +41,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// <param name="model">Model オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ShortcutSettingsViewModel(ShortcutSettings model)
+        public ShortcutViewModel(ShortcutSettings model)
         {
             _model = model;
             _model.PropertyChanged += (s, e) => OnPropertyChanged(e);

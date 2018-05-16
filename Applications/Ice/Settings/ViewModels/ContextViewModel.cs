@@ -19,20 +19,20 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ContextSettingsViewModel
+    /// ContextViewModel
     ///
     /// <summary>
     /// ContextSettings の ViewModel を表すクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ContextSettingsViewModel : ObservableProperty
+    public class ContextViewModel : ObservableProperty
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ContextSettingsViewModel
+        /// ContextViewModel
         ///
         /// <summary>
         /// オブジェクトを初期化します。
@@ -41,7 +41,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// <param name="model">Model オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ContextSettingsViewModel(ContextSettings model)
+        public ContextViewModel(ContextSettings model)
         {
             _model = model;
             _model.PropertyChanged += (s, e) => OnPropertyChanged(e);
@@ -450,7 +450,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         public void Customize()
         {
             var view = new ContextForm();
-            var vm   = new ContextCustomizationViewModel(_model.Preset.ToContextMenuGroup());
+            var vm   = new CustomContextViewModel(_model.Preset.ToContextMenuGroup());
             view.Bind(vm);
             view.ShowDialog();
         }

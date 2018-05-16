@@ -19,20 +19,20 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ExtractSettingsViewModel
+    /// ExtractViewModel
     ///
     /// <summary>
     /// ExtractSettings の ViewModel を表すクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ExtractSettingsViewModel : GeneralSettingsViewModel<ExtractSettings>
+    public class ExtractViewModel : ArchiveViewModelBase<ExtractSettings>
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ExtractSettingsViewModel
+        /// ExtractViewModel
         ///
         /// <summary>
         /// オブジェクトを初期化します。
@@ -41,7 +41,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// <param name="model">Model オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ExtractSettingsViewModel(ExtractSettings model) : base(model) { }
+        public ExtractViewModel(ExtractSettings model) : base(model) { }
 
         #endregion
 

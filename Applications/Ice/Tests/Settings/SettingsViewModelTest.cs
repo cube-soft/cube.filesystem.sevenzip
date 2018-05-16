@@ -51,7 +51,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         {
             var m = Create();
 
-            var vm = new SettingsViewModel(m)
+            var vm = new MainViewModel(m)
             {
                 CheckUpdate  = true,
                 ErrorReport  = true,
@@ -113,7 +113,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         public void ArchiveSettings()
         {
             var m    = Create();
-            var vm   = new SettingsViewModel(m);
+            var vm   = new MainViewModel(m);
             var src  = vm.Archive;
             var dest = m.Value.Archive;
 
@@ -206,7 +206,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         public void ExtractSettings()
         {
             var m    = Create();
-            var vm   = new SettingsViewModel(m);
+            var vm   = new MainViewModel(m);
             var src  = vm.Extract;
             var dest = m.Value.Extract;
 
@@ -326,7 +326,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         public void AssociateSettings()
         {
             var m    = Create();
-            var vm   = new SettingsViewModel(m);
+            var vm   = new MainViewModel(m);
             var src  = vm.Associate;
             var dest = m.Value.Associate;
 
@@ -443,7 +443,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         public void ContextMenuSettings()
         {
             var m    = Create();
-            var vm   = new SettingsViewModel(m);
+            var vm   = new MainViewModel(m);
             var src  = vm.Context;
             var dest = m.Value.Context;
 
@@ -538,7 +538,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         public void ShortcutSettings()
         {
             var m    = Create();
-            var vm   = new SettingsViewModel(m);
+            var vm   = new MainViewModel(m);
             var src  = vm.Shortcut;
             var dest = m.Value.Shortcut;
 
@@ -580,7 +580,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             m0.Startup.Name = "cubeice-test";
             m0.Value.Shortcut.Directory = Results;
 
-            var vm0 = new SettingsViewModel(m0)
+            var vm0 = new MainViewModel(m0)
             {
                 CheckUpdate = true,
                 InstallMode = install,
@@ -594,7 +594,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             m1.Startup.Name = "cubeice-test";
             m1.Value.Shortcut.Directory = Results;
 
-            var vm1 = new SettingsViewModel(m1)
+            var vm1 = new MainViewModel(m1)
             {
                 CheckUpdate = false,
                 InstallMode = false,

@@ -19,20 +19,20 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveSettingsViewModel
+    /// ArchiveViewModel
     ///
     /// <summary>
     /// ArchiveSettings の ViewModel を表すクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveSettingsViewModel : GeneralSettingsViewModel<ArchiveSettings>
+    public class ArchiveViewModel : ArchiveViewModelBase<ArchiveSettings>
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveSettingsViewModel
+        /// ArchiveViewModel
         ///
         /// <summary>
         /// オブジェクトを初期化します。
@@ -41,7 +41,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// <param name="model">Model オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveSettingsViewModel(ArchiveSettings model) : base(model) { }
+        public ArchiveViewModel(ArchiveSettings model) : base(model) { }
 
         #endregion
 

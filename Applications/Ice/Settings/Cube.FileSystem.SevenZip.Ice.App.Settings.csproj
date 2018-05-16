@@ -112,14 +112,14 @@
     <Compile Include="Interactions\Images.cs" />
     <Compile Include="Interactions\TreeViewAction.cs" />
     <Compile Include="Models\AssociateCommand.cs" />
-    <Compile Include="ViewModels\ArchiveSettingsViewModel.cs" />
-    <Compile Include="ViewModels\AssociateSettingsViewModel.cs" />
-    <Compile Include="ViewModels\ContextCustomizationViewModel.cs" />
-    <Compile Include="ViewModels\ContextSettingsViewModel.cs" />
-    <Compile Include="ViewModels\ExtractSettingsViewModel.cs" />
-    <Compile Include="ViewModels\GeneralSettingsViewModel.cs" />
-    <Compile Include="ViewModels\SettingsViewModel.cs" />
-    <Compile Include="ViewModels\ShortcutSettingsViewModel.cs" />
+    <Compile Include="ViewModels\ArchiveViewModel.cs" />
+    <Compile Include="ViewModels\AssociateViewModel.cs" />
+    <Compile Include="ViewModels\CustomContextViewModel.cs" />
+    <Compile Include="ViewModels\ContextViewModel.cs" />
+    <Compile Include="ViewModels\ExtractViewModel.cs" />
+    <Compile Include="ViewModels\ArchiveViewModelBase.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\ShortcutViewModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -130,17 +130,17 @@
     <Compile Include="Views\ContextForm.Designer.cs">
       <DependentUpon>ContextForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\SettingsForm.cs">
+    <Compile Include="Views\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\SettingsForm.Designer.cs">
-      <DependentUpon>SettingsForm.cs</DependentUpon>
+    <Compile Include="Views\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Views\ContextForm.resx">
       <DependentUpon>ContextForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\SettingsForm.resx">
-      <DependentUpon>SettingsForm.cs</DependentUpon>
+    <EmbeddedResource Include="Views\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

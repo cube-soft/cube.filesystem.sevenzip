@@ -71,7 +71,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Customization
+        /// Custom
         ///
         /// <summary>
         /// カスタマイズされたコンテキストメニュー一覧を取得または
@@ -80,15 +80,15 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public IList<ContextMenu> Customization
+        public IList<ContextMenu> Custom
         {
-            get => _customization;
-            set => SetProperty(ref _customization, value);
+            get => _custom;
+            set => SetProperty(ref _custom, value);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// UseCustomization
+        /// IsCustomized
         ///
         /// <summary>
         /// カスタマイズされたコンテキストメニューを使用するかどうかを示す
@@ -97,10 +97,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public bool UseCustomization
+        public bool IsCustomized
         {
-            get => _useCustomization;
-            set => SetProperty(ref _useCustomization, value);
+            get => _isCustomized;
+            set => SetProperty(ref _isCustomized, value);
         }
 
         #endregion
@@ -130,17 +130,17 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void Reset()
         {
-            _preset           = PresetMenu.DefaultContext;
-            _customization    = new List<ContextMenu>();
-            _useCustomization = false;
+            _preset       = PresetMenu.DefaultContext;
+            _custom       = new List<ContextMenu>();
+            _isCustomized = false;
         }
 
         #endregion
 
         #region Fields
         private PresetMenu _preset;
-        private IList<ContextMenu> _customization;
-        private bool _useCustomization;
+        private IList<ContextMenu> _custom;
+        private bool _isCustomized;
         #endregion
     }
 }

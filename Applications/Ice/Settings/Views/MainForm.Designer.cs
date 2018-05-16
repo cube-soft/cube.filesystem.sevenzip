@@ -1,6 +1,6 @@
 ﻿namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 {
-    partial class SettingsForm
+    partial class MainForm
     {
         /// <summary>
         /// 必要なデザイナー変数です。
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.RootPanel = new System.Windows.Forms.TableLayoutPanel();
             this.SettingsPanel = new Cube.Forms.SettingsControl();
             this.SettingsTabControl = new System.Windows.Forms.TabControl();
@@ -364,7 +364,7 @@
             //
             // ContextSettingsBindingSource
             //
-            this.ContextSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.App.Settings.ContextSettingsViewModel);
+            this.ContextSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.App.Settings.ContextViewModel);
             //
             // ContextExtractPanel
             //
@@ -461,7 +461,7 @@
             //
             // ShortcutSettingsBindingSource
             //
-            this.ShortcutSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.App.Settings.ShortcutSettingsViewModel);
+            this.ShortcutSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.App.Settings.ShortcutViewModel);
             //
             // ShortcutArchiveComboBox
             //
@@ -558,7 +558,7 @@
             //
             // ArchiveSettingsBindingSource
             //
-            this.ArchiveSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.App.Settings.ArchiveSettingsViewModel);
+            this.ArchiveSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.App.Settings.ArchiveViewModel);
             //
             // ArchiveSaveTextBox
             //
@@ -749,7 +749,7 @@
             //
             // ExtractSettingsBindingSource
             //
-            this.ExtractSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.App.Settings.ExtractSettingsViewModel);
+            this.ExtractSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.App.Settings.ExtractViewModel);
             //
             // ExtractSaveTextBox
             //
@@ -972,7 +972,7 @@
             //
             // SettingsBindingSource
             //
-            this.SettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.App.Settings.SettingsViewModel);
+            this.SettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.App.Settings.MainViewModel);
             //
             // OthersGroupBox
             //

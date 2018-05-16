@@ -23,20 +23,20 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ContextCustomizationViewModel
+    /// CustomContextViewModel
     ///
     /// <summary>
-    /// ContextSettings.Customization の ViewModel を表すクラスです。
+    /// ContextSettings.Custom の ViewModel を表すクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ContextCustomizationViewModel : ObservableProperty
+    public class CustomContextViewModel : ObservableProperty
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ContextMenuViewModel
+        /// CustomContextViewModel
         ///
         /// <summary>
         /// オブジェクトを初期化します。
@@ -45,7 +45,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// <param name="current">現在のメニュー一覧</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ContextCustomizationViewModel(IEnumerable<ContextMenu> current)
+        public CustomContextViewModel(IEnumerable<ContextMenu> current)
         {
             Current = current;
         }
