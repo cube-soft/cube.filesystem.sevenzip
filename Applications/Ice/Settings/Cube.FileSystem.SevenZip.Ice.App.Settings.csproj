@@ -109,10 +109,12 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interactions\Images.cs" />
+    <Compile Include="Interactions\TreeViewAction.cs" />
     <Compile Include="Models\AssociateCommand.cs" />
     <Compile Include="ViewModels\ArchiveSettingsViewModel.cs" />
     <Compile Include="ViewModels\AssociateSettingsViewModel.cs" />
-    <Compile Include="ViewModels\ContextMenuViewModel.cs" />
+    <Compile Include="ViewModels\ContextCustomizationViewModel.cs" />
     <Compile Include="ViewModels\ContextSettingsViewModel.cs" />
     <Compile Include="ViewModels\ExtractSettingsViewModel.cs" />
     <Compile Include="ViewModels\GeneralSettingsViewModel.cs" />

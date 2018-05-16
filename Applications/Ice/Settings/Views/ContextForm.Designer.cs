@@ -223,6 +223,7 @@
             //
             // ExitButton
             //
+            this.ExitButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.ExitButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ExitButton.Location = new System.Drawing.Point(513, 3);
             this.ExitButton.Name = "ExitButton";
@@ -233,6 +234,7 @@
             //
             // ApplyButton
             //
+            this.ApplyButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.ApplyButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ApplyButton.Location = new System.Drawing.Point(407, 3);
             this.ApplyButton.Name = "ApplyButton";
@@ -241,16 +243,17 @@
             this.ApplyButton.Text = "OK";
             this.ApplyButton.UseVisualStyleBackColor = true;
             //
-            // ContextCustomizationFrom
+            // ContextForm
             //
+            this.AcceptButton = this.ApplyButton;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.CancelButton = this.ExitButton;
             this.ClientSize = new System.Drawing.Size(634, 311);
             this.Controls.Add(this.RootPanel);
             this.Font = new System.Drawing.Font("Meiryo UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Location = new System.Drawing.Point(0, 0);
             this.MinimumSize = new System.Drawing.Size(540, 320);
-            this.Name = "ContextCustomizationFrom";
+            this.Name = "ContextForm";
             this.Text = "コンテキストメニューのカスタマイズ";
             this.RootPanel.ResumeLayout(false);
             this.RootPanel.PerformLayout();

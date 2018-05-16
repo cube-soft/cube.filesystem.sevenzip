@@ -148,6 +148,9 @@
   <data name="MenuMyDocuments" xml:space="preserve">
     <value>マイドキュメントに解凍</value>
   </data>
+  <data name="MenuNewCategory" xml:space="preserve">
+    <value>新しいカテゴリー</value>
+  </data>
   <data name="MenuRuntime" xml:space="preserve">
     <value>場所を指定して解凍</value>
   </data>

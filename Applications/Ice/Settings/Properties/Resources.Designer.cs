@@ -154,6 +154,15 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings.Properties {
         }
         
         /// <summary>
+        ///   新しいカテゴリー に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuNewCategory {
+            get {
+                return ResourceManager.GetString("MenuNewCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   場所を指定して解凍 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MenuRuntime {
