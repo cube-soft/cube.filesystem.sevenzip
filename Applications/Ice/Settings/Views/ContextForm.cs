@@ -45,7 +45,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         {
             InitializeComponent();
 
-            _tv = new TreeViewAction(DestinationTreeView, true);
+            _tv = new TreeViewBehavior(DestinationTreeView, true);
 
             DestinationTreeView.AfterSelect += (s, e) => UpdateMenu();
 
@@ -78,7 +78,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /* ----------------------------------------------------------------- */
         public void Bind(CustomContextViewModel vm)
         {
-            new TreeViewAction(SourceTreeView, false).Register(vm.Source, vm.Images);
+            new TreeViewBehavior(SourceTreeView, false).Register(vm.Source, vm.Images);
             _tv.Register(vm.Current, vm.Images);
             UpdateMenu();
         }
@@ -107,7 +107,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         #endregion
 
         #region Fields
-        private readonly TreeViewAction _tv;
+        private readonly TreeViewBehavior _tv;
         #endregion
     }
 }

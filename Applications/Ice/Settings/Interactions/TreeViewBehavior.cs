@@ -27,7 +27,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// TreeViewAction
+    /// TreeViewBehavior
     ///
     /// <summary>
     /// コンテキストメニューを編集するための TreeView オブジェクトの
@@ -35,7 +35,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class TreeViewAction
+    public class TreeViewBehavior
     {
         #region Constructors
 
@@ -53,7 +53,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// </param>
         ///
         /* ----------------------------------------------------------------- */
-        public TreeViewAction(TreeView src, bool rootCreation)
+        public TreeViewBehavior(TreeView src, bool rootCreation)
         {
             Source  = src ?? throw new ArgumentException();
             HasRoot = rootCreation;

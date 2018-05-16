@@ -110,7 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interactions\Images.cs" />
-    <Compile Include="Interactions\TreeViewAction.cs" />
+    <Compile Include="Interactions\TreeViewBehavior.cs" />
     <Compile Include="Models\AssociateCommand.cs" />
     <Compile Include="ViewModels\ArchiveViewModel.cs" />
     <Compile Include="ViewModels\AssociateViewModel.cs" />
