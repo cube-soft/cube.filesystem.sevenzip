@@ -79,7 +79,6 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             Name         = ToName(src),
             Arguments    = string.Join(" ", ToArguments(src)),
-            IconLocation = ToIconLocation(src),
             IconIndex    = ToIconIndex(src),
         };
 
@@ -129,32 +128,6 @@ namespace Cube.FileSystem.SevenZip.Ice
             if ((src & PresetMenu.Extract)        != 0) return new[] { "/x" };
             if ((src & PresetMenu.Mail)           != 0) return Find(PresetMenu.MailZip, MailArguments);
             return new string[0];
-        }
-
-        /* --------------------------------------------------------------------- */
-        ///
-        /// ToIconLocation
-        ///
-        /// <summary>
-        /// PresetMenu に対応するアイコンのパスを取得します。
-        /// </summary>
-        ///
-        /// <param name="src">PresetMenu オブジェクト</param>
-        ///
-        /// <returns>アイコンのパス</returns>
-        ///
-        /* --------------------------------------------------------------------- */
-        public static string ToIconLocation(this PresetMenu src)
-        {
-            var mask = PresetMenu.Archive        |
-                       PresetMenu.ArchiveOptions |
-                       PresetMenu.Extract        |
-                       PresetMenu.ExtractOptions |
-                       PresetMenu.Mail           |
-                       PresetMenu.MailOptions    ;
-            var dir  = System.IO.Path.GetDirectoryName(AssemblyReader.Default.Location);
-            var dest = System.IO.Path.Combine(dir, "cubeice.exe");
-            return ((src & mask) != 0) ? dest : string.Empty;
         }
 
         /* --------------------------------------------------------------------- */

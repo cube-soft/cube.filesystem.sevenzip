@@ -86,22 +86,6 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* --------------------------------------------------------------------- */
         ///
-        /// IconLocation
-        ///
-        /// <summary>
-        /// メニューのアイコンを示すパスを取得または設定します。
-        /// </summary>
-        ///
-        /* --------------------------------------------------------------------- */
-        [DataMember]
-        public string IconLocation
-        {
-            get => _iconLocation;
-            set => SetProperty(ref _iconLocation, value);
-        }
-
-        /* --------------------------------------------------------------------- */
-        ///
         /// IconIndex
         ///
         /// <summary>
@@ -161,7 +145,6 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             _name         = string.Empty;
             _arguments    = string.Empty;
-            _iconLocation = string.Empty;
             _iconIndex    = 0;
             _children     = new List<ContextMenu>();
         }
@@ -171,7 +154,6 @@ namespace Cube.FileSystem.SevenZip.Ice
         #region Fields
         private string _name;
         private string _arguments;
-        private string _iconLocation;
         private int _iconIndex;
         private IList<ContextMenu> _children;
         #endregion
