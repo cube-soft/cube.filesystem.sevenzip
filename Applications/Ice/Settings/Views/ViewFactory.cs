@@ -51,7 +51,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
             view.Bind(vm);
 
             e.Cancel = (view.ShowDialog() == DialogResult.Cancel);
-            if (!e.Cancel) e.Result = new List<ContextMenu>();
+            if (!e.Cancel) e.Result = view.Result;
         }
 
         #endregion

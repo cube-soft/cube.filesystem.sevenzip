@@ -108,6 +108,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
             AssociateAllButton.Click     += (s, e) => vm.Associate.SelectAll();
             AssociateClearButton.Click   += (s, e) => vm.Associate.Clear();
             CustomizeContextButton.Click += (s, e) => vm.Context.Customize();
+            CustomizeContextButton.Click += (s, e) => ApplyButton.Enabled = true;
         }
 
         #endregion

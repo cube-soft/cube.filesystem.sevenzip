@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Cube.FileSystem.SevenZip.Ice.App.Settings
@@ -60,6 +61,21 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 
             ShortcutKeys.Add(Keys.F2, () => _tv.Rename());
         }
+
+        #endregion
+
+        #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Result
+        ///
+        /// <summary>
+        /// 操作結果を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public IEnumerable<ContextMenu> Result => _tv.Result;
 
         #endregion
 

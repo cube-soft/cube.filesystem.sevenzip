@@ -78,6 +78,17 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Result
+        ///
+        /// <summary>
+        /// 操作結果を表す ContextMenu 一覧を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public IEnumerable<ContextMenu> Result => CreateResult();
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// HasRoot
         ///
         /// <summary>
@@ -240,6 +251,46 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         #endregion
 
         #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CreateResult
+        ///
+        /// <summary>
+        /// 操作結果を生成します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private IEnumerable<ContextMenu> CreateResult()
+        {
+            var dest = new List<ContextMenu>();
+            var root = RootNode();
+            if (root != null)
+            {
+                foreach (TreeNode n in root.Nodes) dest.Add(CreateMenu(n));
+            }
+            return dest;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CreateMenu
+        ///
+        /// <summary>
+        /// TreeMode の内容を基にして ContextMenu オブジェクトを生成します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private ContextMenu CreateMenu(TreeNode src)
+        {
+            var dest = src.Tag as ContextMenu ?? new ContextMenu();
+            dest.Name      = src.Text;
+            dest.IconIndex = src.ImageIndex;
+
+            foreach (TreeNode n in src.Nodes) dest.Children.Add(CreateMenu(n));
+
+            return dest;
+        }
 
         /* ----------------------------------------------------------------- */
         ///
