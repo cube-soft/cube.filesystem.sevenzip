@@ -15,6 +15,8 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System.ComponentModel;
+
 namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 {
     /* --------------------------------------------------------------------- */
@@ -44,12 +46,28 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         public ContextViewModel(ContextSettings model)
         {
             _model = model;
-            _model.PropertyChanged += (s, e) => OnPropertyChanged(e);
+            _model.PropertyChanged += WhenChanged;
         }
 
         #endregion
 
         #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// PresetEnabled
+        ///
+        /// <summary>
+        /// プリセットの項目が有効化されているかどうかを示す値を取得
+        /// または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public bool PresetEnabled
+        {
+            get => !_model.IsCustomized;
+            set => _model.IsCustomized = !value;
+        }
 
         #region Archive
 
@@ -436,7 +454,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Reset() => _model.Preset = PresetMenu.DefaultContext;
+        public void Reset() => _model.Reset();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -449,10 +467,13 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /* ----------------------------------------------------------------- */
         public void Customize()
         {
-            var view = new ContextForm();
-            var vm   = new CustomContextViewModel(_model.Preset.ToContextMenuGroup());
-            view.Bind(vm);
-            view.ShowDialog();
+            var e = QueryEventArgs.Create(_model.IsCustomized ?
+                _model.Custom :
+                _model.Preset.ToContextMenuGroup()
+            );
+
+            Views.ShowContextView(e);
+            if (!e.Cancel) _model.Customize(e.Result);
         }
 
         #endregion
@@ -472,6 +493,25 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         {
             if (check) _model.Preset |= value;
             else _model.Preset &= ~value;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenChanged
+        ///
+        /// <summary>
+        /// プロパティの変更時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenChanged(object s, PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged(e);
+
+            if (e.PropertyName == nameof(ContextSettings.IsCustomized))
+            {
+                RaisePropertyChanged(nameof(PresetEnabled));
+            }
         }
 
         #endregion
