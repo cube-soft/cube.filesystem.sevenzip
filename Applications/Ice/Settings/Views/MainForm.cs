@@ -107,8 +107,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
             ContextResetButton.Click     += (s, e) => vm.Context.Reset();
             AssociateAllButton.Click     += (s, e) => vm.Associate.SelectAll();
             AssociateClearButton.Click   += (s, e) => vm.Associate.Clear();
-            CustomizeContextButton.Click += (s, e) => vm.Context.Customize();
-            CustomizeContextButton.Click += (s, e) => ApplyButton.Enabled = true;
+            ContextCustomizeButton.Click += (s, e) => vm.Context.Customize();
         }
 
         #endregion
@@ -285,6 +284,9 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
                 Create(PresetMenu.ExtractMyDocuments, Properties.Resources.MenuMyDocuments, index++),
                 Create(PresetMenu.ExtractRuntime,     Properties.Resources.MenuRuntime,     index++),
             });
+
+            ContextCustomizeButton.Click += (s, e) => ApplyButton.Enabled = true;
+            ContextResetButton.Click += (s, e)     => ApplyButton.Enabled = true;
         }
 
         /* ----------------------------------------------------------------- */

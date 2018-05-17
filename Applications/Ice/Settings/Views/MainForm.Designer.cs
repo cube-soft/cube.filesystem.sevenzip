@@ -45,10 +45,10 @@
             this.ContextPanel = new System.Windows.Forms.TableLayoutPanel();
             this.ContextButtonsPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.ContextResetButton = new System.Windows.Forms.Button();
-            this.CustomizeContextButton = new System.Windows.Forms.Button();
+            this.ContextCustomizeButton = new System.Windows.Forms.Button();
             this.ContextPresetPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.ContextSettingsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.ContextExtractPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.ContextSettingsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.ContextExtractCheckBox = new System.Windows.Forms.CheckBox();
             this.ContextArchiveCheckBox = new System.Windows.Forms.CheckBox();
             this.ContextArchivePanel = new System.Windows.Forms.FlowLayoutPanel();
@@ -317,7 +317,7 @@
             // ContextButtonsPanel
             //
             this.ContextButtonsPanel.Controls.Add(this.ContextResetButton);
-            this.ContextButtonsPanel.Controls.Add(this.CustomizeContextButton);
+            this.ContextButtonsPanel.Controls.Add(this.ContextCustomizeButton);
             this.ContextButtonsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ContextButtonsPanel.Location = new System.Drawing.Point(0, 227);
             this.ContextButtonsPanel.Margin = new System.Windows.Forms.Padding(0);
@@ -335,14 +335,14 @@
             this.ContextResetButton.Text = "リセット";
             this.ContextResetButton.UseVisualStyleBackColor = true;
             //
-            // CustomizeContextButton
+            // ContextCustomizeButton
             //
-            this.CustomizeContextButton.Location = new System.Drawing.Point(249, 3);
-            this.CustomizeContextButton.Name = "CustomizeContextButton";
-            this.CustomizeContextButton.Size = new System.Drawing.Size(100, 25);
-            this.CustomizeContextButton.TabIndex = 0;
-            this.CustomizeContextButton.Text = "カスタマイズ";
-            this.CustomizeContextButton.UseVisualStyleBackColor = true;
+            this.ContextCustomizeButton.Location = new System.Drawing.Point(249, 3);
+            this.ContextCustomizeButton.Name = "ContextCustomizeButton";
+            this.ContextCustomizeButton.Size = new System.Drawing.Size(100, 25);
+            this.ContextCustomizeButton.TabIndex = 0;
+            this.ContextCustomizeButton.Text = "カスタマイズ";
+            this.ContextCustomizeButton.UseVisualStyleBackColor = true;
             //
             // ContextPresetPanel
             //
@@ -365,10 +365,6 @@
             this.ContextPresetPanel.Size = new System.Drawing.Size(458, 227);
             this.ContextPresetPanel.TabIndex = 0;
             //
-            // ContextSettingsBindingSource
-            //
-            this.ContextSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.App.Settings.ContextViewModel);
-            //
             // ContextExtractPanel
             //
             this.ContextExtractPanel.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", this.ContextSettingsBindingSource, "Extract", true, System.Windows.Forms.DataSourceUpdateMode.Never));
@@ -380,6 +376,10 @@
             this.ContextExtractPanel.Name = "ContextExtractPanel";
             this.ContextExtractPanel.Size = new System.Drawing.Size(217, 203);
             this.ContextExtractPanel.TabIndex = 3;
+            //
+            // ContextSettingsBindingSource
+            //
+            this.ContextSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.App.Settings.ContextViewModel);
             //
             // ContextExtractCheckBox
             //
@@ -1195,7 +1195,7 @@
         private System.Windows.Forms.TableLayoutPanel ContextPanel;
         private System.Windows.Forms.FlowLayoutPanel ContextButtonsPanel;
         private System.Windows.Forms.Button ContextResetButton;
-        private System.Windows.Forms.Button CustomizeContextButton;
+        private System.Windows.Forms.Button ContextCustomizeButton;
         private System.Windows.Forms.GroupBox ShortcutGroupBox;
         private System.Windows.Forms.FlowLayoutPanel ShortcutPanel;
         private System.Windows.Forms.CheckBox ShortcutArchiveCheckBox;
