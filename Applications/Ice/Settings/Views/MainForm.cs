@@ -286,7 +286,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
             });
 
             ContextCustomizeButton.Click += (s, e) => ApplyButton.Enabled = true;
-            ContextResetButton.Click += (s, e)     => ApplyButton.Enabled = true;
+            ContextResetButton.Click     += (s, e) => ApplyButton.Enabled = true;
         }
 
         /* ----------------------------------------------------------------- */
