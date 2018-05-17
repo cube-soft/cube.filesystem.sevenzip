@@ -461,16 +461,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             src.ExtractMyDocuments = true;
             src.ExtractRuntime     = true;
             src.ExtractSource      = true;
-            src.Mail               = true;
-            src.MailBZip2          = true;
-            src.MailDetails        = true;
-            src.MailGZip           = true;
-            src.MailXZ             = true;
-            src.MailSevenZip       = true;
-            src.MailSfx            = true;
-            src.MailZip            = true;
-            src.MailZipPassword    = true;
-            Assert.That((uint)dest.Preset, Is.EqualTo(0x0fffffb));
+            Assert.That((uint)dest.Preset, Is.EqualTo(0x000fff3));
 
             src.Archive            = false;
             src.ArchiveBZip2       = false;
@@ -486,15 +477,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             src.ExtractMyDocuments = false;
             src.ExtractRuntime     = false;
             src.ExtractSource      = false;
-            src.Mail               = false;
-            src.MailBZip2          = false;
-            src.MailDetails        = false;
-            src.MailGZip           = false;
-            src.MailXZ             = false;
-            src.MailSevenZip       = false;
-            src.MailSfx            = false;
-            src.MailZip            = false;
-            src.MailZipPassword    = false;
             Assert.That(dest.Preset, Is.EqualTo(PresetMenu.None));
 
             src.Reset();
@@ -512,15 +494,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             Assert.That(src.ExtractMyDocuments, Is.True);
             Assert.That(src.ExtractRuntime,     Is.True);
             Assert.That(src.ExtractSource,      Is.True);
-            Assert.That(src.Mail,               Is.False);
-            Assert.That(src.MailBZip2,          Is.False);
-            Assert.That(src.MailDetails,        Is.False);
-            Assert.That(src.MailGZip,           Is.False);
-            Assert.That(src.MailXZ,             Is.False);
-            Assert.That(src.MailSevenZip,       Is.False);
-            Assert.That(src.MailSfx,            Is.False);
-            Assert.That(src.MailZip,            Is.False);
-            Assert.That(src.MailZipPassword,    Is.False);
             Assert.That(dest.Preset,            Is.EqualTo(PresetMenu.DefaultContext));
         }
 

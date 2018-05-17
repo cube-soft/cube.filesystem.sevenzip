@@ -285,18 +285,6 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
                 Create(PresetMenu.ExtractMyDocuments, Properties.Resources.MenuMyDocuments, index++),
                 Create(PresetMenu.ExtractRuntime,     Properties.Resources.MenuRuntime,     index++),
             });
-
-            ContextMailPanel.Controls.AddRange(new[]
-            {
-                Create(PresetMenu.MailZip,            Properties.Resources.MenuZip,         index++),
-                Create(PresetMenu.MailZipPassword,    Properties.Resources.MenuZipPassword, index++),
-                Create(PresetMenu.MailSevenZip,       Properties.Resources.MenuSevenZip,    index++),
-                Create(PresetMenu.MailBZip2,          Properties.Resources.MenuBZip2,       index++),
-                Create(PresetMenu.MailGZip,           Properties.Resources.MenuGZip,        index++),
-                Create(PresetMenu.MailXz,             Properties.Resources.MenuXZ,          index++),
-                Create(PresetMenu.MailSfx,            Properties.Resources.MenuSfx,         index++),
-                Create(PresetMenu.MailDetails,        Properties.Resources.MenuDetails,      index++),
-            });
         }
 
         /* ----------------------------------------------------------------- */
@@ -320,7 +308,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
                 Create(Properties.Resources.MenuBZip2,       PresetMenu.ArchiveBZip2),
                 Create(Properties.Resources.MenuGZip,        PresetMenu.ArchiveGZip),
                 Create(Properties.Resources.MenuSfx,         PresetMenu.ArchiveSfx),
-                Create(Properties.Resources.MenuDetails,      PresetMenu.ArchiveDetails),
+                Create(Properties.Resources.MenuDetails,     PresetMenu.ArchiveDetails),
             };
         }
 
