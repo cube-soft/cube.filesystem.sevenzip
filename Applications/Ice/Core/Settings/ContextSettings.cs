@@ -105,6 +105,44 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         #endregion
 
+        #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Customize
+        ///
+        /// <summary>
+        /// コンテキストメニューのカスタマイズを実行します。
+        /// </summary>
+        ///
+        /// <param name="src">カスタマイズメニュー</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Customize(IEnumerable<ContextMenu> src)
+        {
+            Custom.Clear();
+            foreach (var m in src) Custom.Add(m);
+            IsCustomized = true;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Reset
+        ///
+        /// <summary>
+        /// 設定をリセットします。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Reset()
+        {
+            Preset       = PresetMenu.DefaultContext;
+            Custom       = new List<ContextMenu>();
+            IsCustomized = false;
+        }
+
+        #endregion
+
         #region Implementations
 
         /* ----------------------------------------------------------------- */
@@ -118,22 +156,6 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         [OnDeserializing]
         private void OnDeserializing(StreamingContext context) => Reset();
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Reset
-        ///
-        /// <summary>
-        /// 設定をリセットします。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Reset()
-        {
-            _preset       = PresetMenu.DefaultContext;
-            _custom       = new List<ContextMenu>();
-            _isCustomized = false;
-        }
 
         #endregion
 
