@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using Cube.FileSystem.SevenZip.Ice.App.Settings;
 using NUnit.Framework;
+using System.Threading;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
@@ -33,6 +34,85 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
     class ContextViewModelTest : SettingsMockViewHelper
     {
         #region Tests
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Customize
+        ///
+        /// <summary>
+        /// コンテキストメニューのカスタマイズのテストを実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test, RequiresThread(ApartmentState.STA)]
+        public void Customize()
+        {
+            Mock.CustomizeContext = (_) => true;
+
+            var m  = CreateSettings();
+            var vm = new MainViewModel(m);
+            vm.Context.Customize();
+
+            var dest = m.Value.Context;
+            Assert.That(dest.IsCustomized, Is.True);
+
+            var root = dest.Custom;
+            Assert.That(root.Count, Is.EqualTo(2));
+            Assert.That(root[0].Name,             Is.EqualTo("圧縮"));
+            Assert.That(root[0].IconIndex,        Is.EqualTo(1));
+            Assert.That(root[0].Children.Count,   Is.EqualTo(7));
+            Assert.That(root[0].Children[0].Name, Is.EqualTo("Zip"));
+            Assert.That(root[0].Children[1].Name, Is.EqualTo("Zip (パスワード)"));
+            Assert.That(root[0].Children[2].Name, Is.EqualTo("7-Zip"));
+            Assert.That(root[0].Children[3].Name, Is.EqualTo("BZip2"));
+            Assert.That(root[0].Children[4].Name, Is.EqualTo("GZip"));
+            Assert.That(root[0].Children[5].Name, Is.EqualTo("自己解凍形式"));
+            Assert.That(root[0].Children[6].Name, Is.EqualTo("詳細設定"));
+
+            foreach (var item in root[0].Children)
+            {
+                Assert.That(item.Arguments, Does.StartWith("/c"), item.Name);
+                Assert.That(item.IconIndex, Is.EqualTo(1), item.Name);
+            }
+
+            Assert.That(root[1].Name,             Is.EqualTo("解凍"));
+            Assert.That(root[1].IconIndex,        Is.EqualTo(2));
+            Assert.That(root[1].Children.Count,   Is.EqualTo(4));
+            Assert.That(root[1].Children[0].Name, Is.EqualTo("ここに解凍"));
+            Assert.That(root[1].Children[1].Name, Is.EqualTo("デスクトップに解凍"));
+            Assert.That(root[1].Children[2].Name, Is.EqualTo("マイドキュメントに解凍"));
+            Assert.That(root[1].Children[3].Name, Is.EqualTo("場所を指定して解凍"));
+
+            foreach (var item in root[1].Children)
+            {
+                Assert.That(item.Arguments, Does.StartWith("/x"), item.Name);
+                Assert.That(item.IconIndex, Is.EqualTo(2), item.Name);
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Customize_Cancel
+        ///
+        /// <summary>
+        /// コンテキストメニューのカスタマイズ操作をキャンセルした時の
+        /// 挙動を確認します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test, RequiresThread(ApartmentState.STA)]
+        public void Customize_Cancel()
+        {
+            Mock.CustomizeContext = (_) => false;
+
+            var m  = CreateSettings();
+            var vm = new MainViewModel(m);
+            vm.Context.Customize();
+
+            var dest = m.Value.Context;
+            Assert.That(dest.IsCustomized, Is.False);
+            Assert.That(dest.Custom.Count, Is.EqualTo(0));
+        }
 
         /* ----------------------------------------------------------------- */
         ///

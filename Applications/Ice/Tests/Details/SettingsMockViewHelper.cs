@@ -56,14 +56,22 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// <param name="io">ファイル操作用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public SettingsMockViewHelper(IO io)
-        {
-            Views.Configure(_mock);
-        }
+        public SettingsMockViewHelper(IO io) : base(io) { }
 
         #endregion
 
         #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Mock
+        ///
+        /// <summary>
+        /// ダミー用の ViewFactory を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected SettingsMockViewFactory Mock { get; private set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -96,6 +104,22 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Setup
+        ///
+        /// <summary>
+        /// テスト毎に実行される SetUp 処理です。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [SetUp]
+        public virtual void Setup()
+        {
+            Mock = new SettingsMockViewFactory();
+            Views.Configure(Mock);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Teardown
         ///
         /// <summary>
@@ -112,10 +136,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             }
         }
 
-        #endregion
-
-        #region Fields
-        private readonly SettingsMockViewFactory _mock = new SettingsMockViewFactory();
         #endregion
     }
 }
