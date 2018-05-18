@@ -15,14 +15,14 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.SevenZip.Ice;
+using Cube.FileSystem.SevenZip.Ice.App;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Cube.FileSystem.SevenZip.App.Ice.Tests
+namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
@@ -34,7 +34,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ArchiveTest : MockViewHelper
+    class ArchiveTest : ProgressMockViewHelper
     {
         #region Tests
 
@@ -297,7 +297,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 
                 yield return new TestCaseData(
                     new[] { "Sample.txt", "Sample 00..01" },
-                    PresetMenu.ArchiveDetail.ToArguments(),
+                    PresetMenu.ArchiveDetails.ToArguments(),
                     new ArchiveSettings
                     {
                         SaveLocation  = SaveLocation.Others,
@@ -345,7 +345,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 
                 yield return new TestCaseData(
                     new[] { "Sample.txt", "Sample 00..01" },
-                    DropRequest(PresetMenu.ArchiveXZ, "Drop"),
+                    DropRequest(PresetMenu.ArchiveXz, "Drop"),
                     new ArchiveSettings
                     {
                         SaveLocation = SaveLocation.Others,
@@ -393,7 +393,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
             var asm  = Assembly.GetExecutingAssembly().Location;
             var root = io.Get(asm).DirectoryName;
             var dir  = typeof(ArchiveTest).FullName;
-            return io.Combine(root, ResultsName, dir, path);
+            return io.Combine(root, "Results", dir, path);
         }
 
         /* ----------------------------------------------------------------- */

@@ -29,7 +29,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public sealed class ExtractSettings : GeneralSettings
+    public sealed class ExtractSettings : ArchiveSettingsBase
     {
         #region Constructors
 
@@ -103,7 +103,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         #endregion
 
-        #region Methods
+        #region Implementations
 
         /* ----------------------------------------------------------------- */
         ///

@@ -29,7 +29,7 @@ namespace Cube.FileSystem.SevenZip.Tests
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    class FileHelper
+    public class FileHelper
     {
         #region Constructors
 

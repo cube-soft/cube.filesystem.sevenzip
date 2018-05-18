@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Cube.FileSystem.SevenZip.App.Ice.Settings.Properties {
+namespace Cube.FileSystem.SevenZip.Ice.App.Settings.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Cube.FileSystem.SevenZip.App.Ice.Settings.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Cube.FileSystem.SevenZip.Ice.App.Settings.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,26 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap Archive {
+            get {
+                object obj = ResourceManager.GetObject("Archive", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap Extract {
+            get {
+                object obj = ResourceManager.GetObject("Extract", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -100,9 +120,9 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings.Properties {
         /// <summary>
         ///   詳細設定 に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        internal static string MenuDetail {
+        internal static string MenuDetails {
             get {
-                return ResourceManager.GetString("MenuDetail", resourceCulture);
+                return ResourceManager.GetString("MenuDetails", resourceCulture);
             }
         }
         
@@ -134,6 +154,15 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings.Properties {
         }
         
         /// <summary>
+        ///   新しいカテゴリー に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuNewCategory {
+            get {
+                return ResourceManager.GetString("MenuNewCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   場所を指定して解凍 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MenuRuntime {
@@ -157,6 +186,15 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings.Properties {
         internal static string MenuSfx {
             get {
                 return ResourceManager.GetString("MenuSfx", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   メニュートップ に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuTop {
+            get {
+                return ResourceManager.GetString("MenuTop", resourceCulture);
             }
         }
         

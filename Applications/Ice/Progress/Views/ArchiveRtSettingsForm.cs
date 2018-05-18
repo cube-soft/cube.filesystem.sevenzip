@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace Cube.FileSystem.SevenZip.App.Ice
+namespace Cube.FileSystem.SevenZip.Ice.App
 {
     /* --------------------------------------------------------------------- */
     ///

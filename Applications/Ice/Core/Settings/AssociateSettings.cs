@@ -80,8 +80,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public int IconIndex
         {
-            get => _index;
-            set => SetProperty(ref _index, value);
+            get => _iconIndex;
+            set => SetProperty(ref _iconIndex, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -577,7 +577,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void Reset()
         {
-            _index = 3;
+            _iconIndex = 3;
 
             Value = new Dictionary<string, bool>
             {
@@ -649,7 +649,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         #endregion
 
         #region Fields
-        private int _index;
+        private int _iconIndex;
         #endregion
     }
 }

@@ -22,7 +22,7 @@ using System.Windows.Forms;
 using Cube.Conversions;
 using Cube.Images.Icons;
 
-namespace Cube.FileSystem.SevenZip.App.Ice
+namespace Cube.FileSystem.SevenZip.Ice.App
 {
     /* --------------------------------------------------------------------- */
     ///

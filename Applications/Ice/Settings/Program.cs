@@ -15,13 +15,12 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.SevenZip.Ice;
 using Cube.Log;
 using System;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace Cube.FileSystem.SevenZip.App.Ice.Settings
+namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
@@ -63,10 +62,10 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
                 var install = args.Length > 0 && args[0] == "/install";
                 if (install) Logger.Info(type, "InstallMode");
 
-                var vm = new SettingsViewModel(model) { InstallMode = install };
+                var vm = new MainViewModel(model) { InstallMode = install };
                 if (!install) vm.Sync();
 
-                var view = new SettingsForm(install);
+                var view = new MainForm(install);
                 view.Bind(vm);
 
                 Application.Run(view);

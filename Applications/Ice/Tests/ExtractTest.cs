@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.SevenZip.Ice;
+using Cube.FileSystem.SevenZip.Ice.App;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -23,7 +23,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Cube.FileSystem.SevenZip.App.Ice.Tests
+namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
@@ -35,7 +35,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ExtractTest : MockViewHelper
+    class ExtractTest : ProgressMockViewHelper
     {
         #region Tests
 
@@ -848,7 +848,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
             var asm  = Assembly.GetExecutingAssembly().Location;
             var root = io.Get(asm).DirectoryName;
             var dir  = typeof(ExtractTest).FullName;
-            return io.Combine(root, ResultsName, dir, path);
+            return io.Combine(root, "Results", dir, path);
         }
 
         /* ----------------------------------------------------------------- */

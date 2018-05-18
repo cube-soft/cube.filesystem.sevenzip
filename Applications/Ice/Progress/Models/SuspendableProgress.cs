@@ -19,7 +19,7 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 
-namespace Cube.FileSystem.SevenZip.App.Ice
+namespace Cube.FileSystem.SevenZip.Ice.App
 {
     /* --------------------------------------------------------------------- */
     ///
