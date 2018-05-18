@@ -110,8 +110,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\EventHub.cs" />
-    <Compile Include="Models\MessageEventArgs.cs" />
-    <Compile Include="Models\OverwriteEventArgs.cs" />
     <Compile Include="Models\PathConverter.cs" />
     <Compile Include="Models\PathQueryEventArgs.cs" />
     <Compile Include="Models\SuspendableProgress.cs" />

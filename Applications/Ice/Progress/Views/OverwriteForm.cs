@@ -15,12 +15,13 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Conversions;
+using Cube.Forms;
+using Cube.Images.Icons;
 using System;
 using System.ComponentModel;
 using System.Text;
 using System.Windows.Forms;
-using Cube.Conversions;
-using Cube.Images.Icons;
 
 namespace Cube.FileSystem.SevenZip.Ice.App
 {

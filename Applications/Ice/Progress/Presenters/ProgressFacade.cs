@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Forms;
 using Cube.Log;
 using System;
 using System.Collections.Generic;
@@ -547,7 +548,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         {
             this.LogError(err.ToString());
             if (!Settings.Value.ErrorReport) return;
-            OnMessageReceived(new MessageEventArgs { Message = err.Message });
+            OnMessageReceived(new MessageEventArgs(err.Message));
         }
 
         /* ----------------------------------------------------------------- */
@@ -697,13 +698,11 @@ namespace Cube.FileSystem.SevenZip.Ice.App
             foreach (var path in e.Paths) sb.AppendLine(path);
             sb.Append($"{e.Name} {e.Exception.Message}");
 
-            var ev = new MessageEventArgs
-            {
-                Message = sb.ToString(),
-                Buttons = MessageBoxButtons.RetryCancel,
-                Icon    = MessageBoxIcon.Warning,
-                Result  = DialogResult.Cancel,
-            };
+            var ev = new MessageEventArgs(
+                sb.ToString(),
+                MessageBoxButtons.RetryCancel,
+                MessageBoxIcon.Warning
+            );
 
             OnMessageReceived(ev);
             this.LogWarn(sb.ToString());

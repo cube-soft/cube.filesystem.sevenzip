@@ -16,6 +16,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.FileSystem.SevenZip.Ice.App;
+using Cube.Forms;
 using NUnit.Framework;
 using System.Threading;
 

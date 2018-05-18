@@ -16,6 +16,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.FileSystem.Files;
+using Cube.Forms;
 using Cube.Log;
 using System;
 using System.Collections.Generic;

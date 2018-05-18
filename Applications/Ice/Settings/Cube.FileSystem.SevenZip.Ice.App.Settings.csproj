@@ -109,7 +109,6 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interactions\Images.cs" />
     <Compile Include="Interactions\TreeViewBehavior.cs" />
     <Compile Include="Models\AssociateCommand.cs" />
     <Compile Include="ViewModels\ArchiveViewModel.cs" />

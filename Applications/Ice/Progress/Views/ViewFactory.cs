@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Forms;
 using Cube.Forms.Processes;
 using System.Windows.Forms;
 
