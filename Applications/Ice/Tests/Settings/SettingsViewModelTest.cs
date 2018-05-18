@@ -33,7 +33,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class SettingsViewModelTest : MockViewHelper
+    class SettingsViewModelTest : ProgressMockViewHelper
     {
         #region Tests
 

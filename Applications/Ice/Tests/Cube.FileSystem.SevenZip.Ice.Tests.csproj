@@ -102,8 +102,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Details\MockViewFactory.cs" />
-    <Compile Include="Details\MockViewHelper.cs" />
+    <Compile Include="Details\ProgressMockViewFactory.cs" />
+    <Compile Include="Details\ProgressMockViewHelper.cs" />
     <Compile Include="Details\ProgressMockView.cs" />
     <Compile Include="Interactions\TreeViewBehaviorTest.cs" />
     <Compile Include="Settings\ArchiveRtSettingsTest.cs" />

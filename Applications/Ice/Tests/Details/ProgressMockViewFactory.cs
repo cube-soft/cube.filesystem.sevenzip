@@ -23,14 +23,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// MockViewSettings
+    /// ProgressMockViewSettings
     ///
     /// <summary>
     /// MockView のテスト時設定を保持するためのクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    class MockViewSettings
+    class ProgressMockViewSettings
     {
         #region Properties
 
@@ -72,27 +72,27 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
     /* --------------------------------------------------------------------- */
     ///
-    /// MockViewFactory
+    /// ProgressMockViewFactory
     ///
     /// <summary>
     /// 各種ダミー View の生成および設定用クラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    class MockViewFactory : ViewFactory
+    class ProgressMockViewFactory : ViewFactory
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// MockViewFactory
+        /// ProgressMockViewFactory
         ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public MockViewFactory()
+        public ProgressMockViewFactory()
         {
             if (SynchronizationContext.Current != null) return;
 
@@ -113,7 +113,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public MockViewSettings Settings { get; set; }
+        public ProgressMockViewSettings Settings { get; set; }
 
         #endregion
 

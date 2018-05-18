@@ -23,31 +23,31 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// MockViewHelper
+    /// ProgressMockViewHelper
     ///
     /// <summary>
     /// テストで MockView を使用するためのクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    class MockViewHelper
+    class ProgressMockViewHelper
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// MockViewHelper
+        /// ProgressMockViewHelper
         ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected MockViewHelper() : this(new IO()) { }
+        protected ProgressMockViewHelper() : this(new IO()) { }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// MockViewHelper
+        /// ProgressMockViewHelper
         ///
         /// <summary>
         /// オブジェクトを初期化します。
@@ -56,7 +56,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// <param name="io">ファイル操作用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected MockViewHelper(IO io)
+        protected ProgressMockViewHelper(IO io)
         {
             IO = io;
             Root = IO.Get(Assembly.GetExecutingAssembly().Location).DirectoryName;
@@ -81,7 +81,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected MockViewSettings Mock
+        protected ProgressMockViewSettings Mock
         {
             get => _mock.Settings;
             set => _mock.Settings = value;
@@ -197,7 +197,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected void Reset() => Mock = new MockViewSettings();
+        protected void Reset() => Mock = new ProgressMockViewSettings();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -245,7 +245,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         #endregion
 
         #region Fields
-        private readonly MockViewFactory _mock = new MockViewFactory();
+        private readonly ProgressMockViewFactory _mock = new ProgressMockViewFactory();
         private readonly string _directory;
         #endregion
     }

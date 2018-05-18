@@ -35,7 +35,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ExtractTest : MockViewHelper
+    class ExtractTest : ProgressMockViewHelper
     {
         #region Tests
 

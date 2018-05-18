@@ -29,7 +29,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ShortcutSettingsTest : MockViewHelper
+    class ShortcutSettingsTest : ProgressMockViewHelper
     {
         /* ----------------------------------------------------------------- */
         ///
