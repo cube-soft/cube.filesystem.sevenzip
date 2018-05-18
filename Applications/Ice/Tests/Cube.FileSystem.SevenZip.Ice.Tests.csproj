@@ -105,9 +105,12 @@
     <Compile Include="Details\ProgressMockViewFactory.cs" />
     <Compile Include="Details\ProgressMockViewHelper.cs" />
     <Compile Include="Details\ProgressMockView.cs" />
+    <Compile Include="Details\SettingsMockViewFactory.cs" />
+    <Compile Include="Details\SettingsMockViewHelper.cs" />
     <Compile Include="Interactions\TreeViewBehaviorTest.cs" />
     <Compile Include="Settings\ArchiveRtSettingsTest.cs" />
     <Compile Include="Settings\AssociateRegistrarTest.cs" />
+    <Compile Include="Settings\ContextViewModelTest.cs" />
     <Compile Include="Settings\SettingsViewModelTest.cs" />
     <Compile Include="Settings\ShortcutSettingsTest.cs" />
     <Compile Include="ArchiveTest.cs" />
@@ -197,6 +200,10 @@
     <ProjectReference Include="..\..\..\Libraries\Cube.FileSystem.SevenZip.csproj">
       <Project>{74c9f388-360e-4c46-a9a6-e131eab2e49c}</Project>
       <Name>Cube.FileSystem.SevenZip</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tests\Cube.FileSystem.SevenZip.Tests.csproj">
+      <Project>{bdba9b88-28d5-4369-b6af-ada67d95ac98}</Project>
+      <Name>Cube.FileSystem.SevenZip.Tests</Name>
     </ProjectReference>
     <ProjectReference Include="..\Core\Cube.FileSystem.SevenZip.Ice.csproj">
       <Project>{1badab3f-38b5-4acf-addf-036918bfc51c}</Project>

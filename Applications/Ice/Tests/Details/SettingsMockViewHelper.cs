@@ -15,38 +15,39 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.SevenZip.Ice.App;
-using System.Threading.Tasks;
+using Cube.FileSystem.SevenZip.Ice.App.Settings;
+using Microsoft.Win32;
+using NUnit.Framework;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ProgressMockViewHelper
+    /// SettingsMockViewHelper
     ///
     /// <summary>
     /// テストで MockView を使用するためのクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    class ProgressMockViewHelper : Cube.FileSystem.SevenZip.Tests.FileHelper
+    class SettingsMockViewHelper : Cube.FileSystem.SevenZip.Tests.FileHelper
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ProgressMockViewHelper
+        /// SettingsMockViewHelper
         ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected ProgressMockViewHelper() : this(new IO()) { }
+        public SettingsMockViewHelper() : this(new IO()) { }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ProgressMockViewHelper
+        /// SettingsMockViewHelper
         ///
         /// <summary>
         /// オブジェクトを初期化します。
@@ -55,7 +56,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// <param name="io">ファイル操作用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected ProgressMockViewHelper(IO io) : base(io)
+        public SettingsMockViewHelper(IO io)
         {
             Views.Configure(_mock);
         }
@@ -66,18 +67,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Mock
+        /// SubKeyName
         ///
         /// <summary>
-        /// MockView のテスト時設定を取得または設定します。
+        /// テスト用のレジストリ・サブキー名を取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected ProgressMockViewSettings Mock
-        {
-            get => _mock.Settings;
-            set => _mock.Settings = value;
-        }
+        protected string SubKeyName => @"CubeSoft\CubeIceTest";
 
         #endregion
 
@@ -85,38 +82,40 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Reset
+        /// CreateSettings
         ///
         /// <summary>
-        /// 内部状態をリセットします。
+        /// SettingsFolder オブジェクトを生成します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected void Reset() => Mock = new ProgressMockViewSettings();
+        protected SettingsFolder CreateSettings() => new SettingsFolder(
+            Cube.DataContract.Format.Registry,
+            $@"Software\{SubKeyName}"
+        ) { AutoSave = false };
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Wait
+        /// Teardown
         ///
         /// <summary>
-        /// View が非表示になるまで待ちます。
+        /// テスト毎に実行される TearDown 処理です。
         /// </summary>
         ///
-        /// <param name="view">View オブジェクト</param>
-        ///
-        /// <returns>正常に終了したかどうか</returns>
-        ///
         /* ----------------------------------------------------------------- */
-        protected async Task<bool> Wait(Cube.Forms.IForm view)
+        [TearDown]
+        public virtual void Teardown()
         {
-            for (var i = 0; view.Visible && i < 100; ++i) await Task.Delay(50).ConfigureAwait(false);
-            return !view.Visible;
+            using (var root = Registry.CurrentUser.OpenSubKey("Software", true))
+            {
+                root.DeleteSubKeyTree(SubKeyName, false);
+            }
         }
 
         #endregion
 
         #region Fields
-        private readonly ProgressMockViewFactory _mock = new ProgressMockViewFactory();
+        private readonly SettingsMockViewFactory _mock = new SettingsMockViewFactory();
         #endregion
     }
 }

@@ -38,6 +38,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
     [RequiresThread(ApartmentState.STA)]
     class TreeViewBehaviorTest
     {
+        #region Tests
+
         /* ----------------------------------------------------------------- */
         ///
         /// Register
@@ -76,6 +78,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             Assert.That(dest[1].Nodes[2].Text, Is.EqualTo("マイドキュメントに解凍"));
             Assert.That(dest[1].Nodes[3].Text, Is.EqualTo("場所を指定して解凍"));
         }
+
+        #endregion
 
         #region Helper methods
 

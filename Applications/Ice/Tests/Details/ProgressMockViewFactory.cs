@@ -94,10 +94,12 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /* ----------------------------------------------------------------- */
         public ProgressMockViewFactory()
         {
-            if (SynchronizationContext.Current != null) return;
-
-            var ctx = new SynchronizationContext();
-            SynchronizationContext.SetSynchronizationContext(ctx);
+            if (SynchronizationContext.Current == null)
+            {
+                SynchronizationContext.SetSynchronizationContext(
+                    new SynchronizationContext()
+                );
+            }
         }
 
         #endregion

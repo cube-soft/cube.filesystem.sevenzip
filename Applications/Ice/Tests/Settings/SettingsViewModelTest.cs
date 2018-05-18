@@ -16,7 +16,6 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.FileSystem.SevenZip.Ice.App.Settings;
-using Microsoft.Win32;
 using NUnit.Framework;
 using System;
 using System.Linq;
@@ -33,7 +32,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class SettingsViewModelTest : ProgressMockViewHelper
+    class SettingsViewModelTest : SettingsMockViewHelper
     {
         #region Tests
 
@@ -49,7 +48,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void GeneralSettings()
         {
-            var m = Create();
+            var m = CreateSettings();
 
             var vm = new MainViewModel(m)
             {
@@ -112,7 +111,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void ArchiveSettings()
         {
-            var m    = Create();
+            var m    = CreateSettings();
             var vm   = new MainViewModel(m);
             var src  = vm.Archive;
             var dest = m.Value.Archive;
@@ -205,7 +204,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void ExtractSettings()
         {
-            var m    = Create();
+            var m    = CreateSettings();
             var vm   = new MainViewModel(m);
             var src  = vm.Extract;
             var dest = m.Value.Extract;
@@ -325,7 +324,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void AssociateSettings()
         {
-            var m    = Create();
+            var m    = CreateSettings();
             var vm   = new MainViewModel(m);
             var src  = vm.Associate;
             var dest = m.Value.Associate;
@@ -431,74 +430,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ContextMenuSettings
-        ///
-        /// <summary>
-        /// ContextMenuSettings オブジェクトに対応する ViewModel の
-        /// 挙動を確認します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [Test]
-        public void ContextMenuSettings()
-        {
-            var m    = Create();
-            var vm   = new MainViewModel(m);
-            var src  = vm.Context;
-            var dest = m.Value.Context;
-
-            src.Archive            = true;
-            src.ArchiveBZip2       = true;
-            src.ArchiveDetails     = true;
-            src.ArchiveGZip        = true;
-            src.ArchiveXZ          = true;
-            src.ArchiveSevenZip    = true;
-            src.ArchiveSfx         = true;
-            src.ArchiveZip         = true;
-            src.ArchiveZipPassword = true;
-            src.Extract            = true;
-            src.ExtractDesktop     = true;
-            src.ExtractMyDocuments = true;
-            src.ExtractRuntime     = true;
-            src.ExtractSource      = true;
-            Assert.That((uint)dest.Preset, Is.EqualTo(0x000fff3));
-
-            src.Archive            = false;
-            src.ArchiveBZip2       = false;
-            src.ArchiveDetails     = false;
-            src.ArchiveGZip        = false;
-            src.ArchiveXZ          = false;
-            src.ArchiveSevenZip    = false;
-            src.ArchiveSfx         = false;
-            src.ArchiveZip         = false;
-            src.ArchiveZipPassword = false;
-            src.Extract            = false;
-            src.ExtractDesktop     = false;
-            src.ExtractMyDocuments = false;
-            src.ExtractRuntime     = false;
-            src.ExtractSource      = false;
-            Assert.That(dest.Preset, Is.EqualTo(PresetMenu.None));
-
-            src.Reset();
-            Assert.That(src.Archive,            Is.True);
-            Assert.That(src.ArchiveBZip2,       Is.True);
-            Assert.That(src.ArchiveDetails,     Is.True);
-            Assert.That(src.ArchiveGZip,        Is.True);
-            Assert.That(src.ArchiveXZ,          Is.False);
-            Assert.That(src.ArchiveSevenZip,    Is.True);
-            Assert.That(src.ArchiveSfx,         Is.True);
-            Assert.That(src.ArchiveZip,         Is.True);
-            Assert.That(src.ArchiveZipPassword, Is.True);
-            Assert.That(src.Extract,            Is.True);
-            Assert.That(src.ExtractDesktop,     Is.True);
-            Assert.That(src.ExtractMyDocuments, Is.True);
-            Assert.That(src.ExtractRuntime,     Is.True);
-            Assert.That(src.ExtractSource,      Is.True);
-            Assert.That(dest.Preset,            Is.EqualTo(PresetMenu.DefaultContext));
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// ShortcutSettings
         ///
         /// <summary>
@@ -510,7 +441,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void ShortcutSettings()
         {
-            var m    = Create();
+            var m    = CreateSettings();
             var vm   = new MainViewModel(m);
             var src  = vm.Shortcut;
             var dest = m.Value.Shortcut;
@@ -549,7 +480,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [TestCase(false)]
         public void SyncUpdate(bool install) => Assert.DoesNotThrow(() =>
         {
-            var m0 = Create();
+            var m0 = CreateSettings();
             m0.Startup.Name = "cubeice-test";
             m0.Value.Shortcut.Directory = Results;
 
@@ -562,7 +493,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             vm0.Associate.Clear();
             vm0.Update();
 
-            var m1 = Create();
+            var m1 = CreateSettings();
             m1.Load();
             m1.Startup.Name = "cubeice-test";
             m1.Value.Shortcut.Directory = Results;
@@ -574,53 +505,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             };
             vm1.Update();
         });
-
-        #endregion
-
-        #region Helper methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SubKeyName
-        ///
-        /// <summary>
-        /// テスト用のレジストリ・サブキー名を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private static readonly string SubKeyName = @"CubeSoft\CubeIceTest";
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Create
-        ///
-        /// <summary>
-        /// Model オブジェクトを生成します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private SettingsFolder Create() => new SettingsFolder(
-            Cube.DataContract.Format.Registry,
-            $@"Software\{SubKeyName}"
-        ) { AutoSave = false };
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// TearDown
-        ///
-        /// <summary>
-        /// テスト毎に実行される TearDown 処理です。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [TearDown]
-        public void TearDown()
-        {
-            using (var root = Registry.CurrentUser.OpenSubKey("Software", true))
-            {
-                root.DeleteSubKeyTree(SubKeyName, false);
-            }
-        }
 
         #endregion
     }
