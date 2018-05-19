@@ -19,6 +19,7 @@ using Cube.Forms;
 using Cube.Generics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -55,7 +56,9 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /* ----------------------------------------------------------------- */
         public TreeViewBehavior(TreeView src, bool rootCreation)
         {
-            Source  = src ?? throw new ArgumentException();
+            Debug.Assert(src != null);
+
+            Source  = src;
             HasRoot = rootCreation;
 
             Source.BeforeLabelEdit += (s, e) => e.CancelEdit = !IsEditable;
