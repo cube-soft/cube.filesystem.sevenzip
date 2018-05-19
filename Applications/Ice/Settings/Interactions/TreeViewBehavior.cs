@@ -105,7 +105,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private TreeNode RootNode => Source.Nodes.Count > 0 ? Source.Nodes[0] : null;
+        private TreeNode RootNode => Source.Nodes[0];
 
         #endregion
 
@@ -250,10 +250,8 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         {
             var dest = new List<ContextMenu>();
             var root = RootNode;
-            if (root != null)
-            {
-                foreach (TreeNode n in root.Nodes) dest.Add(CreateMenu(n));
-            }
+            Debug.Assert(root != null);
+            foreach (TreeNode n in root.Nodes) dest.Add(CreateMenu(n));
             return dest;
         }
 
@@ -311,7 +309,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         private TreeNode TargetNode()
         {
             var dest = Source.SelectedNode ?? RootNode;
-            if (dest == null) return null;
+            Debug.Assert(dest != null);
 
             var command = !string.IsNullOrEmpty(dest.Tag.TryCast<ContextMenu>()?.Arguments);
             return dest.Nodes.Count <= 0 && command ?

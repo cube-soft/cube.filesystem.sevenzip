@@ -207,6 +207,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             {
                 b.Source.SelectedNode = b.Source.Nodes[0].Nodes[1];
                 b.Move(-1);
+                b.Move(-1);
                 return true;
             };
 
@@ -232,6 +233,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             {
                 b.Source.SelectedNode = b.Source.Nodes[0].Nodes[0];
                 b.Move(1);
+                b.Move(1);
                 return true;
             };
 
@@ -239,6 +241,30 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             Assert.That(dest.Count,   Is.EqualTo(2));
             Assert.That(dest[0].Name, Is.EqualTo("解凍"));
             Assert.That(dest[1].Name, Is.EqualTo("圧縮"));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Customize_NotSelected
+        ///
+        /// <summary>
+        /// 非選択時に操作を実行した時の挙動を確認します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test, RequiresThread(ApartmentState.STA)]
+        public void Customize_NotSelected()
+        {
+            Mock.CustomizeContext = (vm, b) =>
+            {
+                b.Move(1);
+                b.Rename();
+                b.Remove();
+                return true;
+            };
+
+            var dest = ExecuteCustomize().Custom;
+            Assert.That(dest.Count, Is.EqualTo(2));
         }
 
         /* ----------------------------------------------------------------- */
