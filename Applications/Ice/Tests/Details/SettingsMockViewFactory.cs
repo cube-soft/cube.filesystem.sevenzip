@@ -16,11 +16,9 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.FileSystem.SevenZip.Ice.App.Settings;
-using Cube.Images.Icons;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -64,23 +62,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Icons
-        ///
-        /// <summary>
-        /// ダミー用のアイコン一覧を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private IEnumerable<Image> Icons { get; } = new List<Image>
-        {
-            StockIcons.Folder.GetIcon(IconSize.Small).ToBitmap(),
-            StockIcons.Application.GetIcon(IconSize.Small).ToBitmap(),
-            StockIcons.Application.GetIcon(IconSize.Small).ToBitmap(),
-            StockIcons.FolderOpen.GetIcon(IconSize.Small).ToBitmap(),
-        };
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// CustomizeContext
         ///
         /// <summary>
@@ -93,7 +74,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public Func<TreeViewBehavior, bool> CustomizeContext { get; set; } = (_) => false;
+        public Func<CustomContextViewModel, TreeViewBehavior, bool> CustomizeContext { get; set; } =
+            (_, __) => false;
 
         #endregion
 
@@ -113,15 +95,16 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         public override void ShowContextView(QueryEventArgs<IEnumerable<ContextMenu>> e)
         {
             var view = new TreeView();
-            var src  = new TreeViewBehavior(view, true);
-            src.Register(e.Query, Icons);
+            var vm   = new CustomContextViewModel(e.Query);
+            var b    = new TreeViewBehavior(view, true);
+            b.Register(vm.Current, vm.Images);
 
-            Assert.That(src.HasRoot,    Is.True);
-            Assert.That(src.IsEditable, Is.False);
-            Assert.That(src.Source,     Is.EqualTo(view));
+            Assert.That(b.HasRoot,    Is.True);
+            Assert.That(b.IsEditable, Is.False);
+            Assert.That(b.Source,     Is.EqualTo(view));
 
-            e.Cancel = !CustomizeContext(src);
-            if (!e.Cancel) e.Result = src.Result;
+            e.Cancel = !CustomizeContext(vm, b);
+            if (!e.Cancel) e.Result = b.Result;
         }
 
         #endregion

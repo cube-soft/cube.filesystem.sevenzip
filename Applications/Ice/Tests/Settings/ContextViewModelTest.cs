@@ -18,6 +18,7 @@
 using Cube.FileSystem.SevenZip.Ice.App.Settings;
 using NUnit.Framework;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
@@ -47,7 +48,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test, RequiresThread(ApartmentState.STA)]
         public void Customize()
         {
-            Mock.CustomizeContext = (_) => true;
+            Mock.CustomizeContext = (_, __) => true;
 
             var dest = ExecuteCustomize();
             Assert.That(dest.IsCustomized, Is.True);
@@ -99,11 +100,44 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test, RequiresThread(ApartmentState.STA)]
         public void Customize_Cancel()
         {
-            Mock.CustomizeContext = (_) => false;
+            Mock.CustomizeContext = (_, __) => false;
 
             var dest = ExecuteCustomize();
             Assert.That(dest.IsCustomized, Is.False);
             Assert.That(dest.Custom.Count, Is.EqualTo(0));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Customize_Add
+        ///
+        /// <summary>
+        /// 新しいメニューを追加するテストを実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test, RequiresThread(ApartmentState.STA)]
+        public void Customize_Add()
+        {
+            Mock.CustomizeContext = (vm, b) =>
+            {
+                var src = new TreeViewBehavior(new TreeView(), false);
+                src.Register(vm.Source, vm.Images);
+                b.Add(src.Source.Nodes[2]);
+                return true;
+            };
+
+            var dest = ExecuteCustomize().Custom;
+            Assert.That(dest.Count,             Is.EqualTo(3));
+            Assert.That(dest[2].Name,           Is.EqualTo("圧縮してメール送信"));
+            Assert.That(dest[2].IconIndex,      Is.EqualTo(1));
+            Assert.That(dest[2].Children.Count, Is.EqualTo(8));
+
+            foreach (var item in dest[2].Children) Assert.That(
+                item.Arguments,
+                Does.StartWith("/c").And.Contain("/m"),
+                item.Name
+            );
         }
 
         /* ----------------------------------------------------------------- */
@@ -118,10 +152,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test, RequiresThread(ApartmentState.STA)]
         public void Customize_NewCategory()
         {
-            Mock.CustomizeContext = e =>
+            Mock.CustomizeContext = (vm, b) =>
             {
-                e.Add();
-                e.Source.SelectedNode.EndEdit(false);
+                b.Add();
+                b.Source.SelectedNode.EndEdit(false);
                 return true;
             };
 
@@ -145,10 +179,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test, RequiresThread(ApartmentState.STA)]
         public void Customize_Remove()
         {
-            Mock.CustomizeContext = e =>
+            Mock.CustomizeContext = (vm, b) =>
             {
-                e.Source.SelectedNode = e.Source.Nodes[0].Nodes[0];
-                e.Remove();
+                b.Source.SelectedNode = b.Source.Nodes[0].Nodes[0];
+                b.Remove();
                 return true;
             };
 
@@ -169,10 +203,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test, RequiresThread(ApartmentState.STA)]
         public void Customize_Up()
         {
-            Mock.CustomizeContext = e =>
+            Mock.CustomizeContext = (vm, b) =>
             {
-                e.Source.SelectedNode = e.Source.Nodes[0].Nodes[1];
-                e.Move(-1);
+                b.Source.SelectedNode = b.Source.Nodes[0].Nodes[1];
+                b.Move(-1);
                 return true;
             };
 
@@ -194,10 +228,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test, RequiresThread(ApartmentState.STA)]
         public void Customize_Down()
         {
-            Mock.CustomizeContext = e =>
+            Mock.CustomizeContext = (vm, b) =>
             {
-                e.Source.SelectedNode = e.Source.Nodes[0].Nodes[0];
-                e.Move(1);
+                b.Source.SelectedNode = b.Source.Nodes[0].Nodes[0];
+                b.Move(1);
                 return true;
             };
 
