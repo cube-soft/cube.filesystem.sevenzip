@@ -237,11 +237,12 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /* ----------------------------------------------------------------- */
         public void Move(int delta)
         {
-            var src = Source.SelectedNode;
-            if (src == null) return;
+            if (!IsEditable) return;
 
+            var src = Source.SelectedNode;
+            Debug.Assert(src != null);
             var parent = src.Parent;
-            if (parent == null) return;
+            Debug.Assert(parent != null);
 
             var index = parent.Nodes.IndexOf(Source.SelectedNode);
             if (index + delta < 0 || index + delta > parent.Nodes.Count - 1) return;
