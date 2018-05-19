@@ -257,6 +257,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         {
             Mock.CustomizeContext = (vm, b) =>
             {
+                b.Add(default(TreeNode));
                 b.Move(1);
                 b.Rename();
                 b.Remove();

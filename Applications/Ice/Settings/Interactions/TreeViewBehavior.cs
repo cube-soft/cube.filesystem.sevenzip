@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using Cube.Forms;
 using Cube.Generics;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -84,6 +85,18 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 
         /* ----------------------------------------------------------------- */
         ///
+        /// IsRegistered
+        ///
+        /// <summary>
+        /// Register メソッドが実行されたかどうかを示す値を取得または
+        /// 設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public bool IsRegistered { get; private set; } = false;
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// IsEditable
         ///
         /// <summary>
@@ -105,7 +118,14 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private TreeNode RootNode => Source.Nodes[0];
+        private TreeNode RootNode
+        {
+            get
+            {
+                if (!IsRegistered) throw new InvalidOperationException("unregistered");
+                return Source.Nodes[0];
+            }
+        }
 
         #endregion
 
@@ -129,6 +149,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
             Source.ImageList = images.ToImageList();
             Source.Nodes.Clear();
             Source.Nodes.Add(CreateRootNode(src));
+            IsRegistered = true;
         }
 
         /* ----------------------------------------------------------------- */
@@ -145,11 +166,10 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         public void Add(TreeNode src)
         {
             if (src == null) return;
-            var dest = TargetNode();
-            if (dest == null) return;
 
-            var cp = Copy(src);
-            dest.Nodes.Add(cp);
+            var dest = TargetNode();
+            Debug.Assert(dest != null);
+            dest.Nodes.Add(Copy(src));
             dest.Expand();
         }
 
@@ -166,9 +186,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         public void Add()
         {
             var dest = TargetNode();
-            if (dest == null) return;
-
-            var src = new TreeNode
+            var src  = new TreeNode
             {
                 Text               = Properties.Resources.MenuNewCategory,
                 ToolTipText        = Properties.Resources.MenuNewCategory,
@@ -177,6 +195,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
                 Tag                = new ContextMenu(),
             };
 
+            Debug.Assert(dest != null);
             dest.Nodes.Add(src);
             dest.Expand();
             Source.SelectedNode = src;
@@ -222,14 +241,14 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
             var src = Source.SelectedNode;
             if (src == null) return;
 
-            var nodes = src.Parent?.Nodes;
-            if (nodes == null) return;
+            var parent = src.Parent;
+            if (parent == null) return;
 
-            var index = nodes.IndexOf(Source.SelectedNode);
-            if (index + delta < 0 || index + delta > nodes.Count - 1) return;
+            var index = parent.Nodes.IndexOf(Source.SelectedNode);
+            if (index + delta < 0 || index + delta > parent.Nodes.Count - 1) return;
 
-            nodes.Remove(src);
-            nodes.Insert(index + delta, src);
+            parent.Nodes.Remove(src);
+            parent.Nodes.Insert(index + delta, src);
             Source.SelectedNode = src;
         }
 

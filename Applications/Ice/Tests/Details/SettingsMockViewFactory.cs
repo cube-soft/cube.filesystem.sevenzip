@@ -99,8 +99,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var b    = new TreeViewBehavior(view);
             b.Register(vm.Current, vm.Images);
 
-            Assert.That(b.IsEditable, Is.False);
-            Assert.That(b.Source,     Is.EqualTo(view));
+            Assert.That(b.IsRegistered, Is.True);
+            Assert.That(b.IsEditable,   Is.False);
+            Assert.That(b.Source,       Is.EqualTo(view));
 
             e.Cancel = !CustomizeContext(vm, b);
             if (!e.Cancel) e.Result = b.Result;
