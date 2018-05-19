@@ -154,17 +154,22 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         {
             Mock.CustomizeContext = (vm, b) =>
             {
+                b.Source.SelectedNode = b.Source.Nodes[0].Nodes[0];
                 b.Add();
                 b.Source.SelectedNode.EndEdit(false);
                 return true;
             };
 
-            var dest = ExecuteCustomize().Custom;
-            Assert.That(dest.Count,             Is.EqualTo(3));
-            Assert.That(dest[2].Name,           Is.EqualTo("新しいカテゴリー"));
-            Assert.That(dest[2].Arguments,      Is.Empty);
-            Assert.That(dest[2].IconIndex,      Is.EqualTo(0));
-            Assert.That(dest[2].Children.Count, Is.EqualTo(0));
+            var menu = ExecuteCustomize().Custom;
+            Assert.That(menu.Count,   Is.EqualTo(2));
+            Assert.That(menu[0].Name, Is.EqualTo("圧縮"));
+
+            var dest = menu[0].Children;
+            Assert.That(dest.Count,             Is.EqualTo(8));
+            Assert.That(dest[7].Name,           Is.EqualTo("新しいカテゴリー"));
+            Assert.That(dest[7].Arguments,      Is.Empty);
+            Assert.That(dest[7].IconIndex,      Is.EqualTo(0));
+            Assert.That(dest[7].Children.Count, Is.EqualTo(0));
         }
 
         /* ----------------------------------------------------------------- */

@@ -117,6 +117,7 @@
     <Compile Include="PathConverterTest.cs" />
     <Compile Include="PresetMenuTest.cs" />
     <Compile Include="RequestTest.cs" />
+    <Compile Include="TreeViewBehaviorTest.cs" />
     <Compile Include="ViewResourceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

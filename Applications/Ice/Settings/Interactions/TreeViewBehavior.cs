@@ -52,8 +52,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /* ----------------------------------------------------------------- */
         public TreeViewBehavior(TreeView src)
         {
-            Debug.Assert(src != null);
-            Source = src;
+            Source = src ?? throw new ArgumentException();
             Source.BeforeLabelEdit += (s, e) => e.CancelEdit = !IsEditable;
         }
 
@@ -167,7 +166,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         {
             if (src == null) return;
 
-            var dest = TargetNode();
+            var dest = GetTargetNode();
             Debug.Assert(dest != null);
             dest.Nodes.Add(Copy(src));
             dest.Expand();
@@ -185,7 +184,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /* ----------------------------------------------------------------- */
         public void Add()
         {
-            var dest = TargetNode();
+            var dest = GetTargetNode();
             var src  = new TreeNode
             {
                 Text               = Properties.Resources.MenuNewCategory,
@@ -285,12 +284,10 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /* ----------------------------------------------------------------- */
         private ContextMenu CreateMenu(TreeNode src)
         {
-            var dest = src.Tag as ContextMenu ?? new ContextMenu();
+            var dest = GetContextMenu(src);
             dest.Name      = src.Text;
             dest.IconIndex = src.ImageIndex;
-
             foreach (TreeNode n in src.Nodes) dest.Children.Add(CreateMenu(n));
-
             return dest;
         }
 
@@ -318,14 +315,14 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// TargetNode
+        /// GetTargetNode
         ///
         /// <summary>
         /// 追加等の操作の対象となる Node オブジェクトを取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private TreeNode TargetNode()
+        private TreeNode GetTargetNode()
         {
             var dest = Source.SelectedNode ?? RootNode;
             Debug.Assert(dest != null);
@@ -334,6 +331,22 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
             return dest.Nodes.Count <= 0 && command ?
                    dest.Parent :
                    dest;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetContextMenu
+        ///
+        /// <summary>
+        /// ContextMenu オブジェクトを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private ContextMenu GetContextMenu(TreeNode src)
+        {
+            var dest = src.Tag as ContextMenu;
+            Debug.Assert(dest != null);
+            return dest;
         }
 
         /* ----------------------------------------------------------------- */
@@ -347,7 +360,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /* ----------------------------------------------------------------- */
         private TreeNode Copy(TreeNode src)
         {
-            var menu = src.Tag as ContextMenu;
+            var menu = GetContextMenu(src);
             var dest = new TreeNode
             {
                 Text               = src.Text,
@@ -356,9 +369,9 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
                 SelectedImageIndex = src.SelectedImageIndex,
                 Tag                = new ContextMenu
                 {
-                    Name      = menu?.Name,
-                    Arguments = menu?.Arguments,
-                    IconIndex = menu?.IconIndex ?? 0,
+                    Name      = menu.Name,
+                    Arguments = menu.Arguments,
+                    IconIndex = menu.IconIndex,
                 },
             };
 
