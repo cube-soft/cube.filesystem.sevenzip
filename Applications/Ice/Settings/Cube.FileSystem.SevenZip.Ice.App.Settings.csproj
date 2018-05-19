@@ -110,6 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interactions\TreeViewBehavior.cs" />
+    <Compile Include="Interactions\TreeViewExtension.cs" />
     <Compile Include="Models\AssociateCommand.cs" />
     <Compile Include="ViewModels\ArchiveViewModel.cs" />
     <Compile Include="ViewModels\AssociateViewModel.cs" />
@@ -172,13 +173,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.ico" />
-    <None Include="Resources\Extract.png" />
-    <None Include="Resources\Archive.png" />
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="App.config" />
     <None Include="App.manifest" />
     <None Include="Packages.config" />
+    <None Include="Resources\Archive.png" />
+    <None Include="Resources\Extract.png" />
     <None Include="Resources\Logo.png" />
   </ItemGroup>
   <ItemGroup>

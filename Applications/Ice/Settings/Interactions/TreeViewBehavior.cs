@@ -17,11 +17,9 @@
 /* ------------------------------------------------------------------------- */
 using Cube.Forms;
 using Cube.Generics;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace Cube.FileSystem.SevenZip.Ice.App.Settings
@@ -49,18 +47,12 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// </summary>
         ///
         /// <param name="src">対象となる TreeView オブジェクト</param>
-        /// <param name="rootCreation">
-        /// ルートとなる Node オブジェクトを挿入するかどうか
-        /// </param>
         ///
         /* ----------------------------------------------------------------- */
-        public TreeViewBehavior(TreeView src, bool rootCreation)
+        public TreeViewBehavior(TreeView src)
         {
             Debug.Assert(src != null);
-
-            Source  = src;
-            HasRoot = rootCreation;
-
+            Source = src;
             Source.BeforeLabelEdit += (s, e) => e.CancelEdit = !IsEditable;
         }
 
@@ -92,24 +84,6 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// HasRoot
-        ///
-        /// <summary>
-        /// ルートとなる Node オブジェクトを保持するかどうかを示す
-        /// 値を取得します。
-        /// </summary>
-        ///
-        /// <remarks>
-        /// true の場合、Source.Nodes には 1 つの TreeNode オブジェクト
-        /// のみが登録され、この Node オブジェクトは編集不可能な特別な
-        /// オブジェクトと認識されます。
-        /// </remarks>
-        ///
-        /* ----------------------------------------------------------------- */
-        public bool HasRoot { get; }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// IsEditable
         ///
         /// <summary>
@@ -120,7 +94,18 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /* ----------------------------------------------------------------- */
         public bool IsEditable =>
             Source.SelectedNode != null &&
-            (!HasRoot || Source.SelectedNode != RootNode());
+            Source.SelectedNode != RootNode;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// RootNode
+        ///
+        /// <summary>
+        /// ルートとなる Node オブジェクトを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private TreeNode RootNode => Source.Nodes.Count > 0 ? Source.Nodes[0] : null;
 
         #endregion
 
@@ -141,12 +126,9 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /* ----------------------------------------------------------------- */
         public void Register(IEnumerable<ContextMenu> src, IEnumerable<Image> images)
         {
-            _lastIndex = Math.Max(images.Count() - 1, 0);
             Source.ImageList = images.ToImageList();
-
             Source.Nodes.Clear();
-            if (HasRoot) Source.Nodes.Add(CreateRootNode(src));
-            else RegisterCore(src, Source.Nodes);
+            Source.Nodes.Add(CreateRootNode(src));
         }
 
         /* ----------------------------------------------------------------- */
@@ -191,7 +173,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
                 Text               = Properties.Resources.MenuNewCategory,
                 ToolTipText        = Properties.Resources.MenuNewCategory,
                 ImageIndex         = 0,
-                SelectedImageIndex = _lastIndex,
+                SelectedImageIndex = 0,
                 Tag                = new ContextMenu(),
             };
 
@@ -267,7 +249,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         private IEnumerable<ContextMenu> CreateResult()
         {
             var dest = new List<ContextMenu>();
-            var root = RootNode();
+            var root = RootNode;
             if (root != null)
             {
                 foreach (TreeNode n in root.Nodes) dest.Add(CreateMenu(n));
@@ -311,23 +293,11 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
                 Text               = Properties.Resources.MenuTop,
                 ToolTipText        = Properties.Resources.MenuTop,
                 ImageIndex         = 0,
-                SelectedImageIndex = _lastIndex,
+                SelectedImageIndex = 0,
             };
-            RegisterCore(src, dest.Nodes);
+            dest.Nodes.Register(src);
             return dest;
         }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// RootNode
-        ///
-        /// <summary>
-        /// ルートとなる Node オブジェクトを取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private TreeNode RootNode() =>
-            Source.Nodes.Count > 0 ? Source.Nodes[0] : null;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -340,7 +310,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /* ----------------------------------------------------------------- */
         private TreeNode TargetNode()
         {
-            var dest = Source.SelectedNode ?? RootNode();
+            var dest = Source.SelectedNode ?? RootNode;
             if (dest == null) return null;
 
             var command = !string.IsNullOrEmpty(dest.Tag.TryCast<ContextMenu>()?.Arguments);
@@ -354,78 +324,31 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// Copy
         ///
         /// <summary>
-        /// ContextMenu オブジェクトをコピーします。
-        /// </summary>
-        ///
-        /// <remarks>
-        /// 階層構造は TreeNode で管理するため、Children プロパティは
-        /// 空の状態にします。
-        /// </remarks>
-        ///
-        /* ----------------------------------------------------------------- */
-        private ContextMenu Copy(ContextMenu src) => new ContextMenu
-        {
-            Name      = src?.Name,
-            Arguments = src?.Arguments,
-            IconIndex = src?.IconIndex ?? -1,
-        };
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Copy
-        ///
-        /// <summary>
         /// TreeNode オブジェクトをコピーします。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         private TreeNode Copy(TreeNode src)
         {
+            var menu = src.Tag as ContextMenu;
             var dest = new TreeNode
             {
                 Text               = src.Text,
                 ToolTipText        = src.ToolTipText,
                 ImageIndex         = src.ImageIndex,
                 SelectedImageIndex = src.SelectedImageIndex,
-                Tag                = Copy(src.Tag as ContextMenu),
+                Tag                = new ContextMenu
+                {
+                    Name      = menu?.Name,
+                    Arguments = menu?.Arguments,
+                    IconIndex = menu?.IconIndex ?? 0,
+                },
             };
 
             foreach (TreeNode node in src.Nodes) dest.Nodes.Add(Copy(node));
             return dest;
         }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Register
-        ///
-        /// <summary>
-        /// 対象となる TreeView オブジェクトに、コンテキストメニューに対応
-        /// する TreeNode 一覧を追加します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void RegisterCore(IEnumerable<ContextMenu> src, TreeNodeCollection dest)
-        {
-            foreach (var item in src)
-            {
-                var node = new TreeNode
-                {
-                    Text               = item.Name,
-                    ToolTipText        = item.Name,
-                    ImageIndex         = item.IconIndex,
-                    SelectedImageIndex = item.IconIndex != 0 ? item.IconIndex : _lastIndex,
-                    Tag                = Copy(item),
-                };
-
-                RegisterCore(item.Children, node.Nodes);
-                dest.Add(node);
-            }
-        }
-
-        #endregion
-
-        #region Fields
-        private int _lastIndex;
         #endregion
     }
 }

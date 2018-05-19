@@ -121,9 +121,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         {
             Mock.CustomizeContext = (vm, b) =>
             {
-                var src = new TreeViewBehavior(new TreeView(), false);
-                src.Register(vm.Source, vm.Images);
-                b.Add(src.Source.Nodes[2]);
+                var src = new TreeView();
+                src.Nodes.Register(vm.Source);
+                b.Add(src.Nodes[2]);
                 return true;
             };
 

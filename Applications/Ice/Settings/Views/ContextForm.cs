@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Forms;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
@@ -46,7 +47,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         {
             InitializeComponent();
 
-            _tv = new TreeViewBehavior(DestinationTreeView, true);
+            _tv = new TreeViewBehavior(DestinationTreeView);
 
             DestinationTreeView.AfterSelect += (s, e) => UpdateMenu();
 
@@ -94,7 +95,8 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /* ----------------------------------------------------------------- */
         public void Bind(CustomContextViewModel vm)
         {
-            new TreeViewBehavior(SourceTreeView, false).Register(vm.Source, vm.Images);
+            SourceTreeView.ImageList = vm.Images.ToImageList();
+            SourceTreeView.Nodes.Register(vm.Source);
             _tv.Register(vm.Current, vm.Images);
             UpdateMenu();
         }

@@ -96,10 +96,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         {
             var view = new TreeView();
             var vm   = new CustomContextViewModel(e.Query);
-            var b    = new TreeViewBehavior(view, true);
+            var b    = new TreeViewBehavior(view);
             b.Register(vm.Current, vm.Images);
 
-            Assert.That(b.HasRoot,    Is.True);
             Assert.That(b.IsEditable, Is.False);
             Assert.That(b.Source,     Is.EqualTo(view));
 
