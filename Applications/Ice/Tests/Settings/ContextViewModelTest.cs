@@ -49,11 +49,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         {
             Mock.CustomizeContext = (_) => true;
 
-            var m  = CreateSettings();
-            var vm = new MainViewModel(m);
-            vm.Context.Customize();
-
-            var dest = m.Value.Context;
+            var dest = ExecuteCustomize();
             Assert.That(dest.IsCustomized, Is.True);
 
             var root = dest.Custom;
@@ -105,13 +101,110 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         {
             Mock.CustomizeContext = (_) => false;
 
-            var m  = CreateSettings();
-            var vm = new MainViewModel(m);
-            vm.Context.Customize();
-
-            var dest = m.Value.Context;
+            var dest = ExecuteCustomize();
             Assert.That(dest.IsCustomized, Is.False);
             Assert.That(dest.Custom.Count, Is.EqualTo(0));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Customize_NewCategory
+        ///
+        /// <summary>
+        /// 新しいカテゴリーを追加するテストを実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test, RequiresThread(ApartmentState.STA)]
+        public void Customize_NewCategory()
+        {
+            Mock.CustomizeContext = e =>
+            {
+                e.Add();
+                e.Source.SelectedNode.EndEdit(false);
+                return true;
+            };
+
+            var dest = ExecuteCustomize().Custom;
+            Assert.That(dest.Count,             Is.EqualTo(3));
+            Assert.That(dest[2].Name,           Is.EqualTo("新しいカテゴリー"));
+            Assert.That(dest[2].Arguments,      Is.Empty);
+            Assert.That(dest[2].IconIndex,      Is.EqualTo(0));
+            Assert.That(dest[2].Children.Count, Is.EqualTo(0));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Customize_Remove
+        ///
+        /// <summary>
+        /// 選択項目を削除するテストを実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test, RequiresThread(ApartmentState.STA)]
+        public void Customize_Remove()
+        {
+            Mock.CustomizeContext = e =>
+            {
+                e.Source.SelectedNode = e.Source.Nodes[0].Nodes[0];
+                e.Remove();
+                return true;
+            };
+
+            var dest = ExecuteCustomize().Custom;
+            Assert.That(dest.Count,   Is.EqualTo(1));
+            Assert.That(dest[0].Name, Is.EqualTo("解凍"));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Customize_Up
+        ///
+        /// <summary>
+        /// 選択項目を上に移動するテストを実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test, RequiresThread(ApartmentState.STA)]
+        public void Customize_Up()
+        {
+            Mock.CustomizeContext = e =>
+            {
+                e.Source.SelectedNode = e.Source.Nodes[0].Nodes[1];
+                e.Move(-1);
+                return true;
+            };
+
+            var dest = ExecuteCustomize().Custom;
+            Assert.That(dest.Count,   Is.EqualTo(2));
+            Assert.That(dest[0].Name, Is.EqualTo("解凍"));
+            Assert.That(dest[1].Name, Is.EqualTo("圧縮"));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Customize_Down
+        ///
+        /// <summary>
+        /// 選択項目を下に移動するテストを実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test, RequiresThread(ApartmentState.STA)]
+        public void Customize_Down()
+        {
+            Mock.CustomizeContext = e =>
+            {
+                e.Source.SelectedNode = e.Source.Nodes[0].Nodes[0];
+                e.Move(1);
+                return true;
+            };
+
+            var dest = ExecuteCustomize().Custom;
+            Assert.That(dest.Count,   Is.EqualTo(2));
+            Assert.That(dest[0].Name, Is.EqualTo("解凍"));
+            Assert.That(dest[1].Name, Is.EqualTo("圧縮"));
         }
 
         /* ----------------------------------------------------------------- */
@@ -171,6 +264,27 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             Assert.That(src.ExtractRuntime,     Is.True);
             Assert.That(src.ExtractSource,      Is.True);
             Assert.That(dest.Preset,            Is.EqualTo(PresetMenu.DefaultContext));
+        }
+
+        #endregion
+
+        #region Helper methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ExecuteCustomize
+        ///
+        /// <summary>
+        /// カスタマイズ操作を実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private ContextSettings ExecuteCustomize()
+        {
+            var m  = CreateSettings();
+            var vm = new MainViewModel(m);
+            vm.Context.Customize();
+            return m.Value.Context;
         }
 
         #endregion
