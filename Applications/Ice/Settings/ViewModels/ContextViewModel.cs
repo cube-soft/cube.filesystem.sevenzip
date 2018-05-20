@@ -58,16 +58,11 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// PresetEnabled
         ///
         /// <summary>
-        /// プリセットの項目が有効化されているかどうかを示す値を取得
-        /// または設定します。
+        /// プリセット項目が有効化されているかどうかを示す値を取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool PresetEnabled
-        {
-            get => !_model.IsCustomized;
-            set => _model.IsCustomized = !value;
-        }
+        public bool PresetEnabled => !_model.IsCustomized;
 
         #region Archive
 

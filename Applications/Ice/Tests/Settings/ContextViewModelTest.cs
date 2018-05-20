@@ -48,7 +48,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test, RequiresThread(ApartmentState.STA)]
         public void Customize()
         {
-            Mock.CustomizeContext = (_, __) => true;
+            Mock.CustomizeContext = (vm, b) => true;
 
             var dest = ExecuteCustomize();
             Assert.That(dest.IsCustomized, Is.True);
@@ -100,7 +100,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test, RequiresThread(ApartmentState.STA)]
         public void Customize_Cancel()
         {
-            Mock.CustomizeContext = (_, __) => false;
+            Mock.CustomizeContext = (vm, b) => false;
 
             var dest = ExecuteCustomize();
             Assert.That(dest.IsCustomized, Is.False);
@@ -338,10 +338,12 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var dest = m.Value.Context;
 
             Set(src, true);
+            Assert.That(src.PresetEnabled, Is.True);
             Assert.That((uint)dest.Preset, Is.EqualTo(0x000fff3));
 
             Set(src, false);
-            Assert.That(dest.Preset, Is.EqualTo(PresetMenu.None));
+            Assert.That(src.PresetEnabled, Is.True);
+            Assert.That(dest.Preset,       Is.EqualTo(PresetMenu.None));
 
             src.Reset();
             Assert.That(src.Archive,            Is.True);
