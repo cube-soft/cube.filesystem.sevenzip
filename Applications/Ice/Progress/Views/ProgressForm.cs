@@ -56,6 +56,9 @@ namespace Cube.FileSystem.SevenZip.Ice.App
 
             _timer.Tick += (s, e) => UpdateElapseLabel();
             _timer.Interval = 500;
+
+            _taskbar = new Cube.Forms.TaskbarProgress(this);
+            _taskbar.Maximum = MainProgressBar.Maximum;
         }
 
         #endregion
@@ -84,7 +87,10 @@ namespace Cube.FileSystem.SevenZip.Ice.App
 
                 var min = MainProgressBar.Minimum;
                 var max = MainProgressBar.Maximum;
-                MainProgressBar.Value = Math.Min(Math.Max(value, min), max);
+                var cvt = Math.Min(Math.Max(value, min), max);
+
+                MainProgressBar.Value = cvt;
+                _taskbar.Value        = cvt;
 
                 ExitButton.Enabled    = value > 0;
                 SuspendButton.Enabled = value > 0;
@@ -275,6 +281,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         {
             _watch.Start();
             _timer.Start();
+            _taskbar.State = Forms.TaskbarProgressState.Normal;
         }
 
         /* ----------------------------------------------------------------- */
@@ -290,6 +297,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         {
             _timer.Stop();
             _watch.Stop();
+            _taskbar.State = Forms.TaskbarProgressState.Paused;
         }
 
         #endregion
@@ -421,6 +429,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         #region Fields
         private readonly Stopwatch _watch = new Stopwatch();
         private readonly Timer _timer = new Timer();
+        private readonly Cube.Forms.TaskbarProgress _taskbar;
         private string _fileName = string.Empty;
         private long _count = 0;
         private long _totalCount = 0;
