@@ -52,7 +52,7 @@ public:
     virtual ~ContextMenu();
 
     TString CurrentDirectory() const;
-    TString Program() const { return CurrentDirectory() + _T("\\") CUBEICE_PROGRAM; }
+    TString Program() const { return CurrentDirectory() + _T("\\") + CUBEICE_PROGRAM; }
 
     const ContextSettings& Settings() const { return settings_; }
     const std::map<int, ContextMenuItem>& Items() const { return items_; }

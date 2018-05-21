@@ -191,7 +191,7 @@ ContextSettings::TString ContextSettings::GetString(HKEY key, const TString& nam
 /* ------------------------------------------------------------------------- */
 ContextSettings::TString ContextSettings::GetIconLocation(DWORD index) {
     if (Program().empty() || index == 0) return TString();
-    std::basic_stringstream<TCHAR> ss;
+    std::basic_ostringstream<TCHAR> ss;
     ss << Program() << _T(",") << index;
     return ss.str();
 }

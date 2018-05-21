@@ -52,7 +52,7 @@ namespace PresetMenu {
         ArchiveSevenZip     = 0x00000400,
         ArchiveBZip2        = 0x00000800,
         ArchiveGZip         = 0x00001000,
-        ArchiveDetail       = 0x00002000,
+        ArchiveDetails      = 0x00002000,
         ArchiveSfx          = 0x00004000,
         ArchiveXZ           = 0x00008000,
 
@@ -61,9 +61,9 @@ namespace PresetMenu {
         MailSevenZip        = 0x00040000,
         MailBZip2           = 0x00080000,
         MailGZip            = 0x00100000,
-        MailDetail          = 0x00200000,
+        MailDetails         = 0x00200000,
         MailSfx             = 0x00400000,
-        MailXZ             = 0x00800000,
+        MailXZ              = 0x00800000,
 
         Unknown             = 0xf0000000,
     };

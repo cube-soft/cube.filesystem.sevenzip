@@ -60,8 +60,8 @@ static ContextMenuItem GetContextMenuItem(int id, const std::basic_string<TCHAR>
         return ContextMenuItem(CUBEICE_MENU_XZ,       exe, _T("/c:xz"),             _T(""));
     case PresetMenu::ArchiveSfx:
         return ContextMenuItem(CUBEICE_MENU_SFX,      exe, _T("/c:exe"),            _T(""));
-    case PresetMenu::ArchiveDetail:
-        return ContextMenuItem(CUBEICE_MENU_DETAIL,   exe, _T("/c:detail"),         _T(""));
+    case PresetMenu::ArchiveDetails:
+        return ContextMenuItem(CUBEICE_MENU_DETAILS,  exe, _T("/c:detail"),         _T(""));
     case PresetMenu::ExtractDesktop:
         return ContextMenuItem(CUBEICE_MENU_EDESKTOP, exe, _T("/x /o:desktop"),     _T(""));
     case PresetMenu::ExtractMyDocuments:
@@ -72,8 +72,8 @@ static ContextMenuItem GetContextMenuItem(int id, const std::basic_string<TCHAR>
         return ContextMenuItem(CUBEICE_MENU_ESOURCE,  exe, _T("/x /o:source"),      _T(""));
     case PresetMenu::MailBZip2:
         return ContextMenuItem(CUBEICE_MENU_BZIP2,    exe, _T("/c:bzip2 /m"),       _T(""));
-    case PresetMenu::MailDetail:
-        return ContextMenuItem(CUBEICE_MENU_DETAIL,   exe, _T("/c:detail /m"),      _T(""));
+    case PresetMenu::MailDetails:
+        return ContextMenuItem(CUBEICE_MENU_DETAILS,  exe, _T("/c:detail /m"),      _T(""));
     case PresetMenu::MailGZip:
         return ContextMenuItem(CUBEICE_MENU_GZIP,     exe, _T("/c:gzip /m"),        _T(""));
     case PresetMenu::MailXZ:
@@ -136,7 +136,7 @@ std::vector<ContextMenuItem> GetContextMenuItems(int menu, const std::basic_stri
         AddContextMenuItem(archive, menu, PresetMenu::ArchiveXZ,          exe);
         AddContextMenuItem(archive, menu, PresetMenu::ArchiveGZip,        exe);
         AddContextMenuItem(archive, menu, PresetMenu::ArchiveSfx,         exe);
-        AddContextMenuItem(archive, menu, PresetMenu::ArchiveDetail,      exe);
+        AddContextMenuItem(archive, menu, PresetMenu::ArchiveDetails,     exe);
 
         if (archive.Children().size() > 0) dest.push_back(archive);
     }
@@ -162,7 +162,7 @@ std::vector<ContextMenuItem> GetContextMenuItems(int menu, const std::basic_stri
         AddContextMenuItem(mail, menu, PresetMenu::MailGZip,        exe);
         AddContextMenuItem(mail, menu, PresetMenu::MailXZ,          exe);
         AddContextMenuItem(mail, menu, PresetMenu::MailSfx,         exe);
-        AddContextMenuItem(mail, menu, PresetMenu::MailDetail,      exe);
+        AddContextMenuItem(mail, menu, PresetMenu::MailDetails,     exe);
 
         if (mail.Children().size() > 0) dest.push_back(mail);
     }

@@ -33,7 +33,7 @@
 #define CUBEICE_MENU_BZIP2          _T("BZip2")
 #define CUBEICE_MENU_XZ             _T("XZ")
 #define CUBEICE_MENU_SFX            _T("自己解凍形式")
-#define CUBEICE_MENU_DETAIL         _T("詳細設定")
+#define CUBEICE_MENU_DETAILS        _T("詳細設定")
 
 #define CUBEICE_MENU_ESOURCE        _T("ここに解凍")
 #define CUBEICE_MENU_EDESKTOP       _T("デスクトップに解凍")
