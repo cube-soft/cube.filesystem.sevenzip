@@ -74,8 +74,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public Func<CustomContextViewModel, TreeViewBehavior, bool> CustomizeContext { get; set; } =
-            (_, __) => false;
+        public Func<CustomizeMenu, bool> CustomizeContext { get; set; } = (_) => false;
 
         #endregion
 
@@ -94,17 +93,17 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /* ----------------------------------------------------------------- */
         public override void ShowCustomizeView(QueryEventArgs<IEnumerable<ContextMenu>> e)
         {
-            var view = new TreeView();
             var vm   = new CustomContextViewModel(e.Query);
-            var b    = new TreeViewBehavior(view);
-            b.Register(vm.Current, vm.Images);
+            var view = new CustomizeMenu(new TreeView(), new TreeView());
+            view.Register(vm.Source, vm.Current, vm.Images);
 
-            Assert.That(b.IsRegistered, Is.True);
-            Assert.That(b.IsEditable,   Is.False);
-            Assert.That(b.Source,       Is.EqualTo(view));
+            Assert.That(view.IsRegistered,        Is.True);
+            Assert.That(view.IsEditable,          Is.False);
+            Assert.That(view.Source.SelectedNode, Is.Not.Null);
+            Assert.That(view.Target.SelectedNode, Is.Not.Null);
 
-            e.Cancel = !CustomizeContext(vm, b);
-            if (!e.Cancel) e.Result = b.Result;
+            e.Cancel = !CustomizeContext(view);
+            if (!e.Cancel) e.Result = view.Result;
         }
 
         #endregion

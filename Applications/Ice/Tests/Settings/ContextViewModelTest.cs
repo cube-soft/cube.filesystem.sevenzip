@@ -18,7 +18,6 @@
 using Cube.FileSystem.SevenZip.Ice.App.Settings;
 using NUnit.Framework;
 using System.Threading;
-using System.Windows.Forms;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
@@ -48,7 +47,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test, RequiresThread(ApartmentState.STA)]
         public void Customize()
         {
-            Mock.CustomizeContext = (vm, b) => true;
+            Mock.CustomizeContext = _ => true;
 
             var dest = ExecuteCustomize();
             Assert.That(dest.IsCustomized, Is.True);
@@ -100,7 +99,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test, RequiresThread(ApartmentState.STA)]
         public void Customize_Cancel()
         {
-            Mock.CustomizeContext = (vm, b) => false;
+            Mock.CustomizeContext = _ => false;
 
             var dest = ExecuteCustomize();
             Assert.That(dest.IsCustomized, Is.False);
@@ -119,11 +118,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test, RequiresThread(ApartmentState.STA)]
         public void Customize_Add()
         {
-            Mock.CustomizeContext = (vm, b) =>
+            Mock.CustomizeContext = v =>
             {
-                var src = new TreeView();
-                src.Nodes.Register(vm.Source);
-                b.Add(src.Nodes[2]);
+                v.Source.SelectedNode = v.Source.Nodes[2];
+                v.AddMenu.Execute();
                 return true;
             };
 
@@ -152,14 +150,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test, RequiresThread(ApartmentState.STA)]
         public void Customize_NewCategory()
         {
-            Mock.CustomizeContext = (vm, b) =>
+            Mock.CustomizeContext = v =>
             {
-                var node = b.Source.Nodes[0].Nodes[0].Nodes[0];
+                var node = v.Target.Nodes[0].Nodes[0].Nodes[0];
                 Assert.That(node.Text, Is.EqualTo("Zip"));
 
-                b.Source.SelectedNode = node;
-                b.Add();
-                b.Source.SelectedNode.EndEdit(false);
+                v.Target.SelectedNode = node;
+                v.NewCategoryMenu.Execute();
+                v.Target.SelectedNode.EndEdit(false);
+
                 return true;
             };
 
@@ -187,10 +186,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test, RequiresThread(ApartmentState.STA)]
         public void Customize_Remove()
         {
-            Mock.CustomizeContext = (vm, b) =>
+            Mock.CustomizeContext = v =>
             {
-                b.Source.SelectedNode = b.Source.Nodes[0].Nodes[0];
-                b.Remove();
+                v.Target.SelectedNode = v.Target.Nodes[0].Nodes[0];
+                v.RemoveMenu.Execute();
                 return true;
             };
 
@@ -211,11 +210,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test, RequiresThread(ApartmentState.STA)]
         public void Customize_Up()
         {
-            Mock.CustomizeContext = (vm, b) =>
+            Mock.CustomizeContext = v =>
             {
-                b.Source.SelectedNode = b.Source.Nodes[0].Nodes[1];
-                b.Move(-1);
-                b.Move(-1);
+                v.Target.SelectedNode = v.Target.Nodes[0].Nodes[1];
+                Assert.That(v.Target.SelectedNode.Text, Is.EqualTo("解凍"));
+
+                v.UpMenu.Execute();
+                v.UpMenu.Execute();
+
                 return true;
             };
 
@@ -237,11 +239,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test, RequiresThread(ApartmentState.STA)]
         public void Customize_Down()
         {
-            Mock.CustomizeContext = (vm, b) =>
+            Mock.CustomizeContext = v =>
             {
-                b.Source.SelectedNode = b.Source.Nodes[0].Nodes[0];
-                b.Move(1);
-                b.Move(1);
+                v.Target.SelectedNode = v.Target.Nodes[0].Nodes[0];
+                Assert.That(v.Target.SelectedNode.Text, Is.EqualTo("圧縮"));
+
+                v.DownMenu.Execute();
+                v.DownMenu.Execute();
+
                 return true;
             };
 
@@ -264,10 +269,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test, RequiresThread(ApartmentState.STA)]
         public void Customize_Move_Root()
         {
-            Mock.CustomizeContext = (vm, b) =>
+            Mock.CustomizeContext = v =>
             {
-                b.Source.SelectedNode = b.Source.Nodes[0];
-                b.Move(1);
+                v.Target.SelectedNode = v.Target.Nodes[0];
+                Assert.That(v.Target.SelectedNode.Text, Is.EqualTo("メニュートップ"));
+
+                v.UpMenu.Execute();
+                v.DownMenu.Execute();
+
                 return true;
             };
 
@@ -289,12 +298,17 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test, RequiresThread(ApartmentState.STA)]
         public void Customize_NotSelected()
         {
-            Mock.CustomizeContext = (vm, b) =>
+            Mock.CustomizeContext = v =>
             {
-                b.Add(default(TreeNode));
-                b.Move(1);
-                b.Rename();
-                b.Remove();
+                v.Source.SelectedNode = null;
+                v.Target.SelectedNode = null;
+
+                v.AddMenu.Execute();
+                v.UpMenu.Execute();
+                v.DownMenu.Execute();
+                v.RenameMenu.Execute();
+                v.RemoveMenu.Execute();
+
                 return true;
             };
 
