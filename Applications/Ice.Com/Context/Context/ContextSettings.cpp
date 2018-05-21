@@ -49,20 +49,20 @@ ContextSettings::ContextSettings() :
 /* ------------------------------------------------------------------------- */
 void ContextSettings::Load() {
     try {
-        auto hkey = Open(_T("Software\\CubeSoft\\CubeICE\\v3\\Context"));
-        if (hkey == nullptr) return;
+        auto root = Open(_T("Software\\CubeSoft\\CubeICE\\v3\\Context"));
+        if (root == nullptr) return;
 
-        auto ps = GetDword(hkey, _T("Preset"), static_cast<DWORD>(PresetMenu::Unknown));
-        if (ps != PresetMenu::Unknown) preset_ = ps;
+        auto preset = GetDword(root, _T("Preset"), static_cast<DWORD>(PresetMenu::Unknown));
+        if (preset != PresetMenu::Unknown) preset_ = preset;
 
-        auto cs = GetDword(hkey, _T("IsCustomized"), 0);
+        auto cs = GetDword(root, _T("IsCustomized"), 0);
         customized_ = (cs != 0);
         if (customized_) {
-            auto custom = Open(hkey, _T("Custom"));
+            auto custom = Open(root, _T("Custom"));
             if (custom != nullptr) LoadCore(custom, Custom());
         }
 
-        RegCloseKey(hkey);
+        RegCloseKey(root);
     }
     catch (...) { CUBE_LOG << _T("Registry error"); }
 }
@@ -76,9 +76,9 @@ void ContextSettings::Load() {
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-void ContextSettings::LoadCore(HKEY hkey, ContextMenuList& dest) {
-    for (auto s : GetSubKeyNames(hkey)) {
-        auto current = Open(hkey, s);
+void ContextSettings::LoadCore(HKEY root, ContextMenuList& dest) {
+    for (auto s : GetSubKeyNames(root)) {
+        auto current = Open(root, s);
         if (current == nullptr) continue;
 
         auto name = GetString(current, _T("Name"));
@@ -101,9 +101,9 @@ void ContextSettings::LoadCore(HKEY hkey, ContextMenuList& dest) {
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-HKEY ContextSettings::Open(HKEY hkey, const TString& name) {
+HKEY ContextSettings::Open(HKEY root, const TString& name) {
     HKEY dest;
-    auto result = RegOpenKeyEx(hkey, name.c_str(), 0, KEY_READ, &dest);
+    auto result = RegOpenKeyEx(root, name.c_str(), 0, KEY_READ, &dest);
     return result == ERROR_SUCCESS ? dest : nullptr;
 }
 
@@ -129,20 +129,20 @@ HKEY ContextSettings::Open(const TString& name) {
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-std::vector<ContextSettings::TString> ContextSettings::GetSubKeyNames(HKEY hkey) {
+std::vector<ContextSettings::TString> ContextSettings::GetSubKeyNames(HKEY root) {
     std::vector<TString> dest;
     DWORD count  = 0;
     DWORD maxlen = 0;
 
-    auto s0 = ::RegQueryInfoKey(hkey, NULL, NULL, NULL, &count, &maxlen, NULL, NULL, NULL, NULL, NULL, NULL);
-    if (s0 != ERROR_SUCCESS) return dest;
+	auto st0 = RegQueryInfoKey(root, NULL, NULL, NULL, &count, &maxlen, NULL, NULL, NULL, NULL, NULL, NULL);
+	if (st0 != ERROR_SUCCESS) return dest;
 
     dest.reserve(count);
     for (auto i = 0u; i < count; ++i) {
         std::vector<TCHAR> buffer(maxlen + 1, 0);
         auto size = static_cast<DWORD>(buffer.size());
-        auto s1 = ::RegEnumKeyEx(hkey, i, reinterpret_cast<TCHAR*>(&buffer[0]), &size, NULL, NULL, NULL, NULL);
-        if (s1 != ERROR_SUCCESS) break;
+        auto st1 = RegEnumKeyEx(root, i, reinterpret_cast<TCHAR*>(&buffer[0]), &size, NULL, NULL, NULL, NULL);
+        if (st1 != ERROR_SUCCESS) break;
         dest.push_back(TString(reinterpret_cast<TCHAR*>(&buffer[0])));
     }
     return dest;
@@ -157,11 +157,11 @@ std::vector<ContextSettings::TString> ContextSettings::GetSubKeyNames(HKEY hkey)
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-DWORD ContextSettings::GetDword(HKEY hkey, const TString& name, DWORD alternate) {
+DWORD ContextSettings::GetDword(HKEY key, const TString& name, DWORD alternate) {
     DWORD dest = 0;
     DWORD size = sizeof(dest);
-    auto result = RegQueryValueEx(hkey, name.c_str(), nullptr, nullptr, reinterpret_cast<LPBYTE>(&dest), &size);
-    return result == ERROR_SUCCESS ? dest : alternate;
+    auto status = RegQueryValueEx(key, name.c_str(), nullptr, nullptr, reinterpret_cast<LPBYTE>(&dest), &size);
+    return status == ERROR_SUCCESS ? dest : alternate;
 }
 
 /* ------------------------------------------------------------------------- */
@@ -173,11 +173,11 @@ DWORD ContextSettings::GetDword(HKEY hkey, const TString& name, DWORD alternate)
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-ContextSettings::TString ContextSettings::GetString(HKEY hkey, const TString& name) {
+ContextSettings::TString ContextSettings::GetString(HKEY key, const TString& name) {
     TCHAR dest[1024] = {};
     DWORD size = sizeof(dest);
-    auto result = RegQueryValueEx(hkey, name.c_str(), nullptr, nullptr, reinterpret_cast<LPBYTE>(&dest), &size);
-    return result == ERROR_SUCCESS ? TString(dest) : TString();
+    auto status = RegQueryValueEx(key, name.c_str(), nullptr, nullptr, reinterpret_cast<LPBYTE>(&dest), &size);
+    return status == ERROR_SUCCESS ? TString(dest) : TString();
 }
 
 /* ------------------------------------------------------------------------- */

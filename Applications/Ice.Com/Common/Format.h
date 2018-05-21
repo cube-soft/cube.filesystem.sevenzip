@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 ///
 /// Copyright (c) 2010 CubeSoft, Inc.
-/// 
+///
 /// Licensed under the Apache License, Version 2.0 (the "License");
 /// you may not use this file except in compliance with the License.
 /// You may obtain a copy of the License at
@@ -30,7 +30,7 @@ namespace Ice {
 /* ------------------------------------------------------------------------- */
 ///
 /// Punct
-/// 
+///
 /// <summary>
 /// 3 桁毎に "," (Comma) を挿入します。
 /// </summary>
@@ -41,9 +41,9 @@ namespace Ice {
 ///
 /* ------------------------------------------------------------------------- */
 inline std::basic_string<TCHAR> Punct(long value) {
-    auto number = std::abs(value); 
+    auto number = std::abs(value);
     auto sign = (value > 0) ? 1 : -1;
-    
+
     std::vector<int> v;
     while (number / 1000) {
         v.push_back(number % 1000);
@@ -61,7 +61,7 @@ inline std::basic_string<TCHAR> Punct(long value) {
 /* ------------------------------------------------------------------------- */
 ///
 /// PrettyByte
-/// 
+///
 /// <summary>
 /// バイト数を整形します。
 /// </summary>

@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 ///
 /// Copyright (c) 2010 CubeSoft, Inc.
-/// 
+///
 /// Licensed under the Apache License, Version 2.0 (the "License");
 /// you may not use this file except in compliance with the License.
 /// You may obtain a copy of the License at
@@ -28,7 +28,7 @@ namespace Encoding {
 /* ------------------------------------------------------------------------- */
 ///
 /// UnicodeToMultiByte
-/// 
+///
 /// <summary>
 /// Unicode をマルチバイト文字列に変換します。
 /// </summary>
@@ -52,7 +52,7 @@ inline std::basic_string<char> UnicodeToMultiByte(const std::basic_string<wchar_
 /* ------------------------------------------------------------------------- */
 ///
 /// MultiByteToUnicode
-/// 
+///
 /// <summary>
 /// マルチバイト文字列を Unicode に変換します。
 /// </summary>
