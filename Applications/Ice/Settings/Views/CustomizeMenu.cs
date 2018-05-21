@@ -281,8 +281,8 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         {
             Source.ImageList = images.ToImageList();
             Source.Nodes.Register(src);
-            if (Source.Nodes.Count > 0) Source.SelectedNode = Source.Nodes[0];
             _core.Register(dest, images);
+            if (Source.Nodes.Count > 0) Source.SelectedNode = Source.Nodes[0];
             Target.SelectedNode = Target.Nodes[0];
             RaiseUpdated();
         }

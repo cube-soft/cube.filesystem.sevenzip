@@ -93,14 +93,18 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /* ----------------------------------------------------------------- */
         public override void ShowCustomizeView(QueryEventArgs<IEnumerable<ContextMenu>> e)
         {
+            var n    = 0;
             var vm   = new CustomContextViewModel(e.Query);
             var view = new CustomizeMenu(new TreeView(), new TreeView());
+
+            view.Updated += (_, __) => ++n;
             view.Register(vm.Source, vm.Current, vm.Images);
 
             Assert.That(view.IsRegistered,        Is.True);
             Assert.That(view.IsEditable,          Is.False);
             Assert.That(view.Source.SelectedNode, Is.Not.Null);
             Assert.That(view.Target.SelectedNode, Is.Not.Null);
+            Assert.That(n,                        Is.EqualTo(1));
 
             e.Cancel = !CustomizeContext(view);
             if (!e.Cancel) e.Result = view.Result;
