@@ -118,7 +118,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private TreeView Source { get; }
+        public TreeView Source { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -129,7 +129,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private TreeView Target { get; }
+        public TreeView Target { get; }
 
         /* ----------------------------------------------------------------- */
         ///
