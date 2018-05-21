@@ -20,6 +20,8 @@
 #include <tchar.h>
 #include <windows.h>
 #include <string>
+#include <vector>
+#include "ContextMenuItem.h"
 
 namespace Cube {
 namespace FileSystem {
@@ -37,20 +39,35 @@ namespace Ice {
 class ContextSettings {
 public:
     typedef std::basic_string<TCHAR> TString;
+    typedef ContextMenuItem::ContextMenuList ContextMenuList;
 
     ContextSettings();
     ContextSettings(const ContextSettings&) = delete;
     ContextSettings& operator=(const ContextSettings&) = delete;
     virtual ~ContextSettings() {}
 
+    TString& Program() { return program_; }
+    const TString& Program() const { return program_; }
     const int& Preset() const { return preset_; }
+    const bool& IsCustomized() const { return customized_; }
+    const ContextMenuList& Custom() const { return custom_; }
+    ContextMenuList& Custom() { return custom_; }
     void Load();
 
 private:
-    HKEY Open(const TString&);
-    DWORD GetDword(HKEY, const TString&, DWORD);
+    void LoadCore(HKEY, ContextMenuList&);
 
+    HKEY Open(HKEY, const TString&);
+    HKEY Open(const TString&);
+    std::vector<TString> GetSubKeyNames(HKEY hkey);
+    DWORD GetDword(HKEY, const TString&, DWORD);
+    TString GetString(HKEY, const TString&);
+    TString GetIconLocation(DWORD);
+
+    TString program_;
     int preset_;
+    bool customized_;
+    ContextMenuList custom_;
 };
 
 }}} // Cube::FileSystem::Ice

@@ -50,7 +50,10 @@ ContextMenu::ContextMenu(HINSTANCE handle, ULONG& count, ContextMenuIcon* icon) 
     items_(),
     files_()
 {
-    try { Settings().Load(); }
+    try {
+        Settings().Program() = Program();
+        Settings().Load();
+    }
     catch (...) { CUBE_LOG << _T("LoadSettings error"); }
     InterlockedIncrement(reinterpret_cast<LONG*>(&dllCount_));
 }
@@ -202,7 +205,9 @@ STDMETHODIMP ContextMenu::QueryContextMenu(HMENU menu, UINT index, UINT first, U
 
     if (drop_.empty()) InsertMenu(menu, index++, MF_BYPOSITION | MF_SEPARATOR, 0, nullptr);
 
-    auto items = GetContextMenuItems(Settings().Preset(), Program());
+    auto items = Settings().IsCustomized() ?
+                 Settings().Custom() :
+                 GetContextMenuItems(Settings().Preset(), Program());
     auto cmdid = first;
     Insert(items, menu, index, cmdid, first);
 
@@ -368,7 +373,7 @@ bool ContextMenu::Insert(ContextMenuItem& src, HMENU dest, UINT& index, UINT& cm
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-bool ContextMenu::Insert(ContextMenuItem::ContextMenuVector& src,
+bool ContextMenu::Insert(ContextMenuItem::ContextMenuList& src,
     HMENU dest, UINT& index, UINT& cmdid, UINT first) {
     auto current = cmdid;
     for (auto ctx : src) Insert(ctx, dest, index, cmdid, first);

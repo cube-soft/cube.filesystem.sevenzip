@@ -37,7 +37,7 @@ namespace Ice {
 class ContextMenuItem {
 public:
     typedef std::basic_string<TCHAR> TString;
-    typedef std::vector<ContextMenuItem> ContextMenuVector;
+    typedef std::vector<ContextMenuItem> ContextMenuList;
 
     ContextMenuItem() = delete;
     ContextMenuItem(const TString&, const TString&, const TString&, const TString&);
@@ -50,14 +50,14 @@ public:
     const TString& FileName() const { return filename_; }
     const TString& Arguments() const { return arguments_; }
     const TString& IconLocation() const { return icon_; }
-    const ContextMenuVector& Children() const { return children_; }
+    const ContextMenuList& Children() const { return children_; }
 
     int& Index() { return index_; }
     TString& DisplayName() { return name_; }
     TString& FileName() { return filename_; }
     TString& Arguments() { return arguments_; }
     TString& IconLocation() { return icon_; }
-    ContextMenuVector& Children() { return children_; }
+    ContextMenuList& Children() { return children_; }
 
     friend bool operator==(const ContextMenuItem& lhs, const ContextMenuItem& rhs) { return lhs.index_ == rhs.index_; }
     friend bool operator!=(const ContextMenuItem& lhs, const ContextMenuItem& rhs) { return lhs.index_ != rhs.index_; }
@@ -72,7 +72,7 @@ private:
     TString filename_;
     TString arguments_;
     TString icon_;
-    ContextMenuVector children_;
+    ContextMenuList children_;
 };
 
 }}}

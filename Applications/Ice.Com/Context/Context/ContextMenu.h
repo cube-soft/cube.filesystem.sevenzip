@@ -72,7 +72,7 @@ public:
 
 private:
     bool Insert(ContextMenuItem&, HMENU, UINT&, UINT&, UINT);
-    bool Insert(ContextMenuItem::ContextMenuVector&, HMENU, UINT&, UINT&, UINT);
+    bool Insert(ContextMenuItem::ContextMenuList&, HMENU, UINT&, UINT&, UINT);
     void UpdateStyle(HMENU);
     void UpdateDragDrop(LPCITEMIDLIST);
 
