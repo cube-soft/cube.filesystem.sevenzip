@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 ///
 /// Copyright (c) 2010 CubeSoft, Inc.
-/// 
+///
 /// Licensed under the Apache License, Version 2.0 (the "License");
 /// you may not use this file except in compliance with the License.
 /// You may obtain a copy of the License at
@@ -25,7 +25,7 @@ namespace Ice {
 /* ------------------------------------------------------------------------- */
 ///
 /// ContextMenuIcon
-/// 
+///
 /// <summary>
 /// オブジェクトを初期化します。
 /// </summary>
@@ -50,7 +50,7 @@ ContextMenuIcon::ContextMenuIcon() :
 /* ------------------------------------------------------------------------- */
 ///
 /// ~ContextMenuIcon
-/// 
+///
 /// <summary>
 /// オブジェクトを破棄します。
 /// </summary>
@@ -72,7 +72,7 @@ ContextMenuIcon::~ContextMenuIcon() {
 /* ------------------------------------------------------------------------- */
 ///
 /// SetMenuIcon
-/// 
+///
 /// <summary>
 /// アイコンを設定します。
 /// </summary>
@@ -94,7 +94,7 @@ void ContextMenuIcon::SetMenuIcon(const TString& src, MENUITEMINFO& dest) {
 /* ------------------------------------------------------------------------- */
 ///
 /// CreateBitmap
-/// 
+///
 /// <summary>
 /// HBITMAP オブジェクトを生成します。
 /// </summary>
@@ -122,7 +122,7 @@ HBITMAP ContextMenuIcon::CreateBitmap(const TString& src) {
 /* ------------------------------------------------------------------------- */
 ///
 /// CreateBitmap
-/// 
+///
 /// <summary>
 /// HBITMAP オブジェクトを生成します。
 /// </summary>
@@ -157,7 +157,7 @@ HBITMAP ContextMenuIcon::CreateBitmap(HDC hsrc, HICON hicon, const SIZE& size) {
 /* ------------------------------------------------------------------------- */
 ///
 /// BITMAPINFO
-/// 
+///
 /// <summary>
 /// BITMAPINFO オブジェクトを生成します。
 /// </summary>
@@ -179,7 +179,7 @@ BITMAPINFO ContextMenuIcon::CreateBitmapInfo(const SIZE& size) {
 /* ------------------------------------------------------------------------- */
 ///
 /// ConvertToArgb
-/// 
+///
 /// <summary>
 /// ARGB 画像に変換します。
 /// </summary>
@@ -205,7 +205,7 @@ void ContextMenuIcon::ConvertToArgb(HPAINTBUFFER pb, HDC hsrc, HICON hicon, cons
 /* ------------------------------------------------------------------------- */
 ///
 /// ConvertToArgb
-/// 
+///
 /// <summary>
 /// ARGB 画像に変換します。
 /// </summary>
@@ -237,7 +237,7 @@ void ContextMenuIcon::ConvertToArgb(HDC hsrc, HBITMAP hbmp, Argb* colors, const 
 /* ------------------------------------------------------------------------- */
 ///
 /// HasAlphaBit
-/// 
+///
 /// <summary>
 /// アルファ値を保持しているかどうかを判別します。
 /// </summary>
@@ -257,7 +257,7 @@ bool ContextMenuIcon::HasAlphaBit(const Argb* colors, const SIZE& size, int row)
 /* ------------------------------------------------------------------------- */
 ///
 /// Split
-/// 
+///
 /// <summary>
 /// パスとインデックスに分割します。
 /// </summary>

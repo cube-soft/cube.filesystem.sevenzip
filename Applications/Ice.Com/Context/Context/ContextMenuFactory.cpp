@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 ///
 /// Copyright (c) 2010 CubeSoft, Inc.
-/// 
+///
 /// Licensed under the Apache License, Version 2.0 (the "License");
 /// you may not use this file except in compliance with the License.
 /// You may obtain a copy of the License at
@@ -26,7 +26,7 @@ namespace Ice {
 /* ------------------------------------------------------------------------- */
 ///
 /// ContextMenuFactory
-/// 
+///
 /// <summary>
 /// オブジェクトを初期化します。
 /// </summary>
@@ -43,7 +43,7 @@ ContextMenuFactory::ContextMenuFactory(HINSTANCE handle, ULONG& count) :
 /* ------------------------------------------------------------------------- */
 ///
 /// ~ContextMenuFactory
-/// 
+///
 /// <summary>
 /// オブジェクトを破棄します。
 /// </summary>
@@ -56,7 +56,7 @@ ContextMenuFactory::~ContextMenuFactory() {
 /* ------------------------------------------------------------------------- */
 ///
 /// AddRef
-/// 
+///
 /// <summary>
 /// オブジェクトへの参照を追加します。
 /// </summary>
@@ -73,7 +73,7 @@ STDMETHODIMP_(ULONG) ContextMenuFactory::AddRef() {
 /* ------------------------------------------------------------------------- */
 ///
 /// Release
-/// 
+///
 /// <summary>
 /// オブジェクトを開放します。
 /// </summary>
@@ -93,7 +93,7 @@ STDMETHODIMP_(ULONG) ContextMenuFactory::Release() {
 /* ------------------------------------------------------------------------- */
 ///
 /// QueryInterface
-/// 
+///
 /// <summary>
 /// 使用するオブジェクトを問い合わせます。
 /// </summary>
@@ -119,7 +119,7 @@ STDMETHODIMP ContextMenuFactory::QueryInterface(REFIID iid, LPVOID * obj) {
 /* ------------------------------------------------------------------------- */
 ///
 /// CreateInstance
-/// 
+///
 /// <summary>
 /// オブジェクトを生成します。
 /// </summary>

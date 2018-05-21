@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 ///
 /// Copyright (c) 2010 CubeSoft, Inc.
-/// 
+///
 /// Licensed under the Apache License, Version 2.0 (the "License");
 /// you may not use this file except in compliance with the License.
 /// You may obtain a copy of the License at
@@ -26,7 +26,7 @@ namespace Ice {
 /* ------------------------------------------------------------------------- */
 ///
 /// GetMenuItem
-/// 
+///
 /// <summary>
 /// PresetMenu に対応する ContextMenuItem オブジェクトを取得します。
 /// </summary>
@@ -95,7 +95,7 @@ static ContextMenuItem GetContextMenuItem(int id, const std::basic_string<TCHAR>
 /* ------------------------------------------------------------------------- */
 ///
 /// AddContextMenuItem
-/// 
+///
 /// <summary>
 /// PresetMenu に対応する ContextMenuItem オブジェクトを追加します。
 /// </summary>
@@ -114,7 +114,7 @@ static void AddContextMenuItem(ContextMenuItem& src, int menu, int id, const std
 /* ------------------------------------------------------------------------- */
 ///
 /// GetContextMenuItems
-/// 
+///
 /// <summary>
 /// PresetMenu に対応するコンテキストメニューを取得します。
 /// </summary>

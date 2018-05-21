@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 ///
 /// Copyright (c) 2010 CubeSoft, Inc.
-/// 
+///
 /// Licensed under the Apache License, Version 2.0 (the "License");
 /// you may not use this file except in compliance with the License.
 /// You may obtain a copy of the License at
@@ -32,7 +32,7 @@ namespace {
 /* ------------------------------------------------------------------------- */
 ///
 /// DllMain
-/// 
+///
 /// <summary>
 /// DLL のエントリーポイントです。
 /// </summary>
@@ -61,7 +61,7 @@ extern "C" int APIENTRY DllMain(HINSTANCE handle, DWORD reason, LPVOID /* reserv
 /* ------------------------------------------------------------------------- */
 ///
 /// DllCanUnloadNow
-/// 
+///
 /// <summary>
 /// DLL がアンロード可能かどうかを判別します。
 /// </summary>
@@ -77,7 +77,7 @@ STDAPI DllCanUnloadNow()
 /* ------------------------------------------------------------------------- */
 ///
 /// DllGetClassObject
-/// 
+///
 /// <summary>
 /// CLASS ID に対応するオブジェクトを取得します。
 /// </summary>

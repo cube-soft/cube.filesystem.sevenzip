@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 ///
 /// Copyright (c) 2010 CubeSoft, Inc.
-/// 
+///
 /// Licensed under the Apache License, Version 2.0 (the "License");
 /// you may not use this file except in compliance with the License.
 /// You may obtain a copy of the License at
@@ -26,7 +26,7 @@ namespace Ice {
 /* ------------------------------------------------------------------------- */
 ///
 /// ContextSettings
-/// 
+///
 /// <summary>
 /// オブジェクトを初期化します。
 /// </summary>
@@ -38,7 +38,7 @@ ContextSettings::ContextSettings() :
 /* ------------------------------------------------------------------------- */
 ///
 /// Load
-/// 
+///
 /// <summary>
 /// ユーザ設定を読み込みます。
 /// </summary>
@@ -60,7 +60,7 @@ void ContextSettings::Load() {
 /* ------------------------------------------------------------------------- */
 ///
 /// Open
-/// 
+///
 /// <summary>
 /// HKEY_CURRENT_USER 下にあるサブキーを読み込み専用で開きます。
 /// </summary>
@@ -75,7 +75,7 @@ HKEY ContextSettings::Open(const TString& name) {
 /* ------------------------------------------------------------------------- */
 ///
 /// GetDword
-/// 
+///
 /// <summary>
 /// DWORD の値を取得します。
 /// </summary>

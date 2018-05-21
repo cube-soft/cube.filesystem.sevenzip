@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------------- */
 ///
 /// Copyright (c) 2010 CubeSoft, Inc.
-/// 
+///
 /// Licensed under the Apache License, Version 2.0 (the "License");
 /// you may not use this file except in compliance with the License.
 /// You may obtain a copy of the License at
@@ -30,7 +30,7 @@ namespace Ice {
 /* ------------------------------------------------------------------------- */
 ///
 /// ContextMenu
-/// 
+///
 /// <summary>
 /// オブジェクトを初期化します。
 /// </summary>
@@ -58,7 +58,7 @@ ContextMenu::ContextMenu(HINSTANCE handle, ULONG& count, ContextMenuIcon* icon) 
 /* ------------------------------------------------------------------------- */
 ///
 /// ~ContextMenu
-/// 
+///
 /// <summary>
 /// オブジェクトを破棄します。
 /// </summary>
@@ -71,7 +71,7 @@ ContextMenu::~ContextMenu() {
 /* ------------------------------------------------------------------------- */
 ///
 /// AddRef
-/// 
+///
 /// <summary>
 /// オブジェクトへの参照を追加します。
 /// </summary>
@@ -88,7 +88,7 @@ STDMETHODIMP_(ULONG) ContextMenu::AddRef() {
 /* ------------------------------------------------------------------------- */
 ///
 /// Release
-/// 
+///
 /// <summary>
 /// オブジェクトを開放します。
 /// </summary>
@@ -108,7 +108,7 @@ STDMETHODIMP_(ULONG) ContextMenu::Release() {
 /* ------------------------------------------------------------------------- */
 ///
 /// QueryInterface
-/// 
+///
 /// <summary>
 /// 使用するオブジェクトを問い合わせます。
 /// </summary>
@@ -135,7 +135,7 @@ STDMETHODIMP ContextMenu::QueryInterface(REFIID iid, LPVOID * obj) {
 /* ------------------------------------------------------------------------- */
 ///
 /// Initialize
-/// 
+///
 /// <summary>
 /// 拡張シェルの初期化を実行します。
 /// </summary>
@@ -161,7 +161,7 @@ STDMETHODIMP ContextMenu::Initialize(LPCITEMIDLIST pid, LPDATAOBJECT data, HKEY 
     for (auto i = 0u; i < count; ++i) {
         auto size = DragQueryFile(handle, i, nullptr, 0);
         auto buffer = new TCHAR[size + 5];
-        
+
         DragQueryFile(handle, i, buffer, size + 3);
         Files().push_back(TString(buffer));
         delete[] buffer;
@@ -177,7 +177,7 @@ STDMETHODIMP ContextMenu::Initialize(LPCITEMIDLIST pid, LPDATAOBJECT data, HKEY 
 /* ------------------------------------------------------------------------- */
 ///
 /// QueryContextMenu
-/// 
+///
 /// <summary>
 /// コンテキストメニューに表示する項目を問い合わせます。
 /// </summary>
@@ -215,7 +215,7 @@ STDMETHODIMP ContextMenu::QueryContextMenu(HMENU menu, UINT index, UINT first, U
 /* ------------------------------------------------------------------------- */
 ///
 /// GetCommandString
-/// 
+///
 /// <summary>
 /// メニューに対応するコマンドラインを取得します。
 /// </summary>
@@ -260,7 +260,7 @@ STDMETHODIMP ContextMenu::GetCommandString(UINT_PTR index, UINT flags, UINT FAR*
 /* ------------------------------------------------------------------------- */
 ///
 /// InvokeCommand
-/// 
+///
 /// <summary>
 /// コマンドラインを実行します。
 /// </summary>
@@ -304,7 +304,7 @@ STDMETHODIMP ContextMenu::InvokeCommand(LPCMINVOKECOMMANDINFO info) {
 /* ------------------------------------------------------------------------- */
 ///
 /// CurrentDirectory
-/// 
+///
 /// <summary>
 /// 実行中の DLL が存在するディレクトリのパスを取得します。
 /// </summary>
@@ -322,7 +322,7 @@ ContextMenu::TString ContextMenu::CurrentDirectory() const {
 /* ------------------------------------------------------------------------- */
 ///
 /// Insert
-/// 
+///
 /// <summary>
 /// メニューを挿入します。
 /// </summary>
@@ -362,7 +362,7 @@ bool ContextMenu::Insert(ContextMenuItem& src, HMENU dest, UINT& index, UINT& cm
 /* ------------------------------------------------------------------------- */
 ///
 /// Insert
-/// 
+///
 /// <summary>
 /// メニューを挿入します。
 /// </summary>
@@ -378,7 +378,7 @@ bool ContextMenu::Insert(ContextMenuItem::ContextMenuVector& src,
 /* ------------------------------------------------------------------------- */
 ///
 /// UpdateStyle
-/// 
+///
 /// <summary>
 /// メニューのスタイルを更新します。
 /// </summary>
@@ -399,7 +399,7 @@ void ContextMenu::UpdateStyle(HMENU menu) {
 /* ------------------------------------------------------------------------- */
 ///
 /// UpdateDragDrop
-/// 
+///
 /// <summary>
 /// ドロップ先の情報を更新します。
 /// </summary>
