@@ -130,6 +130,9 @@
   <data name="Logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Logo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="MenuAdd" xml:space="preserve">
+    <value>メニューを追加</value>
+  </data>
   <data name="MenuBZip2" xml:space="preserve">
     <value>BZip2</value>
   </data>
@@ -138,6 +141,9 @@
   </data>
   <data name="MenuDetails" xml:space="preserve">
     <value>詳細設定</value>
+  </data>
+  <data name="MenuDown" xml:space="preserve">
+    <value>下に移動</value>
   </data>
   <data name="MenuGZip" xml:space="preserve">
     <value>GZip</value>
@@ -151,6 +157,12 @@
   <data name="MenuNewCategory" xml:space="preserve">
     <value>新しいカテゴリー</value>
   </data>
+  <data name="MenuRemove" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="MenuRename" xml:space="preserve">
+    <value>名前を変更</value>
+  </data>
   <data name="MenuRuntime" xml:space="preserve">
     <value>場所を指定して解凍</value>
   </data>
@@ -162,6 +174,9 @@
   </data>
   <data name="MenuTop" xml:space="preserve">
     <value>メニュートップ</value>
+  </data>
+  <data name="MenuUp" xml:space="preserve">
+    <value>上に移動</value>
   </data>
   <data name="MenuXZ" xml:space="preserve">
     <value>XZ</value>

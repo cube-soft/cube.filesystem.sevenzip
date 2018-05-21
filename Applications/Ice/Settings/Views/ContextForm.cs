@@ -30,7 +30,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class ContextForm : Cube.Forms.StandardForm
+    public partial class ContextForm : StandardForm
     {
         #region Constructors
 
@@ -47,20 +47,19 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         {
             InitializeComponent();
 
-            _tv = new TreeViewBehavior(DestinationTreeView);
-
-            DestinationTreeView.AfterSelect += (s, e) => UpdateMenu();
+            _menu = new CustomizeMenu(SourceTreeView, DestinationTreeView);
+            _menu.Updated += (s, e) => UpdateMenu();
 
             ApplyButton.Click       += (s, e) => Close();
             ExitButton.Click        += (s, e) => Close();
-            RenameButton.Click      += (s, e) => _tv.Rename();
-            AddButton.Click         += (s, e) => _tv.Add(SourceTreeView.SelectedNode);
-            NewCategoryButton.Click += (s, e) => _tv.Add();
-            RemoveButton.Click      += (s, e) => _tv.Remove();
-            UpButton.Click += (s, e) => _tv.Move(-1);
-            DownButton.Click += (s, e) => _tv.Move(1);
+            RenameButton.Click      += (s, e) => _menu.RenameMenu.Execute();
+            AddButton.Click         += (s, e) => _menu.AddMenu.Execute();
+            NewCategoryButton.Click += (s, e) => _menu.NewCategoryMenu.Execute();
+            RemoveButton.Click      += (s, e) => _menu.RemoveMenu.Execute();
+            UpButton.Click          += (s, e) => _menu.UpMenu.Execute();
+            DownButton.Click        += (s, e) => _menu.DownMenu.Execute();
 
-            ShortcutKeys.Add(Keys.F2, () => _tv.Rename());
+            ShortcutKeys.Add(Keys.F2, () => _menu.RenameMenu.Execute());
         }
 
         #endregion
@@ -76,7 +75,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IEnumerable<ContextMenu> Result => _tv.Result;
+        public IEnumerable<ContextMenu> Result => _menu.Result;
 
         #endregion
 
@@ -93,13 +92,8 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// <param name="vm">ViewModel オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Bind(CustomContextViewModel vm)
-        {
-            SourceTreeView.ImageList = vm.Images.ToImageList();
-            SourceTreeView.Nodes.Register(vm.Source);
-            _tv.Register(vm.Current, vm.Images);
-            UpdateMenu();
-        }
+        public void Bind(CustomContextViewModel vm) =>
+            _menu.Register(vm.Source, vm.Current, vm.Images);
 
         #endregion
 
@@ -116,16 +110,16 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /* ----------------------------------------------------------------- */
         private void UpdateMenu()
         {
-            RenameButton.Enabled = _tv.IsEditable;
-            RemoveButton.Enabled = _tv.IsEditable;
-            UpButton.Enabled     = _tv.IsEditable;
-            DownButton.Enabled   = _tv.IsEditable;
+            RenameButton.Enabled = _menu.IsEditable;
+            RemoveButton.Enabled = _menu.IsEditable;
+            UpButton.Enabled     = _menu.IsEditable;
+            DownButton.Enabled   = _menu.IsEditable;
         }
 
         #endregion
 
         #region Fields
-        private readonly TreeViewBehavior _tv;
+        private readonly CustomizeMenu _menu;
         #endregion
     }
 }

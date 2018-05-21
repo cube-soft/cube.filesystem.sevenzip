@@ -100,6 +100,15 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings.Properties {
         }
         
         /// <summary>
+        ///   メニューを追加 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuAdd {
+            get {
+                return ResourceManager.GetString("MenuAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   BZip2 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MenuBZip2 {
@@ -123,6 +132,15 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings.Properties {
         internal static string MenuDetails {
             get {
                 return ResourceManager.GetString("MenuDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   下に移動 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuDown {
+            get {
+                return ResourceManager.GetString("MenuDown", resourceCulture);
             }
         }
         
@@ -163,6 +181,24 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings.Properties {
         }
         
         /// <summary>
+        ///   削除 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuRemove {
+            get {
+                return ResourceManager.GetString("MenuRemove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   名前を変更 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuRename {
+            get {
+                return ResourceManager.GetString("MenuRename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   場所を指定して解凍 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MenuRuntime {
@@ -195,6 +231,15 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings.Properties {
         internal static string MenuTop {
             get {
                 return ResourceManager.GetString("MenuTop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   上に移動 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuUp {
+            get {
+                return ResourceManager.GetString("MenuUp", resourceCulture);
             }
         }
         
