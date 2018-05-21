@@ -83,7 +83,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ShowContextView
+        /// ShowCustomizeView
         ///
         /// <summary>
         /// コンテキストメニューのカスタマイズ画面を表示します。
@@ -92,7 +92,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// <param name="e">コンテキストメニュー</param>
         ///
         /* ----------------------------------------------------------------- */
-        public override void ShowContextView(QueryEventArgs<IEnumerable<ContextMenu>> e)
+        public override void ShowCustomizeView(QueryEventArgs<IEnumerable<ContextMenu>> e)
         {
             var view = new TreeView();
             var vm   = new CustomContextViewModel(e.Query);

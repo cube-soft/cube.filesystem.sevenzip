@@ -1,6 +1,6 @@
 ﻿namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 {
-    partial class ContextForm
+    partial class CustomizeForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ContextForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomizeForm));
             this.RootPanel = new System.Windows.Forms.TableLayoutPanel();
             this.AddButton = new System.Windows.Forms.Button();
             this.DestinationTreeView = new System.Windows.Forms.TreeView();

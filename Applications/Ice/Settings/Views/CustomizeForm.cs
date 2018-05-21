@@ -23,27 +23,27 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ContextForm
+    /// CustomizeForm
     ///
     /// <summary>
     /// コンテキストメニューのカスタマイズ画面を表すクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class ContextForm : StandardForm
+    public partial class CustomizeForm : StandardForm
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ContextForm
+        /// CustomizeForm
         ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ContextForm()
+        public CustomizeForm()
         {
             InitializeComponent();
 

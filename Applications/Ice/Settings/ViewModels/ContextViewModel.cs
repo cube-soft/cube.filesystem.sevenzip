@@ -319,7 +319,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
                 _model.Preset.ToContextMenuGroup()
             );
 
-            Views.ShowContextView(e);
+            Views.ShowCustomizeView(e);
             if (!e.Cancel) _model.Customize(e.Result);
         }
 

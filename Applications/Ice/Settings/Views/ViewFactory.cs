@@ -35,7 +35,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ShowContextView
+        /// ShowCustomizeView
         ///
         /// <summary>
         /// コンテキストメニューのカスタマイズ画面を表示します。
@@ -44,9 +44,9 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// <param name="e">コンテキストメニュー</param>
         ///
         /* ----------------------------------------------------------------- */
-        public virtual void ShowContextView(QueryEventArgs<IEnumerable<ContextMenu>> e)
+        public virtual void ShowCustomizeView(QueryEventArgs<IEnumerable<ContextMenu>> e)
         {
-            var view = new ContextForm();
+            var view = new CustomizeForm();
             var vm   = new CustomContextViewModel(e.Query);
             view.Bind(vm);
 
@@ -95,7 +95,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ShowContextView
+        /// ShowCustomizeView
         ///
         /// <summary>
         /// コンテキストメニューのカスタマイズ画面を表示します。
@@ -104,8 +104,8 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// <param name="e">コンテキストメニュー</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void ShowContextView(QueryEventArgs<IEnumerable<ContextMenu>> e) =>
-            _factory.ShowContextView(e);
+        public static void ShowCustomizeView(QueryEventArgs<IEnumerable<ContextMenu>> e) =>
+            _factory.ShowCustomizeView(e);
 
         #endregion
 
