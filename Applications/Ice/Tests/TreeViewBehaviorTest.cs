@@ -74,7 +74,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Move_DragDrop
+        /// DragDrop
         ///
         /// <summary>
         /// ドラッグドロップによる移動操作のテストを実行します。
@@ -87,7 +87,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Move_DragDrop()
+        public void DragDrop()
         {
             var tv   = Create();
             var root = tv.Source.Nodes[0];
@@ -106,7 +106,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Move_DragDrop_Null
+        /// DragDrop_Null
         ///
         /// <summary>
         /// ドロップ地点に TreeNode オブジェクトがない時の挙動を確認します。
@@ -114,7 +114,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Move_DragDrop_Null()
+        public void DragDrop_Null()
         {
             var tv   = Create();
             var root = tv.Source.Nodes[0];
@@ -126,7 +126,28 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Move_DragDrop_Root
+        /// DragDrop_Same
+        ///
+        /// <summary>
+        /// ドラッグ項目とドロップ項目が同じ時の挙動を確認します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void DragDrop_Same()
+        {
+            var tv = Create();
+            var root = tv.Source.Nodes[0];
+            var src  = root.Nodes[0];
+            tv.Move(src, src);
+
+            Assert.That(root.Nodes[0].Nodes.Count, Is.EqualTo(7));
+            Assert.That(root.Nodes[1].Nodes.Count, Is.EqualTo(4));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// DragDrop_Root
         ///
         /// <summary>
         /// ドラッグ項目がトップメニューである時の挙動を確認します。
@@ -134,7 +155,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Move_DragDrop_Root()
+        public void DragDrop_Root()
         {
             var tv   = Create();
             var root = tv.Source.Nodes[0];
@@ -146,7 +167,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Move_DragDrop_Parent
+        /// DragDrop_Parent
         ///
         /// <summary>
         /// ドロップ地点が自分の親要素である時の挙動を確認します。
@@ -154,7 +175,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Move_DragDrop_Parent()
+        public void DragDrop_Parent()
         {
             var tv   = Create();
             var root = tv.Source.Nodes[0];
@@ -167,7 +188,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Move_DragDrop_Parent
+        /// DragDrop_Parent
         ///
         /// <summary>
         /// ドロップ地点が自分の祖父母要素である時の挙動を確認します。
@@ -175,7 +196,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Move_DragDrop_Grandparent()
+        public void DragDrop_Grandparent()
         {
             var tv   = Create();
             var root = tv.Source.Nodes[0];
