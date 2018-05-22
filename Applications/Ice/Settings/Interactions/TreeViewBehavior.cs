@@ -53,6 +53,10 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         public TreeViewBehavior(TreeView src)
         {
             Source = src ?? throw new ArgumentException();
+            Source.AllowDrop        = true;
+            Source.ItemDrag        += WhenItemDrag;
+            Source.DragOver        += WhenDragOver;
+            Source.DragDrop        += WhenDragDrop;
             Source.BeforeLabelEdit += (s, e) => e.CancelEdit = !IsEditable;
         }
 
@@ -241,15 +245,37 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 
             var src = Source.SelectedNode;
             Debug.Assert(src != null);
-            var parent = src.Parent;
-            Debug.Assert(parent != null);
+            var dest = src.Parent;
+            Debug.Assert(dest != null);
 
-            var index = parent.Nodes.IndexOf(Source.SelectedNode);
-            if (index + delta < 0 || index + delta > parent.Nodes.Count - 1) return;
+            var index = dest.Nodes.IndexOf(Source.SelectedNode);
+            if (index + delta < 0 || index + delta > dest.Nodes.Count - 1) return;
 
-            parent.Nodes.Remove(src);
-            parent.Nodes.Insert(index + delta, src);
+            src.Remove();
+            dest.Nodes.Insert(index + delta, src);
             Source.SelectedNode = src;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Move
+        ///
+        /// <summary>
+        /// src が dest の子要素になるように移動します。
+        /// </summary>
+        ///
+        /// <param name="src">移動元オブジェクト</param>
+        /// <param name="dest">移動先オブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Move(TreeNode src, TreeNode dest)
+        {
+            if (!IsMovable(src, dest)) return;
+
+            src.Remove();
+            dest.Nodes.Add(src);
+            Source.SelectedNode = src;
+            dest.Expand();
         }
 
         #endregion
@@ -328,11 +354,22 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
             var dest = Source.SelectedNode ?? RootNode;
             Debug.Assert(dest != null);
 
-            var command = !string.IsNullOrEmpty(dest.Tag.TryCast<ContextMenu>()?.Arguments);
-            return dest.Nodes.Count <= 0 && command ?
-                   dest.Parent :
-                   dest;
+            return string.IsNullOrEmpty(dest.Tag.TryCast<ContextMenu>()?.Arguments) ?
+                   dest :
+                   dest.Parent;
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetTargetNode
+        ///
+        /// <summary>
+        /// 指定された座標に対応する Node オブジェクトを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private TreeNode GetTargetNode(int x, int y) =>
+            Source.GetNodeAt(Source.PointToClient(new Point(x, y)));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -379,6 +416,82 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
             foreach (TreeNode node in src.Nodes) dest.Nodes.Add(Copy(node));
             return dest;
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// IsMovable
+        ///
+        /// <summary>
+        /// src ノードから dest ノードへ移動可能かどうかを判別します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private bool IsMovable(TreeNode src, TreeNode dest)
+        {
+            Debug.Assert(src != null);
+
+            if (dest == null ||
+                dest.Equals(src) ||
+                dest.Equals(src.Parent) ||
+                dest.IsLeaf()
+            ) return false;
+
+            // Check if ancestor
+            var node = dest;
+            while (node != null && node != src) node = node.Parent;
+            return node == null;
+        }
+
+        #region Drag&Drop
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenItemDrag
+        ///
+        /// <summary>
+        /// Node オブジェクトのドラッグ開始時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenItemDrag(object s, ItemDragEventArgs e)
+        {
+            var src = e.Item.TryCast<TreeNode>();
+            if (src.Text == Properties.Resources.MenuTop) return;
+            Source.SelectedNode = src;
+            Source.DoDragDrop(src, DragDropEffects.Move);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenDragOver
+        ///
+        /// <summary>
+        /// ドラッグ状態でのマウスオーバ時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenDragOver(object s, DragEventArgs e)
+        {
+            var src  = e.Data.GetData(typeof(TreeNode)).TryCast<TreeNode>();
+            var dest = GetTargetNode(e.X, e.Y);
+            e.Effect = IsMovable(src, dest) ? DragDropEffects.Move : DragDropEffects.None;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// WhenDragDrop
+        ///
+        /// <summary>
+        /// Node オブジェクトがドロップされた時に実行されるハンドラです。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void WhenDragDrop(object s, DragEventArgs e) => Move(
+            e.Data.GetData(typeof(TreeNode)).TryCast<TreeNode>(),
+            GetTargetNode(e.X, e.Y)
+        );
+
+        #endregion
 
         #endregion
     }

@@ -190,7 +190,7 @@
             this.DownButton.Name = "DownButton";
             this.DownButton.Size = new System.Drawing.Size(100, 30);
             this.DownButton.TabIndex = 2;
-            this.DownButton.Text = "下へ";
+            this.DownButton.Text = "下に移動";
             this.DownButton.UseVisualStyleBackColor = true;
             //
             // UpButton
@@ -200,7 +200,7 @@
             this.UpButton.Name = "UpButton";
             this.UpButton.Size = new System.Drawing.Size(100, 30);
             this.UpButton.TabIndex = 1;
-            this.UpButton.Text = "上へ";
+            this.UpButton.Text = "上に移動";
             this.UpButton.UseVisualStyleBackColor = true;
             //
             // FooterPanel
@@ -243,7 +243,7 @@
             this.ApplyButton.Text = "OK";
             this.ApplyButton.UseVisualStyleBackColor = true;
             //
-            // ContextForm
+            // CustomizeForm
             //
             this.AcceptButton = this.ApplyButton;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -253,7 +253,7 @@
             this.Font = new System.Drawing.Font("Meiryo UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(540, 320);
-            this.Name = "ContextForm";
+            this.Name = "CustomizeForm";
             this.Text = "コンテキストメニューのカスタマイズ";
             this.RootPanel.ResumeLayout(false);
             this.RootPanel.PerformLayout();

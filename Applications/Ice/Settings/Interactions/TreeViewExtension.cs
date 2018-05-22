@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Generics;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
@@ -44,29 +45,52 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// <param name="src">登録先オブジェクト</param>
         /// <param name="menu">登録メニュー</param>
         ///
+        /// <remarks>
+        /// 子要素を持つ Node オブジェクトの Arguments は削除します。
+        /// </remarks>
+        ///
         /* ----------------------------------------------------------------- */
         public static void Register(this TreeNodeCollection src, IEnumerable<ContextMenu> menu)
         {
             foreach (var item in menu)
             {
+                var tag = new ContextMenu
+                {
+                    Name      = item.Name,
+                    Arguments = string.Empty,
+                    IconIndex = item.IconIndex,
+                };
+
                 var node = new TreeNode
                 {
                     Text               = item.Name,
                     ToolTipText        = item.Name,
                     ImageIndex         = item.IconIndex,
                     SelectedImageIndex = item.IconIndex,
-                    Tag                = new ContextMenu
-                    {
-                        Name      = item.Name,
-                        Arguments = item.Arguments,
-                        IconIndex = item.IconIndex,
-                    },
+                    Tag                = tag,
                 };
 
                 node.Nodes.Register(item.Children);
+                if (node.Nodes.Count == 0) tag.Arguments = item.Arguments;
                 src.Add(node);
             }
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// IsLeaf
+        ///
+        /// <summary>
+        /// 子要素を保持できないオブジェクトかどうかを判別します。
+        /// </summary>
+        ///
+        /// <param name="src">TreeNode オブジェクト</param>
+        ///
+        /// <returns>子要素を保持できるかどうか</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static bool IsLeaf(this TreeNode src) =>
+            !string.IsNullOrEmpty(src.Tag.TryCast<ContextMenu>()?.Arguments);
 
         #endregion
     }
