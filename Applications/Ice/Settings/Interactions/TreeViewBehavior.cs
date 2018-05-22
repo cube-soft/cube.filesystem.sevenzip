@@ -430,8 +430,8 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         {
             Debug.Assert(src != null);
 
-            if (dest == null ||
-                dest.Equals(src) ||
+            if (dest == null            ||
+                dest.Equals(src)        ||
                 dest.Equals(src.Parent) ||
                 dest.IsLeaf()
             ) return false;
