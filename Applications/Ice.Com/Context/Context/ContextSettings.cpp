@@ -134,8 +134,8 @@ std::vector<ContextSettings::TString> ContextSettings::GetSubKeyNames(HKEY root)
     DWORD count  = 0;
     DWORD maxlen = 0;
 
-	auto st0 = RegQueryInfoKey(root, NULL, NULL, NULL, &count, &maxlen, NULL, NULL, NULL, NULL, NULL, NULL);
-	if (st0 != ERROR_SUCCESS) return dest;
+    auto st0 = RegQueryInfoKey(root, NULL, NULL, NULL, &count, &maxlen, NULL, NULL, NULL, NULL, NULL, NULL);
+    if (st0 != ERROR_SUCCESS) return dest;
 
     dest.reserve(count);
     for (auto i = 0u; i < count; ++i) {
