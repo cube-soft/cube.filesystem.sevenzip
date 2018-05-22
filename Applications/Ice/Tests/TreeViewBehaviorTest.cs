@@ -72,6 +72,145 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             Throws.TypeOf<InvalidOperationException>()
         );
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Move_DragDrop
+        ///
+        /// <summary>
+        /// ドラッグドロップによる移動操作のテストを実行します。
+        /// </summary>
+        ///
+        /// <remarks>
+        /// 実際には、DragDrop イベントで最終的に実行される Move メソッドの
+        /// 動作を確認しています。
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Move_DragDrop()
+        {
+            var tv   = Create();
+            var root = tv.Source.Nodes[0];
+            var src  = root.Nodes[0].Nodes[0];
+            var dest = root.Nodes[1];
+
+            Assert.That(src.Text,  Is.EqualTo("Zip"));
+            Assert.That(dest.Text, Is.EqualTo("解凍"));
+
+            tv.Move(src, dest);
+            Assert.That(root.Nodes[0].Nodes.Count,   Is.EqualTo(6));
+            Assert.That(root.Nodes[0].Nodes[0].Text, Is.EqualTo("Zip (パスワード)"));
+            Assert.That(root.Nodes[1].Nodes.Count,   Is.EqualTo(5));
+            Assert.That(root.Nodes[1].Nodes[4].Text, Is.EqualTo("Zip"));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Move_DragDrop_Null
+        ///
+        /// <summary>
+        /// ドロップ地点に TreeNode オブジェクトがない時の挙動を確認します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Move_DragDrop_Null()
+        {
+            var tv   = Create();
+            var root = tv.Source.Nodes[0];
+            tv.Move(root.Nodes[0].Nodes[0], null);
+
+            Assert.That(root.Nodes[0].Nodes.Count, Is.EqualTo(7));
+            Assert.That(root.Nodes[1].Nodes.Count, Is.EqualTo(4));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Move_DragDrop_Root
+        ///
+        /// <summary>
+        /// ドラッグ項目がトップメニューである時の挙動を確認します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Move_DragDrop_Root()
+        {
+            var tv   = Create();
+            var root = tv.Source.Nodes[0];
+            tv.Move(root, root.Nodes[0].Nodes[0]);
+
+            Assert.That(root.Nodes[0].Nodes.Count, Is.EqualTo(7));
+            Assert.That(root.Nodes[1].Nodes.Count, Is.EqualTo(4));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Move_DragDrop_Parent
+        ///
+        /// <summary>
+        /// ドロップ地点が自分の親要素である時の挙動を確認します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Move_DragDrop_Parent()
+        {
+            var tv   = Create();
+            var root = tv.Source.Nodes[0];
+            var src  = root.Nodes[0].Nodes[6];
+            tv.Move(src, src.Parent);
+
+            Assert.That(root.Nodes[0].Nodes.Count, Is.EqualTo(7));
+            Assert.That(root.Nodes[1].Nodes.Count, Is.EqualTo(4));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Move_DragDrop_Parent
+        ///
+        /// <summary>
+        /// ドロップ地点が自分の祖父母要素である時の挙動を確認します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Move_DragDrop_Grandparent()
+        {
+            var tv   = Create();
+            var root = tv.Source.Nodes[0];
+            var src  = root.Nodes[0].Nodes[3];
+            tv.Move(src, src.Parent.Parent);
+
+            Assert.That(root.Nodes.Count,          Is.EqualTo(3));
+            Assert.That(root.Nodes[0].Nodes.Count, Is.EqualTo(6));
+            Assert.That(root.Nodes[1].Nodes.Count, Is.EqualTo(4));
+            Assert.That(root.Nodes[2].Text,        Is.EqualTo("BZip2"));
+        }
+
+        #endregion
+
+        #region Helper methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create
+        ///
+        /// <summary>
+        /// TreeViewBehavior オブジェクトを生成します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private TreeViewBehavior Create()
+        {
+            var m    = PresetMenu.DefaultContext.ToContextMenuGroup();
+            var vm   = new CustomContextViewModel(m);
+            var dest = new TreeViewBehavior(new TreeView());
+
+            dest.Register(vm.Current, vm.Images);
+            return dest;
+        }
+
         #endregion
     }
 }
