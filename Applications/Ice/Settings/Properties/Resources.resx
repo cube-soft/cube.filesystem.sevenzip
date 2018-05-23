@@ -117,12 +117,21 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Archive" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Archive.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Extract" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Extract.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="FileAssociate" xml:space="preserve">
     <value>cubeice-associate.exe</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="Logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Logo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MenuAdd" xml:space="preserve">
+    <value>メニューを追加</value>
   </data>
   <data name="MenuBZip2" xml:space="preserve">
     <value>BZip2</value>
@@ -130,8 +139,11 @@
   <data name="MenuDesktop" xml:space="preserve">
     <value>デスクトップに解凍</value>
   </data>
-  <data name="MenuDetail" xml:space="preserve">
+  <data name="MenuDetails" xml:space="preserve">
     <value>詳細設定</value>
+  </data>
+  <data name="MenuDown" xml:space="preserve">
+    <value>下に移動</value>
   </data>
   <data name="MenuGZip" xml:space="preserve">
     <value>GZip</value>
@@ -142,6 +154,15 @@
   <data name="MenuMyDocuments" xml:space="preserve">
     <value>マイドキュメントに解凍</value>
   </data>
+  <data name="MenuNewCategory" xml:space="preserve">
+    <value>新しいカテゴリー</value>
+  </data>
+  <data name="MenuRemove" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="MenuRename" xml:space="preserve">
+    <value>名前を変更</value>
+  </data>
   <data name="MenuRuntime" xml:space="preserve">
     <value>場所を指定して解凍</value>
   </data>
@@ -150,6 +171,12 @@
   </data>
   <data name="MenuSfx" xml:space="preserve">
     <value>自己解凍形式</value>
+  </data>
+  <data name="MenuTop" xml:space="preserve">
+    <value>メニュートップ</value>
+  </data>
+  <data name="MenuUp" xml:space="preserve">
+    <value>上に移動</value>
   </data>
   <data name="MenuXZ" xml:space="preserve">
     <value>XZ</value>

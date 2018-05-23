@@ -79,17 +79,17 @@
     <AssemblyOriginatorKeyFile>..\Cube.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AlphaFS">
+      <HintPath>..\..\packages\AlphaFS.2.2.1\lib\net35\AlphaFS.dll</HintPath>
+    </Reference>
     <Reference Include="Cube.Backwards">
-      <HintPath>..\..\packages\Cube.Backwards.1.4.0\lib\net35\Cube.Backwards.dll</HintPath>
+      <HintPath>..\..\packages\Cube.Backwards.1.4.1\lib\net35\Cube.Backwards.dll</HintPath>
     </Reference>
     <Reference Include="Cube.Core">
-      <HintPath>..\..\packages\Cube.Core.Net35.1.7.0\lib\net35\Cube.Core.dll</HintPath>
+      <HintPath>..\..\packages\Cube.Core.1.9.0\lib\net35\Cube.Core.dll</HintPath>
     </Reference>
     <Reference Include="Cube.FileSystem">
-      <HintPath>..\..\packages\Cube.FileSystem.Net35.1.7.0\lib\net35\Cube.FileSystem.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\..\packages\log4net.2.0.8\lib\net35-full\log4net.dll</HintPath>
+      <HintPath>..\..\packages\Cube.FileSystem.1.9.0\lib\net35\Cube.FileSystem.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -117,7 +117,7 @@
     <Compile Include="NativeMethods\Structures\SafeLibraryHandle.cs" />
     <Compile Include="NativeMethods\Kernel32.cs" />
     <Compile Include="NativeMethods\Ole32.cs" />
-    <Compile Include="Operations\Archives.cs" />
+    <Compile Include="ArchiveExtension.cs" />
     <Compile Include="ArchiveItem.cs" />
     <Compile Include="ArchiveOption.cs" />
     <Compile Include="ArchiveReport.cs" />
@@ -126,6 +126,7 @@
     <Compile Include="Exceptions.cs" />
     <Compile Include="FileItem.cs" />
     <Compile Include="Format.cs" />
+    <Compile Include="FormatExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

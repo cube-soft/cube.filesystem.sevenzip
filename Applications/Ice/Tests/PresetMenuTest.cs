@@ -15,11 +15,10 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.Linq;
-using Cube.FileSystem.SevenZip.Ice;
 using NUnit.Framework;
+using System.Linq;
 
-namespace Cube.FileSystem.SevenZip.App.Ice.Tests
+namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
@@ -33,6 +32,45 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
     [TestFixture]
     class PresetMenuTest
     {
+        /* --------------------------------------------------------------------- */
+        ///
+        /// ToContextMenuGroup
+        ///
+        /// <summary>
+        /// PresetMenu.DefaultContext を ContextMenu コレクションに変換する
+        /// テストを実行します。
+        /// </summary>
+        ///
+        /* --------------------------------------------------------------------- */
+        [Test]
+        public void ToContextMenuGroup()
+        {
+            var dest = PresetMenu.DefaultContext.ToContextMenuGroup().ToList();
+            Assert.That(dest.Count,   Is.EqualTo(2));
+            Assert.That(dest[0].Name, Is.EqualTo("圧縮"));
+            Assert.That(dest[1].Name, Is.EqualTo("解凍"));
+
+            var d0 = dest[0].Children;
+            Assert.That(d0.Count, Is.EqualTo(7));
+            Assert.That(d0[0].Name, Is.EqualTo("Zip"));
+            Assert.That(d0[1].Name, Is.EqualTo("Zip (パスワード)"));
+            Assert.That(d0[2].Name, Is.EqualTo("7-Zip"));
+            Assert.That(d0[3].Name, Is.EqualTo("BZip2"));
+            Assert.That(d0[4].Name, Is.EqualTo("GZip"));
+            Assert.That(d0[5].Name, Is.EqualTo("自己解凍形式"));
+            Assert.That(d0[6].Name, Is.EqualTo("詳細設定"));
+
+            var d1 = dest[1].Children;
+            Assert.That(d1.Count, Is.EqualTo(4));
+            Assert.That(d1[0].Name, Is.EqualTo("ここに解凍"));
+            Assert.That(d1[1].Name, Is.EqualTo("デスクトップに解凍"));
+            Assert.That(d1[2].Name, Is.EqualTo("マイドキュメントに解凍"));
+            Assert.That(d1[3].Name, Is.EqualTo("場所を指定して解凍"));
+
+            foreach (var m in d0) Assert.That(m.IconIndex, Is.EqualTo(1), m.Name);
+            foreach (var m in d1) Assert.That(m.IconIndex, Is.EqualTo(2), m.Name);
+        }
+
         /* --------------------------------------------------------------------- */
         ///
         /// ToArguments
@@ -56,9 +94,9 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         [TestCase(PresetMenu.MailSevenZip,       ExpectedResult = 2)]
         [TestCase(PresetMenu.MailBZip2,          ExpectedResult = 2)]
         [TestCase(PresetMenu.MailGZip,           ExpectedResult = 2)]
-        [TestCase(PresetMenu.MailXZ,             ExpectedResult = 2)]
+        [TestCase(PresetMenu.MailXz,             ExpectedResult = 2)]
         [TestCase(PresetMenu.MailSfx,            ExpectedResult = 2)]
-        [TestCase(PresetMenu.MailDetail,         ExpectedResult = 2)]
+        [TestCase(PresetMenu.MailDetails,        ExpectedResult = 2)]
         public int ToArguments(PresetMenu menu) => menu.ToArguments().Count();
     }
 }

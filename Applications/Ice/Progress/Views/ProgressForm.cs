@@ -21,7 +21,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Cube.FileSystem.SevenZip.App.Ice
+namespace Cube.FileSystem.SevenZip.Ice.App
 {
     /* --------------------------------------------------------------------- */
     ///
@@ -56,6 +56,9 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
             _timer.Tick += (s, e) => UpdateElapseLabel();
             _timer.Interval = 500;
+
+            _taskbar = new Cube.Forms.TaskbarProgress(this);
+            _taskbar.Maximum = MainProgressBar.Maximum;
         }
 
         #endregion
@@ -84,9 +87,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
                 var min = MainProgressBar.Minimum;
                 var max = MainProgressBar.Maximum;
-                MainProgressBar.Value = Math.Min(Math.Max(value, min), max);
+                var cvt = Math.Min(Math.Max(value, min), max);
 
-                ExitButton.Enabled    =
+                MainProgressBar.Value = cvt;
+                _taskbar.Value        = cvt;
+
+                ExitButton.Enabled    = value > 0;
                 SuspendButton.Enabled = value > 0;
 
                 UpdateTitle();
@@ -275,6 +281,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         {
             _watch.Start();
             _timer.Start();
+            _taskbar.State = Forms.TaskbarProgressState.Normal;
         }
 
         /* ----------------------------------------------------------------- */
@@ -290,6 +297,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         {
             _timer.Stop();
             _watch.Stop();
+            _taskbar.State = Forms.TaskbarProgressState.Paused;
         }
 
         #endregion
@@ -402,7 +410,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenSuspendOrResume(object sender, EventArgs e)
+        private void WhenSuspendOrResume(object s, EventArgs e)
         {
             var suspend = !(bool)SuspendButton.Tag;
             SuspendButton.Tag  = suspend;
@@ -419,11 +427,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         #endregion
 
         #region Fields
+        private readonly Stopwatch _watch = new Stopwatch();
+        private readonly Timer _timer = new Timer();
+        private readonly Cube.Forms.TaskbarProgress _taskbar;
         private string _fileName = string.Empty;
         private long _count = 0;
         private long _totalCount = 0;
-        private Stopwatch _watch = new Stopwatch();
-        private Timer _timer = new Timer();
         private TimeSpan _remain = TimeSpan.Zero;
         #endregion
     }

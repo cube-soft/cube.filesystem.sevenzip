@@ -16,10 +16,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Log;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using Cube.Log;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -50,7 +50,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="io">入出力用のオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveOpenCallback(string src, ArchiveStreamReader stream, Operator io)
+        public ArchiveOpenCallback(string src, ArchiveStreamReader stream, IO io)
             : base(src, io)
         {
             _dispose = new OnceAction<bool>(Dispose);
@@ -132,15 +132,11 @@ namespace Cube.FileSystem.SevenZip
         {
             var info = IO.Get(Source);
 
-            switch (pid)
+            if (pid == ItemPropId.Name) value.Set(info.FullName);
+            else
             {
-                case ItemPropId.Name:
-                    value.Set(info.FullName);
-                    break;
-                default:
-                    this.LogDebug($"Unknown\tPid:{pid}");
-                    value.Clear();
-                    break;
+                this.LogDebug($"Unknown\tPid:{pid}");
+                value.Clear();
             }
 
             ExecuteReport();
@@ -220,7 +216,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (disposing)
             {
@@ -234,8 +230,8 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Fields
-        private OnceAction<bool> _dispose;
-        private IList<ArchiveStreamReader> _streams = new List<ArchiveStreamReader>();
+        private readonly OnceAction<bool> _dispose;
+        private readonly IList<ArchiveStreamReader> _streams = new List<ArchiveStreamReader>();
         #endregion
     }
 }

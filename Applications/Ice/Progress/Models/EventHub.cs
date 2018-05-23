@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-namespace Cube.FileSystem.SevenZip.App.Ice
+namespace Cube.FileSystem.SevenZip.Ice.App
 {
     /* --------------------------------------------------------------------- */
     ///
@@ -64,14 +64,14 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
     /* --------------------------------------------------------------------- */
     ///
-    /// EventHubConverter
+    /// EventHubExtension
     ///
     /// <summary>
-    /// EventHub クラスに関連する拡張メソッドを定義したクラスです。
+    /// EventHub の拡張用クラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public static class EventHubConverter
+    public static class EventHubExtension
     {
         /* ----------------------------------------------------------------- */
         ///

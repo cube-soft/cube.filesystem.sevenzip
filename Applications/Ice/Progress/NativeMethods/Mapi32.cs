@@ -18,7 +18,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace Cube.FileSystem.SevenZip.App.Ice.Mapi32
+namespace Cube.FileSystem.SevenZip.Ice.App.Mapi32
 {
     /* --------------------------------------------------------------------- */
     ///

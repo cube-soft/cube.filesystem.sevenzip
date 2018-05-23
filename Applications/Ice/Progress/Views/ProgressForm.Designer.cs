@@ -1,4 +1,4 @@
-﻿namespace Cube.FileSystem.SevenZip.App.Ice
+﻿namespace Cube.FileSystem.SevenZip.Ice.App
 {
     partial class ProgressForm
     {
@@ -41,9 +41,9 @@
             this.RootPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.HeaderPictureBox)).BeginInit();
             this.SuspendLayout();
-            // 
+            //
             // RootPanel
-            // 
+            //
             this.RootPanel.ColumnCount = 2;
             this.RootPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.RootPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -67,9 +67,9 @@
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.RootPanel.Size = new System.Drawing.Size(434, 206);
             this.RootPanel.TabIndex = 0;
-            // 
+            //
             // ExitButton
-            // 
+            //
             this.ExitButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.ExitButton.Enabled = false;
             this.ExitButton.Location = new System.Drawing.Point(275, 163);
@@ -78,9 +78,9 @@
             this.ExitButton.TabIndex = 1;
             this.ExitButton.Text = "キャンセル";
             this.ExitButton.UseVisualStyleBackColor = true;
-            // 
+            //
             // RemainLabel
-            // 
+            //
             this.RemainLabel.AutoSize = true;
             this.RemainLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RemainLabel.Location = new System.Drawing.Point(229, 91);
@@ -91,9 +91,9 @@
             this.RemainLabel.Text = "残り時間 : 約 23:55:55";
             this.RemainLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.RemainLabel.Visible = false;
-            // 
+            //
             // CountLabel
-            // 
+            //
             this.CountLabel.AutoSize = true;
             this.RootPanel.SetColumnSpan(this.CountLabel, 2);
             this.CountLabel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -104,9 +104,9 @@
             this.CountLabel.TabIndex = 0;
             this.CountLabel.Text = "ファイル数 : 669 / 796";
             this.CountLabel.TextAlign = System.Drawing.ContentAlignment.BottomRight;
-            // 
+            //
             // MainProgressBar
-            // 
+            //
             this.RootPanel.SetColumnSpan(this.MainProgressBar, 2);
             this.MainProgressBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MainProgressBar.Location = new System.Drawing.Point(14, 67);
@@ -118,9 +118,9 @@
             this.MainProgressBar.Step = 1;
             this.MainProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.MainProgressBar.TabIndex = 1;
-            // 
+            //
             // ElapseLabel
-            // 
+            //
             this.ElapseLabel.AutoSize = true;
             this.ElapseLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ElapseLabel.Location = new System.Drawing.Point(12, 91);
@@ -129,9 +129,9 @@
             this.ElapseLabel.Size = new System.Drawing.Size(193, 18);
             this.ElapseLabel.TabIndex = 2;
             this.ElapseLabel.Text = "経過時間 : 23:55:55";
-            // 
+            //
             // StatusLabel
-            // 
+            //
             this.StatusLabel.AutoEllipsis = true;
             this.StatusLabel.AutoSize = true;
             this.RootPanel.SetColumnSpan(this.StatusLabel, 2);
@@ -142,9 +142,9 @@
             this.StatusLabel.Size = new System.Drawing.Size(410, 42);
             this.StatusLabel.TabIndex = 4;
             this.StatusLabel.Text = "ファイル圧縮・解凍処理の準備中です...";
-            // 
+            //
             // SuspendButton
-            // 
+            //
             this.SuspendButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.SuspendButton.Enabled = false;
             this.SuspendButton.Location = new System.Drawing.Point(58, 163);
@@ -153,12 +153,12 @@
             this.SuspendButton.TabIndex = 0;
             this.SuspendButton.Text = "一時停止";
             this.SuspendButton.UseVisualStyleBackColor = true;
-            // 
+            //
             // HeaderPictureBox
-            // 
+            //
             this.RootPanel.SetColumnSpan(this.HeaderPictureBox, 2);
             this.HeaderPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.HeaderPictureBox.Image = global::Cube.FileSystem.SevenZip.App.Ice.Properties.Resources.HeaderArchive;
+            this.HeaderPictureBox.Image = global::Cube.FileSystem.SevenZip.Ice.App.Properties.Resources.HeaderArchive;
             this.HeaderPictureBox.Location = new System.Drawing.Point(0, 0);
             this.HeaderPictureBox.Margin = new System.Windows.Forms.Padding(0);
             this.HeaderPictureBox.Name = "HeaderPictureBox";
@@ -166,9 +166,9 @@
             this.HeaderPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.HeaderPictureBox.TabIndex = 5;
             this.HeaderPictureBox.TabStop = false;
-            // 
+            //
             // ProgressForm
-            // 
+            //
             this.AcceptButton = this.ExitButton;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(434, 206);

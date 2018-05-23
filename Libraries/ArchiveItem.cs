@@ -50,7 +50,7 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         protected ArchiveItem(Format format, string src, int index,
-            IQuery<string, string> password, Operator io)
+            IQuery<string, string> password, IO io)
         {
             Format   = format;
             Source   = src;
@@ -143,7 +143,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected Operator IO { get; }
+        protected IO IO { get; }
 
         /* ----------------------------------------------------------------- */
         ///

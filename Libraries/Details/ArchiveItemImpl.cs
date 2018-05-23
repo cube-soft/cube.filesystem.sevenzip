@@ -16,9 +16,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-using System;
-using Cube.Log;
 using Cube.FileSystem.SevenZip.Archives;
+using Cube.Log;
+using System;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -52,7 +52,7 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public ArchiveItemImpl(IInArchive archive, Format format, string src, int index,
-            IQuery<string, string> password, Operator io)
+            IQuery<string, string> password, IO io)
             : base(format, src, index, password, io)
         {
             _archive = archive;
@@ -245,7 +245,7 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Fields
-        private IInArchive _archive;
+        private readonly IInArchive _archive;
         #endregion
     }
 }

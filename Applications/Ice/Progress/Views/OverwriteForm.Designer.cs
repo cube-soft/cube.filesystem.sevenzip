@@ -1,4 +1,4 @@
-﻿namespace Cube.FileSystem.SevenZip.App.Ice
+﻿namespace Cube.FileSystem.SevenZip.Ice.App
 {
     partial class OverwriteForm
     {
@@ -43,9 +43,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.IconPictureBox)).BeginInit();
             this.ButtonsPanel.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // RootPanel
-            // 
+            //
             this.RootPanel.ColumnCount = 2;
             this.RootPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
             this.RootPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -60,9 +60,9 @@
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
             this.RootPanel.Size = new System.Drawing.Size(484, 311);
             this.RootPanel.TabIndex = 0;
-            // 
+            //
             // IconPictureBox
-            // 
+            //
             this.IconPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.IconPictureBox.Location = new System.Drawing.Point(3, 3);
             this.IconPictureBox.Margin = new System.Windows.Forms.Padding(3, 3, 3, 120);
@@ -71,9 +71,9 @@
             this.IconPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.IconPictureBox.TabIndex = 0;
             this.IconPictureBox.TabStop = false;
-            // 
+            //
             // DescriptionLabel
-            // 
+            //
             this.DescriptionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DescriptionLabel.Location = new System.Drawing.Point(84, 20);
             this.DescriptionLabel.Margin = new System.Windows.Forms.Padding(4, 20, 4, 0);
@@ -83,9 +83,9 @@
             this.DescriptionLabel.Text = "この場所には同じ名前のファイルが既に存在します。上書きしますか？\r\n\r\n現在のファイル\r\nD:\\Foo\\Bar\\Bas.txt\r\nサイズ : 12.3KB\r\n更新" +
     "日時 : 2017/07/10 23:55:55\r\n\r\n新しいファイル\r\nBas.txt\r\nサイズ : 34.5KB\r\n更新日時 : 2017/07/10 12" +
     ":12:12";
-            // 
+            //
             // ButtonsPanel
-            // 
+            //
             this.RootPanel.SetColumnSpan(this.ButtonsPanel, 2);
             this.ButtonsPanel.Controls.Add(this.AlwaysRenameButton);
             this.ButtonsPanel.Controls.Add(this.AlwaysYesButton);
@@ -99,9 +99,9 @@
             this.ButtonsPanel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.ButtonsPanel.Size = new System.Drawing.Size(478, 74);
             this.ButtonsPanel.TabIndex = 2;
-            // 
+            //
             // AlwaysRenameButton
-            // 
+            //
             this.AlwaysRenameButton.Location = new System.Drawing.Point(362, 4);
             this.AlwaysRenameButton.Margin = new System.Windows.Forms.Padding(16, 4, 4, 4);
             this.AlwaysRenameButton.Name = "AlwaysRenameButton";
@@ -109,9 +109,9 @@
             this.AlwaysRenameButton.TabIndex = 4;
             this.AlwaysRenameButton.Text = "すべてリネーム";
             this.AlwaysRenameButton.UseVisualStyleBackColor = true;
-            // 
+            //
             // AlwaysYesButton
-            // 
+            //
             this.AlwaysYesButton.Location = new System.Drawing.Point(254, 4);
             this.AlwaysYesButton.Margin = new System.Windows.Forms.Padding(4);
             this.AlwaysYesButton.Name = "AlwaysYesButton";
@@ -119,9 +119,9 @@
             this.AlwaysYesButton.TabIndex = 2;
             this.AlwaysYesButton.Text = "すべてはい";
             this.AlwaysYesButton.UseVisualStyleBackColor = true;
-            // 
+            //
             // YesButton
-            // 
+            //
             this.ButtonsPanel.SetFlowBreak(this.YesButton, true);
             this.YesButton.Location = new System.Drawing.Point(146, 4);
             this.YesButton.Margin = new System.Windows.Forms.Padding(4);
@@ -130,9 +130,9 @@
             this.YesButton.TabIndex = 0;
             this.YesButton.Text = "はい";
             this.YesButton.UseVisualStyleBackColor = true;
-            // 
+            //
             // ExitButton
-            // 
+            //
             this.ExitButton.Location = new System.Drawing.Point(362, 37);
             this.ExitButton.Margin = new System.Windows.Forms.Padding(16, 4, 4, 4);
             this.ExitButton.Name = "ExitButton";
@@ -140,9 +140,9 @@
             this.ExitButton.TabIndex = 5;
             this.ExitButton.Text = "キャンセル";
             this.ExitButton.UseVisualStyleBackColor = true;
-            // 
+            //
             // AlwaysNoButton
-            // 
+            //
             this.AlwaysNoButton.Location = new System.Drawing.Point(254, 37);
             this.AlwaysNoButton.Margin = new System.Windows.Forms.Padding(4);
             this.AlwaysNoButton.Name = "AlwaysNoButton";
@@ -150,9 +150,9 @@
             this.AlwaysNoButton.TabIndex = 3;
             this.AlwaysNoButton.Text = "すべていいえ";
             this.AlwaysNoButton.UseVisualStyleBackColor = true;
-            // 
+            //
             // NoButton
-            // 
+            //
             this.NoButton.Location = new System.Drawing.Point(146, 37);
             this.NoButton.Margin = new System.Windows.Forms.Padding(4);
             this.NoButton.Name = "NoButton";
@@ -160,9 +160,9 @@
             this.NoButton.TabIndex = 1;
             this.NoButton.Text = "いいえ";
             this.NoButton.UseVisualStyleBackColor = true;
-            // 
+            //
             // OverwriteForm
-            // 
+            //
             this.AcceptButton = this.YesButton;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(484, 311);

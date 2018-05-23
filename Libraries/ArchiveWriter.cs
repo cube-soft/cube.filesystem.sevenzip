@@ -48,7 +48,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="format">圧縮フォーマット</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveWriter(Format format) : this(format, new Operator()) { }
+        public ArchiveWriter(Format format) : this(format, new IO()) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -62,7 +62,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="io">ファイル操作用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveWriter(Format format, Operator io)
+        public ArchiveWriter(Format format, IO io)
         {
             _dispose = new OnceAction<bool>(Dispose);
             Format = format;
@@ -465,6 +465,8 @@ namespace Cube.FileSystem.SevenZip
                     return;
                 case OperationResult.UserCancel:
                     throw new OperationCanceledException();
+                default:
+                    break;
             }
 
             if (err != null) throw err;
@@ -474,10 +476,10 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Fields
-        private OnceAction<bool> _dispose;
-        private SevenZipLibrary _7z;
-        private Operator _io;
-        private IList<FileItem> _items = new List<FileItem>();
+        private readonly OnceAction<bool> _dispose;
+        private readonly SevenZipLibrary _7z;
+        private readonly IO _io;
+        private readonly IList<FileItem> _items = new List<FileItem>();
         #endregion
     }
 }

@@ -148,8 +148,8 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Fields
-        private OnceAction<bool> _dispose;
-        private bool _disposeStream = true;
+        private readonly OnceAction<bool> _dispose;
+        private readonly bool _disposeStream = true;
         #endregion
     }
 

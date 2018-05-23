@@ -16,10 +16,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
 
 namespace Cube.FileSystem.SevenZip.Tests
 {
@@ -116,7 +116,7 @@ namespace Cube.FileSystem.SevenZip.Tests
 
             using (var writer = new ArchiveWriter(fmt))
             {
-                writer.Option = new ZipOption { UseUtf8 = utf8 };
+                writer.Option = new ZipOption { CodePage = utf8 ? CodePage.Utf8 : CodePage.Japanese };
                 writer.Add(src);
                 writer.Save(dest);
             }
@@ -209,7 +209,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             var dir    = Result("Ignore");
             var ignore = IO.Combine(dir, "Sample.txt");
 
-            var io = new Operator();
+            var io = new IO();
             io.Failed += (s, e) => e.Cancel = true;
             io.Copy(Example("Sample.txt"), ignore);
 
@@ -447,7 +447,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     {
                         CompressionMethod = CompressionMethod.Lzma,
                         CompressionLevel  = CompressionLevel.Ultra,
-                        Module            = Current("7z.sfx"),
+                        Module            = Current(Formats.SfxName),
                     }
                 ).Returns(Format.PE);
             }

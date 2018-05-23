@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Cube.FileSystem.SevenZip.Ice
@@ -29,8 +30,26 @@ namespace Cube.FileSystem.SevenZip.Ice
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public class ContextSettings : ObservableProperty
+    public sealed class ContextSettings : ObservableProperty
     {
+        #region Constructors
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ContextSettings
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ContextSettings()
+        {
+            Reset();
+        }
+
+        #endregion
+
         #region Properties
 
         /* ----------------------------------------------------------------- */
@@ -50,10 +69,100 @@ namespace Cube.FileSystem.SevenZip.Ice
             set => SetProperty(ref _preset, value);
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Custom
+        ///
+        /// <summary>
+        /// カスタマイズされたコンテキストメニュー一覧を取得または
+        /// 設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [DataMember]
+        public IList<ContextMenu> Custom
+        {
+            get => _custom;
+            set => SetProperty(ref _custom, value);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// IsCustomized
+        ///
+        /// <summary>
+        /// カスタマイズされたコンテキストメニューを使用するかどうかを示す
+        /// 値を取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [DataMember]
+        public bool IsCustomized
+        {
+            get => _isCustomized;
+            set => SetProperty(ref _isCustomized, value);
+        }
+
+        #endregion
+
+        #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Customize
+        ///
+        /// <summary>
+        /// コンテキストメニューのカスタマイズを実行します。
+        /// </summary>
+        ///
+        /// <param name="src">カスタマイズメニュー</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Customize(IEnumerable<ContextMenu> src)
+        {
+            Custom.Clear();
+            foreach (var m in src) Custom.Add(m);
+            IsCustomized = true;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Reset
+        ///
+        /// <summary>
+        /// 設定をリセットします。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Reset()
+        {
+            Preset       = PresetMenu.DefaultContext;
+            Custom       = new List<ContextMenu>();
+            IsCustomized = false;
+        }
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OnDeserializing
+        ///
+        /// <summary>
+        /// デシリアライズ直前に実行されます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [OnDeserializing]
+        private void OnDeserializing(StreamingContext context) => Reset();
+
         #endregion
 
         #region Fields
-        private PresetMenu _preset = PresetMenu.DefaultContext;
+        private PresetMenu _preset;
+        private IList<ContextMenu> _custom;
+        private bool _isCustomized;
         #endregion
     }
 }

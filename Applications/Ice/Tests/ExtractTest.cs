@@ -15,15 +15,16 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.FileSystem.SevenZip.Ice.App;
+using Cube.Forms;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Cube.FileSystem.SevenZip.Ice;
-using NUnit.Framework;
 
-namespace Cube.FileSystem.SevenZip.App.Ice.Tests
+namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
@@ -35,7 +36,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ExtractTest : MockViewHelper
+    class ExtractTest : ProgressMockViewHelper
     {
         #region Tests
 
@@ -50,7 +51,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
         public void Extract(string filename, string password,
-            IEnumerable<string> args, ExtractSettings extract, string exists, long count)
+            IEnumerable<string> args, ExtractSettings settings, string exists, long count)
         {
             var request = new Request(args.Concat(new[] { Example(filename) }));
             var tmp     = string.Empty;
@@ -61,7 +62,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
             using (var p = Create(request))
             {
                 p.Settings.Value.Explorer = "dummy.exe";
-                p.Settings.Value.Extract = extract;
+                p.Settings.Value.Extract = settings;
                 p.Settings.Value.Extract.SaveDirectoryName = Result("Others");
                 p.View.Show();
 
@@ -802,11 +803,24 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
                     DropRequest("Bz2Sample"),
                     new ExtractSettings
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation  = SaveLocation.Others,
                         RootDirectory = CreateDirectoryMethod.CreateSmart,
                     },
                     FullName(@"Bz2Sample\Sample\Sample.txt"),
                     1L
+                );
+
+                yield return new TestCaseData(
+                    "SampleSfx.exe",
+                    "",
+                    DropRequest("SfxSample"),
+                    new ExtractSettings
+                    {
+                        SaveLocation  = SaveLocation.Others,
+                        RootDirectory = CreateDirectoryMethod.CreateSmart,
+                    },
+                    FullName(@"SfxSample\Sample\Foo.txt"),
+                    4L
                 );
             }
         }
@@ -831,11 +845,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         private static string FullName(string path)
         {
-            var io   = new Operator();
+            var io   = new IO();
             var asm  = Assembly.GetExecutingAssembly().Location;
             var root = io.Get(asm).DirectoryName;
             var dir  = typeof(ExtractTest).FullName;
-            return io.Combine(root, ResultsName, dir, path);
+            return io.Combine(root, "Results", dir, path);
         }
 
         /* ----------------------------------------------------------------- */

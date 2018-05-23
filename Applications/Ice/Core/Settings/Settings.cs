@@ -18,7 +18,6 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Cube.Settings;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -32,8 +31,26 @@ namespace Cube.FileSystem.SevenZip.Ice
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public class Settings : ObservableProperty
+    public sealed class Settings : ObservableProperty
     {
+        #region Constructors
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Settings
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public Settings()
+        {
+            Reset();
+        }
+
+        #endregion
+
         #region Properties
 
         /* ----------------------------------------------------------------- */
@@ -250,87 +267,58 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         #endregion
 
-        #region Fields
-        private bool _checkUpdate = true;
-        private bool _errorReport = true;
-        private string _explorer = string.Empty;
-        private string _filtering = ".DS_Store|Thumbs.db|__MACOSX|desktop.ini";
-        private bool _toolTip = true;
-        private int _toolTipCount = 5;
-        private ArchiveSettings _archive = new ArchiveSettings();
-        private ExtractSettings _extract = new ExtractSettings();
-        private AssociateSettings _associate = new AssociateSettings();
-        private ContextSettings _context = new ContextSettings();
-        private ShortcutSettings _shortcut = new ShortcutSettings();
-        #endregion
-    }
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// SettingsFolder
-    ///
-    /// <summary>
-    /// 各種設定を保持するためのクラスです。
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    public class SettingsFolder : SettingsFolder<Settings>
-    {
-        #region Constructors
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SettingsFolder
-        ///
-        /// <summary>
-        /// オブジェクトを初期化します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public SettingsFolder() : this(SettingsType.Registry, @"Software\CubeSoft\CubeICE\v3") { }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SettingsFolder
-        ///
-        /// <summary>
-        /// オブジェクトを初期化します。
-        /// </summary>
-        ///
-        /// <param name="type">設定情報の保存方法</param>
-        /// <param name="path">設定情報の保存パス</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public SettingsFolder(SettingsType type, string path) : base(type, path)
-        {
-            AutoSave       = false;
-            Version.Digit  = 3;
-            Version.Suffix = Properties.Resources.VersionSuffix;
-
-            var dir = System.IO.Path.GetDirectoryName(AssemblyReader.Default.Location);
-            Startup.Command = $"\"{System.IO.Path.Combine(dir, "cubeice-checker.exe")}\"";
-            Startup.Name    = "cubeice-checker";
-        }
-
-        #endregion
-
         #region Implementations
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OnSaved
+        /// OnDeserializing
         ///
         /// <summary>
-        /// 保存時に実行されます。
+        /// デシリアライズ直前に実行されます。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected override void OnSaved(KeyValueEventArgs<SettingsType, string> e)
+        [OnDeserializing]
+        private void OnDeserializing(StreamingContext context) => Reset();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Reset
+        ///
+        /// <summary>
+        /// 設定をリセットします。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Reset()
         {
-            if (Value != null) Startup.Enabled = Value.CheckUpdate;
-            base.OnSaved(e);
+            _checkUpdate  = true;
+            _errorReport  = true;
+            _explorer     = string.Empty;
+            _filtering    = ".DS_Store|Thumbs.db|__MACOSX|desktop.ini";
+            _toolTip      = true;
+            _toolTipCount = 5;
+            _archive      = new ArchiveSettings();
+            _extract      = new ExtractSettings();
+            _associate    = new AssociateSettings();
+            _context      = new ContextSettings();
+            _shortcut     = new ShortcutSettings();
         }
 
+        #endregion
+
+        #region Fields
+        private bool _checkUpdate;
+        private bool _errorReport;
+        private string _explorer;
+        private string _filtering;
+        private bool _toolTip;
+        private int _toolTipCount;
+        private ArchiveSettings _archive;
+        private ExtractSettings _extract;
+        private AssociateSettings _associate;
+        private ContextSettings _context;
+        private ShortcutSettings _shortcut;
         #endregion
     }
 }

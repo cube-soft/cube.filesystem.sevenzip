@@ -16,9 +16,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Log;
 using System;
 using System.Collections.Generic;
-using Cube.Log;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -49,7 +49,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="io">ファイル操作用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveUpdateCallback(IList<FileItem> items, string dest, Operator io) : base(io)
+        public ArchiveUpdateCallback(IList<FileItem> items, string dest, IO io) : base(io)
         {
             _dispose = new OnceAction<bool>(Dispose);
             Items = items;
@@ -381,8 +381,8 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Fields
-        private OnceAction<bool> _dispose;
-        private IList<ArchiveStreamReader> _streams = new List<ArchiveStreamReader>();
+        private readonly OnceAction<bool> _dispose;
+        private readonly IList<ArchiveStreamReader> _streams = new List<ArchiveStreamReader>();
         #endregion
     }
 }

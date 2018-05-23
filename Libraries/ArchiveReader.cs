@@ -62,7 +62,7 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public ArchiveReader(string path, string password) :
-            this(path, password, new Operator()) { }
+            this(path, password, new IO()) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -77,7 +77,7 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public ArchiveReader(string path, IQuery<string, string> password) :
-            this(path, password, new Operator()) { }
+            this(path, password, new IO()) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -92,7 +92,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="io">ファイル操作用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveReader(string path, string password, Operator io)
+        public ArchiveReader(string path, string password, IO io)
         {
             _dispose = new OnceAction<bool>(Dispose);
             Source = path;
@@ -114,7 +114,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="io">ファイル操作用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveReader(string path, IQuery<string, string> password, Operator io)
+        public ArchiveReader(string path, IQuery<string, string> password, IO io)
         {
             _dispose = new OnceAction<bool>(Dispose);
             Source = path;
@@ -380,6 +380,8 @@ namespace Cube.FileSystem.SevenZip
                     throw new EncryptionException();
                 case OperationResult.UserCancel:
                     throw new OperationCanceledException();
+                default:
+                    break;
             }
 
             if (err != null) throw err;
@@ -389,9 +391,9 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Fields
-        private OnceAction<bool> _dispose;
-        private Operator _io;
-        private PasswordQuery _password;
+        private readonly OnceAction<bool> _dispose;
+        private readonly IO _io;
+        private readonly PasswordQuery _password;
         private SevenZipLibrary _7z;
         private IInArchive _archive;
         private ArchiveOpenCallback _callback;

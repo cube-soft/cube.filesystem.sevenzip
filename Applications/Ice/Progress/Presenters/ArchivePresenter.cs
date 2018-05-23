@@ -16,10 +16,8 @@
 //
 /* ------------------------------------------------------------------------- */
 using System;
-using System.Linq;
-using Cube.FileSystem.SevenZip.Ice;
 
-namespace Cube.FileSystem.SevenZip.App.Ice
+namespace Cube.FileSystem.SevenZip.Ice.App
 {
     /* --------------------------------------------------------------------- */
     ///
@@ -61,7 +59,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             model.DestinationRequested += WhenDestinationRequested;
             model.PasswordRequested    += WhenPasswordRequested;
             model.Progress             += WhenProgress;
-            model.DetailsRequested     += WhenDetailsRequested;
+            model.RtSettingsRequested  += WhenRtSettingsRequested;
             model.MailRequested        += WhenMailRequested;
         }
 
@@ -71,15 +69,16 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// WhenDetailsRequested
+        /// WhenRtSettingsRequested
         ///
         /// <summary>
         /// 詳細設定要求時に実行されるハンドラです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenDetailsRequested(object sender, QueryEventArgs<string, ArchiveDetails> e) =>
-            ShowDialog(() => Views.ShowArchiveView(e));
+        private void WhenRtSettingsRequested(object s,
+            QueryEventArgs<string, ArchiveRtSettings> e) =>
+            ShowDialog(() => Views.ShowArchiveRtSettingsView(e));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -90,7 +89,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenDestinationRequested(object sender, PathQueryEventArgs e) =>
+        private void WhenDestinationRequested(object s, PathQueryEventArgs e) =>
             ShowDialog(() => Views.ShowSaveView(e));
 
         /* ----------------------------------------------------------------- */
@@ -102,7 +101,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenPasswordRequested(object sender, QueryEventArgs<string, string> e) =>
+        private void WhenPasswordRequested(object s, QueryEventArgs<string, string> e) =>
             ShowDialog(() => Views.ShowPasswordView(e, true));
 
         /* ----------------------------------------------------------------- */
@@ -114,7 +113,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenMailRequested(object sender, ValueEventArgs<string> e) =>
+        private void WhenMailRequested(object s, ValueEventArgs<string> e) =>
             Views.ShowMailView(e);
 
         /* ----------------------------------------------------------------- */
@@ -126,7 +125,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenProgress(object sender, ValueEventArgs<ArchiveReport> e) => Sync(() =>
+        private void WhenProgress(object s, ValueEventArgs<ArchiveReport> e) => Sync(() =>
         {
             View.FileName   = Model.IO.Get(Model.Destination).Name;
             View.TotalCount = e.Value.TotalCount;

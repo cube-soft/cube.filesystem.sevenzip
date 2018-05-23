@@ -15,11 +15,12 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.FileSystem.SevenZip.Ice.App;
 using System;
 using System.Diagnostics;
 using System.Drawing;
 
-namespace Cube.FileSystem.SevenZip.App.Ice.Tests
+namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
@@ -167,7 +168,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         #endregion
 
         #region Fields
-        private Stopwatch _watch = new Stopwatch();
+        private readonly Stopwatch _watch = new Stopwatch();
         #endregion
     }
 }

@@ -29,7 +29,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public class ArchiveSettings : GeneralSettings
+    public sealed class ArchiveSettings : ArchiveSettingsBase
     {
         /* ----------------------------------------------------------------- */
         ///
@@ -40,7 +40,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveSettings() : base() { }
+        public ArchiveSettings()
+        {
+            Reset();
+        }
 
         #region Properties
 
@@ -81,9 +84,42 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         #endregion
 
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OnDeserializing
+        ///
+        /// <summary>
+        /// デシリアライズ直前に実行されます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [OnDeserializing]
+        private void OnDeserializing(StreamingContext context) => Reset();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Reset
+        ///
+        /// <summary>
+        /// 設定をリセットします。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected override void Reset()
+        {
+            _useUtf8         = false;
+            _overwritePrompt = true;
+
+            base.Reset();
+        }
+
+        #endregion
+
         #region Fields
-        private bool _useUtf8 = false;
-        private bool _overwritePrompt = true;
+        private bool _useUtf8;
+        private bool _overwritePrompt;
         #endregion
     }
 }

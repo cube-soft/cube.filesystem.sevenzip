@@ -15,11 +15,11 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System;
+using Cube.Forms;
 using Cube.Generics;
-using Cube.FileSystem.SevenZip.Ice;
+using System;
 
-namespace Cube.FileSystem.SevenZip.App.Ice
+namespace Cube.FileSystem.SevenZip.Ice.App
 {
     /* --------------------------------------------------------------------- */
     ///
@@ -80,7 +80,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenDestinationRequested(object sender, PathQueryEventArgs e) =>
+        private void WhenDestinationRequested(object s, PathQueryEventArgs e) =>
             ShowDialog(() => Views.ShowSaveView(e));
 
         /* ----------------------------------------------------------------- */
@@ -92,7 +92,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenPasswordRequested(object sender, QueryEventArgs<string, string> e) =>
+        private void WhenPasswordRequested(object s, QueryEventArgs<string, string> e) =>
             ShowDialog(() => Views.ShowPasswordView(e, false));
 
         /* ----------------------------------------------------------------- */
@@ -104,7 +104,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenOverwriteRequested(object sender, OverwriteEventArgs e) =>
+        private void WhenOverwriteRequested(object s, OverwriteEventArgs e) =>
             ShowDialog(() => Views.ShowOverwriteView(e));
 
         /* ----------------------------------------------------------------- */
@@ -116,7 +116,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenProgress(object sender, ValueEventArgs<ArchiveReport> e) => Sync(() =>
+        private void WhenProgress(object s, ValueEventArgs<ArchiveReport> e) => Sync(() =>
         {
             View.Status     = Model.Current;
             View.Value      = Math.Max(Math.Max((int)(e.Value.Ratio * View.Unit), 1), View.Value);
@@ -133,7 +133,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenProgressReset(object sender, EventArgs e) => Sync(() =>
+        private void WhenProgressReset(object s, EventArgs e) => Sync(() =>
         {
             View.FileName   = Model.IO.Get(Model.TryCast<ExtractFacade>().Source).Name;
             View.Status     = Properties.Resources.MessagePreExtract;

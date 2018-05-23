@@ -15,11 +15,10 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.SevenZip.Ice;
 using NUnit.Framework;
 using Cube.Enumerations;
 
-namespace Cube.FileSystem.SevenZip.App.Ice.Tests
+namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
@@ -31,7 +30,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ShortcutSettingsTest : MockViewHelper
+    class ShortcutSettingsTest : ProgressMockViewHelper
     {
         /* ----------------------------------------------------------------- */
         ///
@@ -49,9 +48,9 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
             var extract  = new Shortcut(Result("CubeICE 解凍"));
             var settings = new Shortcut(Result("CubeICE 設定"));
 
-            var src  = new ShortcutSettings() { Directory = Results };
+            var src  = new ShortcutSettings { Directory = Results };
             var menu = PresetMenu.Archive |
-                       PresetMenu.ArchiveDetail |
+                       PresetMenu.ArchiveDetails |
                        PresetMenu.Extract |
                        PresetMenu.Settings;
 
@@ -60,7 +59,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 
             src.Sync();
             Assert.That(src.Preset.HasFlag(PresetMenu.Archive),       Is.False);
-            Assert.That(src.Preset.HasFlag(PresetMenu.ArchiveDetail), Is.True);
+            Assert.That(src.Preset.HasFlag(PresetMenu.ArchiveDetails), Is.True);
             Assert.That(src.Preset.HasFlag(PresetMenu.Extract),       Is.False);
             Assert.That(src.Preset.HasFlag(PresetMenu.Settings),      Is.False);
 

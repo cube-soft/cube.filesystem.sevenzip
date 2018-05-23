@@ -73,23 +73,26 @@
     <DocumentationFile>bin\x64\Release\Cube.FileSystem.SevenZip.Tests.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AsyncBridge.Net35">
-      <HintPath>..\..\packages\AsyncBridge.Net35.0.2.0\lib\net35-Client\AsyncBridge.Net35.dll</HintPath>
+    <Reference Include="AsyncBridge">
+      <HintPath>..\..\packages\AsyncBridge.0.3.1\lib\net35-Client\AsyncBridge.dll</HintPath>
+    </Reference>
+    <Reference Include="AlphaFS">
+      <HintPath>..\..\packages\AlphaFS.2.2.1\lib\net35\AlphaFS.dll</HintPath>
     </Reference>
     <Reference Include="Cube.Backwards">
-      <HintPath>..\..\packages\Cube.Backwards.1.4.0\lib\net35\Cube.Backwards.dll</HintPath>
+      <HintPath>..\..\packages\Cube.Backwards.1.4.1\lib\net35\Cube.Backwards.dll</HintPath>
     </Reference>
     <Reference Include="Cube.Core">
-      <HintPath>..\..\packages\Cube.Core.Net35.1.7.0\lib\net35\Cube.Core.dll</HintPath>
+      <HintPath>..\..\packages\Cube.Core.1.9.0\lib\net35\Cube.Core.dll</HintPath>
     </Reference>
     <Reference Include="Cube.FileSystem">
-      <HintPath>..\..\packages\Cube.FileSystem.Net35.1.7.0\lib\net35\Cube.FileSystem.dll</HintPath>
+      <HintPath>..\..\packages\Cube.FileSystem.1.9.0\lib\net35\Cube.FileSystem.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.2.0.8\lib\net35-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\..\packages\NUnit.3.9.0\lib\net35\nunit.framework.dll</HintPath>
+      <HintPath>..\..\packages\NUnit.3.10.1\lib\net35\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System.Threading">
       <HintPath>..\..\packages\TaskParallelLibrary.1.0.2856.0\lib\Net35\System.Threading.dll</HintPath>
@@ -299,6 +302,9 @@
     <None Include="Examples\Sample.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Examples\Sample.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Examples\Sample.flv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -392,6 +398,9 @@
     <None Include="Examples\SampleMac.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Examples\SampleSfx.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Examples\SampleUtf8.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -442,8 +451,4 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
 </Project>

@@ -15,15 +15,14 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Log;
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using Cube.FileSystem.SevenZip.Ice;
-using Cube.Log;
 
-namespace Cube.FileSystem.SevenZip.App.Ice
+namespace Cube.FileSystem.SevenZip.Ice.App
 {
     /* --------------------------------------------------------------------- */
     ///
@@ -52,10 +51,10 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             {
                 if (args.Length <= 0) return;
 
-                LogOperator.Configure();
-                LogOperator.ObserveTaskException();
-                LogOperator.Info(typeof(Program), Assembly.GetExecutingAssembly());
-                LogOperator.Info(typeof(Program), $"Arguments:{string.Join(" ", args)}");
+                Logger.Configure();
+                Logger.ObserveTaskException();
+                Logger.Info(typeof(Program), Assembly.GetExecutingAssembly());
+                Logger.Info(typeof(Program), $"Arguments:{string.Join(" ", args)}");
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
@@ -75,6 +74,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
                     case Mode.Extract:
                         if (m.Sources.Count() > 1 && s.Value.Extract.Bursty && !m.SuppressRecursive) Extract(m);
                         else using (var _ = new ExtractPresenter(v, m, s, e)) Application.Run(v);
+                        break;
+                    default:
                         break;
                 }
             }
@@ -112,6 +113,6 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        static void Log(Exception err) => LogOperator.Error(typeof(Program), err.ToString());
+        static void Log(Exception err) => Logger.Error(typeof(Program), err.ToString());
     }
 }

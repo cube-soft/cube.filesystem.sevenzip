@@ -15,14 +15,14 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.FileSystem.SevenZip.Ice.App;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Cube.FileSystem.SevenZip.Ice;
-using NUnit.Framework;
 
-namespace Cube.FileSystem.SevenZip.App.Ice.Tests
+namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
@@ -34,7 +34,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ArchiveTest : MockViewHelper
+    class ArchiveTest : ProgressMockViewHelper
     {
         #region Tests
 
@@ -49,7 +49,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
         public void Archive(string[] files, IEnumerable<string> args,
-            ArchiveSettings archive, string dest, long count)
+            ArchiveSettings settings, string dest, long count)
         {
             var filename = GetFileName(Example(files.First()), dest);
             var request  = new Request(args.Concat(files.Select(s => Example(s))));
@@ -59,7 +59,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 
             using (var p = Create(request))
             {
-                p.Settings.Value.Archive = archive;
+                p.Settings.Value.Archive = settings;
                 p.Settings.Value.Archive.SaveDirectoryName = Result("Others");
                 p.View.Show();
 
@@ -297,7 +297,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 
                 yield return new TestCaseData(
                     new[] { "Sample.txt", "Sample 00..01" },
-                    PresetMenu.ArchiveDetail.ToArguments(),
+                    PresetMenu.ArchiveDetails.ToArguments(),
                     new ArchiveSettings
                     {
                         SaveLocation  = SaveLocation.Others,
@@ -345,7 +345,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
 
                 yield return new TestCaseData(
                     new[] { "Sample.txt", "Sample 00..01" },
-                    DropRequest(PresetMenu.ArchiveXZ, "Drop"),
+                    DropRequest(PresetMenu.ArchiveXz, "Drop"),
                     new ArchiveSettings
                     {
                         SaveLocation = SaveLocation.Others,
@@ -389,11 +389,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Tests
         /* ----------------------------------------------------------------- */
         private static string FullName(string path)
         {
-            var io   = new Operator();
+            var io   = new IO();
             var asm  = Assembly.GetExecutingAssembly().Location;
             var root = io.Get(asm).DirectoryName;
             var dir  = typeof(ArchiveTest).FullName;
-            return io.Combine(root, ResultsName, dir, path);
+            return io.Combine(root, "Results", dir, path);
         }
 
         /* ----------------------------------------------------------------- */

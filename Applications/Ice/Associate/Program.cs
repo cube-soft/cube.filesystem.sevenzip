@@ -15,13 +15,12 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Log;
 using System;
 using System.Linq;
 using System.Reflection;
-using Cube.FileSystem.SevenZip.Ice;
-using Cube.Log;
 
-namespace Cube.FileSystem.SevenZip.App.Ice.Associate
+namespace Cube.FileSystem.SevenZip.Ice.App.Associate
 {
     /* --------------------------------------------------------------------- */
     ///
@@ -50,12 +49,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Associate
 
             try
             {
-                LogOperator.Configure();
-                LogOperator.Info(type, Assembly.GetExecutingAssembly());
-                LogOperator.Info(type, string.Join(" ", args));
+                Logger.Configure();
+                Logger.Info(type, Assembly.GetExecutingAssembly());
+                Logger.Info(type, string.Join(" ", args));
 
                 var settings = new SettingsFolder();
-                if (args.Length > 0 && args[0].ToLower() == "/uninstall") Clear(settings);
+                if (args.Length > 0 && args[0].ToLowerInvariant() == "/uninstall") Clear(settings);
                 else settings.Load();
 
                 var asm  = AssemblyReader.Default.Location;
@@ -63,8 +62,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Associate
                 var exe  = System.IO.Path.Combine(dir, "cubeice.exe");
                 var icon = $"{exe},{settings.Value.Associate.IconIndex}";
 
-                LogOperator.Info(type, $"FileName:{exe}");
-                LogOperator.Info(type, $"IconLocation:{icon}");
+                Logger.Info(type, $"FileName:{exe}");
+                Logger.Info(type, $"IconLocation:{icon}");
 
                 var registrar = new AssociateRegistrar(exe)
                 {
@@ -82,7 +81,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Associate
                     IntPtr.Zero
                 );
             }
-            catch (Exception err) { LogOperator.Error(type, err.ToString()); }
+            catch (Exception err) { Logger.Error(type, err.ToString()); }
         }
 
         /* ----------------------------------------------------------------- */

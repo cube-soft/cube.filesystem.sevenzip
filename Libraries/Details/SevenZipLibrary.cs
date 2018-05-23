@@ -179,7 +179,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (_handle != null && !_handle.IsClosed) _handle.Close();
         }
@@ -209,8 +209,8 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Fields
-        private OnceAction<bool> _dispose;
-        private SafeLibraryHandle _handle;
+        private readonly OnceAction<bool> _dispose;
+        private readonly SafeLibraryHandle _handle;
         #endregion
     }
 }

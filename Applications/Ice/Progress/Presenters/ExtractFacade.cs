@@ -15,15 +15,15 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Enumerations;
+using Cube.FileSystem.Files;
+using Cube.Forms;
+using Cube.Log;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Cube.Log;
-using Cube.FileSystem.Files;
-using Cube.FileSystem.SevenZip.Ice;
-using Cube.Enumerations;
 
-namespace Cube.FileSystem.SevenZip.App.Ice
+namespace Cube.FileSystem.SevenZip.Ice.App
 {
     /* --------------------------------------------------------------------- */
     ///
@@ -343,6 +343,8 @@ namespace Cube.FileSystem.SevenZip.App.Ice
                 case OverwriteMode.Rename:
                     Move(src, IO.Get(IO.GetUniqueName(dest)));
                     break;
+                default:
+                    break;
             }
         }
 
@@ -387,7 +389,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
             {
                 if (string.IsNullOrEmpty(item.FullName)) continue;
                 var root = GetRootDirectory(item, "*"); // Count all files as "*"
-                var key = root.ToLower();
+                var key = root.ToLowerInvariant();
                 if (!dest.ContainsKey(key)) dest.Add(key, root);
 
                 if (dest.Count >= 2) break;
@@ -479,7 +481,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenExtracting(object sender, ValueEventArgs<ArchiveItem> e) =>
+        private void WhenExtracting(object s, ValueEventArgs<ArchiveItem> e) =>
             Current = e.Value.FullName;
 
         /* ----------------------------------------------------------------- */
@@ -491,7 +493,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenExtracted(object sender, ValueEventArgs<ArchiveItem> e)
+        private void WhenExtracted(object s, ValueEventArgs<ArchiveItem> e)
         {
             var src  = IO.Get(IO.Combine(Tmp, e.Value.FullName));
             var dest = IO.Get(IO.Combine(Destination, e.Value.FullName));

@@ -117,6 +117,51 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CtxArchive" xml:space="preserve">
+    <value>圧縮</value>
+  </data>
+  <data name="CtxBZip2" xml:space="preserve">
+    <value>BZip2</value>
+  </data>
+  <data name="CtxDesktop" xml:space="preserve">
+    <value>デスクトップに解凍</value>
+  </data>
+  <data name="CtxDetails" xml:space="preserve">
+    <value>詳細設定</value>
+  </data>
+  <data name="CtxExtract" xml:space="preserve">
+    <value>解凍</value>
+  </data>
+  <data name="CtxGZip" xml:space="preserve">
+    <value>GZip</value>
+  </data>
+  <data name="CtxMail" xml:space="preserve">
+    <value>圧縮してメール送信</value>
+  </data>
+  <data name="CtxMyDocuments" xml:space="preserve">
+    <value>マイドキュメントに解凍</value>
+  </data>
+  <data name="CtxRuntime" xml:space="preserve">
+    <value>場所を指定して解凍</value>
+  </data>
+  <data name="CtxSevenZip" xml:space="preserve">
+    <value>7-Zip</value>
+  </data>
+  <data name="CtxSfx" xml:space="preserve">
+    <value>自己解凍形式</value>
+  </data>
+  <data name="CtxSource" xml:space="preserve">
+    <value>ここに解凍</value>
+  </data>
+  <data name="CtxXz" xml:space="preserve">
+    <value>Xz</value>
+  </data>
+  <data name="CtxZip" xml:space="preserve">
+    <value>Zip</value>
+  </data>
+  <data name="CtxZipPassword" xml:space="preserve">
+    <value>Zip (パスワード)</value>
+  </data>
   <data name="FileSuffix" xml:space="preserve">
     <value>ファイル</value>
   </data>

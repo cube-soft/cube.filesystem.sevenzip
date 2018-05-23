@@ -15,12 +15,11 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Log;
 using System;
 using System.Collections.Generic;
-using Cube.FileSystem.SevenZip.Ice;
-using Cube.Log;
 
-namespace Cube.FileSystem.SevenZip.App.Ice.Settings
+namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
@@ -146,7 +145,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings
         #endregion
 
         #region Fields
-        private IDictionary<string, bool> _prev = new Dictionary<string, bool>();
+        private readonly IDictionary<string, bool> _prev = new Dictionary<string, bool>();
         #endregion
     }
 }

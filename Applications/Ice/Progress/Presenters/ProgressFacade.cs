@@ -15,16 +15,16 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Enumerations;
+using Cube.Forms;
+using Cube.Log;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using Cube.FileSystem.SevenZip.Ice;
-using Cube.Log;
-using Cube.Enumerations;
 
-namespace Cube.FileSystem.SevenZip.App.Ice
+namespace Cube.FileSystem.SevenZip.Ice.App
 {
     /* --------------------------------------------------------------------- */
     ///
@@ -51,12 +51,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// <param name="settings">設定情報</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ProgressFacade(Request request, SettingsFolder settings)
+        protected ProgressFacade(Request request, SettingsFolder settings)
         {
             _dispose = new OnceAction<bool>(Dispose);
             Request  = request;
             Settings = settings;
-            IO       = new AfsOperator();
+            IO       = new AfsIO();
 
             IO.Failed += WhenFailed;
             _timer.Elapsed += (s, e) => OnProgress(ValueEventArgs.Create(Report));
@@ -185,7 +185,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Operator IO { get; }
+        public IO IO { get; }
 
         #endregion
 
@@ -202,7 +202,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ValueEventHandler<ArchiveReport> Progress;
+        public event ValueEventHandler<ArchiveReport> Progress;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -229,7 +229,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public EventHandler ProgressReset;
+        public event EventHandler ProgressReset;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -256,7 +256,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public PathQueryEventHandler DestinationRequested;
+        public event PathQueryEventHandler DestinationRequested;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -283,7 +283,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public QueryEventHandler<string, string> PasswordRequested;
+        public event QueryEventHandler<string, string> PasswordRequested;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -519,8 +519,11 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
             var info = IO.Get(path);
             var src  = info.IsDirectory ? info.FullName : info.DirectoryName;
-            var cmp  = Environment.GetFolderPath(Environment.SpecialFolder.Desktop).ToLower();
-            if (mode == OpenDirectoryMethod.OpenNotDesktop && src.ToLower().CompareTo(cmp) == 0) return;
+            var cmp  = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            var skip = mode == OpenDirectoryMethod.OpenNotDesktop &&
+                       src.Equals(cmp, StringComparison.InvariantCultureIgnoreCase);
+
+            if (skip) return;
 
             var exec = !string.IsNullOrEmpty(Settings.Value.Explorer) ?
                        Settings.Value.Explorer :
@@ -546,7 +549,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         {
             this.LogError(err.ToString());
             if (!Settings.Value.ErrorReport) return;
-            OnMessageReceived(new MessageEventArgs { Message = err.Message });
+            OnMessageReceived(new MessageEventArgs(err.Message));
         }
 
         /* ----------------------------------------------------------------- */
@@ -558,7 +561,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected KeyValuePair<SaveLocation, string> GetSaveLocation(GeneralSettings settings, Format format, string query)
+        protected KeyValuePair<SaveLocation, string> GetSaveLocation(ArchiveSettingsBase settings, Format format, string query)
         {
             var key = Request.Location != SaveLocation.Unknown ?
                       Request.Location :
@@ -654,7 +657,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetSavePath(SaveLocation key, GeneralSettings settings, Format format, string query)
+        private string GetSavePath(SaveLocation key, ArchiveSettingsBase settings, Format format, string query)
         {
             switch (key)
             {
@@ -690,19 +693,17 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenFailed(object sender, FailedEventArgs e)
+        private void WhenFailed(object s, FailedEventArgs e)
         {
             var sb = new System.Text.StringBuilder();
             foreach (var path in e.Paths) sb.AppendLine(path);
             sb.Append($"{e.Name} {e.Exception.Message}");
 
-            var ev = new MessageEventArgs
-            {
-                Message = sb.ToString(),
-                Buttons = MessageBoxButtons.RetryCancel,
-                Icon    = MessageBoxIcon.Warning,
-                Result  = DialogResult.Cancel,
-            };
+            var ev = new MessageEventArgs(
+                sb.ToString(),
+                MessageBoxButtons.RetryCancel,
+                MessageBoxIcon.Warning
+            );
 
             OnMessageReceived(ev);
             this.LogWarn(sb.ToString());
@@ -714,12 +715,12 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         #endregion
 
         #region Fields
-        private OnceAction<bool> _dispose;
+        private readonly OnceAction<bool> _dispose;
+        private readonly System.Timers.Timer _timer = new System.Timers.Timer(100.0);
+        private readonly CancellationTokenSource _cancel = new CancellationTokenSource();
+        private readonly ManualResetEvent _wait = new ManualResetEvent(true);
         private string _dest;
         private string _tmp;
-        private System.Timers.Timer _timer = new System.Timers.Timer(100.0);
-        private CancellationTokenSource _cancel = new CancellationTokenSource();
-        private ManualResetEvent _wait = new ManualResetEvent(true);
         #endregion
     }
 }

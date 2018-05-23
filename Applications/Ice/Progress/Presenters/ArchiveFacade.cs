@@ -15,12 +15,11 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Log;
 using System;
 using System.Linq;
-using Cube.FileSystem.SevenZip.Ice;
-using Cube.Log;
 
-namespace Cube.FileSystem.SevenZip.App.Ice
+namespace Cube.FileSystem.SevenZip.Ice.App
 {
     /* --------------------------------------------------------------------- */
     ///
@@ -56,51 +55,51 @@ namespace Cube.FileSystem.SevenZip.App.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Details
+        /// RtSettings
         ///
         /// <summary>
         /// 圧縮処理の実行時詳細設定を取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveDetails Details { get; private set; }
+        public ArchiveRtSettings RtSettings { get; private set; }
 
         #endregion
 
         #region Events
 
-        #region DetailsRequested
+        #region RtSettingsRequested
 
         /* ----------------------------------------------------------------- */
         ///
-        /// DetailsRequested
+        /// RtSettingsRequested
         ///
         /// <summary>
         /// 圧縮の詳細設定が要求された時に発生するイベントです。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public event QueryEventHandler<string, ArchiveDetails> DetailsRequested;
+        public event QueryEventHandler<string, ArchiveRtSettings> RtSettingsRequested;
 
         /* ----------------------------------------------------------------- */
         ///
-        /// RaiseDetailsRequested
+        /// RaiseRtSettingsRequested
         ///
         /// <summary>
-        /// DetailsRequested イベントを発生させます。
+        /// RuntimeSettingsRequested イベントを発生させます。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void RaiseDetailsRequested()
+        private void RaiseRtSettingsRequested()
         {
             var info = IO.Get(Request.Sources.First());
             var path = IO.Combine(info.DirectoryName, $"{info.NameWithoutExtension}.zip");
 
-            var e = new QueryEventArgs<string, ArchiveDetails>(path, true);
-            DetailsRequested?.Invoke(this, e);
+            var e = new QueryEventArgs<string, ArchiveRtSettings>(path, true);
+            RtSettingsRequested?.Invoke(this, e);
             if (e.Cancel) throw new OperationCanceledException();
 
-            Details = e.Result;
+            RtSettings = e.Result;
         }
 
         #endregion
@@ -179,17 +178,17 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         private void Archive()
         {
             var fmt   = GetFormat();
-            var dest  = GetTmp(fmt);
-            var query = !string.IsNullOrEmpty(Details.Password) || Request.Password ?
+            var dest  = GetTmp();
+            var query = !string.IsNullOrEmpty(RtSettings.Password) || Request.Password ?
                         new Query<string, string>(x => RaisePasswordRequested(x)) :
                         null;
 
-            System.Diagnostics.Debug.Assert(Details != null);
-            this.LogDebug(string.Format("Format:{0}\tMethod:{1}", fmt, Details.CompressionMethod));
+            System.Diagnostics.Debug.Assert(RtSettings != null);
+            this.LogDebug(string.Format("Format:{0}\tMethod:{1}", fmt, RtSettings.CompressionMethod));
 
             using (var writer = new ArchiveWriter(fmt, IO))
             {
-                writer.Option = Details.ToOption(Settings);
+                writer.Option = RtSettings.ToOption(Settings);
                 if (Settings.Value.Archive.Filtering) writer.Filters = Settings.Value.GetFilters();
                 foreach (var item in Request.Sources) writer.Add(item);
                 ProgressStart();
@@ -220,20 +219,20 @@ namespace Cube.FileSystem.SevenZip.App.Ice
                 case Format.Zip:
                 case Format.SevenZip:
                 case Format.Sfx:
-                    Details = new ArchiveDetails(f);
+                    RtSettings = new ArchiveRtSettings(f);
                     break;
                 case Format.BZip2:
                 case Format.GZip:
                 case Format.XZ:
-                    Details = new ArchiveDetails(Format.Tar);
-                    Details.CompressionMethod = f.ToMethod();
+                    RtSettings = new ArchiveRtSettings(Format.Tar);
+                    RtSettings.CompressionMethod = f.ToMethod();
                     break;
                 default:
-                    RaiseDetailsRequested();
+                    RaiseRtSettingsRequested();
                     break;
             }
 
-            return Details.Format;
+            return RtSettings.Format;
         }
 
         /* ----------------------------------------------------------------- */
@@ -245,9 +244,9 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetTmp(Format format)
+        private string GetTmp()
         {
-            Destination = GetDestination(format);
+            Destination = GetDestination();
             var info = IO.Get(Destination);
             SetTmp(info.DirectoryName);
             return Tmp;
@@ -262,9 +261,9 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetDestination(Format format)
+        private string GetDestination()
         {
-            if (!string.IsNullOrEmpty(Details?.Path)) return Details.Path;
+            if (!string.IsNullOrEmpty(RtSettings?.Path)) return RtSettings.Path;
 
             var cvt = new PathConverter(Request.Sources.First(), Request.Format, IO);
             var kv = GetSaveLocation(Settings.Value.Archive, cvt.ResultFormat, cvt.Result.FullName);
@@ -292,9 +291,9 @@ namespace Cube.FileSystem.SevenZip.App.Ice
         /* ----------------------------------------------------------------- */
         private void RaisePasswordRequested(QueryEventArgs<string, string> e)
         {
-            if (!string.IsNullOrEmpty(Details.Password))
+            if (!string.IsNullOrEmpty(RtSettings.Password))
             {
-                e.Result = Details.Password;
+                e.Result = RtSettings.Password;
                 e.Cancel = false;
             }
             else OnPasswordRequested(e);

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Cube.FileSystem.SevenZip.App.Ice.Settings.Properties {
+namespace Cube.FileSystem.SevenZip.Ice.App.Settings.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Cube.FileSystem.SevenZip.App.Ice.Settings.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Cube.FileSystem.SevenZip.Ice.App.Settings.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,6 +61,26 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings.Properties {
         }
         
         /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap Archive {
+            get {
+                object obj = ResourceManager.GetObject("Archive", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap Extract {
+            get {
+                object obj = ResourceManager.GetObject("Extract", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   cubeice-associate.exe に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string FileAssociate {
@@ -76,6 +96,15 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings.Properties {
             get {
                 object obj = ResourceManager.GetObject("Logo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   メニューを追加 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuAdd {
+            get {
+                return ResourceManager.GetString("MenuAdd", resourceCulture);
             }
         }
         
@@ -100,9 +129,18 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings.Properties {
         /// <summary>
         ///   詳細設定 に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        internal static string MenuDetail {
+        internal static string MenuDetails {
             get {
-                return ResourceManager.GetString("MenuDetail", resourceCulture);
+                return ResourceManager.GetString("MenuDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   下に移動 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuDown {
+            get {
+                return ResourceManager.GetString("MenuDown", resourceCulture);
             }
         }
         
@@ -134,6 +172,33 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings.Properties {
         }
         
         /// <summary>
+        ///   新しいカテゴリー に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuNewCategory {
+            get {
+                return ResourceManager.GetString("MenuNewCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   削除 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuRemove {
+            get {
+                return ResourceManager.GetString("MenuRemove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   名前を変更 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuRename {
+            get {
+                return ResourceManager.GetString("MenuRename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   場所を指定して解凍 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MenuRuntime {
@@ -157,6 +222,24 @@ namespace Cube.FileSystem.SevenZip.App.Ice.Settings.Properties {
         internal static string MenuSfx {
             get {
                 return ResourceManager.GetString("MenuSfx", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   メニュートップ に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuTop {
+            get {
+                return ResourceManager.GetString("MenuTop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   上に移動 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuUp {
+            get {
+                return ResourceManager.GetString("MenuUp", resourceCulture);
             }
         }
         
