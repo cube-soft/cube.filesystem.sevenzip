@@ -74,16 +74,11 @@
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
     <AssemblyOriginatorKeyFile>..\..\..\Cube.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AsyncBridge">
       <HintPath>..\..\..\..\packages\AsyncBridge.0.3.1\lib\net35-Client\AsyncBridge.dll</HintPath>
-    </Reference>
-    <Reference Include="AlphaFS">
-      <HintPath>..\..\..\..\packages\AlphaFS.2.2.1\lib\net35\AlphaFS.dll</HintPath>
     </Reference>
     <Reference Include="Cube.Backwards">
       <HintPath>..\..\..\..\packages\Cube.Backwards.1.4.1\lib\net35\Cube.Backwards.dll</HintPath>

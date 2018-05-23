@@ -79,9 +79,6 @@
     <AssemblyOriginatorKeyFile>..\Cube.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AlphaFS">
-      <HintPath>..\..\packages\AlphaFS.2.2.1\lib\net35\AlphaFS.dll</HintPath>
-    </Reference>
     <Reference Include="Cube.Backwards">
       <HintPath>..\..\packages\Cube.Backwards.1.4.1\lib\net35\Cube.Backwards.dll</HintPath>
     </Reference>
