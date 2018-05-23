@@ -102,6 +102,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Details\GlobalSetup.cs" />
     <Compile Include="Details\ProgressMockView.cs" />
     <Compile Include="Details\ProgressMockViewFactory.cs" />
     <Compile Include="Details\ProgressMockViewHelper.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="Packages.config" />
     <None Include="Examples\Sample 00..01\FilterDirectory\Filter.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Forms;
+using Cube.Forms.Images;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
