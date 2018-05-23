@@ -38,7 +38,7 @@ artifacts:
     - path: CubeIce.Settings
     - path: CubeIce.Settings.Associate
 test_script:
-    - >-
+    - >
       ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe
       -register:user
       -target:nunit3-console.exe
@@ -48,7 +48,7 @@ test_script:
       -hideskipped:All
       -output:CoverResult.xml
       -filter:"+[*]* -[AlphaFS]* -[*]*NativeMethods -[*]*Properties.*"
-    - >-
+    - >
       ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe
       -register:user
       -target:nunit3-console.exe
