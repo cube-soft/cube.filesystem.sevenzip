@@ -15,11 +15,11 @@
 /// limitations under the License.
 ///
 /* ------------------------------------------------------------------------- */
+#include "Config.h"
 #include "ContextMenu.h"
 #include "ContextPresetMenu.h"
 #include "Encoding.h"
 #include "Log.h"
-#include <shlobj.h>
 #include <shlwapi.h>
 #include <sstream>
 
