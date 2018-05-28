@@ -420,7 +420,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         private ArchivePresenter Create(Request request)
         {
             var v = Views.CreateProgressView();
-            var e = new EventHub();
+            var e = new Aggregator();
             var s = new SettingsFolder();
 
             s.Value.Filters = "Filter.txt|FilterDirectory";

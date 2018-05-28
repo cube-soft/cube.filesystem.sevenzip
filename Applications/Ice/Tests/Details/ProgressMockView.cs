@@ -162,7 +162,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         {
             base.Show();
             Start();
-            EventHub.GetEvents().Show.Publish();
+            Aggregator.GetEvents().Show.Publish();
         }
 
         #endregion
