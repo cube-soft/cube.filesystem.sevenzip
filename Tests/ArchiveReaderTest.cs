@@ -439,7 +439,6 @@ namespace Cube.FileSystem.SevenZip.Tests
             {
                 foreach (var item in archive.Items)
                 {
-                    Assert.That(item.Format, Is.EqualTo(Format.Zip));
                     item.CreateDirectory(dest);
                     item.SetAttributes(dest);
                 }

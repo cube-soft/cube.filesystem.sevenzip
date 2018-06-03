@@ -46,16 +46,14 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /// <param name="archive">実装オブジェクト</param>
-        /// <param name="format">圧縮形式</param>
         /// <param name="index">インデックス</param>
         /// <param name="password">パスワード取得用オブジェクト</param>
         /// <param name="io">入出力用のオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveItemController(IInArchive archive, Format format, int index,
+        public ArchiveItemController(IInArchive archive, int index,
             IQuery<string, string> password, IO io)
         {
-            Format    = format;
             Index     = index;
             _archive  = archive;
             _password = password;
@@ -65,17 +63,6 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Format
-        ///
-        /// <summary>
-        /// 圧縮ファイル形式を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public Format Format { get; }
 
         /* ----------------------------------------------------------------- */
         ///
