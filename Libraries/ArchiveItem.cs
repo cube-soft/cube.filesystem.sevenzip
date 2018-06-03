@@ -43,18 +43,12 @@ namespace Cube.FileSystem.SevenZip
         /// オブジェクトを初期化します。
         /// </summary>
         ///
-        /// <param name="format">圧縮ファイル形式</param>
         /// <param name="src">圧縮ファイルのパス</param>
-        /// <param name="index">圧縮ファイル中のインデックス</param>
         /// <param name="controller">情報更新用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        internal ArchiveItem(Format format, string src, int index,
-            ArchiveItemController controller) : base(src, controller)
-        {
-            Format   = format;
-            Index    = index;
-        }
+        internal ArchiveItem(string src, ArchiveItemController controller) :
+            base(src, controller) { }
 
         #endregion
 
@@ -69,7 +63,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Format Format { get; }
+        public Format Format => GetController().Format;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -80,7 +74,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public int Index { get; }
+        public int Index => GetController().Index;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -96,7 +90,7 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public string RawName { get; set; }
+        public string RawName => GetController().RawName;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -107,7 +101,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool Encrypted { get; set; }
+        public bool Encrypted => GetController().Encrypted;
 
         #endregion
 
@@ -133,11 +127,7 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public bool Match(IEnumerable<string> names)
-        {
-            Debug.Assert(Controller is ArchiveItemController);
-            return ((ArchiveItemController)Controller).Match(names);
-        }
+        public bool Match(IEnumerable<string> names) => GetController().Match(names);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -164,10 +154,26 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="progress">進捗報告用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Extract(string directory, IProgress<ArchiveReport> progress)
+        public void Extract(string directory, IProgress<ArchiveReport> progress) =>
+            GetController().Extract(this, directory, progress);
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetController
+        ///
+        /// <summary>
+        /// ArchiveItemController オブジェクトを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private ArchiveItemController GetController()
         {
             Debug.Assert(Controller is ArchiveItemController);
-            ((ArchiveItemController)Controller).Extract(this, directory, progress);
+            return (ArchiveItemController)Controller;
         }
 
         #endregion

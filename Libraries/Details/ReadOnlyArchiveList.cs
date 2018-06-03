@@ -31,7 +31,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal class ReadOnlyArchiveList: IReadOnlyList<ArchiveItem>
+    internal class ReadOnlyArchiveList : IReadOnlyList<ArchiveItem>
     {
         #region Constructors
 
@@ -105,10 +105,8 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public ArchiveItem this[int index] => new ArchiveItem(
-            Format,
             Source,
-            index,
-            new ArchiveItemController(_archive, Password, _io)
+            new ArchiveItemController(_archive, Format, index, Password, _io)
         );
 
         /* ----------------------------------------------------------------- */

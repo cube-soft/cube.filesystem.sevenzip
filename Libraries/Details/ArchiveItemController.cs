@@ -47,16 +47,74 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /// <param name="archive">実装オブジェクト</param>
+        /// <param name="format">圧縮形式</param>
+        /// <param name="index">インデックス</param>
         /// <param name="password">パスワード取得用オブジェクト</param>
         /// <param name="io">入出力用のオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveItemController(IInArchive archive, IQuery<string, string> password, IO io)
+        public ArchiveItemController(IInArchive archive, Format format, int index,
+            IQuery<string, string> password, IO io)
         {
+            Format    = format;
+            Index     = index;
             _archive  = archive;
             _password = password;
             _io       = io;
         }
+
+        #endregion
+
+        #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Format
+        ///
+        /// <summary>
+        /// 圧縮ファイル形式を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public Format Format { get; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Index
+        ///
+        /// <summary>
+        /// 圧縮ファイル中のインデックスを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public int Index { get; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// RawName
+        ///
+        /// <summary>
+        /// 圧縮ファイル中の相対パスのオリジナルの文字列を取得します。
+        /// </summary>
+        ///
+        /// <remarks>
+        /// RawName の内容に対して、Windows で使用不可能な文字列に対する
+        /// エスケープ処理を実行した結果が FullName となります。
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string RawName { get; private set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Encrypted
+        ///
+        /// <summary>
+        /// 暗号化されているかどうかを示す値を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public bool Encrypted { get; private set; }
 
         #endregion
 
@@ -103,14 +161,14 @@ namespace Cube.FileSystem.SevenZip
                 return;
             }
 
-            using (var cb = new ArchiveExtractCallback(src.Source, directory, new[] { src }, _io))
+            using (var cb = new ArchiveExtractCallback(src.FullName, directory, new[] { src }, _io))
             {
                 cb.TotalCount = 1;
                 cb.TotalBytes = src.Length;
                 cb.Password   = _password;
                 cb.Progress   = progress;
 
-                _archive.Extract(new[] { (uint)src.Index }, 1, 0, cb);
+                _archive.Extract(new[] { (uint)Index }, 1, 0, cb);
                 ThrowIfError(src, cb.Result);
             }
         }
@@ -133,9 +191,10 @@ namespace Cube.FileSystem.SevenZip
             var cvt = src.TryCast<ArchiveItem>();
             Debug.Assert(cvt != null);
 
+            RawName   = GetPath(cvt);
+            Encrypted = Get<bool>(cvt, ItemPropId.Encrypted);
+
             cvt.Exists         = true;
-            cvt.RawName        = GetPath(cvt);
-            cvt.Encrypted      = Get<bool>(cvt, ItemPropId.Encrypted);
             cvt.IsDirectory    = Get<bool>(cvt, ItemPropId.IsDirectory);
             cvt.Attributes     = (System.IO.FileAttributes)Get<uint>(cvt, ItemPropId.Attributes);
             cvt.Length         = (long)Get<ulong>(cvt, ItemPropId.Size);
@@ -176,7 +235,7 @@ namespace Cube.FileSystem.SevenZip
         private T Get<T>(ArchiveItem src, ItemPropId pid)
         {
             var var = new PropVariant();
-            _archive.GetProperty((uint)src.Index, pid, ref var);
+            _archive.GetProperty((uint)Index, pid, ref var);
 
             var obj = var.Object;
             return (obj != null && obj is T) ? (T)obj : default(T);
@@ -208,7 +267,7 @@ namespace Cube.FileSystem.SevenZip
             var fmt = Formats.FromExtension(i1.Extension);
             if (fmt != Format.Unknown) return i1.Name;
 
-            var name = (src.Index == 0) ? i1.Name : $"{i1.Name}({src.Index})";
+            var name = (Index == 0) ? i1.Name : $"{i1.Name}({Index})";
             return IsTarExtension(i0.Extension) ? $"{name}.tar" : name;
         }
 
