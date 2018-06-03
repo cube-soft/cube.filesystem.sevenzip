@@ -172,7 +172,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public override void Invoke(Information src)
+        public override void Invoke(InformationCore src)
         {
             RawName   = GetPath(src.Source);
             Encrypted = Get<bool>(src.Source, ItemPropId.Encrypted);
