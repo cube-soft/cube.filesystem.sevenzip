@@ -17,7 +17,6 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.FileSystem.SevenZip.Archives;
-using Cube.Generics;
 using Cube.Log;
 using System;
 using System.Collections.Generic;
@@ -188,21 +187,18 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public override void Invoke(Information src)
         {
-            var cvt = src.TryCast<ArchiveItem>();
-            Debug.Assert(cvt != null);
+            RawName   = GetPath(src.Source);
+            Encrypted = Get<bool>(src.Source, ItemPropId.Encrypted);
 
-            RawName   = GetPath(cvt);
-            Encrypted = Get<bool>(cvt, ItemPropId.Encrypted);
+            src.Exists         = true;
+            src.IsDirectory    = Get<bool>(src.Source, ItemPropId.IsDirectory);
+            src.Attributes     = (System.IO.FileAttributes)Get<uint>(src.Source, ItemPropId.Attributes);
+            src.Length         = (long)Get<ulong>(src.Source, ItemPropId.Size);
+            src.CreationTime   = Get<DateTime>(src.Source, ItemPropId.CreationTime);
+            src.LastWriteTime  = Get<DateTime>(src.Source, ItemPropId.LastWriteTime);
+            src.LastAccessTime = Get<DateTime>(src.Source, ItemPropId.LastAccessTime);
 
-            cvt.Exists         = true;
-            cvt.IsDirectory    = Get<bool>(cvt, ItemPropId.IsDirectory);
-            cvt.Attributes     = (System.IO.FileAttributes)Get<uint>(cvt, ItemPropId.Attributes);
-            cvt.Length         = (long)Get<ulong>(cvt, ItemPropId.Size);
-            cvt.CreationTime   = Get<DateTime>(cvt, ItemPropId.CreationTime);
-            cvt.LastWriteTime  = Get<DateTime>(cvt, ItemPropId.LastWriteTime);
-            cvt.LastAccessTime = Get<DateTime>(cvt, ItemPropId.LastAccessTime);
-
-            _filter = new PathFilter(cvt.RawName)
+            _filter = new PathFilter(RawName)
             {
                 AllowParentDirectory  = false,
                 AllowDriveLetter      = false,
@@ -211,16 +207,16 @@ namespace Cube.FileSystem.SevenZip
                 AllowUnc              = false,
             };
 
-            cvt.FullName = _filter.EscapedPath;
+            src.FullName = _filter.EscapedPath;
             if (string.IsNullOrEmpty(_filter.EscapedPath)) return;
 
             var info = _io.Get(_filter.EscapedPath);
-            cvt.Name                 = info.Name;
-            cvt.NameWithoutExtension = info.NameWithoutExtension;
-            cvt.Extension            = info.Extension;
-            cvt.DirectoryName        = info.DirectoryName;
+            src.Name                 = info.Name;
+            src.NameWithoutExtension = info.NameWithoutExtension;
+            src.Extension            = info.Extension;
+            src.DirectoryName        = info.DirectoryName;
 
-            if (cvt.FullName != cvt.RawName) this.LogDebug($"Escape:{cvt.FullName}\tRaw:{cvt.RawName}");
+            if (src.FullName != RawName) this.LogDebug($"Escape:{src.FullName}\tRaw:{RawName}");
         }
 
         /* ----------------------------------------------------------------- */
@@ -232,7 +228,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private T Get<T>(ArchiveItem src, ItemPropId pid)
+        private T Get<T>(string src, ItemPropId pid)
         {
             var var = new PropVariant();
             _archive.GetProperty((uint)Index, pid, ref var);
@@ -256,14 +252,13 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetPath(ArchiveItem src)
+        private string GetPath(string src)
         {
             var dest = Get<string>(src, ItemPropId.Path);
             if (!string.IsNullOrEmpty(dest)) return dest;
 
-            var i0 = _io.Get(src.Source);
-            var i1 = _io.Get(i0.NameWithoutExtension);
-
+            var i0  = _io.Get(src);
+            var i1  = _io.Get(i0.NameWithoutExtension);
             var fmt = Formats.FromExtension(i1.Extension);
             if (fmt != Format.Unknown) return i1.Name;
 
