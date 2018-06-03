@@ -17,80 +17,68 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.FileSystem.SevenZip.Archives;
+using Cube.Generics;
 using Cube.Log;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveItemImpl
+    /// ArchiveItemController
     ///
     /// <summary>
-    /// ArchiveItem の実装クラスです。
+    /// ArchiveItem の情報を更新するためのクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal class ArchiveItemImpl : ArchiveItem
+    internal class ArchiveItemController : Information.RefreshController
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveItemImpl
+        /// ArchiveItemController
         ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         ///
         /// <param name="archive">実装オブジェクト</param>
-        /// <param name="format">圧縮ファイル形式</param>
-        /// <param name="src">圧縮ファイルのパス</param>
-        /// <param name="index">圧縮ファイル中のインデックス</param>
         /// <param name="password">パスワード取得用オブジェクト</param>
         /// <param name="io">入出力用のオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveItemImpl(IInArchive archive, Format format, string src, int index,
-            IQuery<string, string> password, IO io)
-            : base(format, src, index, password, io)
+        public ArchiveItemController(IInArchive archive, IQuery<string, string> password, IO io)
         {
-            _archive = archive;
-
-            Exists         = true;
-            RawName        = GetPath();
-            Encrypted      = Get<bool>(ItemPropId.Encrypted);
-            IsDirectory    = Get<bool>(ItemPropId.IsDirectory);
-            Attributes     = (System.IO.FileAttributes)Get<uint>(ItemPropId.Attributes);
-            Length         = (long)Get<ulong>(ItemPropId.Size);
-            CreationTime   = Get<DateTime>(ItemPropId.CreationTime);
-            LastWriteTime  = Get<DateTime>(ItemPropId.LastWriteTime);
-            LastAccessTime = Get<DateTime>(ItemPropId.LastAccessTime);
-
-            Filter = new PathFilter(RawName)
-            {
-                AllowParentDirectory  = false,
-                AllowDriveLetter      = false,
-                AllowCurrentDirectory = false,
-                AllowInactivation     = false,
-                AllowUnc              = false,
-            };
-
-            FullName = Filter.EscapedPath;
-            if (string.IsNullOrEmpty(Filter.EscapedPath)) return;
-
-            var info = IO.Get(Filter.EscapedPath);
-            Name                 = info.Name;
-            NameWithoutExtension = info.NameWithoutExtension;
-            Extension            = info.Extension;
-            DirectoryName        = info.DirectoryName;
-
-            if (FullName != RawName) this.LogDebug($"Escape:{FullName}\tRaw:{RawName}");
+            _archive  = archive;
+            _password = password;
+            _io       = io;
         }
 
         #endregion
 
         #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Match
+        ///
+        /// <summary>
+        /// 指定されたファイル名またはディレクトリ名のいずれか 1 つでも
+        /// パス中のどこかに存在するかどうかを判別します。
+        /// </summary>
+        ///
+        /// <param name="names">
+        /// 判別するファイル名またはディレクトリ名一覧
+        /// </param>
+        ///
+        /// <returns>存在するかどうかを示す値</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public bool Match(IEnumerable<string> names) => _filter.MatchAny(names);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -100,35 +88,81 @@ namespace Cube.FileSystem.SevenZip
         /// 展開した内容を保存します。
         /// </summary>
         ///
+        /// <param name="src">展開項目</param>
         /// <param name="directory">保存ディレクトリ</param>
         /// <param name="progress">進捗報告用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public override void Extract(string directory, IProgress<ArchiveReport> progress)
+        public void Extract(ArchiveItem src, string directory, IProgress<ArchiveReport> progress)
         {
-            System.Diagnostics.Debug.Assert(!string.IsNullOrEmpty(FullName));
+            Debug.Assert(!string.IsNullOrEmpty(src.FullName));
 
-            if (IsDirectory)
+            if (src.IsDirectory)
             {
-                this.CreateDirectory(directory, IO);
+                src.CreateDirectory(directory, _io);
                 return;
             }
 
-            using (var cb = new ArchiveExtractCallback(Source, directory, new[] { this }, IO))
+            using (var cb = new ArchiveExtractCallback(src.Source, directory, new[] { src }, _io))
             {
                 cb.TotalCount = 1;
-                cb.TotalBytes = Length;
-                cb.Password   = Password;
+                cb.TotalBytes = src.Length;
+                cb.Password   = _password;
                 cb.Progress   = progress;
 
-                _archive.Extract(new[] { (uint)Index }, 1, 0, cb);
-                ThrowIfError(cb.Result);
+                _archive.Extract(new[] { (uint)src.Index }, 1, 0, cb);
+                ThrowIfError(src, cb.Result);
             }
         }
 
         #endregion
 
         #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Invoke
+        ///
+        /// <summary>
+        /// 情報を更新します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public override void Invoke(Information src)
+        {
+            var cvt = src.TryCast<ArchiveItem>();
+            Debug.Assert(cvt != null);
+
+            cvt.Exists         = true;
+            cvt.RawName        = GetPath(cvt);
+            cvt.Encrypted      = Get<bool>(cvt, ItemPropId.Encrypted);
+            cvt.IsDirectory    = Get<bool>(cvt, ItemPropId.IsDirectory);
+            cvt.Attributes     = (System.IO.FileAttributes)Get<uint>(cvt, ItemPropId.Attributes);
+            cvt.Length         = (long)Get<ulong>(cvt, ItemPropId.Size);
+            cvt.CreationTime   = Get<DateTime>(cvt, ItemPropId.CreationTime);
+            cvt.LastWriteTime  = Get<DateTime>(cvt, ItemPropId.LastWriteTime);
+            cvt.LastAccessTime = Get<DateTime>(cvt, ItemPropId.LastAccessTime);
+
+            _filter = new PathFilter(cvt.RawName)
+            {
+                AllowParentDirectory  = false,
+                AllowDriveLetter      = false,
+                AllowCurrentDirectory = false,
+                AllowInactivation     = false,
+                AllowUnc              = false,
+            };
+
+            cvt.FullName = _filter.EscapedPath;
+            if (string.IsNullOrEmpty(_filter.EscapedPath)) return;
+
+            var info = _io.Get(_filter.EscapedPath);
+            cvt.Name                 = info.Name;
+            cvt.NameWithoutExtension = info.NameWithoutExtension;
+            cvt.Extension            = info.Extension;
+            cvt.DirectoryName        = info.DirectoryName;
+
+            if (cvt.FullName != cvt.RawName) this.LogDebug($"Escape:{cvt.FullName}\tRaw:{cvt.RawName}");
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -139,10 +173,10 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private T Get<T>(ItemPropId pid)
+        private T Get<T>(ArchiveItem src, ItemPropId pid)
         {
             var var = new PropVariant();
-            _archive.GetProperty((uint)Index, pid, ref var);
+            _archive.GetProperty((uint)src.Index, pid, ref var);
 
             var obj = var.Object;
             return (obj != null && obj is T) ? (T)obj : default(T);
@@ -163,18 +197,18 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetPath()
+        private string GetPath(ArchiveItem src)
         {
-            var dest = Get<string>(ItemPropId.Path);
+            var dest = Get<string>(src, ItemPropId.Path);
             if (!string.IsNullOrEmpty(dest)) return dest;
 
-            var i0 = IO.Get(Source);
-            var i1 = IO.Get(i0.NameWithoutExtension);
+            var i0 = _io.Get(src.Source);
+            var i1 = _io.Get(i0.NameWithoutExtension);
 
             var fmt = Formats.FromExtension(i1.Extension);
             if (fmt != Format.Unknown) return i1.Name;
 
-            var name = (Index == 0) ? i1.Name : $"{i1.Name}({Index})";
+            var name = (src.Index == 0) ? i1.Name : $"{i1.Name}({src.Index})";
             return IsTarExtension(i0.Extension) ? $"{name}.tar" : name;
         }
 
@@ -204,26 +238,26 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void ThrowIfError(OperationResult result)
+        private void ThrowIfError(ArchiveItem src, OperationResult result)
         {
             switch (result)
             {
                 case OperationResult.OK:
                     break;
                 case OperationResult.DataError:
-                    if (Encrypted)
+                    if (src.Encrypted)
                     {
                         ResetPassword();
                         throw new EncryptionException();
                     }
-                    else throw new System.IO.IOException($"{FullName} ({result})");
+                    else throw new System.IO.IOException($"{src.FullName} ({result})");
                 case OperationResult.WrongPassword:
                     ResetPassword();
                     throw new EncryptionException();
                 case OperationResult.UserCancel:
                     throw new OperationCanceledException();
                 default:
-                    throw new System.IO.IOException($"{FullName} ({result})");
+                    throw new System.IO.IOException($"{src.FullName} ({result})");
             }
         }
 
@@ -238,14 +272,17 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         private void ResetPassword()
         {
-            System.Diagnostics.Debug.Assert(Password is PasswordQuery);
-            ((PasswordQuery)Password).Reset();
+            Debug.Assert(_password is PasswordQuery);
+            ((PasswordQuery)_password).Reset();
         }
 
         #endregion
 
         #region Fields
         private readonly IInArchive _archive;
+        private readonly IO _io;
+        private readonly IQuery<string, string> _password;
+        private PathFilter _filter;
         #endregion
     }
 }

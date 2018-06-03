@@ -104,8 +104,12 @@ namespace Cube.FileSystem.SevenZip
         /// <returns>ArchiveItem オブジェクト</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveItem this[int index] =>
-            new ArchiveItemImpl(_archive, Format, Source, index, Password, _io);
+        public ArchiveItem this[int index] => new ArchiveItem(
+            Format,
+            Source,
+            index,
+            new ArchiveItemController(_archive, Password, _io)
+        );
 
         /* ----------------------------------------------------------------- */
         ///

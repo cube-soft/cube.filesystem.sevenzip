@@ -307,7 +307,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Move(IInformation src, IInformation dest)
+        private void Move(Information src, Information dest)
         {
             if (src.IsDirectory)
             {
@@ -332,7 +332,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Overwrite(IInformation src, IInformation dest)
+        private void Overwrite(Information src, Information dest)
         {
             switch (OverwriteMode & OverwriteMode.Operations)
             {
@@ -406,7 +406,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetRootDirectory(IInformation info, string alternate)
+        private string GetRootDirectory(Information info, string alternate)
         {
             var root = info.FullName.Split(
                 System.IO.Path.DirectorySeparatorChar,
@@ -463,7 +463,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void RaiseOverwriteRequested(IInformation src, IInformation dest)
+        private void RaiseOverwriteRequested(Information src, Information dest)
         {
             var e = new OverwriteEventArgs(src, dest);
             OnOverwriteRequested(e);

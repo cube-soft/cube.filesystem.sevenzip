@@ -155,7 +155,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IInformation Result => _result = _result ?? Invoke();
+        public Information Result => _result = _result ?? Invoke();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -182,7 +182,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private IInformation Invoke()
+        private Information Invoke()
         {
             var src  = IO.Get(Source);
             var tmp  = IO.Get(src.NameWithoutExtension);
@@ -243,7 +243,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         #endregion
 
         #region Fields
-        private IInformation _result;
+        private Information _result;
         #endregion
     }
 }

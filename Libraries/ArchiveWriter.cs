@@ -303,7 +303,7 @@ namespace Cube.FileSystem.SevenZip
             {
                 SaveCore(Format.Tar, tmp, password, progress, items);
 
-                var f = new List<FileItem> { new FileItem(tmp) };
+                var f = new List<FileItem> { _io.Get(tmp).ToFileItem() };
                 var m = (Option as TarOption)?.CompressionMethod ?? CompressionMethod.Copy;
 
                 switch (m)
@@ -368,19 +368,18 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void AddItem(IInformation info, string name)
+        private void AddItem(Information info, string name)
         {
-            var path = info.FullName;
-            if (CanRead(info)) _items.Add(new FileItem(path, name));
+            if (CanRead(info)) _items.Add(info.ToFileItem(name));
             if (!info.IsDirectory) return;
 
-            foreach (var file in _io.GetFiles(path))
+            foreach (var file in _io.GetFiles(info.FullName))
             {
                 var child = _io.Get(file);
-                _items.Add(new FileItem(child.FullName, _io.Combine(name, child.Name)));
+                _items.Add(child.ToFileItem(_io.Combine(name, child.Name)));
             }
 
-            foreach (var dir in _io.GetDirectories(path))
+            foreach (var dir in _io.GetDirectories(info.FullName))
             {
                 var child = _io.Get(dir);
                 AddItem(child, _io.Combine(name, child.Name));
@@ -414,7 +413,7 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        private bool CanRead(IInformation info)
+        private bool CanRead(Information info)
         {
             if (info.IsDirectory) return true;
             using (var stream = _io.OpenRead(info.FullName)) return stream != null;
