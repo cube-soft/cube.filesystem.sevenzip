@@ -26,20 +26,20 @@ namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveItemController
+    /// ArchiveRefreshable
     ///
     /// <summary>
     /// ArchiveItem の情報を更新するためのクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal class ArchiveItemController : Information.RefreshController
+    internal class ArchiveRefreshable : IRefreshable
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveItemController
+        /// ArchiveRefreshable
         ///
         /// <summary>
         /// オブジェクトを初期化します。
@@ -51,7 +51,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="io">入出力用のオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveItemController(IInArchive archive, int index,
+        public ArchiveRefreshable(IInArchive archive, int index,
             IQuery<string, string> password, IO io)
         {
             Index     = index;
@@ -105,6 +105,49 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Invoke
+        ///
+        /// <summary>
+        /// 情報を更新します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Invoke(InformationCore src)
+        {
+            RawName   = GetPath(src.Source);
+            Encrypted = Get<bool>(src.Source, ItemPropId.Encrypted);
+
+            src.Exists         = true;
+            src.IsDirectory    = Get<bool>(src.Source, ItemPropId.IsDirectory);
+            src.Attributes     = (System.IO.FileAttributes)Get<uint>(src.Source, ItemPropId.Attributes);
+            src.Length         = (long)Get<ulong>(src.Source, ItemPropId.Size);
+            src.CreationTime   = Get<DateTime>(src.Source, ItemPropId.CreationTime);
+            src.LastWriteTime  = Get<DateTime>(src.Source, ItemPropId.LastWriteTime);
+            src.LastAccessTime = Get<DateTime>(src.Source, ItemPropId.LastAccessTime);
+
+            _filter = new PathFilter(RawName)
+            {
+                AllowParentDirectory  = false,
+                AllowDriveLetter      = false,
+                AllowCurrentDirectory = false,
+                AllowInactivation     = false,
+                AllowUnc              = false,
+            };
+
+            src.FullName = _filter.EscapedPath;
+            if (string.IsNullOrEmpty(_filter.EscapedPath)) return;
+
+            var info = _io.Get(_filter.EscapedPath);
+            src.Name                 = info.Name;
+            src.NameWithoutExtension = info.NameWithoutExtension;
+            src.Extension            = info.Extension;
+            src.DirectoryName        = info.DirectoryName;
+
+            if (src.FullName != RawName) this.LogDebug($"Escape:{src.FullName}\tRaw:{RawName}");
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -162,49 +205,6 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Invoke
-        ///
-        /// <summary>
-        /// 情報を更新します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public override void Invoke(InformationCore src)
-        {
-            RawName   = GetPath(src.Source);
-            Encrypted = Get<bool>(src.Source, ItemPropId.Encrypted);
-
-            src.Exists         = true;
-            src.IsDirectory    = Get<bool>(src.Source, ItemPropId.IsDirectory);
-            src.Attributes     = (System.IO.FileAttributes)Get<uint>(src.Source, ItemPropId.Attributes);
-            src.Length         = (long)Get<ulong>(src.Source, ItemPropId.Size);
-            src.CreationTime   = Get<DateTime>(src.Source, ItemPropId.CreationTime);
-            src.LastWriteTime  = Get<DateTime>(src.Source, ItemPropId.LastWriteTime);
-            src.LastAccessTime = Get<DateTime>(src.Source, ItemPropId.LastAccessTime);
-
-            _filter = new PathFilter(RawName)
-            {
-                AllowParentDirectory  = false,
-                AllowDriveLetter      = false,
-                AllowCurrentDirectory = false,
-                AllowInactivation     = false,
-                AllowUnc              = false,
-            };
-
-            src.FullName = _filter.EscapedPath;
-            if (string.IsNullOrEmpty(_filter.EscapedPath)) return;
-
-            var info = _io.Get(_filter.EscapedPath);
-            src.Name                 = info.Name;
-            src.NameWithoutExtension = info.NameWithoutExtension;
-            src.Extension            = info.Extension;
-            src.DirectoryName        = info.DirectoryName;
-
-            if (src.FullName != RawName) this.LogDebug($"Escape:{src.FullName}\tRaw:{RawName}");
-        }
 
         /* ----------------------------------------------------------------- */
         ///
