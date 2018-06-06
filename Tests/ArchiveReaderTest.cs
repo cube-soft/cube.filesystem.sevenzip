@@ -504,6 +504,10 @@ namespace Cube.FileSystem.SevenZip.Tests
                 yield return new TestCaseData("PasswordJapanese02.zip", "ｶﾞｷﾞｸﾞｹﾞｺﾞﾊﾟﾋﾟﾌﾟﾍﾟﾎﾟ");
                 yield return new TestCaseData("InvalidSymbol.zip", "");
                 yield return new TestCaseData("InvalidReserved.zip", "");
+                yield return new TestCaseData("ZipSlip.zip", "");
+                yield return new TestCaseData("ZipSlip.tar", "");
+                yield return new TestCaseData("ZipSlipWin.zip", "");
+                yield return new TestCaseData("ZipSlipWin.tar", "");
             }
         }
 
