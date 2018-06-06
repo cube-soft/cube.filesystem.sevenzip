@@ -78,7 +78,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IQuery<string, string> Password { get; set; }
+        public IQuery<string> Password { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///

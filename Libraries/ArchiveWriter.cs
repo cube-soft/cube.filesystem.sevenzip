@@ -120,6 +120,8 @@ namespace Cube.FileSystem.SevenZip
         /// ファイルまたはディレクトリを圧縮ファイルに追加します。
         /// </summary>
         ///
+        /// <param name="path">ファイルまたはディレクトリのパス</param>
+        ///
         /* ----------------------------------------------------------------- */
         public void Add(string path) => Add(path, _io.Get(path).Name);
 
@@ -130,6 +132,9 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// ファイルまたはフォルダを圧縮ファイルに追加します。
         /// </summary>
+        ///
+        /// <param name="path">ファイルまたはディレクトリのパス</param>
+        /// <param name="pathInArchive">圧縮ファイル中の相対パス</param>
         ///
         /* ----------------------------------------------------------------- */
         public void Add(string path, string pathInArchive)
@@ -188,7 +193,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="progress">進捗状況報告用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Save(string path, IQuery<string, string> password, IProgress<ArchiveReport> progress)
+        public void Save(string path, IQuery<string> password, IProgress<ArchiveReport> progress)
         {
             var query = password != null ?
                         new PasswordQuery(password) :
@@ -256,7 +261,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void SaveCoreSfx(string path, IQuery<string, string> password,
+        private void SaveCoreSfx(string path, IQuery<string> password,
             IProgress<ArchiveReport> progress, IList<FileItem> items)
         {
             var sfx = (Option as SfxOption)?.Module;
@@ -290,7 +295,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void SaveCoreTar(string path, IQuery<string, string> password,
+        private void SaveCoreTar(string path, IQuery<string> password,
             IProgress<ArchiveReport> progress, IList<FileItem> items)
         {
             var info = _io.Get(path);
@@ -330,7 +335,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void SaveCore(Format format, string path, IQuery<string, string> password,
+        private void SaveCore(Format format, string path, IQuery<string> password,
             IProgress<ArchiveReport> progress, IList<FileItem> items)
         {
             var dir = _io.Get(_io.Get(path).DirectoryName);

@@ -51,12 +51,12 @@ using (var writer = new ArchiveWriter(Format.Tar))
 
 If you want to extract all files from the archive, you create an ArchiveReader object
 and call the Extract method. The 2nd argument of the constructor, that means the
-password of the archive, can be set string or Cube.Query<string, string> object.
+password of the archive, can be set string or Cube.Query<string> object.
 The latter is mainly used for implementing the interactive mode.
 
 ```cs
-// Set password directly or using Query<string, string>
-var password = new Cube.Query<string, string>(e => e.Result = "password");
+// Set password directly or using Query<string>
+var password = new Cube.Query<string>(e => e.Result = "password");
 using (var reader = new ArchiveReader(@"path\to\archive", password))
 {
     reader.Extract(@"path\to\directory");

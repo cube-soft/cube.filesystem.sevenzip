@@ -87,7 +87,7 @@ namespace Cube.FileSystem.SevenZip
         {
             Debug.Assert(Password != null);
 
-            var e = new QueryEventArgs<string, string>(Source);
+            var e = QueryEventArgs.Create(Source);
             Password.Request(e);
 
             var ok = !e.Cancel && !string.IsNullOrEmpty(e.Result);

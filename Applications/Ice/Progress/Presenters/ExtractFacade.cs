@@ -125,7 +125,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         {
             try
             {
-                var query = new Query<string, string>(x => OnPasswordRequested(x));
+                var query = new Query<string>(e => OnPasswordRequested(e));
                 using (var reader = new ArchiveReader(Source, query, IO))
                 {
                     this.LogDebug($"Format:{reader.Format}\tSource:{Source}");
@@ -205,7 +205,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
 
                 if (Formats.FromFile(path) == Format.Tar)
                 {
-                    var query = new Query<string, string>(x => OnPasswordRequested(x));
+                    var query = new Query<string>(e => OnPasswordRequested(e));
                     using (var r = new ArchiveReader(path, query, IO)) Extract(r, dest);
                 }
                 else

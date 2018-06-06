@@ -180,7 +180,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
             var fmt   = GetFormat();
             var dest  = GetTmp();
             var query = !string.IsNullOrEmpty(RtSettings.Password) || Request.Password ?
-                        new Query<string, string>(x => RaisePasswordRequested(x)) :
+                        new Query<string>(e => RaisePasswordRequested(e)) :
                         null;
 
             System.Diagnostics.Debug.Assert(RtSettings != null);

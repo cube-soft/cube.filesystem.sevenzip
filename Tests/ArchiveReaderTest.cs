@@ -351,7 +351,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             Assert.That(() =>
             {
                 var src   = Example("Password.7z");
-                var query = new Query<string, string>(e => e.Cancel = true);
+                var query = new Query<string>(e => e.Cancel = true);
                 using (var archive = new ArchiveReader(src, query))
                 {
                     archive.Extracted += (s, e) => ++count;
@@ -375,7 +375,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         public void Extract_Each_PasswordCancel() => Assert.That(() =>
         {
             var src = Example("Password.7z");
-            var query = new Query<string, string>(e => e.Cancel = true);
+            var query = new Query<string>(e => e.Cancel = true);
             using (var archive = new ArchiveReader(src, query))
             {
                 foreach (var item in archive.Items) item.Extract(Results);

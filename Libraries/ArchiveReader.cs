@@ -76,7 +76,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="password">パスワード取得用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveReader(string path, IQuery<string, string> password) :
+        public ArchiveReader(string path, IQuery<string> password) :
             this(path, password, new IO()) { }
 
         /* ----------------------------------------------------------------- */
@@ -114,7 +114,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="io">ファイル操作用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveReader(string path, IQuery<string, string> password, IO io)
+        public ArchiveReader(string path, IQuery<string> password, IO io)
         {
             _dispose = new OnceAction<bool>(Dispose);
             Source = path;

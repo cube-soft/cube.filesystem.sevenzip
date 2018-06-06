@@ -52,7 +52,7 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public ArchiveRefreshable(IInArchive archive, int index,
-            IQuery<string, string> password, IO io)
+            IQuery<string> password, IO io)
         {
             Index     = index;
             _archive  = archive;
@@ -322,7 +322,7 @@ namespace Cube.FileSystem.SevenZip
         #region Fields
         private readonly IInArchive _archive;
         private readonly IO _io;
-        private readonly IQuery<string, string> _password;
+        private readonly IQuery<string> _password;
         private PathFilter _filter;
         #endregion
     }
