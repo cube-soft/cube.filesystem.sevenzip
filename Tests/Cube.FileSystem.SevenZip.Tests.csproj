@@ -169,6 +169,12 @@
     <None Include="Examples\Expected\Sample.lzh.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Examples\Expected\Sample.rar.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\Expected\Sample.rar5.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Examples\Expected\Sample.tar.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
