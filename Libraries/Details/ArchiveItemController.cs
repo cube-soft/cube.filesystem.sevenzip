@@ -26,20 +26,20 @@ namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveRefreshable
+    /// ArchiveItemController
     ///
     /// <summary>
-    /// ArchiveItem の情報を更新するためのクラスです。
+    /// ArchiveItem の情報更新、解凍処理等を実装したクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal class ArchiveRefreshable : IRefreshable
+    internal class ArchiveItemController : IRefreshable
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveRefreshable
+        /// ArchiveItemController
         ///
         /// <summary>
         /// オブジェクトを初期化します。
@@ -51,7 +51,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="io">入出力用のオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveRefreshable(IInArchive archive, int index,
+        public ArchiveItemController(IInArchive archive, int index,
             IQuery<string> password, IO io)
         {
             Index     = index;

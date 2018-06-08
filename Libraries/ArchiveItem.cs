@@ -44,11 +44,11 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /// <param name="src">圧縮ファイルのパス</param>
-        /// <param name="refreshable">情報更新用オブジェクト</param>
+        /// <param name="controller">実装オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        internal ArchiveItem(string src, ArchiveRefreshable refreshable) :
-            base(src, refreshable) { }
+        internal ArchiveItem(string src, ArchiveItemController controller) :
+            base(src, controller) { }
 
         #endregion
 
@@ -63,7 +63,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public int Index => GetRefreshable().Index;
+        public int Index => GetController().Index;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -79,7 +79,7 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public string RawName => GetRefreshable().RawName;
+        public string RawName => GetController().RawName;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -90,7 +90,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool Encrypted => GetRefreshable().Encrypted;
+        public bool Encrypted => GetController().Encrypted;
 
         #endregion
 
@@ -116,7 +116,7 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public bool Match(IEnumerable<string> names) => GetRefreshable().Match(names);
+        public bool Match(IEnumerable<string> names) => GetController().Match(names);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -144,7 +144,7 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public void Extract(string directory, IProgress<ArchiveReport> progress) =>
-            GetRefreshable().Extract(this, directory, progress);
+            GetController().Extract(this, directory, progress);
 
         #endregion
 
@@ -152,17 +152,17 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetRefreshable
+        /// GetController
         ///
         /// <summary>
-        /// ArchiveRefreshable オブジェクトを取得します。
+        /// ArchiveItemController オブジェクトを取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private ArchiveRefreshable GetRefreshable()
+        private ArchiveItemController GetController()
         {
-            Debug.Assert(Refreshable is ArchiveRefreshable);
-            return (ArchiveRefreshable)Refreshable;
+            Debug.Assert(Refreshable is ArchiveItemController);
+            return (ArchiveItemController)Refreshable;
         }
 
         #endregion
