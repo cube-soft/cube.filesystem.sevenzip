@@ -47,19 +47,19 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// <param name="view">View オブジェクト</param>
         /// <param name="model">Model オブジェクト</param>
         /// <param name="settings">ユーザ設定</param>
-        /// <param name="events">イベント集約用オブジェクト</param>
+        /// <param name="ea">イベント集約オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
         public ProgressPresenter(IProgressView view, ProgressFacade model,
-            SettingsFolder settings, IEventHub events) :
-            base(view, model, settings, events)
+            SettingsFolder settings, IAggregator ea) :
+            base(view, model, settings, ea)
         {
-            View.EventHub = EventHub;
+            View.Aggregator = Aggregator;
 
-            Debug.Assert(EventHub.GetEvents() != null);
-            EventHub.GetEvents().Show.Subscribe(WhenShow);
-            EventHub.GetEvents().Cancel.Subscribe(() => Model.Cancel());
-            EventHub.GetEvents().Suspend.Subscribe(WhenSuspend);
+            Debug.Assert(Aggregator.GetEvents() != null);
+            Aggregator.GetEvents().Show.Subscribe(WhenShow);
+            Aggregator.GetEvents().Cancel.Subscribe(() => Model.Cancel());
+            Aggregator.GetEvents().Suspend.Subscribe(WhenSuspend);
 
             Model.MessageReceived        += WhenMessageReceived;
             Model.OpenDirectoryRequested += WhenOpenDirectoryRequested;

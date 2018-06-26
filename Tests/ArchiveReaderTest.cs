@@ -351,7 +351,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             Assert.That(() =>
             {
                 var src   = Example("Password.7z");
-                var query = new Query<string, string>(e => e.Cancel = true);
+                var query = new Query<string>(e => e.Cancel = true);
                 using (var archive = new ArchiveReader(src, query))
                 {
                     archive.Extracted += (s, e) => ++count;
@@ -375,7 +375,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         public void Extract_Each_PasswordCancel() => Assert.That(() =>
         {
             var src = Example("Password.7z");
-            var query = new Query<string, string>(e => e.Cancel = true);
+            var query = new Query<string>(e => e.Cancel = true);
             using (var archive = new ArchiveReader(src, query))
             {
                 foreach (var item in archive.Items) item.Extract(Results);
@@ -439,7 +439,6 @@ namespace Cube.FileSystem.SevenZip.Tests
             {
                 foreach (var item in archive.Items)
                 {
-                    Assert.That(item.Format, Is.EqualTo(Format.Zip));
                     item.CreateDirectory(dest);
                     item.SetAttributes(dest);
                 }
@@ -505,6 +504,10 @@ namespace Cube.FileSystem.SevenZip.Tests
                 yield return new TestCaseData("PasswordJapanese02.zip", "ｶﾞｷﾞｸﾞｹﾞｺﾞﾊﾟﾋﾟﾌﾟﾍﾟﾎﾟ");
                 yield return new TestCaseData("InvalidSymbol.zip", "");
                 yield return new TestCaseData("InvalidReserved.zip", "");
+                yield return new TestCaseData("ZipSlip.zip", "");
+                yield return new TestCaseData("ZipSlip.tar", "");
+                yield return new TestCaseData("ZipSlipWin.zip", "");
+                yield return new TestCaseData("ZipSlipWin.tar", "");
             }
         }
 

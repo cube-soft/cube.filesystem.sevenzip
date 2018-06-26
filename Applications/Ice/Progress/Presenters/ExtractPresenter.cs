@@ -45,12 +45,12 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// <param name="view">View オブジェクト</param>
         /// <param name="model">コマンドライン</param>
         /// <param name="settings">ユーザ設定</param>
-        /// <param name="events">イベント集約用オブジェクト</param>
+        /// <param name="ea">イベント集約オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
         public ExtractPresenter(IProgressView view, Request model,
-            SettingsFolder settings, IEventHub events) :
-            base(view, new ExtractFacade(model, settings), settings, events)
+            SettingsFolder settings, IAggregator ea) :
+            base(view, new ExtractFacade(model, settings), settings, ea)
         {
             var fs = Model.TryCast<ExtractFacade>();
 

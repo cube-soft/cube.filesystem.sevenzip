@@ -76,7 +76,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /* ----------------------------------------------------------------- */
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public IInformation Source { get; set; }
+        public Information Source { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -89,7 +89,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /* ----------------------------------------------------------------- */
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public IInformation Destination { get; set; }
+        public Information Destination { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///

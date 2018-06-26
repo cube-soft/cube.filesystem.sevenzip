@@ -142,7 +142,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             using (var writer = new ArchiveWriter(Format.Zip))
             {
                 var dest  = Result("PasswordCancel.zip");
-                var query = new Query<string, string>(x => x.Cancel = true);
+                var query = new Query<string>(e => e.Cancel = true);
                 writer.Add(Example("Sample.txt"));
                 writer.Save(dest, query, null);
             }

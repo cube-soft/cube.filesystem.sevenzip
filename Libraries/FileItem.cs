@@ -39,13 +39,10 @@ namespace Cube.FileSystem.SevenZip
         /// オブジェクトを初期化します。
         /// </summary>
         ///
-        /// <param name="path">ファイルまたはディレクトリのパス</param>
+        /// <param name="src">Information オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public FileItem(string path) : base(path)
-        {
-            PathInArchive = Name;
-        }
+        public FileItem(Information src) : this(src, src.Name) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -55,11 +52,12 @@ namespace Cube.FileSystem.SevenZip
         /// オブジェクトを初期化します。
         /// </summary>
         ///
-        /// <param name="path">ファイルまたはディレクトリのパス</param>
+        /// <param name="src">Information オブジェクト</param>
         /// <param name="pathInArchive">圧縮ファイル中の相対パス</param>
         ///
         /* ----------------------------------------------------------------- */
-        public FileItem(string path, string pathInArchive) : base(path)
+        public FileItem(Information src, string pathInArchive) :
+            base(src.Source, src.Refreshable)
         {
             PathInArchive = pathInArchive;
         }
@@ -78,6 +76,55 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public string PathInArchive { get; }
+
+        #endregion
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// FileItem
+    ///
+    /// <summary>
+    /// FileItem の拡張用クラスです。
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public static class FileItemExtension
+    {
+        #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ToFileItem
+        ///
+        /// <summary>
+        /// FileItem オブジェクトに変換します。
+        /// </summary>
+        ///
+        /// <param name="src">Information オブジェクト</param>
+        ///
+        /// <returns>FileItem オブジェクト</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static FileItem ToFileItem(this Information src) =>
+            new FileItem(src);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ToFileItem
+        ///
+        /// <summary>
+        /// FileItem オブジェクトに変換します。
+        /// </summary>
+        ///
+        /// <param name="src">Information オブジェクト</param>
+        /// <param name="pathInArchive">圧縮ファイル中の相対パス</param>
+        ///
+        /// <returns>FileItem オブジェクト</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static FileItem ToFileItem(this Information src, string pathInArchive) =>
+            new FileItem(src, pathInArchive);
 
         #endregion
     }

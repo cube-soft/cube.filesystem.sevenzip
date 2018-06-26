@@ -16,7 +16,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.Enumerations;
-using Cube.FileSystem.Files;
+using Cube.FileSystem.Mixin;
 using Cube.Forms;
 using Cube.Log;
 using System;
@@ -126,7 +126,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         {
             try
             {
-                var query = new Query<string, string>(x => OnPasswordRequested(x));
+                var query = new Query<string>(e => OnPasswordRequested(e));
                 using (var reader = new ArchiveReader(Source, query, IO))
                 {
                     this.LogDebug($"Format:{reader.Format}\tSource:{Source}");
@@ -206,7 +206,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
 
                 if (Formats.FromFile(path) == Format.Tar)
                 {
-                    var query = new Query<string, string>(x => OnPasswordRequested(x));
+                    var query = new Query<string>(e => OnPasswordRequested(e));
                     using (var r = new ArchiveReader(path, query, IO)) Extract(r, dest);
                 }
                 else
@@ -308,7 +308,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Move(IInformation src, IInformation dest)
+        private void Move(Information src, Information dest)
         {
             if (src.IsDirectory)
             {
@@ -333,7 +333,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Overwrite(IInformation src, IInformation dest)
+        private void Overwrite(Information src, Information dest)
         {
             switch (OverwriteMode & OverwriteMode.Operations)
             {
@@ -407,7 +407,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetRootDirectory(IInformation info, string alternate)
+        private string GetRootDirectory(Information info, string alternate)
         {
             var root = info.FullName.Split(
                 System.IO.Path.DirectorySeparatorChar,
@@ -464,7 +464,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void RaiseOverwriteRequested(IInformation src, IInformation dest)
+        private void RaiseOverwriteRequested(Information src, Information dest)
         {
             var e = new OverwriteEventArgs(src, dest);
             OnOverwriteRequested(e);

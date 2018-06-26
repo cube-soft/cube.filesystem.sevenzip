@@ -43,12 +43,12 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// <param name="view">View オブジェクト</param>
         /// <param name="args">コマンドライン</param>
         /// <param name="settings">ユーザ設定</param>
-        /// <param name="events">イベント集約用オブジェクト</param>
+        /// <param name="ea">イベント集約オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
         public ArchivePresenter(IProgressView view, Request args,
-            SettingsFolder settings, IEventHub events) :
-            base(view, new ArchiveFacade(args, settings), settings, events)
+            SettingsFolder settings, IAggregator ea) :
+            base(view, new ArchiveFacade(args, settings), settings, ea)
         {
             // View
             View.Logo   = Properties.Resources.HeaderArchive;

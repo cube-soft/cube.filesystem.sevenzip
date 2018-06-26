@@ -19,14 +19,14 @@ namespace Cube.FileSystem.SevenZip.Ice.App
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// EventHub
+    /// Aggregator
     ///
     /// <summary>
     /// CubeICE で発生するイベントを集約するクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class EventHub : IEventHub
+    public class Aggregator : IAggregator
     {
         /* ----------------------------------------------------------------- */
         ///
@@ -64,25 +64,29 @@ namespace Cube.FileSystem.SevenZip.Ice.App
 
     /* --------------------------------------------------------------------- */
     ///
-    /// EventHubExtension
+    /// AggregatorExtension
     ///
     /// <summary>
-    /// EventHub の拡張用クラスです。
+    /// Aggregator の拡張用クラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public static class EventHubExtension
+    public static class AggregatorExtension
     {
         /* ----------------------------------------------------------------- */
         ///
         /// GetEvents
         ///
         /// <summary>
-        /// EventAggregator で定義されているイベント群にアクセス可能な
+        /// Aggregator で定義されているイベント群にアクセス可能な
         /// オブジェクトを取得します。
         /// </summary>
         ///
+        /// <param name="src">イベント集約オブジェクト</param>
+        ///
+        /// <returns>Aggregator オブジェクト</returns>
+        ///
         /* ----------------------------------------------------------------- */
-        public static EventHub GetEvents(this IEventHub e) => e as EventHub;
+        public static Aggregator GetEvents(this IAggregator src) => src as Aggregator;
     }
 }

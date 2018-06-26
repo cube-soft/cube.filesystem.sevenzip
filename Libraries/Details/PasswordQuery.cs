@@ -27,7 +27,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal class PasswordQuery : IQuery<string, string>
+    internal class PasswordQuery : IQuery<string>
     {
         #region Constructors
 
@@ -66,7 +66,7 @@ namespace Cube.FileSystem.SevenZip
         /// </param>
         ///
         /* ----------------------------------------------------------------- */
-        public PasswordQuery(IQuery<string, string> inner)
+        public PasswordQuery(IQuery<string> inner)
         {
             InnerQuery = inner;
         }
@@ -95,7 +95,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IQuery<string, string> InnerQuery { get; private set; }
+        public IQuery<string> InnerQuery { get; private set; }
 
         #endregion
 
@@ -112,7 +112,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="e">パラメータを保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Request(QueryEventArgs<string, string> e)
+        public void Request(QueryEventArgs<string> e)
         {
             if (!string.IsNullOrEmpty(Password) || !string.IsNullOrEmpty(_cache))
             {

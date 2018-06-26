@@ -121,6 +121,8 @@ namespace Cube.FileSystem.SevenZip
         /// ファイルまたはディレクトリを圧縮ファイルに追加します。
         /// </summary>
         ///
+        /// <param name="path">ファイルまたはディレクトリのパス</param>
+        ///
         /* ----------------------------------------------------------------- */
         public void Add(string path) => Add(path, _io.Get(path).Name);
 
@@ -131,6 +133,9 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>
         /// ファイルまたはフォルダを圧縮ファイルに追加します。
         /// </summary>
+        ///
+        /// <param name="path">ファイルまたはディレクトリのパス</param>
+        /// <param name="pathInArchive">圧縮ファイル中の相対パス</param>
         ///
         /* ----------------------------------------------------------------- */
         public void Add(string path, string pathInArchive)
@@ -189,7 +194,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="progress">進捗状況報告用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Save(string path, IQuery<string, string> password, IProgress<ArchiveReport> progress)
+        public void Save(string path, IQuery<string> password, IProgress<ArchiveReport> progress)
         {
             var query = password != null ?
                         new PasswordQuery(password) :
@@ -257,7 +262,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void SaveCoreSfx(string path, IQuery<string, string> password,
+        private void SaveCoreSfx(string path, IQuery<string> password,
             IProgress<ArchiveReport> progress, IList<FileItem> items)
         {
             var sfx = (Option as SfxOption)?.Module;
@@ -291,7 +296,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void SaveCoreTar(string path, IQuery<string, string> password,
+        private void SaveCoreTar(string path, IQuery<string> password,
             IProgress<ArchiveReport> progress, IList<FileItem> items)
         {
             var info = _io.Get(path);
@@ -304,7 +309,7 @@ namespace Cube.FileSystem.SevenZip
             {
                 SaveCore(Format.Tar, tmp, password, progress, items);
 
-                var f = new List<FileItem> { new FileItem(tmp) };
+                var f = new List<FileItem> { _io.Get(tmp).ToFileItem() };
                 var m = (Option as TarOption)?.CompressionMethod ?? CompressionMethod.Copy;
 
                 switch (m)
@@ -331,7 +336,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void SaveCore(Format format, string path, IQuery<string, string> password,
+        private void SaveCore(Format format, string path, IQuery<string> password,
             IProgress<ArchiveReport> progress, IList<FileItem> items)
         {
             var dir = _io.Get(_io.Get(path).DirectoryName);
@@ -369,19 +374,18 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void AddItem(IInformation info, string name)
+        private void AddItem(Information info, string name)
         {
-            var path = info.FullName;
-            if (CanRead(info)) _items.Add(new FileItem(path, name));
+            if (CanRead(info)) _items.Add(info.ToFileItem(name));
             if (!info.IsDirectory) return;
 
-            foreach (var file in _io.GetFiles(path))
+            foreach (var file in _io.GetFiles(info.FullName))
             {
                 var child = _io.Get(file);
-                _items.Add(new FileItem(child.FullName, _io.Combine(name, child.Name)));
+                _items.Add(child.ToFileItem(_io.Combine(name, child.Name)));
             }
 
-            foreach (var dir in _io.GetDirectories(path))
+            foreach (var dir in _io.GetDirectories(info.FullName))
             {
                 var child = _io.Get(dir);
                 AddItem(child, _io.Combine(name, child.Name));
@@ -415,7 +419,7 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        private bool CanRead(IInformation info)
+        private bool CanRead(Information info)
         {
             if (info.IsDirectory) return true;
             using (var stream = _io.OpenRead(info.FullName)) return stream != null;

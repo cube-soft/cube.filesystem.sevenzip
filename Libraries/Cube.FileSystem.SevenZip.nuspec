@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Cube.FileSystem.SevenZip</id>
-    <version>1.9.0</version>
+    <version>1.10.0</version>
     <title>Cube.FileSystem.SevenZip</title>
     <authors>CubeSoft</authors>
     <owners>CubeSoft</owners>
@@ -15,12 +15,12 @@
     <iconUrl>https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Icon.png?raw=true</iconUrl>
     <dependencies>
       <group targetFramework="net45">
-        <dependency id="Cube.Core" version="1.9.0" />
-        <dependency id="Cube.FileSystem" version="1.9.0" />
+        <dependency id="Cube.Core" version="1.10.0" />
+        <dependency id="Cube.FileSystem" version="1.10.0" />
       </group>
       <group targetFramework="net35">
-        <dependency id="Cube.Core" version="1.9.0" />
-        <dependency id="Cube.FileSystem" version="1.9.0" />
+        <dependency id="Cube.Core" version="1.10.0" />
+        <dependency id="Cube.FileSystem" version="1.10.0" />
         <dependency id="Cube.Backwards" version="1.4.1" />
       </group>
     </dependencies>

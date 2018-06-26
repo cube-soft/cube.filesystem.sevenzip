@@ -60,7 +60,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
                 Application.SetCompatibleTextRenderingDefault(false);
 
                 var s = new SettingsFolder();
-                var e = new EventHub();
+                var e = new Aggregator();
                 var v = new ProgressForm();
                 var m = new Request(args);
 

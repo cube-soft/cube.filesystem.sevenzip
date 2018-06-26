@@ -18,6 +18,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -30,7 +31,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public abstract class ArchiveItem : IInformation
+    public class ArchiveItem : Information
     {
         #region Constructors
 
@@ -42,48 +43,16 @@ namespace Cube.FileSystem.SevenZip
         /// オブジェクトを初期化します。
         /// </summary>
         ///
-        /// <param name="format">圧縮ファイル形式</param>
         /// <param name="src">圧縮ファイルのパス</param>
-        /// <param name="index">圧縮ファイル中のインデックス</param>
-        /// <param name="password">パスワード取得用オブジェクト</param>
-        /// <param name="io">ファイル操作用オブジェクト</param>
+        /// <param name="controller">実装オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected ArchiveItem(Format format, string src, int index,
-            IQuery<string, string> password, IO io)
-        {
-            Format   = format;
-            Source   = src;
-            Index    = index;
-            Password = password;
-            IO       = io;
-        }
+        internal ArchiveItem(string src, ArchiveItemController controller) :
+            base(src, controller) { }
 
         #endregion
 
         #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Format
-        ///
-        /// <summary>
-        /// 圧縮ファイル形式を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public Format Format { get; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Source
-        ///
-        /// <summary>
-        /// 圧縮ファイルのパスを取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Source { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -94,7 +63,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public int Index { get; }
+        public int Index => GetController().Index;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -110,7 +79,7 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public string RawName { get; protected set; }
+        public string RawName => GetController().RawName;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -121,191 +90,11 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool Encrypted { get; protected set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Password
-        ///
-        /// <summary>
-        /// パスワード取得用オブジェクトを取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected IQuery<string, string> Password { get; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// IO
-        ///
-        /// <summary>
-        /// ファイル操作用オブジェクトを取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected IO IO { get; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Filter
-        ///
-        /// <summary>
-        /// パスのフィルター処理用オブジェクトを取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected PathFilter Filter { get; set; }
-
-        #region IInformation
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Exists
-        ///
-        /// <summary>
-        /// 存在するかどうかを示す値を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public bool Exists { get; protected set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// IsDirectory
-        ///
-        /// <summary>
-        /// ディレクトリかどうかを示す値を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public bool IsDirectory { get; protected set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Name
-        ///
-        /// <summary>
-        /// ファイル名を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Name { get; protected set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// NameWithoutExtension
-        ///
-        /// <summary>
-        /// 拡張子を除いたファイル名を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string NameWithoutExtension { get; protected set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extension
-        ///
-        /// <summary>
-        /// 拡張子を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Extension { get; protected set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// DirectoryName
-        ///
-        /// <summary>
-        /// ディレクトリ名を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string DirectoryName { get; protected set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// FullName
-        ///
-        /// <summary>
-        /// 圧縮ファイル中の相対パスを取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string FullName { get; protected set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Length
-        ///
-        /// <summary>
-        /// 展開後のファイルサイズを取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public long Length { get; protected set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Attributes
-        ///
-        /// <summary>
-        /// 属性を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public System.IO.FileAttributes Attributes { get; protected set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CreationTime
-        ///
-        /// <summary>
-        /// 作成日時を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public DateTime CreationTime { get; protected set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// LastWriteTime
-        ///
-        /// <summary>
-        /// 最終更新日時を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public DateTime LastWriteTime { get; protected set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// LastAccessTime
-        ///
-        /// <summary>
-        /// 最終アクセス日時を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public DateTime LastAccessTime { get; protected set; }
-
-        #endregion
+        public bool Encrypted => GetController().Encrypted;
 
         #endregion
 
         #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Refresh
-        ///
-        /// <summary>
-        /// オブジェクトを最新の状態に更新します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public virtual void Refresh() { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -327,7 +116,7 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public bool Match(IEnumerable<string> names) => Filter.MatchAny(names);
+        public bool Match(IEnumerable<string> names) => GetController().Match(names);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -354,7 +143,27 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="progress">進捗報告用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public abstract void Extract(string directory, IProgress<ArchiveReport> progress);
+        public void Extract(string directory, IProgress<ArchiveReport> progress) =>
+            GetController().Extract(this, directory, progress);
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetController
+        ///
+        /// <summary>
+        /// ArchiveItemController オブジェクトを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private ArchiveItemController GetController()
+        {
+            Debug.Assert(Refreshable is ArchiveItemController);
+            return (ArchiveItemController)Refreshable;
+        }
 
         #endregion
     }

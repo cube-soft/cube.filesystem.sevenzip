@@ -131,7 +131,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
             var dummy = Example("Sample.txt");
             var src   = Example("Complex.1.0.0.zip");
-            var dest  = Result("Overwrite");
+            var dest  = Result("Rename");
 
             IO.Copy(dummy, IO.Combine(dest, @"Foo.txt"));
             IO.Copy(dummy, IO.Combine(dest, @"Directory\Empty.txt"));
@@ -143,8 +143,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 Assert.That(Wait(p.View).Result, Is.True, "Timeout");
             }
 
-            Assert.That(IO.Exists(IO.Combine(dest, @"Foo(2).txt")), Is.True);
-            Assert.That(IO.Exists(IO.Combine(dest, @"Directory\Empty(2).txt")), Is.True);
+            Assert.That(IO.Exists(IO.Combine(dest, @"Foo (1).txt")), Is.True);
+            Assert.That(IO.Exists(IO.Combine(dest, @"Directory\Empty (1).txt")), Is.True);
         }
 
         /* ----------------------------------------------------------------- */
@@ -240,11 +240,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             {
                 p.Model.Interval = TimeSpan.FromMilliseconds(50);
                 p.View.Show();
-                p.EventHub.GetEvents().Suspend.Publish(true);
+                p.Aggregator.GetEvents().Suspend.Publish(true);
                 var count = p.View.Value;
                 TaskEx.Delay(150).Wait();
                 Assert.That(p.View.Value, Is.EqualTo(count).Within(10)); // see remarks
-                p.EventHub.GetEvents().Suspend.Publish(false);
+                p.Aggregator.GetEvents().Suspend.Publish(false);
                 Assert.That(Wait(p.View).Result, Is.True, "Timeout");
             }
 
@@ -266,7 +266,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             using (var p = Create("", Example("Complex.zip")))
             {
                 p.View.Show();
-                p.EventHub.GetEvents().Cancel.Publish();
+                p.Aggregator.GetEvents().Cancel.Publish();
                 Assert.That(Wait(p.View).Result, Is.True, "Timeout");
             }
         }
@@ -898,7 +898,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         private ExtractPresenter Create(Request request)
         {
             var v = Views.CreateProgressView();
-            var e = new EventHub();
+            var e = new Aggregator();
             var s = new SettingsFolder();
 
             var dest = new ExtractPresenter(v, request, s, e);

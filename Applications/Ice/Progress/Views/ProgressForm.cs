@@ -49,7 +49,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         {
             InitializeComponent();
 
-            ExitButton.Click += (s, e) => EventHub.GetEvents()?.Cancel.Publish();
+            ExitButton.Click += (s, e) => Aggregator.GetEvents()?.Cancel.Publish();
 
             SuspendButton.Tag = false;
             SuspendButton.Click += WhenSuspendOrResume;
@@ -321,7 +321,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
             UpdateElapseLabel();
             Start();
 
-            EventHub.GetEvents()?.Show.Publish();
+            Aggregator.GetEvents()?.Show.Publish();
         }
 
         /* ----------------------------------------------------------------- */
@@ -421,7 +421,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
             if (suspend) Stop();
             else Start();
 
-            EventHub.GetEvents()?.Suspend.Publish(suspend);
+            Aggregator.GetEvents()?.Suspend.Publish(suspend);
         }
 
         #endregion

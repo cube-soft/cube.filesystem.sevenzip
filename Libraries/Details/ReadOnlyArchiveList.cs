@@ -31,7 +31,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal class ReadOnlyArchiveList: IReadOnlyList<ArchiveItem>
+    internal class ReadOnlyArchiveList : IReadOnlyList<ArchiveItem>
     {
         #region Constructors
 
@@ -51,7 +51,7 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public ReadOnlyArchiveList(IInArchive archive, Format format,
-            string src, IQuery<string, string> password, IO io)
+            string src, IQuery<string> password, IO io)
         {
             Format   = format;
             Source   = src;
@@ -104,8 +104,10 @@ namespace Cube.FileSystem.SevenZip
         /// <returns>ArchiveItem オブジェクト</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveItem this[int index] =>
-            new ArchiveItemImpl(_archive, Format, Source, index, Password, _io);
+        public ArchiveItem this[int index] => new ArchiveItem(
+            Source,
+            new ArchiveItemController(_archive, index, Password, _io)
+        );
 
         /* ----------------------------------------------------------------- */
         ///
@@ -127,7 +129,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private IQuery<string, string> Password { get; }
+        private IQuery<string> Password { get; }
 
         #endregion
 
