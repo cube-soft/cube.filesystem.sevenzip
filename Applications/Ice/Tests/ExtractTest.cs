@@ -131,7 +131,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
             var dummy = Example("Sample.txt");
             var src   = Example("Complex.1.0.0.zip");
-            var dest  = Result("Overwrite");
+            var dest  = Result("Rename");
 
             IO.Copy(dummy, IO.Combine(dest, @"Foo.txt"));
             IO.Copy(dummy, IO.Combine(dest, @"Directory\Empty.txt"));
@@ -143,8 +143,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 Assert.That(Wait(p.View).Result, Is.True, "Timeout");
             }
 
-            Assert.That(IO.Exists(IO.Combine(dest, @"Foo(2).txt")), Is.True);
-            Assert.That(IO.Exists(IO.Combine(dest, @"Directory\Empty(2).txt")), Is.True);
+            Assert.That(IO.Exists(IO.Combine(dest, @"Foo (1).txt")), Is.True);
+            Assert.That(IO.Exists(IO.Combine(dest, @"Directory\Empty (1).txt")), Is.True);
         }
 
         /* ----------------------------------------------------------------- */
