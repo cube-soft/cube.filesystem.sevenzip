@@ -16,6 +16,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Reflection;
 using System.Runtime.Serialization;
 
 namespace Cube.FileSystem.SevenZip.Ice
@@ -259,7 +260,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private string GetLink(string filename)
         {
-            var dir = System.IO.Path.GetDirectoryName(AssemblyReader.Default.Location);
+            var asm = Assembly.GetExecutingAssembly().GetReader();
+            var dir = System.IO.Path.GetDirectoryName(asm.Location);
             return System.IO.Path.Combine(dir, filename);
         }
 

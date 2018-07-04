@@ -53,12 +53,12 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Associate
                 Logger.Info(type, Assembly.GetExecutingAssembly());
                 Logger.Info(type, string.Join(" ", args));
 
-                var settings = new SettingsFolder();
+                var asm      = Assembly.GetExecutingAssembly();
+                var settings = new SettingsFolder(asm, new AfsIO());
                 if (args.Length > 0 && args[0].ToLowerInvariant() == "/uninstall") Clear(settings);
                 else settings.Load();
 
-                var asm  = AssemblyReader.Default.Location;
-                var dir  = System.IO.Path.GetDirectoryName(asm);
+                var dir  = System.IO.Path.GetDirectoryName(asm.Location);
                 var exe  = System.IO.Path.Combine(dir, "cubeice.exe");
                 var icon = $"{exe},{settings.Value.Associate.IconIndex}";
 

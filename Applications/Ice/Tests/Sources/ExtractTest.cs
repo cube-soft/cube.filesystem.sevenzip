@@ -897,9 +897,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /* ----------------------------------------------------------------- */
         private ExtractPresenter Create(Request request)
         {
+            var a = Assembly.GetExecutingAssembly();
             var v = Views.CreateProgressView();
             var e = new Aggregator();
-            var s = new SettingsFolder();
+            var s = new SettingsFolder(a, IO);
 
             var dest = new ExtractPresenter(v, request, s, e);
             Assert.That(dest.Model.Interval.TotalMilliseconds, Is.EqualTo(100).Within(1));

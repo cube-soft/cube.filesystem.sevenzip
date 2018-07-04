@@ -46,17 +46,18 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         static void Main(string[] args)
         {
             var type = typeof(Program);
+            var asm  = Assembly.GetExecutingAssembly();
 
             try
             {
                 Logger.Configure();
                 Logger.ObserveTaskException();
-                Logger.Info(type, Assembly.GetExecutingAssembly());
+                Logger.Info(type, asm);
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
 
-                var model = new SettingsFolder();
+                var model = new SettingsFolder(asm, new AfsIO());
                 model.Load();
 
                 var install = args.Length > 0 && args[0] == "/install";

@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using Cube.Forms;
 using Cube.Forms.Processes;
+using Cube.Generics;
 using System.Windows.Forms;
 
 namespace Cube.FileSystem.SevenZip.Ice.App
@@ -126,9 +127,8 @@ namespace Cube.FileSystem.SevenZip.Ice.App
             {
                 e.Cancel = view.ShowDialog() == DialogResult.Cancel;
                 if (e.Cancel) return;
-                e.Result = new ArchiveRtSettings
+                e.Result = new ArchiveRtSettings(view.Format, new AfsIO())
                 {
-                    Format            = view.Format,
                     Path              = view.Path,
                     Password          = view.Password,
                     CompressionLevel  = view.CompressionLevel,
@@ -152,7 +152,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /* ----------------------------------------------------------------- */
         public virtual void ShowExplorerView(KeyValueEventArgs<string, string> e)
         {
-            var proc = System.Diagnostics.Process.Start(e.Key, $"\"{e.Value}\"");
+            var proc = System.Diagnostics.Process.Start(e.Key, e.Value.Quote());
             proc.Activate();
         }
 

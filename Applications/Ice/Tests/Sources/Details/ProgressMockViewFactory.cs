@@ -207,7 +207,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var format = Formats.FromExtension(System.IO.Path.GetExtension(e.Query));
 
             e.Cancel = false;
-            e.Result = new ArchiveRtSettings(format)
+            e.Result = new ArchiveRtSettings(format, new AfsIO())
             {
                 Path              = Settings.Destination,
                 Password          = Settings.Password,

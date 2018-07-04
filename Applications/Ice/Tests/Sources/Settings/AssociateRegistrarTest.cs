@@ -15,10 +15,12 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.FileSystem.Tests;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
@@ -32,7 +34,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class AssociateRegistrarTest
+    class AssociateRegistrarTest : FileFixture
     {
         #region Tests
 
@@ -75,7 +77,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         {
             try
             {
-                var settings  = new SettingsFolder();
+                var asm       = Assembly.GetExecutingAssembly();
+                var settings  = new SettingsFolder(asm, IO);
                 var path      = @"C:\Program Files\CubeICE\cubeice.exe";
                 var registrar = new AssociateRegistrar(path)
                 {

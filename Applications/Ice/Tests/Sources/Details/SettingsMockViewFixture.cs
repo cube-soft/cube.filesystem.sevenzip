@@ -19,6 +19,7 @@ using Cube.FileSystem.SevenZip.Ice.App.Settings;
 using Cube.FileSystem.Tests;
 using Microsoft.Win32;
 using NUnit.Framework;
+using System.Reflection;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
@@ -44,7 +45,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public SettingsMockViewFixture() : this(new IO()) { }
+        public SettingsMockViewFixture() : this(new AfsIO()) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -100,8 +101,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /* ----------------------------------------------------------------- */
         protected SettingsFolder CreateSettings()
         {
+            var asm  = Assembly.GetExecutingAssembly();
             var dc   = Cube.DataContract.Format.Registry;
-            var dest = new SettingsFolder(dc, SubKeyName) { AutoSave = false };
+            var dest = new SettingsFolder(asm, dc, SubKeyName, IO) { AutoSave = false };
             Assert.That(dest.Location, Does.Not.StartsWith("Software"));
             return dest;
         }

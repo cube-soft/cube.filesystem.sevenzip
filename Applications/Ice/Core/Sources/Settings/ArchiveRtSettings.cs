@@ -16,6 +16,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Reflection;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -40,13 +41,16 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// オブジェクトを初期化します。
         /// </summary>
         ///
+        /// <param name="io">I/O オブジェクト</param>
+        ///
         /* ----------------------------------------------------------------- */
-        public ArchiveRtSettings()
+        public ArchiveRtSettings(IO io)
         {
-            SfxModule = System.IO.Path.Combine(
-                System.IO.Path.GetDirectoryName(AssemblyReader.Default.Location),
-                Formats.SfxName
-            );
+            var asm = Assembly.GetExecutingAssembly().GetReader();
+            var dir = io.Get(asm.Location).DirectoryName;
+
+            IO        = io;
+            SfxModule = io.Combine(dir, Formats.SfxName);
         }
 
         /* ----------------------------------------------------------------- */
@@ -58,9 +62,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /// <param name="format">圧縮形式</param>
+        /// <param name="io">I/O オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveRtSettings(Format format) : this()
+        public ArchiveRtSettings(Format format, IO io) : this(io)
         {
             Format = format;
         }
@@ -68,6 +73,17 @@ namespace Cube.FileSystem.SevenZip.Ice
         #endregion
 
         #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// IO
+        ///
+        /// <summary>
+        /// I/O オブジェクトを取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public IO IO { get; }
 
         /* ----------------------------------------------------------------- */
         ///

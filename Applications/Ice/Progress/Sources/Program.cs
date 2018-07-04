@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Generics;
 using Cube.Log;
 using System;
 using System.Diagnostics;
@@ -51,15 +52,17 @@ namespace Cube.FileSystem.SevenZip.Ice.App
             {
                 if (args.Length <= 0) return;
 
+                var asm = Assembly.GetExecutingAssembly();
+
                 Logger.Configure();
                 Logger.ObserveTaskException();
-                Logger.Info(typeof(Program), Assembly.GetExecutingAssembly());
+                Logger.Info(typeof(Program), asm);
                 Logger.Info(typeof(Program), $"Arguments:{string.Join(" ", args)}");
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
 
-                var s = new SettingsFolder();
+                var s = new SettingsFolder(asm, new AfsIO());
                 var e = new Aggregator();
                 var v = new ProgressForm();
                 var m = new Request(args);
@@ -72,7 +75,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
                         using (var _ = new ArchivePresenter(v, m, s, e)) Application.Run(v);
                         break;
                     case Mode.Extract:
-                        if (m.Sources.Count() > 1 && s.Value.Extract.Bursty && !m.SuppressRecursive) Extract(m);
+                        if (m.Sources.Count() > 1 && s.Value.Extract.Bursty && !m.SuppressRecursive) Extract(m, asm);
                         else using (var _ = new ExtractPresenter(v, m, s, e)) Application.Run(v);
                         break;
                     default:
@@ -91,15 +94,15 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        static void Extract(Request request)
+        static void Extract(Request request, Assembly assembly)
         {
-            var exec = AssemblyReader.Default.Location;
+            var exec = assembly.GetReader().Location;
             var args = new System.Text.StringBuilder();
 
-            foreach (var s in request.Options) args.Append($"\"{s}\" ");
+            foreach (var s in request.Options) args.Append($"{s.Quote()} ");
             foreach (var path in request.Sources)
             {
-                try { Process.Start(exec, $"/x /sr {args.ToString()} \"{path}\""); }
+                try { Process.Start(exec, $"/x /sr {args.ToString()} {path.Quote()}"); }
                 catch (Exception err) { Log(err); }
             }
         }

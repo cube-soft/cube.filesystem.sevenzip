@@ -448,6 +448,15 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Properties {
         }
         
         /// <summary>
+        ///   CubeICE エラー に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string TitleError {
+            get {
+                return ResourceManager.GetString("TitleError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   パスワードの入力 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string TitlePassword {

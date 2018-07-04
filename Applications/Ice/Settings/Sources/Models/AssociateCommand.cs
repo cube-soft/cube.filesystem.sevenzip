@@ -18,6 +18,7 @@
 using Cube.Log;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 {
@@ -92,8 +93,8 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
             {
                 if (!force && !IsChanged()) return;
 
-                var asm = AssemblyReader.Default.Location;
-                var dir = System.IO.Path.GetDirectoryName(asm);
+                var asm = Assembly.GetExecutingAssembly();
+                var dir = System.IO.Path.GetDirectoryName(asm.Location);
                 var exe = System.IO.Path.Combine(dir, Properties.Resources.FileAssociate);
 
                 var process = System.Diagnostics.Process.Start(exe);

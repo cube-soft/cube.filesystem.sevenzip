@@ -15,6 +15,9 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Generics;
+using System.Reflection;
+
 namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
@@ -38,11 +41,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// オブジェクトを初期化します。
         /// </summary>
         ///
+        /// <param name="assembly">アセンブリ情報</param>
+        /// <param name="io">I/O オブジェクト</param>
+        ///
         /* ----------------------------------------------------------------- */
-        public SettingsFolder() : this(
-            Cube.DataContract.Format.Registry,
-            @"CubeSoft\CubeICE\v3"
-        ) { }
+        public SettingsFolder(Assembly assembly, IO io) :
+            this(assembly, Cube.DataContract.Format.Registry, @"CubeSoft\CubeICE\v3", io) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -52,19 +56,23 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// オブジェクトを初期化します。
         /// </summary>
         ///
+        /// <param name="assembly">アセンブリ情報</param>
         /// <param name="format">設定情報の保存方法</param>
-        /// <param name="path">設定情報の保存パス</param>
+        /// <param name="location">設定情報の保存パス</param>
+        /// <param name="io">I/O オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public SettingsFolder(Cube.DataContract.Format format, string path) : base(format, path)
+        public SettingsFolder(Assembly assembly, Cube.DataContract.Format format, string location, IO io) :
+            base(assembly, format, location, io)
         {
             AutoSave       = false;
             Version.Digit  = 3;
             Version.Suffix = Properties.Resources.VersionSuffix;
 
-            var dir = System.IO.Path.GetDirectoryName(AssemblyReader.Default.Location);
-            Startup.Command = $"\"{System.IO.Path.Combine(dir, "cubeice-checker.exe")}\"";
-            Startup.Name    = "cubeice-checker";
+            var name = "cubeice-checker";
+            var dir  = IO.Get(assembly.GetReader().Location).DirectoryName;
+            Startup.Name    = name;
+            Startup.Command = IO.Combine(dir, $"{name}.exe").Quote();
         }
 
         #endregion

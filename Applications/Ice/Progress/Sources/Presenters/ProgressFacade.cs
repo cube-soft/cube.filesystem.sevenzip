@@ -55,7 +55,6 @@ namespace Cube.FileSystem.SevenZip.Ice.App
             _dispose = new OnceAction<bool>(Dispose);
             Request  = request;
             Settings = settings;
-            IO       = new AfsIO();
 
             IO.Failed += WhenFailed;
             _timer.Elapsed += (s, e) => OnProgress(ValueEventArgs.Create(Report));
@@ -180,11 +179,11 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// IO
         ///
         /// <summary>
-        /// ファイル操作オブジェクトを取得します。
+        /// I/O オブジェクトを取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IO IO { get; }
+        public IO IO => Settings.IO;
 
         #endregion
 
@@ -548,7 +547,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         {
             this.LogError(err.ToString());
             if (!Settings.Value.ErrorReport) return;
-            OnMessageReceived(new MessageEventArgs(err.Message));
+            OnMessageReceived(new MessageEventArgs(err.Message, Properties.Resources.TitleError));
         }
 
         /* ----------------------------------------------------------------- */
@@ -700,6 +699,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
 
             var ev = new MessageEventArgs(
                 sb.ToString(),
+                Properties.Resources.TitleError,
                 MessageBoxButtons.RetryCancel,
                 MessageBoxIcon.Warning
             );

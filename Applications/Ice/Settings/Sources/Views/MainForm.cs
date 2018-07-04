@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace Cube.FileSystem.SevenZip.Ice.App.Settings
@@ -388,7 +389,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         #endregion
 
         #region Fields
-        private readonly Cube.Forms.VersionControl VersionPanel = new Cube.Forms.VersionControl();
+        private readonly Cube.Forms.VersionControl VersionPanel = new Cube.Forms.VersionControl(Assembly.GetExecutingAssembly());
         #endregion
     }
 }

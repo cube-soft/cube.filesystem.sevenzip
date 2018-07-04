@@ -21,6 +21,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Cube.FileSystem.SevenZip.Tests
 {
@@ -469,8 +470,8 @@ namespace Cube.FileSystem.SevenZip.Tests
         /* ----------------------------------------------------------------- */
         private static string Current(string filename)
         {
-            var asm = AssemblyReader.Default.Location;
-            var dir = System.IO.Path.GetDirectoryName(asm);
+            var asm = Assembly.GetExecutingAssembly().GetReader();
+            var dir = System.IO.Path.GetDirectoryName(asm.Location);
             return System.IO.Path.Combine(dir, filename);
         }
 
@@ -483,8 +484,8 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private System.IO.Stream OpenExclude(string path)
-            => System.IO.File.Open(path,
+        private System.IO.Stream OpenExclude(string path) =>
+            System.IO.File.Open(path,
                 System.IO.FileMode.Open,
                 System.IO.FileAccess.ReadWrite,
                 System.IO.FileShare.None

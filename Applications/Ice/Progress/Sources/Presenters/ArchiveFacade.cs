@@ -219,12 +219,12 @@ namespace Cube.FileSystem.SevenZip.Ice.App
                 case Format.Zip:
                 case Format.SevenZip:
                 case Format.Sfx:
-                    RtSettings = new ArchiveRtSettings(f);
+                    RtSettings = new ArchiveRtSettings(f, Settings.IO);
                     break;
                 case Format.BZip2:
                 case Format.GZip:
                 case Format.XZ:
-                    RtSettings = new ArchiveRtSettings(Format.Tar);
+                    RtSettings = new ArchiveRtSettings(Format.Tar, Settings.IO);
                     RtSettings.CompressionMethod = f.ToMethod();
                     break;
                 default:

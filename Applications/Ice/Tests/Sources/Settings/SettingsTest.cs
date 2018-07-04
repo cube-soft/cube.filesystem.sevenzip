@@ -18,6 +18,7 @@
 using Cube.FileSystem.Tests;
 using NUnit.Framework;
 using System;
+using System.Reflection;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
@@ -45,12 +46,13 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void Create()
         {
-            var dest = new SettingsFolder();
+            var asm  = Assembly.GetExecutingAssembly();
+            var dest = new SettingsFolder(asm, IO);
             Assert.That(dest.AutoSave,           Is.False);
             Assert.That(dest.AutoSaveDelay,      Is.EqualTo(TimeSpan.FromSeconds(1)));
-            Assert.That(dest.Version.ToString(), Is.EqualTo("1.10.0β"));
+            Assert.That(dest.Version.ToString(), Is.EqualTo("0.9.1β"));
             Assert.That(dest.Company,            Is.EqualTo("CubeSoft"));
-            Assert.That(dest.Product,            Is.EqualTo("Cube.Core"));
+            Assert.That(dest.Product,            Is.EqualTo("Cube.FileSystem.SevenZip.Ice.Tests"));
             Assert.That(dest.Format,             Is.EqualTo(Cube.DataContract.Format.Registry));
             Assert.That(dest.Location,           Is.EqualTo(@"CubeSoft\CubeICE\v3"));
             Assert.That(dest.Startup,            Is.Not.Null);
@@ -120,7 +122,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void Convert_ToOption()
         {
-            var actual = new ArchiveRtSettings
+            var asm  = Assembly.GetExecutingAssembly();
+            var dest = new ArchiveRtSettings(IO)
             {
                 CompressionLevel  = CompressionLevel.High,
                 CompressionMethod = CompressionMethod.Ppmd,
@@ -130,10 +133,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 Path              = "dummy",
                 SfxModule         = string.Empty,
                 ThreadCount       = 3,
-            }.ToOption(new SettingsFolder());
+            }.ToOption(new SettingsFolder(asm, IO));
 
-            Assert.That(actual.CompressionLevel, Is.EqualTo(CompressionLevel.High));
-            Assert.That(actual.ThreadCount,      Is.EqualTo(3));
+            Assert.That(dest.CompressionLevel, Is.EqualTo(CompressionLevel.High));
+            Assert.That(dest.ThreadCount,      Is.EqualTo(3));
         }
     }
 }

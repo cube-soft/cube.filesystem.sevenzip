@@ -418,9 +418,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /* ----------------------------------------------------------------- */
         private ArchivePresenter Create(Request request)
         {
+            var a = Assembly.GetExecutingAssembly();
             var v = Views.CreateProgressView();
             var e = new Aggregator();
-            var s = new SettingsFolder();
+            var s = new SettingsFolder(a, IO);
 
             s.Value.Filters = "Filter.txt|FilterDirectory";
 
