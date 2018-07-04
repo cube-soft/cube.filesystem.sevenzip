@@ -96,8 +96,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Details\FileHelper.cs" />
-    <Compile Include="Details\GlobalSetup.cs" />
+    <Compile Include="GlobalSetup.cs" />
     <Compile Include="ArchiveReaderTest.cs" />
     <Compile Include="ArchiveWriterTest.cs" />
     <Compile Include="FormatTest.cs" />

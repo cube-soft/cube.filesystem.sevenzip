@@ -16,6 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.FileSystem.Tests;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -33,7 +34,7 @@ namespace Cube.FileSystem.SevenZip.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ArchiveWriterTest : FileHelper
+    class ArchiveWriterTest : FileFixture
     {
         #region Tests
 
@@ -50,12 +51,12 @@ namespace Cube.FileSystem.SevenZip.Tests
         public Format Archive(Format format, string filename, string password,
             string[] items, ArchiveOption option)
         {
-            var dest = Result(filename);
+            var dest = GetResultsWith(filename);
 
             using (var writer = new ArchiveWriter(format))
             {
                 writer.Option = option;
-                foreach (var item in items) writer.Add(Example(item));
+                foreach (var item in items) writer.Add(GetExamplesWith(item));
                 writer.Save(dest, password);
             }
 
@@ -80,13 +81,13 @@ namespace Cube.FileSystem.SevenZip.Tests
         {
             var names = new[] { "Filter.txt", "FilterDirectory" };
             var s     = filter ? "True" : "False";
-            var dest  = Result($"Filter{s}.zip");
+            var dest  = GetResultsWith($"Filter{s}.zip");
 
             using (var writer = new ArchiveWriter(Format.Zip))
             {
                 if (filter) writer.Filters = names;
-                writer.Add(Example("Sample.txt"));
-                writer.Add(Example("Sample 00..01"));
+                writer.Add(GetExamplesWith("Sample.txt"));
+                writer.Add(GetExamplesWith("Sample 00..01"));
                 writer.Save(dest);
             }
 
@@ -107,11 +108,11 @@ namespace Cube.FileSystem.SevenZip.Tests
         public void Archive_Japanese(bool utf8)
         {
             var fmt  = Format.Zip;
-            var src  = Result("日本語のファイル名.txt");
+            var src  = GetResultsWith("日本語のファイル名.txt");
             var code = utf8 ? "UTF8" : "SJis";
-            var dest = Result($"ZipJapanese{code}.zip");
+            var dest = GetResultsWith($"ZipJapanese{code}.zip");
 
-            IO.Copy(Example("Sample.txt"), src, true);
+            IO.Copy(GetExamplesWith("Sample.txt"), src, true);
             Assert.That(IO.Exists(src), Is.True);
 
             using (var writer = new ArchiveWriter(fmt))
@@ -141,9 +142,9 @@ namespace Cube.FileSystem.SevenZip.Tests
         {
             using (var writer = new ArchiveWriter(Format.Zip))
             {
-                var dest  = Result("PasswordCancel.zip");
+                var dest  = GetResultsWith("PasswordCancel.zip");
                 var query = new Query<string>(e => e.Cancel = true);
-                writer.Add(Example("Sample.txt"));
+                writer.Add(GetExamplesWith("Sample.txt"));
                 writer.Save(dest, query, null);
             }
         }, Throws.TypeOf<OperationCanceledException>());
@@ -162,9 +163,9 @@ namespace Cube.FileSystem.SevenZip.Tests
         {
             using (var writer = new ArchiveWriter(Format.Sfx))
             {
-                var dest = Result("SfxNotFound.exe");
+                var dest = GetResultsWith("SfxNotFound.exe");
                 writer.Option = new SfxOption { Module = "dummy.sfx" };
-                writer.Add(Example("Sample.txt"));
+                writer.Add(GetExamplesWith("Sample.txt"));
                 writer.Save(dest);
             }
         }, Throws.TypeOf<System.IO.FileNotFoundException>());
@@ -181,10 +182,10 @@ namespace Cube.FileSystem.SevenZip.Tests
         [Test]
         public void Archive_PermissionError() => Assert.That(() =>
         {
-            var dir = Result("PermissionError");
+            var dir = GetResultsWith("PermissionError");
             var src = IO.Combine(dir, "Sample.txt");
 
-            IO.Copy(Example("Sample.txt"), src);
+            IO.Copy(GetExamplesWith("Sample.txt"), src);
 
             using (var _ = OpenExclude(src))
             using (var writer = new ArchiveWriter(Format.Zip))
@@ -206,12 +207,12 @@ namespace Cube.FileSystem.SevenZip.Tests
         [Test]
         public void Archive_Skip()
         {
-            var dir    = Result("Ignore");
+            var dir    = GetResultsWith("Ignore");
             var ignore = IO.Combine(dir, "Sample.txt");
 
             var io = new IO();
             io.Failed += (s, e) => e.Cancel = true;
-            io.Copy(Example("Sample.txt"), ignore);
+            io.Copy(GetExamplesWith("Sample.txt"), ignore);
 
             var dest = io.Combine(dir, "Sample.zip");
 
@@ -219,7 +220,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             using (var writer = new ArchiveWriter(Format.Zip, io))
             {
                 writer.Add(ignore);
-                writer.Add(Example("Sample 00..01"));
+                writer.Add(GetExamplesWith("Sample 00..01"));
                 writer.Save(dest);
             }
 
@@ -244,7 +245,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         {
             using (var writer = new ArchiveWriter(Format.Zip))
             {
-                writer.Add(Example("NotFound.txt"));
+                writer.Add(GetExamplesWith("NotFound.txt"));
             }
         }, Throws.TypeOf<System.IO.FileNotFoundException>());
 

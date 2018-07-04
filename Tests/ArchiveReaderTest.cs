@@ -17,6 +17,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.FileSystem.SevenZip.Archives;
+using Cube.FileSystem.Tests;
 using Microsoft.VisualBasic.FileIO;
 using NUnit.Framework;
 using System;
@@ -36,7 +37,7 @@ namespace Cube.FileSystem.SevenZip.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ArchiveReaderTest : FileHelper
+    class ArchiveReaderTest : FileFixture
     {
         #region Tests
 
@@ -57,7 +58,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         [TestCaseSource(nameof(TestCases))]
         public void Items(string filename, string password)
         {
-            var src = Example(filename);
+            var src = GetExamplesWith(filename);
             using (var archive = new ArchiveReader(src, password))
             {
                 var actual   = archive.Items.ToList();
@@ -88,8 +89,8 @@ namespace Cube.FileSystem.SevenZip.Tests
         [TestCaseSource(nameof(TestCases))]
         public void Extract(string filename, string password) => IgnoreCultureError(() =>
         {
-            var src  = Example(filename);
-            var dest = Result($@"Extract\{filename}");
+            var src  = GetExamplesWith(filename);
+            var dest = GetResultsWith(nameof(Extract), filename);
 
             using (var archive = new ArchiveReader(src, password))
             {
@@ -122,8 +123,8 @@ namespace Cube.FileSystem.SevenZip.Tests
         [TestCaseSource(nameof(TestCases))]
         public void Extract_Each(string filename, string password) => IgnoreCultureError(() =>
         {
-            var src = Example(filename);
-            var dest = Result($@"Extract_Each\{filename}");
+            var src  = GetExamplesWith(filename);
+            var dest = GetResultsWith(nameof(Extract_Each), filename);
 
             using (var archive = new ArchiveReader(src, password))
             {
@@ -177,13 +178,13 @@ namespace Cube.FileSystem.SevenZip.Tests
         [TestCase("SampleSfx.exe",  ExpectedResult =  4)]
         public int Extract_Count(string filename)
         {
-            var src        = Example(filename);
+            var src        = GetExamplesWith(filename);
             var extracting = 0;
             var extracted  = 0;
 
             using (var archive = new ArchiveReader(src))
             {
-                var dest = Result($@"Extract_Count\{filename}");
+                var dest = GetResultsWith(nameof(Extract_Count), filename);
                 archive.Extracting += (s, e) => ++extracting;
                 archive.Extracted  += (s, e) => ++extracted;
                 archive.Extract(dest);
@@ -205,8 +206,8 @@ namespace Cube.FileSystem.SevenZip.Tests
         [Test]
         public void Extract_Filter()
         {
-            var src  = Example("SampleFilter.zip");
-            var dest = Result("Extract_Filter");
+            var src  = GetExamplesWith("SampleFilter.zip");
+            var dest = GetResultsWith(nameof(Extract_Filter));
 
             using (var archive = new ArchiveReader(src))
             {
@@ -234,7 +235,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /* ----------------------------------------------------------------- */
         [Test]
         public void Extract_NotSupported() => Assert.That(
-            () => new ArchiveReader(Example("Sample.txt")),
+            () => new ArchiveReader(GetExamplesWith("Sample.txt")),
             Throws.TypeOf<NotSupportedException>()
         );
 
@@ -250,16 +251,16 @@ namespace Cube.FileSystem.SevenZip.Tests
         [Test]
         public void Extract_PermissionError() => Assert.That(() =>
         {
-            var dir  = Result("PermissionError");
+            var dir  = GetResultsWith(nameof(Extract_PermissionError));
             var dest = IO.Combine(dir, @"Sample\Foo.txt");
 
-            IO.Copy(Example("Sample.txt"), dest);
+            IO.Copy(GetExamplesWith("Sample.txt"), dest);
 
             var io = new IO();
             io.Failed += (s, e) => throw new OperationCanceledException();
 
             using (var _ = io.OpenRead(dest))
-            using (var archive = new ArchiveReader(Example("Sample.zip"), "", io))
+            using (var archive = new ArchiveReader(GetExamplesWith("Sample.zip"), "", io))
             {
                 archive.Extract(dir);
             }
@@ -277,11 +278,11 @@ namespace Cube.FileSystem.SevenZip.Tests
         [Test]
         public void Extract_MergeError() => Assert.That(() =>
         {
-            var dir = Result("MergeError");
+            var dir = GetResultsWith(nameof(Extract_MergeError));
             for (var i = 1; i < 4; ++i)
             {
                 var name = $"SampleVolume.rar.{i:000}";
-                IO.Copy(Example(name), IO.Combine(dir, name));
+                IO.Copy(GetExamplesWith(name), IO.Combine(dir, name));
             }
 
             using (var archive = new ArchiveReader(IO.Combine(dir, "SampleVolume.rar.001")))
@@ -303,7 +304,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         [TestCase("wrong")]
         public void Extract_WrongPassword(string password) => Assert.That(() =>
         {
-            var src = Example("Password.7z");
+            var src = GetExamplesWith("Password.7z");
             using (var archive = new ArchiveReader(src, password))
             {
                 archive.Extract(Results);
@@ -322,7 +323,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         [TestCase("")]
         public void Extract_Each_WrongPassword(string password) => Assert.That(() =>
         {
-            var src = Example("Password.7z");
+            var src = GetExamplesWith("Password.7z");
             using (var archive = new ArchiveReader(src, password))
             {
                 foreach (var item in archive.Items) item.Extract(Results);
@@ -350,7 +351,7 @@ namespace Cube.FileSystem.SevenZip.Tests
 
             Assert.That(() =>
             {
-                var src   = Example("Password.7z");
+                var src   = GetExamplesWith("Password.7z");
                 var query = new Query<string>(e => e.Cancel = true);
                 using (var archive = new ArchiveReader(src, query))
                 {
@@ -374,7 +375,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         [Test]
         public void Extract_Each_PasswordCancel() => Assert.That(() =>
         {
-            var src = Example("Password.7z");
+            var src = GetExamplesWith("Password.7z");
             var query = new Query<string>(e => e.Cancel = true);
             using (var archive = new ArchiveReader(src, query))
             {
@@ -394,7 +395,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         [Test]
         public void Extracting_Throws() => Assert.That(() =>
         {
-            var src = Example("Sample.zip");
+            var src = GetExamplesWith("Sample.zip");
             using (var archive = new ArchiveReader(src))
             {
                 archive.Extracting += (s, e) => throw new ArgumentException();
@@ -414,7 +415,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         [Test]
         public void Extraced_Throws() => Assert.That(() =>
         {
-            var src = Example("Sample.zip");
+            var src = GetExamplesWith("Sample.zip");
             using (var archive = new ArchiveReader(src))
             {
                 archive.Extracted += (s, e) => throw new OperationCanceledException();
@@ -434,8 +435,8 @@ namespace Cube.FileSystem.SevenZip.Tests
         [Test]
         public void CreateDirectory()
         {
-            var dest = Result("CreateDirectory");
-            using (var archive = new ArchiveReader(Example("Sample.zip")))
+            var dest = GetResultsWith(nameof(CreateDirectory));
+            using (var archive = new ArchiveReader(GetExamplesWith("Sample.zip")))
             {
                 foreach (var item in archive.Items)
                 {
@@ -527,7 +528,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         private IDictionary<string, long> Expect(string filename)
         {
             var dest = new Dictionary<string, long>();
-            var path = Example($@"Expected\{filename}.txt");
+            var path = GetExamplesWith("Expected", $"{filename}.txt");
             var csv  = new TextFieldParser(path, System.Text.Encoding.UTF8)
             {
                 Delimiters                = new[] { "," },

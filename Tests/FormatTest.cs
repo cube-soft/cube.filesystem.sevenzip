@@ -16,6 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.FileSystem.Tests;
 using NUnit.Framework;
 using System;
 
@@ -31,7 +32,7 @@ namespace Cube.FileSystem.SevenZip.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class FormatTest : FileHelper
+    class FormatTest : FileFixture
     {
         #region Tests
 
@@ -69,8 +70,8 @@ namespace Cube.FileSystem.SevenZip.Tests
         [TestCase("SampleSfx.exe",   ExpectedResult = Format.Sfx)]
         public Format Detect(string filename)
         {
-            var src  = Example(filename);
-            var dest = Result(Guid.NewGuid().ToString("D"));
+            var src  = GetExamplesWith(filename);
+            var dest = GetResultsWith(Guid.NewGuid().ToString("D"));
             IO.Copy(src, dest);
             return Formats.FromFile(dest);
         }
@@ -90,7 +91,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /* ----------------------------------------------------------------- */
         [Test]
         public void FromFile_NotFound()=> Assert.That(
-            Formats.FromFile(Example("NotFound.rar")),
+            Formats.FromFile(GetExamplesWith("NotFound.rar")),
             Is.EqualTo(Format.Rar)
         );
 
@@ -105,7 +106,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /* ----------------------------------------------------------------- */
         [Test]
         public void FromStream_CannotRead() => Assert.That(
-            () => Formats.FromStream(IO.OpenWrite(Example("Sample.zip"))),
+            () => Formats.FromStream(IO.OpenWrite(GetExamplesWith("Sample.zip"))),
             Throws.TypeOf<NotSupportedException>()
         );
 
