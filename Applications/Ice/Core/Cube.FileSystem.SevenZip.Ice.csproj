@@ -90,22 +90,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Settings\ArchiveRtSettings.cs" />
-    <Compile Include="Settings\ArchiveSettings.cs" />
-    <Compile Include="Settings\ArchiveSettingsBase.cs" />
-    <Compile Include="Settings\AssociateSettings.cs" />
-    <Compile Include="Settings\ContextSettings.cs" />
-    <Compile Include="Settings\ExtractSettings.cs" />
-    <Compile Include="Settings\Settings.cs" />
-    <Compile Include="Settings\SettingsExtension.cs" />
-    <Compile Include="Settings\SettingsFolder.cs" />
-    <Compile Include="Settings\ShortcutSettings.cs" />
-    <Compile Include="AssociateRegistrar.cs" />
-    <Compile Include="ContextMenu.cs" />
-    <Compile Include="Parameters.cs" />
-    <Compile Include="PresetMenu.cs" />
-    <Compile Include="PresetMenuExtension.cs" />
-    <Compile Include="Request.cs" />
+    <Compile Include="Sources\Settings\ArchiveRtSettings.cs" />
+    <Compile Include="Sources\Settings\ArchiveSettings.cs" />
+    <Compile Include="Sources\Settings\ArchiveSettingsBase.cs" />
+    <Compile Include="Sources\Settings\AssociateSettings.cs" />
+    <Compile Include="Sources\Settings\ContextSettings.cs" />
+    <Compile Include="Sources\Settings\ExtractSettings.cs" />
+    <Compile Include="Sources\Settings\Settings.cs" />
+    <Compile Include="Sources\Settings\SettingsExtension.cs" />
+    <Compile Include="Sources\Settings\SettingsFolder.cs" />
+    <Compile Include="Sources\Settings\ShortcutSettings.cs" />
+    <Compile Include="Sources\AssociateRegistrar.cs" />
+    <Compile Include="Sources\ContextMenu.cs" />
+    <Compile Include="Sources\Parameters.cs" />
+    <Compile Include="Sources\PresetMenu.cs" />
+    <Compile Include="Sources\PresetMenuExtension.cs" />
+    <Compile Include="Sources\Request.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

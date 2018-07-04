@@ -115,8 +115,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NativeMethods\Shell32.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Sources\NativeMethods\Shell32.cs" />
+    <Compile Include="Sources\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

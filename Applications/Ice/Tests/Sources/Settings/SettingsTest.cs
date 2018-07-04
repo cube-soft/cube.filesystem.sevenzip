@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.FileSystem.Tests;
 using NUnit.Framework;
 using System;
 
@@ -30,7 +31,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ShortcutSettingsTest : ProgressMockViewFixture
+    class SettingsTest : FileFixture
     {
         /* ----------------------------------------------------------------- */
         ///
@@ -104,6 +105,35 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             Assert.That(archive.Exists,  Is.False);
             Assert.That(extract.Exists,  Is.False);
             Assert.That(settings.Exists, Is.False);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Convert_ToOption
+        ///
+        /// <summary>
+        /// ArchiveRtSettings を ArchiveOption オブジェクトに変換する
+        /// テストを実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Convert_ToOption()
+        {
+            var actual = new ArchiveRtSettings
+            {
+                CompressionLevel  = CompressionLevel.High,
+                CompressionMethod = CompressionMethod.Ppmd,
+                EncryptionMethod  = EncryptionMethod.Aes192,
+                Format            = Format.GZip,
+                Password          = "password",
+                Path              = "dummy",
+                SfxModule         = string.Empty,
+                ThreadCount       = 3,
+            }.ToOption(new SettingsFolder());
+
+            Assert.That(actual.CompressionLevel, Is.EqualTo(CompressionLevel.High));
+            Assert.That(actual.ThreadCount,      Is.EqualTo(3));
         }
     }
 }

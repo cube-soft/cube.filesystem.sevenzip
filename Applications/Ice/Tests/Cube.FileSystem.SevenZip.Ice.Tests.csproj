@@ -102,24 +102,23 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Details\GlobalSetup.cs" />
-    <Compile Include="Details\ProgressMockView.cs" />
-    <Compile Include="Details\ProgressMockViewFactory.cs" />
-    <Compile Include="Details\ProgressMockViewFixture.cs" />
-    <Compile Include="Details\SettingsMockViewFactory.cs" />
-    <Compile Include="Details\SettingsMockViewFixture.cs" />
-    <Compile Include="Settings\ArchiveRtSettingsTest.cs" />
-    <Compile Include="Settings\AssociateRegistrarTest.cs" />
-    <Compile Include="Settings\SettingsTest.cs" />
-    <Compile Include="ViewModels\ContextViewModelTest.cs" />
-    <Compile Include="ViewModels\SettingsViewModelTest.cs" />
-    <Compile Include="ArchiveTest.cs" />
-    <Compile Include="ExtractTest.cs" />
-    <Compile Include="PathConverterTest.cs" />
-    <Compile Include="PresetMenuTest.cs" />
-    <Compile Include="RequestTest.cs" />
-    <Compile Include="TreeViewBehaviorTest.cs" />
-    <Compile Include="ViewResourceTest.cs" />
+    <Compile Include="Sources\Details\GlobalSetup.cs" />
+    <Compile Include="Sources\Details\ProgressMockView.cs" />
+    <Compile Include="Sources\Details\ProgressMockViewFactory.cs" />
+    <Compile Include="Sources\Details\ProgressMockViewFixture.cs" />
+    <Compile Include="Sources\Details\SettingsMockViewFactory.cs" />
+    <Compile Include="Sources\Details\SettingsMockViewFixture.cs" />
+    <Compile Include="Sources\Settings\AssociateRegistrarTest.cs" />
+    <Compile Include="Sources\Settings\SettingsTest.cs" />
+    <Compile Include="Sources\ViewModels\ContextViewModelTest.cs" />
+    <Compile Include="Sources\ViewModels\SettingsViewModelTest.cs" />
+    <Compile Include="Sources\ArchiveTest.cs" />
+    <Compile Include="Sources\ExtractTest.cs" />
+    <Compile Include="Sources\PathConverterTest.cs" />
+    <Compile Include="Sources\PresetMenuTest.cs" />
+    <Compile Include="Sources\RequestTest.cs" />
+    <Compile Include="Sources\TreeViewBehaviorTest.cs" />
+    <Compile Include="Sources\ViewResourceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

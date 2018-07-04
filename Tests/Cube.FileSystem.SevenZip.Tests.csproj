@@ -96,10 +96,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GlobalSetup.cs" />
-    <Compile Include="ArchiveReaderTest.cs" />
-    <Compile Include="ArchiveWriterTest.cs" />
-    <Compile Include="FormatTest.cs" />
+    <Compile Include="Sources\GlobalSetup.cs" />
+    <Compile Include="Sources\ArchiveReaderTest.cs" />
+    <Compile Include="Sources\ArchiveWriterTest.cs" />
+    <Compile Include="Sources\FormatTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
