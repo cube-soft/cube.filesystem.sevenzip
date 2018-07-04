@@ -34,7 +34,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ArchiveTest : ProgressMockViewHelper
+    class ArchiveTest : ProgressMockViewFixture
     {
         #region Tests
 
@@ -51,16 +51,16 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         public void Archive(string[] files, IEnumerable<string> args,
             ArchiveSettings settings, string dest, long count)
         {
-            var filename = GetFileName(Example(files.First()), dest);
-            var request  = new Request(args.Concat(files.Select(s => Example(s))));
+            var filename = GetFileName(GetExamplesWith(files.First()), dest);
+            var request  = new Request(args.Concat(files.Select(s => GetExamplesWith(s))));
 
-            Mock.Destination = Result($@"Runtime\{filename}");
+            Mock.Destination = GetResultsWith("Runtime", filename);
             Mock.Password    = "password"; // used by "/p" option
 
             using (var p = Create(request))
             {
                 p.Settings.Value.Archive = settings;
-                p.Settings.Value.Archive.SaveDirectoryName = Result("Others");
+                p.Settings.Value.Archive.SaveDirectoryName = GetResultsWith("Others");
                 p.View.Show();
 
                 Assert.That(p.View.Visible,       Is.True, "Visible");
@@ -89,19 +89,19 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void Archive_Exists()
         {
-            var src    = Example("Sample.txt");
-            var exists = Result(@"Exists\Sample.zip");
-            var dest   = Result(@"Exists\SampleRuntime.zip");
+            var src    = GetExamplesWith("Sample.txt");
+            var exists = GetResultsWith("Exists", "Sample.zip");
+            var dest   = GetResultsWith("Exists", "SampleRuntime.zip");
             var args   = PresetMenu.Archive.ToArguments().Concat(new[] { src });
 
             Mock.Destination = dest;
-            IO.Copy(Example("Single.1.0.0.zip"), exists);
+            IO.Copy(GetExamplesWith("Single.1.0.0.zip"), exists);
 
             using (var p = Create(new Request(args)))
             {
                 p.Settings.Value.ErrorReport = false;
                 p.Settings.Value.Archive.SaveLocation = SaveLocation.Others;
-                p.Settings.Value.Archive.SaveDirectoryName = Result("Exists");
+                p.Settings.Value.Archive.SaveDirectoryName = GetResultsWith("Exists");
                 p.View.Show();
 
                 Assert.That(Wait(p.View).Result, Is.True, "Timeout");
@@ -123,14 +123,13 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void Archive_Overwrite()
         {
-            var dir  = Result("Overwrite");
-            var src  = Example("Sample.txt");
+            var src  = GetExamplesWith("Sample.txt");
+            var dest = GetResultsWith("Overwrite", "Sample.zip");
             var args = PresetMenu.Archive.ToArguments().Concat(new[] { src });
-            var dest = IO.Combine(dir, "Sample.zip");
             var tmp  = string.Empty;
 
             Mock.Destination = dest;
-            IO.Copy(Example("Single.1.0.0.zip"), dest);
+            IO.Copy(GetExamplesWith("Single.1.0.0.zip"), dest);
 
             using (var p = Create(new Request(args)))
             {
@@ -159,8 +158,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void Archive_PasswordCancel()
         {
-            var dir  = Result("PasswordCancel");
-            var src  = Example("Sample.txt");
+            var dir  = GetResultsWith("PasswordCancel");
+            var src  = GetExamplesWith("Sample.txt");
             var dest = IO.Combine(dir, "Sample.zip");
             var args = PresetMenu.ArchiveZipPassword.ToArguments().Concat(new[] { src });
 
@@ -188,12 +187,12 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void Archive_MoveFailed()
         {
-            var dir  = Result("MoveFailed");
-            var src  = Example("Sample.txt");
+            var dir  = GetResultsWith("MoveFailed");
+            var src  = GetExamplesWith("Sample.txt");
             var dest = IO.Combine(dir, "Sample.zip");
 
             Mock.Destination = dir;
-            IO.Copy(Example("Single.1.0.0.zip"), dest, true);
+            IO.Copy(GetExamplesWith("Single.1.0.0.zip"), dest, true);
 
             var args = PresetMenu.ArchiveZip.ToArguments().Concat(new[] { "/o:runtime", src });
 

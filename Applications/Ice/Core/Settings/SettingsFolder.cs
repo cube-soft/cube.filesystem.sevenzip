@@ -41,7 +41,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         public SettingsFolder() : this(
             Cube.DataContract.Format.Registry,
-            @"Software\CubeSoft\CubeICE\v3"
+            @"CubeSoft\CubeICE\v3"
         ) { }
 
         /* ----------------------------------------------------------------- */

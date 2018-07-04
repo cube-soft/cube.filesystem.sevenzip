@@ -16,21 +16,46 @@
 //
 /* ------------------------------------------------------------------------- */
 using NUnit.Framework;
+using System;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ShortcutSettingsTest
+    /// SettingsTest
     ///
     /// <summary>
-    /// ShortcutSettings のテスト用クラスです。
+    /// 各種 Settings のテスト用クラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ShortcutSettingsTest : ProgressMockViewHelper
+    class ShortcutSettingsTest : ProgressMockViewFixture
     {
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create
+        ///
+        /// <summary>
+        /// Settings クラスの初期値を確認します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Create()
+        {
+            var dest = new SettingsFolder();
+            Assert.That(dest.AutoSave,           Is.False);
+            Assert.That(dest.AutoSaveDelay,      Is.EqualTo(TimeSpan.FromSeconds(1)));
+            Assert.That(dest.Version.ToString(), Is.EqualTo("1.10.0β"));
+            Assert.That(dest.Company,            Is.EqualTo("CubeSoft"));
+            Assert.That(dest.Product,            Is.EqualTo("Cube.Core"));
+            Assert.That(dest.Format,             Is.EqualTo(Cube.DataContract.Format.Registry));
+            Assert.That(dest.Location,           Is.EqualTo(@"CubeSoft\CubeICE\v3"));
+            Assert.That(dest.Startup,            Is.Not.Null);
+            Assert.That(dest.Value,              Is.Not.Null);
+        }
+
         /* ----------------------------------------------------------------- */
         ///
         /// SyncUpdate
@@ -43,9 +68,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void SyncUpdate()
         {
-            var archive  = new Shortcut(Result("CubeICE 圧縮"));
-            var extract  = new Shortcut(Result("CubeICE 解凍"));
-            var settings = new Shortcut(Result("CubeICE 設定"));
+            var archive  = new Shortcut(GetResultsWith("CubeICE 圧縮"));
+            var extract  = new Shortcut(GetResultsWith("CubeICE 解凍"));
+            var settings = new Shortcut(GetResultsWith("CubeICE 設定"));
 
             var src  = new ShortcutSettings { Directory = Results };
             var menu = PresetMenu.Archive |
@@ -57,10 +82,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             Assert.That(src.Preset, Is.EqualTo(menu));
 
             src.Sync();
-            Assert.That(src.Preset.HasFlag(PresetMenu.Archive),       Is.False);
+            Assert.That(src.Preset.HasFlag(PresetMenu.Archive),        Is.False);
             Assert.That(src.Preset.HasFlag(PresetMenu.ArchiveDetails), Is.True);
-            Assert.That(src.Preset.HasFlag(PresetMenu.Extract),       Is.False);
-            Assert.That(src.Preset.HasFlag(PresetMenu.Settings),      Is.False);
+            Assert.That(src.Preset.HasFlag(PresetMenu.Extract),        Is.False);
+            Assert.That(src.Preset.HasFlag(PresetMenu.Settings),       Is.False);
 
             src.Preset = menu;
             src.Update();

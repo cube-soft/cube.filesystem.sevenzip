@@ -31,7 +31,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ContextViewModelTest : SettingsMockViewHelper
+    class ContextViewModelTest : SettingsMockViewFixture
     {
         #region Tests
 
