@@ -16,7 +16,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.FileSystem.SevenZip.Ice.App;
-using Cube.FileSystem.Tests;
+using Cube.FileSystem.TestService;
 using System.Threading.Tasks;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests

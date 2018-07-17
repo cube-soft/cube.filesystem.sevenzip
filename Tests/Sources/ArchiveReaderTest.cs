@@ -17,7 +17,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.FileSystem.SevenZip.Archives;
-using Cube.FileSystem.Tests;
+using Cube.FileSystem.TestService;
 using Microsoft.VisualBasic.FileIO;
 using NUnit.Framework;
 using System;
