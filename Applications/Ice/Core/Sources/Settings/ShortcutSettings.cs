@@ -102,15 +102,15 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         public void Sync()
         {
-            var b0 = new Shortcut(GetFileName(Properties.Resources.ScArcive)).Exists;
+            var b0 = new Shortcut { FullName = GetFileName(Properties.Resources.ScArcive) }.Exists;
             if (b0) Preset |= PresetMenu.Archive;
             else Preset &= ~PresetMenu.Archive;
 
-            var b1 = new Shortcut(GetFileName(Properties.Resources.ScExtract)).Exists;
+            var b1 = new Shortcut { FullName = GetFileName(Properties.Resources.ScExtract) }.Exists;
             if (b1) Preset |= PresetMenu.Extract;
             else Preset &= ~PresetMenu.Extract;
 
-            var b2 = new Shortcut(GetFileName(Properties.Resources.ScSettings)).Exists;
+            var b2 = new Shortcut { FullName = GetFileName(Properties.Resources.ScSettings) }.Exists;
             if (b2) Preset |= PresetMenu.Settings;
             else Preset &= ~PresetMenu.Settings;
         }
@@ -174,9 +174,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             var src  = GetFileName(Properties.Resources.ScArcive);
             var dest = GetLink("cubeice.exe");
-            var sc   = new Shortcut(src)
+            var sc   = new Shortcut
             {
-                Link         = dest,
+                FullName     = src,
+                Target       = dest,
                 Arguments    = Preset.ToArguments(),
                 IconLocation = $"{dest},1",
             };
@@ -198,9 +199,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             var src  = GetFileName(Properties.Resources.ScExtract);
             var dest = GetLink("cubeice.exe");
-            var sc   = new Shortcut(src)
+            var sc   = new Shortcut
             {
-                Link         = dest,
+                FullName     = src,
+                Target       = dest,
                 Arguments    = PresetMenu.Extract.ToArguments(),
                 IconLocation = $"{dest},2",
             };
@@ -222,9 +224,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             var src  = GetFileName(Properties.Resources.ScSettings);
             var dest = GetLink("cubeice-setting.exe");
-            var sc   = new Shortcut(src)
+            var sc   = new Shortcut
             {
-                Link         = dest,
+                FullName     = src,
+                Target       = dest,
                 IconLocation = dest,
             };
 
