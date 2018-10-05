@@ -34,7 +34,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public abstract class ProgressFacade : IDisposable
+    public abstract class ProgressFacade : DisposableBase
     {
         #region Constructors
 
@@ -52,7 +52,6 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /* ----------------------------------------------------------------- */
         protected ProgressFacade(Request request, SettingsFolder settings)
         {
-            _dispose = new OnceAction<bool>(Dispose);
             Request  = request;
             Settings = settings;
 
@@ -590,18 +589,9 @@ namespace Cube.FileSystem.SevenZip.Ice.App
 
         #endregion
 
-        #region IDisposable
+        #endregion
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ~ProgressFacade
-        ///
-        /// <summary>
-        /// オブジェクトを破棄します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        ~ProgressFacade() { _dispose.Invoke(false); }
+        #region Implementations
 
         /* ----------------------------------------------------------------- */
         ///
@@ -612,22 +602,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Dispose()
-        {
-            _dispose.Invoke(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Dispose
-        ///
-        /// <summary>
-        /// リソースを解放します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected virtual void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
@@ -639,12 +614,6 @@ namespace Cube.FileSystem.SevenZip.Ice.App
             try { if (!string.IsNullOrEmpty(Tmp)) IO.Delete(Tmp); }
             catch (Exception err) { this.LogWarn(err.ToString(), err); }
         }
-
-        #endregion
-
-        #endregion
-
-        #region Implementations
 
         /* ----------------------------------------------------------------- */
         ///
@@ -714,7 +683,6 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         #endregion
 
         #region Fields
-        private readonly OnceAction<bool> _dispose;
         private readonly System.Timers.Timer _timer = new System.Timers.Timer(100.0);
         private readonly CancellationTokenSource _cancel = new CancellationTokenSource();
         private readonly ManualResetEvent _wait = new ManualResetEvent(true);

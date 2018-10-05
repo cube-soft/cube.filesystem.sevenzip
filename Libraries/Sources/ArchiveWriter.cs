@@ -32,7 +32,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveWriter : IDisposable
+    public class ArchiveWriter : DisposableBase
     {
         #region Constructors
 
@@ -63,7 +63,6 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public ArchiveWriter(Format format, IO io)
         {
-            _dispose = new OnceAction<bool>(Dispose);
             Format = format;
             _io = io;
             _7z = new SevenZipLibrary();
@@ -204,53 +203,20 @@ namespace Cube.FileSystem.SevenZip
             else SaveCore(Format, path, query, progress, GetItems());
         }
 
-        #region IDisposable
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ~ArchiveWriter
-        ///
-        /// <summary>
-        /// オブジェクトを破棄します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        ~ArchiveWriter() { _dispose.Invoke(false); }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Dispose
-        ///
-        /// <summary>
-        /// リソースを破棄します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Dispose()
-        {
-            _dispose.Invoke(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Dispose
-        ///
-        /// <summary>
-        /// リソースを破棄します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected virtual void Dispose(bool disposing)
-        {
-            _7z.Dispose();
-        }
-
-        #endregion
-
         #endregion
 
         #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Dispose
+        ///
+        /// <summary>
+        /// リソースを破棄します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected override void Dispose(bool disposing) => _7z.Dispose();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -479,7 +445,6 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Fields
-        private readonly OnceAction<bool> _dispose;
         private readonly SevenZipLibrary _7z;
         private readonly IO _io;
         private readonly IList<FileItem> _items = new List<FileItem>();
