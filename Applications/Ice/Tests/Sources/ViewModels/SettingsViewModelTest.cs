@@ -481,7 +481,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         public void SyncUpdate(bool install) => Assert.DoesNotThrow(() =>
         {
             var m0 = CreateSettings();
-            m0.Startup.Name = "cubeice-test";
             m0.Value.Shortcut.Directory = Results;
 
             var vm0 = new MainViewModel(m0)
@@ -495,7 +494,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
             var m1 = CreateSettings();
             m1.Load();
-            m1.Startup.Name = "cubeice-test";
             m1.Value.Shortcut.Directory = Results;
 
             var vm1 = new MainViewModel(m1)

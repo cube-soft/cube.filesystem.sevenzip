@@ -1,4 +1,4 @@
-version: 1.11.0.{build}
+version: 1.12.0.{build}
 branches:
     only:
         - master
@@ -33,10 +33,6 @@ after_build:
     - xcopy /Y /I Thirdparty\x64\7z.* CubeIce\x64
     - xcopy /Y /I Thirdparty\x64\7z.* Tests\bin\Release
     - xcopy /Y /I Thirdparty\x64\7z.* Applications\Ice\Tests\bin\Release
-artifacts:
-    - path: CubeIce
-    - path: CubeIce.Settings
-    - path: CubeIce.Settings.Associate
 test_script:
     - >
       ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe
@@ -46,8 +42,8 @@ test_script:
       -targetdir:Tests\bin\Release
       -returntargetcode
       -hideskipped:All
-      -output:CoverResult.xml
-      -filter:"+[*]* -[AlphaFS]* -[*]*NativeMethods -[*]*Properties.*"
+      -output:CoverResults.xml
+      -filter:"+[Cube*]* -[*]*NativeMethods -[*]*Properties.*"
     - >
       ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe
       -register:user
@@ -57,9 +53,17 @@ test_script:
       -returntargetcode
       -hideskipped:All
       -mergeoutput
-      -output:CoverResult.xml
-      -filter:"+[*]* -[AlphaFS]* -[*]*NativeMethods -[*]*Properties.* -[*]*Form -[*]*.Program"
+      -output:CoverResults.xml
+      -filter:"+[Cube*]* -[*]*NativeMethods -[*]*Properties.* -[*]*Form -[*]*.Program"
 after_test:
+    - xcopy /q /Y /I Tests\bin\Release\Cube.FileSystem.SevenZip.Tests.log Tests\
+    - xcopy /q /Y /I Applications\Ice\Tests\bin\Release\Cube.FileSystem.SevenZip.Ice.Tests.log Tests\
+    - xcopy /q /Y /I CoverResults.xml Tests\
     - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
     - pip install codecov
-    - codecov -f CoverResult.xml
+    - codecov -f CoverResults.xml
+artifacts:
+    - path: CubeIce
+    - path: CubeIce.Settings
+    - path: CubeIce.Settings.Associate
+    - path: Tests

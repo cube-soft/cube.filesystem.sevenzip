@@ -379,7 +379,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         #endregion
 
-        #region Helper methods
+        #region Others
 
         /* ----------------------------------------------------------------- */
         ///

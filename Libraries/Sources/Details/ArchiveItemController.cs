@@ -115,7 +115,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Invoke(InformationCore src)
+        public void Invoke(RefreshableInfo src)
         {
             RawName   = GetPath(src.Source);
             Encrypted = Get<bool>(src.Source, ItemPropId.Encrypted);

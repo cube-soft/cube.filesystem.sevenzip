@@ -50,7 +50,7 @@ using (var writer = new ArchiveWriter(Format.Tar))
 
 If you want to extract all files from the archive, you create an ArchiveReader object
 and call the Extract method. The 2nd argument of the constructor, that means the
-password of the archive, can be set string or Cube.Query<string> object.
+password of the archive, can be set string or Cube.Query&lt;string&gt; object.
 The latter is mainly used for implementing the interactive mode.
 
 ```cs
@@ -104,7 +104,7 @@ We will implement to add and/or modify files to existed archives in the future.
 
 ## License
  
-Copyright (c) 2010 [CubeSoft, Inc.](http://www.cube-soft.jp/)
+Copyright &copy; 2010 [CubeSoft, Inc.](http://www.cube-soft.jp/)
 
 The Cube.FileSystem.SevenZip project is licensed under the [GNU LGPLv3](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries/License.txt)
 and the other projects are [Apache 2.0](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/License.txt).

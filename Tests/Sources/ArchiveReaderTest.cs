@@ -514,7 +514,7 @@ namespace Cube.FileSystem.SevenZip.Tests
 
         #endregion
 
-        #region Helper methods
+        #region Others
 
         /* ----------------------------------------------------------------- */
         ///
