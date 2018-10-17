@@ -1,6 +1,7 @@
 Cube.FileSystem.SevenZip
 ====
 
+[![NuGet](https://img.shields.io/nuget/v/Cube.FileSystem.SevenZip.svg)](https://www.nuget.org/packages/Cube.FileSystem.SevenZip/)
 [![AppVeyor](https://ci.appveyor.com/api/projects/status/jao7f754rlookxxe?svg=true)](https://ci.appveyor.com/project/clown/cube-filesystem-sevenzip)
 [![Codecov](https://codecov.io/gh/cube-soft/Cube.FileSystem.SevenZip/branch/master/graph/badge.svg)](https://codecov.io/gh/cube-soft/Cube.FileSystem.SevenZip)
 
