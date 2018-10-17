@@ -3,7 +3,6 @@ Cube.FileSystem.SevenZip
 
 [![AppVeyor](https://ci.appveyor.com/api/projects/status/jao7f754rlookxxe?svg=true)](https://ci.appveyor.com/project/clown/cube-filesystem-sevenzip)
 [![Codecov](https://codecov.io/gh/cube-soft/Cube.FileSystem.SevenZip/branch/master/graph/badge.svg)](https://codecov.io/gh/cube-soft/Cube.FileSystem.SevenZip)
-[![Codacy](https://api.codacy.com/project/badge/Grade/001ce47631f14e648b864b5d391173d8)](https://www.codacy.com/app/clown/Cube.FileSystem.SevenZip)
 
 Cube.FileSystem.SevenZip is an I/O library, especially for archiving or extracting files.
 The Cube.FileSystem.SevenZip project (files in the Libraries directory) is licensed under the GNU LGPLv3 and the other projects are Apache 2.0.

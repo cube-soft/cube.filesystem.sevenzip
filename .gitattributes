@@ -22,6 +22,7 @@
 *.jpg           binary
 *.png           binary
 *.ico           binary
+*.svg           binary
 *.7z            binary
 *.zip           binary
 *.tar           binary

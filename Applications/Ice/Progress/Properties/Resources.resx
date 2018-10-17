@@ -119,25 +119,25 @@
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="Archive" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Icons\Archive.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Assets\Icons\Archive.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Extract" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Icons\Extract.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Assets\Icons\Extract.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="File" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Icons\File.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Assets\Icons\File.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="FileAlternate01" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Icons\FileAlternate01.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Assets\Icons\FileAlternate01.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="FileAlternate02" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Icons\FileAlternate02.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Assets\Icons\FileAlternate02.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="FileAlternate03" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Icons\FileAlternate03.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Assets\Icons\FileAlternate03.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="FileOld" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Icons\FileOld.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Assets\Icons\FileOld.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="FilterAll" xml:space="preserve">
     <value>すべてのファイル (*.*)|*.*</value>
@@ -167,10 +167,10 @@
     <value>自己解凍形式</value>
   </data>
   <data name="HeaderArchive" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\HeaderArchive.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Assets\Images\HeaderArchive.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="HeaderExtract" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\HeaderExtract.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Assets\Images\HeaderExtract.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="LevelFast" xml:space="preserve">
     <value>最速</value>
@@ -243,6 +243,9 @@
   </data>
   <data name="MessageUnknownFile" xml:space="preserve">
     <value>不明なファイル</value>
+  </data>
+  <data name="TitleError" xml:space="preserve">
+    <value>CubeICE エラー</value>
   </data>
   <data name="TitlePassword" xml:space="preserve">
     <value>パスワードの入力</value>
