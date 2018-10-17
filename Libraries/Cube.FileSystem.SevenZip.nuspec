@@ -10,8 +10,8 @@
     <description>C# wrapper library for 7-Zip.</description>
     <tags>Cube Zip 7-Zip SevenZip</tags>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <licenseUrl>https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/License.txt</licenseUrl>
     <projectUrl>https://github.com/cube-soft/Cube.FileSystem.SevenZip</projectUrl>
+    <licenseUrl>https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/License.txt</licenseUrl>
     <iconUrl>https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Icon.png?raw=true</iconUrl>
     <dependencies>
       <group targetFramework="net45">
