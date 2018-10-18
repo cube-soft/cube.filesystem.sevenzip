@@ -211,15 +211,15 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Context
+        /// Menu
         ///
         /// <summary>
         /// コンテキストメニューに関する設定を取得または設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [DataMember]
-        public ContextSettings Context
+        [DataMember(Name = "Context")]
+        public ContextSettings Menu
         {
             get => _context;
             set => SetProperty(ref _context, value);

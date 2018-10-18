@@ -355,7 +355,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                 }
             }, Throws.TypeOf<OperationCanceledException>());
 
-            Assert.That(count[ReportStatus.End], Is.EqualTo(2));
+            Assert.That(count[ReportStatus.End], Is.AtLeast(1));
         }
 
         /* ----------------------------------------------------------------- */
