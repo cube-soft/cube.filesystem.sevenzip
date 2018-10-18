@@ -56,8 +56,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="pathInArchive">圧縮ファイル中の相対パス</param>
         ///
         /* ----------------------------------------------------------------- */
-        public FileItem(Information src, string pathInArchive) :
-            base(src.Source, src.Refreshable)
+        public FileItem(Information src, string pathInArchive) : base(src.Source, src.Refreshable)
         {
             PathInArchive = pathInArchive;
         }

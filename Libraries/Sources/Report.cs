@@ -40,7 +40,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ReportStatus Status { get; set; }
+        public ReportStatus Status { get; set; } = ReportStatus.Progress;
 
         /* ----------------------------------------------------------------- */
         ///

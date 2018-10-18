@@ -101,13 +101,12 @@ namespace Cube.FileSystem.SevenZip.Tests
 
             foreach (var kv in Expect(filename))
             {
-                var path = IO.Combine(dest, kv.Key);
-                var info = IO.Get(path);
-                Assert.That(info.Exists,         Is.True, kv.Key);
-                Assert.That(info.Length,         Is.EqualTo(kv.Value), kv.Key);
-                Assert.That(info.CreationTime,   Is.Not.EqualTo(DateTime.MinValue), kv.Key);
-                Assert.That(info.LastWriteTime,  Is.Not.EqualTo(DateTime.MinValue), kv.Key);
-                Assert.That(info.LastAccessTime, Is.Not.EqualTo(DateTime.MinValue), kv.Key);
+                var fi = IO.Get(IO.Combine(dest, kv.Key));
+                Assert.That(fi.Exists,         Is.True, kv.Key);
+                Assert.That(fi.Length,         Is.EqualTo(kv.Value), kv.Key);
+                Assert.That(fi.CreationTime,   Is.Not.EqualTo(DateTime.MinValue), kv.Key);
+                Assert.That(fi.LastWriteTime,  Is.Not.EqualTo(DateTime.MinValue), kv.Key);
+                Assert.That(fi.LastAccessTime, Is.Not.EqualTo(DateTime.MinValue), kv.Key);
             }
         }, $"{filename}, {password}");
 
@@ -166,7 +165,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /* ----------------------------------------------------------------- */
         [TestCase("Sample.cab",     ExpectedResult =  3)]
         [TestCase("Sample.chm",     ExpectedResult = 89)]
-        [TestCase("Sample.cpio",    ExpectedResult =  4)]
+        [TestCase("Sample.cpio",    ExpectedResult =  5)]
         [TestCase("Sample.docx",    ExpectedResult = 13)]
         [TestCase("Sample.exe",     ExpectedResult =  4)]
         [TestCase("Sample.nupkg",   ExpectedResult =  5)]
@@ -178,20 +177,16 @@ namespace Cube.FileSystem.SevenZip.Tests
         [TestCase("SampleSfx.exe",  ExpectedResult =  4)]
         public int Extract_Count(string filename)
         {
-            var src        = GetExamplesWith(filename);
-            var extracting = 0;
-            var extracted  = 0;
+            var src   = GetExamplesWith(filename);
+            var count = Create();
 
             using (var archive = new ArchiveReader(src))
             {
-                var dest = GetResultsWith(nameof(Extract_Count), filename);
-                archive.Extracting += (s, e) => ++extracting;
-                archive.Extracted  += (s, e) => ++extracted;
-                archive.Extract(dest);
+                var path = GetResultsWith(nameof(Extract_Count), filename);
+                archive.Extract(path, Create(count));
             }
 
-            Assert.That(extracted, Is.EqualTo(extracting));
-            return extracted;
+            return count[ReportStatus.End];
         }
 
         /* ----------------------------------------------------------------- */
@@ -347,20 +342,20 @@ namespace Cube.FileSystem.SevenZip.Tests
         [Test]
         public void Extract_PasswordCancel()
         {
-            var count = 0;
+            var count = Create();
 
             Assert.That(() =>
             {
                 var src   = GetExamplesWith("Password.7z");
                 var query = new Query<string>(e => e.Cancel = true);
+
                 using (var archive = new ArchiveReader(src, query))
                 {
-                    archive.Extracted += (s, e) => ++count;
-                    archive.Extract(Results);
+                    archive.Extract(Results, Create(count));
                 }
             }, Throws.TypeOf<OperationCanceledException>());
 
-            Assert.That(count, Is.EqualTo(2));
+            Assert.That(count[ReportStatus.End], Is.EqualTo(2));
         }
 
         /* ----------------------------------------------------------------- */
@@ -380,46 +375,6 @@ namespace Cube.FileSystem.SevenZip.Tests
             using (var archive = new ArchiveReader(src, query))
             {
                 foreach (var item in archive.Items) item.Extract(Results);
-            }
-        }, Throws.TypeOf<OperationCanceledException>());
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extracting_Throws
-        ///
-        /// <summary>
-        /// Extracting イベントで例外を送出した時の挙動を確認します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [Test]
-        public void Extracting_Throws() => Assert.That(() =>
-        {
-            var src = GetExamplesWith("Sample.zip");
-            using (var archive = new ArchiveReader(src))
-            {
-                archive.Extracting += (s, e) => throw new ArgumentException();
-                archive.Extract(Results);
-            }
-        }, Throws.TypeOf<ArgumentException>());
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extracted_Throws
-        ///
-        /// <summary>
-        /// Extracted イベントで例外を送出した時の挙動を確認します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [Test]
-        public void Extraced_Throws() => Assert.That(() =>
-        {
-            var src = GetExamplesWith("Sample.zip");
-            using (var archive = new ArchiveReader(src))
-            {
-                archive.Extracted += (s, e) => throw new OperationCanceledException();
-                archive.Extract(Results);
             }
         }, Throws.TypeOf<OperationCanceledException>());
 
@@ -518,10 +473,39 @@ namespace Cube.FileSystem.SevenZip.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Create
+        ///
+        /// <summary>
+        /// Creates a new collection for ReportStatus.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private IDictionary<ReportStatus, int> Create() => new Dictionary<ReportStatus, int>
+        {
+            { ReportStatus.Begin,    0 },
+            { ReportStatus.End,      0 },
+            { ReportStatus.Progress, 0 },
+        };
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create
+        ///
+        /// <summary>
+        /// Creates a new instance of the Progress(Report) class.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private IProgress<Report> Create(IDictionary<ReportStatus, int> src) =>
+            new Progress<Report>(e => src[e.Status]++);
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Expect
         ///
         /// <summary>
-        /// 期待値を生成します。
+        /// Creates the expected result corresponding to the specified
+        /// filename.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
