@@ -180,7 +180,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="progress">進捗報告用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Extract(ArchiveItem src, string directory, IProgress<ArchiveReport> progress)
+        public void Extract(ArchiveItem src, string directory, IProgress<Report> progress)
         {
             Debug.Assert(!string.IsNullOrEmpty(src.FullName));
 

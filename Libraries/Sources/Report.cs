@@ -20,23 +20,45 @@ namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveReport
+    /// Report
     ///
     /// <summary>
-    /// 進捗状況を保持するためのクラスです。
+    /// Represents information of the archived or extracted report.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveReport
+    public class Report
     {
         #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Status
+        ///
+        /// <summary>
+        /// Gets or sets the reporting status.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ReportStatus Status { get; set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Current
+        ///
+        /// <summary>
+        /// Gets or sets the file information that is currently processing.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public Information Current { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
         /// Count
         ///
         /// <summary>
-        /// 処理の終了したファイル数を取得または設定します。
+        /// Gets or sets the number of processed files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -47,7 +69,7 @@ namespace Cube.FileSystem.SevenZip
         /// TotalCount
         ///
         /// <summary>
-        /// 処理対象となるファイル数を取得または設定します。
+        /// Gets or sets the number of processing target files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -58,7 +80,7 @@ namespace Cube.FileSystem.SevenZip
         /// Bytes
         ///
         /// <summary>
-        /// 処理の終了したとなるバイト数を取得します。
+        /// Gets or sets the number of processed bytes.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -69,7 +91,7 @@ namespace Cube.FileSystem.SevenZip
         /// TotalBytes
         ///
         /// <summary>
-        /// 処理対象となるバイト数を取得または設定します。
+        /// Gets or sets the number of processing target bytes.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -80,12 +102,31 @@ namespace Cube.FileSystem.SevenZip
         /// Ratio
         ///
         /// <summary>
-        /// 進捗状況を示す値を [0, 1] の範囲で取得します。
+        /// Gets the progress ratio within the range of [0, 1].
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public double Ratio => TotalBytes > 0 ? Bytes / (double)TotalBytes : 0.0;
 
         #endregion
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// ReportStatus
+    ///
+    /// <summary>
+    /// Specifies status of the provided report.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public enum ReportStatus
+    {
+        /// <summary>Current file begins to be archived or extracted</summary>
+        Begin,
+        /// <summary>Current file ends to be archived or extracted</summary>
+        End,
+        /// <summary>Archiving or Extracting operation is in progress.</summary>
+        Progress,
     }
 }

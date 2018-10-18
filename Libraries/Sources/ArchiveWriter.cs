@@ -192,7 +192,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="progress">進捗状況報告用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Save(string path, IQuery<string> password, IProgress<ArchiveReport> progress)
+        public void Save(string path, IQuery<string> password, IProgress<Report> progress)
         {
             var query = password != null ?
                         new PasswordQuery(password) :
@@ -228,7 +228,7 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         private void SaveCoreSfx(string path, IQuery<string> password,
-            IProgress<ArchiveReport> progress, IList<FileItem> items)
+            IProgress<Report> progress, IList<FileItem> items)
         {
             var sfx = (Option as SfxOption)?.Module;
             if (string.IsNullOrEmpty(sfx) || !_io.Exists(sfx))
@@ -262,7 +262,7 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         private void SaveCoreTar(string path, IQuery<string> password,
-            IProgress<ArchiveReport> progress, IList<FileItem> items)
+            IProgress<Report> progress, IList<FileItem> items)
         {
             var info = _io.Get(path);
             var nwe  = _io.Get(info.NameWithoutExtension);
@@ -302,7 +302,7 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         private void SaveCore(Format format, string path, IQuery<string> password,
-            IProgress<ArchiveReport> progress, IList<FileItem> items)
+            IProgress<Report> progress, IList<FileItem> items)
         {
             var dir = _io.Get(_io.Get(path).DirectoryName);
             if (!dir.Exists) _io.CreateDirectory(dir.FullName);

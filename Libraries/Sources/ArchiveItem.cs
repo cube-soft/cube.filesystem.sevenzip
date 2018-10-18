@@ -143,7 +143,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="progress">進捗報告用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Extract(string directory, IProgress<ArchiveReport> progress) =>
+        public void Extract(string directory, IProgress<Report> progress) =>
             GetController().Extract(this, directory, progress);
 
         #endregion

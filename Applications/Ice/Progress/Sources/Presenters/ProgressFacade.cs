@@ -145,7 +145,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveReport Report { get; protected set; } = new ArchiveReport();
+        public Report Report { get; protected set; } = new Report();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -199,7 +199,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public event ValueEventHandler<ArchiveReport> Progress;
+        public event ValueEventHandler<Report> Progress;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -210,7 +210,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnProgress(ValueEventArgs<ArchiveReport> e) =>
+        protected virtual void OnProgress(ValueEventArgs<Report> e) =>
             Progress?.Invoke(this, e);
 
         #endregion
@@ -449,8 +449,8 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected IProgress<ArchiveReport> CreateInnerProgress(Action<ArchiveReport> action) =>
-            new SuspendableProgress<ArchiveReport>(_cancel.Token, _wait, action);
+        protected IProgress<Report> CreateInnerProgress(Action<Report> action) =>
+            new SuspendableProgress<Report>(_cancel.Token, _wait, action);
 
         /* ----------------------------------------------------------------- */
         ///

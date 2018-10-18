@@ -89,7 +89,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IProgress<ArchiveReport> Progress { get; set; }
+        public IProgress<Report> Progress { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -122,7 +122,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected ArchiveReport Report { get; set; } = new ArchiveReport();
+        protected Report Report { get; set; } = new Report();
 
         #endregion
 

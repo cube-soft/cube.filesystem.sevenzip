@@ -95,7 +95,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             using (var archive = new ArchiveReader(src, password))
             {
                 var bytes  = 0L;
-                var report = new Progress<ArchiveReport>(x => bytes = x.Bytes);
+                var report = new Progress<Report>(x => bytes = x.Bytes);
                 archive.Extract(dest, report);
             }
 

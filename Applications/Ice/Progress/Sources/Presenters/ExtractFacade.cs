@@ -266,7 +266,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        private void ExtractCore(ArchiveReader src, IProgress<ArchiveReport> progress)
+        private void ExtractCore(ArchiveReader src, IProgress<Report> progress)
         {
             var retry = false;
             do

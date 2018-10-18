@@ -114,7 +114,7 @@
     <Compile Include="Sources\ArchiveExtension.cs" />
     <Compile Include="Sources\ArchiveItem.cs" />
     <Compile Include="Sources\ArchiveOption.cs" />
-    <Compile Include="Sources\ArchiveReport.cs" />
+    <Compile Include="Sources\Report.cs" />
     <Compile Include="Sources\ArchiveReader.cs" />
     <Compile Include="Sources\ArchiveWriter.cs" />
     <Compile Include="Sources\Exceptions.cs" />
