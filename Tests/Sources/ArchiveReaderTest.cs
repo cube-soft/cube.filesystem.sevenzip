@@ -355,7 +355,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                 }
             }, Throws.TypeOf<OperationCanceledException>());
 
-            Assert.That(count[ReportStatus.End], Is.AtLeast(1));
+            Assert.That(count[ReportStatus.End], Is.EqualTo(2));
         }
 
         /* ----------------------------------------------------------------- */
@@ -497,7 +497,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         ///
         /* ----------------------------------------------------------------- */
         private IProgress<Report> Create(IDictionary<ReportStatus, int> src) =>
-            new Progress<Report>(e => src[e.Status]++);
+            new SyncProgress<Report>(e => src[e.Status]++);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -551,6 +551,23 @@ namespace Cube.FileSystem.SevenZip.Tests
                 if (!string.Equals(code, "ja-JP", option)) Assert.Ignore(message);
                 else throw;
             }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SyncProgress
+        ///
+        /// <summary>
+        /// Provides functioanlity to execute the specified action
+        /// as a synchronous operation.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private class SyncProgress<T> : IProgress<T>
+        {
+            public SyncProgress(Action<T> e) { _do = e; }
+            public void Report(T e) => _do(e);
+            private readonly Action<T> _do;
         }
 
         #endregion
