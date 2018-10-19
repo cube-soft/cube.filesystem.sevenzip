@@ -168,14 +168,29 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="password">パスワード</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Save(string path, string password)
+        public void Save(string path, string password) => Save(path, password, null);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Save
+        ///
+        /// <summary>
+        /// 圧縮ファイルを作成し保存します。
+        /// </summary>
+        ///
+        /// <param name="path">保存パス</param>
+        /// <param name="password">パスワード</param>
+        /// <param name="progress">進捗状況報告用オブジェクト</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Save(string path, string password, IProgress<Report> progress)
         {
             var query = !string.IsNullOrEmpty(password) ?
                         new PasswordQuery(password) :
                         null;
 
-            if (Format == Format.Sfx) SaveCoreSfx(path, query, null, GetItems());
-            else if (Format == Format.Tar) SaveCoreTar(path, query, null, GetItems());
+            if (Format == Format.Sfx) SaveCoreSfx(path, query, progress, GetItems());
+            else if (Format == Format.Tar) SaveCoreTar(path, query, progress, GetItems());
             else SaveCore(Format, path, query, null, GetItems());
         }
 
