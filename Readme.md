@@ -21,15 +21,18 @@ Note that all the samples need the "using Cube.FileSystem.SevenZip;" statement.
 ```cs
 using (var writer = new ArchiveWriter(Format.Zip))
 {
-    writer.Option = new ZipOption(); // optional
     writer.Add(@"path\to\file");
     writer.Add(@"path\to\directory_including_files");
-    writer.Save(@"path\to\save.zip", "password");
+    writer.Option  = new ZipOption();
+    writer.Filters = new[] { ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini" };
+    
+    var progress = new Progress<Report>(e => DoSomething(e));
+    writer.Save(@"path\to\save.zip", "password", progress);
 }
 ```
 
-You create an ArchiveWriter object with an archiving format (e.g. Zip, SevenZip, ...), 
-add files and/or directories you want to archive, and finally call the Save method.
+You create an ArchiveWriter object with an archiving format (e.g. Zip, SevenZip, ...),
+add files and/or directories you want to archive, set some additional options, and finally call the Save method.
 When you create Tar based archives, you can use a TarOption object for selecting a compression method.
 
 ```cs
@@ -57,9 +60,12 @@ The latter is mainly used for implementing the interactive mode.
 ```cs
 // Set password directly or using Query<string>
 var password = new Cube.Query<string>(e => e.Result = "password");
+var progress = new Progress<Report>(e => DoSomething(e));
+
 using (var reader = new ArchiveReader(@"path\to\archive", password))
 {
-    reader.Extract(@"path\to\directory");
+    reader.Filters = new[] { ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini" };    
+    reader.Extract(@"path\to\directory", progress);
 }
 ```
 
@@ -76,10 +82,6 @@ using (var reader = new ArchiveReader(@"path\to\archive", "password"))
     reader.Items[3].Extract(directory);
 }
 ```
-
-## Todo
-
-We will implement to add and/or modify files to existed archives in the future.
 
 ## Dependencies
 
