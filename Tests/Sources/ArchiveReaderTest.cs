@@ -16,8 +16,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.SevenZip.Archives;
-using Cube.FileSystem.TestService;
 using Microsoft.VisualBasic.FileIO;
 using NUnit.Framework;
 using System;
@@ -37,124 +35,87 @@ namespace Cube.FileSystem.SevenZip.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ArchiveReaderTest : FileFixture
+    class ArchiveReaderTest : ArchiveFixture
     {
         #region Tests
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Items
-        ///
-        /// <summary>
-        /// 圧縮ファイルのリストを取得するテストを実行します。
-        /// </summary>
-        ///
-        /// <remarks>
-        /// 圧縮形式によっては各項目のファイルサイズが取得できない場合が
-        /// あるため、各項目のファイルサイズの確認は省略しています。
-        /// </remarks>
-        ///
-        /* ----------------------------------------------------------------- */
-        [TestCaseSource(nameof(TestCases))]
-        public void Items(string filename, string password)
-        {
-            var src = GetExamplesWith(filename);
-            using (var archive = new ArchiveReader(src, password))
-            {
-                var actual   = archive.Items.ToList();
-                var expected = Expect(filename).Keys.ToList();
-
-                Assert.That(actual.Count, Is.EqualTo(expected.Count));
-
-                for (var i = 0; i < expected.Count; ++i)
-                {
-                    var item = actual[i];
-                    item.Refresh(); // NOP
-
-                    Assert.That(item.Index,    Is.EqualTo(i));
-                    Assert.That(item.FullName, Is.EqualTo(expected[i]));
-                }
-            }
-        }
 
         /* ----------------------------------------------------------------- */
         ///
         /// Extract
         ///
         /// <summary>
-        /// 圧縮ファイルを展開するテストを実行します。
+        /// Executes a test to extract the specified archive.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
         public void Extract(string filename, string password) => IgnoreCultureError(() =>
         {
-            var src  = GetExamplesWith(filename);
-            var dest = GetResultsWith(nameof(Extract), filename);
+            var src    = GetExamplesWith(filename);
+            var dest   = GetResultsWith(nameof(Extract), filename);
+            var report = CreateReport();
 
-            using (var archive = new ArchiveReader(src, password))
-            {
-                var bytes  = 0L;
-                var report = new Progress<Report>(x => bytes = x.Bytes);
-                archive.Extract(dest, report);
-            }
+            using (var obj = new ArchiveReader(src, password)) obj.Extract(dest, Create(report));
 
-            foreach (var kv in Expect(filename))
+            foreach (var cmp in Expect(filename))
             {
-                var fi = IO.Get(IO.Combine(dest, kv.Key));
-                Assert.That(fi.Exists,         Is.True, kv.Key);
-                Assert.That(fi.Length,         Is.EqualTo(kv.Value), kv.Key);
-                Assert.That(fi.CreationTime,   Is.Not.EqualTo(DateTime.MinValue), kv.Key);
-                Assert.That(fi.LastWriteTime,  Is.Not.EqualTo(DateTime.MinValue), kv.Key);
-                Assert.That(fi.LastAccessTime, Is.Not.EqualTo(DateTime.MinValue), kv.Key);
+                var fi = IO.Get(IO.Combine(dest, cmp.Key));
+
+                Assert.That(fi.Exists,         Is.True, cmp.Key);
+                Assert.That(fi.Length,         Is.EqualTo(cmp.Value), cmp.Key);
+                Assert.That(fi.CreationTime,   Is.Not.EqualTo(DateTime.MinValue), cmp.Key);
+                Assert.That(fi.LastWriteTime,  Is.Not.EqualTo(DateTime.MinValue), cmp.Key);
+                Assert.That(fi.LastAccessTime, Is.Not.EqualTo(DateTime.MinValue), cmp.Key);
             }
         }, $"{filename}, {password}");
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract_Each
+        /// Extract_EachItem
         ///
         /// <summary>
-        /// 圧縮ファイルの項目毎に展開するテストを実行します。
+        /// Executes a test to extract the specified archive for each item.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
-        public void Extract_Each(string filename, string password) => IgnoreCultureError(() =>
+        public void Extract_EachItem(string filename, string password) => IgnoreCultureError(() =>
         {
             var src  = GetExamplesWith(filename);
-            var dest = GetResultsWith(nameof(Extract_Each), filename);
+            var dest = GetResultsWith(nameof(Extract_EachItem), filename);
 
-            using (var archive = new ArchiveReader(src, password))
+            using (var obj = new ArchiveReader(src, password))
             {
-                var actual   = archive.Items.ToList();
-                var expected = Expect(filename);
-                var keys     = expected.Keys.ToList();
+                var items = obj.Items.ToList();
+                var cmp   = Expect(filename);
+                var keys  = cmp.Keys.ToList();
 
-                Assert.That(actual.Count, Is.EqualTo(expected.Count));
+                Assert.That(items.Count, Is.EqualTo(cmp.Count));
 
                 for (var i = 0; i < keys.Count; ++i)
                 {
-                    actual[i].Extract(dest);
+                    items[i].Refresh();
+                    var name = keys[i];
+                    Assert.That(items[i].Index,    Is.EqualTo(i), name);
+                    Assert.That(items[i].FullName, Is.EqualTo(name), name);
 
-                    var key  = keys[i];
-                    var info = IO.Get(IO.Combine(dest, key));
-
-                    Assert.That(info.Exists,         Is.True, key);
-                    Assert.That(info.Length,         Is.EqualTo(expected[key]), key);
-                    Assert.That(info.CreationTime,   Is.Not.EqualTo(DateTime.MinValue), key);
-                    Assert.That(info.LastWriteTime,  Is.Not.EqualTo(DateTime.MinValue), key);
-                    Assert.That(info.LastAccessTime, Is.Not.EqualTo(DateTime.MinValue), key);
+                    items[i].Extract(dest);
+                    var fi = IO.Get(IO.Combine(dest, name));
+                    Assert.That(fi.Exists,         Is.True, name);
+                    Assert.That(fi.Length,         Is.EqualTo(cmp[name]), name);
+                    Assert.That(fi.CreationTime,   Is.Not.EqualTo(DateTime.MinValue), name);
+                    Assert.That(fi.LastWriteTime,  Is.Not.EqualTo(DateTime.MinValue), name);
+                    Assert.That(fi.LastAccessTime, Is.Not.EqualTo(DateTime.MinValue), name);
                 }
             }
         }, $"{filename}, {password}");
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract_Count
+        /// Extract_Lite
         ///
         /// <summary>
-        /// 圧縮ファイルを展開するテストを実行します。
+        /// Executes a test to extract the specified archive.
         /// </summary>
         ///
         /// <remarks>
@@ -175,235 +136,14 @@ namespace Cube.FileSystem.SevenZip.Tests
         [TestCase("Sample.xlsx",    ExpectedResult = 14)]
         [TestCase("SampleEmpty.7z", ExpectedResult =  7)]
         [TestCase("SampleSfx.exe",  ExpectedResult =  4)]
-        public int Extract_Count(string filename)
+        public int Extract_Lite(string filename)
         {
-            var src   = GetExamplesWith(filename);
-            var count = Create();
+            var src    = GetExamplesWith(filename);
+            var dest   = GetResultsWith(nameof(Extract_Lite), filename);
+            var report = CreateReport();
 
-            using (var archive = new ArchiveReader(src))
-            {
-                var path = GetResultsWith(nameof(Extract_Count), filename);
-                archive.Extract(path, Create(count));
-            }
-
-            return count[ReportStatus.End];
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extract_Filter
-        ///
-        /// <summary>
-        /// フィルタリング設定を行った時の挙動を確認します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [Test]
-        public void Extract_Filter()
-        {
-            var src  = GetExamplesWith("SampleFilter.zip");
-            var dest = GetResultsWith(nameof(Extract_Filter));
-
-            using (var archive = new ArchiveReader(src))
-            {
-                archive.Filters = new[] { ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini" };
-                archive.Extract(dest);
-            }
-
-            Assert.That(IO.Exists(IO.Combine(dest, @"フィルタリング テスト用")),              Is.True);
-            Assert.That(IO.Exists(IO.Combine(dest, @"フィルタリング テスト用\.DS_Store")),    Is.False);
-            Assert.That(IO.Exists(IO.Combine(dest, @"フィルタリング テスト用\desktop.ini")),  Is.False);
-            Assert.That(IO.Exists(IO.Combine(dest, @"フィルタリング テスト用\DS_Store.txt")), Is.True);
-            Assert.That(IO.Exists(IO.Combine(dest, @"フィルタリング テスト用\Thumbs.db")),    Is.False);
-            Assert.That(IO.Exists(IO.Combine(dest, @"フィルタリング テスト用\__MACOSX")),     Is.False);
-            Assert.That(IO.Exists(IO.Combine(dest, @"フィルタリング テスト用\フィルタリングされないファイル.txt")), Is.True);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extract_NotSupported
-        ///
-        /// <summary>
-        /// 未対応のファイルが指定された時の挙動を確認します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [Test]
-        public void Extract_NotSupported() => Assert.That(
-            () => new ArchiveReader(GetExamplesWith("Sample.txt")),
-            Throws.TypeOf<NotSupportedException>()
-        );
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extract_PermissionError
-        ///
-        /// <summary>
-        /// 書き込みできないファイルを指定した時の挙動を確認します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [Test]
-        public void Extract_PermissionError() => Assert.That(() =>
-        {
-            var dir  = GetResultsWith(nameof(Extract_PermissionError));
-            var dest = IO.Combine(dir, @"Sample\Foo.txt");
-
-            IO.Copy(GetExamplesWith("Sample.txt"), dest);
-
-            var io = new IO();
-            io.Failed += (s, e) => throw new OperationCanceledException();
-
-            using (var _ = io.OpenRead(dest))
-            using (var archive = new ArchiveReader(GetExamplesWith("Sample.zip"), "", io))
-            {
-                archive.Extract(dir);
-            }
-        }, Throws.TypeOf<OperationCanceledException>());
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extract_MergeError
-        ///
-        /// <summary>
-        /// 分割された圧縮ファイルの展開に失敗する時の挙動を確認します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [Test]
-        public void Extract_MergeError() => Assert.That(() =>
-        {
-            var dir = GetResultsWith(nameof(Extract_MergeError));
-            for (var i = 1; i < 4; ++i)
-            {
-                var name = $"SampleVolume.rar.{i:000}";
-                IO.Copy(GetExamplesWith(name), IO.Combine(dir, name));
-            }
-
-            using (var archive = new ArchiveReader(IO.Combine(dir, "SampleVolume.rar.001")))
-            {
-                archive.Extract(dir);
-            }
-        }, Throws.TypeOf<System.IO.IOException>());
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extract_WrongPassword
-        ///
-        /// <summary>
-        /// 暗号化されたファイルの展開に失敗するテストを実行します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [TestCase("")]
-        [TestCase("wrong")]
-        public void Extract_WrongPassword(string password) => Assert.That(() =>
-        {
-            var src = GetExamplesWith("Password.7z");
-            using (var archive = new ArchiveReader(src, password))
-            {
-                archive.Extract(Results);
-            }
-        }, Throws.TypeOf<EncryptionException>());
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extract_Each_WrongPassword
-        ///
-        /// <summary>
-        /// 暗号化されたファイルの展開に失敗するテストを実行します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [TestCase("")]
-        public void Extract_Each_WrongPassword(string password) => Assert.That(() =>
-        {
-            var src = GetExamplesWith("Password.7z");
-            using (var archive = new ArchiveReader(src, password))
-            {
-                foreach (var item in archive.Items) item.Extract(Results);
-            }
-        }, Throws.TypeOf<EncryptionException>());
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extract_UserCancel
-        ///
-        /// <summary>
-        /// パスワード要求時にキャンセルするテストを実行します。
-        /// </summary>
-        ///
-        /// <remarks>
-        /// 0 バイトのファイルはパスワード無しで展開が完了するため、
-        /// Extracted イベントが 1 回発生します。
-        /// </remarks>
-        ///
-        /* ----------------------------------------------------------------- */
-        [Test]
-        public void Extract_PasswordCancel()
-        {
-            var count = Create();
-
-            Assert.That(() =>
-            {
-                var src   = GetExamplesWith("Password.7z");
-                var query = new Query<string>(e => e.Cancel = true);
-
-                using (var archive = new ArchiveReader(src, query))
-                {
-                    archive.Extract(Results, Create(count));
-                }
-            }, Throws.TypeOf<OperationCanceledException>());
-
-            Assert.That(count[ReportStatus.End], Is.EqualTo(2));
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extract_Each_PasswordCancel
-        ///
-        /// <summary>
-        /// パスワード要求時にキャンセルするテストを実行します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [Test]
-        public void Extract_Each_PasswordCancel() => Assert.That(() =>
-        {
-            var src = GetExamplesWith("Password.7z");
-            var query = new Query<string>(e => e.Cancel = true);
-            using (var archive = new ArchiveReader(src, query))
-            {
-                foreach (var item in archive.Items) item.Extract(Results);
-            }
-        }, Throws.TypeOf<OperationCanceledException>());
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CreateDirectory
-        ///
-        /// <summary>
-        /// ArchiveItem の拡張メソッドのテストを実行します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [Test]
-        public void CreateDirectory()
-        {
-            var dest = GetResultsWith(nameof(CreateDirectory));
-            using (var archive = new ArchiveReader(GetExamplesWith("Sample.zip")))
-            {
-                foreach (var item in archive.Items)
-                {
-                    item.CreateDirectory(dest);
-                    item.SetAttributes(dest);
-                }
-            }
-
-            Assert.That(IO.Exists(IO.Combine(dest, @"Sample")),         Is.True);
-            Assert.That(IO.Exists(IO.Combine(dest, @"Sample\Foo.txt")), Is.False);
-            Assert.That(IO.Exists(IO.Combine(dest, @"Sample\Bar.txt")), Is.False);
-            Assert.That(IO.Exists(IO.Combine(dest, @"Sample\Bas.txt")), Is.False);
+            using (var obj = new ArchiveReader(src)) obj.Extract(dest, Create(report));
+            return report[ReportStatus.End];
         }
 
         #endregion
@@ -415,7 +155,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// TestCases
         ///
         /// <summary>
-        /// Items および Extract_* のテスト用データを取得します。
+        /// Gets test cases.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -473,47 +213,17 @@ namespace Cube.FileSystem.SevenZip.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Create
-        ///
-        /// <summary>
-        /// Creates a new collection for ReportStatus.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private IDictionary<ReportStatus, int> Create() => new Dictionary<ReportStatus, int>
-        {
-            { ReportStatus.Begin,    0 },
-            { ReportStatus.End,      0 },
-            { ReportStatus.Progress, 0 },
-        };
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Create
-        ///
-        /// <summary>
-        /// Creates a new instance of the Progress(Report) class.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private IProgress<Report> Create(IDictionary<ReportStatus, int> src) =>
-            new SyncProgress<Report>(e => src[e.Status]++);
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// Expect
         ///
         /// <summary>
-        /// Creates the expected result corresponding to the specified
-        /// filename.
+        /// Creates the expected result from the specified file.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         private IDictionary<string, long> Expect(string filename)
         {
-            var dest = new Dictionary<string, long>();
-            var path = GetExamplesWith("Expected", $"{filename}.txt");
-            var csv  = new TextFieldParser(path, System.Text.Encoding.UTF8)
+            var src = GetExamplesWith("Expected", $"{filename}.txt");
+            var csv = new TextFieldParser(src, System.Text.Encoding.UTF8)
             {
                 Delimiters                = new[] { "," },
                 HasFieldsEnclosedInQuotes = true,
@@ -521,12 +231,12 @@ namespace Cube.FileSystem.SevenZip.Tests
                 TrimWhiteSpace            = true,
             };
 
+            var dest = new Dictionary<string, long>();
             while (!csv.EndOfData)
             {
                 var row = csv.ReadFields();
                 dest.Add(row[0], long.Parse(row[1]));
             }
-
             return dest;
         }
 
@@ -535,10 +245,14 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// IgnoreCultureError
         ///
         /// <summary>
+        /// Checks if the thrown exception is the EncryptionException class.
+        /// </summary>
+        ///
+        /// <remarks>
         /// ロケールが日本語以外の環境で失敗するテストに関しては、現時点
         /// では無視しています。将来的には CodePage を指定可能な形に修正
         /// する事で対応する予定です。
-        /// </summary>
+        /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
         private void IgnoreCultureError(Action action, string message)
@@ -547,27 +261,10 @@ namespace Cube.FileSystem.SevenZip.Tests
             catch (EncryptionException)
             {
                 var code = CultureInfo.CurrentCulture.Name;
-                var option = StringComparison.InvariantCultureIgnoreCase;
-                if (!string.Equals(code, "ja-JP", option)) Assert.Ignore(message);
+                var opt  = StringComparison.InvariantCultureIgnoreCase;
+                if (!code.Equals("ja-JP", opt)) Assert.Ignore(message);
                 else throw;
             }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SyncProgress
-        ///
-        /// <summary>
-        /// Provides functioanlity to execute the specified action
-        /// as a synchronous operation.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private class SyncProgress<T> : IProgress<T>
-        {
-            public SyncProgress(Action<T> e) { _do = e; }
-            public void Report(T e) => _do(e);
-            private readonly Action<T> _do;
         }
 
         #endregion

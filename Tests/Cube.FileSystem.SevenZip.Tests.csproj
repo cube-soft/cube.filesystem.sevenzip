@@ -96,8 +96,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Sources\ArchiveFixture.cs" />
     <Compile Include="Sources\GlobalSetup.cs" />
+    <Compile Include="Sources\ArchiveReaderExtTest.cs" />
     <Compile Include="Sources\ArchiveReaderTest.cs" />
+    <Compile Include="Sources\ArchiveWriterExtTest.cs" />
     <Compile Include="Sources\ArchiveWriterTest.cs" />
     <Compile Include="Sources\FormatTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
