@@ -57,6 +57,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                 writer.Option = option;
                 foreach (var item in items) writer.Add(GetExamplesWith(item));
                 writer.Save(dest, password);
+                writer.Clear();
             }
 
             using (var ss = IO.OpenRead(dest)) return Formats.FromStream(ss);
