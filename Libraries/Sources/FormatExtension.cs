@@ -28,7 +28,7 @@ namespace Cube.FileSystem.SevenZip
     /// Formats
     ///
     /// <summary>
-    /// Format に対する拡張用クラスです。
+    /// Provides extended methods of the Format.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -41,7 +41,7 @@ namespace Cube.FileSystem.SevenZip
         /// SfxName
         ///
         /// <summary>
-        /// 自己解凍形式 (SFX) モジュールの名前を取得します。
+        /// Gets the default name of SFX module.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -55,39 +55,15 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ToClassId
-        ///
-        /// <summary>
-        /// Format に対応する Class ID を取得します。
-        /// </summary>
-        ///
-        /// <param name="src">Format オブジェクト</param>
-        ///
-        /// <returns>Class ID</returns>
-        ///
-        /// <remarks>
-        /// GUID は {23170F69-40C1-278A-1000-000110xx0000} となります。
-        /// </remarks>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static Guid ToClassId(this Format src)
-        {
-            if (src == Format.Unknown) return Guid.Empty;
-            var cvt = (src == Format.Sfx) ? Format.SevenZip : src;
-            return new Guid($"23170f69-40c1-278a-1000-000110{((int)cvt):x2}0000");
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// ToExtension
         ///
         /// <summary>
-        /// Format に対応する拡張子を取得します。
+        /// Gets the extension corresponding to the specified format.
         /// </summary>
         ///
-        /// <param name="src">Format オブジェクト</param>
+        /// <param name="src">Archive format.</param>
         ///
-        /// <returns>拡張子</returns>
+        /// <returns>Extension.</returns>
         ///
         /* ----------------------------------------------------------------- */
         public static string ToExtension(this Format src) =>
@@ -100,12 +76,13 @@ namespace Cube.FileSystem.SevenZip
         /// ToExtension
         ///
         /// <summary>
-        /// CompressionMethod に対応する拡張子を取得します。
+        /// Gets the extension corresponding to the specified compression
+        /// method.
         /// </summary>
         ///
-        /// <param name="src">CompressionMethod オブジェクト</param>
+        /// <param name="src">Compression method.</param>
         ///
-        /// <returns>拡張子</returns>
+        /// <returns>Extension.</returns>
         ///
         /* ----------------------------------------------------------------- */
         public static string ToExtension(this CompressionMethod src) =>
@@ -118,17 +95,13 @@ namespace Cube.FileSystem.SevenZip
         /// ToMethod
         ///
         /// <summary>
-        /// Format に対応する CompressionMethod を取得します。
+        /// Gets the compression method corresponding to the specified
+        /// format.
         /// </summary>
         ///
-        /// <param name="src">Format オブジェクト</param>
+        /// <param name="src">Archive format.</param>
         ///
-        /// <returns>CompressionMethod オブジェクト</returns>
-        ///
-        /// <remarks>
-        /// 一部の Format は CompressionMethod に指定可能なため、
-        /// その対応関係をこのメソッドに記述しています。
-        /// </remarks>
+        /// <returns>Compression method.</returns>
         ///
         /* ----------------------------------------------------------------- */
         public static CompressionMethod ToMethod(this Format src) =>
@@ -136,39 +109,64 @@ namespace Cube.FileSystem.SevenZip
             dest :
             CompressionMethod.Default;
 
-        #endregion
-
-        #region FromXxx
-
         /* ----------------------------------------------------------------- */
         ///
-        /// FromMethod
+        /// ToFormat
         ///
         /// <summary>
-        /// CompressionMethod に対応する Format を取得します。
+        /// Gets the archvie format corresponding to the specified
+        /// compression method.
         /// </summary>
         ///
-        /// <param name="src">CompressionMethod</param>
+        /// <param name="src">Compression method.</param>
         ///
-        /// <returns>Format オブジェクト</returns>
+        /// <returns>Archive format.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static Format FromMethod(CompressionMethod src) =>
+        public static Format ToFormat(this CompressionMethod src) =>
             GetMethodToFormatMap().TryGetValue(src, out Format dest) ?
             dest :
             Format.Unknown;
 
         /* ----------------------------------------------------------------- */
         ///
+        /// ToClassId
+        ///
+        /// <summary>
+        /// Gets the class ID from the specified format.
+        /// </summary>
+        ///
+        /// <param name="src">Archive format.</param>
+        ///
+        /// <returns>Class ID</returns>
+        ///
+        /// <remarks>
+        /// GUID represents {23170F69-40C1-278A-1000-000110xx0000}.
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        internal static Guid ToClassId(this Format src)
+        {
+            if (src == Format.Unknown) return Guid.Empty;
+            var cvt = (src == Format.Sfx) ? Format.SevenZip : src;
+            return new Guid($"23170f69-40c1-278a-1000-000110{((int)cvt):x2}0000");
+        }
+
+        #endregion
+
+        #region FromXxx
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// FromString
         ///
         /// <summary>
-        /// 文字列に対応する Format を取得します。
+        /// Gets the archvie format corresponding to the specified string.
         /// </summary>
         ///
-        /// <param name="src">Format を表す文字列</param>
+        /// <param name="src">Value that represents the format.</param>
         ///
-        /// <returns>Format オブジェクト</returns>
+        /// <returns>Archive format.</returns>
         ///
         /* ----------------------------------------------------------------- */
         public static Format FromString(string src)
@@ -188,12 +186,12 @@ namespace Cube.FileSystem.SevenZip
         /// FromExtension
         ///
         /// <summary>
-        /// 拡張子に対応する Format を取得します。
+        /// Gets the archvie format corresponding to the specified extension.
         /// </summary>
         ///
-        /// <param name="src">拡張子</param>
+        /// <param name="src">Extension.</param>
         ///
-        /// <returns>Format オブジェクト</returns>
+        /// <returns>Archive format.</returns>
         ///
         /* ----------------------------------------------------------------- */
         public static Format FromExtension(string src) =>
@@ -206,12 +204,13 @@ namespace Cube.FileSystem.SevenZip
         /// FromStream
         ///
         /// <summary>
-        /// ストリームの内容に対応する Format を取得します。
+        /// Reads bytes from the specified stream and determines
+        /// the archive format.
         /// </summary>
         ///
-        /// <param name="src">ストリーム</param>
+        /// <param name="src">Stream of the archive.</param>
         ///
-        /// <returns>Format オブジェクト</returns>
+        /// <returns>Archive format.</returns>
         ///
         /* ----------------------------------------------------------------- */
         public static Format FromStream(Stream src)
@@ -244,12 +243,12 @@ namespace Cube.FileSystem.SevenZip
         /// FromFile
         ///
         /// <summary>
-        /// ファイルに対応する Format を取得します。
+        /// Gets the archvie format corresponding to the specified file.
         /// </summary>
         ///
-        /// <param name="src">ファイル名</param>
+        /// <param name="src">Path of the archive file.</param>
         ///
-        /// <returns>Format オブジェクト</returns>
+        /// <returns>Archive format.</returns>
         ///
         /* ----------------------------------------------------------------- */
         public static Format FromFile(string src) => FromFile(src, new IO());
@@ -259,13 +258,13 @@ namespace Cube.FileSystem.SevenZip
         /// FromFile
         ///
         /// <summary>
-        /// ファイルに対応する Format を取得します。
+        /// Gets the archvie format corresponding to the specified file.
         /// </summary>
         ///
-        /// <param name="src">ファイル名</param>
-        /// <param name="io">ファイル操作用オブジェクト</param>
+        /// <param name="src">Path of the archive file.</param>
+        /// <param name="io">I/O handler.</param>
         ///
-        /// <returns>Format オブジェクト</returns>
+        /// <returns>Archive format.</returns>
         ///
         /* ----------------------------------------------------------------- */
         public static Format FromFile(string src, IO io)
@@ -294,7 +293,8 @@ namespace Cube.FileSystem.SevenZip
         /// Match
         ///
         /// <summary>
-        /// ストリームの特定の内容が一致するかどうか判別します。
+        /// Gets the value indicating whether bytes that are read from
+        /// the stream matches the specified signature.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -311,7 +311,7 @@ namespace Cube.FileSystem.SevenZip
         /// Convert
         ///
         /// <summary>
-        /// Format をファイルの内容に応じて変更します。
+        /// Gets the archive format corresponding to the specified arguments.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -325,7 +325,8 @@ namespace Cube.FileSystem.SevenZip
         /// GetExtensionToFormatMap
         ///
         /// <summary>
-        /// Format と拡張子の対応関係を示すオブジェクトを取得します。
+        /// Gets the collection that represents the relation of extension
+        /// and archive format.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -360,7 +361,8 @@ namespace Cube.FileSystem.SevenZip
         /// GetFormatToExtensionMap
         ///
         /// <summary>
-        /// Format と拡張子の対応関係を示すオブジェクトを取得します。
+        /// Gets the collection that represents the relation of archive
+        /// formation and extension.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -382,8 +384,8 @@ namespace Cube.FileSystem.SevenZip
         /// GetMethodToExtensionMap
         ///
         /// <summary>
-        /// CompressionMethod と拡張子の対応関係を示すオブジェクトを
-        /// 取得します。
+        /// Gets the collection that represents the relation of compression
+        /// method and extension.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -402,8 +404,8 @@ namespace Cube.FileSystem.SevenZip
         /// GetMethodToFormatMap
         ///
         /// <summary>
-        /// CompressionMethod と Format の対応関係を示すオブジェクトを
-        /// 取得します。
+        /// Gets the collection that represents the relation of compression
+        /// method and archive format.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -422,8 +424,8 @@ namespace Cube.FileSystem.SevenZip
         /// GetFormatToMethodMap
         ///
         /// <summary>
-        /// Format と CompressionMethod の対応関係を示すオブジェクトを
-        /// 取得します。
+        /// Gets the collection that represents the relation of archive
+        /// format and compression method.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -442,7 +444,8 @@ namespace Cube.FileSystem.SevenZip
         /// CreateSignatureMap
         ///
         /// <summary>
-        /// Format と Signature の対応関係を示すオブジェクトを取得します。
+        /// Gets the collection that represents the relation of byte
+        /// signature and archive format.
         /// </summary>
         ///
         /// <remarks>

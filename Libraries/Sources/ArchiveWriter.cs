@@ -323,7 +323,7 @@ namespace Cube.FileSystem.SevenZip
                 if (m == CompressionMethod.BZip2 || m == CompressionMethod.GZip || m == CompressionMethod.XZ)
                 {
                     var f = new List<FileItem> { IO.Get(tmp).ToFileItem() };
-                    Invoke(f, Formats.FromMethod(m), dest, query, progress);
+                    Invoke(f, m.ToFormat(), dest, query, progress);
                 }
                 else IO.Move(tmp, dest, true);
             }

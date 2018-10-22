@@ -22,14 +22,14 @@ namespace Cube.FileSystem.SevenZip.Archives
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveExtension
+    /// ArchiveItemExtension
     ///
     /// <summary>
-    /// 圧縮ファイルに関する拡張メソッドを定義するためのクラスです。
+    /// Provides extended methods of the ArchiveItem class.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public static class ArchiveExtension
+    public static class ArchiveItemExtension
     {
         #region Methods
 
@@ -38,15 +38,11 @@ namespace Cube.FileSystem.SevenZip.Archives
         /// CreateDirectory
         ///
         /// <summary>
-        /// ディレクトリを生成します。
+        /// Creates the directory.
         /// </summary>
         ///
-        /// <param name="item">圧縮ファイル情報</param>
-        /// <param name="root">起点となるディレクトリのパス</param>
-        ///
-        /// <remarks>
-        /// ArchiveItem.IsDirectory が false の場合、何もせずに終了します。
-        /// </remarks>
+        /// <param name="item">Information of an archived item.</param>
+        /// <param name="root">Path of the root directory.</param>
         ///
         /* ----------------------------------------------------------------- */
         public static void CreateDirectory(this ArchiveItem item, string root) =>
@@ -57,16 +53,12 @@ namespace Cube.FileSystem.SevenZip.Archives
         /// CreateDirectory
         ///
         /// <summary>
-        /// ディレクトリを生成します。
+        /// Creates the directory.
         /// </summary>
         ///
-        /// <param name="item">圧縮ファイル情報</param>
-        /// <param name="root">起点となるディレクトリのパス</param>
-        /// <param name="io">ファイル操作用オブジェクト</param>
-        ///
-        /// <remarks>
-        /// ArchiveItem.IsDirectory が false の場合、何もせずに終了します。
-        /// </remarks>
+        /// <param name="item">Information of the archived item.</param>
+        /// <param name="root">Path of the root directory.</param>
+        /// <param name="io">I/O handler.</param>
         ///
         /* ----------------------------------------------------------------- */
         public static void CreateDirectory(this ArchiveItem item, string root, IO io)
@@ -82,13 +74,12 @@ namespace Cube.FileSystem.SevenZip.Archives
         /// SetAttributes
         ///
         /// <summary>
-        /// ArchiveItem オブジェクトの内容に従ってファイルまたは
-        /// ディレクトリに属性、作成日時、最終更新日時、最終アクセス日時を
-        /// 設定します。
+        /// Sets attributes, creation time, last written time, and last
+        /// accessed time to the extracted file or directory.
         /// </summary>
         ///
-        /// <param name="item">圧縮ファイル情報</param>
-        /// <param name="root">起点となるディレクトリのパス</param>
+        /// <param name="item">Information of the archived item.</param>
+        /// <param name="root">Path of the root directory.</param>
         ///
         /* ----------------------------------------------------------------- */
         public static void SetAttributes(this ArchiveItem item, string root) =>
@@ -99,14 +90,13 @@ namespace Cube.FileSystem.SevenZip.Archives
         /// SetAttributes
         ///
         /// <summary>
-        /// ArchiveItem オブジェクトの内容に従ってファイルまたは
-        /// ディレクトリに属性、作成日時、最終更新日時、最終アクセス日時を
-        /// 設定します。
+        /// Sets attributes, creation time, last written time, and last
+        /// accessed time to the extracted file or directory.
         /// </summary>
         ///
-        /// <param name="item">圧縮ファイル情報</param>
-        /// <param name="root">起点となるディレクトリのパス</param>
-        /// <param name="io">ファイル操作用オブジェクト</param>
+        /// <param name="item">Information of the archived item.</param>
+        /// <param name="root">Path of the root directory.</param>
+        /// <param name="io">I/O handler.</param>
         ///
         /* ----------------------------------------------------------------- */
         public static void SetAttributes(this ArchiveItem item, string root, IO io)
@@ -129,7 +119,7 @@ namespace Cube.FileSystem.SevenZip.Archives
         /// SetCreationTime
         ///
         /// <summary>
-        /// 作成日時を設定します。
+        /// Sets the creation time.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -146,7 +136,7 @@ namespace Cube.FileSystem.SevenZip.Archives
         /// SetLastWriteTime
         ///
         /// <summary>
-        /// 最終更新日時を設定します。
+        /// Sets the last written time.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -163,7 +153,7 @@ namespace Cube.FileSystem.SevenZip.Archives
         /// SetLastAccessTime
         ///
         /// <summary>
-        /// 最終アクセス日時を取得します。
+        /// Sets the last accessed time.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */

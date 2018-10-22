@@ -27,7 +27,7 @@ namespace Cube.FileSystem.SevenZip
     /// ArchiveItem
     ///
     /// <summary>
-    /// 圧縮ファイルの 1 項目を表すクラスです。
+    /// Represents an item in the archive.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -40,11 +40,12 @@ namespace Cube.FileSystem.SevenZip
         /// ArchiveItem
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the ArchiveItem class with the
+        /// specified arguments.
         /// </summary>
         ///
-        /// <param name="src">圧縮ファイルのパス</param>
-        /// <param name="controller">実装オブジェクト</param>
+        /// <param name="src">Path of the archive.</param>
+        /// <param name="controller">Controller object.</param>
         ///
         /* ----------------------------------------------------------------- */
         internal ArchiveItem(string src, ArchiveItemController controller) :
@@ -59,7 +60,7 @@ namespace Cube.FileSystem.SevenZip
         /// Index
         ///
         /// <summary>
-        /// 圧縮ファイル中のインデックスを取得します。
+        /// Gets the index in the archive.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -70,12 +71,13 @@ namespace Cube.FileSystem.SevenZip
         /// RawName
         ///
         /// <summary>
-        /// 圧縮ファイル中の相対パスのオリジナルの文字列を取得します。
+        /// Gets the original name that represents the relative path
+        /// in the archive.
         /// </summary>
         ///
         /// <remarks>
-        /// RawName の内容に対して、Windows で使用不可能な文字列に対する
-        /// エスケープ処理を実行した結果が FullName となります。
+        /// FullName property represents the normalized result against
+        /// the RawName property.
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
@@ -86,7 +88,7 @@ namespace Cube.FileSystem.SevenZip
         /// Encrypted
         ///
         /// <summary>
-        /// 暗号化されているかどうかを示す値を取得します。
+        /// Gets the value indicating whether the archive is encrypted.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -101,19 +103,13 @@ namespace Cube.FileSystem.SevenZip
         /// Match
         ///
         /// <summary>
-        /// 指定されたファイル名またはディレクトリ名のいずれか 1 つでも
-        /// パス中のどこかに存在するかどうかを判別します。
+        /// Gets the value indicating whether any of the specified
+        /// collection matches the all or part of the path.
         /// </summary>
         ///
-        /// <param name="names">
-        /// 判別するファイル名またはディレクトリ名一覧
-        /// </param>
+        /// <param name="names">Collection of names.</param>
         ///
-        /// <returns>存在するかどうかを示す値</returns>
-        ///
-        /// <remarks>
-        /// 大文字・小文字の違いは無視されます。
-        /// </remarks>
+        /// <returns>true for match.</returns>
         ///
         /* ----------------------------------------------------------------- */
         public bool Match(IEnumerable<string> names) => GetController().Match(names);
@@ -123,10 +119,10 @@ namespace Cube.FileSystem.SevenZip
         /// Extract
         ///
         /// <summary>
-        /// 展開した内容を保存します。
+        /// Extracts the archived item and saves to the specified path.
         /// </summary>
         ///
-        /// <param name="directory">保存ディレクトリ</param>
+        /// <param name="directory">Directory to save.</param>
         ///
         /* ----------------------------------------------------------------- */
         public void Extract(string directory) => Extract(directory, null);
@@ -136,11 +132,11 @@ namespace Cube.FileSystem.SevenZip
         /// Extract
         ///
         /// <summary>
-        /// 展開した内容を保存します。
+        /// Extracts the archived item and saves to the specified path.
         /// </summary>
         ///
-        /// <param name="directory">保存ディレクトリ</param>
-        /// <param name="progress">進捗報告用オブジェクト</param>
+        /// <param name="directory">Directory to save.</param>
+        /// <param name="progress">Progress report.</param>
         ///
         /* ----------------------------------------------------------------- */
         public void Extract(string directory, IProgress<Report> progress) =>
@@ -155,7 +151,7 @@ namespace Cube.FileSystem.SevenZip
         /// GetController
         ///
         /// <summary>
-        /// ArchiveItemController オブジェクトを取得します。
+        /// Gets the controller object.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */

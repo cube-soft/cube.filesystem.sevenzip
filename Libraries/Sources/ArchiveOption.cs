@@ -23,7 +23,7 @@ namespace Cube.FileSystem.SevenZip
     /// ArchiveOption
     ///
     /// <summary>
-    /// 圧縮時に設定可能なオプションを保持するためのクラスです。
+    /// Represents options when creating a new archive.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -36,7 +36,7 @@ namespace Cube.FileSystem.SevenZip
         /// CompressionLevel
         ///
         /// <summary>
-        /// 圧縮レベルを取得または設定します。
+        /// Gets or sets the compression level.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -47,7 +47,8 @@ namespace Cube.FileSystem.SevenZip
         /// ThreadCount
         ///
         /// <summary>
-        /// 圧縮処理時の最大スレッド数を取得または設定します。
+        /// Gets or sets the number of threads that the archiver is
+        /// available.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -58,7 +59,7 @@ namespace Cube.FileSystem.SevenZip
         /// CodePage
         ///
         /// <summary>
-        /// 文字コードを取得または設定します。
+        /// Gets or sets the value of code page.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -72,7 +73,7 @@ namespace Cube.FileSystem.SevenZip
     /// TarOption
     ///
     /// <summary>
-    /// Tar 圧縮時に設定可能なオプションを保持するためのクラスです。
+    /// Represents options when creating a new TAR archive.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -85,8 +86,12 @@ namespace Cube.FileSystem.SevenZip
         /// CompressionMethod
         ///
         /// <summary>
-        /// 圧縮方法取得または設定します。
+        /// Gets or sets the compression method.
         /// </summary>
+        ///
+        /// <remarks>
+        /// GZip, BZip2, XZ, and Copy is available.
+        /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
         public CompressionMethod CompressionMethod { get; set; } = CompressionMethod.Copy;
@@ -99,7 +104,7 @@ namespace Cube.FileSystem.SevenZip
     /// ZipOption
     ///
     /// <summary>
-    /// Zip 圧縮時に設定可能なオプションを保持するためのクラスです。
+    /// Represents options when creating a new ZIP archive.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -112,7 +117,7 @@ namespace Cube.FileSystem.SevenZip
         /// CompressionMethod
         ///
         /// <summary>
-        /// 圧縮方法取得または設定します。
+        /// Gets or sets the compression method.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -123,11 +128,11 @@ namespace Cube.FileSystem.SevenZip
         /// EncryptionMethod
         ///
         /// <summary>
-        /// 暗号化方法を取得または設定します。
+        /// Gets or sets the encryption method.
         /// </summary>
         ///
         /// <remarks>
-        /// 設定可能な値は ZipCrypto, Aes128, Aes192, Aes256 です。
+        /// ZipCrypto, Aes128, Aes192, and Aes256 is available.
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
@@ -141,7 +146,7 @@ namespace Cube.FileSystem.SevenZip
     /// SevenZipOption
     ///
     /// <summary>
-    /// 7z 圧縮時に設定可能なオプションを保持するためのクラスです。
+    /// Represents options when creating a new 7-ZIP archive.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -154,7 +159,7 @@ namespace Cube.FileSystem.SevenZip
         /// CompressionMethod
         ///
         /// <summary>
-        /// 圧縮方法取得または設定します。
+        /// Gets or sets the compression method.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -168,8 +173,7 @@ namespace Cube.FileSystem.SevenZip
     /// SfxOption
     ///
     /// <summary>
-    /// 自己解凍形式の圧縮ファイル作成時に設定可能なオプションを保持する
-    /// ためのクラスです。
+    /// Represents options when creating a new self-executable archive.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -182,7 +186,7 @@ namespace Cube.FileSystem.SevenZip
         /// Module
         ///
         /// <summary>
-        /// 自己解凍形式用モジュールのパスを取得または設定します。
+        /// Gets or sets the path of SFX module.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
