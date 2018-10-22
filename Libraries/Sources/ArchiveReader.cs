@@ -249,13 +249,19 @@ namespace Cube.FileSystem.SevenZip
         /// Dispose
         ///
         /// <summary>
-        /// リソースを破棄します。
+        /// Releases the unmanaged resources used by the ArchiveReader
+        /// and optionally releases the managed resources.
         /// </summary>
+        ///
+        /// <param name="disposing">
+        /// true to release both managed and unmanaged resources;
+        /// false to release only unmanaged resources.
+        /// </param>
         ///
         /* ----------------------------------------------------------------- */
         protected override void Dispose(bool disposing)
         {
-            if (disposing) _callback.Dispose();
+            _callback.Dispose();
             _module.Close();
             _core.Dispose();
         }
@@ -303,25 +309,14 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Terminate(OperationResult result, Exception err)
+        private void Terminate(OperationResult src, Exception err)
         {
-            switch (result)
-            {
-                case OperationResult.OK:
-                    return;
-                case OperationResult.DataError:
-                    if (Items.Any(x => x.Encrypted)) throw CreateEncryptionException();
-                    break;
-                case OperationResult.WrongPassword:
-                    throw CreateEncryptionException();
-                case OperationResult.UserCancel:
-                    throw new OperationCanceledException();
-                default:
-                    break;
-            }
-
+            if (src == OperationResult.OK) return;
+            if (src == OperationResult.UserCancel) throw new OperationCanceledException();
+            if (src == OperationResult.WrongPassword) throw CreateEncryptionException();
+            if (src == OperationResult.DataError && Items.Any(x => x.Encrypted)) throw CreateEncryptionException();
             if (err != null) throw err;
-            else throw new System.IO.IOException($"{result}");
+            else throw new System.IO.IOException($"{src}");
         }
 
         #endregion
