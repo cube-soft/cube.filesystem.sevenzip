@@ -115,7 +115,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Invoke(InformationCore src)
+        public void Invoke(RefreshableInfo src)
         {
             RawName   = GetPath(src.Source);
             Encrypted = Get<bool>(src.Source, ItemPropId.Encrypted);
@@ -180,7 +180,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="progress">進捗報告用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Extract(ArchiveItem src, string directory, IProgress<ArchiveReport> progress)
+        public void Extract(ArchiveItem src, string directory, IProgress<Report> progress)
         {
             Debug.Assert(!string.IsNullOrEmpty(src.FullName));
 

@@ -26,7 +26,8 @@ namespace Cube.FileSystem.SevenZip
     /// EncryptionException
     ///
     /// <summary>
-    /// パスワードエラーを表す例外クラスです。
+    /// Represents the encryption related exception like the password
+    /// unmatched error.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */

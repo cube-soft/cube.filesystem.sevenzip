@@ -23,7 +23,7 @@ namespace Cube.FileSystem.SevenZip
     /// Format
     ///
     /// <summary>
-    /// 対応している圧縮形式一覧を表す列挙型です。
+    /// Specifies archive formats.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -146,7 +146,7 @@ namespace Cube.FileSystem.SevenZip
     /// CompressionLevel
     ///
     /// <summary>
-    /// 圧縮レベルを表す列挙型です。
+    /// Specifies compression levels.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -171,7 +171,7 @@ namespace Cube.FileSystem.SevenZip
     /// CompressionMethod
     ///
     /// <summary>
-    /// 圧縮アルゴリズムを表す列挙型です。
+    /// Specifies compression methods.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -195,7 +195,7 @@ namespace Cube.FileSystem.SevenZip
         Lzma2,
         /// <summary>PPMD</summary>
         Ppmd,
-        /// <summary>初期設定</summary>
+        /// <summary>Default settings</summary>
         Default,
     }
 
@@ -204,7 +204,7 @@ namespace Cube.FileSystem.SevenZip
     /// EncryptionMethod
     ///
     /// <summary>
-    /// Format に対する拡張メソッドを定義したクラスです。
+    /// Specifies encryption methods.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -218,7 +218,7 @@ namespace Cube.FileSystem.SevenZip
         Aes256,
         /// <summary>Zip crypto algorithm</summary>
         ZipCrypto,
-        /// <summary>初期設定</summary>
+        /// <summary>Default settings</summary>
         Default,
     }
 
@@ -227,7 +227,7 @@ namespace Cube.FileSystem.SevenZip
     /// CodePage
     ///
     /// <summary>
-    /// Windows における文字コードを表す列挙型です。
+    /// Specifies code pages in Windows.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -235,11 +235,11 @@ namespace Cube.FileSystem.SevenZip
     {
         /// <summary>ASCII</summary>
         Ascii = 0,
-        /// <summary>端末のロケール設定に応じた文字コード</summary>
+        /// <summary>Code page corresponding to the locale settings</summary>
         Oem = 1,
-        /// <summary>シンボルを表す文字コード</summary>
+        /// <summary>Symbol</summary>
         Symbol = 42,
-        /// <summary>日本語（Shift_JIS 互換）</summary>
+        /// <summary>Japanese (Shift_JIS compatible)</summary>
         Japanese = 932,
         /// <summary>UTF-8</summary>
         Utf8 = 65001,

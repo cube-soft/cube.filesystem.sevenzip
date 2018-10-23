@@ -16,67 +16,90 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-namespace Cube.FileSystem.SevenZip
+using Cube.FileSystem.TestService;
+using System;
+using System.Collections.Generic;
+
+namespace Cube.FileSystem.SevenZip.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// FileItem
+    /// ArchiveFixture
     ///
     /// <summary>
-    /// Represents an item to be archived.
+    /// Provides helper methods to test ArchiveReader and ArchiveWriter
+    /// classes.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class FileItem : Information
+    abstract class ArchiveFixture : FileFixture
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// FileItem
+        /// ArchiveFixture
         ///
         /// <summary>
-        /// Creates a new instance of the FileItem class with the specified
-        /// information.
+        /// Initializes a new instance of the ArchiveFixture class.
         /// </summary>
         ///
-        /// <param name="src">File or directory information.</param>
-        ///
         /* ----------------------------------------------------------------- */
-        public FileItem(Information src) : this(src, src.Name) { }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// FileItem
-        ///
-        /// <summary>
-        /// Creates a new instance of the FileItem class with the specified
-        /// information.
-        /// </summary>
-        ///
-        /// <param name="src">File or directory information.</param>
-        /// <param name="pathInArchive">Relative path in the archive.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public FileItem(Information src, string pathInArchive) : base(src.Source, src.Refreshable)
-        {
-            PathInArchive = pathInArchive;
-        }
+        protected ArchiveFixture() { }
 
         #endregion
 
-        #region Properties
+        #region Methods
 
         /* ----------------------------------------------------------------- */
         ///
-        /// PathInArchive
+        /// CreateReport
         ///
         /// <summary>
-        /// Gets the relative path in the archive.
+        /// Creates a new collection for ReportStatus.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string PathInArchive { get; }
+        protected IDictionary<ReportStatus, int> CreateReport() =>
+            new Dictionary<ReportStatus, int>
+            {
+                { ReportStatus.Begin,    0 },
+                { ReportStatus.End,      0 },
+                { ReportStatus.Progress, 0 },
+            };
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create
+        ///
+        /// <summary>
+        /// Creates a new instance of the Progress(Report) class.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected IProgress<Report> Create(IDictionary<ReportStatus, int> src) =>
+            new SyncProgress<Report>(e => src[e.Status]++);
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SyncProgress
+        ///
+        /// <summary>
+        /// Provides functioanlity to execute the specified action
+        /// as a synchronous operation.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private class SyncProgress<T> : IProgress<T>
+        {
+            public SyncProgress(Action<T> e) { _do = e; }
+            public void Report(T e) => _do(e);
+            private readonly Action<T> _do;
+        }
 
         #endregion
     }

@@ -20,63 +20,51 @@ namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// FileItem
+    /// FileItemExtension
     ///
     /// <summary>
-    /// Represents an item to be archived.
+    /// Provides extended methods of the FileItem class.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class FileItem : Information
+    public static class FileItemExtension
     {
-        #region Constructors
+        #region Methods
 
         /* ----------------------------------------------------------------- */
         ///
-        /// FileItem
+        /// ToFileItem
         ///
         /// <summary>
         /// Creates a new instance of the FileItem class with the specified
-        /// information.
+        /// file or directory information.
         /// </summary>
         ///
         /// <param name="src">File or directory information.</param>
         ///
+        /// <returns>Converted result.</returns>
+        ///
         /* ----------------------------------------------------------------- */
-        public FileItem(Information src) : this(src, src.Name) { }
+        public static FileItem ToFileItem(this Information src) =>
+            new FileItem(src);
 
         /* ----------------------------------------------------------------- */
         ///
-        /// FileItem
+        /// ToFileItem
         ///
         /// <summary>
         /// Creates a new instance of the FileItem class with the specified
-        /// information.
+        /// arguments.
         /// </summary>
         ///
         /// <param name="src">File or directory information.</param>
         /// <param name="pathInArchive">Relative path in the archive.</param>
         ///
-        /* ----------------------------------------------------------------- */
-        public FileItem(Information src, string pathInArchive) : base(src.Source, src.Refreshable)
-        {
-            PathInArchive = pathInArchive;
-        }
-
-        #endregion
-
-        #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// PathInArchive
-        ///
-        /// <summary>
-        /// Gets the relative path in the archive.
-        /// </summary>
+        /// <returns>Converted result.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public string PathInArchive { get; }
+        public static FileItem ToFileItem(this Information src, string pathInArchive) =>
+            new FileItem(src, pathInArchive);
 
         #endregion
     }

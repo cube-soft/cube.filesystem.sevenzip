@@ -348,8 +348,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
             var m    = CreateSettings();
             var vm   = new MainViewModel(m);
-            var src  = vm.Context;
-            var dest = m.Value.Context;
+            var src  = vm.Menu;
+            var dest = m.Value.Menu;
 
             Set(src, true);
             Assert.That(src.PresetEnabled, Is.True);
@@ -379,7 +379,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         #endregion
 
-        #region Helper methods
+        #region Others
 
         /* ----------------------------------------------------------------- */
         ///
@@ -394,8 +394,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         {
             var m  = CreateSettings();
             var vm = new MainViewModel(m);
-            vm.Context.Customize();
-            return m.Value.Context;
+            vm.Menu.Customize();
+            return m.Value.Menu;
         }
 
         #endregion

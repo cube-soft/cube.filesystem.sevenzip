@@ -31,7 +31,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal class ArchiveStreamBase : IDisposable
+    internal class ArchiveStreamBase : DisposableBase
     {
         #region Constructors
 
@@ -54,7 +54,6 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         protected ArchiveStreamBase(Stream baseStream, bool disposeStream)
         {
-            _dispose = new OnceAction<bool>(Dispose);
             BaseStream = baseStream;
             _disposeStream = disposeStream;
         }
@@ -101,19 +100,6 @@ namespace Cube.FileSystem.SevenZip
             if (result != IntPtr.Zero) Marshal.WriteInt64(result, pos);
         }
 
-        #region IDisposable
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ~ArchiveStreamBase
-        ///
-        /// <summary>
-        /// オブジェクトを破棄します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        ~ArchiveStreamBase() { _dispose.Invoke(false); }
-
         /* ----------------------------------------------------------------- */
         ///
         /// Dispose
@@ -123,32 +109,14 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Dispose()
-        {
-            _dispose.Invoke(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Dispose
-        ///
-        /// <summary>
-        /// リソースを破棄します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected virtual void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             if (disposing && _disposeStream) BaseStream.Dispose();
         }
 
         #endregion
 
-        #endregion
-
         #region Fields
-        private readonly OnceAction<bool> _dispose;
         private readonly bool _disposeStream = true;
         #endregion
     }

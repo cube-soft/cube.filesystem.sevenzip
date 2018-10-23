@@ -16,7 +16,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Log;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -50,8 +49,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="io">入出力用のオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveOpenCallback(string src, ArchiveStreamReader stream, IO io)
-            : base(src, io)
+        public ArchiveOpenCallback(string src, ArchiveStreamReader stream, IO io) : base(src, io)
         {
             _dispose = new OnceAction<bool>(Dispose);
             _streams.Add(stream);
@@ -81,13 +79,11 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public void SetTotal(IntPtr count, IntPtr bytes)
+        public void SetTotal(IntPtr count, IntPtr bytes) => Invoke(() =>
         {
             if (count != IntPtr.Zero) Report.TotalCount = Marshal.ReadInt64(count);
             if (bytes != IntPtr.Zero) Report.TotalBytes = Marshal.ReadInt64(bytes);
-
-            ExecuteReport();
-        }
+        });
 
         /* ----------------------------------------------------------------- */
         ///
@@ -101,14 +97,12 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="bytes">バイト数</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void SetCompleted(IntPtr count, IntPtr bytes)
+        public void SetCompleted(IntPtr count, IntPtr bytes) => Invoke(() =>
         {
             if (count != IntPtr.Zero) Report.Count = Marshal.ReadInt64(count);
             if (bytes != IntPtr.Zero) Report.Bytes = Marshal.ReadInt64(bytes);
-
-            ExecuteReport();
             Result = OperationResult.OK;
-        }
+        });
 
         #endregion
 
@@ -130,17 +124,9 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int GetProperty(ItemPropId pid, ref PropVariant value)
         {
-            var info = IO.Get(Source);
-
-            if (pid == ItemPropId.Name) value.Set(info.FullName);
-            else
-            {
-                this.LogDebug($"Unknown\tPid:{pid}");
-                value.Clear();
-            }
-
-            ExecuteReport();
-            return (int)Result;
+            if (pid == ItemPropId.Name) value.Set(IO.Get(Source).FullName);
+            else value.Clear();
+            return Invoke(() => (int)Result);
         }
 
         /* ----------------------------------------------------------------- */
@@ -159,19 +145,15 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int GetStream(string name, out IInStream stream)
         {
-            ExecuteReport();
-
-            var src = IO.Exists(name) ?
-                      name :
-                      IO.Combine(IO.Get(Source).DirectoryName, name);
-
-            if (IO.Exists(src))
+            stream = Invoke(() =>
             {
+                var src = IO.Exists(name) ? name : IO.Combine(IO.Get(Source).DirectoryName, name);
+                if (!IO.Exists(src)) return default(IInStream);
+
                 var dest = new ArchiveStreamReader(IO.OpenRead(src));
                 _streams.Add(dest);
-                stream = dest;
-            }
-            else stream = null;
+                return dest;
+            });
 
             Result = (stream != null) ? OperationResult.OK : OperationResult.DataError;
             return (int)Result;

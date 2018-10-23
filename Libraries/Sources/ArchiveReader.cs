@@ -18,7 +18,6 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace Cube.FileSystem.SevenZip
@@ -28,11 +27,11 @@ namespace Cube.FileSystem.SevenZip
     /// ArchiveReader
     ///
     /// <summary>
-    /// 圧縮ファイルを読み込み、展開するクラスです。
+    /// Provides functionality to extract an archived file.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveReader : IDisposable
+    public class ArchiveReader : DisposableBase
     {
         #region Constructors
 
@@ -41,86 +40,106 @@ namespace Cube.FileSystem.SevenZip
         /// ArchiveReader
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the ArchiveReader class with
+        /// the specified path.
         /// </summary>
         ///
-        /// <param name="path">圧縮ファイルのパス</param>
+        /// <param name="src">Path of the archive.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveReader(string path) : this(path, string.Empty) { }
+        public ArchiveReader(string src) : this(src, string.Empty) { }
 
         /* ----------------------------------------------------------------- */
         ///
         /// ArchiveReader
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the ArchiveReader class with
+        /// the specified arguments.
         /// </summary>
         ///
-        /// <param name="path">圧縮ファイルのパス</param>
-        /// <param name="password">パスワード</param>
+        /// <param name="src">Path of the archive.</param>
+        /// <param name="password">Password of the archive.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveReader(string path, string password) :
-            this(path, password, new IO()) { }
+        public ArchiveReader(string src, string password) :
+            this(src, password, new IO()) { }
 
         /* ----------------------------------------------------------------- */
         ///
         /// ArchiveReader
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the ArchiveReader class with
+        /// the specified arguments.
         /// </summary>
         ///
-        /// <param name="path">圧縮ファイルのパス</param>
-        /// <param name="password">パスワード取得用オブジェクト</param>
+        /// <param name="src">Path of the archive.</param>
+        /// <param name="password">Query object to get password.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveReader(string path, IQuery<string> password) :
-            this(path, password, new IO()) { }
+        public ArchiveReader(string src, IQuery<string> password) :
+            this(src, password, new IO()) { }
 
         /* ----------------------------------------------------------------- */
         ///
         /// ArchiveReader
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the ArchiveReader class with
+        /// the specified arguments.
         /// </summary>
         ///
-        /// <param name="path">圧縮ファイルのパス</param>
-        /// <param name="password">パスワード</param>
-        /// <param name="io">ファイル操作用オブジェクト</param>
+        /// <param name="src">Path of the archive.</param>
+        /// <param name="password">Password of the archive.</param>
+        /// <param name="io">I/O handler.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveReader(string path, string password, IO io)
+        public ArchiveReader(string src, string password, IO io) :
+            this(Formats.FromFile(src), src, new PasswordQuery(password), io) { }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ArchiveReader
+        ///
+        /// <summary>
+        /// Initializes a new instance of the ArchiveReader class with
+        /// the specified arguments.
+        /// </summary>
+        ///
+        /// <param name="src">Path of the archive.</param>
+        /// <param name="password">Query object to get password.</param>
+        /// <param name="io">I/O handler.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ArchiveReader(string src, IQuery<string> password, IO io) :
+            this(Formats.FromFile(src), src, new PasswordQuery(password), io) { }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ArchiveReader
+        ///
+        /// <summary>
+        /// Initializes a new instance of the ArchiveReader class with
+        /// the specified arguments.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private ArchiveReader(Format format, string src, PasswordQuery query, IO io)
         {
-            _dispose = new OnceAction<bool>(Dispose);
-            Source = path;
-            _io = io;
-            _password = new PasswordQuery(password);
-            Open();
-        }
+            if (format == Format.Unknown) throw new NotSupportedException();
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ArchiveReader
-        ///
-        /// <summary>
-        /// オブジェクトを初期化します。
-        /// </summary>
-        ///
-        /// <param name="path">圧縮ファイルのパス</param>
-        /// <param name="password">パスワード取得用オブジェクト</param>
-        /// <param name="io">ファイル操作用オブジェクト</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public ArchiveReader(string path, IQuery<string> password, IO io)
-        {
-            _dispose = new OnceAction<bool>(Dispose);
-            Source = path;
-            _io = io;
-            _password = new PasswordQuery(password);
-            Open();
+            var asr   = new ArchiveStreamReader(io.OpenRead(src));
+            _core     = new SevenZipLibrary();
+            _query    = query;
+            _callback = new ArchiveOpenCallback(src, asr, io) { Password = _query };
+            _module   = _core.GetInArchive(format);
+            _module.Open(asr, IntPtr.Zero, _callback);
+
+            IO     = io;
+            Format = format;
+            Source = src;
+            Items  = new ReadOnlyArchiveList(_module, format, src, _query, io);
         }
 
         #endregion
@@ -129,10 +148,21 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
+        /// IO
+        ///
+        /// <summary>
+        /// Gets the I/O handler.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected IO IO { get; }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Source
         ///
         /// <summary>
-        /// 圧縮ファイルのパスを取得します。
+        /// Gets the path of archive.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -143,92 +173,34 @@ namespace Cube.FileSystem.SevenZip
         /// Format
         ///
         /// <summary>
-        /// 圧縮ファイルのファイル形式を取得します。
+        /// Gets the format of archive.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Format Format { get; private set; } = Format.Unknown;
+        public Format Format { get; }
 
         /* ----------------------------------------------------------------- */
         ///
         /// Items
         ///
         /// <summary>
-        /// 圧縮ファイルの一覧を取得します。
+        /// Gets the collection of archived items.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IReadOnlyList<ArchiveItem> Items => _items;
+        public IReadOnlyList<ArchiveItem> Items { get; }
 
         /* ----------------------------------------------------------------- */
         ///
         /// Filters
         ///
         /// <summary>
-        /// 展開をスキップするファイル名またはディレクトリ名一覧を
-        /// 取得または設定します。
+        /// Gets or sets the collection of file or directory names to
+        /// filter.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public IEnumerable<string> Filters { get; set; }
-
-        #endregion
-
-        #region Events
-
-        #region Extracting
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extracting
-        ///
-        /// <summary>
-        /// 圧縮ファイル各項目の展開開始時に発生するイベントです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public event ValueEventHandler<ArchiveItem> Extracting;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnExtracted
-        ///
-        /// <summary>
-        /// Extracting イベントを発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected virtual void OnExtracting(ValueEventArgs<ArchiveItem> e) =>
-            Extracting?.Invoke(this, e);
-
-        #endregion
-
-        #region Extracted
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extracted
-        ///
-        /// <summary>
-        /// 圧縮ファイル各項目の展開完了時に発生するイベントです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public event ValueEventHandler<ArchiveItem> Extracted;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnExtracted
-        ///
-        /// <summary>
-        /// Extracted イベントを発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected virtual void OnExtracted(ValueEventArgs<ArchiveItem> e) =>
-            Extracted?.Invoke(this, e);
-
-        #endregion
 
         #endregion
 
@@ -239,10 +211,10 @@ namespace Cube.FileSystem.SevenZip
         /// Extract
         ///
         /// <summary>
-        /// 展開した内容を保存します。
+        /// Extracts files and saves to the specified directory.
         /// </summary>
         ///
-        /// <param name="directory">保存ディレクトリ</param>
+        /// <param name="directory">Save directory.</param>
         ///
         /* ----------------------------------------------------------------- */
         public void Extract(string directory) => Extract(directory, null);
@@ -252,74 +224,21 @@ namespace Cube.FileSystem.SevenZip
         /// Extract
         ///
         /// <summary>
-        /// 展開した内容を保存します。
+        /// Extracts files and saves to the specified directory.
         /// </summary>
         ///
-        /// <param name="directory">保存ディレクトリ</param>
-        /// <param name="progress">進捗報告用オブジェクト</param>
+        /// <param name="directory">Save directory.</param>
+        /// <param name="progress">Progress object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Extract(string directory, IProgress<ArchiveReport> progress)
+        public void Extract(string directory, IProgress<Report> progress)
         {
-            using (var cb = new ArchiveExtractCallback(Source, directory, _items, _io))
+            using (var cb = Create(directory, progress))
             {
-                cb.TotalCount  = _items.Count;
-                cb.Password    = _password;
-                cb.Progress    = progress;
-                cb.Filters     = Filters;
-                cb.Extracting += (s, e) => OnExtracting(e);
-                cb.Extracted  += (s, e) => OnExtracted(e);
-
-                _archive.Extract(null, uint.MaxValue, 0, cb);
-                ThrowIfError(cb.Result, cb.Exception);
+                _module.Extract(null, uint.MaxValue, 0, cb);
+                Terminate(cb.Result, cb.Exception);
             }
         }
-
-        #region IDisposable
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ~Archive
-        ///
-        /// <summary>
-        /// オブジェクトを破棄します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        ~ArchiveReader() { _dispose.Invoke(false); }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Dispose
-        ///
-        /// <summary>
-        /// リソースを破棄します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Dispose()
-        {
-            _dispose.Invoke(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Dispose
-        ///
-        /// <summary>
-        /// リソースを破棄します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing) _callback.Dispose();
-            _archive.Close();
-            _7z.Dispose();
-        }
-
-        #endregion
 
         #endregion
 
@@ -327,77 +246,86 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Open
+        /// Dispose
         ///
         /// <summary>
-        /// 圧縮ファイルを開きます。
+        /// Releases the unmanaged resources used by the ArchiveReader
+        /// and optionally releases the managed resources.
         /// </summary>
         ///
+        /// <param name="disposing">
+        /// true to release both managed and unmanaged resources;
+        /// false to release only unmanaged resources.
+        /// </param>
+        ///
         /* ----------------------------------------------------------------- */
-        private void Open()
+        protected override void Dispose(bool disposing)
         {
-            Format = Formats.FromFile(Source, _io);
-            if (Format == Format.Unknown) throw new NotSupportedException();
-
-            var stream = new ArchiveStreamReader(_io.OpenRead(Source));
-            Debug.Assert(stream != null);
-
-            _7z = new SevenZipLibrary();
-            Debug.Assert(_7z != null);
-
-            _archive = _7z.GetInArchive(Format);
-            Debug.Assert(_archive != null);
-
-            _callback = new ArchiveOpenCallback(Source, stream, _io) { Password = _password };
-            _archive.Open(stream, IntPtr.Zero, _callback);
-            _items = new ReadOnlyArchiveList(_archive, Format, Source, _password, _io);
+            _callback.Dispose();
+            _module.Close();
+            _core.Dispose();
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ThrowIfError
+        /// Create
         ///
         /// <summary>
-        /// エラーが発生していた場合に例外を送出します。
+        /// Creates a new instance of the ArchiveExtractCallback class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void ThrowIfError(OperationResult result, Exception err)
+        private ArchiveExtractCallback Create(string directory, IProgress<Report> progress) =>
+            new ArchiveExtractCallback(Source, directory, Items, IO)
         {
-            switch (result)
-            {
-                case OperationResult.OK:
-                    return;
-                case OperationResult.DataError:
-                    if (Items.Any(x => x.Encrypted))
-                    {
-                        _password.Reset();
-                        throw new EncryptionException();
-                    }
-                    break;
-                case OperationResult.WrongPassword:
-                    _password.Reset();
-                    throw new EncryptionException();
-                case OperationResult.UserCancel:
-                    throw new OperationCanceledException();
-                default:
-                    break;
-            }
+            TotalCount = Items.Count,
+            Password   = _query,
+            Progress   = progress,
+            Filters    = Filters,
+        };
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CreateEncryptionException
+        ///
+        /// <summary>
+        /// Resets the password and returns a new instance of the
+        /// EncryptionException class.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private EncryptionException CreateEncryptionException()
+        {
+            _query.Reset();
+            return new EncryptionException();
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Terminate
+        ///
+        /// <summary>
+        /// Invokes post processing and throws an exception if needed.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Terminate(OperationResult src, Exception err)
+        {
+            if (src == OperationResult.OK) return;
+            if (src == OperationResult.UserCancel) throw new OperationCanceledException();
+            if (src == OperationResult.WrongPassword) throw CreateEncryptionException();
+            if (src == OperationResult.DataError && Items.Any(x => x.Encrypted)) throw CreateEncryptionException();
             if (err != null) throw err;
-            else throw new System.IO.IOException($"{result}");
+            else throw new System.IO.IOException($"{src}");
         }
 
         #endregion
 
         #region Fields
-        private readonly OnceAction<bool> _dispose;
-        private readonly IO _io;
-        private readonly PasswordQuery _password;
-        private SevenZipLibrary _7z;
-        private IInArchive _archive;
+        private readonly PasswordQuery _query;
         private ArchiveOpenCallback _callback;
-        private ReadOnlyArchiveList _items;
+        private SevenZipLibrary _core;
+        private IInArchive _module;
         #endregion
     }
 }

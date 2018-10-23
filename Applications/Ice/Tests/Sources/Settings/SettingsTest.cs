@@ -52,11 +52,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             Assert.That(dest.AutoSave,           Is.False);
             Assert.That(dest.AutoSaveDelay,      Is.EqualTo(TimeSpan.FromSeconds(1)));
             Assert.That(dest.Version.ToString(), Is.EqualTo("0.9.1β"));
-            Assert.That(dest.Company,            Is.EqualTo("CubeSoft"));
-            Assert.That(dest.Product,            Is.EqualTo("Cube.FileSystem.SevenZip.Ice.Tests"));
             Assert.That(dest.Format,             Is.EqualTo(Cube.DataContract.Format.Registry));
             Assert.That(dest.Location,           Is.EqualTo(@"CubeSoft\CubeICE\v3"));
-            Assert.That(dest.Startup,            Is.Not.Null);
             Assert.That(dest.Value,              Is.Not.Null);
         }
 

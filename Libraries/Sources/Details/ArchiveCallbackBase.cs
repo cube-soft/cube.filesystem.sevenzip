@@ -89,7 +89,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IProgress<ArchiveReport> Progress { get; set; }
+        public IProgress<Report> Progress { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -122,7 +122,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected ArchiveReport Report { get; set; } = new ArchiveReport();
+        protected Report Report { get; set; } = new Report();
 
         #endregion
 
@@ -130,62 +130,104 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CallbackAction
+        /// Invoke
         ///
         /// <summary>
-        /// コールバック関数を実行します。
+        /// Invokes the specified callback and reports the progress.
         /// </summary>
         ///
-        /// <param name="action">実行する関数オブジェクト</param>
+        /// <param name="callback">Callback action.</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected void CallbackAction(Action action)
-        {
-            try { action(); }
-            catch (OperationCanceledException) { Result = OperationResult.UserCancel; throw; }
-            catch (Exception err)
-            {
-                Result    = OperationResult.DataError;
-                Exception = err;
-                throw;
-            }
-        }
+        protected void Invoke(Action callback) => Invoke(callback, true);
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CallbackFunc
+        /// Invoke
         ///
         /// <summary>
-        /// コールバック関数を実行します。
+        /// Invokes the specified callback and optionally reports the
+        /// progress.
         /// </summary>
         ///
-        /// <param name="func">実行する関数オブジェクト</param>
-        ///
-        /// <returns>関数オブジェクトの戻り値</returns>
+        /// <param name="callback">Callback action.</param>
+        /// <param name="report">Reports or not the progress.</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected T CallbackFunc<T>(Func<T> func)
-        {
-            try { return func(); }
-            catch (OperationCanceledException) { Result = OperationResult.UserCancel; throw; }
-            catch (Exception err)
-            {
-                Result    = OperationResult.DataError;
-                Exception = err;
-                throw;
-            }
-        }
+        protected void Invoke(Action callback, bool report) =>
+            Invoke(() => { callback(); return true; }, report);
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ExecuteReport
+        /// Invoke
         ///
         /// <summary>
-        /// 進捗状況を通知します。
+        /// Invokes the specified callback and reports the progress.
+        /// </summary>
+        ///
+        /// <param name="callback">Callback function.</param>
+        ///
+        /// <returns>Result of the callback function.</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected T Invoke<T>(Func<T> callback) => Invoke(callback, true);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Invoke
+        ///
+        /// <summary>
+        /// Invokes the specified callback and optionally reports the
+        /// progress.
+        /// </summary>
+        ///
+        /// <param name="callback">Callback function.</param>
+        /// <param name="report">Reports or not the progress.</param>
+        ///
+        /// <returns>Result of the callback function.</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected T Invoke<T>(Func<T> callback, bool report)
+        {
+            try
+            {
+                var dest = callback();
+                if (report) Progress?.Report(Copy(Report));
+                return dest;
+            }
+            catch (Exception err)
+            {
+                Result    = err is OperationCanceledException ?
+                            OperationResult.UserCancel :
+                            OperationResult.DataError;
+                Exception = err;
+                throw;
+            }
+            finally { Report.Status = ReportStatus.Progress; }
+        }
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Copy
+        ///
+        /// <summary>
+        /// Creates a copied instance of the Report class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected void ExecuteReport() => CallbackAction(() => Progress?.Report(Report));
+        private Report Copy(Report src) => new Report
+        {
+            Status     = src.Status,
+            Current    = src.Current,
+            Count      = src.Count,
+            Bytes      = src.Bytes,
+            TotalCount = src.TotalCount,
+            TotalBytes = src.TotalBytes,
+        };
 
         #endregion
     }
