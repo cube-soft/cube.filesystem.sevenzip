@@ -68,11 +68,6 @@ namespace Cube.FileSystem.SevenZip.Ice
             AutoSave       = false;
             Version.Digit  = 3;
             Version.Suffix = Properties.Resources.VersionSuffix;
-
-            var name = "cubeice-checker";
-            var dir  = IO.Get(assembly.GetReader().Location).DirectoryName;
-            Startup.Name    = name;
-            Startup.Command = IO.Combine(dir, $"{name}.exe").Quote();
         }
 
         #endregion
@@ -90,8 +85,20 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         protected override void OnSaved(KeyValueEventArgs<Cube.DataContract.Format, string> e)
         {
-            if (Value != null) Startup.Enabled = Value.CheckUpdate;
-            base.OnSaved(e);
+            try
+            {
+                if (Value == null) return;
+
+                var name = "cubeice-checker";
+                var dir  = IO.Get(Assembly.Location).DirectoryName;
+
+                new Startup(name)
+                {
+                    Command = IO.Combine(dir, $"{name}.exe").Quote(),
+                    Enabled = Value.CheckUpdate,
+                }.Save();
+            }
+            finally { base.OnSaved(e); }
         }
 
         #endregion

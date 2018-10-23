@@ -51,7 +51,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
             Archive   = new ArchiveViewModel(model.Value.Archive);
             Extract   = new ExtractViewModel(model.Value.Extract);
             Associate = new AssociateViewModel(model.Value.Associate);
-            Context   = new ContextViewModel(model.Value.Context);
+            Menu      = new ContextViewModel(model.Value.Menu);
             Shortcut  = new ShortcutViewModel(model.Value.Shortcut);
         }
 
@@ -197,14 +197,14 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Context
+        /// Menu
         ///
         /// <summary>
         /// コンテキストメニューの設定を扱う ViewModel を取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ContextViewModel Context { get; }
+        public ContextViewModel Menu { get; }
 
         /* ----------------------------------------------------------------- */
         ///

@@ -1,11 +1,13 @@
 Cube.FileSystem.SevenZip
 ====
 
+[![NuGet](https://img.shields.io/nuget/v/Cube.FileSystem.SevenZip.svg)](https://www.nuget.org/packages/Cube.FileSystem.SevenZip/)
 [![AppVeyor](https://ci.appveyor.com/api/projects/status/jao7f754rlookxxe?svg=true)](https://ci.appveyor.com/project/clown/cube-filesystem-sevenzip)
 [![Codecov](https://codecov.io/gh/cube-soft/Cube.FileSystem.SevenZip/branch/master/graph/badge.svg)](https://codecov.io/gh/cube-soft/Cube.FileSystem.SevenZip)
 
-Cube.FileSystem.SevenZip is an I/O library, especially for archiving or extracting files.
-The Cube.FileSystem.SevenZip project (files in the Libraries directory) is licensed under the GNU LGPLv3 and the other projects are Apache 2.0.
+Cube.FileSystem.SevenZip projects wrap the [7-Zip](http://www.7-zip.org/) library.
+The repository also has an archiving or extracting application, which name is [CubeICE](https://www.cube-soft.jp/cubeice/).
+Note that the Cube.FileSystem.SevenZip project (files in the Libraries directory) is licensed under the GNU LGPLv3 and the other projects are Apache 2.0.
 
 ## Usage
 
@@ -20,15 +22,18 @@ Note that all the samples need the "using Cube.FileSystem.SevenZip;" statement.
 ```cs
 using (var writer = new ArchiveWriter(Format.Zip))
 {
-    writer.Option = new ZipOption(); // optional
     writer.Add(@"path\to\file");
     writer.Add(@"path\to\directory_including_files");
-    writer.Save(@"path\to\save.zip", "password");
+    writer.Option  = new ZipOption();
+    writer.Filters = new[] { ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini" };
+    
+    var progress = new Progress<Report>(e => DoSomething(e));
+    writer.Save(@"path\to\save.zip", "password", progress);
 }
 ```
 
-You create an ArchiveWriter object with an archiving format (e.g. Zip, SevenZip, ...), 
-add files and/or directories you want to archive, and finally call the Save method.
+You create an ArchiveWriter object with an archiving format (e.g. Zip, SevenZip, ...),
+add files and/or directories you want to archive, set some additional options, and finally call the Save method.
 When you create Tar based archives, you can use a TarOption object for selecting a compression method.
 
 ```cs
@@ -50,15 +55,18 @@ using (var writer = new ArchiveWriter(Format.Tar))
 
 If you want to extract all files from the archive, you create an ArchiveReader object
 and call the Extract method. The 2nd argument of the constructor, that means the
-password of the archive, can be set string or Cube.Query<string> object.
+password of the archive, can be set string or Cube.Query&lt;string&gt; object.
 The latter is mainly used for implementing the interactive mode.
 
 ```cs
 // Set password directly or using Query<string>
 var password = new Cube.Query<string>(e => e.Result = "password");
+var progress = new Progress<Report>(e => DoSomething(e));
+
 using (var reader = new ArchiveReader(@"path\to\archive", password))
 {
-    reader.Extract(@"path\to\directory");
+    reader.Filters = new[] { ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini" };    
+    reader.Extract(@"path\to\directory", progress);
 }
 ```
 
@@ -75,10 +83,6 @@ using (var reader = new ArchiveReader(@"path\to\archive", "password"))
     reader.Items[3].Extract(directory);
 }
 ```
-
-## Todo
-
-We will implement to add and/or modify files to existed archives in the future.
 
 ## Dependencies
 
@@ -104,7 +108,7 @@ We will implement to add and/or modify files to existed archives in the future.
 
 ## License
  
-Copyright (c) 2010 [CubeSoft, Inc.](http://www.cube-soft.jp/)
+Copyright &copy; 2010 [CubeSoft, Inc.](http://www.cube-soft.jp/)
 
 The Cube.FileSystem.SevenZip project is licensed under the [GNU LGPLv3](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries/License.txt)
 and the other projects are [Apache 2.0](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/License.txt).

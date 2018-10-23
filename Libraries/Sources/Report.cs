@@ -16,151 +16,117 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-
 namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveItem
+    /// Report
     ///
     /// <summary>
-    /// Represents an item in the archive.
+    /// Represents information of the archived or extracted report.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveItem : Information
+    public class Report
     {
-        #region Constructors
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ArchiveItem
-        ///
-        /// <summary>
-        /// Initializes a new instance of the ArchiveItem class with the
-        /// specified arguments.
-        /// </summary>
-        ///
-        /// <param name="src">Path of the archive.</param>
-        /// <param name="controller">Controller object.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        internal ArchiveItem(string src, ArchiveItemController controller) :
-            base(src, controller) { }
-
-        #endregion
-
         #region Properties
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Index
+        /// Status
         ///
         /// <summary>
-        /// Gets the index in the archive.
+        /// Gets or sets the reporting status.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public int Index => GetController().Index;
+        public ReportStatus Status { get; set; } = ReportStatus.Progress;
 
         /* ----------------------------------------------------------------- */
         ///
-        /// RawName
+        /// Current
         ///
         /// <summary>
-        /// Gets the original name that represents the relative path
-        /// in the archive.
+        /// Gets or sets the file information that is currently processing.
         /// </summary>
         ///
-        /// <remarks>
-        /// FullName property represents the normalized result against
-        /// the RawName property.
-        /// </remarks>
-        ///
         /* ----------------------------------------------------------------- */
-        public string RawName => GetController().RawName;
+        public Information Current { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Encrypted
+        /// Count
         ///
         /// <summary>
-        /// Gets the value indicating whether the archive is encrypted.
+        /// Gets or sets the number of processed files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool Encrypted => GetController().Encrypted;
+        public long Count { get; set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// TotalCount
+        ///
+        /// <summary>
+        /// Gets or sets the number of processing target files.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public long TotalCount { get; set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Bytes
+        ///
+        /// <summary>
+        /// Gets or sets the number of processed bytes.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public long Bytes { get; set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// TotalBytes
+        ///
+        /// <summary>
+        /// Gets or sets the number of processing target bytes.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public long TotalBytes { get; set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Ratio
+        ///
+        /// <summary>
+        /// Gets the progress ratio within the range of [0, 1].
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public double Ratio => TotalBytes > 0 ? Bytes / (double)TotalBytes : 0.0;
 
         #endregion
+    }
 
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Match
-        ///
-        /// <summary>
-        /// Gets the value indicating whether any of the specified
-        /// collection matches the all or part of the path.
-        /// </summary>
-        ///
-        /// <param name="names">Collection of names.</param>
-        ///
-        /// <returns>true for match.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public bool Match(IEnumerable<string> names) => GetController().Match(names);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extract
-        ///
-        /// <summary>
-        /// Extracts the archived item and saves to the specified path.
-        /// </summary>
-        ///
-        /// <param name="directory">Directory to save.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Extract(string directory) => Extract(directory, null);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extract
-        ///
-        /// <summary>
-        /// Extracts the archived item and saves to the specified path.
-        /// </summary>
-        ///
-        /// <param name="directory">Directory to save.</param>
-        /// <param name="progress">Progress report.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Extract(string directory, IProgress<Report> progress) =>
-            GetController().Extract(this, directory, progress);
-
-        #endregion
-
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetController
-        ///
-        /// <summary>
-        /// Gets the controller object.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private ArchiveItemController GetController()
-        {
-            Debug.Assert(Refreshable is ArchiveItemController);
-            return (ArchiveItemController)Refreshable;
-        }
-
-        #endregion
+    /* --------------------------------------------------------------------- */
+    ///
+    /// ReportStatus
+    ///
+    /// <summary>
+    /// Specifies status of the provided report.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public enum ReportStatus
+    {
+        /// <summary>Current file begins to be archived or extracted</summary>
+        Begin,
+        /// <summary>Current file ends to be archived or extracted</summary>
+        End,
+        /// <summary>Archiving or Extracting operation is in progress.</summary>
+        Progress,
     }
 }

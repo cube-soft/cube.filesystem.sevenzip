@@ -34,7 +34,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public abstract class ProgressFacade : IDisposable
+    public abstract class ProgressFacade : DisposableBase
     {
         #region Constructors
 
@@ -52,7 +52,6 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /* ----------------------------------------------------------------- */
         protected ProgressFacade(Request request, SettingsFolder settings)
         {
-            _dispose = new OnceAction<bool>(Dispose);
             Request  = request;
             Settings = settings;
 
@@ -128,17 +127,6 @@ namespace Cube.FileSystem.SevenZip.Ice.App
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Current
-        ///
-        /// <summary>
-        /// 現在処理中のファイルのパスを取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Current { get; protected set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// Report
         ///
         /// <summary>
@@ -146,7 +134,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveReport Report { get; protected set; } = new ArchiveReport();
+        public Report Report { get; protected set; } = new Report();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -200,7 +188,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public event ValueEventHandler<ArchiveReport> Progress;
+        public event ValueEventHandler<Report> Progress;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -211,7 +199,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void OnProgress(ValueEventArgs<ArchiveReport> e) =>
+        protected virtual void OnProgress(ValueEventArgs<Report> e) =>
             Progress?.Invoke(this, e);
 
         #endregion
@@ -450,8 +438,8 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected IProgress<ArchiveReport> CreateInnerProgress(Action<ArchiveReport> action) =>
-            new SuspendableProgress<ArchiveReport>(_cancel.Token, _wait, action);
+        protected IProgress<Report> CreateInnerProgress(Action<Report> action) =>
+            new SuspendableProgress<Report>(_cancel.Token, _wait, action);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -590,18 +578,9 @@ namespace Cube.FileSystem.SevenZip.Ice.App
 
         #endregion
 
-        #region IDisposable
+        #endregion
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ~ProgressFacade
-        ///
-        /// <summary>
-        /// オブジェクトを破棄します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        ~ProgressFacade() { _dispose.Invoke(false); }
+        #region Implementations
 
         /* ----------------------------------------------------------------- */
         ///
@@ -612,22 +591,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Dispose()
-        {
-            _dispose.Invoke(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Dispose
-        ///
-        /// <summary>
-        /// リソースを解放します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected virtual void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
@@ -639,12 +603,6 @@ namespace Cube.FileSystem.SevenZip.Ice.App
             try { if (!string.IsNullOrEmpty(Tmp)) IO.Delete(Tmp); }
             catch (Exception err) { this.LogWarn(err.ToString(), err); }
         }
-
-        #endregion
-
-        #endregion
-
-        #region Implementations
 
         /* ----------------------------------------------------------------- */
         ///
@@ -714,7 +672,6 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         #endregion
 
         #region Fields
-        private readonly OnceAction<bool> _dispose;
         private readonly System.Timers.Timer _timer = new System.Timers.Timer(100.0);
         private readonly CancellationTokenSource _cancel = new CancellationTokenSource();
         private readonly ManualResetEvent _wait = new ManualResetEvent(true);

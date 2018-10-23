@@ -19,6 +19,7 @@
 using Cube.Log;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -142,11 +143,7 @@ namespace Cube.FileSystem.SevenZip
         /// </param>
         ///
         /* ----------------------------------------------------------------- */
-        public void SetTotal(ulong bytes)
-        {
-            Report.TotalBytes = (long)bytes;
-            ExecuteReport();
-        }
+        public void SetTotal(ulong bytes) => Invoke(() => Report.TotalBytes = (long)bytes);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -161,8 +158,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void SetCompleted(ref ulong bytes)
         {
-            Report.Bytes = (long)bytes;
-            ExecuteReport();
+            var cvt = (long)bytes;
+            Invoke(() => Report.Bytes = cvt);
         }
 
         /* ----------------------------------------------------------------- */
@@ -190,9 +187,7 @@ namespace Cube.FileSystem.SevenZip
             newdata = 1;
             newprop = 1;
             indexInArchive = uint.MaxValue;
-
-            ExecuteReport();
-            return (int)Result;
+            return Invoke(() => (int)Result);
         }
 
         /* ----------------------------------------------------------------- */
@@ -212,7 +207,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int GetProperty(uint index, ItemPropId pid, ref PropVariant value)
         {
-            var src = Items[(int)index];
+            var src = GetItem(index);
 
             switch (pid)
             {
@@ -246,8 +241,7 @@ namespace Cube.FileSystem.SevenZip
                     break;
             }
 
-            ExecuteReport();
-            return (int)Result;
+            return Invoke(() => (int)Result);
         }
 
         /* ----------------------------------------------------------------- */
@@ -266,12 +260,12 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int GetStream(uint index, out ISequentialInStream stream)
         {
-            ExecuteReport();
-            stream = CallbackFunc(() =>
+            stream = Invoke(() =>
             {
-                Report.Count = index + 1;
-                Progress?.Report(Report);
-                return CreateStream(index);
+                Report.Count   = index + 1;
+                Report.Current = GetItem(index);
+                Report.Status  = ReportStatus.Begin;
+                return GetStream(Report.Current);
             });
             return (int)Result;
         }
@@ -287,7 +281,11 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="result">処理結果</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void SetOperationResult(OperationResult result) => Result = result;
+        public void SetOperationResult(OperationResult result) => Invoke(() =>
+        {
+            Result        = result;
+            Report.Status = ReportStatus.End;
+        });
 
         /* ----------------------------------------------------------------- */
         ///
@@ -360,20 +358,32 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CreateStream
+        /// GetItem
         ///
         /// <summary>
-        /// ストリームを生成します。
+        /// Gets the item of the specified index.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private ArchiveStreamReader CreateStream(uint index)
+        private FileItem GetItem(uint index)
         {
-            var path = Items[(int)index].FullName;
-            var info = IO.Get(path);
-            if (info.IsDirectory) return null;
+            Debug.Assert(index >= 0 && index < Items.Count);
+            return Items[(int)index];
+        }
 
-            var dest = new ArchiveStreamReader(IO.OpenRead(path));
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetStream
+        ///
+        /// <summary>
+        /// Gets the stream corresponding to the specified information.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private ArchiveStreamReader GetStream(Information src)
+        {
+            if (!src.Exists || src.IsDirectory) return null;
+            var dest = new ArchiveStreamReader(IO.OpenRead(src.FullName));
             _streams.Add(dest);
             return dest;
         }

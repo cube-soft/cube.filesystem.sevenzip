@@ -161,4 +161,43 @@ namespace Cube.FileSystem.SevenZip
         private readonly IDictionary<string, PropVariant> _dic = new Dictionary<string, PropVariant>();
         #endregion
     }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// ArchiveOptionSetterExtension
+    ///
+    /// <summary>
+    /// Provides extended methods for the ArchiveOptionSetter class.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    internal static class ArchiveOptionSetterExtension
+    {
+        #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Convert
+        ///
+        /// <summary>
+        /// Converts from the specified object to the new instance of
+        /// the ArchiveOptionSetter class.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static ArchiveOptionSetter Convert(this ArchiveOption src, Format format)
+        {
+            if (src == null) return null;
+            switch (format)
+            {
+                case Format.Zip:      return new ZipOptionSetter(src);
+                case Format.SevenZip: return new SevenZipOptionSetter(src);
+                case Format.Sfx:      return new SevenZipOptionSetter(src);
+                case Format.Tar:      return null;
+                default:              return new ArchiveOptionSetter(src);
+            }
+        }
+
+        #endregion
+    }
 }

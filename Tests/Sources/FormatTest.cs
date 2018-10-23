@@ -112,32 +112,6 @@ namespace Cube.FileSystem.SevenZip.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// FromMethod
-        ///
-        /// <summary>
-        /// CompressionMethod から Format に変換するテストを実行します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [TestCase(CompressionMethod.GZip, ExpectedResult = Format.GZip)]
-        [TestCase(CompressionMethod.Lzma, ExpectedResult = Format.Unknown)]
-        public Format FromMethod(CompressionMethod method) => Formats.FromMethod(method);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ToClassId
-        ///
-        /// <summary>
-        /// Class ID に変換するテストを実行します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [TestCase(Format.Zip,     ExpectedResult = "23170f69-40c1-278a-1000-000110010000")]
-        [TestCase(Format.Unknown, ExpectedResult = "00000000-0000-0000-0000-000000000000")]
-        public string ToClassId(Format format) => format.ToClassId().ToString("D").ToLower();
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// ToExtension
         ///
         /// <summary>
@@ -153,6 +127,19 @@ namespace Cube.FileSystem.SevenZip.Tests
         [TestCase(Format.Sfx,      ExpectedResult = ".exe")]
         [TestCase(Format.Unknown,  ExpectedResult = "")]
         public string ToExtension(Format format) => format.ToExtension();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ToFormat
+        ///
+        /// <summary>
+        /// CompressionMethod から Format に変換するテストを実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [TestCase(CompressionMethod.GZip, ExpectedResult = Format.GZip)]
+        [TestCase(CompressionMethod.Lzma, ExpectedResult = Format.Unknown)]
+        public Format ToFormat(CompressionMethod method) => method.ToFormat();
 
         /* ----------------------------------------------------------------- */
         ///

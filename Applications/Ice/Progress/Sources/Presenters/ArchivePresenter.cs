@@ -125,7 +125,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void WhenProgress(object s, ValueEventArgs<ArchiveReport> e) => Sync(() =>
+        private void WhenProgress(object s, ValueEventArgs<Report> e) => Sync(() =>
         {
             View.FileName   = Model.IO.Get(Model.Destination).Name;
             View.TotalCount = e.Value.TotalCount;

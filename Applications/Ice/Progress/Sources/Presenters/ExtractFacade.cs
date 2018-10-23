@@ -200,7 +200,6 @@ namespace Cube.FileSystem.SevenZip.Ice.App
                 var path = IO.Combine(Tmp, item.FullName);
 
                 ProgressStart();
-                WhenExtracting(this, ValueEventArgs.Create(item));
                 item.Extract(Tmp, CreateInnerProgress(e => Report = e));
 
                 if (Formats.FromFile(path) == Format.Tar)
@@ -212,7 +211,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
                 {
                     Report.TotalBytes = IO.Get(path).Length;
                     SetDirectories(reader, dest, IsTrimExtension(reader.Format));
-                    WhenExtracted(this, ValueEventArgs.Create(item));
+                    Move(item);
                     ProgressResult();
                 }
             }
@@ -235,18 +234,15 @@ namespace Cube.FileSystem.SevenZip.Ice.App
                 SetDirectories(reader, dest, false);
                 if (Settings.Value.Extract.Filtering) reader.Filters = Settings.Value.GetFilters();
 
-                reader.Extracting += WhenExtracting;
-                reader.Extracted  += WhenExtracted;
                 ProgressStart();
-                ExtractCore(reader, CreateInnerProgress(e => Report = e));
+                ExtractCore(reader, CreateInnerProgress(e =>
+                {
+                    Report = e;
+                    if (Report.Status == ReportStatus.End) Move(e.Current);
+                }));
                 ProgressResult();
             }
-            finally
-            {
-                ProgressStop();
-                reader.Extracting -= WhenExtracting;
-                reader.Extracted  -= WhenExtracted;
-            }
+            finally { ProgressStop(); }
         }
 
         /* ----------------------------------------------------------------- */
@@ -266,7 +262,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        private void ExtractCore(ArchiveReader src, IProgress<ArchiveReport> progress)
+        private void ExtractCore(ArchiveReader src, IProgress<Report> progress)
         {
             var retry = false;
             do
@@ -296,6 +292,30 @@ namespace Cube.FileSystem.SevenZip.Ice.App
                       directories.Count() == 1 &&
                       directories.First() != "*";
             OpenDirectoryName = one ? directories.First() : ".";
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Move
+        ///
+        /// <summary>
+        /// Moves from the temporary directory to the specified directory.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Move(Information item)
+        {
+            var src = IO.Get(IO.Combine(Tmp, item.FullName));
+            if (!src.Exists) return;
+
+            var dest = IO.Get(IO.Combine(Destination, item.FullName));
+            if (dest.Exists)
+            {
+                if (item.IsDirectory) return;
+                if (!OverwriteMode.HasFlag(OverwriteMode.Always)) RaiseOverwriteRequested(src, dest);
+                Overwrite(src, dest);
+            }
+            else Move(src, dest);
         }
 
         /* ----------------------------------------------------------------- */
@@ -469,41 +489,6 @@ namespace Cube.FileSystem.SevenZip.Ice.App
             OnOverwriteRequested(e);
             if (e.Result == OverwriteMode.Cancel) throw new OperationCanceledException();
             OverwriteMode = e.Result;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenExtracting
-        ///
-        /// <summary>
-        /// Extracting イベント発生時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenExtracting(object s, ValueEventArgs<ArchiveItem> e) =>
-            Current = e.Value.FullName;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenExtracted
-        ///
-        /// <summary>
-        /// Extracted イベント発生時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenExtracted(object s, ValueEventArgs<ArchiveItem> e)
-        {
-            var src  = IO.Get(IO.Combine(Tmp, e.Value.FullName));
-            var dest = IO.Get(IO.Combine(Destination, e.Value.FullName));
-
-            if (dest.Exists)
-            {
-                if (e.Value.IsDirectory) return;
-                if (!OverwriteMode.HasFlag(OverwriteMode.Always)) RaiseOverwriteRequested(src, dest);
-                Overwrite(src, dest);
-            }
-            else Move(src, dest);
         }
 
         #endregion

@@ -16,75 +16,90 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-namespace Cube.FileSystem.SevenZip
+using Cube.FileSystem.TestService;
+using System;
+using System.Collections.Generic;
+
+namespace Cube.FileSystem.SevenZip.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveReport
+    /// ArchiveFixture
     ///
     /// <summary>
-    /// 進捗状況を保持するためのクラスです。
+    /// Provides helper methods to test ArchiveReader and ArchiveWriter
+    /// classes.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveReport
+    abstract class ArchiveFixture : FileFixture
     {
-        #region Properties
+        #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Count
+        /// ArchiveFixture
         ///
         /// <summary>
-        /// 処理の終了したファイル数を取得または設定します。
+        /// Initializes a new instance of the ArchiveFixture class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public long Count { get; set; }
+        protected ArchiveFixture() { }
+
+        #endregion
+
+        #region Methods
 
         /* ----------------------------------------------------------------- */
         ///
-        /// TotalCount
+        /// CreateReport
         ///
         /// <summary>
-        /// 処理対象となるファイル数を取得または設定します。
+        /// Creates a new collection for ReportStatus.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public long TotalCount { get; set; }
+        protected IDictionary<ReportStatus, int> CreateReport() =>
+            new Dictionary<ReportStatus, int>
+            {
+                { ReportStatus.Begin,    0 },
+                { ReportStatus.End,      0 },
+                { ReportStatus.Progress, 0 },
+            };
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Bytes
+        /// Create
         ///
         /// <summary>
-        /// 処理の終了したとなるバイト数を取得します。
+        /// Creates a new instance of the Progress(Report) class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public long Bytes { get; set; }
+        protected IProgress<Report> Create(IDictionary<ReportStatus, int> src) =>
+            new SyncProgress<Report>(e => src[e.Status]++);
+
+        #endregion
+
+        #region Implementations
 
         /* ----------------------------------------------------------------- */
         ///
-        /// TotalBytes
+        /// SyncProgress
         ///
         /// <summary>
-        /// 処理対象となるバイト数を取得または設定します。
+        /// Provides functioanlity to execute the specified action
+        /// as a synchronous operation.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public long TotalBytes { get; set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Ratio
-        ///
-        /// <summary>
-        /// 進捗状況を示す値を [0, 1] の範囲で取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public double Ratio => TotalBytes > 0 ? Bytes / (double)TotalBytes : 0.0;
+        private class SyncProgress<T> : IProgress<T>
+        {
+            public SyncProgress(Action<T> e) { _do = e; }
+            public void Report(T e) => _do(e);
+            private readonly Action<T> _do;
+        }
 
         #endregion
     }
