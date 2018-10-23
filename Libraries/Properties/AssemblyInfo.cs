@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("1.12.0.0")]
 [assembly: AssemblyTitle("Cube.FileSystem.SevenZip")]
 [assembly: AssemblyProduct("Cube.FileSystem.SevenZip")]
-[assembly: AssemblyDescription("C# wrapper library for 7-Zip")]
+[assembly: AssemblyDescription("Archive library to wrap 7-Zip in .NET Framework.")]
 [assembly: AssemblyCompany("CubeSoft")]
 [assembly: AssemblyCopyright("Copyright © 2010 CubeSoft, Inc.")]
 [assembly: AssemblyConfiguration("")]

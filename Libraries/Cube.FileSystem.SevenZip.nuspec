@@ -7,9 +7,9 @@
         <copyright>$copyright$</copyright>
         <authors>CubeSoft</authors>
         <owners>CubeSoft</owners>
-        <description>C# wrapper library for 7-Zip.</description>
-        <releaseNotes>Private release.</releaseNotes>
-        <tags>Cube Windows SevenZip</tags>
+        <description>Archive library to wrap 7-Zip in .NET Framework.</description>
+        <releaseNotes>Stable release.</releaseNotes>
+        <tags>Cube Windows 7-Zip SevenZip</tags>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <projectUrl>https://github.com/cube-soft/Cube.FileSystem.SevenZip</projectUrl>
         <licenseUrl>https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries/License.txt</licenseUrl>
