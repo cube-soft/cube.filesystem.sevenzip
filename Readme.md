@@ -7,6 +7,7 @@ Cube.FileSystem.SevenZip
 
 Cube.FileSystem.SevenZip projects wrap the [7-Zip](http://www.7-zip.org/) library.
 The repository also has an archiving or extracting application, which name is [CubeICE](https://www.cube-soft.jp/cubeice/).
+Note that the Cube.FileSystem.SevenZip project (files in the Libraries directory) is licensed under the GNU LGPLv3 and the other projects are Apache 2.0.
 
 ## Usage
 
