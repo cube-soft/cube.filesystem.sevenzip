@@ -70,7 +70,7 @@ using (var reader = new ArchiveReader(@"path\to\archive", password))
 }
 ```
 
-ArchvieReader.Items property can access the each item of the archive.
+ArchvieReader.Items property can access each item of the archive.
 If you want to extract only the specific files, write as follows.
 
 ```cs
