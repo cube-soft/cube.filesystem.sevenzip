@@ -7,17 +7,16 @@ Cube.FileSystem.SevenZip
 
 Cube.FileSystem.SevenZip projects wrap the [7-Zip](http://www.7-zip.org/) library.
 The repository also has an archiving or extracting application, which name is [CubeICE](https://www.cube-soft.jp/cubeice/).
-Note that the Cube.FileSystem.SevenZip project (files in the Libraries directory) is licensed under the GNU LGPLv3 and the other projects are Apache 2.0.
 
 ## Usage
 
-Note that ArchiveWriter and ArchiveReader classes need to execute in the same thread from constructing to destroying.
-Use Task.Run() in the whole transaction if you need to archive or extract files asynchronously.
+The Cube.FileSystem.SevenZip library is available for NuGet, but you need to copy the 7z.dll to the executing directory manually. 
+You can download the library from [www.7-zip.org](https://www.7-zip.org/) or our [GitHub releases](https://github.com/cube-soft/Cube.FileSystem.SevenZip/releases).
 
 ### Example for archiving files
 
-The simplest example for archiving files is as follows.
-Note that all the samples need the "using Cube.FileSystem.SevenZip;" statement.
+A simple example for archiving files is as follows.
+The statement "using Cube.FileSystem.SevenZip;" has been omitted in all samples.
 
 ```cs
 using (var writer = new ArchiveWriter(Format.Zip))
@@ -84,17 +83,19 @@ using (var reader = new ArchiveReader(@"path\to\archive", "password"))
 }
 ```
 
+Note that ArchiveWriter and ArchiveReader classes need to execute in the same thread from constructing to destroying.
+Use Task.Run() in the whole transaction if you need to archive or extract files asynchronously.
+
 ## Dependencies
 
-* [7-Zip](http://www.7-zip.org/) ... [cube-soft/7z](https://github.com/cube-soft/7z) is optimized for Japanese encoding.
-* [AlphaFS](http://alphafs.alphaleonis.com/)
+* [7-Zip](https://www.7-zip.org/) ... [cube-soft/7z](https://github.com/cube-soft/7z) is optimized for Japanese encoding.
+* [AlphaFS](https://alphafs.alphaleonis.com/)
 * [Cube.Core](https://github.com/cube-soft/Cube.Core)
 * [Cube.FileSystem](https://github.com/cube-soft/Cube.FileSystem)
 * [log4net](https://logging.apache.org/log4net/)
 
 ## Thanks
 
-* [babel](http://tricklib.com/cxx/ex/babel/) ... Used in the customized version of 7-Zip
 * [SevenZipSharp](https://www.nuget.org/packages/SevenZipSharp/)
 
 ## Contributing
@@ -110,6 +111,6 @@ using (var reader = new ArchiveReader(@"path\to\archive", "password"))
  
 Copyright &copy; 2010 [CubeSoft, Inc.](http://www.cube-soft.jp/)
 
-The Cube.FileSystem.SevenZip project is licensed under the [GNU LGPLv3](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries/License.txt)
+The [Cube.FileSystem.SevenZip](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries) project is licensed under the [GNU LGPLv3](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries/License.txt)
 and the other projects are [Apache 2.0](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/License.txt).
 Note that trade names, trademarks, service marks, or logo images distributed in CubeSoft applications are not allowed to reuse or modify all or parts of them.
