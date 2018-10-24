@@ -7,14 +7,14 @@ Cube.FileSystem.SevenZip
 
 Cube.FileSystem.SevenZip projects wrap the [7-Zip](http://www.7-zip.org/) library.
 The repository also has an archiving or extracting application, which name is [CubeICE](https://www.cube-soft.jp/cubeice/).
-Note that the Cube.FileSystem.SevenZip project (files in the Libraries directory) is licensed under the GNU LGPLv3 and the other projects are Apache 2.0.
+Note that the Cube.FileSystem.SevenZip project (files in the [Libraries](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries) directory) is licensed under the GNU LGPLv3 and the other projects are Apache 2.0.
 
 ## Usage
 
 The Cube.FileSystem.SevenZip library is available for NuGet, but you need to copy the 7z.dll to the executing directory manually. 
 You can download the library from [www.7-zip.org](https://www.7-zip.org/) or our [GitHub releases](https://github.com/cube-soft/Cube.FileSystem.SevenZip/releases).
 
-### Example for archiving files
+### Examples for archiving files
 
 A simple example for archiving files is as follows.
 The statement "using Cube.FileSystem.SevenZip;" has been omitted in all samples.
@@ -51,7 +51,7 @@ using (var writer = new ArchiveWriter(Format.Tar))
 }
 ```
 
-### Example for extracting archives
+### Examples for extracting archives
 
 If you want to extract all files from the archive, you create an ArchiveReader object
 and call the Extract method. The 2nd argument of the constructor, that means the
@@ -112,6 +112,6 @@ Use Task.Run() in the whole transaction if you need to archive or extract files 
  
 Copyright &copy; 2010 [CubeSoft, Inc.](http://www.cube-soft.jp/)
 
-The [Cube.FileSystem.SevenZip](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries) project is licensed under the [GNU LGPLv3](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries/License.txt)
+The Cube.FileSystem.SevenZip project (files in the [Libraries](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries) directory) is licensed under the [GNU LGPLv3](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries/License.txt)
 and the other projects are [Apache 2.0](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/License.txt).
 Note that trade names, trademarks, service marks, or logo images distributed in CubeSoft applications are not allowed to reuse or modify all or parts of them.
