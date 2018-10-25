@@ -24,7 +24,7 @@ using (var writer = new ArchiveWriter(Format.Zip))
 {
     writer.Add(@"path\to\file");
     writer.Add(@"path\to\directory_including_files");
-    writer.Option  = new ZipOption();
+    writer.Option  = new ZipOption { CompressionLevel = CompressionLevel.Ultra };
     writer.Filters = new[] { ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini" };
     
     var progress = new Progress<Report>(e => DoSomething(e));
@@ -60,11 +60,15 @@ The latter is mainly used for implementing the interactive mode.
 
 ```cs
 // Set password directly or using Query<string>
-var password = new Cube.Query<string>(e => e.Result = "password");
-var progress = new Progress<Report>(e => DoSomething(e));
+var password = new Cube.Query<string>(e =>
+{
+    e.Result = "password";
+    e.Cancel = false;
+});
 
 using (var reader = new ArchiveReader(@"path\to\archive", password))
 {
+    var progress = new Progress<Report>(e => DoSomething(e));
     reader.Filters = new[] { ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini" };    
     reader.Extract(@"path\to\directory", progress);
 }
@@ -76,9 +80,8 @@ If you want to extract only the specific files, write as follows.
 ```cs
 using (var reader = new ArchiveReader(@"path\to\archive", "password"))
 {
-    var directory = @"path\to\directory";
-
     // Save as "path\to\directory\{item.FullName}"
+    var directory = @"path\to\directory";
     reader.Items[0].Extract(directory);
     reader.Items[3].Extract(directory);
 }
@@ -110,7 +113,7 @@ Use Task.Run() in the whole transaction if you need to archive or extract files 
 
 ## License
  
-Copyright &copy; 2010 [CubeSoft, Inc.](http://www.cube-soft.jp/)
+Copyright © 2010 [CubeSoft, Inc.](http://www.cube-soft.jp/)
 
 The Cube.FileSystem.SevenZip project (files in the [Libraries](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries) directory) is licensed under the [GNU LGPLv3](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries/License.txt)
 and the other projects are [Apache 2.0](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/License.txt).
