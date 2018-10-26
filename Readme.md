@@ -5,8 +5,9 @@ Cube.FileSystem.SevenZip
 [![AppVeyor](https://ci.appveyor.com/api/projects/status/jao7f754rlookxxe?svg=true)](https://ci.appveyor.com/project/clown/cube-filesystem-sevenzip)
 [![Codecov](https://codecov.io/gh/cube-soft/Cube.FileSystem.SevenZip/branch/master/graph/badge.svg)](https://codecov.io/gh/cube-soft/Cube.FileSystem.SevenZip)
 
-Cube.FileSystem.SevenZip projects wrap the [7-Zip](http://www.7-zip.org/) library.
+Cube.FileSystem.SevenZip projects wrap the [7-Zip](http://www.7-zip.org/) library through the COM interface.
 The repository also has an archiving or extracting application, which name is [CubeICE](https://www.cube-soft.jp/cubeice/).
+These libraries and applications are available for .NET Framework 3.5, 4.5 or more.
 Note that the Cube.FileSystem.SevenZip project (files in the [Libraries](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries) directory) is licensed under the GNU LGPLv3 and the other projects are Apache 2.0.
 
 ## Usage
