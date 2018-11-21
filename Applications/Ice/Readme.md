@@ -1,9 +1,9 @@
 CubeICE
 ====
 
-Copyright (c) 2010 CubeSoft Inc.
+Copyright © 2010 CubeSoft, Inc.
 support@cube-soft.jp
-http://www.cube-soft.jp/cubeice/
+https://www.cube-soft.jp/cubeice/
 
 ## はじめに
 
@@ -12,8 +12,8 @@ CubeICE は、様々な形式に対応した圧縮・解凍ソフトです。
 選択するかショートカットにドラッグ&ドロップする事によって圧縮・解凍を行う事ができます。
 
 CubeICE を使用するためには、Microsoft .NET Framework 3.5 以上がインストール
-されている必要があります。.NET Framework 3.5 は、以下の URL からダウンロードして下さい。
-http://www.microsoft.com/ja-jp/download/details.aspx?id=22
+されている必要があります。.NET Framework 3.5 は、以下の URL からダウンロードして下さい。  
+https://www.microsoft.com/ja-jp/download/details.aspx?id=22
 
 ### 動作環境
 
@@ -38,21 +38,21 @@ CubeICE は、以下のライブラリを利用しています。
 
 * 7-Zip
     - GNU Lesser　General Public License
-    - http://www.7-zip.org/
-- バベル
+    - https://www.7-zip.org/
+* バベル
     - http://tricklib.com/cxx/ex/babel/
     - http://tricklib.com/license.htm
 * log4net
     - Apache License, Version 2.0
-    - http://logging.apache.org/log4net/
+    - https://logging.apache.org/log4net/
     - https://www.nuget.org/packages/log4net/
 * AlphaFS
     - MIT License
-    - http://alphafs.alphaleonis.com/
+    - https://alphafs.alphaleonis.com/
     - https://www.nuget.org/packages/AlphaFS/
 * AsyncBridge
     - MIT License
-    - http://omermor.github.io/AsyncBridge/
+    - https://omermor.github.io/AsyncBridge/
     - https://www.nuget.org/packages/AsyncBridge/
 
 ## バージョン履歴
