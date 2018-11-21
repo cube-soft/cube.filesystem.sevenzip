@@ -5,26 +5,27 @@ Cube.FileSystem.SevenZip
 [![AppVeyor](https://ci.appveyor.com/api/projects/status/jao7f754rlookxxe?svg=true)](https://ci.appveyor.com/project/clown/cube-filesystem-sevenzip)
 [![Codecov](https://codecov.io/gh/cube-soft/Cube.FileSystem.SevenZip/branch/master/graph/badge.svg)](https://codecov.io/gh/cube-soft/Cube.FileSystem.SevenZip)
 
-Cube.FileSystem.SevenZip projects wrap the [7-Zip](http://www.7-zip.org/) library.
+Cube.FileSystem.SevenZip is a wrapper library of the [7-Zip](http://www.7-zip.org/) via COM interface.
 The repository also has an archiving or extracting application, which name is [CubeICE](https://www.cube-soft.jp/cubeice/).
-Note that the Cube.FileSystem.SevenZip project (files in the Libraries directory) is licensed under the GNU LGPLv3 and the other projects are Apache 2.0.
+These libraries and applications are available for .NET Framework 3.5, 4.5 or more.
+Note that the Cube.FileSystem.SevenZip project (files in the [Libraries](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries) directory) is licensed under the GNU LGPLv3 and the other projects are Apache 2.0.
 
 ## Usage
 
-Note that ArchiveWriter and ArchiveReader classes need to execute in the same thread from constructing to destroying.
-Use Task.Run() in the whole transaction if you need to archive or extract files asynchronously.
+The Cube.FileSystem.SevenZip library is available for NuGet, but you need to copy the 7z.dll to the executing directory manually. 
+You can download the library from [www.7-zip.org](https://www.7-zip.org/) or our [GitHub releases](https://github.com/cube-soft/Cube.FileSystem.SevenZip/releases).
 
-### Example for archiving files
+### Examples for archiving files
 
-The simplest example for archiving files is as follows.
-Note that all the samples need the "using Cube.FileSystem.SevenZip;" statement.
+A simple example for archiving files is as follows.
+Note that the statement "using Cube.FileSystem.SevenZip;" has been omitted in all samples.
 
 ```cs
 using (var writer = new ArchiveWriter(Format.Zip))
 {
     writer.Add(@"path\to\file");
     writer.Add(@"path\to\directory_including_files");
-    writer.Option  = new ZipOption();
+    writer.Option  = new ZipOption { CompressionLevel = CompressionLevel.Ultra };
     writer.Filters = new[] { ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini" };
     
     var progress = new Progress<Report>(e => DoSomething(e));
@@ -51,7 +52,7 @@ using (var writer = new ArchiveWriter(Format.Tar))
 }
 ```
 
-### Example for extracting archives
+### Examples for extracting archives
 
 If you want to extract all files from the archive, you create an ArchiveReader object
 and call the Extract method. The 2nd argument of the constructor, that means the
@@ -60,41 +61,46 @@ The latter is mainly used for implementing the interactive mode.
 
 ```cs
 // Set password directly or using Query<string>
-var password = new Cube.Query<string>(e => e.Result = "password");
-var progress = new Progress<Report>(e => DoSomething(e));
+var password = new Cube.Query<string>(e =>
+{
+    e.Result = "password";
+    e.Cancel = false;
+});
 
 using (var reader = new ArchiveReader(@"path\to\archive", password))
 {
+    var progress = new Progress<Report>(e => DoSomething(e));
     reader.Filters = new[] { ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini" };    
     reader.Extract(@"path\to\directory", progress);
 }
 ```
 
-ArchvieReader.Items property can access the each item of the archive.
+ArchvieReader.Items property can access each item of the archive.
 If you want to extract only the specific files, write as follows.
 
 ```cs
 using (var reader = new ArchiveReader(@"path\to\archive", "password"))
 {
-    var directory = @"path\to\directory";
-
     // Save as "path\to\directory\{item.FullName}"
+    var directory = @"path\to\directory";
     reader.Items[0].Extract(directory);
     reader.Items[3].Extract(directory);
 }
 ```
 
+Note that ArchiveWriter and ArchiveReader classes need to execute in the same thread from constructing to destroying.
+Use Task.Run() in the whole transaction if you need to archive or extract files asynchronously.
+
 ## Dependencies
 
-* [7-Zip](http://www.7-zip.org/) ... [cube-soft/7z](https://github.com/cube-soft/7z) is optimized for Japanese encoding.
-* [AlphaFS](http://alphafs.alphaleonis.com/)
+* [7-Zip](https://www.7-zip.org/) ... [cube-soft/7z](https://github.com/cube-soft/7z) is optimized for Japanese encoding.
+* [AlphaFS](https://alphafs.alphaleonis.com/)
 * [Cube.Core](https://github.com/cube-soft/Cube.Core)
 * [Cube.FileSystem](https://github.com/cube-soft/Cube.FileSystem)
 * [log4net](https://logging.apache.org/log4net/)
 
 ## Thanks
 
-* [babel](http://tricklib.com/cxx/ex/babel/) ... Used in the customized version of 7-Zip
 * [SevenZipSharp](https://www.nuget.org/packages/SevenZipSharp/)
 
 ## Contributing
@@ -108,8 +114,6 @@ using (var reader = new ArchiveReader(@"path\to\archive", "password"))
 
 ## License
  
-Copyright &copy; 2010 [CubeSoft, Inc.](http://www.cube-soft.jp/)
-
-The Cube.FileSystem.SevenZip project is licensed under the [GNU LGPLv3](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries/License.txt)
+Copyright © 2010 [CubeSoft, Inc.](http://www.cube-soft.jp/) The Cube.FileSystem.SevenZip project (files in the [Libraries](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries) directory) is licensed under the [GNU LGPLv3](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries/License.txt)
 and the other projects are [Apache 2.0](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/License.txt).
 Note that trade names, trademarks, service marks, or logo images distributed in CubeSoft applications are not allowed to reuse or modify all or parts of them.
