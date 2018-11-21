@@ -5,7 +5,7 @@ Cube.FileSystem.SevenZip
 [![AppVeyor](https://ci.appveyor.com/api/projects/status/jao7f754rlookxxe?svg=true)](https://ci.appveyor.com/project/clown/cube-filesystem-sevenzip)
 [![Codecov](https://codecov.io/gh/cube-soft/Cube.FileSystem.SevenZip/branch/master/graph/badge.svg)](https://codecov.io/gh/cube-soft/Cube.FileSystem.SevenZip)
 
-Cube.FileSystem.SevenZip projects wrap the [7-Zip](http://www.7-zip.org/) library through the COM interface.
+Cube.FileSystem.SevenZip is a wrapper library of the [7-Zip](http://www.7-zip.org/) via COM interface.
 The repository also has an archiving or extracting application, which name is [CubeICE](https://www.cube-soft.jp/cubeice/).
 These libraries and applications are available for .NET Framework 3.5, 4.5 or more.
 Note that the Cube.FileSystem.SevenZip project (files in the [Libraries](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries) directory) is licensed under the GNU LGPLv3 and the other projects are Apache 2.0.
@@ -18,7 +18,7 @@ You can download the library from [www.7-zip.org](https://www.7-zip.org/) or our
 ### Examples for archiving files
 
 A simple example for archiving files is as follows.
-The statement "using Cube.FileSystem.SevenZip;" has been omitted in all samples.
+Note that the statement "using Cube.FileSystem.SevenZip;" has been omitted in all samples.
 
 ```cs
 using (var writer = new ArchiveWriter(Format.Zip))
@@ -114,8 +114,6 @@ Use Task.Run() in the whole transaction if you need to archive or extract files 
 
 ## License
  
-Copyright © 2010 [CubeSoft, Inc.](http://www.cube-soft.jp/)
-
-The Cube.FileSystem.SevenZip project (files in the [Libraries](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries) directory) is licensed under the [GNU LGPLv3](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries/License.txt)
+Copyright © 2010 [CubeSoft, Inc.](http://www.cube-soft.jp/) The Cube.FileSystem.SevenZip project (files in the [Libraries](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries) directory) is licensed under the [GNU LGPLv3](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries/License.txt)
 and the other projects are [Apache 2.0](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/License.txt).
 Note that trade names, trademarks, service marks, or logo images distributed in CubeSoft applications are not allowed to reuse or modify all or parts of them.
