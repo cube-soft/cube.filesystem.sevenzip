@@ -26,11 +26,6 @@ build:
     publish_nuget: true
     verbosity: minimal
 after_build:
-    - xcopy /Y /I Applications\Ice\Progress\bin\Release CubeIce
-    - xcopy /Y /I Applications\Ice\Settings\bin\Release CubeIce.Settings
-    - xcopy /Y /I Applications\Ice\Associate\bin\Release CubeIce.Settings.Associate
-    - xcopy /Y /I Thirdparty\x86\7z.* CubeIce\x86
-    - xcopy /Y /I Thirdparty\x64\7z.* CubeIce\x64
     - xcopy /Y /I Thirdparty\x64\7z.* Tests\bin\Release
     - xcopy /Y /I Thirdparty\x64\7z.* Applications\Ice\Tests\bin\Release
 test_script:
@@ -56,9 +51,12 @@ test_script:
       -output:CoverResults.xml
       -filter:"+[Cube*]* -[*]*NativeMethods -[*]*Properties.* -[*]*Form -[*]*.Program"
 after_test:
-    - xcopy /q /Y /I Tests\bin\Release\Cube.FileSystem.SevenZip.Tests.log Tests\
-    - xcopy /q /Y /I Applications\Ice\Tests\bin\Release\Cube.FileSystem.SevenZip.Ice.Tests.log Tests\
-    - xcopy /q /Y /I CoverResults.xml Tests\
+    - xcopy /q /Y /I CoverResults.xml TestLog\
+    - xcopy /q /Y /I Tests\bin\Release\Cube.FileSystem.SevenZip.Tests.log TestLog\
+    - xcopy /q /Y /I Applications\Ice\Tests\bin\Release\Cube.FileSystem.SevenZip.Ice.Tests.log TestLog\
+    - xcopy /q /Y /I Applications\Ice\Progress\bin\Release CubeIce
+    - xcopy /q /Y /I Applications\Ice\Settings\bin\Release CubeIce.Settings
+    - xcopy /q /Y /I Applications\Ice\Associate\bin\Release CubeIce.Settings.Associate
     - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
     - pip install codecov
     - codecov -f CoverResults.xml
@@ -66,4 +64,4 @@ artifacts:
     - path: CubeIce
     - path: CubeIce.Settings
     - path: CubeIce.Settings.Associate
-    - path: Tests
+    - path: TestLog
