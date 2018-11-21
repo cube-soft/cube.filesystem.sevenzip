@@ -53,11 +53,7 @@ CubeICE は、以下のライブラリを利用しています。
 * AsyncBridge
     - MIT License
     - http://omermor.github.io/AsyncBridge/
-<<<<<<< HEAD
-    - https://www.nuget.org/packages/AsyncBridge
-=======
     - https://www.nuget.org/packages/AsyncBridge/
->>>>>>> master
 
 ## バージョン履歴
 

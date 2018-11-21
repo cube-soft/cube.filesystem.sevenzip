@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <package >
     <metadata>
-        <version>1.12.0</version>
+        <version>1.13.0</version>
         <id>Cube.FileSystem.SevenZip</id>
         <title>Cube.FileSystem.SevenZip</title>
         <authors>CubeSoft</authors>
         <owners>CubeSoft</owners>
-        <copyright>Copyright (c) 2010 CubeSoft, Inc.</copyright>
-        <description>Archive library to wrap 7-Zip in .NET Framework.</description>
+        <copyright>Copyright © 2010 CubeSoft, Inc.</copyright>
+        <description>7-Zip wrapper library in .NET Framework.</description>
         <tags>Cube Windows 7-Zip SevenZip</tags>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <projectUrl>https://github.com/cube-soft/Cube.FileSystem.SevenZip</projectUrl>
@@ -15,12 +15,12 @@
         <iconUrl>https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Icon.png?raw=true</iconUrl>
         <dependencies>
             <group targetFramework="net45">
-                <dependency id="Cube.Core" version="1.12.0" />
-                <dependency id="Cube.FileSystem" version="1.12.0" />
+                <dependency id="Cube.Core" version="1.13.0" />
+                <dependency id="Cube.FileSystem" version="1.13.0" />
             </group>
             <group targetFramework="net35">
-                <dependency id="Cube.Core" version="1.12.0" />
-                <dependency id="Cube.FileSystem" version="1.12.0" />
+                <dependency id="Cube.Core" version="1.13.0" />
+                <dependency id="Cube.FileSystem" version="1.13.0" />
                 <dependency id="Cube.Backwards" version="1.5.0" />
             </group>
         </dependencies>
