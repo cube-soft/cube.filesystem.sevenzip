@@ -323,9 +323,9 @@ namespace Cube.FileSystem.SevenZip
 
         #region Fields
         private readonly PasswordQuery _query;
-        private ArchiveOpenCallback _callback;
-        private SevenZipLibrary _core;
-        private IInArchive _module;
+        private readonly ArchiveOpenCallback _callback;
+        private readonly SevenZipLibrary _core;
+        private readonly IInArchive _module;
         #endregion
     }
 }
