@@ -66,11 +66,10 @@ task :copy do
         any_cpu = [ 'bin', set[0], set[2] ].compact.reject(&:empty?).join('/')
 
         [ 'Tests', 'Applications/Ice/Tests', 'Applications/Ice/Progress' ].each { |dest|
-            src  = [ NATIVE, set[1] ].join('/')
-            do_copy("#{src}/7z.dll", "#{dest}/#{x86_64}")
-            do_copy("#{src}/7z.dll", "#{dest}/#{any_cpu}") if (set[1] == 'x64')
-            do_copy("#{src}/7z.sfx", "#{dest}/#{x86_64}")
-            do_copy("#{src}/7z.sfx", "#{dest}/#{any_cpu}") if (set[1] == 'x64')
+            dir = [ NATIVE, set[1] ].join('/')
+            src = Dir.glob("#{dir}/7z/7z.*")
+            do_copy(src, "#{dest}/#{x86_64}")
+            do_copy(src, "#{dest}/#{any_cpu}") if (set[1] == 'x64')
         }
     }
 end

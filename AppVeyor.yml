@@ -11,7 +11,7 @@ nuget:
 platform: Any CPU
 configuration: Release
 before_build:
-    - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
+    - "SET PATH=C:\\Ruby22\\bin;C:\\Python34;C:\\Python34\\Scripts;%PATH%"
     - nuget sources add -name Cube.Core -source https://ci.appveyor.com/nuget/cube.core
     - nuget sources add -name Cube.FileSystem -source https://ci.appveyor.com/nuget/cube.filesystem
     - nuget sources add -name Cube.Images -source https://ci.appveyor.com/nuget/cube.images
@@ -24,9 +24,9 @@ build:
     verbosity: minimal
 after_build:
     - ps: Start-FileDownload https://ci.appveyor.com/api/projects/clown/7z/artifacts/7z-x64.zip?job=Platform:+x64
-    - 7z x -o"..\resources\native\x64" 7z-x64.zip
-    - xcopy /Y /I ..\resources\native\x64\7z.* Tests\bin\Release
-    - xcopy /Y /I ..\resources\native\x64\7z.* Applications\Ice\Tests\bin\Release
+    - 7z x -o"..\resources\native\x64\7z" 7z-x64.zip
+    - xcopy /Y /I ..\resources\native\x64\7z\7z.* Tests\bin\Release
+    - xcopy /Y /I ..\resources\native\x64\7z\7z.* Applications\Ice\Tests\bin\Release
 test_script:
     - >
       ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe
