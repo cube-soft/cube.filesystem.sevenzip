@@ -15,7 +15,6 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Log;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -81,7 +80,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Associate
                     IntPtr.Zero
                 );
             }
-            catch (Exception err) { Logger.Error(type, err.ToString()); }
+            catch (Exception e) { Logger.Error(type, e); }
         }
 
         /* ----------------------------------------------------------------- */
