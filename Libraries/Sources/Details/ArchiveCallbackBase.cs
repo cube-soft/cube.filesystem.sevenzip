@@ -195,12 +195,12 @@ namespace Cube.FileSystem.SevenZip
                 if (report) Progress?.Report(Copy(Report));
                 return dest;
             }
-            catch (Exception e)
+            catch (Exception err)
             {
-                Result    = e is OperationCanceledException ?
+                Result    = err is OperationCanceledException ?
                             OperationResult.UserCancel :
                             OperationResult.DataError;
-                Exception = e;
+                Exception = err;
                 throw;
             }
             finally { Report.Status = ReportStatus.Progress; }

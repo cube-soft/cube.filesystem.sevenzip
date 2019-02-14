@@ -16,6 +16,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.Forms;
+using Cube.Generics;
 using Cube.Log;
 using System;
 using System.Collections.Generic;
@@ -506,8 +507,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
             var info = IO.Get(path);
             var src  = info.IsDirectory ? info.FullName : info.DirectoryName;
             var cmp  = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            var skip = mode == OpenDirectoryMethod.OpenNotDesktop &&
-                       src.Equals(cmp, StringComparison.InvariantCultureIgnoreCase);
+            var skip = mode == OpenDirectoryMethod.OpenNotDesktop && src.FuzzyEquals(cmp);
 
             if (skip) return;
 
@@ -601,7 +601,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
 
             IO.Failed -= WhenFailed;
             try { if (!string.IsNullOrEmpty(Tmp)) IO.Delete(Tmp); }
-            catch (Exception e) { this.LogWarn(e); }
+            catch (Exception err) { this.LogWarn(err); }
         }
 
         /* ----------------------------------------------------------------- */

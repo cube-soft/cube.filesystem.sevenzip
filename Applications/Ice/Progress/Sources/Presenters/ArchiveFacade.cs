@@ -158,7 +158,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
                 Open(Destination, Settings.Value.Archive.OpenDirectory);
             }
             catch (OperationCanceledException) { /* user cancel */ }
-            catch (Exception e) { Error(e); }
+            catch (Exception err) { Error(err); }
             finally { ProgressStop(); }
         }
 

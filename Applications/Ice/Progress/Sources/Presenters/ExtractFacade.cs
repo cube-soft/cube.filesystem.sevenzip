@@ -141,7 +141,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
                 DeleteSource();
             }
             catch (OperationCanceledException) { /* user cancel */ }
-            catch (Exception e) { Error(e); }
+            catch (Exception err) { Error(err); }
         }
 
         /* ----------------------------------------------------------------- */

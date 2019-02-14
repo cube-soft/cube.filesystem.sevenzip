@@ -466,7 +466,7 @@ namespace Cube.FileSystem.SevenZip
             };
 
             try { callback(cb); }
-            catch (Exception e) { error = e; }
+            catch (Exception err) { error = err; }
             finally
             {
                 var kv = KeyValuePair.Create(cb.Result, error ?? cb.Exception);

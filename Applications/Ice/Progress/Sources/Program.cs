@@ -83,7 +83,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
                         break;
                 }
             }
-            catch (Exception e) { Logger.Error(LogType, e); }
+            catch (Exception err) { Logger.Error(LogType, err); }
         }
 
         /* ----------------------------------------------------------------- */
@@ -104,7 +104,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
             foreach (var path in request.Sources)
             {
                 try { Process.Start(exec, $"/x /sr {args.ToString()} {path.Quote()}"); }
-                catch (Exception e) { Logger.Error(LogType, e); }
+                catch (Exception err) { Logger.Error(LogType, err); }
             }
         }
 

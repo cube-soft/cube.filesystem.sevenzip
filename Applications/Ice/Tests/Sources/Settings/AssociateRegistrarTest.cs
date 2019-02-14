@@ -97,7 +97,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
                 Assert.Pass("Administrator");
             }
-            catch (UnauthorizedAccessException e) { Assert.Pass(e.Message); }
+            catch (UnauthorizedAccessException err) { Assert.Pass(err.Message); }
         }
 
         #endregion
