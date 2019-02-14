@@ -261,9 +261,9 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         protected override void Dispose(bool disposing)
         {
-            _callback.Dispose();
-            _module.Close();
-            _core.Dispose();
+            _callback?.Dispose();
+            _module?.Close();
+            _core?.Dispose();
         }
 
         /* ----------------------------------------------------------------- */
