@@ -16,7 +16,6 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.Generics;
-using Cube.Log;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -36,6 +35,8 @@ namespace Cube.FileSystem.SevenZip.Ice.App
     /* --------------------------------------------------------------------- */
     static class Program
     {
+        #region Methods
+
         /* ----------------------------------------------------------------- */
         ///
         /// Main
@@ -56,8 +57,8 @@ namespace Cube.FileSystem.SevenZip.Ice.App
 
                 Logger.Configure();
                 Logger.ObserveTaskException();
-                Logger.Info(typeof(Program), asm);
-                Logger.Info(typeof(Program), $"Arguments:{string.Join(" ", args)}");
+                Logger.Info(LogType, asm);
+                Logger.Info(LogType, $"[ {string.Join(" ", args)} ]");
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
@@ -72,17 +73,17 @@ namespace Cube.FileSystem.SevenZip.Ice.App
                 switch (m.Mode)
                 {
                     case Mode.Archive:
-                        using (var _ = new ArchivePresenter(v, m, s, e)) Application.Run(v);
+                        using (new ArchivePresenter(v, m, s, e)) Application.Run(v);
                         break;
                     case Mode.Extract:
                         if (m.Sources.Count() > 1 && s.Value.Extract.Bursty && !m.SuppressRecursive) Extract(m, asm);
-                        else using (var _ = new ExtractPresenter(v, m, s, e)) Application.Run(v);
+                        else using (new ExtractPresenter(v, m, s, e)) Application.Run(v);
                         break;
                     default:
                         break;
                 }
             }
-            catch (Exception err) { Log(err); }
+            catch (Exception err) { Logger.Error(LogType, err); }
         }
 
         /* ----------------------------------------------------------------- */
@@ -103,19 +104,14 @@ namespace Cube.FileSystem.SevenZip.Ice.App
             foreach (var path in request.Sources)
             {
                 try { Process.Start(exec, $"/x /sr {args.ToString()} {path.Quote()}"); }
-                catch (Exception err) { Log(err); }
+                catch (Exception err) { Logger.Error(LogType, err); }
             }
         }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Log
-        ///
-        /// <summary>
-        /// エラー内容をログに出力します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        static void Log(Exception err) => Logger.Error(typeof(Program), err.ToString());
+        #endregion
+
+        #region Fields
+        private static readonly Type LogType = typeof(Program);
+        #endregion
     }
 }

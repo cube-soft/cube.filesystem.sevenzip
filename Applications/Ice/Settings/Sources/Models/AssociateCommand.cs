@@ -102,7 +102,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 
                 Reset();
             }
-            catch (Exception err) { this.LogWarn(err.ToString(), err); }
+            catch (Exception err) { this.LogWarn(err); }
         }
 
         #endregion

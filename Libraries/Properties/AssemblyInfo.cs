@@ -2,8 +2,8 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyVersion("1.13.0.0")]
-[assembly: AssemblyFileVersion("1.13.0.0")]
+[assembly: AssemblyVersion("1.14.0.0")]
+[assembly: AssemblyFileVersion("1.14.0.0")]
 [assembly: AssemblyTitle("Cube.FileSystem.SevenZip")]
 [assembly: AssemblyProduct("Cube.FileSystem.SevenZip")]
 [assembly: AssemblyDescription("Archive library to wrap 7-Zip in .NET Framework.")]

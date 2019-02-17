@@ -15,7 +15,6 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Log;
 using System;
 using System.Reflection;
 using System.Windows.Forms;
@@ -71,7 +70,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 
                 Application.Run(view);
             }
-            catch (Exception err) { Logger.Error(type, err.ToString()); }
+            catch (Exception err) { Logger.Error(type, err); }
         }
     }
 }

@@ -1,34 +1,81 @@
 require 'rake'
 require 'rake/clean'
+require 'fileutils'
 
+# --------------------------------------------------------------------------- #
 # Configuration
-PROJECT  = 'Cube.FileSystem.SevenZip'
-BRANCHES = [ 'master', 'net35' ]
-COPY     = 'cp -pf'
+# --------------------------------------------------------------------------- #
+SOLUTION       = 'Cube.FileSystem.SevenZip'
+BRANCHES       = [ 'master', 'net35' ]
+PLATFORMS      = [ 'x86', 'x64' ]
+CONFIGURATIONS = [ 'Debug', 'Release' ]
+NATIVE         = '../resources/native'
+
+# --------------------------------------------------------------------------- #
+# Commands
+# --------------------------------------------------------------------------- #
 CHECKOUT = 'git checkout'
 BUILD    = 'msbuild /t:Clean,Build /m /verbosity:minimal /p:Configuration=Release;Platform="Any CPU";GeneratePackageOnBuild=false'
 RESTORE  = 'nuget restore'
 PACK     = 'nuget pack -Properties "Configuration=Release;Platform=AnyCPU"'
 
+# --------------------------------------------------------------------------- #
+# Functions
+# --------------------------------------------------------------------------- #
+def do_copy(src, dest)
+    FileUtils.mkdir_p(dest)
+    FileUtils.cp_r(src, dest)
+end
+
+# --------------------------------------------------------------------------- #
 # Tasks
+# --------------------------------------------------------------------------- #
 task :default do
     Rake::Task[:clean].execute
     Rake::Task[:build].execute
+    Rake::Task[:copy].execute
     Rake::Task[:pack].execute
 end
 
+# --------------------------------------------------------------------------- #
+# Build
+# --------------------------------------------------------------------------- #
 task :build do
-    BRANCHES.each do |branch|
+    BRANCHES.each { |branch|
         sh("#{CHECKOUT} #{branch}")
-        sh("#{RESTORE} #{PROJECT}.sln")
-        sh("#{BUILD} #{PROJECT}.sln")
-    end
+        sh("#{RESTORE} #{SOLUTION}.sln")
+        sh("#{BUILD} #{SOLUTION}.sln")
+    }
 end
 
+# --------------------------------------------------------------------------- #
+# Build
+# --------------------------------------------------------------------------- #
 task :pack do
     sh("#{CHECKOUT} net35")
-    sh("#{PACK} Libraries/#{PROJECT}.nuspec")
+    sh("#{PACK} Libraries/#{SOLUTION}.nuspec")
     sh("#{CHECKOUT} master")
 end
 
-CLEAN.include("#{PROJECT}.*.nupkg")
+# --------------------------------------------------------------------------- #
+# Copy
+# --------------------------------------------------------------------------- #
+task :copy do
+    [ '', 'net35' ].product(PLATFORMS, CONFIGURATIONS) { |set|
+        x86_64  = [ 'bin', set[0], set[1], set[2] ].compact.reject(&:empty?).join('/')
+        any_cpu = [ 'bin', set[0], set[2] ].compact.reject(&:empty?).join('/')
+
+        [ 'Tests', 'Applications/Ice/Tests', 'Applications/Ice/Progress' ].each { |dest|
+            dir = [ NATIVE, set[1] ].join('/')
+            src = Dir.glob("#{dir}/7z/7z.*")
+            do_copy(src, "#{dest}/#{x86_64}")
+            do_copy(src, "#{dest}/#{any_cpu}") if (set[1] == 'x64')
+        }
+    }
+end
+
+# --------------------------------------------------------------------------- #
+# Clean
+# --------------------------------------------------------------------------- #
+CLEAN.include("#{SOLUTION}.*.nupkg")
+CLEAN.include(%w{dll log}.map{ |e| "**/*.#{e}" })

@@ -16,6 +16,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.Forms;
+using Cube.Generics;
 using Cube.Log;
 using System;
 using System.Collections.Generic;
@@ -506,8 +507,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
             var info = IO.Get(path);
             var src  = info.IsDirectory ? info.FullName : info.DirectoryName;
             var cmp  = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            var skip = mode == OpenDirectoryMethod.OpenNotDesktop &&
-                       src.Equals(cmp, StringComparison.InvariantCultureIgnoreCase);
+            var skip = mode == OpenDirectoryMethod.OpenNotDesktop && src.FuzzyEquals(cmp);
 
             if (skip) return;
 
@@ -528,14 +528,14 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /// エラー発生時の処理を実行します。
         /// </summary>
         ///
-        /// <param name="err">例外オブジェクト</param>
+        /// <param name="error">例外オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected void Error(Exception err)
+        protected void Error(Exception error)
         {
-            this.LogError(err.ToString());
+            this.LogError(error);
             if (!Settings.Value.ErrorReport) return;
-            OnMessageReceived(new MessageEventArgs(err.Message, Properties.Resources.TitleError));
+            OnMessageReceived(new MessageEventArgs(error.Message, Properties.Resources.TitleError));
         }
 
         /* ----------------------------------------------------------------- */
@@ -601,7 +601,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
 
             IO.Failed -= WhenFailed;
             try { if (!string.IsNullOrEmpty(Tmp)) IO.Delete(Tmp); }
-            catch (Exception err) { this.LogWarn(err.ToString(), err); }
+            catch (Exception err) { this.LogWarn(err); }
         }
 
         /* ----------------------------------------------------------------- */

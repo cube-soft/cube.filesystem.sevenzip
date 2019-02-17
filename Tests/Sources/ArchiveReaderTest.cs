@@ -16,6 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Generics;
 using Microsoft.VisualBasic.FileIO;
 using NUnit.Framework;
 using System;
@@ -261,8 +262,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             catch (EncryptionException)
             {
                 var code = CultureInfo.CurrentCulture.Name;
-                var opt  = StringComparison.InvariantCultureIgnoreCase;
-                if (!code.Equals("ja-JP", opt)) Assert.Ignore(message);
+                if (!code.FuzzyEquals("ja-JP")) Assert.Ignore(message);
                 else throw;
             }
         }

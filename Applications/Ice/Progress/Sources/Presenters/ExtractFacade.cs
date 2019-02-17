@@ -272,7 +272,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
                     src.Extract(Tmp, progress);
                     retry = false;
                 }
-                catch (EncryptionException /* err */) { retry = true; }
+                catch (EncryptionException /* e */) { retry = true; }
             }
             while (retry);
         }
