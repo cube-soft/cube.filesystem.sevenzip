@@ -459,18 +459,18 @@ namespace Cube.FileSystem.SevenZip
         private void Create(IList<FileItem> src, string dest, IQuery<string> query,
             IProgress<Report> progress, Action<ArchiveUpdateCallback> callback)
         {
-            var err = default(Exception);
-            var cb  = new ArchiveUpdateCallback(src, dest, IO)
+            var error = default(Exception);
+            var cb    = new ArchiveUpdateCallback(src, dest, IO)
             {
                 Password = query,
                 Progress = progress,
             };
 
             try { callback(cb); }
-            catch (Exception e) { err = e; }
+            catch (Exception err) { error = err; }
             finally
             {
-                var kv = KeyValuePair.Create(cb.Result, err ?? cb.Exception);
+                var kv = KeyValuePair.Create(cb.Result, error ?? cb.Exception);
                 cb.Dispose();
                 Terminate(kv.Key, kv.Value);
             }
@@ -485,11 +485,11 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Terminate(OperationResult src, Exception err)
+        private void Terminate(OperationResult src, Exception error)
         {
             if (src == OperationResult.OK) return;
             if (src == OperationResult.UserCancel) throw new OperationCanceledException();
-            if (err != null) throw err;
+            if (error != null) throw error;
             else throw new System.IO.IOException($"{src}");
         }
 

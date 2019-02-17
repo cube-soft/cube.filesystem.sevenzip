@@ -261,9 +261,9 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         protected override void Dispose(bool disposing)
         {
-            _callback.Dispose();
-            _module.Close();
-            _core.Dispose();
+            _callback?.Dispose();
+            _module?.Close();
+            _core?.Dispose();
         }
 
         /* ----------------------------------------------------------------- */
@@ -309,13 +309,13 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Terminate(OperationResult src, Exception err)
+        private void Terminate(OperationResult src, Exception error)
         {
             if (src == OperationResult.OK) return;
             if (src == OperationResult.UserCancel) throw new OperationCanceledException();
             if (src == OperationResult.WrongPassword) throw CreateEncryptionException();
             if (src == OperationResult.DataError && Items.Any(x => x.Encrypted)) throw CreateEncryptionException();
-            if (err != null) throw err;
+            if (error != null) throw error;
             else throw new System.IO.IOException($"{src}");
         }
 
@@ -323,9 +323,9 @@ namespace Cube.FileSystem.SevenZip
 
         #region Fields
         private readonly PasswordQuery _query;
-        private ArchiveOpenCallback _callback;
-        private SevenZipLibrary _core;
-        private IInArchive _module;
+        private readonly ArchiveOpenCallback _callback;
+        private readonly SevenZipLibrary _core;
+        private readonly IInArchive _module;
         #endregion
     }
 }

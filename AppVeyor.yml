@@ -1,4 +1,4 @@
-version: 1.13.0.{build}
+version: 1.14.0.{build}
 branches:
     only:
         - master
@@ -11,10 +11,7 @@ nuget:
 platform: Any CPU
 configuration: Release
 before_build:
-    - ps: Start-FileDownload https://ci.appveyor.com/api/projects/clown/7z/artifacts/7z-Win32.zip?job=Platform:+Win32
-    - ps: Start-FileDownload https://ci.appveyor.com/api/projects/clown/7z/artifacts/7z-x64.zip?job=Platform:+x64
-    - 7z x -o"Thirdparty\x86" 7z-Win32.zip
-    - 7z x -o"Thirdparty\x64" 7z-x64.zip
+    - "SET PATH=C:\\Ruby22\\bin;C:\\Python34;C:\\Python34\\Scripts;%PATH%"
     - nuget sources add -name Cube.Core -source https://ci.appveyor.com/nuget/cube.core
     - nuget sources add -name Cube.FileSystem -source https://ci.appveyor.com/nuget/cube.filesystem
     - nuget sources add -name Cube.Images -source https://ci.appveyor.com/nuget/cube.images
@@ -26,8 +23,10 @@ build:
     publish_nuget: true
     verbosity: minimal
 after_build:
-    - xcopy /Y /I Thirdparty\x64\7z.* Tests\bin\Release
-    - xcopy /Y /I Thirdparty\x64\7z.* Applications\Ice\Tests\bin\Release
+    - ps: Start-FileDownload https://ci.appveyor.com/api/projects/clown/7z/artifacts/7z-x64.zip?job=Platform:+x64
+    - 7z x -o"..\resources\native\x64\7z" 7z-x64.zip
+    - xcopy /Y /I ..\resources\native\x64\7z\7z.* Tests\bin\Release
+    - xcopy /Y /I ..\resources\native\x64\7z\7z.* Applications\Ice\Tests\bin\Release
 test_script:
     - >
       ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe
@@ -57,7 +56,6 @@ after_test:
     - xcopy /q /Y /I Applications\Ice\Progress\bin\Release CubeIce
     - xcopy /q /Y /I Applications\Ice\Settings\bin\Release CubeIce.Settings
     - xcopy /q /Y /I Applications\Ice\Associate\bin\Release CubeIce.Settings.Associate
-    - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
     - pip install codecov
     - codecov -f CoverResults.xml
 artifacts:
