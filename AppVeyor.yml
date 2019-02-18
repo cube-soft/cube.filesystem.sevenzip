@@ -29,9 +29,9 @@ after_build:
     - xcopy /Y /I ..\resources\native\x64\7z\7z.* Applications\Ice\Tests\bin\Release
 test_script:
     - >
-      ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe
+      ..\packages\OpenCover.4.7.922\tools\OpenCover.Console.exe
       -register:user
-      -target:nunit3-console.exe
+      -target:../packages/NUnit.ConsoleRunner.3.9.0/tools/nunit3-console.exe
       -targetargs:Cube.FileSystem.SevenZip.Tests.dll
       -targetdir:Tests\bin\Release
       -returntargetcode
@@ -39,9 +39,9 @@ test_script:
       -output:CoverResults.xml
       -filter:"+[Cube*]* -[*]*NativeMethods -[*]*Properties.*"
     - >
-      ..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe
+      ..\packages\OpenCover.4.7.922\tools\OpenCover.Console.exe
       -register:user
-      -target:nunit3-console.exe
+      -target:../packages/NUnit.ConsoleRunner.3.9.0/tools/nunit3-console.exe
       -targetargs:Cube.FileSystem.SevenZip.Ice.Tests.dll
       -targetdir:Applications\Ice\Tests\bin\Release
       -returntargetcode
