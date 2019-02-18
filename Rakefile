@@ -5,11 +5,16 @@ require 'fileutils'
 # --------------------------------------------------------------------------- #
 # Configuration
 # --------------------------------------------------------------------------- #
-SOLUTION       = 'Cube.FileSystem.SevenZip'
+SOLUTION       = 'Cube.FileSystem.SevenZip.Ice'
+PACKAGE        = 'Cube.FileSystem.SevenZip'
+NATIVE         = '../resources/native'
 BRANCHES       = [ 'master', 'net35' ]
 PLATFORMS      = [ 'x86', 'x64' ]
 CONFIGURATIONS = [ 'Debug', 'Release' ]
-NATIVE         = '../resources/native'
+TESTCASES      = {
+    'Cube.FileSystem.SevenZip.Tests'     => 'Tests',
+    'Cube.FileSystem.SevenZip.Ice.Tests' => 'Applications/Ice/Tests'
+}
 
 # --------------------------------------------------------------------------- #
 # Commands
@@ -18,6 +23,7 @@ CHECKOUT = 'git checkout'
 BUILD    = 'msbuild /t:Clean,Build /m /verbosity:minimal /p:Configuration=Release;Platform="Any CPU";GeneratePackageOnBuild=false'
 RESTORE  = 'nuget restore'
 PACK     = 'nuget pack -Properties "Configuration=Release;Platform=AnyCPU"'
+TEST     = '../packages/NUnit.ConsoleRunner.3.9.0/tools/nunit3-console.exe'
 
 # --------------------------------------------------------------------------- #
 # Functions
@@ -49,11 +55,11 @@ task :build do
 end
 
 # --------------------------------------------------------------------------- #
-# Build
+# Pack
 # --------------------------------------------------------------------------- #
 task :pack do
     sh("#{CHECKOUT} net35")
-    sh("#{PACK} Libraries/#{SOLUTION}.nuspec")
+    sh("#{PACK} Libraries/#{PACKAGE}.nuspec")
     sh("#{CHECKOUT} master")
 end
 
@@ -75,7 +81,23 @@ task :copy do
 end
 
 # --------------------------------------------------------------------------- #
+# Test
+# --------------------------------------------------------------------------- #
+task :test do
+    sh("#{RESTORE} #{SOLUTION}.sln")
+    sh("#{BUILD} #{SOLUTION}.sln")
+
+    branch = `git symbolic-ref --short HEAD`.chomp
+    TESTCASES.each { |proj, dir|
+        src = branch == 'net35' ?
+              "#{dir}/bin/net35/Release/#{proj}.dll" :
+              "#{dir}/bin/Release/#{proj}.dll"
+        sh("#{TEST} #{src}")
+    }
+end
+
+# --------------------------------------------------------------------------- #
 # Clean
 # --------------------------------------------------------------------------- #
-CLEAN.include("#{SOLUTION}.*.nupkg")
+CLEAN.include("#{PACKAGE}.*.nupkg")
 CLEAN.include(%w{dll log}.map{ |e| "**/*.#{e}" })
