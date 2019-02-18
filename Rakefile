@@ -5,10 +5,10 @@ require 'fileutils'
 # --------------------------------------------------------------------------- #
 # Configuration
 # --------------------------------------------------------------------------- #
-SOLUTION       = 'Cube.FileSystem.SevenZip.Ice'
-PACKAGE        = 'Cube.FileSystem.SevenZip'
+SOLUTION       = 'Cube.FileSystem.SevenZip'
+SUFFIX         = 'Ice'
 NATIVE         = '../resources/native'
-BRANCHES       = [ 'master', 'net35' ]
+BRANCHES       = [ 'stable', 'net35' ]
 PLATFORMS      = [ 'x86', 'x64' ]
 CONFIGURATIONS = [ 'Debug', 'Release' ]
 TESTCASES      = {
@@ -49,8 +49,8 @@ end
 task :build do
     BRANCHES.each { |branch|
         sh("#{CHECKOUT} #{branch}")
-        sh("#{RESTORE} #{SOLUTION}.sln")
-        sh("#{BUILD} #{SOLUTION}.sln")
+        sh("#{RESTORE} #{SOLUTION}.#{SUFFIX}.sln")
+        sh("#{BUILD} #{SOLUTION}.#{SUFFIX}.sln")
     }
 end
 
@@ -59,7 +59,7 @@ end
 # --------------------------------------------------------------------------- #
 task :pack do
     sh("#{CHECKOUT} net35")
-    sh("#{PACK} Libraries/#{PACKAGE}.nuspec")
+    sh("#{PACK} Libraries/#{SOLUTION}.nuspec")
     sh("#{CHECKOUT} master")
 end
 
@@ -84,8 +84,8 @@ end
 # Test
 # --------------------------------------------------------------------------- #
 task :test do
-    sh("#{RESTORE} #{SOLUTION}.sln")
-    sh("#{BUILD} #{SOLUTION}.sln")
+    sh("#{RESTORE} #{SOLUTION}.#{SUFFIX}.sln")
+    sh("#{BUILD} #{SOLUTION}.#{SUFFIX}.sln")
 
     branch = `git symbolic-ref --short HEAD`.chomp
     TESTCASES.each { |proj, dir|
@@ -99,5 +99,5 @@ end
 # --------------------------------------------------------------------------- #
 # Clean
 # --------------------------------------------------------------------------- #
-CLEAN.include("#{PACKAGE}.*.nupkg")
+CLEAN.include("#{SOLUTION}.*.nupkg")
 CLEAN.include(%w{dll log}.map{ |e| "**/*.#{e}" })
