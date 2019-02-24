@@ -23,7 +23,7 @@ namespace Cube.FileSystem.SevenZip
     /// AskMode
     ///
     /// <summary>
-    /// 処理モードを表す列挙型です。
+    /// Specifies processing mode.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -39,7 +39,7 @@ namespace Cube.FileSystem.SevenZip
     /// OperationResult
     ///
     /// <summary>
-    /// 処理結果を表す列挙型です。
+    /// Specifies the operation result.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -65,7 +65,7 @@ namespace Cube.FileSystem.SevenZip
     /// ItemPropId
     ///
     /// <summary>
-    /// 圧縮ファイル中の各項目の ID を表す列挙型です。
+    /// Specifies the property ID in an archived item.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -115,7 +115,7 @@ namespace Cube.FileSystem.SevenZip
     /// ArchivePropId
     ///
     /// <summary>
-    /// 圧縮ファイル中の各項目の ID を表す列挙型です。
+    /// Specifies the property ID in an archive.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
