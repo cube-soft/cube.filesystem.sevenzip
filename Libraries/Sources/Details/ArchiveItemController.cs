@@ -29,7 +29,8 @@ namespace Cube.FileSystem.SevenZip
     /// ArchiveItemController
     ///
     /// <summary>
-    /// ArchiveItem の情報更新、解凍処理等を実装したクラスです。
+    /// Provides functionality to get properties of the archived item and
+    /// execute the processing of the extraction.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -42,13 +43,14 @@ namespace Cube.FileSystem.SevenZip
         /// ArchiveItemController
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the ArchvieItemController class
+        /// with the specified arguments.
         /// </summary>
         ///
-        /// <param name="archive">実装オブジェクト</param>
-        /// <param name="index">インデックス</param>
-        /// <param name="password">パスワード取得用オブジェクト</param>
-        /// <param name="io">入出力用のオブジェクト</param>
+        /// <param name="archive">7-zip module.</param>
+        /// <param name="index">Index in the archive.</param>
+        /// <param name="password">Query to get password.</param>
+        /// <param name="io">I/O handler.</param>
         ///
         /* ----------------------------------------------------------------- */
         public ArchiveItemController(IInArchive archive, int index,
@@ -69,7 +71,7 @@ namespace Cube.FileSystem.SevenZip
         /// Index
         ///
         /// <summary>
-        /// 圧縮ファイル中のインデックスを取得します。
+        /// Gets the index of the item in the archive.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -80,7 +82,7 @@ namespace Cube.FileSystem.SevenZip
         /// RawName
         ///
         /// <summary>
-        /// 圧縮ファイル中の相対パスのオリジナルの文字列を取得します。
+        /// Gets the original path described in the archive.
         /// </summary>
         ///
         /// <remarks>
@@ -96,7 +98,7 @@ namespace Cube.FileSystem.SevenZip
         /// Encrypted
         ///
         /// <summary>
-        /// 暗号化されているかどうかを示す値を取得します。
+        /// Gets a value indicating whether the item is encrypted.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -111,7 +113,7 @@ namespace Cube.FileSystem.SevenZip
         /// Invoke
         ///
         /// <summary>
-        /// 情報を更新します。
+        /// Refreshes information of the item.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -154,15 +156,15 @@ namespace Cube.FileSystem.SevenZip
         /// Match
         ///
         /// <summary>
-        /// 指定されたファイル名またはディレクトリ名のいずれか 1 つでも
-        /// パス中のどこかに存在するかどうかを判別します。
+        /// Determines whether any one of the specified filename or
+        /// directory name exists somewhere in the path.
         /// </summary>
         ///
         /// <param name="names">
-        /// 判別するファイル名またはディレクトリ名一覧
+        /// Collection of filenames and directory names.
         /// </param>
         ///
-        /// <returns>存在するかどうかを示す値</returns>
+        /// <returns>true for match; otherwise, false.</returns>
         ///
         /* ----------------------------------------------------------------- */
         public bool Match(IEnumerable<string> names) => _filter.MatchAny(names);
@@ -172,12 +174,12 @@ namespace Cube.FileSystem.SevenZip
         /// Extract
         ///
         /// <summary>
-        /// 展開した内容を保存します。
+        /// Extracts the specified item and save to the specified directory.
         /// </summary>
         ///
-        /// <param name="src">展開項目</param>
-        /// <param name="directory">保存ディレクトリ</param>
-        /// <param name="progress">進捗報告用オブジェクト</param>
+        /// <param name="src">Item to extract.</param>
+        /// <param name="directory">Saving directory.</param>
+        /// <param name="progress">Object to notify progress.</param>
         ///
         /* ----------------------------------------------------------------- */
         public void Extract(ArchiveItem src, string directory, IProgress<Report> progress)
@@ -211,7 +213,7 @@ namespace Cube.FileSystem.SevenZip
         /// Get
         ///
         /// <summary>
-        /// 情報を取得します。
+        /// Gets information corresponding to the specified ID.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -229,7 +231,7 @@ namespace Cube.FileSystem.SevenZip
         /// GetPath
         ///
         /// <summary>
-        /// パスを取得します。
+        /// Gets the path of the specified item.
         /// </summary>
         ///
         /// <remarks>
@@ -258,7 +260,8 @@ namespace Cube.FileSystem.SevenZip
         /// IsTarExtension
         ///
         /// <summary>
-        /// TAR 系の拡張子かどうかを判別します。
+        /// Determines whether the specified extension is one of the TAR
+        /// archives.
         /// </summary>
         ///
         /// <remarks>
@@ -275,7 +278,7 @@ namespace Cube.FileSystem.SevenZip
         /// ThrowIfError
         ///
         /// <summary>
-        /// エラーが発生していた場合に例外を送出します。
+        /// Throws an exception if the specified result represents an error.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -307,7 +310,7 @@ namespace Cube.FileSystem.SevenZip
         /// ResetPassword
         ///
         /// <summary>
-        /// パスワードをリセットします。
+        /// Resets the password query.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
