@@ -95,6 +95,17 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Crc
+        ///
+        /// <summary>
+        /// Gets the CRC value of the item.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public uint Crc { get; private set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Encrypted
         ///
         /// <summary>
@@ -120,6 +131,7 @@ namespace Cube.FileSystem.SevenZip
         public void Invoke(RefreshableInfo src)
         {
             RawName   = GetPath(src.Source);
+            Crc       = Get<uint>(src.Source, ItemPropId.Crc);
             Encrypted = Get<bool>(src.Source, ItemPropId.Encrypted);
 
             src.Exists         = true;

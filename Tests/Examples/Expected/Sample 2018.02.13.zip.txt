@@ -1,8 +1,8 @@
-"Sample 2018.02.13",0
-"Sample 2018.02.13\Dot 2018.02.13.txt",6
-"Sample 2018.02.13\Empty.txt",0
-"Sample 2018.02.13\FileInDirectory.txt",35181
-"Sample 2018.02.13\Filter.txt",6
-"Sample 2018.02.13\FilterDirectory",0
-"Sample 2018.02.13\FilterDirectory\Filter.txt",6
-"Sample 2018.02.13\FilterDirectory\Sample.txt",6
+"Sample 2018.02.13",0,0
+"Sample 2018.02.13\Dot 2018.02.13.txt",6,262819556
+"Sample 2018.02.13\Empty.txt",0,0
+"Sample 2018.02.13\FileInDirectory.txt",35181,2915496062
+"Sample 2018.02.13\Filter.txt",6,262819556
+"Sample 2018.02.13\FilterDirectory",0,0
+"Sample 2018.02.13\FilterDirectory\Filter.txt",6,262819556
+"Sample 2018.02.13\FilterDirectory\Sample.txt",6,4044060355

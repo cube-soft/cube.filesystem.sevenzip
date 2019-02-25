@@ -1,4 +1,4 @@
-"Sample",0
-"Sample\Bar.txt",7816
-"Sample\Bas.txt",0
-"Sample\Foo.txt",3
+"Sample",0,0
+"Sample\Bar.txt",7816,63613
+"Sample\Bas.txt",0,0
+"Sample\Foo.txt",3,2444
