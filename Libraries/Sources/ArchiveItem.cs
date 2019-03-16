@@ -168,8 +168,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         private ArchiveItemController GetController()
         {
-            Debug.Assert(Refreshable is ArchiveItemController);
-            return (ArchiveItemController)Refreshable;
+            Debug.Assert(Refresher is ArchiveItemController);
+            return (ArchiveItemController)Refresher;
         }
 
         #endregion

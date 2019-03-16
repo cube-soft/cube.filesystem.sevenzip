@@ -17,6 +17,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.FileSystem.SevenZip.Archives;
+using Cube.Generics;
 using Cube.Log;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal class ArchiveItemController : IRefreshable
+    internal class ArchiveItemController : Refresher
     {
         #region Constructors
 
@@ -128,7 +129,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Invoke(RefreshableInfo src)
+        public override void Invoke(Refreshable src)
         {
             RawName   = GetPath(src.Source);
             Crc       = Get<uint>(src.Source, ItemPropId.Crc);
@@ -151,10 +152,10 @@ namespace Cube.FileSystem.SevenZip
                 AllowUnc              = false,
             };
 
-            src.FullName = _filter.EscapedPath;
-            if (string.IsNullOrEmpty(_filter.EscapedPath)) return;
+            src.FullName = _filter.Result;
+            if (!_filter.Result.HasValue()) return;
 
-            var info = _io.Get(_filter.EscapedPath);
+            var info = _io.Get(_filter.Result);
             src.Name                 = info.Name;
             src.NameWithoutExtension = info.NameWithoutExtension;
             src.Extension            = info.Extension;
