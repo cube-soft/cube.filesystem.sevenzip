@@ -35,7 +35,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal class ArchiveItemController : Refresher
+    internal class ArchiveItemController : Controller
     {
         #region Constructors
 
@@ -122,14 +122,14 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Invoke
+        /// Refresh
         ///
         /// <summary>
         /// Refreshes information of the item.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public override void Invoke(Refreshable src)
+        public override void Refresh(Refreshable src)
         {
             RawName   = GetPath(src.Source);
             Crc       = Get<uint>(src.Source, ItemPropId.Crc);
