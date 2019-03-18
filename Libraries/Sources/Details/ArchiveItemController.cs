@@ -49,15 +49,12 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /// <param name="archive">7-zip module.</param>
-        /// <param name="index">Index in the archive.</param>
         /// <param name="password">Query to get password.</param>
         /// <param name="io">I/O handler.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveItemController(IInArchive archive, int index,
-            IQuery<string> password, IO io)
+        public ArchiveItemController(IInArchive archive, IQuery<string> password, IO io)
         {
-            Index     = index;
             _archive  = archive;
             _password = password;
             _io       = io;
@@ -65,60 +62,29 @@ namespace Cube.FileSystem.SevenZip
 
         #endregion
 
-        #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Index
-        ///
-        /// <summary>
-        /// Gets the index of the item in the archive.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public int Index { get; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// RawName
-        ///
-        /// <summary>
-        /// Gets the original path described in the archive.
-        /// </summary>
-        ///
-        /// <remarks>
-        /// RawName の内容に対して、Windows で使用不可能な文字列に対する
-        /// エスケープ処理を実行した結果が FullName となります。
-        /// </remarks>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string RawName { get; private set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Crc
-        ///
-        /// <summary>
-        /// Gets the CRC value of the item.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public uint Crc { get; private set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Encrypted
-        ///
-        /// <summary>
-        /// Gets a value indicating whether the item is encrypted.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public bool Encrypted { get; private set; }
-
-        #endregion
-
         #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create
+        ///
+        /// <summary>
+        /// Creates a new instance of the specified path.
+        /// </summary>
+        ///
+        /// <param name="src">Path of the source file.</param>
+        /// <param name="options">Optional parameters.</param>
+        ///
+        /// <returns>Controllable object.</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public override Controllable Create(string src, params object[] options)
+        {
+            Debug.Assert(options.Length > 0 && options[0] is int);
+            var dest = new ArchiveItemControllable(src, (int)options[0]);
+            Refresh(dest);
+            return dest;
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -128,22 +94,24 @@ namespace Cube.FileSystem.SevenZip
         /// Refreshes information of the item.
         /// </summary>
         ///
+        /// <param name="src">Object to be refreshed.</param>
+        ///
         /* ----------------------------------------------------------------- */
-        public override void Refresh(Refreshable src)
+        public override void Refresh(Controllable src)
         {
-            RawName   = GetPath(src.Source);
-            Crc       = Get<uint>(src.Source, ItemPropId.Crc);
-            Encrypted = Get<bool>(src.Source, ItemPropId.Encrypted);
+            var ai = src.Convert();
 
-            src.Exists         = true;
-            src.IsDirectory    = Get<bool>(src.Source, ItemPropId.IsDirectory);
-            src.Attributes     = (System.IO.FileAttributes)Get<uint>(src.Source, ItemPropId.Attributes);
-            src.Length         = (long)Get<ulong>(src.Source, ItemPropId.Size);
-            src.CreationTime   = Get<DateTime>(src.Source, ItemPropId.CreationTime);
-            src.LastWriteTime  = Get<DateTime>(src.Source, ItemPropId.LastWriteTime);
-            src.LastAccessTime = Get<DateTime>(src.Source, ItemPropId.LastAccessTime);
-
-            _filter = new PathFilter(RawName)
+            ai.RawName        = GetPath(ai.Index, ai.Source);
+            ai.Crc            = Get<uint>(ai.Index, ItemPropId.Crc);
+            ai.Encrypted      = Get<bool>(ai.Index, ItemPropId.Encrypted);
+            ai.Exists         = true;
+            ai.IsDirectory    = Get<bool>(ai.Index, ItemPropId.IsDirectory);
+            ai.Attributes     = (System.IO.FileAttributes)Get<uint>(ai.Index, ItemPropId.Attributes);
+            ai.Length         = (long)Get<ulong>(ai.Index, ItemPropId.Size);
+            ai.CreationTime   = Get<DateTime>(ai.Index, ItemPropId.CreationTime);
+            ai.LastWriteTime  = Get<DateTime>(ai.Index, ItemPropId.LastWriteTime);
+            ai.LastAccessTime = Get<DateTime>(ai.Index, ItemPropId.LastAccessTime);
+            ai.Filter         = new PathFilter(ai.RawName)
             {
                 AllowParentDirectory  = false,
                 AllowDriveLetter      = false,
@@ -152,16 +120,18 @@ namespace Cube.FileSystem.SevenZip
                 AllowUnc              = false,
             };
 
-            src.FullName = _filter.Result;
-            if (!_filter.Result.HasValue()) return;
+            var path = ai.Filter.Result;
+            var info = path.HasValue() ? _io.Get(path) : default;
 
-            var info = _io.Get(_filter.Result);
-            src.Name                 = info.Name;
-            src.NameWithoutExtension = info.NameWithoutExtension;
-            src.Extension            = info.Extension;
-            src.DirectoryName        = info.DirectoryName;
+            ai.FullName             = ai.Filter.Result;
+            ai.Name                 = info?.Name;
+            ai.NameWithoutExtension = info?.NameWithoutExtension;
+            ai.Extension            = info?.Extension;
+            ai.DirectoryName        = info?.DirectoryName;
 
-            if (src.FullName != RawName) this.LogDebug($"Escape:{src.FullName}\tRaw:{RawName}");
+            if (ai.FullName != ai.RawName) this.LogDebug(string.Join("\t",
+                $"Escape:{ai.FullName}", $"Raw:{ai.RawName}"
+            ));
         }
 
         /* ----------------------------------------------------------------- */
@@ -173,6 +143,7 @@ namespace Cube.FileSystem.SevenZip
         /// directory name exists somewhere in the path.
         /// </summary>
         ///
+        /// <param name="src">File or directory information.</param>
         /// <param name="names">
         /// Collection of filenames and directory names.
         /// </param>
@@ -180,7 +151,8 @@ namespace Cube.FileSystem.SevenZip
         /// <returns>true for match; otherwise, false.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public bool Match(IEnumerable<string> names) => _filter.MatchAny(names);
+        public bool Match(Controllable src, IEnumerable<string> names) =>
+            src.Convert().Filter.MatchAny(names);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -194,10 +166,14 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="directory">Saving directory.</param>
         /// <param name="progress">Object to notify progress.</param>
         ///
+        /// <remarks>
+        /// TODO: 引数の ArchiveItem を ArchiveItemControllable に変更したい。
+        /// </remarks>
+        ///
         /* ----------------------------------------------------------------- */
         public void Extract(ArchiveItem src, string directory, IProgress<Report> progress)
         {
-            Debug.Assert(!string.IsNullOrEmpty(src.FullName));
+            Debug.Assert(src.FullName.HasValue());
 
             if (src.IsDirectory)
             {
@@ -212,8 +188,8 @@ namespace Cube.FileSystem.SevenZip
                 cb.Password   = _password;
                 cb.Progress   = progress;
 
-                _archive.Extract(new[] { (uint)Index }, 1, 0, cb);
-                ThrowIfError(src, cb.Result);
+                _archive.Extract(new[] { (uint)src.Index }, 1, 0, cb);
+                Terminate(src, cb.Result);
             }
         }
 
@@ -230,13 +206,13 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private T Get<T>(string src, ItemPropId pid)
+        private T Get<T>(int index, ItemPropId pid)
         {
             var var = new PropVariant();
-            _archive.GetProperty((uint)Index, pid, ref var);
+            _archive.GetProperty((uint)index, pid, ref var);
 
             var obj = var.Object;
-            return (obj != null && obj is T) ? (T)obj : default(T);
+            return obj is T dest ? dest : default;
         }
 
         /* ----------------------------------------------------------------- */
@@ -254,17 +230,17 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetPath(string src)
+        private string GetPath(int index, string src)
         {
-            var dest = Get<string>(src, ItemPropId.Path);
-            if (!string.IsNullOrEmpty(dest)) return dest;
+            var dest = Get<string>(index, ItemPropId.Path);
+            if (dest.HasValue()) return dest;
 
             var i0  = _io.Get(src);
             var i1  = _io.Get(i0.NameWithoutExtension);
             var fmt = Formats.FromExtension(i1.Extension);
             if (fmt != Format.Unknown) return i1.Name;
 
-            var name = (Index == 0) ? i1.Name : $"{i1.Name}({Index})";
+            var name = index == 0 ? i1.Name : $"{i1.Name}({index})";
             return IsTarExtension(i0.Extension) ? $"{name}.tar" : name;
         }
 
@@ -288,14 +264,14 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ThrowIfError
+        /// Terminate
         ///
         /// <summary>
         /// Throws an exception if the specified result represents an error.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void ThrowIfError(ArchiveItem src, OperationResult result)
+        private void Terminate(ArchiveItem src, OperationResult result)
         {
             switch (result)
             {
@@ -339,7 +315,6 @@ namespace Cube.FileSystem.SevenZip
         private readonly IInArchive _archive;
         private readonly IO _io;
         private readonly IQuery<string> _password;
-        private PathFilter _filter;
         #endregion
     }
 }

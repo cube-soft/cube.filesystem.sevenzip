@@ -106,7 +106,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public ArchiveItem this[int index] => new ArchiveItem(
             Source,
-            new ArchiveItemController(_archive, index, Password, _io)
+            index,
+            new ArchiveItemController(_archive, Password, _io)
         );
 
         /* ----------------------------------------------------------------- */

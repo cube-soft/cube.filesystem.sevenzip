@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Cube.FileSystem.SevenZip.Archives;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -45,11 +46,12 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /// <param name="src">Path of the archive.</param>
+        /// <param name="index">Index of the archive.</param>
         /// <param name="controller">Controller object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        internal ArchiveItem(string src, ArchiveItemController controller) :
-            base(src, controller) { }
+        internal ArchiveItem(string src, int index, ArchiveItemController controller) :
+            base(src, controller, index) { }
 
         #endregion
 
@@ -64,7 +66,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public int Index => GetController().Index;
+        public int Index => Controllable.Convert().Index;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -81,7 +83,7 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public string RawName => GetController().RawName;
+        public string RawName => Controllable.Convert().RawName;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -92,7 +94,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public uint Crc => GetController().Crc;
+        public uint Crc => Controllable.Convert().Crc;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -103,7 +105,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool Encrypted => GetController().Encrypted;
+        public bool Encrypted => Controllable.Convert().Encrypted;
 
         #endregion
 
@@ -123,7 +125,7 @@ namespace Cube.FileSystem.SevenZip
         /// <returns>true for match.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public bool Match(IEnumerable<string> names) => GetController().Match(names);
+        public bool Match(IEnumerable<string> names) => GetController().Match(Controllable, names);
 
         /* ----------------------------------------------------------------- */
         ///

@@ -17,6 +17,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Diagnostics;
 
 namespace Cube.FileSystem.SevenZip.Archives
 {
@@ -163,6 +164,21 @@ namespace Cube.FileSystem.SevenZip.Archives
                        item.LastWriteTime  != DateTime.MinValue ? item.LastWriteTime :
                        item.CreationTime;
             if (time != DateTime.MinValue) io.SetLastAccessTime(path, time);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Convert
+        ///
+        /// <summary>
+        /// Converts from Controllable to ArchiveItemControllable.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        internal static ArchiveItemControllable Convert(this Controllable src)
+        {
+            Debug.Assert(src is ArchiveItemControllable);
+            return (ArchiveItemControllable)src;
         }
 
         #endregion
