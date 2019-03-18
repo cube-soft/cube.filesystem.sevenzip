@@ -19,7 +19,6 @@
 using Cube.FileSystem.SevenZip.Mixin;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -153,26 +152,7 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public void Extract(string directory, IProgress<Report> progress) =>
-            GetController().Extract(this, directory, progress);
-
-        #endregion
-
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetController
-        ///
-        /// <summary>
-        /// Gets the controller object.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private ArchiveItemController GetController()
-        {
-            Debug.Assert(Controller is ArchiveItemController);
-            return (ArchiveItemController)Controller;
-        }
+            ((ArchiveItemController)Controller).Extract(this, directory, progress);
 
         #endregion
     }

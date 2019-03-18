@@ -241,7 +241,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /// <remarks>
-        /// TAR 系に関してはパスの情報を取得する事ができないため、元の
+        /// TAR 系に関してはパス情報を取得する事ができないため、元の
         /// ファイル名の拡張子を .tar に変更したものをパスにする事として
         /// います。
         /// </remarks>
@@ -258,26 +258,11 @@ namespace Cube.FileSystem.SevenZip
             if (fmt != Format.Unknown) return i1.Name;
 
             var name = index == 0 ? i1.Name : $"{i1.Name}({index})";
-            return IsTarExtension(i0.Extension) ? $"{name}.tar" : name;
+            var ext  = i0.Extension.ToLowerInvariant();
+            var tar  = ext == ".tb2" ||
+                       ext.Length == 4 && ext[0] == '.' && ext[1] == 't' && ext[3] == 'z';
+            return tar ? $"{name}.tar" : name;
         }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// IsTarExtension
-        ///
-        /// <summary>
-        /// Determines whether the specified extension is one of the TAR
-        /// archives.
-        /// </summary>
-        ///
-        /// <remarks>
-        /// tb2 および t*z と言う文字列の場合に TAR 系の拡張子と判別して
-        /// います。
-        /// </remarks>
-        ///
-        /* ----------------------------------------------------------------- */
-        private bool IsTarExtension(string ext) =>
-            ext == ".tb2" || (ext.Length == 4 && ext[0] == '.' && ext[1] == 't' && ext[3] == 'z');
 
         #endregion
     }
