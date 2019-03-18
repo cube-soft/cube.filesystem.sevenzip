@@ -16,7 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.SevenZip.Archives;
+using Cube.FileSystem.SevenZip.Mixin;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

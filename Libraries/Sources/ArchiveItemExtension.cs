@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace Cube.FileSystem.SevenZip.Archives
+namespace Cube.FileSystem.SevenZip.Mixin
 {
     /* --------------------------------------------------------------------- */
     ///
