@@ -16,10 +16,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.FileSystem.SevenZip.Archives;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Cube.FileSystem.SevenZip.Archives;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -66,7 +66,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public int Index => Controllable.Convert().Index;
+        public int Index => Controllable.ToAi().Index;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -83,7 +83,7 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public string RawName => Controllable.Convert().RawName;
+        public string RawName => Controllable.ToAi().RawName;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -94,7 +94,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public uint Crc => Controllable.Convert().Crc;
+        public uint Crc => Controllable.ToAi().Crc;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -105,7 +105,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool Encrypted => Controllable.Convert().Encrypted;
+        public bool Encrypted => Controllable.ToAi().Encrypted;
 
         #endregion
 
@@ -125,7 +125,7 @@ namespace Cube.FileSystem.SevenZip
         /// <returns>true for match.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public bool Match(IEnumerable<string> names) => GetController().Match(Controllable, names);
+        public bool Match(IEnumerable<string> names) => Controllable.ToAi().Filter.MatchAny(names);
 
         /* ----------------------------------------------------------------- */
         ///

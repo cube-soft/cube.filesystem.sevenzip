@@ -44,36 +44,20 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /// <param name="archive">実装オブジェクト</param>
-        /// <param name="format">圧縮形式</param>
         /// <param name="src">圧縮ファイルのパス</param>
         /// <param name="password">パスワード取得用オブジェクト</param>
         /// <param name="io">入出力用のオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ReadOnlyArchiveList(IInArchive archive, Format format,
-            string src, IQuery<string> password, IO io)
+        public ReadOnlyArchiveList(IInArchive archive, string src, PasswordQuery password, IO io)
         {
-            Format   = format;
-            Source   = src;
-            Password = password;
-            _archive = archive;
-            _io      = io;
+            Source      = src;
+            _controller = new ArchiveItemController(archive, password, io);
         }
 
         #endregion
 
         #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Format
-        ///
-        /// <summary>
-        /// Format オブジェクトを取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public Format Format { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -89,7 +73,7 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public int Count => Math.Max((int)_archive.GetNumberOfItems(), 1);
+        public int Count => Math.Max((int)_controller.Archive.GetNumberOfItems(), 1);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -104,11 +88,7 @@ namespace Cube.FileSystem.SevenZip
         /// <returns>ArchiveItem オブジェクト</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveItem this[int index] => new ArchiveItem(
-            Source,
-            index,
-            new ArchiveItemController(_archive, Password, _io)
-        );
+        public ArchiveItem this[int index] => new ArchiveItem(Source, index, _controller);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -120,17 +100,6 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public string Source { get; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Password
-        ///
-        /// <summary>
-        /// パスワード取得用オブジェクトを取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private IQuery<string> Password { get; }
 
         #endregion
 
@@ -164,8 +133,7 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Fields
-        private readonly IInArchive _archive;
-        private readonly IO _io;
+        private readonly ArchiveItemController _controller;
         #endregion
     }
 }
