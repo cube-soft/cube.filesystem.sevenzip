@@ -10,6 +10,7 @@
         <PackageProjectUrl>https://github.com/cube-soft/$(AssemblyName)</PackageProjectUrl>
         <PackageIconUrl>https://github.com/cube-soft/$(AssemblyName)/blob/master/Icon.png?raw=true</PackageIconUrl>
         <TargetFramework>net45</TargetFramework>
+        <LangVersion>latest</LangVersion>
         <Optimize>true</Optimize>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
@@ -17,7 +18,6 @@
         <AssemblyOriginatorKeyFile>../Cube.snk</AssemblyOriginatorKeyFile>
         <OutputPath>bin/$(Platform)/$(Configuration)/</OutputPath>
         <DocumentationFile>bin/$(Platform)/$(Configuration)/$(TargetFramework)/$(AssemblyName).xml</DocumentationFile>
-        <Platforms>AnyCPU;x86</Platforms>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
         <DefineConstants>DEBUG;TRACE</DefineConstants>
