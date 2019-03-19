@@ -16,6 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Generics;
 using Cube.Log;
 using System;
 using System.Collections.Generic;
@@ -110,7 +111,7 @@ namespace Cube.FileSystem.SevenZip
                 var e = QueryEventArgs.Create(Destination);
                 Password.Request(e);
 
-                var ok = !e.Cancel && !string.IsNullOrEmpty(e.Result);
+                var ok = !e.Cancel && e.Result.HasValue();
 
                 Result   = ok ? OperationResult.OK : OperationResult.UserCancel;
                 enabled  = ok ? 1 : 0;

@@ -148,7 +148,7 @@ namespace Cube.FileSystem.SevenZip
             stream = Invoke(() =>
             {
                 var src = IO.Exists(name) ? name : IO.Combine(IO.Get(Source).DirectoryName, name);
-                if (!IO.Exists(src)) return default(IInStream);
+                if (!IO.Exists(src)) return default;
 
                 var dest = new ArchiveStreamReader(IO.OpenRead(src));
                 _streams.Add(dest);

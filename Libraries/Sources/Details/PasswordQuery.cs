@@ -16,6 +16,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Generics;
+
 namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
@@ -114,15 +116,15 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void Request(QueryEventArgs<string> e)
         {
-            if (!string.IsNullOrEmpty(Password) || !string.IsNullOrEmpty(_cache))
+            if (Password.HasValue() || _cache.HasValue())
             {
-                e.Result = !string.IsNullOrEmpty(Password) ? Password : _cache;
+                e.Result = Password.HasValue() ? Password : _cache;
                 e.Cancel = false;
             }
             else
             {
                 InnerQuery?.Request(e);
-                if (!e.Cancel && !string.IsNullOrEmpty(e.Result)) _cache = e.Result;
+                if (!e.Cancel && e.Result.HasValue()) _cache = e.Result;
             }
         }
 
