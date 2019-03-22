@@ -10,6 +10,7 @@
         <TargetFramework>net45</TargetFramework>
         <AssemblyName>cubeice-setting</AssemblyName>
         <LangVersion>latest</LangVersion>
+        <IsPackable>false</IsPackable>
         <Optimize>true</Optimize>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
