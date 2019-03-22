@@ -195,7 +195,7 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public static Format FromExtension(string src) =>
-            GetExtensionToFormatMap().TryGetValue(src.ToLowerInvariant(), out Format dest) ?
+            GetExtensionToFormatMap().TryGetValue(src.ToLowerInvariant(), out var dest) ?
             dest :
             Format.Unknown;
 

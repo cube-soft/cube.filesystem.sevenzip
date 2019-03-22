@@ -16,41 +16,36 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.SevenZip.Mixin;
-using System;
-using System.Collections.Generic;
-
 namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveItem
+    /// ArchiveItemController
     ///
     /// <summary>
-    /// Represents an item in the archive.
+    /// Provides functionality to get properties of the archived item and
+    /// execute the processing of the extraction.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveItem : Information
+    internal class ArchiveItemControllable : Controllable
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveItem
+        /// ArchiveItemControllable
         ///
         /// <summary>
-        /// Initializes a new instance of the ArchiveItem class with the
-        /// specified arguments.
+        /// Creates a new instance of the ArchiveItemControllable class
+        /// with the specified arguments.
         /// </summary>
         ///
-        /// <param name="src">Path of the archive.</param>
-        /// <param name="index">Index of the archive.</param>
-        /// <param name="controller">Controller object.</param>
-        ///
         /* ----------------------------------------------------------------- */
-        internal ArchiveItem(string src, int index, ArchiveItemController controller) :
-            base(src, controller, index) { }
+        public ArchiveItemControllable(string src, int index) : base(src)
+        {
+            Index = index;
+        }
 
         #endregion
 
@@ -61,98 +56,60 @@ namespace Cube.FileSystem.SevenZip
         /// Index
         ///
         /// <summary>
-        /// Gets the index in the archive.
+        /// Gets the index of the item in the archive.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public int Index => Controllable.ToAi().Index;
+        public int Index { get; }
 
         /* ----------------------------------------------------------------- */
         ///
         /// RawName
         ///
         /// <summary>
-        /// Gets the original name that represents the relative path
-        /// in the archive.
+        /// Gets or sets the original path described in the archive.
         /// </summary>
         ///
         /// <remarks>
-        /// FullName property represents the normalized result against
-        /// the RawName property.
+        /// RawName の内容に対して、Windows で使用不可能な文字列に対する
+        /// エスケープ処理を実行した結果が FullName となります。
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public string RawName => Controllable.ToAi().RawName;
+        public string RawName { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
         /// Crc
         ///
         /// <summary>
-        /// Gets the CRC value of the item.
+        /// Gets or sets the CRC value of the item.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public uint Crc => Controllable.ToAi().Crc;
+        public uint Crc { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
         /// Encrypted
         ///
         /// <summary>
-        /// Gets the value indicating whether the archive is encrypted.
+        /// Gets or sets a value indicating whether the item is encrypted.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool Encrypted => Controllable.ToAi().Encrypted;
-
-        #endregion
-
-        #region Methods
+        public bool Encrypted { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Match
+        /// Filter
         ///
         /// <summary>
-        /// Gets the value indicating whether any of the specified
-        /// collection matches the all or part of the path.
+        /// Gets or sets the path filter object.
         /// </summary>
         ///
-        /// <param name="names">Collection of names.</param>
-        ///
-        /// <returns>true for match.</returns>
-        ///
         /* ----------------------------------------------------------------- */
-        public bool Match(IEnumerable<string> names) => Controllable.ToAi().Filter.MatchAny(names);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extract
-        ///
-        /// <summary>
-        /// Extracts the archived item and saves to the specified path.
-        /// </summary>
-        ///
-        /// <param name="directory">Directory to save.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Extract(string directory) => Extract(directory, null);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extract
-        ///
-        /// <summary>
-        /// Extracts the archived item and saves to the specified path.
-        /// </summary>
-        ///
-        /// <param name="directory">Directory to save.</param>
-        /// <param name="progress">Progress report.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Extract(string directory, IProgress<Report> progress) =>
-            ((ArchiveItemController)Controller).Extract(this, directory, progress);
+        public PathFilter Filter { get; set; }
 
         #endregion
     }

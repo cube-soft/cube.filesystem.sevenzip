@@ -58,7 +58,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="pathInArchive">Relative path in the archive.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public FileItem(Information src, string pathInArchive) : base(src.Source, src.Refreshable)
+        public FileItem(Information src, string pathInArchive) : base(src)
         {
             PathInArchive = pathInArchive;
         }

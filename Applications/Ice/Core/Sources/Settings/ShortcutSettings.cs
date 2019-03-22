@@ -15,7 +15,9 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Generics;
 using System;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 
@@ -178,7 +180,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             {
                 FullName     = src,
                 Target       = dest,
-                Arguments    = Preset.ToArguments(),
+                Arguments    = string.Join(" ", Preset.ToArguments().Select(e => e.Quote())),
                 IconLocation = $"{dest},1",
             };
 
@@ -203,7 +205,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             {
                 FullName     = src,
                 Target       = dest,
-                Arguments    = PresetMenu.Extract.ToArguments(),
+                Arguments    = string.Join(" ", PresetMenu.Extract.ToArguments().Select(e => e.Quote())),
                 IconLocation = $"{dest},2",
             };
 
