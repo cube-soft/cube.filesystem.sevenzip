@@ -11,12 +11,12 @@ nuget:
 platform: Any CPU
 configuration: Release
 before_build:
-    - "SET PATH=C:\\Ruby22\\bin;C:\\Python34;C:\\Python34\\Scripts;%PATH%"
+    - "SET PATH=C:\\Cube\\packages\\OpenCover.4.7.922\\tools;%PATH%"
     - nuget sources add -name Cube.Core -source https://ci.appveyor.com/nuget/cube.core
     - nuget sources add -name Cube.FileSystem -source https://ci.appveyor.com/nuget/cube.filesystem
     - nuget sources add -name Cube.Images -source https://ci.appveyor.com/nuget/cube.images
     - nuget sources add -name Cube.Forms -source https://ci.appveyor.com/nuget/cube.forms
-    - nuget restore Cube.FileSystem.SevenZip.Ice.sln
+    - rake restore
 build:
     parallel: true
     project: Cube.FileSystem.SevenZip.Ice.sln
@@ -29,33 +29,33 @@ after_build:
     - xcopy /Y /I ..\resources\native\x64\7z\7z.* Applications\Ice\Tests\bin\Release
 test_script:
     - >
-      ..\packages\OpenCover.4.7.922\tools\OpenCover.Console.exe
+      OpenCover.Console.exe
       -register:user
-      -target:../packages/NUnit.ConsoleRunner.3.9.0/tools/nunit3-console.exe
+      -target:nunit3-console.exe
       -targetargs:Cube.FileSystem.SevenZip.Tests.dll
-      -targetdir:Tests\bin\Release
+      -targetdir:"Tests\bin\Any CPU\Release\net45"
       -returntargetcode
       -hideskipped:All
       -output:CoverResults.xml
       -filter:"+[Cube*]* -[*]*NativeMethods -[*]*Properties.*"
     - >
-      ..\packages\OpenCover.4.7.922\tools\OpenCover.Console.exe
+      OpenCover.Console.exe
       -register:user
-      -target:../packages/NUnit.ConsoleRunner.3.9.0/tools/nunit3-console.exe
+      -target:nunit3-console.exe
       -targetargs:Cube.FileSystem.SevenZip.Ice.Tests.dll
-      -targetdir:Applications\Ice\Tests\bin\Release
+      -targetdir:"Applications\Ice\Tests\bin\Any CPU\Release\net45"
       -returntargetcode
       -hideskipped:All
       -mergeoutput
       -output:CoverResults.xml
       -filter:"+[Cube*]* -[*]*NativeMethods -[*]*Properties.* -[*]*Form -[*]*.Program"
 after_test:
+    - xcopy /q /Y /I "Applications\Ice\Progress\bin\Any CPU\Release\net45" CubeIce
+    - xcopy /q /Y /I "Applications\Ice\Settings\bin\Any CPU\Release\net45" CubeIce.Settings
+    - xcopy /q /Y /I "Applications\Ice\Associate\bin\Any CPU\Release\net45" CubeIce.Settings.Associate
+    - xcopy /q /Y /I "Tests\bin\Any CPU\Release\net45\*.log" TestLog\
+    - xcopy /q /Y /I "Applications\Ice\Tests\bin\Any CPU\Release\net45\*.log" TestLog\
     - xcopy /q /Y /I CoverResults.xml TestLog\
-    - xcopy /q /Y /I Tests\bin\Release\Cube.FileSystem.SevenZip.Tests.log TestLog\
-    - xcopy /q /Y /I Applications\Ice\Tests\bin\Release\Cube.FileSystem.SevenZip.Ice.Tests.log TestLog\
-    - xcopy /q /Y /I Applications\Ice\Progress\bin\Release CubeIce
-    - xcopy /q /Y /I Applications\Ice\Settings\bin\Release CubeIce.Settings
-    - xcopy /q /Y /I Applications\Ice\Associate\bin\Release CubeIce.Settings.Associate
     - pip install codecov
     - codecov -f CoverResults.xml
 artifacts:
