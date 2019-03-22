@@ -25,8 +25,8 @@ build:
 after_build:
     - ps: Start-FileDownload https://ci.appveyor.com/api/projects/clown/7z/artifacts/7z-x64.zip?job=Platform:+x64
     - 7z x -o"..\resources\native\x64\7z" 7z-x64.zip
-    - xcopy /Y /I ..\resources\native\x64\7z\7z.* Tests\bin\Release
-    - xcopy /Y /I ..\resources\native\x64\7z\7z.* Applications\Ice\Tests\bin\Release
+    - xcopy /Y /I ..\resources\native\x64\7z\7z.* "Tests\bin\Any CPU\Release\net45"
+    - xcopy /Y /I ..\resources\native\x64\7z\7z.* "Applications\Ice\Tests\bin\Any CPU\Release\net45"
 test_script:
     - >
       OpenCover.Console.exe
