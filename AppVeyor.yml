@@ -8,7 +8,7 @@ environment:
     PROJECT_NATIVE: "..\resources\native"
     TEST_TOOL:      "C:\\Cube\\packages\\OpenCover.4.7.922\\tools\\OpenCover.Console.exe"
     TEST_CORETOOL:  "nunit3-console.exe"
-    TEST_RESULT:    "TestResults"
+    TEST_RESULTS:   "TestResults"
     TEST_COVERAGE:  "CoverResults.xml"
 branches:
     only:
@@ -60,13 +60,13 @@ after_test:
     - xcopy /q /Y /I "Applications\Ice\Progress\%PROJECT_BIN%" "CubeIce"
     - xcopy /q /Y /I "Applications\Ice\Settings\%PROJECT_BIN%" "CubeIce.Settings"
     - xcopy /q /Y /I "Applications\Ice\Associate\%PROJECT_BIN%" "CubeIce.Settings.Associate"
-    - xcopy /q /Y /I "Tests\%PROJECT_BIN%\*.log" "%TEST_RESULT%\"
-    - xcopy /q /Y /I "Applications\Ice\Tests\%PROJECT_BIN%\*.log" "%TEST_RESULT%\"
-    - xcopy /q /Y /I "%TEST_COVERAGE%" "%TEST_RESULT%\"
+    - xcopy /q /Y /I "Tests\%PROJECT_BIN%\*.log" "%TEST_RESULTS%\"
+    - xcopy /q /Y /I "Applications\Ice\Tests\%PROJECT_BIN%\*.log" "%TEST_RESULTS%\"
+    - xcopy /q /Y /I "%TEST_COVERAGE%" "%TEST_RESULTS%\"
     - pip install codecov
     - codecov -f "%TEST_COVERAGE%"
 artifacts:
     - path: "CubeIce"
     - path: "CubeIce.Settings"
     - path: "CubeIce.Settings.Associate"
-    - path: "%TEST_RESULT%"
+    - path: "%TEST_RESULTS%"
