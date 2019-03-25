@@ -6,9 +6,9 @@
         <Company>CubeSoft</Company>
         <Product>CubeICE Associate</Product>
         <Copyright>Copyright © 2010 CubeSoft, Inc.</Copyright>
+        <AssemblyName>cubeice-associate</AssemblyName>
         <OutputType>WinExe</OutputType>
         <TargetFramework>net45</TargetFramework>
-        <AssemblyName>cubeice-associate</AssemblyName>
         <LangVersion>latest</LangVersion>
         <IsPackable>false</IsPackable>
         <Optimize>true</Optimize>
@@ -16,17 +16,11 @@
         <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
         <ApplicationIcon>App.ico</ApplicationIcon>
         <ApplicationManifest>App.manifest</ApplicationManifest>
-        <OutputPath>bin/$(Platform)/$(Configuration)/</OutputPath>
-        <DocumentationFile>bin/$(Platform)/$(Configuration)/$(TargetFramework)/$(AssemblyName).xml</DocumentationFile>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
         <DefineConstants>DEBUG;TRACE</DefineConstants>
     </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-        <OutputPath>bin/Any CPU/$(Configuration)/</OutputPath>
-        <DocumentationFile>bin/Any CPU/$(Configuration)/$(TargetFramework)/$(AssemblyName).xml</DocumentationFile>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
         <OutputPath>bin/Any CPU/$(Configuration)/</OutputPath>
         <DocumentationFile>bin/Any CPU/$(Configuration)/$(TargetFramework)/$(AssemblyName).xml</DocumentationFile>
     </PropertyGroup>

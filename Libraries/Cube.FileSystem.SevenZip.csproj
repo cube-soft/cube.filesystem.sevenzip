@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <Version>1.15.0</Version>
-        <Description>7-Zip wrapper library for .NET Framework.</Description>
         <Authors>CubeSoft</Authors>
         <Company>CubeSoft</Company>
+        <Description>7-Zip wrapper library for .NET Framework.</Description>
         <Copyright>Copyright © 2010 CubeSoft, Inc.</Copyright>
         <PackageTags>7-Zip;7z;SevenZip;Zip</PackageTags>
         <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
@@ -16,17 +16,11 @@
         <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
         <SignAssembly>true</SignAssembly>
         <AssemblyOriginatorKeyFile>../Cube.snk</AssemblyOriginatorKeyFile>
-        <OutputPath>bin/$(Platform)/$(Configuration)/</OutputPath>
-        <DocumentationFile>bin/$(Platform)/$(Configuration)/$(TargetFramework)/$(AssemblyName).xml</DocumentationFile>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
         <DefineConstants>DEBUG;TRACE</DefineConstants>
     </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-        <OutputPath>bin/Any CPU/$(Configuration)/</OutputPath>
-        <DocumentationFile>bin/Any CPU/$(Configuration)/$(TargetFramework)/$(AssemblyName).xml</DocumentationFile>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
         <OutputPath>bin/Any CPU/$(Configuration)/</OutputPath>
         <DocumentationFile>bin/Any CPU/$(Configuration)/$(TargetFramework)/$(AssemblyName).xml</DocumentationFile>
     </PropertyGroup>

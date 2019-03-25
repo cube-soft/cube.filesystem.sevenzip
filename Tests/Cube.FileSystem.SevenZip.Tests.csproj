@@ -9,17 +9,11 @@
         <Optimize>true</Optimize>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
-        <OutputPath>bin/$(Platform)/$(Configuration)/</OutputPath>
-        <DocumentationFile>bin/$(Platform)/$(Configuration)/$(TargetFramework)/$(AssemblyName).xml</DocumentationFile>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
         <DefineConstants>DEBUG;TRACE</DefineConstants>
     </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-        <OutputPath>bin/Any CPU/$(Configuration)/</OutputPath>
-        <DocumentationFile>bin/Any CPU/$(Configuration)/$(TargetFramework)/$(AssemblyName).xml</DocumentationFile>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
         <OutputPath>bin/Any CPU/$(Configuration)/</OutputPath>
         <DocumentationFile>bin/Any CPU/$(Configuration)/$(TargetFramework)/$(AssemblyName).xml</DocumentationFile>
     </PropertyGroup>

@@ -1,17 +1,24 @@
 version: 1.15.0.{build}
+image: Visual Studio 2019 Preview
+platform: Any CPU
+configuration: Release
+environment:
+    PROJECT_NAME:   "Cube.FileSystem.SevenZip"
+    PROJECT_BIN:    "bin\\%PLATFORM%\\%CONFIGURATION%\\net45"
+    PROJECT_NATIVE: "..\resources\native"
+    TEST_TOOL:      "C:\\Cube\\packages\\OpenCover.4.7.922\\tools\\OpenCover.Console.exe"
+    TEST_CORETOOL:  "nunit3-console.exe"
+    TEST_RESULT:    "TestResults"
+    TEST_COVERAGE:  "CoverResults.xml"
 branches:
     only:
         - master
 skip_tags: true
-clone_folder: C:\Cube\Cube.FileSystem.SevenZip
-image: Visual Studio 2019 Preview
 nuget:
     project_feed: true
     disable_publish_on_pr: true
-platform: Any CPU
-configuration: Release
+clone_folder: "C:\\Cube\\%PROJECT_NAME%"
 before_build:
-    - "SET PATH=C:\\Cube\\packages\\OpenCover.4.7.922\\tools;%PATH%"
     - nuget sources add -name Cube.Core -source https://ci.appveyor.com/nuget/cube.core
     - nuget sources add -name Cube.FileSystem -source https://ci.appveyor.com/nuget/cube.filesystem
     - nuget sources add -name Cube.Images -source https://ci.appveyor.com/nuget/cube.images
@@ -19,47 +26,47 @@ before_build:
     - rake restore
 build:
     parallel: true
-    project: Cube.FileSystem.SevenZip.Ice.sln
+    project: "%PROJECT_NAME%.Ice.sln"
     publish_nuget: true
     verbosity: minimal
 after_build:
     - ps: Start-FileDownload https://ci.appveyor.com/api/projects/clown/7z/artifacts/7z-x64.zip?job=Platform:+x64
-    - 7z x -o"..\resources\native\x64\7z" 7z-x64.zip
-    - xcopy /Y /I ..\resources\native\x64\7z\7z.* "Tests\bin\Any CPU\Release\net45"
-    - xcopy /Y /I ..\resources\native\x64\7z\7z.* "Applications\Ice\Tests\bin\Any CPU\Release\net45"
+    - 7z x -o"%PROJECT_NATIVE%\x64\7z" 7z-x64.zip
+    - xcopy /Y /I "%PROJECT_NATIVE%\x64\7z\7z.*" "Tests\%PROJECT_BIN%"
+    - xcopy /Y /I "%PROJECT_NATIVE%\x64\7z\7z.*" "Applications\Ice\Tests\%PROJECT_BIN%"
 test_script:
     - >
-      OpenCover.Console.exe
+      "%TEST_TOOL%"
       -register:user
-      -target:nunit3-console.exe
-      -targetargs:Cube.FileSystem.SevenZip.Tests.dll
-      -targetdir:"Tests\bin\Any CPU\Release\net45"
+      -target:"%TEST_CORETOOL%"
+      -targetargs:"%PROJECT_NAME%.Tests.dll"
+      -targetdir:"Tests\%PROJECT_BIN%"
       -returntargetcode
       -hideskipped:All
-      -output:CoverResults.xml
+      -output:"%TEST_COVERAGE%"
       -filter:"+[Cube*]* -[*]*NativeMethods -[*]*Properties.*"
     - >
-      OpenCover.Console.exe
+      "%TEST_TOOL%"
       -register:user
-      -target:nunit3-console.exe
-      -targetargs:Cube.FileSystem.SevenZip.Ice.Tests.dll
-      -targetdir:"Applications\Ice\Tests\bin\Any CPU\Release\net45"
+      -target:"%TEST_CORETOOL%"
+      -targetargs:"%PROJECT_NAME%.Ice.Tests.dll"
+      -targetdir:"Applications\Ice\Tests\%PROJECT_BIN%"
       -returntargetcode
       -hideskipped:All
       -mergeoutput
-      -output:CoverResults.xml
+      -output:"%TEST_COVERAGE%"
       -filter:"+[Cube*]* -[*]*NativeMethods -[*]*Properties.* -[*]*Form -[*]*.Program"
 after_test:
-    - xcopy /q /Y /I "Applications\Ice\Progress\bin\Any CPU\Release\net45" CubeIce
-    - xcopy /q /Y /I "Applications\Ice\Settings\bin\Any CPU\Release\net45" CubeIce.Settings
-    - xcopy /q /Y /I "Applications\Ice\Associate\bin\Any CPU\Release\net45" CubeIce.Settings.Associate
-    - xcopy /q /Y /I "Tests\bin\Any CPU\Release\net45\*.log" TestLog\
-    - xcopy /q /Y /I "Applications\Ice\Tests\bin\Any CPU\Release\net45\*.log" TestLog\
-    - xcopy /q /Y /I CoverResults.xml TestLog\
+    - xcopy /q /Y /I "Applications\Ice\Progress\%PROJECT_BIN%" "CubeIce"
+    - xcopy /q /Y /I "Applications\Ice\Settings\%PROJECT_BIN%" "CubeIce.Settings"
+    - xcopy /q /Y /I "Applications\Ice\Associate\%PROJECT_BIN%" "CubeIce.Settings.Associate"
+    - xcopy /q /Y /I "Tests\%PROJECT_BIN%\*.log" "%TEST_RESULT%\"
+    - xcopy /q /Y /I "Applications\Ice\Tests\%PROJECT_BIN%\*.log" "%TEST_RESULT%\"
+    - xcopy /q /Y /I "%TEST_COVERAGE%" "%TEST_RESULT%\"
     - pip install codecov
-    - codecov -f CoverResults.xml
+    - codecov -f "%TEST_COVERAGE%"
 artifacts:
-    - path: CubeIce
-    - path: CubeIce.Settings
-    - path: CubeIce.Settings.Associate
-    - path: TestLog
+    - path: "CubeIce"
+    - path: "CubeIce.Settings"
+    - path: "CubeIce.Settings.Associate"
+    - path: "%TEST_RESULT%"
