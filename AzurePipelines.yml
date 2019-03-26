@@ -1,0 +1,46 @@
+trigger:
+    - master
+pool:
+    vmImage: 'VS2017-Win2016'
+variables:
+    PROJECT_NAME:     'Cube.FileSystem.SevenZip'
+    PROJECT_PLATFORM: 'Any CPU'
+    PROJECT_CONFIG:   'Release'
+    PROJECT_BIN:      'bin\$(PROJECT_PLATFORM)\$(PROJECT_CONFIG)\net45'
+    PROJECT_PACKAGE:  '..\packages'
+    PROJECT_NATIVE:   "..\resources\native"
+    TEST_TOOL:        '$(PROJECT_PACKAGE)\OpenCover\4.7.922\tools\OpenCover.Console.exe'
+    TEST_CORETOOL:    '$(PROJECT_PACKAGE)\NUnit.ConsoleRunner\3.10.0\tools\nunit3-console.exe'
+    TEST_RESULT:      'TestResult.xml'
+    TEST_COVERAGE:    'CoverResults.xml'
+    TEST_LOG:         '$(Build.ArtifactStagingDirectory)\TestResults'
+
+steps:
+- task: NuGetToolInstaller@0
+  inputs:
+    versionSpec: '>= 4.9'
+  displayName: 'Use NuGet 4.9 or later'
+
+- script: |
+    nuget restore "$(PROJECT_NAME).Ice.sln"
+  displayName: 'Restore NuGet packages'
+
+- task: VSBuild@1
+  inputs:
+    solution: '$(PROJECT_NAME).Ice.sln'
+    platform: '$(PROJECT_PLATFORM)'
+    configuration: '$(PROJECT_CONFIG)'
+  displayName: 'Build solution'
+
+- task: NuGetCommand@2
+  inputs:
+    command: 'pack'
+    packagesToPack: 'Libraries\$(PROJECT_NAME).csproj'
+    configuration: '$(PROJECT_CONFIG)'
+  displayName: 'Create NuGet package'
+
+- task: PublishPipelineArtifact@0
+  inputs:
+    artifactName: '$(PROJECT_NAME)'
+    targetPath: '$(Build.ArtifactStagingDirectory)'
+  displayName: 'Publish pipline artifacts'
