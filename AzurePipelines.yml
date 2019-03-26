@@ -32,6 +32,14 @@ steps:
     configuration: '$(PROJECT_CONFIG)'
   displayName: 'Build solution'
 
+- task: DownloadGitHubRelease@0
+  inputs:
+    connection: 'cube-soft-ci'
+    userRepository: 'cube-soft/7z'
+    defaultVersionType: 'latest'
+    itemPattern: '7z-*-x64.zip'
+  displayName: 'Download 7-Zip modules'
+
 - task: NuGetCommand@2
   inputs:
     command: 'pack'
