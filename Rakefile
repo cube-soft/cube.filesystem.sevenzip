@@ -26,6 +26,7 @@ REPOSITORY  = 'Cube.FileSystem.SevenZip'
 SUFFIX      = 'Ice'
 NATIVE      = '../resources/native'
 BRANCHES    = ['stable', 'net35']
+FRAMEWORKS  = ['net45', 'net35']
 PLATFORMS   = ['Any CPU', 'x86', 'x64']
 CONFIGS     = ['Release', 'Debug']
 COPIES      = ['Tests', 'Applications/Ice/Tests', 'Applications/Ice/Progress']
@@ -74,6 +75,7 @@ task :test => [:build] do
     fw  = 'net45' if (fw != 'net35')
     bin = ['bin', PLATFORMS[0], CONFIGS[0], fw].join('/')
 
+    Rake::Task[:copy].invoke(fw)
     TESTCASES.each { |proj, root|
         dir = "#{root}/#{bin}"
         sh("#{TEST} \"#{dir}/#{proj}.dll\" --work=\"#{dir}\"")
@@ -95,8 +97,9 @@ end
 # copy
 # --------------------------------------------------------------------------- #
 desc "Copy resources to the bin directories."
-task :copy do
-    ['net45', 'net35'].product(PLATFORMS, CONFIGS) { |set|
+task :copy, [:framework] do |_, e|
+    src = (e.framework != nil) ? [e.framework] : FRAMEWORKS
+    src.product(PLATFORMS, CONFIGS) { |set|
         pf  = (set[1] == 'Any CPU') ? 'x64' : set[1]
         bin = ['bin', set[1], set[2], set[0]].join('/')
         COPIES.each { |root|
