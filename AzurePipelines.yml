@@ -36,9 +36,61 @@ steps:
   inputs:
     connection: 'cube-soft-ci'
     userRepository: 'cube-soft/7z'
-    defaultVersionType: 'latest'
     itemPattern: '7z-*-x64.zip'
+    downloadPath: '$(Build.SourcesDirectory)'
   displayName: 'Download 7-Zip modules'
+
+- task: ExtractFiles@1
+  inputs:
+    archiveFilePatterns: '7z-*-x64.zip'
+    destinationFolder: 'Tests\$(PROJECT_BIN)'
+    cleanDestinationFolder: false
+  displayName: 'Extract archives to the library tests directory.'
+
+- script: >-
+    "$(TEST_TOOL)"
+    -log:Error
+    -register:user
+    -target:"$(TEST_CORETOOL)"
+    -targetargs:"$(PROJECT_NAME).Tests.dll"
+    -targetdir:"Tests\$(PROJECT_BIN)"
+    -returntargetcode
+    -hideskipped:All
+    -output:"$(TEST_COVERAGE)"
+    -filter:"+[Cube*]* -[*]*NativeMethods -[*]*Properties.*"
+  displayName: 'Run library tests via OpenCover and NUnit'
+
+- task: ExtractFiles@1
+  inputs:
+    archiveFilePatterns: '7z-*-x64.zip'
+    destinationFolder: 'Applications\Ice\Tests\$(PROJECT_BIN)'
+    cleanDestinationFolder: false
+  displayName: 'Extract archives to the application tests directory.'
+
+- script: >-
+    "$(TEST_TOOL)"
+    -log:Error
+    -register:user
+    -target:"$(TEST_CORETOOL)"
+    -targetargs:"$(PROJECT_NAME).Ice.Tests.dll"
+    -targetdir:"Applications\Ice\Tests\$(PROJECT_BIN)"
+    -returntargetcode
+    -hideskipped:All
+    -mergeoutput
+    -output:"$(TEST_COVERAGE)"
+    -filter:"+[Cube*]* -[*]*NativeMethods -[*]*Properties.* -[*]*Form -[*]*.Program"
+  displayName: 'Run application tests via OpenCover and NUnit'
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'NUnit'
+    testResultsFiles: '**\$(TEST_RESULT)'
+  displayName: 'Publish test results'
+
+- script: |
+    pip install codecov
+    codecov -f "$(TEST_COVERAGE)" -t $(CODECOV_TOKEN)
+  displayName: "Send coverage results to Codecov"
 
 - task: NuGetCommand@2
   inputs:
@@ -46,6 +98,27 @@ steps:
     packagesToPack: 'Libraries\$(PROJECT_NAME).csproj'
     configuration: '$(PROJECT_CONFIG)'
   displayName: 'Create NuGet package'
+
+- task: CopyFiles@2
+  inputs:
+    contents: '**\*.log'
+    targetFolder: '$(TEST_LOG)'
+    overWrite: true
+  displayName: 'Copy log files'
+
+- task: CopyFiles@2
+  inputs:
+    contents: '**\$(TEST_RESULT)'
+    targetFolder: '$(TEST_LOG)'
+    overWrite: true
+  displayName: 'Copy test results'
+
+- task: CopyFiles@2
+  inputs:
+    contents: '$(TEST_COVERAGE)'
+    targetFolder: '$(TEST_LOG)'
+    overWrite: true
+  displayName: 'Copy coverage results'
 
 - task: PublishPipelineArtifact@0
   inputs:
