@@ -3,6 +3,7 @@ Cube.FileSystem.SevenZip
 
 [![NuGet](https://img.shields.io/nuget/v/Cube.FileSystem.SevenZip.svg)](https://www.nuget.org/packages/Cube.FileSystem.SevenZip/)
 [![AppVeyor](https://ci.appveyor.com/api/projects/status/jao7f754rlookxxe?svg=true)](https://ci.appveyor.com/project/clown/cube-filesystem-sevenzip)
+[![Azure Pipelines](https://dev.azure.com/cube-soft-jp/Cube.FileSystem.SevenZip/_apis/build/status/cube-soft.Cube.FileSystem.SevenZip?branchName=master)](https://dev.azure.com/cube-soft-jp/Cube.FileSystem.SevenZip/_build)
 [![Codecov](https://codecov.io/gh/cube-soft/Cube.FileSystem.SevenZip/branch/master/graph/badge.svg)](https://codecov.io/gh/cube-soft/Cube.FileSystem.SevenZip)
 
 Cube.FileSystem.SevenZip is a wrapper library of the [7-Zip](http://www.7-zip.org/) via COM interface.
