@@ -99,6 +99,33 @@ steps:
     configuration: '$(PROJECT_CONFIG)'
   displayName: 'Create NuGet package'
 
+- task: ArchiveFiles@2
+  inputs:
+    archiveFile: '$(Build.ArtifactStagingDirectory)/CubeIce.zip'
+    rootFolderOrFile: 'Applications\Ice\Progress\$(PROJECT_BIN)'
+    includeRootFolder: false
+    archiveType: 'zip'
+    replaceExistingArchive: true
+  displayName: 'Copy CubeICE modules'
+
+- task: ArchiveFiles@2
+  inputs:
+    archiveFile: '$(Build.ArtifactStagingDirectory)\CubeIce.Settings.zip'
+    rootFolderOrFile: 'Applications\Ice\Settings\$(PROJECT_BIN)'
+    includeRootFolder: false
+    archiveType: 'zip'
+    replaceExistingArchive: true
+  displayName: 'Copy CubeICE Settings modules'
+
+- task: ArchiveFiles@2
+  inputs:
+    archiveFile: '$(Build.ArtifactStagingDirectory)\CubeIce.Settings.Associate.zip'
+    rootFolderOrFile: 'Applications\Ice\Associate\$(PROJECT_BIN)'
+    includeRootFolder: false
+    archiveType: 'zip'
+    replaceExistingArchive: true
+  displayName: 'Copy CubeICE Settings helper modules'
+
 - task: CopyFiles@2
   inputs:
     contents: '**\*.log'
