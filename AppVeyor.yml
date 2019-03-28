@@ -3,15 +3,15 @@ image: Visual Studio 2019 Preview
 platform: Any CPU
 configuration: Release
 environment:
-    PROJECT_NAME:     "Cube.FileSystem.SevenZip"
-    PROJECT_BIN:      "bin\\%PLATFORM%\\%CONFIGURATION%\\net45"
-    PROJECT_PACKAGE:  "..\\packages"
-    PROJECT_NATIVE:   "..\\resources\\native"
-    TEST_TOOL:        "$(PROJECT_PACKAGE)\\OpenCover\\4.7.922\\tools\\OpenCover.Console.exe"
-    TEST_CORETOOL:    "nunit3-console.exe"
+    PROJECT_NAME:     'Cube.FileSystem.SevenZip'
+    PROJECT_BIN:      'bin\%PLATFORM%\%CONFIGURATION%\net45'
+    PROJECT_PACKAGE:  '..\packages'
+    PROJECT_NATIVE:   '..\resources\native'
+    TEST_CORETOOL:    'nunit3-console.exe'
+    TEST_FILTERS:     '+[Cube*]* -[*]*NativeMethods -[*]*Properties.*'
     TEST_RESULT:      'TestResult.xml'
-    TEST_COVERAGE:    "CoverResults.xml"
-    TEST_LOG:         "TestResults"
+    TEST_COVERAGE:    'CoverResults.xml'
+    TEST_LOG:         '+[Cube*]* -[*]*NativeMethods -[*]*Properties.* -[*]*Form -[*]*.Program'
 branches:
     only:
         - master
@@ -19,19 +19,19 @@ skip_tags: true
 nuget:
     project_feed: true
     disable_publish_on_pr: true
-clone_folder: "C:\\Cube\\%PROJECT_NAME%"
+clone_folder: 'C:\Cube\%PROJECT_NAME%'
 before_build:
     - nuget restore "%PROJECT_NAME%.Ice.sln"
 build:
+    project: '%PROJECT_NAME%.sln'
     parallel: true
-    project: "%PROJECT_NAME%.Ice.sln"
     publish_nuget: true
     verbosity: minimal
 after_build:
     - ps: Start-FileDownload https://ci.appveyor.com/api/projects/clown/7z/artifacts/7z-x64.zip?job=Platform:+x64
     - 7z x -o"%PROJECT_NATIVE%\x64\7z" 7z-x64.zip
-    - xcopy /Y /I "%PROJECT_NATIVE%\x64\7z\7z.*" "Tests\%PROJECT_BIN%"
-    - xcopy /Y /I "%PROJECT_NATIVE%\x64\7z\7z.*" "Applications\Ice\Tests\%PROJECT_BIN%"
+    - xcopy /Y /I "%PROJECT_NATIVE%\x64\7z\7z.*" "Tests\%PROJECT_BIN%\"
+    - xcopy /Y /I "%PROJECT_NATIVE%\x64\7z\7z.*" "Applications\Ice\Tests\%PROJECT_BIN%\"
 test_script:
     - >
       "%TEST_TOOL%"
@@ -43,7 +43,7 @@ test_script:
       -returntargetcode
       -hideskipped:All
       -output:"%TEST_COVERAGE%"
-      -filter:"+[Cube*]* -[*]*NativeMethods -[*]*Properties.*"
+      -filter:"%TEST_FILTERS%"
     - >
       "%TEST_TOOL%"
       -log:Error
@@ -55,7 +55,7 @@ test_script:
       -hideskipped:All
       -mergeoutput
       -output:"%TEST_COVERAGE%"
-      -filter:"+[Cube*]* -[*]*NativeMethods -[*]*Properties.* -[*]*Form -[*]*.Program"
+      -filter:"%TEST_FILTERS%"
 after_test:
     - xcopy /q /Y /I "Applications\Ice\Progress\%PROJECT_BIN%" "CubeIce"
     - xcopy /q /Y /I "Applications\Ice\Settings\%PROJECT_BIN%" "CubeIce.Settings"
@@ -64,7 +64,7 @@ after_test:
     - xcopy /q /Y /I "Applications\Ice\Tests\%PROJECT_BIN%\*.log" "%TEST_LOG%\"
     - xcopy /q /Y /I "%TEST_COVERAGE%" "%TEST_LOG%\"
 artifacts:
-    - path: "CubeIce"
-    - path: "CubeIce.Settings"
-    - path: "CubeIce.Settings.Associate"
-    - path: "%TEST_LOG%"
+    - path: 'CubeIce'
+    - path: 'CubeIce.Settings'
+    - path: 'CubeIce.Settings.Associate'
+    - path: '%TEST_LOG%'
