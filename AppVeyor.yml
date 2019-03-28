@@ -7,11 +7,12 @@ environment:
     PROJECT_BIN:      'bin\%PLATFORM%\%CONFIGURATION%\net45'
     PROJECT_PACKAGE:  '..\packages'
     PROJECT_NATIVE:   '..\resources\native'
+    TEST_TOOL:        '$(PROJECT_PACKAGE)\OpenCover\4.7.922\tools\OpenCover.Console.exe'
     TEST_CORETOOL:    'nunit3-console.exe'
-    TEST_FILTERS:     '+[Cube*]* -[*]*NativeMethods -[*]*Properties.*'
+    TEST_FILTERS:     '+[Cube*]* -[*]*NativeMethods -[*]*Properties.* -[*]*Form -[*]*.Program'
     TEST_RESULT:      'TestResult.xml'
     TEST_COVERAGE:    'CoverResults.xml'
-    TEST_LOG:         '+[Cube*]* -[*]*NativeMethods -[*]*Properties.* -[*]*Form -[*]*.Program'
+    TEST_LOG:         'TestResults'
 branches:
     only:
         - master
@@ -23,7 +24,7 @@ clone_folder: 'C:\Cube\%PROJECT_NAME%'
 before_build:
     - nuget restore "%PROJECT_NAME%.Ice.sln"
 build:
-    project: '%PROJECT_NAME%.sln'
+    project: '%PROJECT_NAME%.Ice.sln'
     parallel: true
     publish_nuget: true
     verbosity: minimal
