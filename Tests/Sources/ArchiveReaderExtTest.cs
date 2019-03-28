@@ -68,7 +68,7 @@ namespace Cube.FileSystem.SevenZip.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract_NotSupported
+        /// Extract_UnknownFormat
         ///
         /// <summary>
         /// 未対応のファイルが指定された時の挙動を確認します。
@@ -76,9 +76,9 @@ namespace Cube.FileSystem.SevenZip.Tests
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Extract_NotSupported() => Assert.That(
+        public void Extract_UnknownFormat() => Assert.That(
             () => new ArchiveReader(GetExamplesWith("Sample.txt")),
-            Throws.TypeOf<NotSupportedException>()
+            Throws.TypeOf<UnknownFormatException>()
         );
 
         /* ----------------------------------------------------------------- */

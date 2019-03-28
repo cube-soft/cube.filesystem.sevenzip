@@ -127,7 +127,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         private ArchiveReader(Format format, string src, PasswordQuery password, IO io)
         {
-            if (format == Format.Unknown) throw new NotSupportedException();
+            if (format == Format.Unknown) throw new UnknownFormatException();
 
             var asr   = new ArchiveStreamReader(io.OpenRead(src));
             _core     = new SevenZipLibrary();
