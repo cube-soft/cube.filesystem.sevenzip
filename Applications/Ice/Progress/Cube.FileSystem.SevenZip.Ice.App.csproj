@@ -21,27 +21,29 @@
         <DefineConstants>DEBUG;TRACE</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
-        <OutputPath>bin/Any CPU/$(Configuration)/</OutputPath>
-        <DocumentationFile>bin/Any CPU/$(Configuration)/$(TargetFramework)/$(AssemblyName).xml</DocumentationFile>
+        <OutputPath>bin/Any CPU\$(Configuration)\</OutputPath>
+        <DocumentationFile>bin\Any CPU\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="../Core/Cube.FileSystem.SevenZip.Ice.csproj" />
+        <ProjectReference Include="..\Core\Cube.FileSystem.SevenZip.Ice.csproj" />
         <PackageReference Include="Cube.Forms" Version="1.15.0" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Update="Sources/Views/ArchiveRtSettingsForm.cs" SubType="Form" />
-        <Compile Update="Sources/Views/OverwriteForm.cs" SubType="Form" />
-        <Compile Update="Sources/Views/PasswordForm.cs" SubType="Form" />
-        <Compile Update="Sources/Views/PasswordConfirmForm.cs" SubType="Form" />
-        <Compile Update="Sources/Views/ProgressForm.cs" SubType="Form" />
-        <EmbeddedResource Update="Sources/Views/ArchiveRtSettingsForm.resx" DependentUpon="ArchiveRtSettingsForm.cs" />
-        <EmbeddedResource Update="Sources/Views/OverwriteForm.resx" DependentUpon="OverwriteForm.cs" />
-        <EmbeddedResource Update="Sources/Views/PasswordForm.resx" DependentUpon="PasswordForm.cs" />
-        <EmbeddedResource Update="Sources/Views/PasswordConfirmForm.resx" DependentUpon="PasswordConfirmForm.cs" />
-        <EmbeddedResource Update="Sources/Views/ProgressForm.resx" DependentUpon="ProgressForm.cs" />
+        <Compile Update="Properties\Resources.Designer.cs" DependentUpon="Resources.resx" AutoGen="True" DesignTime="True" />
+        <Compile Update="Sources\Views\ArchiveRtSettingsForm.cs" SubType="Form" />
+        <Compile Update="Sources\Views\OverwriteForm.cs" SubType="Form" />
+        <Compile Update="Sources\Views\PasswordForm.cs" SubType="Form" />
+        <Compile Update="Sources\Views\PasswordConfirmForm.cs" SubType="Form" />
+        <Compile Update="Sources\Views\ProgressForm.cs" SubType="Form" />
+        <EmbeddedResource Update="Properties\Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
+        <EmbeddedResource Update="Sources\Views\ArchiveRtSettingsForm.resx" DependentUpon="ArchiveRtSettingsForm.cs" />
+        <EmbeddedResource Update="Sources\Views\OverwriteForm.resx" DependentUpon="OverwriteForm.cs" />
+        <EmbeddedResource Update="Sources\Views\PasswordForm.resx" DependentUpon="PasswordForm.cs" />
+        <EmbeddedResource Update="Sources\Views\PasswordConfirmForm.resx" DependentUpon="PasswordConfirmForm.cs" />
+        <EmbeddedResource Update="Sources\Views\ProgressForm.resx" DependentUpon="ProgressForm.cs" />
     </ItemGroup>
     <ItemGroup>
         <None Include="App.config" />
-        <None Include="Assets/**/*" />
+        <None Include="Assets\**\*" />
     </ItemGroup>
 </Project>
