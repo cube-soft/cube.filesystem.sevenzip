@@ -535,8 +535,21 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         {
             this.LogError(error);
             if (!Settings.Value.ErrorReport) return;
-            OnMessageReceived(new MessageEventArgs(error.Message, Properties.Resources.TitleError));
+            OnMessageReceived(new MessageEventArgs(GetMessage(error), Properties.Resources.TitleError));
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetMessage
+        ///
+        /// <summary>
+        /// Gets the message from the specified exception.
+        /// </summary>
+        ///
+        /// <param name="src">Exception object.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected virtual string GetMessage(Exception src) => src.Message;
 
         /* ----------------------------------------------------------------- */
         ///

@@ -114,6 +114,21 @@ namespace Cube.FileSystem.SevenZip.Ice.App
 
         /* ----------------------------------------------------------------- */
         ///
+        /// GetMessage
+        ///
+        /// <summary>
+        /// Gets the message from the specified exception.
+        /// </summary>
+        ///
+        /// <param name="src">Exception object.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected override string GetMessage(Exception src) =>
+            src is UnknownFormatException ? Properties.Resources.MessageUnkownFormat :
+            base.GetMessage(src);
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// StartCore
         ///
         /// <summary>

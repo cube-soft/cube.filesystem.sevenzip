@@ -244,6 +244,9 @@
   <data name="MessageUnknownFile" xml:space="preserve">
     <value>不明なファイル</value>
   </data>
+  <data name="MessageUnkownFormat" xml:space="preserve">
+    <value>指定されたファイルは未対応の圧縮形式か、または圧縮ファイルではないため解凍する事ができません。</value>
+  </data>
   <data name="TitleError" xml:space="preserve">
     <value>CubeICE エラー</value>
   </data>
