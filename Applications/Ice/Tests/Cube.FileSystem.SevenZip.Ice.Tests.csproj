@@ -14,18 +14,18 @@
         <DefineConstants>DEBUG;TRACE</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
-        <OutputPath>bin/Any CPU/$(Configuration)/</OutputPath>
-        <DocumentationFile>bin/Any CPU/$(Configuration)/$(TargetFramework)/$(AssemblyName).xml</DocumentationFile>
+        <OutputPath>bin\Any CPU\$(Configuration)\</OutputPath>
+        <DocumentationFile>bin\Any CPU\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="../Progress/Cube.FileSystem.SevenZip.Ice.App.csproj" />
-        <ProjectReference Include="../Settings/Cube.FileSystem.SevenZip.Ice.App.Settings.csproj" />
+        <ProjectReference Include="..\Progress\Cube.FileSystem.SevenZip.Ice.App.csproj" />
+        <ProjectReference Include="..\Settings\Cube.FileSystem.SevenZip.Ice.App.Settings.csproj" />
         <PackageReference Include="NUnit" Version="3.11.0" />
         <PackageReference Include="NUnit.ConsoleRunner" Version="3.10.0" />
         <PackageReference Include="OpenCover" Version="4.7.922" />
     </ItemGroup>
     <ItemGroup>
         <None Include="App.config" />
-        <None Include="Examples/**/*" CopyToOutputDirectory="Always" />
+        <None Include="Examples\**\*" CopyToOutputDirectory="Always" />
     </ItemGroup>
 </Project>

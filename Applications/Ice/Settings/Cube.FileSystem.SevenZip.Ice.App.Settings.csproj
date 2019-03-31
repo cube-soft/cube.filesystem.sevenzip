@@ -21,22 +21,24 @@
         <DefineConstants>DEBUG;TRACE</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
-        <OutputPath>bin/Any CPU/$(Configuration)/</OutputPath>
-        <DocumentationFile>bin/Any CPU/$(Configuration)/$(TargetFramework)/$(AssemblyName).xml</DocumentationFile>
+        <OutputPath>bin\Any CPU\$(Configuration)\</OutputPath>
+        <DocumentationFile>bin\Any CPU\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="../Core/Cube.FileSystem.SevenZip.Ice.csproj" />
+        <ProjectReference Include="..\Core\Cube.FileSystem.SevenZip.Ice.csproj" />
         <PackageReference Include="Cube.Forms" Version="1.15.0" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Update="Sources/Views/CustomizeForm.cs" SubType="Form" />
-        <Compile Update="Sources/Views/MainForm.cs" SubType="Form" />
-        <EmbeddedResource Update="Sources/Views/CustomizeForm.resx" DependentUpon="CustomizeForm.cs" />
-        <EmbeddedResource Update="Sources/Views/MainForm.resx" DependentUpon="MainForm.cs" />
+        <Compile Update="Properties\Resources.Designer.cs" DependentUpon="Resources.resx" AutoGen="True" DesignTime="True" />
+        <Compile Update="Sources\Views\CustomizeForm.cs" SubType="Form" />
+        <Compile Update="Sources\Views\MainForm.cs" SubType="Form" />
+        <EmbeddedResource Update="Properties\Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
+        <EmbeddedResource Update="Sources\Views\CustomizeForm.resx" DependentUpon="CustomizeForm.cs" />
+        <EmbeddedResource Update="Sources\Views\MainForm.resx" DependentUpon="MainForm.cs" />
     </ItemGroup>
     <ItemGroup>
         <None Include="App.config" />
-        <None Include="Assets/**/*" />
-        <None Include="Properties/DataSources/*.datasource" />
+        <None Include="Assets\**\*" />
+        <None Include="Properties\DataSources\*.datasource" />
     </ItemGroup>
 </Project>

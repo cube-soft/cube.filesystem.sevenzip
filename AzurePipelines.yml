@@ -8,7 +8,7 @@ variables:
     PROJECT_CONFIG:   'Release'
     PROJECT_BIN:      'bin\$(PROJECT_PLATFORM)\$(PROJECT_CONFIG)\net45'
     PROJECT_PACKAGE:  '..\packages'
-    PROJECT_NATIVE:   "..\resources\native"
+    PROJECT_NATIVE:   '..\resources\native'
     TEST_TOOL:        '$(PROJECT_PACKAGE)\OpenCover\4.7.922\tools\OpenCover.Console.exe'
     TEST_CORETOOL:    '$(PROJECT_PACKAGE)\NUnit.ConsoleRunner\3.10.0\tools\nunit3-console.exe'
     TEST_FILTERS:     '+[Cube*]* -[*]*NativeMethods -[*]*Properties.*'
@@ -46,7 +46,7 @@ steps:
     archiveFilePatterns: '7z-*-x64.zip'
     destinationFolder: 'Tests\$(PROJECT_BIN)'
     cleanDestinationFolder: false
-  displayName: 'Extract archives to the library tests directory.'
+  displayName: 'Extract archives to the library tests directory'
 
 - script: >
     "$(TEST_TOOL)"
@@ -66,7 +66,7 @@ steps:
     archiveFilePatterns: '7z-*-x64.zip'
     destinationFolder: 'Applications\Ice\Tests\$(PROJECT_BIN)'
     cleanDestinationFolder: false
-  displayName: 'Extract archives to the application tests directory.'
+  displayName: 'Extract archives to the application tests directory'
 
 - script: >
     "$(TEST_TOOL)"
