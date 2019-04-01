@@ -26,6 +26,6 @@
     </ItemGroup>
     <ItemGroup>
         <None Include="App.config" />
-        <None Include="Examples/**/*" CopyToOutputDirectory="Always" />
+        <None Include="Examples\**\*" CopyToOutputDirectory="Always" />
     </ItemGroup>
 </Project>

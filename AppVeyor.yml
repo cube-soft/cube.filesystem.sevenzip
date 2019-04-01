@@ -4,6 +4,7 @@ platform: Any CPU
 configuration: Release
 environment:
     PROJECT_NAME:     'Cube.FileSystem.SevenZip'
+    PROJECT_APP:      'Ice'
     PROJECT_BIN:      'bin\%PLATFORM%\%CONFIGURATION%\net45'
     PROJECT_PACKAGE:  '..\packages'
     PROJECT_NATIVE:   '..\resources\native'
@@ -22,9 +23,9 @@ nuget:
     disable_publish_on_pr: true
 clone_folder: 'C:\Cube\%PROJECT_NAME%'
 before_build:
-    - nuget restore "%PROJECT_NAME%.Ice.sln"
+    - nuget restore "%PROJECT_NAME%.%PROJECT_APP%.sln"
 build:
-    project: '%PROJECT_NAME%.Ice.sln'
+    project: '%PROJECT_NAME%.%PROJECT_APP%.sln'
     parallel: true
     publish_nuget: true
     verbosity: minimal
@@ -32,7 +33,7 @@ after_build:
     - ps: Start-FileDownload https://ci.appveyor.com/api/projects/clown/7z/artifacts/7z-x64.zip?job=Platform:+x64
     - 7z x -o"%PROJECT_NATIVE%\x64\7z" 7z-x64.zip
     - xcopy /Y /I "%PROJECT_NATIVE%\x64\7z\7z.*" "Tests\%PROJECT_BIN%\"
-    - xcopy /Y /I "%PROJECT_NATIVE%\x64\7z\7z.*" "Applications\Ice\Tests\%PROJECT_BIN%\"
+    - xcopy /Y /I "%PROJECT_NATIVE%\x64\7z\7z.*" "Applications\%PROJECT_APP%\Tests\%PROJECT_BIN%\"
 test_script:
     - >
       "%TEST_TOOL%"
@@ -50,19 +51,19 @@ test_script:
       -log:Error
       -register:user
       -target:"%TEST_CORETOOL%"
-      -targetargs:"%PROJECT_NAME%.Ice.Tests.dll"
-      -targetdir:"Applications\Ice\Tests\%PROJECT_BIN%"
+      -targetargs:"%PROJECT_NAME%.%PROJECT_APP%.Tests.dll"
+      -targetdir:"Applications\%PROJECT_APP%\Tests\%PROJECT_BIN%"
       -returntargetcode
       -hideskipped:All
       -mergeoutput
       -output:"%TEST_COVERAGE%"
       -filter:"%TEST_FILTERS%"
 after_test:
-    - xcopy /q /Y /I "Applications\Ice\Progress\%PROJECT_BIN%" "CubeIce"
-    - xcopy /q /Y /I "Applications\Ice\Settings\%PROJECT_BIN%" "CubeIce.Settings"
-    - xcopy /q /Y /I "Applications\Ice\Associate\%PROJECT_BIN%" "CubeIce.Settings.Associate"
+    - xcopy /q /Y /I "Applications\%PROJECT_APP%\Progress\%PROJECT_BIN%" "CubeIce"
+    - xcopy /q /Y /I "Applications\%PROJECT_APP%\Settings\%PROJECT_BIN%" "CubeIce.Settings"
+    - xcopy /q /Y /I "Applications\%PROJECT_APP%\Associate\%PROJECT_BIN%" "CubeIce.Settings.Associate"
     - xcopy /q /Y /I "Tests\%PROJECT_BIN%\*.log" "%TEST_LOG%\"
-    - xcopy /q /Y /I "Applications\Ice\Tests\%PROJECT_BIN%\*.log" "%TEST_LOG%\"
+    - xcopy /q /Y /I "Applications\%PROJECT_APP%\Tests\%PROJECT_BIN%\*.log" "%TEST_LOG%\"
     - xcopy /q /Y /I "%TEST_COVERAGE%" "%TEST_LOG%\"
 artifacts:
     - path: 'CubeIce'

@@ -30,20 +30,11 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Update="Properties\Resources.Designer.cs" DependentUpon="Resources.resx" AutoGen="True" DesignTime="True" />
-        <Compile Update="Sources\Views\ArchiveRtSettingsForm.cs" SubType="Form" />
-        <Compile Update="Sources\Views\OverwriteForm.cs" SubType="Form" />
-        <Compile Update="Sources\Views\PasswordForm.cs" SubType="Form" />
-        <Compile Update="Sources\Views\PasswordConfirmForm.cs" SubType="Form" />
-        <Compile Update="Sources\Views\ProgressForm.cs" SubType="Form" />
+        <Compile Update="Sources\Views\*.cs" SubType="Form" />
+        <Compile Update="Sources\Views\*.Designer.cs" SubType="Code" />
         <EmbeddedResource Update="Properties\Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
-        <EmbeddedResource Update="Sources\Views\ArchiveRtSettingsForm.resx" DependentUpon="ArchiveRtSettingsForm.cs" />
-        <EmbeddedResource Update="Sources\Views\OverwriteForm.resx" DependentUpon="OverwriteForm.cs" />
-        <EmbeddedResource Update="Sources\Views\PasswordForm.resx" DependentUpon="PasswordForm.cs" />
-        <EmbeddedResource Update="Sources\Views\PasswordConfirmForm.resx" DependentUpon="PasswordConfirmForm.cs" />
-        <EmbeddedResource Update="Sources\Views\ProgressForm.resx" DependentUpon="ProgressForm.cs" />
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="App.config" />
+        <EmbeddedResource Update="Sources\Views\*.resx" DependentUpon="%(Filename).cs" />
         <None Include="Assets\**\*" />
+        <None Include="App.config" />
     </ItemGroup>
 </Project>

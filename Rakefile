@@ -22,8 +22,8 @@ require 'fileutils'
 # --------------------------------------------------------------------------- #
 # configuration
 # --------------------------------------------------------------------------- #
-REPOSITORY  = 'Cube.FileSystem.SevenZip'
-SUFFIX      = 'Ice'
+PROJECT     = 'Cube.FileSystem.SevenZip'
+APPLICATION = 'Ice'
 NATIVE      = '../resources/native'
 BRANCHES    = ['stable', 'net35']
 FRAMEWORKS  = ['net45', 'net35']
@@ -31,8 +31,8 @@ PLATFORMS   = ['Any CPU', 'x86', 'x64']
 CONFIGS     = ['Release', 'Debug']
 COPIES      = ['Tests', 'Applications/Ice/Tests', 'Applications/Ice/Progress']
 TESTCASES   = {
-    "#{REPOSITORY}.Tests"     => 'Tests',
-    "#{REPOSITORY}.Ice.Tests" => 'Applications/Ice/Tests'
+    "#{PROJECT}.Tests"     => 'Tests',
+    "#{PROJECT}.Ice.Tests" => 'Applications/Ice/Tests'
 }
 
 # --------------------------------------------------------------------------- #
@@ -45,7 +45,7 @@ TEST    = '../packages/NUnit.ConsoleRunner/3.10.0/tools/nunit3-console.exe'
 # --------------------------------------------------------------------------- #
 # clean
 # --------------------------------------------------------------------------- #
-CLEAN.include("#{REPOSITORY}.*.nupkg")
+CLEAN.include("#{PROJECT}.*.nupkg")
 CLEAN.include("../packages/cube.*")
 CLEAN.include(%w{bin obj}.map{ |e| "**/#{e}" })
 
@@ -62,7 +62,7 @@ desc "Pack nupkg in the net35 branch."
 task :pack do
     BRANCHES.each { |e| Rake::Task[:build].invoke(e) }
     sh("git checkout net35")
-    sh("#{PACK} Libraries/#{REPOSITORY}.nuspec")
+    sh("#{PACK} Libraries/#{PROJECT}.nuspec")
     sh("git checkout master")
 end
 
@@ -89,8 +89,8 @@ desc "Build the solution in the specified branch."
 task :build, [:branch] do |_, e|
     e.with_defaults(branch: '')
     sh("git checkout #{e.branch}") if (!e.branch.empty?)
-    sh("nuget restore #{REPOSITORY}.#{SUFFIX}.sln")
-    sh("#{BUILD} #{REPOSITORY}.#{SUFFIX}.sln")
+    sh("nuget restore #{PROJECT}.#{APPLICATION}.sln")
+    sh("#{BUILD} #{PROJECT}.#{APPLICATION}.sln")
 end
 
 # --------------------------------------------------------------------------- #

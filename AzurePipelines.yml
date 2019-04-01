@@ -4,6 +4,7 @@ pool:
     vmImage: 'VS2017-Win2016'
 variables:
     PROJECT_NAME:     'Cube.FileSystem.SevenZip'
+    PROJECT_APP:      'Ice'
     PROJECT_PLATFORM: 'Any CPU'
     PROJECT_CONFIG:   'Release'
     PROJECT_BIN:      'bin\$(PROJECT_PLATFORM)\$(PROJECT_CONFIG)\net45'
@@ -23,12 +24,12 @@ steps:
   displayName: 'Use NuGet 4.9 or later'
 
 - script: |
-    nuget restore "$(PROJECT_NAME).Ice.sln"
+    nuget restore "$(PROJECT_NAME).$(PROJECT_APP).sln"
   displayName: 'Restore NuGet packages'
 
 - task: VSBuild@1
   inputs:
-    solution: '$(PROJECT_NAME).Ice.sln'
+    solution: '$(PROJECT_NAME).$(PROJECT_APP).sln'
     platform: '$(PROJECT_PLATFORM)'
     configuration: '$(PROJECT_CONFIG)'
   displayName: 'Build solution'
@@ -64,7 +65,7 @@ steps:
 - task: ExtractFiles@1
   inputs:
     archiveFilePatterns: '7z-*-x64.zip'
-    destinationFolder: 'Applications\Ice\Tests\$(PROJECT_BIN)'
+    destinationFolder: 'Applications\$(PROJECT_APP)\Tests\$(PROJECT_BIN)'
     cleanDestinationFolder: false
   displayName: 'Extract archives to the application tests directory'
 
@@ -73,8 +74,8 @@ steps:
     -log:Error
     -register:user
     -target:"$(TEST_CORETOOL)"
-    -targetargs:"$(PROJECT_NAME).Ice.Tests.dll"
-    -targetdir:"Applications\Ice\Tests\$(PROJECT_BIN)"
+    -targetargs:"$(PROJECT_NAME).$(PROJECT_APP).Tests.dll"
+    -targetdir:"Applications\$(PROJECT_APP)\Tests\$(PROJECT_BIN)"
     -returntargetcode
     -hideskipped:All
     -mergeoutput
@@ -103,7 +104,7 @@ steps:
 - task: ArchiveFiles@2
   inputs:
     archiveFile: '$(Build.ArtifactStagingDirectory)/CubeIce.zip'
-    rootFolderOrFile: 'Applications\Ice\Progress\$(PROJECT_BIN)'
+    rootFolderOrFile: 'Applications\$(PROJECT_APP)\Progress\$(PROJECT_BIN)'
     includeRootFolder: false
     archiveType: 'zip'
     replaceExistingArchive: true
@@ -112,7 +113,7 @@ steps:
 - task: ArchiveFiles@2
   inputs:
     archiveFile: '$(Build.ArtifactStagingDirectory)\CubeIce.Settings.zip'
-    rootFolderOrFile: 'Applications\Ice\Settings\$(PROJECT_BIN)'
+    rootFolderOrFile: 'Applications\$(PROJECT_APP)\Settings\$(PROJECT_BIN)'
     includeRootFolder: false
     archiveType: 'zip'
     replaceExistingArchive: true
@@ -121,7 +122,7 @@ steps:
 - task: ArchiveFiles@2
   inputs:
     archiveFile: '$(Build.ArtifactStagingDirectory)\CubeIce.Settings.Associate.zip'
-    rootFolderOrFile: 'Applications\Ice\Associate\$(PROJECT_BIN)'
+    rootFolderOrFile: 'Applications\$(PROJECT_APP)\Associate\$(PROJECT_BIN)'
     includeRootFolder: false
     archiveType: 'zip'
     replaceExistingArchive: true
