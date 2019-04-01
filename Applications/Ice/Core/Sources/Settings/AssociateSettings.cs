@@ -65,6 +65,18 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         public IDictionary<string, bool> Value { get; private set; }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Changed
+        ///
+        /// <summary>
+        /// Gets or sets a value indicating whether any of associations are
+        /// changed.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public bool Changed { get; set; } = false;
+
         #region DataMember
 
         /* ----------------------------------------------------------------- */
@@ -81,7 +93,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         public int IconIndex
         {
             get => _iconIndex;
-            set => SetProperty(ref _iconIndex, value);
+            set { if (SetProperty(ref _iconIndex, value)) Changed = true; }
         }
 
         /* ----------------------------------------------------------------- */
@@ -643,6 +655,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             }
             else Value.Add(name, value);
             OnPropertyChanged(new PropertyChangedEventArgs(name));
+            Changed = true;
             return true;
         }
 

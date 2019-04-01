@@ -17,7 +17,6 @@
 /* ------------------------------------------------------------------------- */
 using Cube.Log;
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace Cube.FileSystem.SevenZip.Ice.App.Settings
@@ -54,7 +53,6 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         public AssociateCommand(AssociateSettings settings)
         {
             Settings = settings;
-            Reset();
         }
 
         #endregion
@@ -81,72 +79,25 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// Execute
         ///
         /// <summary>
-        /// ファイルの関連付けを状態を更新します。
+        /// Updates file associations from the provided settings.
         /// </summary>
         ///
-        /// <param name="force">強制的に更新するかどうかを示す値</param>
-        ///
         /* ----------------------------------------------------------------- */
-        public void Execute(bool force)
+        public void Execute()
         {
             try
             {
-                if (!force && !IsChanged()) return;
-
-                var asm = Assembly.GetExecutingAssembly();
-                var dir = System.IO.Path.GetDirectoryName(asm.Location);
-                var exe = System.IO.Path.Combine(dir, Properties.Resources.FileAssociate);
-
-                var process = System.Diagnostics.Process.Start(exe);
-                process.WaitForExit();
-
-                Reset();
+                if (Settings.Changed)
+                {
+                    var dir = Assembly.GetExecutingAssembly().GetReader().DirectoryName;
+                    var exe = System.IO.Path.Combine(dir, Properties.Resources.FileAssociate);
+                    System.Diagnostics.Process.Start(exe).WaitForExit();
+                    Settings.Changed = false;
+                }
             }
             catch (Exception err) { this.LogWarn(err); }
         }
 
-        #endregion
-
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// IsChanged
-        ///
-        /// <summary>
-        /// ファイルの関連付け状態を表す値が変更されたかどうかを判別
-        /// します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private bool IsChanged()
-        {
-            foreach (var item in Settings.Value)
-            {
-                if (!_prev.ContainsKey(item.Key) || _prev[item.Key] != item.Value) return true;
-            }
-            return false;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Reset
-        ///
-        /// <summary>
-        /// 起点となる値を再設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Reset()
-        {
-            _prev.Clear();
-            foreach (var item in Settings.Value) _prev.Add(item);
-        }
-
-        #endregion
-
-        #region Fields
-        private readonly IDictionary<string, bool> _prev = new Dictionary<string, bool>();
         #endregion
     }
 }

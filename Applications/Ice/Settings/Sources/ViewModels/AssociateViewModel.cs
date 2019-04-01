@@ -56,6 +56,22 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Changed
+        ///
+        /// <summary>
+        /// Gets or sets a value indicating whether any of associations are
+        /// changed.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public bool Changed
+        {
+            get => _model.Settings.Changed;
+            set => _model.Settings.Changed = value;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// IconIndex
         ///
         /// <summary>
@@ -539,10 +555,8 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         /// ファイルの関連付けを更新します。
         /// </summary>
         ///
-        /// <param name="force">強制モード</param>
-        ///
         /* ----------------------------------------------------------------- */
-        public void Update(bool force) => _model.Execute(force);
+        public void Update() => _model.Execute();
 
         #endregion
 
