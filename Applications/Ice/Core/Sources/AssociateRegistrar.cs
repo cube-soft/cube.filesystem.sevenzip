@@ -210,6 +210,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             using (var key = root.CreateSubKey(name)) Create(key, id);
 
             Create(extension, name);
+            DeleteUserChoise(extension);
         }
 
         /* ----------------------------------------------------------------- */
@@ -291,6 +292,22 @@ namespace Cube.FileSystem.SevenZip.Ice
                 UpdateToolTip(key, false);
             }
             Registry.ClassesRoot.DeleteSubKeyTree(name, false);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// DeleteUserChoise
+        ///
+        /// <summary>
+        /// Deletes the UserChoise subkey of the specified extension.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void DeleteUserChoise(string extension)
+        {
+            var s  = (extension[0] == '.') ? extension : $".{extension}";
+            var sk = $@"Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\{s}\UserChoise";
+            Registry.CurrentUser.DeleteSubKeyTree(sk, false);
         }
 
         /* ----------------------------------------------------------------- */
