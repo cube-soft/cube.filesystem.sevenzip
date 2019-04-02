@@ -10,10 +10,12 @@
         <OutputType>WinExe</OutputType>
         <TargetFramework>net45</TargetFramework>
         <LangVersion>latest</LangVersion>
+        <Platforms>AnyCPU;x86;x64</Platforms>
         <IsPackable>false</IsPackable>
         <Optimize>true</Optimize>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <ApplicationIcon>App.ico</ApplicationIcon>
         <ApplicationManifest>App.manifest</ApplicationManifest>
     </PropertyGroup>
