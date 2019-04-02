@@ -49,7 +49,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>.;..\Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Common;Sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -76,7 +76,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>.;..\Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Common;Sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;WIN64;NDEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -102,22 +102,22 @@
     <None Include="App.def" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Context\ContextMenu.cpp" />
-    <ClCompile Include="Context\ContextMenuFactory.cpp" />
-    <ClCompile Include="Context\ContextMenuIcon.cpp" />
-    <ClCompile Include="Context\ContextMenuItem.cpp" />
-    <ClCompile Include="Context\ContextPresetMenu.cpp" />
-    <ClCompile Include="Context\ContextSettings.cpp" />
-    <ClCompile Include="Program.cpp" />
+    <ClCompile Include="Sources\Context\ContextMenu.cpp" />
+    <ClCompile Include="Sources\Context\ContextMenuFactory.cpp" />
+    <ClCompile Include="Sources\Context\ContextMenuIcon.cpp" />
+    <ClCompile Include="Sources\Context\ContextMenuItem.cpp" />
+    <ClCompile Include="Sources\Context\ContextPresetMenu.cpp" />
+    <ClCompile Include="Sources\Context\ContextSettings.cpp" />
+    <ClCompile Include="Sources\Program.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Context\ContextMenu.h" />
-    <ClInclude Include="Context\ContextMenuFactory.h" />
-    <ClInclude Include="Context\ContextMenuIcon.h" />
-    <ClInclude Include="Context\ContextMenuItem.h" />
-    <ClInclude Include="Context\ContextPresetMenu.h" />
-    <ClInclude Include="Context\ContextSettings.h" />
-    <ClInclude Include="Resources.h" />
+    <ClInclude Include="Sources\Context\ContextMenu.h" />
+    <ClInclude Include="Sources\Context\ContextMenuFactory.h" />
+    <ClInclude Include="Sources\Context\ContextMenuIcon.h" />
+    <ClInclude Include="Sources\Context\ContextMenuItem.h" />
+    <ClInclude Include="Sources\Context\ContextPresetMenu.h" />
+    <ClInclude Include="Sources\Context\ContextSettings.h" />
+    <ClInclude Include="Sources\Resources.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

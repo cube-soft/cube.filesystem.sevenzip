@@ -53,7 +53,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <TreatWarningAsError>true</TreatWarningAsError>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>.;..\Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Common;Sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -71,7 +71,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <TreatWarningAsError>true</TreatWarningAsError>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>.;..\Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Common;Sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -86,24 +86,24 @@
     <Image Include="App.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="QueryInfo\QueryInfo.cpp" />
-    <ClCompile Include="QueryInfo\QueryInfoFactory.cpp" />
-    <ClCompile Include="QueryInfo\QueryInfoSettings.cpp" />
-    <ClCompile Include="SevenZip\ArchiveList.cpp" />
-    <ClCompile Include="SevenZip\SevenZipLibrary.cpp" />
-    <ClCompile Include="SevenZip\Stream.cpp" />
-    <ClCompile Include="Program.cpp" />
+    <ClCompile Include="Sources\QueryInfo\QueryInfo.cpp" />
+    <ClCompile Include="Sources\QueryInfo\QueryInfoFactory.cpp" />
+    <ClCompile Include="Sources\QueryInfo\QueryInfoSettings.cpp" />
+    <ClCompile Include="Sources\SevenZip\ArchiveList.cpp" />
+    <ClCompile Include="Sources\SevenZip\SevenZipLibrary.cpp" />
+    <ClCompile Include="Sources\SevenZip\Stream.cpp" />
+    <ClCompile Include="Sources\Program.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="QueryInfo\QueryInfo.h" />
-    <ClInclude Include="QueryInfo\QueryInfoFactory.h" />
-    <ClInclude Include="QueryInfo\QueryInfoSettings.h" />
-    <ClInclude Include="SevenZip\ArchiveList.h" />
-    <ClInclude Include="SevenZip\Format.h" />
-    <ClInclude Include="SevenZip\SevenZipInterface.h" />
-    <ClInclude Include="SevenZip\SevenZipLibrary.h" />
-    <ClInclude Include="SevenZip\Stream.h" />
-    <ClInclude Include="Resources.h" />
+    <ClInclude Include="Sources\QueryInfo\QueryInfo.h" />
+    <ClInclude Include="Sources\QueryInfo\QueryInfoFactory.h" />
+    <ClInclude Include="Sources\QueryInfo\QueryInfoSettings.h" />
+    <ClInclude Include="Sources\SevenZip\ArchiveList.h" />
+    <ClInclude Include="Sources\SevenZip\Format.h" />
+    <ClInclude Include="Sources\SevenZip\SevenZipInterface.h" />
+    <ClInclude Include="Sources\SevenZip\SevenZipLibrary.h" />
+    <ClInclude Include="Sources\SevenZip\Stream.h" />
+    <ClInclude Include="Sources\Resources.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>
