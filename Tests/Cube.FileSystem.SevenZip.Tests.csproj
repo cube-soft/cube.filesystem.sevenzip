@@ -7,8 +7,6 @@
         <TargetFramework>net45</TargetFramework>
         <LangVersion>latest</LangVersion>
         <IsPackable>false</IsPackable>
-        <Optimize>true</Optimize>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
