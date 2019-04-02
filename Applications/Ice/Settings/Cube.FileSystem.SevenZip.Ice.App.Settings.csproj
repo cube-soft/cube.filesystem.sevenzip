@@ -6,7 +6,7 @@
         <Product>CubeICE Settings</Product>
         <Description>Settings application for CubeICE.</Description>
         <Copyright>Copyright © 2010 CubeSoft, Inc.</Copyright>
-        <AssemblyName>cubeice-setting</AssemblyName>
+        <AssemblyName>CubeIce-Setting</AssemblyName>
         <OutputType>WinExe</OutputType>
         <TargetFramework>net45</TargetFramework>
         <LangVersion>latest</LangVersion>

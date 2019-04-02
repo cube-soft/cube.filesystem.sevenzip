@@ -6,7 +6,7 @@
         <Company>CubeSoft</Company>
         <Product>CubeICE Associate</Product>
         <Copyright>Copyright © 2010 CubeSoft, Inc.</Copyright>
-        <AssemblyName>cubeice-associate</AssemblyName>
+        <AssemblyName>CubeIce-Associate</AssemblyName>
         <OutputType>WinExe</OutputType>
         <TargetFramework>net45</TargetFramework>
         <LangVersion>latest</LangVersion>
