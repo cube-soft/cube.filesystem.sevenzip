@@ -8,6 +8,7 @@ variables:
     PROJECT_PLATFORM: 'Any CPU'
     PROJECT_CONFIG:   'Release'
     PROJECT_BIN:      'bin\$(PROJECT_PLATFORM)\$(PROJECT_CONFIG)\net45'
+    PROJECT_VCBIN:    'bin\x64\$(PROJECT_CONFIG)'
     PROJECT_PACKAGE:  '..\packages'
     PROJECT_NATIVE:   '..\resources\native'
     TEST_TOOL:        '$(PROJECT_PACKAGE)\OpenCover\4.7.922\tools\OpenCover.Console.exe'
@@ -127,6 +128,24 @@ steps:
     archiveType: 'zip'
     replaceExistingArchive: true
   displayName: 'Copy CubeICE Settings helper modules'
+
+- task: ArchiveFiles@2
+  inputs:
+    archiveFile: '$(Build.ArtifactStagingDirectory)\CubeIce.Context.zip'
+    rootFolderOrFile: 'Applications\$(PROJECT_APP).Com\Context\$(PROJECT_VCBIN)'
+    includeRootFolder: false
+    archiveType: 'zip'
+    replaceExistingArchive: true
+  displayName: 'Copy CubeICE ContextMenu modules'
+
+- task: ArchiveFiles@2
+  inputs:
+    archiveFile: '$(Build.ArtifactStagingDirectory)\CubeIce.QueryInfo.zip'
+    rootFolderOrFile: 'Applications\$(PROJECT_APP).Com\QueryInfo\$(PROJECT_VCBIN)'
+    includeRootFolder: false
+    archiveType: 'zip'
+    replaceExistingArchive: true
+  displayName: 'Copy CubeICE QueryInfo modules'
 
 - task: CopyFiles@2
   inputs:

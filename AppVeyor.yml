@@ -6,6 +6,7 @@ environment:
     PROJECT_NAME:     'Cube.FileSystem.SevenZip'
     PROJECT_APP:      'Ice'
     PROJECT_BIN:      'bin\%PLATFORM%\%CONFIGURATION%\net45'
+    PROJECT_VCBIN:    'bin\x64\%CONFIGURATION%'
     PROJECT_PACKAGE:  '..\packages'
     PROJECT_NATIVE:   '..\resources\native'
     TEST_TOOL:        '$(PROJECT_PACKAGE)\OpenCover\4.7.922\tools\OpenCover.Console.exe'
@@ -62,6 +63,8 @@ after_test:
     - xcopy /q /Y /I "Applications\%PROJECT_APP%\Progress\%PROJECT_BIN%" "CubeIce"
     - xcopy /q /Y /I "Applications\%PROJECT_APP%\Settings\%PROJECT_BIN%" "CubeIce.Settings"
     - xcopy /q /Y /I "Applications\%PROJECT_APP%\Associate\%PROJECT_BIN%" "CubeIce.Settings.Associate"
+    - xcopy /q /Y /I "Applications\%PROJECT_APP%.Com\Context\%PROJECT_VCBIN%" "CubeIce.Context"
+    - xcopy /q /Y /I "Applications\%PROJECT_APP%.Com\QueryInfo\%PROJECT_VCBIN%" "CubeIce.QueryInfo"
     - xcopy /q /Y /I "Tests\%PROJECT_BIN%\*.log" "%TEST_LOG%\"
     - xcopy /q /Y /I "Applications\%PROJECT_APP%\Tests\%PROJECT_BIN%\*.log" "%TEST_LOG%\"
     - xcopy /q /Y /I "%TEST_COVERAGE%" "%TEST_LOG%\"
@@ -69,4 +72,6 @@ artifacts:
     - path: 'CubeIce'
     - path: 'CubeIce.Settings'
     - path: 'CubeIce.Settings.Associate'
+    - path: 'CubeIce.Context'
+    - path: 'CubeIce.QueryInfo'
     - path: '%TEST_LOG%'
