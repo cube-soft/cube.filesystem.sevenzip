@@ -14,8 +14,6 @@
     <ProjectGuid>{4E6E949D-ECC5-42B1-BF66-2838947D397C}</ProjectGuid>
     <ProjectName>Cube.FileSystem.SevenZip.Ice.Com.QueryInfo</ProjectName>
     <RootNamespace>CubeFileSystemAppIceQueryInfo</RootNamespace>
-    <VCProjectVersion>15.0</VCProjectVersion>
-    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">

@@ -14,8 +14,6 @@
     <ProjectGuid>{C580D316-6704-483D-9930-CC063D3E0800}</ProjectGuid>
     <ProjectName>Cube.FileSystem.SevenZip.Ice.Com.Context</ProjectName>
     <RootNamespace>Cube.FileSystem.SevenZip.Ice.App.Context</RootNamespace>
-    <VCProjectVersion>15.0</VCProjectVersion>
-    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
