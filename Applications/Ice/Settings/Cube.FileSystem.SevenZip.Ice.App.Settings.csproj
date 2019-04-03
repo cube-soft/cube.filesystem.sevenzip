@@ -3,10 +3,11 @@
         <Version>0.9.1</Version>
         <Authors>CubeSoft</Authors>
         <Company>CubeSoft</Company>
-        <Product>CubeICE Settings</Product>
+        <Product>CubeIceSetting</Product>
         <Description>Settings application for CubeICE.</Description>
         <Copyright>Copyright © 2010 CubeSoft, Inc.</Copyright>
         <AssemblyName>CubeIce-Setting</AssemblyName>
+        <AssemblyTitle>CubeICE Setting</AssemblyTitle>
         <OutputType>WinExe</OutputType>
         <TargetFramework>net45</TargetFramework>
         <LangVersion>latest</LangVersion>
