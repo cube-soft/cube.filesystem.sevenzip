@@ -448,7 +448,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Properties {
         }
         
         /// <summary>
-        ///   指定されたファイルは未対応の圧縮形式か、または圧縮ファイルではないため解凍する事ができません。 に類似しているローカライズされた文字列を検索します。
+        ///   指定されたファイルは未対応の圧縮形式か、または圧縮ファイルではないため解凍する事ができません。もう1度ファイルの内容を確認して下さい。 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MessageUnkownFormat {
             get {

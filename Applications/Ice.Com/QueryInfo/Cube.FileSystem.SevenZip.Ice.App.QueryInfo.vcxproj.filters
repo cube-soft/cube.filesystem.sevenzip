@@ -1,25 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Program.cpp" />
-    <ClCompile Include="QueryInfo\QueryInfo.cpp">
-      <Filter>QueryInfo</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryInfo\QueryInfoFactory.cpp">
-      <Filter>QueryInfo</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryInfo\QueryInfoSettings.cpp">
-      <Filter>QueryInfo</Filter>
-    </ClCompile>
-    <ClCompile Include="SevenZip\ArchiveList.cpp">
-      <Filter>SevenZip</Filter>
-    </ClCompile>
-    <ClCompile Include="SevenZip\SevenZipLibrary.cpp">
-      <Filter>SevenZip</Filter>
-    </ClCompile>
-    <ClCompile Include="SevenZip\Stream.cpp">
-      <Filter>SevenZip</Filter>
-    </ClCompile>
+    <ClCompile Include="Sources\QueryInfo\QueryInfo.cpp" />
+    <ClCompile Include="Sources\QueryInfo\QueryInfoFactory.cpp" />
+    <ClCompile Include="Sources\QueryInfo\QueryInfoSettings.cpp" />
+    <ClCompile Include="Sources\SevenZip\ArchiveList.cpp" />
+    <ClCompile Include="Sources\SevenZip\SevenZipLibrary.cpp" />
+    <ClCompile Include="Sources\SevenZip\Stream.cpp" />
+    <ClCompile Include="Sources\Program.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.def" />
@@ -36,30 +24,14 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="QueryInfo\QueryInfo.h">
-      <Filter>QueryInfo</Filter>
-    </ClInclude>
-    <ClInclude Include="QueryInfo\QueryInfoFactory.h">
-      <Filter>QueryInfo</Filter>
-    </ClInclude>
-    <ClInclude Include="QueryInfo\QueryInfoSettings.h">
-      <Filter>QueryInfo</Filter>
-    </ClInclude>
-    <ClInclude Include="Resources.h" />
-    <ClInclude Include="SevenZip\ArchiveList.h">
-      <Filter>SevenZip</Filter>
-    </ClInclude>
-    <ClInclude Include="SevenZip\SevenZipLibrary.h">
-      <Filter>SevenZip</Filter>
-    </ClInclude>
-    <ClInclude Include="SevenZip\SevenZipInterface.h">
-      <Filter>SevenZip</Filter>
-    </ClInclude>
-    <ClInclude Include="SevenZip\Format.h">
-      <Filter>SevenZip</Filter>
-    </ClInclude>
-    <ClInclude Include="SevenZip\Stream.h">
-      <Filter>SevenZip</Filter>
-    </ClInclude>
+    <ClInclude Include="Sources\QueryInfo\QueryInfo.h" />
+    <ClInclude Include="Sources\QueryInfo\QueryInfoFactory.h" />
+    <ClInclude Include="Sources\QueryInfo\QueryInfoSettings.h" />
+    <ClInclude Include="Sources\SevenZip\ArchiveList.h" />
+    <ClInclude Include="Sources\SevenZip\Format.h" />
+    <ClInclude Include="Sources\SevenZip\SevenZipInterface.h" />
+    <ClInclude Include="Sources\SevenZip\SevenZipLibrary.h" />
+    <ClInclude Include="Sources\SevenZip\Stream.h" />
+    <ClInclude Include="Sources\Resources.h" />
   </ItemGroup>
 </Project>
