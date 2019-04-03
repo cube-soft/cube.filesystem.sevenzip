@@ -1,7 +1,7 @@
 trigger:
     - master
 pool:
-    vmImage: 'VS2017-Win2016'
+    vmImage: 'Windows-2019'
 variables:
     PROJECT_NAME:     'Cube.FileSystem.SevenZip'
     PROJECT_APP:      'Ice'
