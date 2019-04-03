@@ -15,6 +15,8 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Generics;
+using Cube.Log;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -255,11 +257,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void Create(string extension, string name)
         {
-            var s = (extension[0] == '.') ? extension : $".{extension}";
-            using (var key = Registry.ClassesRoot.CreateSubKey(s.ToLowerInvariant()))
+            using (var key = Registry.ClassesRoot.CreateSubKey(GetExtension(extension)))
             {
                 var prev = key.GetValue("") as string;
-                if (!string.IsNullOrEmpty(prev) && prev != name) key.SetValue(PreArchiver, prev);
+                if (prev.HasValue() && prev != name) key.SetValue(PreArchiver, prev);
                 key.SetValue("", name);
                 UpdateToolTip(key, ToolTip);
             }
@@ -276,13 +277,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void Delete(string extension)
         {
-            var name = GetSubKeyName(extension);
-            var cvt  = (extension[0] == '.') ? extension : $".{extension}";
-
-            using (var key = Registry.ClassesRoot.CreateSubKey(cvt.ToLowerInvariant()))
+            using (var key = Registry.ClassesRoot.CreateSubKey(GetExtension(extension)))
             {
                 var prev = key.GetValue(PreArchiver, "") as string;
-                if (!string.IsNullOrEmpty(prev))
+                if (prev.HasValue())
                 {
                     key.SetValue("", prev);
                     key.DeleteValue(PreArchiver, false);
@@ -291,7 +289,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 
                 UpdateToolTip(key, false);
             }
-            Registry.ClassesRoot.DeleteSubKeyTree(name, false);
+            Registry.ClassesRoot.DeleteSubKeyTree(GetSubKeyName(extension), false);
         }
 
         /* ----------------------------------------------------------------- */
@@ -303,12 +301,21 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void DeleteUserChoise(string extension)
+        private void DeleteUserChoise(string extension) => this.LogWarn(() =>
         {
-            var s  = (extension[0] == '.') ? extension : $".{extension}";
-            var sk = $@"Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\{s}\UserChoise";
-            Registry.CurrentUser.DeleteSubKeyTree(sk, false);
-        }
+            var src  = "UserChoice";
+            var root = @"Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts";
+            var name = $@"{root}\{GetExtension(extension)}";
+
+            using(var k = Registry.CurrentUser.OpenSubKey(name, true))
+            {
+                if (k != null && k.GetSubKeyNames().Any(e => e.FuzzyEquals(src)))
+                {
+                    k.DeleteSubKey(src, false);
+                    this.LogDebug($"Reset:{name.Quote()}");
+                }
+            }
+        });
 
         /* ----------------------------------------------------------------- */
         ///
@@ -321,6 +328,18 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private string GetSubKeyName(string id) =>
             $"{System.IO.Path.GetFileNameWithoutExtension(FileName)}_{id}".ToLowerInvariant();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetExtension
+        ///
+        /// <summary>
+        /// Gets the normalized extension.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private string GetExtension(string src) =>
+            ((src[0] == '.') ? src : $".{src}").ToLowerInvariant();
 
         #endregion
 
