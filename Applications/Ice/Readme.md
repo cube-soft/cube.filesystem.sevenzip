@@ -11,9 +11,11 @@ CubeICE は、様々な形式に対応した圧縮・解凍ソフトです。
 圧縮・解凍したいファイルを選択して右クリックから表示されるコンテキストメニューで
 選択するかショートカットにドラッグ&ドロップする事によって圧縮・解凍を行う事ができます。
 
-CubeICE を使用するためには、Microsoft .NET Framework 3.5 以上がインストール
-されている必要があります。.NET Framework 3.5 は、以下の URL からダウンロードして下さい。  
-https://www.microsoft.com/ja-jp/download/details.aspx?id=22
+CubeICE を使用するためには .NET Framework 3.5 以降がインストールされている必要があります。
+.NET Framework は、以下の URL からダウンロードして下さい。
+
+* .NET Downloads for Linux, macOS, and Windows  
+  https://dotnet.microsoft.com/download
 
 ### 動作環境
 
@@ -31,17 +33,20 @@ CubeICE はエクスプローラーなどの右クリックから表示される
 該当プログラムは、32bit 版の場合は cubeicectx-vXX.dll、
 64bit 版の場合は cubeicectx-vXX-x86.dll および cubeicectx-vXX-x64.dll です。
 
+### 問題が発生した場合
+
+CubeICE は、以下のフォルダに実行ログを出力しています（%UserName% は、ログオン中のユーザ名に置換）。  
+```C:\Users\%UserName%\AppData\Local\CubeSoft\CubeIce\Log```  
+問題が発生した時は、これらのログを添付して support@cube-soft.jp までご連絡をお願いいたします。
+
 ## 利用ライブラリ
 
 CubeICE は、以下のライブラリを利用しています。
 それぞれのライブラリについては、記載した URL から取得することができます。
 
 * 7-Zip
-    - GNU Lesser　General Public License
+    - GNU Lesser General Public License
     - https://www.7-zip.org/
-* バベル
-    - http://tricklib.com/cxx/ex/babel/
-    - http://tricklib.com/license.htm
 * log4net
     - Apache License, Version 2.0
     - https://logging.apache.org/log4net/
@@ -50,13 +55,16 @@ CubeICE は、以下のライブラリを利用しています。
     - MIT License
     - https://alphafs.alphaleonis.com/
     - https://www.nuget.org/packages/AlphaFS/
-* AsyncBridge
-    - MIT License
-    - https://omermor.github.io/AsyncBridge/
-    - https://www.nuget.org/packages/AsyncBridge/
 
 ## バージョン履歴
 
+* 2019/04/05 version 0.9.1β
+    - 特定の条件でファイルの関連付け設定が機能しない不都合を修正
+    - ファイル一覧の表示機能を完全に無効化できるように修正
+    - タスクバーの進捗表示機能に関する不都合を修正
+    - パスワード入力画面での不都合を修
+    - 未対応形式のファイルが指定された時のエラーメッセージを修正
+    - 7-Zip 19.00 の修正を適用
 * 2018/05/25 version 0.9.0β
     - コンテキストメニューのカスタマイズ画面を再実装
     - 自己解凍形式の圧縮ファイルを CubeICE 経由で解凍した時にエラーとなる不都合を修正
@@ -120,7 +128,7 @@ CubeICE は、以下のライブラリを利用しています。
     - ファイルを作成できないフォルダが保存先に指定された場合に、エラーメッセージを表示するように修正
 * 2011/10/26 version 0.6.5β
     - CubeICE 設定のレイアウトを解像度 800x600 の画面内に収まるように修正
-    - 複数の圧縮ファイルを選択して解凍を実行した際に，全ての解凍処理が終了するまでプログレスバーが表示され続ける（複数のプログレスバーが表示される状態となる）不都合を修正
+    - 複数の圧縮ファイルを選択して解凍を実行した際に、全ての解凍処理が終了するまでプログレスバーが表示され続ける不都合を修正
     - 圧縮ファイルに保存されているコメント情報が原因で解凍に失敗する不都合を修正
     - 「フォルダを自動生成する」オプションに「単一ファイルの場合は生成しない」サブオプションを追加
 * 2011/10/05 version 0.6.4β
