@@ -165,7 +165,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void Update(string extension, bool enabled)
         {
-            if (string.IsNullOrEmpty(extension)) return;
+            if (!extension.HasValue()) return;
             if (enabled) Create(extension);
             else Delete(extension);
         }
@@ -204,7 +204,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void Create(string extension)
         {
-            if (string.IsNullOrEmpty(FileName)) return;
+            if (!FileName.HasValue()) return;
 
             var id   = extension.TrimStart('.');
             var root = Registry.ClassesRoot;

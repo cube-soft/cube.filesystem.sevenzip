@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Generics;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -267,9 +268,9 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         public IEnumerable<string> GetFilters() =>
-            string.IsNullOrEmpty(Filters) ?
-            new string[0] :
-            Filters.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            Filters.HasValue() ?
+            Filters.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries) :
+            new string[0];
 
         #endregion
 

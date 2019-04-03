@@ -248,7 +248,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private string GetFileName(string name)
         {
-            var dir = !string.IsNullOrEmpty(Directory) ?
+            var dir = Directory.HasValue() ?
                       Directory :
                       Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             return System.IO.Path.Combine(dir, name);

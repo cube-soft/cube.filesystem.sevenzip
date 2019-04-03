@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Generics;
 using Cube.Log;
 using System;
 using System.Linq;
@@ -179,7 +180,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         {
             var fmt   = GetFormat();
             var dest  = GetTmp();
-            var query = !string.IsNullOrEmpty(RtSettings.Password) || Request.Password ?
+            var query = RtSettings.Password.HasValue() || Request.Password ?
                         new Query<string>(e => RaisePasswordRequested(e)) :
                         null;
 
@@ -196,7 +197,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
             }
 
             // Move
-            if (string.IsNullOrEmpty(Tmp) || !IO.Exists(Tmp)) return;
+            if (!IO.Exists(Tmp)) return;
             IO.Move(Tmp, Destination, true);
         }
 
@@ -224,8 +225,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
                 case Format.BZip2:
                 case Format.GZip:
                 case Format.XZ:
-                    RtSettings = new ArchiveRtSettings(Format.Tar, Settings.IO);
-                    RtSettings.CompressionMethod = f.ToMethod();
+                    RtSettings = new ArchiveRtSettings(Format.Tar, Settings.IO) { CompressionMethod = f.ToMethod() };
                     break;
                 default:
                     RaiseRtSettingsRequested();
@@ -291,7 +291,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /* ----------------------------------------------------------------- */
         private void RaisePasswordRequested(QueryEventArgs<string, string> e)
         {
-            if (!string.IsNullOrEmpty(RtSettings.Password))
+            if (RtSettings.Password.HasValue())
             {
                 e.Result = RtSettings.Password;
                 e.Cancel = false;

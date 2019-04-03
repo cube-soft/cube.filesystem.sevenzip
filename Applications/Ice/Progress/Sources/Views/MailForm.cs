@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Generics;
 using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
@@ -117,7 +118,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /* ----------------------------------------------------------------- */
         private void AttachFile(Mapi32.MapiMessage mms)
         {
-            if (string.IsNullOrEmpty(Attach)) return;
+            if (!Attach.HasValue()) return;
 
             var size = Marshal.SizeOf(typeof(Mapi32.MapiFileDesc));
             var ptr  = Marshal.AllocHGlobal(size);

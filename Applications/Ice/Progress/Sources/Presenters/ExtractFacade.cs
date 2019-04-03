@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using Cube.FileSystem.Mixin;
 using Cube.Forms;
+using Cube.Generics;
 using Cube.Log;
 using System;
 using System.Collections.Generic;
@@ -279,7 +280,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /* ----------------------------------------------------------------- */
         private void ExtractCore(ArchiveReader src, IProgress<Report> progress)
         {
-            var retry = false;
+            bool retry;
             do
             {
                 try
@@ -421,7 +422,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
 
             foreach (var item in items)
             {
-                if (string.IsNullOrEmpty(item.FullName)) continue;
+                if (!item.FullName.HasValue()) continue;
                 var root = GetRootDirectory(item, "*"); // Count all files as "*"
                 var key = root.ToLowerInvariant();
                 if (!dest.ContainsKey(key)) dest.Add(key, root);
