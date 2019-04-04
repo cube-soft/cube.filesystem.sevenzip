@@ -457,6 +457,15 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Properties {
         }
         
         /// <summary>
+        ///   CubeICE に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string TitleDefault {
+            get {
+                return ResourceManager.GetString("TitleDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   CubeICE エラー に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string TitleError {

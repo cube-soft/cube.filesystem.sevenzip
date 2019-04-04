@@ -340,7 +340,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
             var ss = new System.Text.StringBuilder();
             ss.Append($"{ratio}%");
             if (FileName.HasValue()) ss.Append($" - {FileName}");
-            ss.Append($" - {ProductName}");
+            ss.Append($" - {Properties.Resources.TitleDefault}");
             Text = ss.ToString();
         }
 

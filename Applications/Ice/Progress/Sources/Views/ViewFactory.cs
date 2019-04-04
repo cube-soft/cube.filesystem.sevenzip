@@ -192,7 +192,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
                           Properties.Resources.MessageUnexpectedError;
             var title   = e.Title.HasValue() ?
                           e.Title :
-                          Application.ProductName;
+                          Properties.Resources.TitleDefault;
 
             e.Result = MessageBox.Show(message, title, e.Buttons, e.Icon);
         }
