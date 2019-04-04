@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <Version>1.15.0</Version>
-        <Authors>CubeSoft</Authors>
+        <Authors>clown;cube-soft</Authors>
         <Company>CubeSoft</Company>
         <Description>7-Zip wrapper library for .NET Framework.</Description>
         <Copyright>Copyright © 2010 CubeSoft, Inc.</Copyright>

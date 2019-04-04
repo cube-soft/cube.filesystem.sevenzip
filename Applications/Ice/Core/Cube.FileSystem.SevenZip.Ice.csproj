@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <Version>0.9.1</Version>
-        <Authors>CubeSoft</Authors>
+        <Authors>clown;cube-soft</Authors>
         <Company>CubeSoft</Company>
-        <Description>Core library for .NET Framework.</Description>
+        <Description>Core library for CubeICE.</Description>
         <Copyright>Copyright © 2010 CubeSoft, Inc.</Copyright>
         <AssemblyName>Cube.FileSystem.SevenZip.Ice</AssemblyName>
         <TargetFramework>net45</TargetFramework>

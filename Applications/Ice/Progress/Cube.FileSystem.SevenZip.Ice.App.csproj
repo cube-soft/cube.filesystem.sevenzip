@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
+    <PropertyGroup>
         <Version>0.9.1</Version>
-        <Authors>CubeSoft</Authors>
+        <Authors>clown;cube-soft</Authors>
         <Company>CubeSoft</Company>
         <Product>CubeIce</Product>
         <Description>GUI application for creating and/or extracting archives.</Description>
