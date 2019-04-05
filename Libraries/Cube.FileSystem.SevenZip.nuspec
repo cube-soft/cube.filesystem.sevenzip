@@ -14,7 +14,7 @@
         <iconUrl>https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Icon.png?raw=true</iconUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <dependencies>
-            <dependency id="Cube.FileSystem" version="1.14.0" />
+            <dependency id="Cube.FileSystem" version="1.15.0" />
         </dependencies>
     </metadata>
     <files>
