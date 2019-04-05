@@ -17,19 +17,20 @@
 # --------------------------------------------------------------------------- #
 require 'rake'
 require 'rake/clean'
-require 'fileutils'
 
 # --------------------------------------------------------------------------- #
 # configuration
 # --------------------------------------------------------------------------- #
 PROJECT     = 'Cube.FileSystem.SevenZip'
 APPLICATION = 'Ice'
+LIBRARY     = '../packages'
 NATIVE      = '../resources/native'
 BRANCHES    = ['stable', 'net35']
 FRAMEWORKS  = ['net45', 'net35']
 PLATFORMS   = ['Any CPU', 'x86', 'x64']
 CONFIGS     = ['Release', 'Debug']
 COPIES      = ['Tests', 'Applications/Ice/Tests', 'Applications/Ice/Progress']
+PACKAGES    = ["Libraries/#{PROJECT}.nuspec"]
 TESTCASES   = {
     "#{PROJECT}.Tests"     => 'Tests',
     "#{PROJECT}.Ice.Tests" => 'Applications/Ice/Tests'
@@ -38,32 +39,52 @@ TESTCASES   = {
 # --------------------------------------------------------------------------- #
 # commands
 # --------------------------------------------------------------------------- #
-BUILD   = 'msbuild /t:Clean,Build /m /verbosity:minimal /p:Configuration=Release;Platform="Any CPU";GeneratePackageOnBuild=false'
-PACK    = 'nuget pack -Properties "Configuration=Release;Platform=AnyCPU"'
-TEST    = '../packages/NUnit.ConsoleRunner/3.10.0/tools/nunit3-console.exe'
+BUILD = 'msbuild /t:Clean,Build /m /verbosity:minimal /p:Configuration=Release;Platform="Any CPU";GeneratePackageOnBuild=false'
+PACK  = 'nuget pack -Properties "Configuration=Release;Platform=AnyCPU"'
+TEST  = '../packages/NUnit.ConsoleRunner/3.10.0/tools/nunit3-console.exe'
 
 # --------------------------------------------------------------------------- #
 # clean
 # --------------------------------------------------------------------------- #
 CLEAN.include("#{PROJECT}.*.nupkg")
 CLEAN.include("../packages/cube.*")
-CLEAN.include(%w{bin obj}.map{ |e| "**/#{e}" })
+CLEAN.include(%w{bin obj}.map { |e| "**/#{e}" })
 
 # --------------------------------------------------------------------------- #
 # default
 # --------------------------------------------------------------------------- #
-desc "Clean objects and pack nupkg."
-task :default => [:clean, :pack]
+desc "Build the solution and create NuGet packages."
+task :default => [:clean_build, :pack]
 
 # --------------------------------------------------------------------------- #
 # pack
 # --------------------------------------------------------------------------- #
-desc "Pack nupkg in the net35 branch."
+desc "Create NuGet packages in the net35 branch."
 task :pack do
-    BRANCHES.each { |e| Rake::Task[:build].invoke(e) }
     sh("git checkout net35")
-    sh("#{PACK} Libraries/#{PROJECT}.nuspec")
+    PACKAGES.each { |e| sh("#{PACK} #{e}") }
     sh("git checkout master")
+end
+
+# --------------------------------------------------------------------------- #
+# clean_build
+# --------------------------------------------------------------------------- #
+desc "Clean objects and build the solution in pre-defined branches."
+task :clean_build => [:clean] do
+    BRANCHES.each { |e|
+        sh("git checkout #{e}")
+        rm_rf("#{LIBRARY}/cube.*")
+        Rake::Task[:build].execute
+    }
+end
+
+# --------------------------------------------------------------------------- #
+# build
+# --------------------------------------------------------------------------- #
+desc "Build the solution in the current branch."
+task :build do
+    sh("nuget restore #{PROJECT}.sln")
+    sh("#{BUILD} #{PROJECT}.sln")
 end
 
 # --------------------------------------------------------------------------- #
@@ -83,29 +104,19 @@ task :test => [:build] do
 end
 
 # --------------------------------------------------------------------------- #
-# build
-# --------------------------------------------------------------------------- #
-desc "Build the solution in the specified branch."
-task :build, [:branch] do |_, e|
-    e.with_defaults(branch: '')
-    sh("git checkout #{e.branch}") if (!e.branch.empty?)
-    sh("nuget restore #{PROJECT}.#{APPLICATION}.sln")
-    sh("#{BUILD} #{PROJECT}.#{APPLICATION}.sln")
-end
-
-# --------------------------------------------------------------------------- #
 # copy
 # --------------------------------------------------------------------------- #
 desc "Copy resources to the bin directories."
 task :copy, [:framework] do |_, e|
-    src = (e.framework != nil) ? [e.framework] : FRAMEWORKS
-    src.product(PLATFORMS, CONFIGS) { |set|
+    fw = (e.framework != nil) ? [e.framework] : FRAMEWORKS
+    fw.product(PLATFORMS, CONFIGS) { |set|
         pf  = (set[1] == 'Any CPU') ? 'x64' : set[1]
         bin = ['bin', set[1], set[2], set[0]].join('/')
         COPIES.each { |root|
+            src  = Dir::glob("#{NATIVE}/#{pf}/7z/7z.*")
             dest = "#{root}/#{bin}"
-            FileUtils.mkdir_p("#{dest}")
-            FileUtils.cp_r(Dir.glob("#{NATIVE}/#{pf}/7z/7z.*"), "#{dest}")
+            RakeFileUtils::mkdir_p(dest)
+            RakeFileUtils::cp_r(src, dest)
         }
     }
 end

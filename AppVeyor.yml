@@ -3,18 +3,18 @@ image: Visual Studio 2019 Preview
 platform: Any CPU
 configuration: Release
 environment:
-    PROJECT_NAME:     'Cube.FileSystem.SevenZip'
-    PROJECT_APP:      'Ice'
-    PROJECT_BIN:      'bin\%PLATFORM%\%CONFIGURATION%\net45'
-    PROJECT_VCBIN:    'bin\x64\%CONFIGURATION%'
-    PROJECT_PACKAGE:  '..\packages'
-    PROJECT_NATIVE:   '..\resources\native'
-    TEST_TOOL:        '$(PROJECT_PACKAGE)\OpenCover\4.7.922\tools\OpenCover.Console.exe'
-    TEST_CORETOOL:    'nunit3-console.exe'
-    TEST_FILTERS:     '+[Cube*]* -[*]*NativeMethods -[*]*Properties.* -[*]*Form -[*]*.Program'
-    TEST_RESULT:      'TestResult.xml'
-    TEST_COVERAGE:    'CoverResults.xml'
-    TEST_LOG:         'TestResults'
+    PROJECT_NAME:   'Cube.FileSystem.SevenZip'
+    PROJECT_APP:    'Ice'
+    PROJECT_BIN:    'bin\%PLATFORM%\%CONFIGURATION%\net45'
+    PROJECT_VCBIN:  'bin\x64\%CONFIGURATION%'
+    PACKAGE_LIB:    '..\packages'
+    PROJECT_NATIVE: '..\resources\native'
+    TEST_TOOL:      '$(PACKAGE_LIB)\OpenCover\4.7.922\tools\OpenCover.Console.exe'
+    TEST_CORETOOL:  'nunit3-console.exe'
+    TEST_FILTERS:   '+[Cube*]* -[*]*NativeMethods -[*]*Properties.* -[*]*Form -[*]*.Program'
+    TEST_RESULT:    'TestResult.xml'
+    TEST_COVERAGE:  'CoverResults.xml'
+    TEST_LOG:       'TestResults'
 branches:
     only:
         - master

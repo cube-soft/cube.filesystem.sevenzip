@@ -3,20 +3,20 @@ trigger:
 pool:
     vmImage: 'Windows-2019'
 variables:
-    PROJECT_NAME:     'Cube.FileSystem.SevenZip'
-    PROJECT_APP:      'Ice'
-    PROJECT_PLATFORM: 'Any CPU'
-    PROJECT_CONFIG:   'Release'
-    PROJECT_BIN:      'bin\$(PROJECT_PLATFORM)\$(PROJECT_CONFIG)\net45'
-    PROJECT_VCBIN:    'bin\x64\$(PROJECT_CONFIG)'
-    PROJECT_PACKAGE:  '..\packages'
-    PROJECT_NATIVE:   '..\resources\native'
-    TEST_TOOL:        '$(PROJECT_PACKAGE)\OpenCover\4.7.922\tools\OpenCover.Console.exe'
-    TEST_CORETOOL:    '$(PROJECT_PACKAGE)\NUnit.ConsoleRunner\3.10.0\tools\nunit3-console.exe'
-    TEST_FILTERS:     '+[Cube*]* -[*]*NativeMethods -[*]*Properties.* -[*]*Form -[*]*.Program'
-    TEST_RESULT:      'TestResult.xml'
-    TEST_COVERAGE:    'CoverResults.xml'
-    TEST_LOG:         '$(Build.ArtifactStagingDirectory)\TestResults'
+    PROJECT_NAME:   'Cube.FileSystem.SevenZip'
+    PROJECT_APP:    'Ice'
+    PACKAGE_ARCH:   'Any CPU'
+    PROJECT_CONFIG: 'Release'
+    PROJECT_BIN:    'bin\$(PACKAGE_ARCH)\$(PROJECT_CONFIG)\net45'
+    PROJECT_VCBIN:  'bin\x64\$(PROJECT_CONFIG)'
+    PACKAGE_LIB:    '..\packages'
+    PROJECT_NATIVE: '..\resources\native'
+    TEST_TOOL:      '$(PACKAGE_LIB)\OpenCover\4.7.922\tools\OpenCover.Console.exe'
+    TEST_CORETOOL:  '$(PACKAGE_LIB)\NUnit.ConsoleRunner\3.10.0\tools\nunit3-console.exe'
+    TEST_FILTERS:   '+[Cube*]* -[*]*NativeMethods -[*]*Properties.* -[*]*Form -[*]*.Program'
+    TEST_RESULT:    'TestResult.xml'
+    TEST_COVERAGE:  'CoverResults.xml'
+    TEST_LOG:       '$(Build.ArtifactStagingDirectory)\TestResults'
 
 steps:
 - task: NuGetToolInstaller@0
@@ -31,7 +31,7 @@ steps:
 - task: VSBuild@1
   inputs:
     solution: '$(PROJECT_NAME).$(PROJECT_APP).sln'
-    platform: '$(PROJECT_PLATFORM)'
+    platform: '$(PACKAGE_ARCH)'
     configuration: '$(PROJECT_CONFIG)'
   displayName: 'Build solution'
 
