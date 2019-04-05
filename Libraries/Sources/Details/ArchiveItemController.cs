@@ -164,7 +164,7 @@ namespace Cube.FileSystem.SevenZip
             ai.DirectoryName        = info?.DirectoryName;
 
             if (ai.FullName == ai.RawName) return;
-            this.LogDebug(string.Join("\t", $"Escape:{ai.FullName}", $"Raw:{ai.RawName}"));
+            this.LogDebug($"Escape:{ai.FullName}", $"Raw:{ai.RawName}");
         }
 
         /* ----------------------------------------------------------------- */
