@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package >
+    <metadata>
+        <version>1.15.0</version>
+        <id>Cube.FileSystem.SevenZip</id>
+        <title>Cube.FileSystem.SevenZip</title>
+        <authors>clown,cube-soft</authors>
+        <owners>clown,cube-soft</owners>
+        <description>7-Zip wrapper library for .NET Framework.</description>
+        <copyright>Copyright © 2010 CubeSoft, Inc.</copyright>
+        <tags>Cube 7-Zip 7z SevenZip Zip</tags>
+        <license type="expression">LGPL-3.0-or-later</license>
+        <projectUrl>https://github.com/cube-soft/Cube.FileSystem.SevenZip</projectUrl>
+        <iconUrl>https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Icon.png?raw=true</iconUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <dependencies>
+            <dependency id="Cube.FileSystem" version="1.14.0" />
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="bin\Any CPU\Release\net45\Cube.FileSystem.SevenZip.*" target="lib\net45" />
+        <file src="bin\Any CPU\Release\net35\Cube.FileSystem.SevenZip.*" target="lib\net35" />
+    </files>
+</package>
