@@ -83,8 +83,8 @@ end
 # --------------------------------------------------------------------------- #
 desc "Build the solution in the current branch."
 task :build do
-    sh("nuget restore #{PROJECT}.sln")
-    sh("#{BUILD} #{PROJECT}.sln")
+    sh("nuget restore #{PROJECT}.#{APPLICATION}.sln")
+    sh("#{BUILD} #{PROJECT}.#{APPLICATION}.sln")
 end
 
 # --------------------------------------------------------------------------- #
