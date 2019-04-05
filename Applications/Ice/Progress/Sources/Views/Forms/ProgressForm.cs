@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Generics;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -338,8 +339,8 @@ namespace Cube.FileSystem.SevenZip.Ice.App
             var ratio = (int)(Value / (double)Unit * 100.0);
             var ss = new System.Text.StringBuilder();
             ss.Append($"{ratio}%");
-            if (!string.IsNullOrEmpty(FileName)) ss.Append($" - {FileName}");
-            ss.Append($" - {ProductName}");
+            if (FileName.HasValue()) ss.Append($" - {FileName}");
+            ss.Append($" - {Properties.Resources.TitleDefault}");
             Text = ss.ToString();
         }
 

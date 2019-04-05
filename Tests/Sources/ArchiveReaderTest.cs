@@ -58,12 +58,12 @@ namespace Cube.FileSystem.SevenZip.Tests
 
             using (var obj = new ArchiveReader(src, password)) obj.Extract(dest, Create(report));
 
-            foreach (var cmp in Expect(filename))
+            foreach (var cmp in GetExpectedValues(filename))
             {
                 var fi = IO.Get(IO.Combine(dest, cmp.Key));
 
                 Assert.That(fi.Exists,         Is.True, cmp.Key);
-                Assert.That(fi.Length,         Is.EqualTo(cmp.Value), cmp.Key);
+                Assert.That(fi.Length,         Is.EqualTo(cmp.Value.Length), cmp.Key);
                 Assert.That(fi.CreationTime,   Is.Not.EqualTo(DateTime.MinValue), cmp.Key);
                 Assert.That(fi.LastWriteTime,  Is.Not.EqualTo(DateTime.MinValue), cmp.Key);
                 Assert.That(fi.LastAccessTime, Is.Not.EqualTo(DateTime.MinValue), cmp.Key);
@@ -88,7 +88,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             using (var obj = new ArchiveReader(src, password))
             {
                 var items = obj.Items.ToList();
-                var cmp   = Expect(filename);
+                var cmp   = GetExpectedValues(filename);
                 var keys  = cmp.Keys.ToList();
 
                 Assert.That(items.Count, Is.EqualTo(cmp.Count));
@@ -99,11 +99,12 @@ namespace Cube.FileSystem.SevenZip.Tests
                     var name = keys[i];
                     Assert.That(items[i].Index,    Is.EqualTo(i), name);
                     Assert.That(items[i].FullName, Is.EqualTo(name), name);
+                    Assert.That(items[i].Crc,      Is.EqualTo(cmp[name].Crc), name);
 
                     items[i].Extract(dest);
                     var fi = IO.Get(IO.Combine(dest, name));
                     Assert.That(fi.Exists,         Is.True, name);
-                    Assert.That(fi.Length,         Is.EqualTo(cmp[name]), name);
+                    Assert.That(fi.Length,         Is.EqualTo(cmp[name].Length), name);
                     Assert.That(fi.CreationTime,   Is.Not.EqualTo(DateTime.MinValue), name);
                     Assert.That(fi.LastWriteTime,  Is.Not.EqualTo(DateTime.MinValue), name);
                     Assert.That(fi.LastAccessTime, Is.Not.EqualTo(DateTime.MinValue), name);
@@ -214,14 +215,29 @@ namespace Cube.FileSystem.SevenZip.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Expect
+        /// Expected
+        ///
+        /// <summary>
+        /// Represents the expected values.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private class Expected
+        {
+            public long Length { get; set; }
+            public uint Crc { get; set; }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetExpectedValues
         ///
         /// <summary>
         /// Creates the expected result from the specified file.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private IDictionary<string, long> Expect(string filename)
+        private IDictionary<string, Expected> GetExpectedValues(string filename)
         {
             var src = GetExamplesWith("Expected", $"{filename}.txt");
             var csv = new TextFieldParser(src, System.Text.Encoding.UTF8)
@@ -232,11 +248,15 @@ namespace Cube.FileSystem.SevenZip.Tests
                 TrimWhiteSpace            = true,
             };
 
-            var dest = new Dictionary<string, long>();
+            var dest = new Dictionary<string, Expected>();
             while (!csv.EndOfData)
             {
                 var row = csv.ReadFields();
-                dest.Add(row[0], long.Parse(row[1]));
+                dest.Add(row[0], new Expected
+                {
+                    Length = long.Parse(row[1]),
+                    Crc    = uint.Parse(row[2])
+                });
             }
             return dest;
         }

@@ -1,2 +1,2 @@
-"good.txt",19
-"tmp\evil.txt",20
+"good.txt",19,0
+"tmp\evil.txt",20,0

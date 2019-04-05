@@ -512,12 +512,11 @@ namespace Cube.FileSystem.SevenZip.Ice.App
 
             if (skip) return;
 
-            var exec = !string.IsNullOrEmpty(Settings.Value.Explorer) ?
+            var exec = Settings.Value.Explorer.HasValue() ?
                        Settings.Value.Explorer :
                        "explorer.exe";
 
-            this.LogDebug($"Open:{src}\tExplorer:{exec}");
-
+            this.LogDebug($"Open:{src.Quote()}", $"Explorer:{exec.Quote()}");
             OnOpenDirectoryRequested(KeyValueEventArgs.Create(exec, src));
         }
 
@@ -536,8 +535,21 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         {
             this.LogError(error);
             if (!Settings.Value.ErrorReport) return;
-            OnMessageReceived(new MessageEventArgs(error.Message, Properties.Resources.TitleError));
+            OnMessageReceived(new MessageEventArgs(GetMessage(error), Properties.Resources.TitleError));
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetMessage
+        ///
+        /// <summary>
+        /// Gets the message from the specified exception.
+        /// </summary>
+        ///
+        /// <param name="src">Exception object.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected virtual string GetMessage(Exception src) => src.Message;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -571,10 +583,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /* ----------------------------------------------------------------- */
         protected void SetTmp(string directory)
         {
-            if (string.IsNullOrEmpty(Tmp))
-            {
-                Tmp = IO.Combine(directory, Guid.NewGuid().ToString("D"));
-            }
+            if (!Tmp.HasValue()) Tmp = IO.Combine(directory, Guid.NewGuid().ToString("D"));
         }
 
         #endregion
@@ -601,8 +610,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
             }
 
             IO.Failed -= WhenFailed;
-            try { if (!string.IsNullOrEmpty(Tmp)) IO.Delete(Tmp); }
-            catch (Exception err) { this.LogWarn(err); }
+            IO.TryDelete(Tmp);
         }
 
         /* ----------------------------------------------------------------- */
@@ -636,7 +644,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
                     break;
             }
 
-            return !string.IsNullOrEmpty(settings.SaveDirectoryName) ?
+            return settings.SaveDirectoryName.HasValue() ?
                    settings.SaveDirectoryName :
                    Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         }

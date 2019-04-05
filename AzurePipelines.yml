@@ -1,0 +1,175 @@
+trigger:
+    - master
+pool:
+    vmImage: 'Windows-2019'
+variables:
+    PROJECT_NAME:   'Cube.FileSystem.SevenZip'
+    PROJECT_APP:    'Ice'
+    PACKAGE_ARCH:   'Any CPU'
+    PROJECT_CONFIG: 'Release'
+    PROJECT_BIN:    'bin\$(PACKAGE_ARCH)\$(PROJECT_CONFIG)\net45'
+    PROJECT_VCBIN:  'bin\x64\$(PROJECT_CONFIG)'
+    PACKAGE_LIB:    '..\packages'
+    PROJECT_NATIVE: '..\resources\native'
+    TEST_TOOL:      '$(PACKAGE_LIB)\OpenCover\4.7.922\tools\OpenCover.Console.exe'
+    TEST_CORETOOL:  '$(PACKAGE_LIB)\NUnit.ConsoleRunner\3.10.0\tools\nunit3-console.exe'
+    TEST_FILTERS:   '+[Cube*]* -[*]*NativeMethods -[*]*Properties.* -[*]*Form -[*]*.Program'
+    TEST_RESULT:    'TestResult.xml'
+    TEST_COVERAGE:  'CoverResults.xml'
+    TEST_LOG:       '$(Build.ArtifactStagingDirectory)\TestResults'
+
+steps:
+- task: NuGetToolInstaller@0
+  inputs:
+    versionSpec: '>= 4.9'
+  displayName: 'Use NuGet 4.9 or later'
+
+- script: |
+    nuget restore "$(PROJECT_NAME).$(PROJECT_APP).sln"
+  displayName: 'Restore NuGet packages'
+
+- task: VSBuild@1
+  inputs:
+    solution: '$(PROJECT_NAME).$(PROJECT_APP).sln'
+    platform: '$(PACKAGE_ARCH)'
+    configuration: '$(PROJECT_CONFIG)'
+  displayName: 'Build solution'
+
+- task: DownloadGitHubRelease@0
+  inputs:
+    connection: 'cube-soft-ci'
+    userRepository: 'cube-soft/7z'
+    itemPattern: '7z-*-x64.zip'
+    downloadPath: '$(Build.SourcesDirectory)'
+  displayName: 'Download 7-Zip modules'
+
+- task: ExtractFiles@1
+  inputs:
+    archiveFilePatterns: '7z-*-x64.zip'
+    destinationFolder: 'Tests\$(PROJECT_BIN)'
+    cleanDestinationFolder: false
+  displayName: 'Extract archives to the library tests directory'
+
+- script: >
+    "$(TEST_TOOL)"
+    -log:Error
+    -register:user
+    -target:"$(TEST_CORETOOL)"
+    -targetargs:"$(PROJECT_NAME).Tests.dll"
+    -targetdir:"Tests\$(PROJECT_BIN)"
+    -returntargetcode
+    -hideskipped:All
+    -output:"$(TEST_COVERAGE)"
+    -filter:"$(TEST_FILTERS)"
+  displayName: 'Run library tests via OpenCover and NUnit'
+
+- task: ExtractFiles@1
+  inputs:
+    archiveFilePatterns: '7z-*-x64.zip'
+    destinationFolder: 'Applications\$(PROJECT_APP)\Tests\$(PROJECT_BIN)'
+    cleanDestinationFolder: false
+  displayName: 'Extract archives to the application tests directory'
+
+- script: >
+    "$(TEST_TOOL)"
+    -log:Error
+    -register:user
+    -target:"$(TEST_CORETOOL)"
+    -targetargs:"$(PROJECT_NAME).$(PROJECT_APP).Tests.dll"
+    -targetdir:"Applications\$(PROJECT_APP)\Tests\$(PROJECT_BIN)"
+    -returntargetcode
+    -hideskipped:All
+    -mergeoutput
+    -output:"$(TEST_COVERAGE)"
+    -filter:"$(TEST_FILTERS)"
+  displayName: 'Run application tests via OpenCover and NUnit'
+
+- script: |
+    pip install codecov
+    codecov -f "$(TEST_COVERAGE)" -t $(CODECOV_TOKEN)
+  displayName: 'Send coverage results to Codecov'
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'NUnit'
+    testResultsFiles: '**\$(TEST_RESULT)'
+  displayName: 'Publish test results'
+
+- task: NuGetCommand@2
+  inputs:
+    command: 'pack'
+    packagesToPack: 'Libraries\$(PROJECT_NAME).csproj'
+    configuration: '$(PROJECT_CONFIG)'
+  displayName: 'Create NuGet package'
+
+- task: ArchiveFiles@2
+  inputs:
+    archiveFile: '$(Build.ArtifactStagingDirectory)/CubeIce.zip'
+    rootFolderOrFile: 'Applications\$(PROJECT_APP)\Progress\$(PROJECT_BIN)'
+    includeRootFolder: false
+    archiveType: 'zip'
+    replaceExistingArchive: true
+  displayName: 'Copy CubeICE modules'
+
+- task: ArchiveFiles@2
+  inputs:
+    archiveFile: '$(Build.ArtifactStagingDirectory)\CubeIce.Settings.zip'
+    rootFolderOrFile: 'Applications\$(PROJECT_APP)\Settings\$(PROJECT_BIN)'
+    includeRootFolder: false
+    archiveType: 'zip'
+    replaceExistingArchive: true
+  displayName: 'Copy CubeICE Settings modules'
+
+- task: ArchiveFiles@2
+  inputs:
+    archiveFile: '$(Build.ArtifactStagingDirectory)\CubeIce.Settings.Associate.zip'
+    rootFolderOrFile: 'Applications\$(PROJECT_APP)\Associate\$(PROJECT_BIN)'
+    includeRootFolder: false
+    archiveType: 'zip'
+    replaceExistingArchive: true
+  displayName: 'Copy CubeICE Settings helper modules'
+
+- task: ArchiveFiles@2
+  inputs:
+    archiveFile: '$(Build.ArtifactStagingDirectory)\CubeIce.Context.zip'
+    rootFolderOrFile: 'Applications\$(PROJECT_APP).Com\Context\$(PROJECT_VCBIN)'
+    includeRootFolder: false
+    archiveType: 'zip'
+    replaceExistingArchive: true
+  displayName: 'Copy CubeICE ContextMenu modules'
+
+- task: ArchiveFiles@2
+  inputs:
+    archiveFile: '$(Build.ArtifactStagingDirectory)\CubeIce.QueryInfo.zip'
+    rootFolderOrFile: 'Applications\$(PROJECT_APP).Com\QueryInfo\$(PROJECT_VCBIN)'
+    includeRootFolder: false
+    archiveType: 'zip'
+    replaceExistingArchive: true
+  displayName: 'Copy CubeICE QueryInfo modules'
+
+- task: CopyFiles@2
+  inputs:
+    contents: '**\*.log'
+    targetFolder: '$(TEST_LOG)'
+    overWrite: true
+  displayName: 'Copy log files'
+
+- task: CopyFiles@2
+  inputs:
+    contents: '**\$(TEST_RESULT)'
+    targetFolder: '$(TEST_LOG)'
+    overWrite: true
+  displayName: 'Copy test results'
+
+- task: CopyFiles@2
+  inputs:
+    contents: '$(TEST_COVERAGE)'
+    targetFolder: '$(TEST_LOG)'
+    overWrite: true
+  displayName: 'Copy coverage results'
+
+- task: PublishPipelineArtifact@0
+  inputs:
+    artifactName: '$(PROJECT_NAME)'
+    targetPath: '$(Build.ArtifactStagingDirectory)'
+  displayName: 'Publish pipline artifacts'

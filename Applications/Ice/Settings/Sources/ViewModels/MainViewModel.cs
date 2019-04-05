@@ -149,17 +149,6 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
             set => _model.Value.ToolTipCount = value;
         }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// InstallMode
-        ///
-        /// <summary>
-        /// インストールモードかどうかを示す値を取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public bool InstallMode { get; set; } = false;
-
         #region ViewModels
 
         /* ----------------------------------------------------------------- */
@@ -250,7 +239,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
         public void Update()
         {
             _model.Save();
-            Associate.Update(InstallMode);
+            Associate.Update();
             Shortcut.Update();
         }
 

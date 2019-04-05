@@ -1,4 +1,4 @@
-"Split\Manual.pdf",990040
-"Split\Sample1.txt",5
-"Split\Sample2.txt",6
-"Split",0
+"Split\Manual.pdf",990040,699024554
+"Split\Sample1.txt",5,1001993670
+"Split\Sample2.txt",6,4044060355
+"Split",0,0

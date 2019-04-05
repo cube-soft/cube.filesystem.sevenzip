@@ -23,6 +23,19 @@ namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
+    /// UnknownFormatException
+    ///
+    /// <summary>
+    /// Represents that the specified file is not supported by the SevenZip
+    /// module.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    [Serializable]
+    public class UnknownFormatException : NotSupportedException { }
+
+    /* --------------------------------------------------------------------- */
+    ///
     /// EncryptionException
     ///
     /// <summary>

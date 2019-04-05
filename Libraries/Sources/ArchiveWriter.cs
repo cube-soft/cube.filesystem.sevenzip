@@ -345,7 +345,7 @@ namespace Cube.FileSystem.SevenZip
             IQuery<string> password, IProgress<Report> progress)
         {
             var sfx = (Option as SfxOption)?.Module;
-            if (!sfx.HasValue() || !IO.Exists(sfx)) throw new System.IO.FileNotFoundException("SFX");
+            if (!IO.Exists(sfx)) throw new System.IO.FileNotFoundException("SFX");
             var tmp = IO.Combine(IO.Get(dest).DirectoryName, Guid.NewGuid().ToString("D"));
 
             try

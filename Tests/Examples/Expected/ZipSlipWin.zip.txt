@@ -1,2 +1,2 @@
-"good.txt",19
-"Temp\evil.txt",20
+"good.txt",19,4082069263
+"Temp\evil.txt",20,964378976

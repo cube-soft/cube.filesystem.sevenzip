@@ -62,7 +62,8 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Settings
                 var install = args.Length > 0 && args[0] == "/install";
                 if (install) Logger.Info(type, "InstallMode");
 
-                var vm = new MainViewModel(model) { InstallMode = install };
+                var vm = new MainViewModel(model);
+                vm.Associate.Changed = install;
                 if (!install) vm.Sync();
 
                 var view = new MainForm(install);

@@ -1,46 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Program.cpp" />
-    <ClCompile Include="Context\ContextMenu.cpp">
-      <Filter>Context</Filter>
-    </ClCompile>
-    <ClCompile Include="Context\ContextMenuFactory.cpp">
-      <Filter>Context</Filter>
-    </ClCompile>
-    <ClCompile Include="Context\ContextMenuIcon.cpp">
-      <Filter>Context</Filter>
-    </ClCompile>
-    <ClCompile Include="Context\ContextMenuItem.cpp">
-      <Filter>Context</Filter>
-    </ClCompile>
-    <ClCompile Include="Context\ContextPresetMenu.cpp">
-      <Filter>Context</Filter>
-    </ClCompile>
-    <ClCompile Include="Context\ContextSettings.cpp">
-      <Filter>Context</Filter>
-    </ClCompile>
+    <ClCompile Include="Sources\Context\ContextMenu.cpp" />
+    <ClCompile Include="Sources\Context\ContextMenuFactory.cpp" />
+    <ClCompile Include="Sources\Context\ContextMenuIcon.cpp" />
+    <ClCompile Include="Sources\Context\ContextMenuItem.cpp" />
+    <ClCompile Include="Sources\Context\ContextPresetMenu.cpp" />
+    <ClCompile Include="Sources\Context\ContextSettings.cpp" />
+    <ClCompile Include="Sources\Program.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Resources.h" />
-    <ClInclude Include="Context\ContextMenu.h">
-      <Filter>Context</Filter>
-    </ClInclude>
-    <ClInclude Include="Context\ContextMenuFactory.h">
-      <Filter>Context</Filter>
-    </ClInclude>
-    <ClInclude Include="Context\ContextMenuIcon.h">
-      <Filter>Context</Filter>
-    </ClInclude>
-    <ClInclude Include="Context\ContextMenuItem.h">
-      <Filter>Context</Filter>
-    </ClInclude>
-    <ClInclude Include="Context\ContextPresetMenu.h">
-      <Filter>Context</Filter>
-    </ClInclude>
-    <ClInclude Include="Context\ContextSettings.h">
-      <Filter>Context</Filter>
-    </ClInclude>
+    <ClInclude Include="Sources\Context\ContextMenu.h" />
+    <ClInclude Include="Sources\Context\ContextMenuFactory.h" />
+    <ClInclude Include="Sources\Context\ContextMenuIcon.h" />
+    <ClInclude Include="Sources\Context\ContextMenuItem.h" />
+    <ClInclude Include="Sources\Context\ContextPresetMenu.h" />
+    <ClInclude Include="Sources\Context\ContextSettings.h" />
+    <ClInclude Include="Sources\Resources.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.ico" />

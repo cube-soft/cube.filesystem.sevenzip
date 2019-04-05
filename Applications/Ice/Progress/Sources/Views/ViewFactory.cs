@@ -187,12 +187,12 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /* ----------------------------------------------------------------- */
         public virtual void ShowMessageBox(MessageEventArgs e)
         {
-            var message = !string.IsNullOrEmpty(e.Message) ?
+            var message = e.Message.HasValue() ?
                           e.Message :
                           Properties.Resources.MessageUnexpectedError;
-            var title   = !string.IsNullOrEmpty(e.Title) ?
+            var title   = e.Title.HasValue() ?
                           e.Title :
-                          Application.ProductName;
+                          Properties.Resources.TitleDefault;
 
             e.Result = MessageBox.Show(message, title, e.Buttons, e.Icon);
         }

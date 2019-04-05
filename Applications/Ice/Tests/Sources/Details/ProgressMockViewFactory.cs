@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using Cube.FileSystem.SevenZip.Ice.App;
 using Cube.Forms;
+using Cube.Generics;
 using NUnit.Framework;
 using System.Threading;
 
@@ -150,7 +151,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var message = $"{e.Query}({e.Format})";
             Assert.That(e.Query, Is.Not.Null, message);
 
-            e.Cancel = string.IsNullOrEmpty(Settings.Destination);
+            e.Cancel = !Settings.Destination.HasValue();
             e.Result = Settings.Destination;
         }
 
@@ -168,7 +169,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /* ----------------------------------------------------------------- */
         public override void ShowPasswordView(QueryEventArgs<string, string> e, bool confirm)
         {
-            e.Cancel = string.IsNullOrEmpty(Settings.Password);
+            e.Cancel = !Settings.Password.HasValue();
             e.Result = Settings.Password;
         }
 

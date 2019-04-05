@@ -1,4 +1,4 @@
-"TarSample",0
-"TarSample\Bar.txt",7816
-"TarSample\Bas.txt",0
-"TarSample\Foo.txt",3
+"TarSample",0,0
+"TarSample\Bar.txt",7816,0
+"TarSample\Bas.txt",0,0
+"TarSample\Foo.txt",3,0

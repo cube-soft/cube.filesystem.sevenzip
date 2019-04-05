@@ -16,9 +16,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.FileSystem.SevenZip.Mixin;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -125,21 +125,21 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private ArchiveReader(Format format, string src, PasswordQuery query, IO io)
+        private ArchiveReader(Format format, string src, PasswordQuery password, IO io)
         {
-            if (format == Format.Unknown) throw new NotSupportedException();
+            if (format == Format.Unknown) throw new UnknownFormatException();
 
             var asr   = new ArchiveStreamReader(io.OpenRead(src));
             _core     = new SevenZipLibrary();
-            _query    = query;
-            _callback = new ArchiveOpenCallback(src, asr, io) { Password = _query };
-            _module   = _core.GetInArchive(format);
-            _module.Open(asr, IntPtr.Zero, _callback);
+            _password = password;
+            _open     = new ArchiveOpenCallback(src, asr, io) { Password = _password };
+            _archive  = _core.GetInArchive(format);
+            _archive.Open(asr, IntPtr.Zero, _open);
 
             IO     = io;
             Format = format;
             Source = src;
-            Items  = new ReadOnlyArchiveList(_module, format, src, _query, io);
+            Items  = new ReadOnlyArchiveList(_archive, src, _password, io);
         }
 
         #endregion
@@ -233,10 +233,10 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void Extract(string directory, IProgress<Report> progress)
         {
-            using (var cb = Create(directory, progress))
+            using (var cb = CreateCallback(directory, progress))
             {
-                _module.Extract(null, uint.MaxValue, 0, cb);
-                Terminate(cb.Result, cb.Exception);
+                _archive.Extract(null, uint.MaxValue, 0, cb);
+                Items.Terminate(cb, _password);
             }
         }
 
@@ -261,71 +261,36 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         protected override void Dispose(bool disposing)
         {
-            _callback?.Dispose();
-            _module?.Close();
+            _archive?.Close();
+            _open?.Dispose();
             _core?.Dispose();
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Create
+        /// CreateCallback
         ///
         /// <summary>
         /// Creates a new instance of the ArchiveExtractCallback class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private ArchiveExtractCallback Create(string directory, IProgress<Report> progress) =>
+        private ArchiveExtractCallback CreateCallback(string directory, IProgress<Report> progress) =>
             new ArchiveExtractCallback(Source, directory, Items, IO)
         {
             TotalCount = Items.Count,
-            Password   = _query,
+            Password   = _password,
             Progress   = progress,
             Filters    = Filters,
         };
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CreateEncryptionException
-        ///
-        /// <summary>
-        /// Resets the password and returns a new instance of the
-        /// EncryptionException class.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private EncryptionException CreateEncryptionException()
-        {
-            _query.Reset();
-            return new EncryptionException();
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Terminate
-        ///
-        /// <summary>
-        /// Invokes post processing and throws an exception if needed.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Terminate(OperationResult src, Exception error)
-        {
-            if (src == OperationResult.OK) return;
-            if (src == OperationResult.UserCancel) throw new OperationCanceledException();
-            if (src == OperationResult.WrongPassword) throw CreateEncryptionException();
-            if (src == OperationResult.DataError && Items.Any(x => x.Encrypted)) throw CreateEncryptionException();
-            if (error != null) throw error;
-            else throw new System.IO.IOException($"{src}");
-        }
-
         #endregion
 
         #region Fields
-        private readonly PasswordQuery _query;
-        private readonly ArchiveOpenCallback _callback;
+        private readonly PasswordQuery _password;
         private readonly SevenZipLibrary _core;
-        private readonly IInArchive _module;
+        private readonly ArchiveOpenCallback _open;
+        private readonly IInArchive _archive;
         #endregion
     }
 }

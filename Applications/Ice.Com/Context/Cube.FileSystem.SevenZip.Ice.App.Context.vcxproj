@@ -12,45 +12,44 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C580D316-6704-483D-9930-CC063D3E0800}</ProjectGuid>
-    <RootNamespace>Cube.FileSystem.SevenZip.Ice.App.Context</RootNamespace>
-    <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
     <ProjectName>Cube.FileSystem.SevenZip.Ice.Com.Context</ProjectName>
+    <RootNamespace>Cube.FileSystem.SevenZip.Ice.App.Context</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <IntDir>obj\x86\$(Configuration)\</IntDir>
+    <OutDir>bin\x86\$(Configuration)\</OutDir>
     <CharacterSet>Unicode</CharacterSet>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <LinkIncremental>false</LinkIncremental>
     <PlatformToolset>v141_xp</PlatformToolset>
+    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <CharacterSet>Unicode</CharacterSet>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <LinkIncremental>false</LinkIncremental>
     <PlatformToolset>v141_xp</PlatformToolset>
+    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-  <ImportGroup Label="ExtensionSettings">
-  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <PropertyGroup Label="UserMacros" />
-  <PropertyGroup>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
-    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
-  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>.;..\Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Common;Sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -77,7 +76,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>.;..\Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Common;Sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;WIN64;NDEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -103,22 +102,22 @@
     <None Include="App.def" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Context\ContextMenu.cpp" />
-    <ClCompile Include="Context\ContextMenuFactory.cpp" />
-    <ClCompile Include="Context\ContextMenuIcon.cpp" />
-    <ClCompile Include="Context\ContextMenuItem.cpp" />
-    <ClCompile Include="Context\ContextPresetMenu.cpp" />
-    <ClCompile Include="Context\ContextSettings.cpp" />
-    <ClCompile Include="Program.cpp" />
+    <ClCompile Include="Sources\Context\ContextMenu.cpp" />
+    <ClCompile Include="Sources\Context\ContextMenuFactory.cpp" />
+    <ClCompile Include="Sources\Context\ContextMenuIcon.cpp" />
+    <ClCompile Include="Sources\Context\ContextMenuItem.cpp" />
+    <ClCompile Include="Sources\Context\ContextPresetMenu.cpp" />
+    <ClCompile Include="Sources\Context\ContextSettings.cpp" />
+    <ClCompile Include="Sources\Program.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Context\ContextMenu.h" />
-    <ClInclude Include="Context\ContextMenuFactory.h" />
-    <ClInclude Include="Context\ContextMenuIcon.h" />
-    <ClInclude Include="Context\ContextMenuItem.h" />
-    <ClInclude Include="Context\ContextPresetMenu.h" />
-    <ClInclude Include="Context\ContextSettings.h" />
-    <ClInclude Include="Resources.h" />
+    <ClInclude Include="Sources\Context\ContextMenu.h" />
+    <ClInclude Include="Sources\Context\ContextMenuFactory.h" />
+    <ClInclude Include="Sources\Context\ContextMenuIcon.h" />
+    <ClInclude Include="Sources\Context\ContextMenuItem.h" />
+    <ClInclude Include="Sources\Context\ContextPresetMenu.h" />
+    <ClInclude Include="Sources\Context\ContextSettings.h" />
+    <ClInclude Include="Sources\Resources.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

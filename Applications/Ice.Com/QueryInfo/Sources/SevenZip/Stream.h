@@ -22,6 +22,7 @@
 #include <windows.h>
 #include <memory>
 #include <string>
+#include <stdexcept>
 
 namespace Cube {
 namespace FileSystem {

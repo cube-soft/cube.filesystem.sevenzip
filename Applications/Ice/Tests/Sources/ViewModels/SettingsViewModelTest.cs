@@ -59,8 +59,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 ToolTipCount = 15
             };
 
-            Assert.That(vm.Version,     Does.StartWith("Version"));
-            Assert.That(vm.InstallMode, Is.False);
+            Assert.That(vm.Version, Does.StartWith("Version"));
 
             Assert.That(m.Value.CheckUpdate,          Is.True);
             Assert.That(m.Value.ErrorReport,          Is.True);
@@ -91,11 +90,12 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 Environment.NewLine
             }, StringSplitOptions.RemoveEmptyEntries);
 
-            Assert.That(f.Count(),       Is.EqualTo(4));
-            Assert.That(vm.CheckUpdate,  Is.True);
-            Assert.That(vm.ErrorReport,  Is.True);
-            Assert.That(vm.ToolTip,      Is.True);
-            Assert.That(vm.ToolTipCount, Is.EqualTo(9));
+            Assert.That(f.Count(),            Is.EqualTo(4));
+            Assert.That(vm.CheckUpdate,       Is.True);
+            Assert.That(vm.ErrorReport,       Is.True);
+            Assert.That(vm.ToolTip,           Is.True);
+            Assert.That(vm.ToolTipCount,      Is.EqualTo(9));
+            Assert.That(vm.Associate.Changed, Is.True);
         }
 
         /* ----------------------------------------------------------------- */
@@ -331,9 +331,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
             Assert.That(dest.Value.Count, Is.EqualTo(29));
             Assert.That(dest.IconIndex,   Is.EqualTo(3));
+            Assert.That(dest.Changed,     Is.False);
 
             src.IconIndex = 0;
             Assert.That(dest.IconIndex, Is.EqualTo(src.IconIndex).And.EqualTo(0));
+            Assert.That(dest.Changed,   Is.True);
 
             src.SelectAll();
             Assert.That(dest.Arj,      Is.EqualTo(src.Arj).And.True);
@@ -483,11 +485,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var m0 = CreateSettings();
             m0.Value.Shortcut.Directory = Results;
 
-            var vm0 = new MainViewModel(m0)
-            {
-                CheckUpdate = true,
-                InstallMode = install,
-            };
+            var vm0 = new MainViewModel(m0) { CheckUpdate = true };
+            vm0.Associate.Changed = install;
             vm0.Sync();
             vm0.Associate.Clear();
             vm0.Update();
@@ -496,11 +495,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             m1.Load();
             m1.Value.Shortcut.Directory = Results;
 
-            var vm1 = new MainViewModel(m1)
-            {
-                CheckUpdate = false,
-                InstallMode = false,
-            };
+            var vm1 = new MainViewModel(m1) { CheckUpdate = false };
             vm1.Update();
         });
 

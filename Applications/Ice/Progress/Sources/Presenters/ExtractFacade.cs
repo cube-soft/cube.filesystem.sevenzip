@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using Cube.FileSystem.Mixin;
 using Cube.Forms;
+using Cube.Generics;
 using Cube.Log;
 using Cube.Net35;
 using System;
@@ -112,6 +113,21 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         #endregion
 
         #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetMessage
+        ///
+        /// <summary>
+        /// Gets the message from the specified exception.
+        /// </summary>
+        ///
+        /// <param name="src">Exception object.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected override string GetMessage(Exception src) =>
+            src is UnknownFormatException ? Properties.Resources.MessageUnkownFormat :
+            base.GetMessage(src);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -265,7 +281,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
         /* ----------------------------------------------------------------- */
         private void ExtractCore(ArchiveReader src, IProgress<Report> progress)
         {
-            var retry = false;
+            bool retry;
             do
             {
                 try
@@ -407,7 +423,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App
 
             foreach (var item in items)
             {
-                if (string.IsNullOrEmpty(item.FullName)) continue;
+                if (!item.FullName.HasValue()) continue;
                 var root = GetRootDirectory(item, "*"); // Count all files as "*"
                 var key = root.ToLowerInvariant();
                 if (!dest.ContainsKey(key)) dest.Add(key, root);

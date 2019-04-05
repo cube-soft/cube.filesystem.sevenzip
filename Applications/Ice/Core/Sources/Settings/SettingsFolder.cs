@@ -87,15 +87,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             try
             {
-                if (Value == null) return;
-
-                var name = "cubeice-checker";
-                var dir  = IO.Get(Assembly.Location).DirectoryName;
-
-                new Startup(name)
+                var exe = IO.Combine(Assembly.DirectoryName, "CubeChecker.exe");
+                new Startup("cubeice-checker")
                 {
-                    Command = IO.Combine(dir, $"{name}.exe").Quote(),
-                    Enabled = Value.CheckUpdate,
+                    Command = $"{exe.Quote()} CubeICE",
+                    Enabled = Value?.CheckUpdate ?? false,
                 }.Save();
             }
             finally { base.OnSaved(e); }

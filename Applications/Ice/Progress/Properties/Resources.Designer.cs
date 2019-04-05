@@ -19,7 +19,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Properties {
     // または Visual Studio のようなツールを使用して自動生成されました。
     // メンバーを追加または削除するには、.ResX ファイルを編集して、/str オプションと共に
     // ResGen を実行し直すか、または VS プロジェクトをビルドし直します。
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -47,7 +47,7 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Properties {
         }
         
         /// <summary>
-        ///   厳密に型指定されたこのリソース クラスを使用して、すべての検索リソースに対し、
+        ///   すべてについて、現在のスレッドの CurrentUICulture プロパティをオーバーライドします
         ///   現在のスレッドの CurrentUICulture プロパティをオーバーライドします。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -444,6 +444,24 @@ namespace Cube.FileSystem.SevenZip.Ice.App.Properties {
         internal static string MessageUnknownFile {
             get {
                 return ResourceManager.GetString("MessageUnknownFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   指定されたファイルは未対応の圧縮形式か、または圧縮ファイルではないため解凍する事ができません。もう1度ファイルの内容を確認して下さい。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MessageUnkownFormat {
+            get {
+                return ResourceManager.GetString("MessageUnkownFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   CubeICE に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string TitleDefault {
+            get {
+                return ResourceManager.GetString("TitleDefault", resourceCulture);
             }
         }
         

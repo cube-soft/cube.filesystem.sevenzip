@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Generics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -234,7 +235,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 
             var droppable = Location == SaveLocation.Unknown ||
                             Location == SaveLocation.Source;
-            if (!string.IsNullOrEmpty(DropDirectory) && droppable) Location = SaveLocation.Drop;
+            if (DropDirectory.HasValue() && droppable) Location = SaveLocation.Drop;
 
             Sources = sources;
             Options = options;
@@ -270,7 +271,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         private SaveLocation GetLocation(string s)
         {
             var query = GetTail(s).ToLowerInvariant();
-            if (string.IsNullOrEmpty(query)) return SaveLocation.Unknown;
+            if (!query.HasValue()) return SaveLocation.Unknown;
 
             foreach (SaveLocation item in Enum.GetValues(typeof(SaveLocation)))
             {

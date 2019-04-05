@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Generics;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -132,12 +133,18 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// するかどうかを示す値を取得または設定します。
         /// </summary>
         ///
+        /// <remarks>
+        /// ToolTip の有効・無効設定はファイルの関連付け設定にも関わるため、
+        /// このプロパティが更新された場合、Associate.Changed を true に
+        /// 設定します。
+        /// </remarks>
+        ///
         /* ----------------------------------------------------------------- */
         [DataMember]
         public bool ToolTip
         {
             get => _toolTip;
-            set => SetProperty(ref _toolTip, value);
+            set { if (SetProperty(ref _toolTip, value)) Associate.Changed = true; }
         }
 
         /* ----------------------------------------------------------------- */
@@ -261,9 +268,9 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         public IEnumerable<string> GetFilters() =>
-            string.IsNullOrEmpty(Filters) ?
-            new string[0] :
-            Filters.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            Filters.HasValue() ?
+            Filters.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries) :
+            new string[0];
 
         #endregion
 

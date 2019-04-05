@@ -1,232 +1,29 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7CBF700C-6F9D-49B5-A905-E5C37302DA93}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Cube.FileSystem.SevenZip.Ice.Tests</RootNamespace>
-    <AssemblyName>Cube.FileSystem.SevenZip.Ice.Tests</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\net35\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\net35\Debug\Cube.FileSystem.SevenZip.Ice.Tests.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\net35\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\net35\Release\Cube.FileSystem.SevenZip.Ice.Tests.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\net35\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>bin\net35\x86\Debug\Cube.FileSystem.SevenZip.Ice.Tests.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\net35\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>bin\net35\x86\Release\Cube.FileSystem.SevenZip.Ice.Tests.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\net35\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>bin\net35\x64\Debug\Cube.FileSystem.SevenZip.Ice.Tests.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\net35\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>bin\net35\x64\Release\Cube.FileSystem.SevenZip.Ice.Tests.xml</DocumentationFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="AsyncBridge">
-      <HintPath>..\..\..\../packages\AsyncBridge.0.3.1\lib\net35-Client\AsyncBridge.dll</HintPath>
-    </Reference>
-    <Reference Include="AlphaFS">
-      <HintPath>..\..\..\..\packages\AlphaFS.2.2.6\lib\net35\AlphaFS.dll</HintPath>
-    </Reference>
-    <Reference Include="Cube.Backwards">
-      <HintPath>..\..\..\..\packages\Cube.Backwards.1.5.0\lib\net35\Cube.Backwards.dll</HintPath>
-    </Reference>
-    <Reference Include="Cube.Core">
-      <HintPath>..\..\..\..\packages\Cube.Core.1.14.0\lib\net35\Cube.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Cube.FileSystem">
-      <HintPath>..\..\..\..\packages\Cube.FileSystem.1.14.0\lib\net35\Cube.FileSystem.dll</HintPath>
-    </Reference>
-    <Reference Include="Cube.Forms">
-      <HintPath>..\..\..\..\packages\Cube.Forms.1.14.0\lib\net35\Cube.Forms.dll</HintPath>
-    </Reference>
-    <Reference Include="Cube.Images">
-      <HintPath>..\..\..\..\packages\Cube.Images.1.14.0\lib\net35\Cube.Images.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\..\..\..\packages\log4net.2.0.8\lib\net35-full\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\..\..\..\packages\NUnit.3.11.0\lib\net35\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Threading">
-      <HintPath>..\..\..\..\packages\TaskParallelLibrary.1.0.2856.0\lib\Net35\System.Threading.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sources\Details\GlobalSetup.cs" />
-    <Compile Include="Sources\Details\ProgressMockView.cs" />
-    <Compile Include="Sources\Details\ProgressMockViewFactory.cs" />
-    <Compile Include="Sources\Details\ProgressMockViewFixture.cs" />
-    <Compile Include="Sources\Details\SettingsMockViewFactory.cs" />
-    <Compile Include="Sources\Details\SettingsMockViewFixture.cs" />
-    <Compile Include="Sources\Settings\AssociateRegistrarTest.cs" />
-    <Compile Include="Sources\Settings\SettingsTest.cs" />
-    <Compile Include="Sources\ViewModels\ContextViewModelTest.cs" />
-    <Compile Include="Sources\ViewModels\SettingsViewModelTest.cs" />
-    <Compile Include="Sources\ArchiveTest.cs" />
-    <Compile Include="Sources\ExtractTest.cs" />
-    <Compile Include="Sources\PathConverterTest.cs" />
-    <Compile Include="Sources\PresetMenuTest.cs" />
-    <Compile Include="Sources\RequestTest.cs" />
-    <Compile Include="Sources\TreeViewBehaviorTest.cs" />
-    <Compile Include="Sources\ViewResourceTest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="Packages.config" />
-    <None Include="Examples\Sample 00..01\FilterDirectory\Filter.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Examples\Sample 00..01\FilterDirectory\Sample.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Examples\Sample 00..01\Dot 2018.02.13.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Examples\Sample 00..01\Empty.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Examples\Sample 00..01\FileInDirectory.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Examples\Sample 00..01\Filter.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Examples\Complex.1.0.0.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Examples\MultiDirectory.1.0.0.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Examples\Password.7z">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Examples\Sample.tar">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Examples\Sample.tar.lzma">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Examples\Sample.tar.z">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Examples\Sample.tbz">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Examples\Sample.tgz">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Examples\Sample.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Examples\Sample.txt.bz2">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Examples\SampleEmpty.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Examples\SampleFilter.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Examples\SampleMac.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Examples\SampleSfx.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Examples\Sample 2018.02.13.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Examples\Sample..DoubleDot.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Examples\Single.1.0.0.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Examples\SingleDirectory.1.0.0.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Libraries\Cube.FileSystem.SevenZip.csproj">
-      <Project>{74c9f388-360e-4c46-a9a6-e131eab2e49c}</Project>
-      <Name>Cube.FileSystem.SevenZip</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Core\Cube.FileSystem.SevenZip.Ice.csproj">
-      <Project>{1badab3f-38b5-4acf-addf-036918bfc51c}</Project>
-      <Name>Cube.FileSystem.SevenZip.Ice</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Progress\Cube.FileSystem.SevenZip.Ice.App.csproj">
-      <Project>{e14092d2-266a-4cc7-b1ce-2add0cb8e65b}</Project>
-      <Name>Cube.FileSystem.SevenZip.Ice.App</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Settings\Cube.FileSystem.SevenZip.Ice.App.Settings.csproj">
-      <Project>{42b72a9a-c752-4d99-97d0-d341f1bd2a45}</Project>
-      <Name>Cube.FileSystem.SevenZip.Ice.App.Settings</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <Version>0.9.1</Version>
+        <Authors>clown;cube-soft</Authors>
+        <Company>CubeSoft</Company>
+        <Copyright>Copyright © 2010 CubeSoft, Inc.</Copyright>
+        <TargetFramework>net35</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <IsPackable>false</IsPackable>
+        <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
+        <DefineConstants Condition=" '$(Configuration)' == 'Debug' ">DEBUG;TRACE</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+        <OutputPath>bin\Any CPU\$(Configuration)\</OutputPath>
+        <DocumentationFile>bin\Any CPU\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Progress\Cube.FileSystem.SevenZip.Ice.App.csproj" />
+        <ProjectReference Include="..\Settings\Cube.FileSystem.SevenZip.Ice.App.Settings.csproj" />
+        <PackageReference Include="NUnit" Version="3.11.0" />
+        <PackageReference Include="NUnit.ConsoleRunner" Version="3.10.0" />
+        <PackageReference Include="OpenCover" Version="4.7.922" />
+        <Reference Include="System.Windows.Forms" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="App.config" />
+        <None Include="Examples\**\*" CopyToOutputDirectory="Always" />
+    </ItemGroup>
 </Project>

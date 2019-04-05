@@ -18,6 +18,7 @@
 #include <initguid.h>
 #include "SevenZipLibrary.h"
 #include <shlwapi.h>
+#include <stdexcept>
 
 namespace Cube {
 namespace FileSystem {
