@@ -15,7 +15,6 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.SevenZip.Ice.App.Settings;
 using Cube.FileSystem.TestService;
 using Microsoft.Win32;
 using NUnit.Framework;
@@ -121,7 +120,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         public virtual void Setup()
         {
             Mock = new SettingsMockViewFactory();
-            Views.Configure(Mock);
+            Configurator.Views.Configure(Mock);
         }
 
         /* ----------------------------------------------------------------- */

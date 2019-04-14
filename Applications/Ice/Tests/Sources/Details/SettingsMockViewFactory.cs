@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.SevenZip.Ice.App.Settings;
+using Cube.FileSystem.SevenZip.Ice.Configurator;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -33,7 +33,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    class SettingsMockViewFactory : ViewFactory
+    class SettingsMockViewFactory : Configurator.ViewFactory
     {
         #region Constructors
 
@@ -97,7 +97,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var vm   = new CustomContextViewModel(e.Query);
             var view = new CustomizeMenu(new TreeView(), new TreeView());
 
-            view.Updated += (_, __) => ++n;
+            view.Updated += (s, ev) => ++n;
             view.Register(vm.Source, vm.Current, vm.Images);
 
             Assert.That(view.IsRegistered,        Is.True);

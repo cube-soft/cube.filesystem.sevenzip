@@ -22,17 +22,16 @@ require 'rake/clean'
 # configuration
 # --------------------------------------------------------------------------- #
 PROJECT     = 'Cube.FileSystem.SevenZip'
-APPLICATION = 'Ice'
 LIBRARY     = '../packages'
 NATIVE      = '../resources/native'
 BRANCHES    = ['stable', 'net35']
 FRAMEWORKS  = ['net45', 'net35']
 PLATFORMS   = ['Any CPU', 'x86', 'x64']
 CONFIGS     = ['Release', 'Debug']
-COPIES      = ['Tests', 'Applications/Ice/Tests', 'Applications/Ice/Progress']
-PACKAGES    = ["Libraries/#{PROJECT}.nuspec"]
+COPIES      = ['Libraries/Tests', 'Applications/Ice/Tests', 'Applications/Ice/Main']
+PACKAGES    = ["Libraries/Core/#{PROJECT}.nuspec"]
 TESTCASES   = {
-    "#{PROJECT}.Tests"     => 'Tests',
+    "#{PROJECT}.Tests"     => 'Libraries/Tests',
     "#{PROJECT}.Ice.Tests" => 'Applications/Ice/Tests'
 }
 
@@ -83,8 +82,8 @@ end
 # --------------------------------------------------------------------------- #
 desc "Build the solution in the current branch."
 task :build do
-    sh("nuget restore #{PROJECT}.#{APPLICATION}.sln")
-    sh("#{BUILD} #{PROJECT}.#{APPLICATION}.sln")
+    sh("nuget restore #{PROJECT}.Apps.sln")
+    sh("#{BUILD} #{PROJECT}.Apps.sln")
 end
 
 # --------------------------------------------------------------------------- #
