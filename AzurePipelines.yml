@@ -4,14 +4,14 @@ pool:
     vmImage: 'Windows-2019'
 variables:
     PROJECT_NAME:   'Cube.FileSystem.SevenZip'
-    PACKAGE_ARCH:   'Any CPU'
+    PROJECT_ARCH:   'Any CPU'
     PROJECT_CONFIG: 'Release'
-    PROJECT_BIN:    'bin\$(PACKAGE_ARCH)\$(PROJECT_CONFIG)\net45'
+    PROJECT_BIN:    'bin\$(PROJECT_ARCH)\$(PROJECT_CONFIG)\net45'
     PROJECT_VCBIN:  'bin\x64\$(PROJECT_CONFIG)'
-    PACKAGE_LIB:    '..\packages'
+    PROJECT_LIB:    '..\packages'
     PROJECT_NATIVE: '..\resources\native'
-    TEST_TOOL:      '$(PACKAGE_LIB)\OpenCover\4.7.922\tools\OpenCover.Console.exe'
-    TEST_CORETOOL:  '$(PACKAGE_LIB)\NUnit.ConsoleRunner\3.10.0\tools\nunit3-console.exe'
+    TEST_TOOL:      '$(PROJECT_LIB)\OpenCover\4.7.922\tools\OpenCover.Console.exe'
+    TEST_CORETOOL:  '$(PROJECT_LIB)\NUnit.ConsoleRunner\3.10.0\tools\nunit3-console.exe'
     TEST_FILTERS:   '+[Cube*]* -[*]*NativeMethods -[*]*Properties.* -[*]*Form -[*]*.Program'
     TEST_RESULT:    'TestResult.xml'
     TEST_COVERAGE:  'CoverResults.xml'
@@ -30,7 +30,7 @@ steps:
 - task: VSBuild@1
   inputs:
     solution: '$(PROJECT_NAME).Apps.sln'
-    platform: '$(PACKAGE_ARCH)'
+    platform: '$(PROJECT_ARCH)'
     configuration: '$(PROJECT_CONFIG)'
   displayName: 'Build solution'
 
