@@ -30,10 +30,8 @@ PLATFORMS   = ['Any CPU', 'x86', 'x64']
 CONFIGS     = ['Release', 'Debug']
 COPIES      = ['Libraries/Tests', 'Applications/Ice/Tests', 'Applications/Ice/Main']
 PACKAGES    = ["Libraries/Core/#{PROJECT}.nuspec"]
-TESTCASES   = {
-    "#{PROJECT}.Tests"     => 'Libraries/Tests',
-    "#{PROJECT}.Ice.Tests" => 'Applications/Ice/Tests'
-}
+TESTCASES   = {"#{PROJECT}.Tests"     => 'Libraries/Tests',
+               "#{PROJECT}.Ice.Tests" => 'Applications/Ice/Tests'}
 
 # --------------------------------------------------------------------------- #
 # commands
@@ -47,7 +45,7 @@ TEST  = "../packages/NUnit.ConsoleRunner/3.10.0/tools/nunit3-console.exe"
 # --------------------------------------------------------------------------- #
 CLEAN.include("#{PROJECT}.*.nupkg")
 CLEAN.include("../packages/cube.*")
-CLEAN.include(%w{bin obj}.map { |e| "**/#{e}" })
+CLEAN.include(['bin', 'obj'].map{ |e| "**/#{e}" })
 
 # --------------------------------------------------------------------------- #
 # default
