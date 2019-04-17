@@ -25,16 +25,15 @@
         <DocumentationFile>bin\Any CPU\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Core\Cube.FileSystem.SevenZip.Ice.Core.csproj" />
+        <ProjectReference Include="..\Core\Cube.FileSystem.SevenZip.Ice.csproj" />
         <PackageReference Include="Cube.Forms" Version="1.15.0" />
         <Reference Include="System.Windows.Forms" />
     </ItemGroup>
     <ItemGroup>
         <Compile Update="Properties\Resources.Designer.cs" DependentUpon="Resources.resx" AutoGen="True" DesignTime="True" />
-        <Compile Update="Sources\Views\Forms\*.cs" SubType="Form" />
-        <Compile Update="Sources\Views\Forms\*.Designer.cs" SubType="Code" />
+        <Compile Update="Sources\Views\*Form.cs" SubType="Form" />
         <EmbeddedResource Update="Properties\Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
-        <EmbeddedResource Update="Sources\Views\Forms\*.resx" DependentUpon="%(Filename).cs" />
+        <EmbeddedResource Update="Sources\Views\*.resx" DependentUpon="%(Filename).cs" />
         <None Include="Assets\**\*" />
         <None Include="Properties\DataSources\*.datasource" />
         <None Include="App.config" />

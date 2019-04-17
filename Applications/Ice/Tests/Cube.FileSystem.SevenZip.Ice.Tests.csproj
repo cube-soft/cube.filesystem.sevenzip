@@ -15,7 +15,7 @@
         <DocumentationFile>bin\Any CPU\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Main\Cube.FileSystem.SevenZip.Ice.csproj" />
+        <ProjectReference Include="..\Main\Cube.FileSystem.SevenZip.Ice.Main.csproj" />
         <ProjectReference Include="..\Configurator\Cube.FileSystem.SevenZip.Ice.Configurator.csproj" />
         <PackageReference Include="NUnit" Version="3.11.0" />
         <PackageReference Include="NUnit.ConsoleRunner" Version="3.10.0" />

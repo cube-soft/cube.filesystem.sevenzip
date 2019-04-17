@@ -24,14 +24,14 @@ namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// MailForm
+    /// MailView
     ///
     /// <summary>
     /// メール送信用クライアントを表すクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class MailForm
+    public class MailView
     {
         #region Properties
 

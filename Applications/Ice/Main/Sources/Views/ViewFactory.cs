@@ -167,7 +167,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="e">添付情報を保持するオブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public virtual void ShowMailView(ValueEventArgs<string> e) => new MailForm
+        public virtual void ShowMailView(ValueEventArgs<string> e) => new MailView
         {
             Subject = "CubeICE",
             Body    = "Attached by CubeICE",

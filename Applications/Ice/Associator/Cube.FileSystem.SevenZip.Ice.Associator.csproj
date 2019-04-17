@@ -25,7 +25,7 @@
         <DocumentationFile>bin\Any CPU\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Core\Cube.FileSystem.SevenZip.Ice.Core.csproj" />
+        <ProjectReference Include="..\Core\Cube.FileSystem.SevenZip.Ice.csproj" />
     </ItemGroup>
     <ItemGroup>
         <None Include="App.config" />
