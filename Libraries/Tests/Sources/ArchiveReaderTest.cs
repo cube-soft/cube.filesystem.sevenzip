@@ -133,10 +133,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         [TestCase("Sample.exe",     ExpectedResult =  4)]
         [TestCase("Sample.nupkg",   ExpectedResult =  5)]
         [TestCase("Sample.pptx",    ExpectedResult = 40)]
-        [TestCase("Sample.rar",     ExpectedResult =  4)]
-        [TestCase("Sample.rar5",    ExpectedResult =  4)]
         [TestCase("Sample.xlsx",    ExpectedResult = 14)]
-        [TestCase("SampleEmpty.7z", ExpectedResult =  7)]
         [TestCase("SampleSfx.exe",  ExpectedResult =  4)]
         public int Extract_Lite(string filename)
         {
@@ -192,6 +189,9 @@ namespace Cube.FileSystem.SevenZip.Tests
                 yield return new TestCaseData("Sample.jar", "");
                 yield return new TestCaseData("Sample.lha", "");
                 yield return new TestCaseData("Sample.lzh", "");
+                yield return new TestCaseData("Sample.rar", "");
+                yield return new TestCaseData("Sample.rar5", "");
+                yield return new TestCaseData("SampleEmpty.7z", "");
                 yield return new TestCaseData("Password.7z", "password");
                 yield return new TestCaseData("PasswordHeader.7z", "password");
                 yield return new TestCaseData("PasswordSymbol01.zip", "()[]{}<>");

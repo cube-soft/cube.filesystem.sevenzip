@@ -63,12 +63,25 @@ namespace Cube.FileSystem.SevenZip
             TotalBytes   = -1;
             Report.Count = 0;
             Report.Bytes = 0;
-            _inner       = Items.GetEnumerator();
+
+            _inner = Items.GetEnumerator();
+            _inner.MoveNext();
         }
 
         #endregion
 
         #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Mode
+        ///
+        /// <summary>
+        /// Gets the operation mode.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public AskMode Mode { get; private set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -220,6 +233,9 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void PrepareOperation(AskMode mode)
         {
+            Mode = mode;
+            if (mode != AskMode.Extract) return;
+
             var item = _inner.Current;
             if (item != null && _streams.ContainsKey(item)) Invoke(() =>
             {
@@ -241,15 +257,20 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void SetOperationResult(OperationResult result) => Invoke(() =>
         {
-            var item = _inner.Current;
-            if (item != null && _streams.ContainsKey(item))
+            try
             {
-                _streams[item].Dispose();
-                _streams.Remove(item);
-            }
+                if (Mode != AskMode.Extract) return;
 
-            Teminate(item, result);
-            Result = result;
+                var item = _inner.Current;
+                if (item != null && _streams.ContainsKey(item))
+                {
+                    _streams[item].Dispose();
+                    _streams.Remove(item);
+                }
+
+                Teminate(item, result);
+            }
+            finally { Result = result; }
         });
 
         #endregion
@@ -323,19 +344,19 @@ namespace Cube.FileSystem.SevenZip
         {
             if (Result != OperationResult.OK || mode != AskMode.Extract) return null;
 
-            while (_inner.MoveNext())
+            do
             {
                 var src = _inner.Current;
 
                 if (src.Index != index) continue;
-                if (!src.FullName.HasValue()) return Skip();
+                if (!src.FullName.HasValue()) return null;
                 if (Filters != null && src.Match(Filters)) return Skip();
                 if (src.IsDirectory) return CreateDirectory();
 
                 var dest = new ArchiveStreamWriter(IO.Create(IO.Combine(Destination, src.FullName)));
                 _streams.Add(src, dest);
                 return dest;
-            }
+            } while (_inner.MoveNext());
 
             return null;
         }
