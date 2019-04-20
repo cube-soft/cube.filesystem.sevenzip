@@ -8,7 +8,7 @@ Cube.FileSystem.SevenZip
 
 Cube.FileSystem.SevenZip is a wrapper library of the [7-Zip](http://www.7-zip.org/) via COM interface.
 The repository also has an archiving or extracting application, which name is [CubeICE](https://www.cube-soft.jp/cubeice/).
-These libraries and applications are available for .NET Framework 3.5, 4.5 or more.
+These libraries and applications are available for .NET Framework 3.5, 4.5 or later.
 Note that the Cube.FileSystem.SevenZip project (files in the [Libraries](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries) directory) is licensed under the GNU LGPLv3 and the other projects are Apache 2.0.
 
 ## Usage
