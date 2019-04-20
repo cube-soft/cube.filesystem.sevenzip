@@ -231,14 +231,32 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="progress">Progress object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Extract(string directory, IProgress<Report> progress)
-        {
-            using (var cb = CreateCallback(directory, progress))
-            {
-                _archive.Extract(null, uint.MaxValue, 0, cb);
-                Items.Terminate(cb, _password);
-            }
-        }
+        public void Extract(string directory, IProgress<Report> progress) =>
+            ExtractCore(directory, false, progress);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract
+        ///
+        /// <summary>
+        /// Tests the extract operations.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Extract() => Extract(default(IProgress<Report>));
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract
+        ///
+        /// <summary>
+        /// Tests the extract operations.
+        /// </summary>
+        ///
+        /// <param name="progress">Progress object.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Extract(IProgress<Report> progress) => ExtractCore(null, true, progress);
 
         #endregion
 
@@ -264,6 +282,25 @@ namespace Cube.FileSystem.SevenZip
             _archive?.Close();
             _open?.Dispose();
             _core?.Dispose();
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ExtractCore
+        ///
+        /// <summary>
+        /// Extracts files and saves to the specified directory, or tests
+        /// the extracting operation.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void ExtractCore(string directory, bool test, IProgress<Report> progress)
+        {
+            using (var cb = CreateCallback(directory, progress))
+            {
+                _archive.Extract(null, uint.MaxValue, test ? 1 : 0, cb);
+                Items.Terminate(cb, _password);
+            }
         }
 
         /* ----------------------------------------------------------------- */

@@ -177,16 +177,17 @@ namespace Cube.FileSystem.SevenZip
         ///
         /// <param name="src">Item to extract.</param>
         /// <param name="directory">Saving directory.</param>
+        /// <param name="test">Test mode or not.</param>
         /// <param name="progress">Object to notify progress.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Extract(ArchiveItem src, string directory, IProgress<Report> progress)
+        public void Extract(ArchiveItem src, string directory, bool test, IProgress<Report> progress)
         {
             Debug.Assert(src.FullName.HasValue());
-            if (src.IsDirectory) { src.CreateDirectory(directory, IO); return; }
+            if (!test && src.IsDirectory) { src.CreateDirectory(directory, IO); return; }
             using (var cb = CreateCallback(src, directory, progress))
             {
-                Archive.Extract(new[] { (uint)src.Index }, 1, 0, cb);
+                Archive.Extract(new[] { (uint)src.Index }, 1, test ? 1 : 0, cb);
                 new[] { src }.Terminate(cb, Password);
             }
         }

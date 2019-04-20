@@ -45,7 +45,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// Extract
         ///
         /// <summary>
-        /// Executes a test to extract the specified archive.
+        /// Tests to extract the specified archive.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -72,10 +72,26 @@ namespace Cube.FileSystem.SevenZip.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Extract
+        ///
+        /// <summary>
+        /// Tests to extract the specified archive in test mode.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [TestCaseSource(nameof(TestCases))]
+        public void Extract_Test(string filename, string password) => IgnoreCultureError(() =>
+        {
+            var src = GetExamplesWith(filename);
+            using (var obj = new ArchiveReader(src, password)) obj.Extract();
+        }, $"{filename}, {password}");
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Extract_EachItem
         ///
         /// <summary>
-        /// Executes a test to extract the specified archive for each item.
+        /// Tests to extract the specified archive for each item.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -113,6 +129,26 @@ namespace Cube.FileSystem.SevenZip.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Extract_Test_EachItem
+        ///
+        /// <summary>
+        /// Tests to extract the specified archive for each item in test
+        /// mode.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [TestCaseSource(nameof(TestCases))]
+        public void Extract_Test_EachItem(string filename, string password) => IgnoreCultureError(() =>
+        {
+            using (var obj = new ArchiveReader(GetExamplesWith(filename), password))
+            {
+                var items = obj.Items.ToList();
+                for (var i = 0; i < items.Count; ++i) items[i].Extract();
+            }
+        }, $"{filename}, {password}");
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Extract_Lite
         ///
         /// <summary>
@@ -140,6 +176,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             var dest   = GetResultsWith(nameof(Extract_Lite), filename);
             var report = CreateReport();
 
+            using (var obj = new ArchiveReader(src)) obj.Extract(); // Test
             using (var obj = new ArchiveReader(src)) obj.Extract(dest, Create(report));
             return report[ReportStatus.End];
         }

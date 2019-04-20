@@ -152,7 +152,32 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public void Extract(string directory, IProgress<Report> progress) =>
-            ((ArchiveItemController)Controller).Extract(this, directory, progress);
+            ((ArchiveItemController)Controller).Extract(this, directory, false, progress);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract
+        ///
+        /// <summary>
+        /// Tests the extract operation on the item.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Extract() => Extract(default(IProgress<Report>));
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract
+        ///
+        /// <summary>
+        /// Tests the extract operation on the item.
+        /// </summary>
+        ///
+        /// <param name="progress">Progress report.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Extract(IProgress<Report> progress) =>
+            ((ArchiveItemController)Controller).Extract(this, null, true, progress);
 
         #endregion
     }

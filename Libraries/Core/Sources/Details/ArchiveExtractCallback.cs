@@ -30,7 +30,7 @@ namespace Cube.FileSystem.SevenZip
     /// ArchiveExtractCallback
     ///
     /// <summary>
-    /// 圧縮ファイルを展開する際のコールバック関数群を定義したクラスです。
+    /// Provides callback functionality to extract files from an archive.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -44,13 +44,14 @@ namespace Cube.FileSystem.SevenZip
         /// ArchiveExtractCallback
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the ArchiveExtractCallback with
+        /// the specified arguments.
         /// </summary>
         ///
-        /// <param name="src">圧縮ファイルのパス</param>
-        /// <param name="dest">展開先ディレクトリ</param>
-        /// <param name="items">展開項目一覧</param>
-        /// <param name="io">ファイル操作用オブジェクト</param>
+        /// <param name="src">Path of the archive file.</param>
+        /// <param name="dest">Path to save extracted items.</param>
+        /// <param name="items">Collection of extracting items.</param>
+        /// <param name="io">I/O handler.</param>
         ///
         /* ----------------------------------------------------------------- */
         public ArchiveExtractCallback(string src, string dest, IEnumerable<ArchiveItem> items, IO io)
@@ -88,7 +89,7 @@ namespace Cube.FileSystem.SevenZip
         /// Destination
         ///
         /// <summary>
-        /// 展開先ディレクトリのパスを取得します。
+        /// Gets the path to save extracted files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -99,7 +100,7 @@ namespace Cube.FileSystem.SevenZip
         /// Items
         ///
         /// <summary>
-        /// 展開する項目一覧を取得します。
+        /// Gets the collection of extracting items.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -110,8 +111,8 @@ namespace Cube.FileSystem.SevenZip
         /// Filters
         ///
         /// <summary>
-        /// 展開をスキップするファイル名またはディレクトリ名一覧を
-        /// 取得または設定します。
+        /// Gets or sets the collection of file or directory names to
+        /// filter.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -122,8 +123,7 @@ namespace Cube.FileSystem.SevenZip
         /// TotalCount
         ///
         /// <summary>
-        /// 展開後のファイルおよびディレクトリの合計を取得または
-        /// 設定します。
+        /// Gets or sets the number of extracting files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -138,7 +138,8 @@ namespace Cube.FileSystem.SevenZip
         /// TotalBytes
         ///
         /// <summary>
-        /// 展開後の総バイト数を取得または設定します。
+        /// Gets or sets the number of bytes when all of the specified
+        /// items have been extracted.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -159,10 +160,11 @@ namespace Cube.FileSystem.SevenZip
         /// SetTotal
         ///
         /// <summary>
-        /// 展開後のバイト数を通知します。
+        /// Sets the number of bytes when all of the specified items have
+        /// been extracted.
         /// </summary>
         ///
-        /// <param name="bytes">バイト数</param>
+        /// <param name="bytes">Number of bytes.</param>
         ///
         /* ----------------------------------------------------------------- */
         public void SetTotal(ulong bytes) => Invoke(() =>
@@ -178,10 +180,10 @@ namespace Cube.FileSystem.SevenZip
         /// SetCompleted
         ///
         /// <summary>
-        /// 展開の完了したバイトサイズを通知します。
+        /// Sets the extracted bytes.
         /// </summary>
         ///
-        /// <param name="bytes">展開の完了したバイト数</param>
+        /// <param name="bytes">Number of bytes.</param>
         ///
         /// <remarks>
         /// IInArchive.Extract を複数回実行する場合、SetTotal および
@@ -204,14 +206,14 @@ namespace Cube.FileSystem.SevenZip
         /// GetStream
         ///
         /// <summary>
-        /// 展開した内容を保存するためのストリームを取得します。
+        /// Gets the stream to save the extracted data.
         /// </summary>
         ///
-        /// <param name="index">圧縮ファイル中のインデックス</param>
-        /// <param name="stream">出力ストリーム</param>
-        /// <param name="mode">展開モード</param>
+        /// <param name="index">Index of the archive.</param>
+        /// <param name="stream">Output stream.</param>
+        /// <param name="mode">Operation mode.</param>
         ///
-        /// <returns>OperationResult</returns>
+        /// <returns>Operation result.</returns>
         ///
         /* ----------------------------------------------------------------- */
         public int GetStream(uint index, out ISequentialOutStream stream, AskMode mode)
@@ -225,50 +227,51 @@ namespace Cube.FileSystem.SevenZip
         /// PrepareOperation
         ///
         /// <summary>
-        /// 展開処理の直前に実行されます。
+        /// Invokes just before extracting a file.
         /// </summary>
         ///
-        /// <param name="mode">展開モード</param>
+        /// <param name="mode">Operation mode.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void PrepareOperation(AskMode mode)
+        public void PrepareOperation(AskMode mode) => Invoke(() =>
         {
             Mode = mode;
-            if (mode != AskMode.Extract) return;
+            if (mode == AskMode.Skip) return;
 
-            var item = _inner.Current;
-            if (item != null && _streams.ContainsKey(item)) Invoke(() =>
-            {
-                Report.Current = item;
-                Report.Status  = ReportStatus.Begin;
-            });
-        }
+            Report.Current = _inner.Current;
+            Report.Status  = ReportStatus.Begin;
+        });
 
         /* ----------------------------------------------------------------- */
         ///
         /// SetOperationResult
         ///
         /// <summary>
-        /// 処理結果を通知します。
+        /// Sets the extracted result.
         /// </summary>
         ///
-        /// <param name="result">処理結果</param>
+        /// <param name="result">Operation result.</param>
         ///
         /* ----------------------------------------------------------------- */
         public void SetOperationResult(OperationResult result) => Invoke(() =>
         {
             try
             {
-                if (Mode != AskMode.Extract) return;
-
-                var item = _inner.Current;
-                if (item != null && _streams.ContainsKey(item))
+                if (Mode == AskMode.Skip) return;
+                if (Mode == AskMode.Extract)
                 {
-                    _streams[item].Dispose();
-                    _streams.Remove(item);
+                    var item = _inner.Current;
+                    if (item != null && _streams.ContainsKey(item))
+                    {
+                        _streams[item].Dispose();
+                        _streams.Remove(item);
+                    }
+                    if (result == OperationResult.OK) item.SetAttributes(Destination, IO);
                 }
 
-                Teminate(item, result);
+                Report.Current = _inner.Current;
+                Report.Status  = ReportStatus.End;
+                Report.Count++;
             }
             finally { Result = result; }
         });
@@ -282,7 +285,7 @@ namespace Cube.FileSystem.SevenZip
         /// ~ArchiveExtractCallback
         ///
         /// <summary>
-        /// オブジェクトを破棄します。
+        /// Finalizes the ArchiveExtractCallback.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -293,7 +296,7 @@ namespace Cube.FileSystem.SevenZip
         /// Dispose
         ///
         /// <summary>
-        /// リソースを開放します。
+        /// Releases all resources used by the ArchiveExtractCallback.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -308,8 +311,15 @@ namespace Cube.FileSystem.SevenZip
         /// Dispose
         ///
         /// <summary>
-        /// リソースを開放します。
+        /// Releases the unmanaged resources used by the
+        /// ArchiveExtractCallback and optionally releases the managed
+        /// resources.
         /// </summary>
+        ///
+        /// <param name="disposing">
+        /// true to release both managed and unmanaged resources;
+        /// false to release only unmanaged resources.
+        /// </param>
         ///
         /* ----------------------------------------------------------------- */
         private void Dispose(bool disposing)
@@ -319,7 +329,8 @@ namespace Cube.FileSystem.SevenZip
                 foreach (var item in _streams)
                 {
                     item.Value.Dispose();
-                    Invoke(() => Teminate(item.Key, Result));
+                    if (Result != OperationResult.OK) continue;
+                    Invoke(() => item.Key.SetAttributes(Destination, IO));
                 }
                 _streams.Clear();
             }
@@ -336,7 +347,7 @@ namespace Cube.FileSystem.SevenZip
         /// CreateStream
         ///
         /// <summary>
-        /// ストリームを生成します。
+        /// Creates a stream from the specified arguments.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -366,7 +377,7 @@ namespace Cube.FileSystem.SevenZip
         /// CreateDirectory
         ///
         /// <summary>
-        /// ディレクトリを生成します。
+        /// Creates a dicretory.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -383,7 +394,7 @@ namespace Cube.FileSystem.SevenZip
         /// Skip
         ///
         /// <summary>
-        /// 展開処理をスキップします。
+        /// Skips the current item.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -391,23 +402,6 @@ namespace Cube.FileSystem.SevenZip
         {
             this.LogDebug($"Skip:{_inner.Current.FullName}");
             return null;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Terminate
-        ///
-        /// <summary>
-        /// Invokes post processing.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Teminate(ArchiveItem src, OperationResult result)
-        {
-            if (result == OperationResult.OK) src.SetAttributes(Destination, IO);
-            Report.Current = src;
-            Report.Status  = ReportStatus.End;
-            Report.Count++;
         }
 
         #endregion
