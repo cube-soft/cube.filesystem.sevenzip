@@ -15,43 +15,34 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
 namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ReadOnlyArchiveList
+    /// ArchiveItemControllable
     ///
     /// <summary>
-    /// 圧縮ファイルの読み取り専用コレクションクラスです。
+    /// Represents an item in the archive.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal class ReadOnlyArchiveList : IReadOnlyList<ArchiveItem>
+    internal class ArchiveItemControllable : Controllable
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ReadOnlyArchiveCollection
+        /// ArchiveItemControllable
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Creates a new instance of the ArchiveItemControllable class
+        /// with the specified arguments.
         /// </summary>
         ///
-        /// <param name="archive">実装オブジェクト</param>
-        /// <param name="src">圧縮ファイルのパス</param>
-        /// <param name="password">パスワード取得用オブジェクト</param>
-        /// <param name="io">入出力用のオブジェクト</param>
-        ///
         /* ----------------------------------------------------------------- */
-        public ReadOnlyArchiveList(IInArchive archive, string src, PasswordQuery password, IO io)
+        public ArchiveItemControllable(string src, int index) : base(src)
         {
-            Source      = src;
-            _controller = new ArchiveItemController(archive, password, io);
+            Index = index;
         }
 
         #endregion
@@ -60,79 +51,64 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Count
+        /// Index
         ///
         /// <summary>
-        /// コレクションの個数を取得します。
+        /// Gets the index of the item in the archive.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public int Index { get; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// RawName
+        ///
+        /// <summary>
+        /// Gets or sets the original path described in the archive.
         /// </summary>
         ///
         /// <remarks>
-        /// BZip2, GZip など一部の圧縮形式で項目数を取得出来ていないため、
-        /// 暫定的に初期値を 1 に設定しています。
+        /// RawName の内容に対して、Windows で使用不可能な文字列に対する
+        /// エスケープ処理を実行した結果が FullName となります。
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public int Count => Math.Max((int)_controller.Archive.GetNumberOfItems(), 1);
+        public string RawName { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Item
+        /// Crc
         ///
         /// <summary>
-        /// 指定したインデックスに対応するオブジェクトを取得します。
-        /// </summary>
-        ///
-        /// <param name="index">インデックス</param>
-        ///
-        /// <returns>ArchiveItem オブジェクト</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public ArchiveItem this[int index] => new ArchiveItem(Source, index, _controller);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Source
-        ///
-        /// <summary>
-        /// 圧縮ファイルのパスを取得します。
+        /// Gets or sets the CRC value of the item.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Source { get; }
-
-        #endregion
-
-        #region Methods
+        public uint Crc { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetEnumerator
+        /// Encrypted
         ///
         /// <summary>
-        /// 各要素にアクセスするための反復子を取得します。
+        /// Gets or sets a value indicating whether the item is encrypted.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IEnumerator<ArchiveItem> GetEnumerator()
-        {
-            for (var i = 0; i < Count; ++i) yield return this[i];
-        }
+        public bool Encrypted { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetEnumerator
+        /// Filter
         ///
         /// <summary>
-        /// 各要素にアクセスするための反復子を取得します。
+        /// Gets or sets the path filter object.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public PathFilter Filter { get; set; }
 
-        #endregion
-
-        #region Fields
-        private readonly ArchiveItemController _controller;
         #endregion
     }
 }

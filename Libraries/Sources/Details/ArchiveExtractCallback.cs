@@ -47,63 +47,47 @@ namespace Cube.FileSystem.SevenZip
         /// the specified arguments.
         /// </summary>
         ///
-        /// <param name="src">Path of the archive file.</param>
+        /// <param name="controller">Controller of th archive.</param>
         /// <param name="dest">Path to save extracted items.</param>
-        /// <param name="items">Collection of extracting items.</param>
-        /// <param name="io">I/O handler.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveExtractCallback(string src, string dest, IEnumerable<ArchiveItem> items, IO io)
-            : base(src, io)
-        {
-            _dispose     = new OnceAction<bool>(Dispose);
-            Destination  = dest;
-            Items        = items;
-            TotalCount   = -1;
-            TotalBytes   = -1;
-            Report.Count = 0;
-            Report.Bytes = 0;
+        public ArchiveExtractCallback(ArchiveReaderController controller, string dest) :
+            this(controller, Enumerable.Range(0, controller.Items.Count), controller.Items.Count, dest) { }
 
-            _inner = Items.GetEnumerator();
-            _inner.MoveNext();
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ArchiveExtractCallback
+        ///
+        /// <summary>
+        /// Initializes a new instance of the ArchiveExtractCallback with
+        /// the specified arguments.
+        /// </summary>
+        ///
+        /// <param name="controller">Controller of th archive.</param>
+        /// <param name="indices">Indices of extracting items.</param>
+        /// <param name="count">Number of indices.</param>
+        /// <param name="dest">Path to save extracted items.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ArchiveExtractCallback(ArchiveReaderController controller,
+            IEnumerable<int> indices, int count, string dest) :
+            base(controller.Source, controller.IO)
+        {
+            _dispose    = new OnceAction<bool>(Dispose);
+            _controller = controller;
+            _dest       = dest;
+            _indices    = indices.GetEnumerator();
+            _indices.MoveNext();
+
+            Report.TotalCount = count;
+            Report.TotalBytes = -1;
+            Report.Count      = 0;
+            Report.Bytes      = 0;
         }
 
         #endregion
 
         #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Mode
-        ///
-        /// <summary>
-        /// Gets the operation mode.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public AskMode Mode { get; private set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Destination
-        ///
-        /// <summary>
-        /// Gets the path to save extracted files.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Destination { get; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Items
-        ///
-        /// <summary>
-        /// Gets the collection of extracting items.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public IEnumerable<ArchiveItem> Items { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -116,37 +100,6 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public IEnumerable<string> Filters { get; set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// TotalCount
-        ///
-        /// <summary>
-        /// Gets or sets the number of extracting files.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public long TotalCount
-        {
-            get => Report.TotalCount;
-            set => Report.TotalCount = value;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// TotalBytes
-        ///
-        /// <summary>
-        /// Gets or sets the number of bytes when all of the specified
-        /// items have been extracted.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public long TotalBytes
-        {
-            get => Report.TotalBytes;
-            set => Report.TotalBytes = value;
-        }
 
         #endregion
 
@@ -168,9 +121,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void SetTotal(ulong bytes) => Invoke(() =>
         {
-            if (TotalCount < 0) TotalCount = Items.Count();
-            if (TotalBytes < 0) TotalBytes = (long)bytes;
-
+            if (Report.TotalBytes < 0) Report.TotalBytes = (long)bytes;
             _hack = Math.Max((long)bytes - Report.TotalBytes, 0);
         });
 
@@ -234,11 +185,13 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void PrepareOperation(AskMode mode) => Invoke(() =>
         {
-            Mode = mode;
+            _mode = mode;
             if (mode == AskMode.Skip) return;
-
-            Report.Current = _inner.Current;
-            Report.Status  = ReportStatus.Begin;
+            if (_dic.TryGetValue(_indices.Current, out var src))
+            {
+                Report.Current = src.Info;
+                Report.Status  = ReportStatus.Begin;
+            }
         });
 
         /* ----------------------------------------------------------------- */
@@ -254,25 +207,21 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void SetOperationResult(OperationResult result) => Invoke(() =>
         {
-            try
+            Result = result;
+            if (_mode == AskMode.Skip) return;
+            if (_dic.TryGetValue(_indices.Current, out var src))
             {
-                if (Mode == AskMode.Skip) return;
-                if (Mode == AskMode.Extract)
+                if (_mode == AskMode.Extract)
                 {
-                    var item = _inner.Current;
-                    if (item != null && _streams.ContainsKey(item))
-                    {
-                        _streams[item].Dispose();
-                        _streams.Remove(item);
-                    }
-                    if (result == OperationResult.OK) item.SetAttributes(Destination, IO);
+                    src.Stream?.Dispose();
+                    _dic.Remove(_indices.Current);
+                    if (result == OperationResult.OK) src.Info.SetAttributes(_dest, IO);
                 }
 
-                Report.Current = _inner.Current;
-                Report.Status  = ReportStatus.End;
+                Report.Current = src.Info;
+                Report.Status = ReportStatus.End;
                 Report.Count++;
             }
-            finally { Result = result; }
         });
 
         #endregion
@@ -325,13 +274,13 @@ namespace Cube.FileSystem.SevenZip
         {
             if (disposing)
             {
-                foreach (var item in _streams)
+                foreach (var kv in _dic)
                 {
-                    item.Value.Dispose();
+                    kv.Value.Stream?.Dispose();
                     if (Result != OperationResult.OK) continue;
-                    Invoke(() => item.Key.SetAttributes(Destination, IO));
+                    Invoke(() => kv.Value.Info.SetAttributes(_dest, IO));
                 }
-                _streams.Clear();
+                _dic.Clear();
             }
         }
 
@@ -352,63 +301,65 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         private ArchiveStreamWriter CreateStream(uint index, AskMode mode)
         {
-            if (Result != OperationResult.OK || mode != AskMode.Extract) return null;
+            if (Result != OperationResult.OK || mode == AskMode.Skip) return null;
 
             do
             {
-                var src = _inner.Current;
+                var key = _indices.Current;
+                if (key != index) continue;
+                var value = new Core(_controller.Items[key]);
+                _dic.Add(key, value);
 
-                if (src.Index != index) continue;
-                if (!src.FullName.HasValue()) return null;
-                if (Filters != null && src.Match(Filters)) return Skip();
-                if (src.IsDirectory) return CreateDirectory();
-
-                var dest = new ArchiveStreamWriter(IO.Create(IO.Combine(Destination, src.FullName)));
-                _streams.Add(src, dest);
-                return dest;
-            } while (_inner.MoveNext());
+                var vi = value.Info;
+                if (mode == AskMode.Extract && vi.FullName.HasValue())
+                {
+                    if (vi.Match(Filters)) this.LogDebug($"Skip:{vi.FullName}");
+                    else if (vi.IsDirectory) vi.CreateDirectory(_dest, IO);
+                    else value.Stream = CreateStream(vi);
+                }
+                return value.Stream;
+            } while (_indices.MoveNext());
 
             return null;
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CreateDirectory
+        /// CreateStream
         ///
         /// <summary>
-        /// Creates a dicretory.
+        /// Creates a stream from the specified item.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private ArchiveStreamWriter CreateDirectory()
-        {
-            Report.Current = _inner.Current;
-            Report.Status  = ReportStatus.Begin;
-            _inner.Current.CreateDirectory(Destination, IO);
-            return null;
-        }
+        private ArchiveStreamWriter CreateStream(ArchiveItem src) =>
+            new ArchiveStreamWriter(IO.Create(IO.Combine(_dest, src.FullName)));
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Skip
+        /// Core
         ///
         /// <summary>
-        /// Skips the current item.
+        /// Represents core information.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private ArchiveStreamWriter Skip()
+        private class Core
         {
-            this.LogDebug($"Skip:{_inner.Current.FullName}");
-            return null;
+            public Core(ArchiveItem info) { Info = info; }
+            public ArchiveItem Info { get; }
+            public ArchiveStreamWriter Stream { get; set; }
         }
 
         #endregion
 
         #region Fields
         private readonly OnceAction<bool> _dispose;
-        private readonly IEnumerator<ArchiveItem> _inner;
-        private readonly IDictionary<ArchiveItem, ArchiveStreamWriter> _streams = new Dictionary<ArchiveItem, ArchiveStreamWriter>();
+        private readonly ArchiveReaderController _controller;
+        private readonly IEnumerator<int> _indices;
+        private readonly IDictionary<int, Core> _dic = new Dictionary<int, Core>();
+        private readonly string _dest;
+        private AskMode _mode = AskMode.Extract;
         private long _hack = 0;
         #endregion
     }

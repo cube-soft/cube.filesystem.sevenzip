@@ -33,7 +33,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal sealed class SevenZipLibrary : IDisposable
+    internal sealed class SevenZipLibrary : DisposableBase
     {
         #region Constructors
 
@@ -48,7 +48,6 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public SevenZipLibrary()
         {
-            _dispose = new OnceAction<bool>(Dispose);
             var asm = Assembly.GetExecutingAssembly().GetReader();
             var dir = Path.GetDirectoryName(asm.Location);
             _handle = Kernel32.NativeMethods.LoadLibrary(Path.Combine(dir, "7z.dll"));
@@ -143,19 +142,6 @@ namespace Cube.FileSystem.SevenZip
             return result as IOutArchive;
         }
 
-        #region IDisposable
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ~LibLoader
-        ///
-        /// <summary>
-        /// オブジェクトを開放します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        ~SevenZipLibrary() { _dispose.Invoke(false); }
-
         /* ----------------------------------------------------------------- */
         ///
         /// Dispose
@@ -165,27 +151,10 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Dispose()
-        {
-            _dispose.Invoke(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Dispose
-        ///
-        /// <summary>
-        /// リソースを破棄します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             if (_handle != null && !_handle.IsClosed) _handle.Close();
         }
-
-        #endregion
 
         #endregion
 
@@ -210,7 +179,6 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Fields
-        private readonly OnceAction<bool> _dispose;
         private readonly SafeLibraryHandle _handle;
         #endregion
     }

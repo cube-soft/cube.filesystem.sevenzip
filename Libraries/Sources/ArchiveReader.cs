@@ -15,7 +15,6 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.SevenZip.Mixin;
 using System;
 using System.Collections.Generic;
 
@@ -126,35 +125,12 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         private ArchiveReader(Format format, string src, PasswordQuery password, IO io)
         {
-            if (format == Format.Unknown) throw new UnknownFormatException();
-
-            var asr   = new ArchiveStreamReader(io.OpenRead(src));
-            _core     = new SevenZipLibrary();
-            _password = password;
-            _open     = new ArchiveOpenCallback(src, asr, io) { Password = _password };
-            _archive  = _core.GetInArchive(format);
-            _archive.Open(asr, IntPtr.Zero, _open);
-
-            IO     = io;
-            Format = format;
-            Source = src;
-            Items  = new ReadOnlyArchiveList(_archive, src, _password, io);
+            _controller = new ArchiveReaderController(format, src, password, io);
         }
 
         #endregion
 
         #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// IO
-        ///
-        /// <summary>
-        /// Gets the I/O handler.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected IO IO { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -165,7 +141,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Source { get; }
+        public string Source => _controller.Source;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -176,7 +152,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Format Format { get; }
+        public Format Format => _controller.Format;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -187,7 +163,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IReadOnlyList<ArchiveItem> Items { get; }
+        public IReadOnlyList<ArchiveItem> Items => _controller.Items;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -199,7 +175,11 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IEnumerable<string> Filters { get; set; }
+        public IEnumerable<string> Filters
+        {
+            get => _controller.Filters;
+            set => _controller.Filters = value;
+        }
 
         #endregion
 
@@ -231,7 +211,7 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public void Extract(string directory, IProgress<Report> progress) =>
-            ExtractCore(directory, false, progress);
+            _controller.Extract(directory, false, progress);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -255,11 +235,8 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="progress">Progress object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Extract(IProgress<Report> progress) => ExtractCore(null, true, progress);
-
-        #endregion
-
-        #region Implementations
+        public void Extract(IProgress<Report> progress) =>
+            _controller.Extract(string.Empty, true, progress);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -276,57 +253,12 @@ namespace Cube.FileSystem.SevenZip
         /// </param>
         ///
         /* ----------------------------------------------------------------- */
-        protected override void Dispose(bool disposing)
-        {
-            _archive?.Close();
-            _open?.Dispose();
-            _core?.Dispose();
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ExtractCore
-        ///
-        /// <summary>
-        /// Extracts files and saves to the specified directory, or tests
-        /// the extracting operation.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void ExtractCore(string directory, bool test, IProgress<Report> progress)
-        {
-            using (var cb = CreateCallback(directory, progress))
-            {
-                _archive.Extract(null, uint.MaxValue, test ? 1 : 0, cb);
-                Items.Terminate(cb, _password);
-            }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CreateCallback
-        ///
-        /// <summary>
-        /// Creates a new instance of the ArchiveExtractCallback class.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private ArchiveExtractCallback CreateCallback(string directory, IProgress<Report> progress) =>
-            new ArchiveExtractCallback(Source, directory, Items, IO)
-        {
-            TotalCount = Items.Count,
-            Password   = _password,
-            Progress   = progress,
-            Filters    = Filters,
-        };
+        protected override void Dispose(bool disposing) => _controller?.Dispose();
 
         #endregion
 
         #region Fields
-        private readonly PasswordQuery _password;
-        private readonly SevenZipLibrary _core;
-        private readonly ArchiveOpenCallback _open;
-        private readonly IInArchive _archive;
+        private readonly ArchiveReaderController _controller;
         #endregion
     }
 }
