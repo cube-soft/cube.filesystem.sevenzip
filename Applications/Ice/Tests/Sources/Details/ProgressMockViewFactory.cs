@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.SevenZip.Ice.App;
+using Cube.FileSystem.SevenZip.Ice;
 using Cube.Forms;
 using Cube.Generics;
 using NUnit.Framework;

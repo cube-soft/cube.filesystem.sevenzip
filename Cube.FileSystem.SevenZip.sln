@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26403.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.SevenZip", "Libraries\Cube.FileSystem.SevenZip.csproj", "{74C9F388-360E-4C46-A9A6-E131EAB2E49C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.SevenZip.Tests", "Tests\Cube.FileSystem.SevenZip.Tests.csproj", "{BDBA9B88-28D5-4369-B6AF-ADA67D95AC98}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.FileSystem.SevenZip.Tests", "Libraries\Tests\Cube.FileSystem.SevenZip.Tests.csproj", "{BDBA9B88-28D5-4369-B6AF-ADA67D95AC98}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
