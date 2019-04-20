@@ -95,7 +95,6 @@ namespace Cube.FileSystem.SevenZip.Tests
 
                 for (var i = 0; i < keys.Count; ++i)
                 {
-                    items[i].Refresh();
                     var name = keys[i];
                     Assert.That(items[i].Index,    Is.EqualTo(i), name);
                     Assert.That(items[i].FullName, Is.EqualTo(name), name);
@@ -163,6 +162,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             get
             {
                 yield return new TestCaseData("Sample.zip", "");
+                yield return new TestCaseData("SampleEmpty.zip", "");
                 yield return new TestCaseData("SampleVolume.zip", "");
                 yield return new TestCaseData("SampleVolume.rar.001", "");
                 yield return new TestCaseData("SampleComma.zip", "");
@@ -191,6 +191,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                 yield return new TestCaseData("Sample.lzh", "");
                 yield return new TestCaseData("Sample.rar", "");
                 yield return new TestCaseData("Sample.rar5", "");
+                yield return new TestCaseData("SampleEmpty.rar", "");
                 yield return new TestCaseData("SampleEmpty.7z", "");
                 yield return new TestCaseData("Password.7z", "password");
                 yield return new TestCaseData("PasswordHeader.7z", "password");

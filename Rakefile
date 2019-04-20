@@ -82,7 +82,7 @@ end
 desc "Build the solution in the current branch."
 task :build, [:platform] do |_, e|
     e.with_defaults(:platform => PLATFORMS[0])
-    sh("nuget restore #{PROJECT}.apps.sln")
+    sh("nuget restore #{PROJECT}.Apps.sln")
     sh(%(#{BUILD} -p:Platform="#{e.platform}" #{PROJECT}.Apps.sln))
 end
 
