@@ -22,13 +22,13 @@ require 'rake/clean'
 # configuration
 # --------------------------------------------------------------------------- #
 PROJECT     = 'Cube.FileSystem.SevenZip'
-LIBRARY     = '../packages'
+LIB         = '../packages'
 NATIVE      = '../resources/native'
 BRANCHES    = ['stable', 'net35']
 FRAMEWORKS  = ['net45', 'net35']
 PLATFORMS   = ['Any CPU', 'x86', 'x64']
 CONFIGS     = ['Release', 'Debug']
-COPIES      = ['Libraries/Tests', 'Applications/Ice/Tests', 'Applications/Ice/Main']
+LIB_DEST    = ['Libraries/Tests', 'Applications/Ice/Tests', 'Applications/Ice/Main']
 PACKAGES    = ["Libraries/Core/#{PROJECT}.nuspec"]
 TESTCASES   = {"#{PROJECT}.Tests"     => 'Libraries/Tests',
                "#{PROJECT}.Ice.Tests" => 'Applications/Ice/Tests'}
@@ -70,7 +70,7 @@ desc "Clean objects and build the solution in pre-defined branches and platforms
 task :clean_build => [:clean] do
     BRANCHES.product(['Any CPU']) { |e|
         sh("git checkout #{e[0]}")
-        RakeFileUtils::rm_rf(FileList.new("#{LIBRARY}/cube.*"))
+        RakeFileUtils::rm_rf(FileList.new("#{LIB}/cube.*"))
         Rake::Task[:build].reenable
         Rake::Task[:build].invoke(e[1])
     }
@@ -91,30 +91,29 @@ end
 # --------------------------------------------------------------------------- #
 desc "Build and test projects in the current branch."
 task :test => [:build] do
+    pf  = PLATFORMS[0]
     fw  = %x(git symbolic-ref --short HEAD).chomp
     fw  = 'net45' if (fw != 'net35')
-    bin = ['bin', PLATFORMS[0], CONFIGS[0], fw].join('/')
-
+    bin = ['bin', pf, CONFIGS[0], fw].join('/')
     Rake::Task[:copy].reenable
-    Rake::Task[:copy].invoke(fw)
-
-    TESTCASES.each { |proj, root|
-        dir = "#{root}/#{bin}"
-        sh("#{TEST} \"#{dir}/#{proj}.dll\" --work=\"#{dir}\"")
-    }
+    Rake::Task[:copy].invoke(pf, fw)
+    TESTCASES.each { |p, d| sh(%(#{TEST} "#{d}/#{bin}/#{p}.dll" --work="#{d}/#{bin}")) }
 end
 
 # --------------------------------------------------------------------------- #
 # copy
 # --------------------------------------------------------------------------- #
 desc "Copy resources to the bin directories."
-task :copy, [:framework] do |_, e|
-    fw = (e.framework != nil) ? [e.framework] : FRAMEWORKS
-    fw.product(PLATFORMS, CONFIGS) { |set|
-        pf  = (set[1] == 'Any CPU') ? 'x64' : set[1]
-        bin = ['bin', set[1], set[2], set[0]].join('/')
-        COPIES.each { |root|
-            src  = Dir::glob("#{NATIVE}/#{pf}/7z/7z.*")
+task :copy, [:platform, :framework] do |_, e|
+    v0 = (e.platform  != nil) ? [e.platform ] : PLATFORMS
+    v1 = (e.framework != nil) ? [e.framework] : FRAMEWORKS
+
+    v0.product(CONFIGS, v1) { |set|
+        pf  = (set[0] == 'Any CPU') ? 'x64' : set[0]
+        bin = ['bin', set[0], set[1], set[2]].join('/')
+
+        LIB_DEST.each { |root|
+            src  = FileList.new("#{NATIVE}/#{pf}/7z/7z.*")
             dest = "#{root}/#{bin}"
             RakeFileUtils::mkdir_p(dest)
             RakeFileUtils::cp_r(src, dest)
