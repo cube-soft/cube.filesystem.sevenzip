@@ -24,5 +24,6 @@
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Cube.FileSystem" Version="1.17.0" />
+        <PackageReference Include="Cube.Native.SevenZip" Version="19.0.1" />
     </ItemGroup>
 </Project>
