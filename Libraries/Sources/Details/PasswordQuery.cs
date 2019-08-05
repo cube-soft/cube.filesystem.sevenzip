@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Generics;
+using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -24,7 +24,7 @@ namespace Cube.FileSystem.SevenZip
     /// PasswordQuery
     ///
     /// <summary>
-    /// パスワードの問い合わせ用オブジェクトです。
+    /// Provides functionality to request the password.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -37,10 +37,11 @@ namespace Cube.FileSystem.SevenZip
         /// PasswordQuery
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the PasswordQuery class with the
+        /// specified value.
         /// </summary>
         ///
-        /// <param name="password">パスワード</param>
+        /// <param name="password">Password result of the request.</param>
         ///
         /// <remarks>
         /// 実行前に既にパスワードを把握している場合に使用します。
@@ -59,12 +60,11 @@ namespace Cube.FileSystem.SevenZip
         /// PasswordQuery
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the PasswordQuery class with the
+        /// specified object.
         /// </summary>
         ///
-        /// <param name="inner">
-        /// パスワードの問い合わせ処理の移譲オブジェクト
-        /// </param>
+        /// <param name="inner">Object to request the password.</param>
         ///
         /* ----------------------------------------------------------------- */
         public PasswordQuery(IQuery<string> inner)
@@ -81,7 +81,7 @@ namespace Cube.FileSystem.SevenZip
         /// Password
         ///
         /// <summary>
-        /// パスワードを取得します。
+        /// Gets the password.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -92,7 +92,7 @@ namespace Cube.FileSystem.SevenZip
         /// InnerQuery
         ///
         /// <summary>
-        /// パスワードの問い合わせ処理の移譲オブジェクトを取得します。
+        /// Gets the query to invokes the password request.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -107,23 +107,23 @@ namespace Cube.FileSystem.SevenZip
         /// Request
         ///
         /// <summary>
-        /// 問い合わせを実行します。
+        /// Requests the password.
         /// </summary>
         ///
-        /// <param name="e">パラメータを保持するオブジェクト</param>
+        /// <param name="e">Message to request the password.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Request(QueryEventArgs<string> e)
+        public void Request(QueryMessage<string, string> e)
         {
             if (Password.HasValue() || _cache.HasValue())
             {
-                e.Result = Password.HasValue() ? Password : _cache;
+                e.Value  = Password.HasValue() ? Password : _cache;
                 e.Cancel = false;
             }
             else
             {
                 InnerQuery?.Request(e);
-                if (!e.Cancel && e.Result.HasValue()) _cache = e.Result;
+                if (!e.Cancel && e.Value.HasValue()) _cache = e.Value;
             }
         }
 
@@ -132,7 +132,7 @@ namespace Cube.FileSystem.SevenZip
         /// Reset
         ///
         /// <summary>
-        /// 内部状態をリセットします。
+        /// Resets inner condition.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */

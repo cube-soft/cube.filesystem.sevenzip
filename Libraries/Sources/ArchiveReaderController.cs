@@ -17,11 +17,11 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.FileSystem.SevenZip.Mixin;
-using Cube.Generics;
-using Cube.Log;
+using Cube.Mixin.Logging;
+using Cube.Mixin.String;
 using System;
-using System.Diagnostics;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Cube.FileSystem.SevenZip
@@ -249,12 +249,12 @@ namespace Cube.FileSystem.SevenZip
             };
 
             var path = ai.Filter.Result;
-            var info = path.HasValue() ? IO.Get(path) : default;
-            ai.FullName             = ai.Filter.Result;
-            ai.Name                 = info?.Name;
-            ai.NameWithoutExtension = info?.NameWithoutExtension;
-            ai.Extension            = info?.Extension;
-            ai.DirectoryName        = info?.DirectoryName;
+            var fi   = path.HasValue() ? IO.Get(path) : default;
+            ai.FullName      = ai.Filter.Result;
+            ai.Name          = fi?.Name;
+            ai.BaseName      = fi?.BaseName;
+            ai.Extension     = fi?.Extension;
+            ai.DirectoryName = fi?.DirectoryName;
 
             if (ai.FullName == ai.RawName) return;
             this.LogDebug($"Escape:{ai.FullName}", $"Raw:{ai.RawName}");

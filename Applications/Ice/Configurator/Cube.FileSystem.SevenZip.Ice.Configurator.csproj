@@ -1,6 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <Version>0.10.0</Version>
+        <Version>0.9.1</Version>
         <Authors>clown;cube-soft</Authors>
         <Company>CubeSoft</Company>
         <Product>CubeIceSetting</Product>
@@ -10,10 +10,8 @@
         <AssemblyTitle>CubeICE Setting</AssemblyTitle>
         <OutputType>WinExe</OutputType>
         <TargetFramework>net45</TargetFramework>
-        <UseWindowsForms>true</UseWindowsForms>
-        <Platforms>AnyCPU;x86;x64</Platforms>
-        <RuntimeIdentifiers>win7-x86;win7-x64</RuntimeIdentifiers>
         <LangVersion>latest</LangVersion>
+        <Platforms>AnyCPU;x86;x64</Platforms>
         <IsPackable>false</IsPackable>
         <Optimize>true</Optimize>
         <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
@@ -23,14 +21,13 @@
         <ApplicationManifest>App.manifest</ApplicationManifest>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
-        <Prefer32Bit>true</Prefer32Bit>
         <OutputPath>bin\Any CPU\$(Configuration)\</OutputPath>
         <DocumentationFile>bin\Any CPU\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\Core\Cube.FileSystem.SevenZip.Ice.csproj" />
-        <PackageReference Include="Cube.Forms" Version="1.15.10" />
-        <PackageReference Include="Cube.Images" Version="1.15.10" />
+        <PackageReference Include="Cube.Forms" Version="1.17.0" />
+        <Reference Include="System.Windows.Forms" />
     </ItemGroup>
     <ItemGroup>
         <Compile Update="Properties\Resources.Designer.cs" DependentUpon="Resources.resx" AutoGen="True" DesignTime="True" />
@@ -39,6 +36,6 @@
         <EmbeddedResource Update="Sources\Views\*.resx" DependentUpon="%(Filename).cs" />
         <None Include="Assets\**\*" />
         <None Include="Properties\DataSources\*.datasource" />
-        <None Include="App.*" />
+        <None Include="App.config" />
     </ItemGroup>
 </Project>

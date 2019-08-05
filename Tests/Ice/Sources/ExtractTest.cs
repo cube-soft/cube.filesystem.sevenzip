@@ -53,17 +53,17 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         public void Extract(string filename, string password,
             IEnumerable<string> args, ExtractSettings settings, string exists, long count)
         {
-            var request = new Request(args.Concat(new[] { GetExamplesWith(filename) }));
+            var request = new Request(args.Concat(new[] { GetSource(filename) }));
             var tmp     = string.Empty;
 
-            Mock.Destination = GetResultsWith("Runtime");
+            Mock.Destination = Get("Runtime");
             Mock.Password    = password;
 
             using (var p = Create(request))
             {
                 p.Settings.Value.Explorer = "dummy.exe";
                 p.Settings.Value.Extract = settings;
-                p.Settings.Value.Extract.SaveDirectoryName = GetResultsWith("Others");
+                p.Settings.Value.Extract.SaveDirectoryName = Get("Others");
                 p.View.Show();
 
                 Assert.That(p.View.Visible,       Is.True, "Visible");
@@ -95,11 +95,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void Extract_Multiple()
         {
-            var dest = GetResultsWith("Multiple");
+            var dest = Get("Multiple");
             var src  = new[]
             {
-                GetExamplesWith("Complex.1.0.0.zip"),
-                GetExamplesWith("Single.1.0.0.zip"),
+                GetSource("Complex.1.0.0.zip"),
+                GetSource("Single.1.0.0.zip"),
             };
 
             using (var p = Create(dest, src))
@@ -129,9 +129,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         {
             Mock.OverwriteMode = OverwriteMode.Rename;
 
-            var dummy = GetExamplesWith("Sample.txt");
-            var src   = GetExamplesWith("Complex.1.0.0.zip");
-            var dest  = GetResultsWith("Rename");
+            var dummy = GetSource("Sample.txt");
+            var src   = GetSource("Complex.1.0.0.zip");
+            var dest  = Get("Rename");
 
             IO.Copy(dummy, IO.Combine(dest, @"Foo.txt"));
             IO.Copy(dummy, IO.Combine(dest, @"Directory\Empty.txt"));
@@ -161,10 +161,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         {
             Mock.OverwriteMode = OverwriteMode.Cancel;
 
-            var dummy = GetExamplesWith("Sample.txt");
+            var dummy = GetSource("Sample.txt");
             var size  = IO.Get(dummy).Length;
-            var src   = GetExamplesWith("Complex.1.0.0.zip");
-            var dest  = GetResultsWith("OverwriteCancel");
+            var src   = GetSource("Complex.1.0.0.zip");
+            var dest  = Get("OverwriteCancel");
             var tmp   = string.Empty;
 
             IO.Copy(dummy, IO.Combine(dest, "Foo.txt"));
@@ -197,11 +197,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void Extract_DeleteSource()
         {
-            var src    = GetResultsWith("Complex.zip");
-            var dest   = GetResultsWith("DeleteSource");
-            var exists = GetResultsWith("DeleteSource", "Complex");
+            var src    = Get("Complex.zip");
+            var dest   = Get("DeleteSource");
+            var exists = Get("DeleteSource", "Complex");
 
-            IO.Copy(GetExamplesWith("Complex.1.0.0.zip"), src);
+            IO.Copy(GetSource("Complex.1.0.0.zip"), src);
 
             using (var p = Create(dest, src))
             {
@@ -232,9 +232,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void Extract_Suspend()
         {
-            var src    = GetExamplesWith("Complex.1.0.0.zip");
-            var dest   = GetResultsWith("Suspend");
-            var exists = GetResultsWith("Suspend", "Complex.1.0.0");
+            var src    = GetSource("Complex.1.0.0.zip");
+            var dest   = Get("Suspend");
+            var exists = Get("Suspend", "Complex.1.0.0");
 
             using (var p = Create(dest, src))
             {
@@ -263,7 +263,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void Extract_Cancel()
         {
-            using (var p = Create("", GetExamplesWith("Complex.zip")))
+            using (var p = Create("", GetSource("Complex.zip")))
             {
                 p.View.Show();
                 p.Aggregator.GetEvents().Cancel.Publish();
@@ -285,7 +285,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         {
             var tmp = string.Empty;
 
-            using (var p = Create("", GetExamplesWith("Password.7z")))
+            using (var p = Create("", GetSource("Password.7z")))
             {
                 p.View.Show();
                 Assert.That(Wait(p.View).Result, Is.True, "Timeout");
@@ -310,7 +310,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void Extract_ErrorReport()
         {
-            using (var p = Create("", GetExamplesWith("Sample.txt")))
+            using (var p = Create("", GetSource("Sample.txt")))
             {
                 p.Settings.Value.ErrorReport = true;
                 p.View.Show();

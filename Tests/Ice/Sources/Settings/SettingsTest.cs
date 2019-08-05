@@ -68,9 +68,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void SyncUpdate()
         {
-            var archive  = new Shortcut { FullName = GetResultsWith("CubeICE 圧縮") };
-            var extract  = new Shortcut { FullName = GetResultsWith("CubeICE 解凍") };
-            var settings = new Shortcut { FullName = GetResultsWith("CubeICE 設定") };
+            var archive  = new Shortcut { FullName = Get("CubeICE 圧縮") };
+            var extract  = new Shortcut { FullName = Get("CubeICE 解凍") };
+            var settings = new Shortcut { FullName = Get("CubeICE 設定") };
 
             var src  = new ShortcutSettings { Directory = Results };
             var menu = PresetMenu.Archive |

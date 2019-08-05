@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Generics;
+using Cube.Mixin.String;
 using Microsoft.VisualBasic.FileIO;
 using NUnit.Framework;
 using System;
@@ -51,8 +51,8 @@ namespace Cube.FileSystem.SevenZip.Tests
         [TestCaseSource(nameof(TestCases))]
         public void Extract(string filename, string password) => IgnoreCultureError(() =>
         {
-            var src    = GetExamplesWith(filename);
-            var dest   = GetResultsWith(nameof(Extract), filename);
+            var src    = GetSource(filename);
+            var dest   = Get(nameof(Extract), filename);
             var report = CreateReport();
 
             using (var obj = new ArchiveReader(src, password)) obj.Extract(dest, Create(report));
@@ -81,7 +81,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         [TestCaseSource(nameof(TestCases))]
         public void Extract_Test(string filename, string password) => IgnoreCultureError(() =>
         {
-            var src = GetExamplesWith(filename);
+            var src = GetSource(filename);
             using (var obj = new ArchiveReader(src, password)) obj.Extract();
         }, $"{filename}, {password}");
 
@@ -97,8 +97,8 @@ namespace Cube.FileSystem.SevenZip.Tests
         [TestCaseSource(nameof(TestCases))]
         public void Extract_EachItem(string filename, string password) => IgnoreCultureError(() =>
         {
-            var src  = GetExamplesWith(filename);
-            var dest = GetResultsWith(nameof(Extract_EachItem), filename);
+            var src  = GetSource(filename);
+            var dest = Get(nameof(Extract_EachItem), filename);
 
             using (var obj = new ArchiveReader(src, password))
             {
@@ -139,7 +139,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         [TestCaseSource(nameof(TestCases))]
         public void Extract_Test_EachItem(string filename, string password) => IgnoreCultureError(() =>
         {
-            using (var obj = new ArchiveReader(GetExamplesWith(filename), password))
+            using (var obj = new ArchiveReader(GetSource(filename), password))
             {
                 var items = obj.Items.ToList();
                 for (var i = 0; i < items.Count; ++i) items[i].Extract();
@@ -171,8 +171,8 @@ namespace Cube.FileSystem.SevenZip.Tests
         [TestCase("SampleSfx.exe",  ExpectedResult =  4)]
         public int Extract_Lite(string filename)
         {
-            var src    = GetExamplesWith(filename);
-            var dest   = GetResultsWith(nameof(Extract_Lite), filename);
+            var src    = GetSource(filename);
+            var dest   = Get(nameof(Extract_Lite), filename);
             var report = CreateReport();
 
             using (var obj = new ArchiveReader(src)) obj.Extract(); // Test
@@ -276,7 +276,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /* ----------------------------------------------------------------- */
         private IDictionary<string, Expected> GetExpectedValues(string filename)
         {
-            var src = GetExamplesWith("Expected", $"{filename}.txt");
+            var src = GetSource("Expected", $"{filename}.txt");
             var csv = new TextFieldParser(src, System.Text.Encoding.UTF8)
             {
                 Delimiters                = new[] { "," },

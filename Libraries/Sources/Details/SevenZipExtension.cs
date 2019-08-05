@@ -16,7 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Generics;
+using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -72,7 +72,7 @@ namespace Cube.FileSystem.SevenZip
             if (dest.HasValue()) return dest;
 
             var i0  = io.Get(path);
-            var i1  = io.Get(i0.NameWithoutExtension);
+            var i1  = io.Get(i0.BaseName);
             var fmt = Formats.FromExtension(i1.Extension);
             if (fmt != Format.Unknown) return i1.Name;
 

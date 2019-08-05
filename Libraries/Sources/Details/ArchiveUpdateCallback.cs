@@ -15,8 +15,8 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Generics;
-using Cube.Log;
+using Cube.Mixin.Logging;
+using Cube.Mixin.String;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -107,14 +107,14 @@ namespace Cube.FileSystem.SevenZip
         {
             if (Password != null)
             {
-                var e = QueryEventArgs.Create(Destination);
+                var e = Query.NewMessage(Destination);
                 Password.Request(e);
 
-                var ok = !e.Cancel && e.Result.HasValue();
+                var ok = !e.Cancel && e.Value.HasValue();
 
                 Result   = ok ? OperationResult.OK : OperationResult.UserCancel;
                 enabled  = ok ? 1 : 0;
-                password = ok ? e.Result : string.Empty;
+                password = ok ? e.Value : string.Empty;
             }
             else
             {
@@ -135,12 +135,10 @@ namespace Cube.FileSystem.SevenZip
         /// SetTotal
         ///
         /// <summary>
-        /// 圧縮するファイルの合計バイト数を通知します。
+        /// Notifies the total bytes of target files.
         /// </summary>
         ///
-        /// <param name="bytes">
-        /// 圧縮するファイルの合計バイト数
-        /// </param>
+        /// <param name="bytes">Total bytes of target files.</param>
         ///
         /* ----------------------------------------------------------------- */
         public void SetTotal(ulong bytes) => Invoke(() => Report.TotalBytes = (long)bytes);
@@ -150,10 +148,10 @@ namespace Cube.FileSystem.SevenZip
         /// SetCompleted
         ///
         /// <summary>
-        /// 圧縮処理の終了したバイト数を通知します。
+        /// Notifies the bytes to be archived.
         /// </summary>
         ///
-        /// <param name="bytes">処理の終了したバイト数</param>
+        /// <param name="bytes">Bytes to be archived.</param>
         ///
         /* ----------------------------------------------------------------- */
         public void SetCompleted(ref ulong bytes)
@@ -167,10 +165,10 @@ namespace Cube.FileSystem.SevenZip
         /// GetUpdateItemInfo
         ///
         /// <summary>
-        /// 追加する項目に関する情報を取得します。
+        /// Gets information of updating item.
         /// </summary>
         ///
-        /// <param name="index">インデックス</param>
+        /// <param name="index">Index of the item.</param>
         /// <param name="newdata">1 if new, 0 if not</param>
         /// <param name="newprop">1 if new, 0 if not</param>
         /// <param name="indexInArchive">-1 if doesn't matter</param>
@@ -195,12 +193,13 @@ namespace Cube.FileSystem.SevenZip
         /// GetProperty
         ///
         /// <summary>
-        /// 各種プロパティを取得します。
+        /// Gets the property information according to the specified
+        /// arguments.
         /// </summary>
         ///
-        /// <param name="index">圧縮ファイル中のインデックス</param>
-        /// <param name="pid">プロパティの種類</param>
-        /// <param name="value">プロパティの内容</param>
+        /// <param name="index">Index of the target file.</param>
+        /// <param name="pid">Property ID to get information.</param>
+        /// <param name="value">Value of the specified property.</param>
         ///
         /// <returns>OperationResult</returns>
         ///
@@ -249,11 +248,11 @@ namespace Cube.FileSystem.SevenZip
         /// GetStream
         ///
         /// <summary>
-        /// ストリームを取得します。
+        /// Gets the stream according to the specified arguments.
         /// </summary>
         ///
-        /// <param name="index">圧縮ファイル中のインデックス</param>
-        /// <param name="stream">読み込み用ストリーム</param>
+        /// <param name="index">Index of the target file.</param>
+        /// <param name="stream">Stream to read data.</param>
         ///
         /// <returns>OperationResult</returns>
         ///
@@ -275,10 +274,10 @@ namespace Cube.FileSystem.SevenZip
         /// SetOperationResult
         ///
         /// <summary>
-        /// 処理結果を設定します。
+        /// Sets the specified operation result.
         /// </summary>
         ///
-        /// <param name="result">処理結果</param>
+        /// <param name="result">Operation result.</param>
         ///
         /* ----------------------------------------------------------------- */
         public void SetOperationResult(OperationResult result) => Invoke(() =>
@@ -311,7 +310,7 @@ namespace Cube.FileSystem.SevenZip
         /// ~ArchiveUpdateCallback
         ///
         /// <summary>
-        /// オブジェクトを破棄します。
+        /// Finalizes the object.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -322,7 +321,7 @@ namespace Cube.FileSystem.SevenZip
         /// Dispose
         ///
         /// <summary>
-        /// リソースを開放します。
+        /// Releases the managed resources used by the object.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -337,7 +336,8 @@ namespace Cube.FileSystem.SevenZip
         /// Dispose
         ///
         /// <summary>
-        /// リソースを開放します。
+        /// Releases the unmanaged resources used by the object
+        /// and optionally releases the managed resources.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -380,7 +380,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private ArchiveStreamReader GetStream(Information src)
+        private ArchiveStreamReader GetStream(Entity src)
         {
             if (!src.Exists || src.IsDirectory) return null;
             var dest = new ArchiveStreamReader(IO.OpenRead(src.FullName));

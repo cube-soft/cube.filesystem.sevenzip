@@ -47,8 +47,8 @@ namespace Cube.FileSystem.SevenZip.Tests
         [Test]
         public void Extract_Filters()
         {
-            var src  = GetExamplesWith("SampleFilter.zip");
-            var dest = GetResultsWith(nameof(Extract_Filters));
+            var src  = GetSource("SampleFilter.zip");
+            var dest = Get(nameof(Extract_Filters));
 
             using (var archive = new ArchiveReader(src))
             {
@@ -76,7 +76,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /* ----------------------------------------------------------------- */
         [Test]
         public void Extract_UnknownFormat() => Assert.That(
-            () => new ArchiveReader(GetExamplesWith("Sample.txt")),
+            () => new ArchiveReader(GetSource("Sample.txt")),
             Throws.TypeOf<UnknownFormatException>()
         );
 
@@ -92,16 +92,16 @@ namespace Cube.FileSystem.SevenZip.Tests
         [Test]
         public void Extract_PermissionError() => Assert.That(() =>
         {
-            var dir  = GetResultsWith(nameof(Extract_PermissionError));
+            var dir  = Get(nameof(Extract_PermissionError));
             var dest = IO.Combine(dir, @"Sample\Foo.txt");
 
-            IO.Copy(GetExamplesWith("Sample.txt"), dest);
+            IO.Copy(GetSource("Sample.txt"), dest);
 
             var io = new IO();
             io.Failed += (s, e) => throw new OperationCanceledException();
 
             using (io.OpenRead(dest))
-            using (var archive = new ArchiveReader(GetExamplesWith("Sample.zip"), "", io))
+            using (var archive = new ArchiveReader(GetSource("Sample.zip"), "", io))
             {
                 archive.Extract(dir);
             }
@@ -119,11 +119,11 @@ namespace Cube.FileSystem.SevenZip.Tests
         [Test]
         public void Extract_MergeError() => Assert.That(() =>
         {
-            var dir = GetResultsWith(nameof(Extract_MergeError));
+            var dir = Get(nameof(Extract_MergeError));
             for (var i = 1; i < 4; ++i)
             {
                 var name = $"SampleVolume.rar.{i:000}";
-                IO.Copy(GetExamplesWith(name), IO.Combine(dir, name));
+                IO.Copy(GetSource(name), IO.Combine(dir, name));
             }
 
             using (var archive = new ArchiveReader(IO.Combine(dir, "SampleVolume.rar.001")))
@@ -145,7 +145,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         [TestCase("wrong")]
         public void Extract_WrongPassword(string password) => Assert.That(() =>
         {
-            var src = GetExamplesWith("Password.7z");
+            var src = GetSource("Password.7z");
             using (var archive = new ArchiveReader(src, password))
             {
                 archive.Extract(Results);
@@ -164,7 +164,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         [TestCase("")]
         public void Extract_Each_WrongPassword(string password) => Assert.That(() =>
         {
-            var src = GetExamplesWith("Password.7z");
+            var src = GetSource("Password.7z");
             using (var archive = new ArchiveReader(src, password))
             {
                 foreach (var item in archive.Items) item.Extract(Results);
@@ -192,7 +192,7 @@ namespace Cube.FileSystem.SevenZip.Tests
 
             Assert.That(() =>
             {
-                var src   = GetExamplesWith("Password.7z");
+                var src   = GetSource("Password.7z");
                 var query = new Query<string>(e => e.Cancel = true);
 
                 using (var archive = new ArchiveReader(src, query))
@@ -216,7 +216,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         [Test]
         public void Extract_Each_PasswordCancel() => Assert.That(() =>
         {
-            var src = GetExamplesWith("Password.7z");
+            var src = GetSource("Password.7z");
             var query = new Query<string>(e => e.Cancel = true);
             using (var archive = new ArchiveReader(src, query))
             {
@@ -236,8 +236,8 @@ namespace Cube.FileSystem.SevenZip.Tests
         [Test]
         public void CreateDirectory()
         {
-            var dest = GetResultsWith(nameof(CreateDirectory));
-            using (var archive = new ArchiveReader(GetExamplesWith("Sample.zip")))
+            var dest = Get(nameof(CreateDirectory));
+            using (var archive = new ArchiveReader(GetSource("Sample.zip")))
             {
                 foreach (var item in archive.Items)
                 {

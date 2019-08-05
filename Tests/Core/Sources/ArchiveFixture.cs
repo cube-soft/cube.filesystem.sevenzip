@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.TestService;
+using Cube.Tests;
 using System;
 using System.Collections.Generic;
 

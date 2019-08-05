@@ -50,13 +50,13 @@ namespace Cube.FileSystem.SevenZip.Tests
         {
             var names = new[] { "Filter.txt", "FilterDirectory" };
             var s     = filter ? "True" : "False";
-            var dest  = GetResultsWith($"Filter{s}.zip");
+            var dest  = Get($"Filter{s}.zip");
 
             using (var writer = new ArchiveWriter(Format.Zip))
             {
                 if (filter) writer.Filters = names;
-                writer.Add(GetExamplesWith("Sample.txt"));
-                writer.Add(GetExamplesWith("Sample 00..01"));
+                writer.Add(GetSource("Sample.txt"));
+                writer.Add(GetSource("Sample 00..01"));
                 writer.Save(dest);
             }
 
@@ -77,11 +77,11 @@ namespace Cube.FileSystem.SevenZip.Tests
         public void Archive_Japanese(bool utf8)
         {
             var fmt  = Format.Zip;
-            var src  = GetResultsWith("日本語のファイル名.txt");
+            var src  = Get("日本語のファイル名.txt");
             var code = utf8 ? "UTF8" : "SJis";
-            var dest = GetResultsWith($"ZipJapanese{code}.zip");
+            var dest = Get($"ZipJapanese{code}.zip");
 
-            IO.Copy(GetExamplesWith("Sample.txt"), src, true);
+            IO.Copy(GetSource("Sample.txt"), src, true);
             Assert.That(IO.Exists(src), Is.True);
 
             using (var writer = new ArchiveWriter(fmt))
@@ -111,9 +111,9 @@ namespace Cube.FileSystem.SevenZip.Tests
         {
             using (var writer = new ArchiveWriter(Format.Zip))
             {
-                var dest  = GetResultsWith("PasswordCancel.zip");
+                var dest  = Get("PasswordCancel.zip");
                 var query = new Query<string>(e => e.Cancel = true);
-                writer.Add(GetExamplesWith("Sample.txt"));
+                writer.Add(GetSource("Sample.txt"));
                 writer.Save(dest, query, null);
             }
         }, Throws.TypeOf<OperationCanceledException>());
@@ -132,9 +132,9 @@ namespace Cube.FileSystem.SevenZip.Tests
         {
             using (var writer = new ArchiveWriter(Format.Sfx))
             {
-                var dest = GetResultsWith("SfxNotFound.exe");
+                var dest = Get("SfxNotFound.exe");
                 writer.Option = new SfxOption { Module = "dummy.sfx" };
-                writer.Add(GetExamplesWith("Sample.txt"));
+                writer.Add(GetSource("Sample.txt"));
                 writer.Save(dest);
             }
         }, Throws.TypeOf<System.IO.FileNotFoundException>());
@@ -151,10 +151,10 @@ namespace Cube.FileSystem.SevenZip.Tests
         [Test]
         public void Archive_PermissionError() => Assert.That(() =>
         {
-            var dir = GetResultsWith("PermissionError");
+            var dir = Get("PermissionError");
             var src = IO.Combine(dir, "Sample.txt");
 
-            IO.Copy(GetExamplesWith("Sample.txt"), src);
+            IO.Copy(GetSource("Sample.txt"), src);
 
             using (var _ = OpenExclude(src))
             using (var writer = new ArchiveWriter(Format.Zip))
@@ -176,12 +176,12 @@ namespace Cube.FileSystem.SevenZip.Tests
         [Test]
         public void Archive_Skip()
         {
-            var dir    = GetResultsWith("Ignore");
+            var dir    = Get("Ignore");
             var ignore = IO.Combine(dir, "Sample.txt");
 
             var io = new IO();
             io.Failed += (s, e) => e.Cancel = true;
-            io.Copy(GetExamplesWith("Sample.txt"), ignore);
+            io.Copy(GetSource("Sample.txt"), ignore);
 
             var dest = io.Combine(dir, "Sample.zip");
 
@@ -189,7 +189,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             using (var writer = new ArchiveWriter(Format.Zip, io))
             {
                 writer.Add(ignore);
-                writer.Add(GetExamplesWith("Sample 00..01"));
+                writer.Add(GetSource("Sample 00..01"));
                 writer.Save(dest);
             }
 
@@ -214,7 +214,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         {
             using (var writer = new ArchiveWriter(Format.Zip))
             {
-                writer.Add(GetExamplesWith("NotFound.txt"));
+                writer.Add(GetSource("NotFound.txt"));
             }
         }, Throws.TypeOf<System.IO.FileNotFoundException>());
 

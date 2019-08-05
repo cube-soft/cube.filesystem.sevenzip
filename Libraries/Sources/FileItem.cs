@@ -26,7 +26,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class FileItem : Information
+    public class FileItem : Entity
     {
         #region Constructors
 
@@ -42,7 +42,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="src">File or directory information.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public FileItem(Information src) : this(src, src.Name) { }
+        public FileItem(Entity src) : this(src, src.Name) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -57,7 +57,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="pathInArchive">Relative path in the archive.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public FileItem(Information src, string pathInArchive) : base(src)
+        public FileItem(Entity src, string pathInArchive) : base(src)
         {
             PathInArchive = pathInArchive;
         }

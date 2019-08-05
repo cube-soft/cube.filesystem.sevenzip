@@ -15,10 +15,10 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Mixin.Assembly;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace Cube.FileSystem.SevenZip.Tests
 {
@@ -49,12 +49,12 @@ namespace Cube.FileSystem.SevenZip.Tests
         public Format Archive(Format format, string filename, string password,
             string[] items, ArchiveOption option)
         {
-            var dest = GetResultsWith(filename);
+            var dest = Get(filename);
 
             using (var writer = new ArchiveWriter(format))
             {
                 writer.Option = option;
-                foreach (var item in items) writer.Add(GetExamplesWith(item));
+                foreach (var item in items) writer.Add(GetSource(item));
                 writer.Save(dest, password);
                 writer.Clear();
             }
@@ -282,8 +282,8 @@ namespace Cube.FileSystem.SevenZip.Tests
         /* ----------------------------------------------------------------- */
         private static string Current(string filename)
         {
-            var asm = Assembly.GetExecutingAssembly().GetReader();
-            var dir = System.IO.Path.GetDirectoryName(asm.Location);
+            var asm = typeof(ArchiveWriterTest).Assembly;
+            var dir = asm.GetDirectoryName();
             return System.IO.Path.Combine(dir, filename);
         }
 
