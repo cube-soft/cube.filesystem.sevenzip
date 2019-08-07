@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Generics;
+using Cube.Mixin.String;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -32,7 +32,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public sealed class Settings : ObservableProperty
+    public sealed class Settings : SerializableBase
     {
         #region Constructors
 

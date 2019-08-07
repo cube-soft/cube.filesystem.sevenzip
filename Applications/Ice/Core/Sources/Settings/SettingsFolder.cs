@@ -15,8 +15,9 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Generics;
+using Cube.Mixin.String;
 using System.Reflection;
+using Cube.Mixin.Assembly;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -29,7 +30,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class SettingsFolder : SettingsFolder<Settings>
+    public class SettingsFolder : SettingFolder<Settings>
     {
         #region Constructors
 
@@ -87,7 +88,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             try
             {
-                var exe = IO.Combine(Assembly.DirectoryName, "CubeChecker.exe");
+                var exe = IO.Combine(Assembly.GetDirectoryName(), "CubeChecker.exe");
                 new Startup("cubeice-checker")
                 {
                     Command = $"{exe.Quote()} CubeICE",

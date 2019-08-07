@@ -15,8 +15,8 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Mixin.Assembly;
 using System;
-using System.Reflection;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -46,11 +46,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         public ArchiveRtSettings(IO io)
         {
-            var asm = Assembly.GetExecutingAssembly().GetReader();
-            var dir = io.Get(asm.Location).DirectoryName;
-
             IO        = io;
-            SfxModule = io.Combine(dir, Formats.SfxName);
+            SfxModule = io.Combine(typeof(ArchiveRtSettings).Assembly.GetDirectoryName(), Formats.SfxName);
         }
 
         /* ----------------------------------------------------------------- */

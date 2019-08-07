@@ -30,7 +30,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public sealed class ContextSettings : ObservableProperty
+    public sealed class ContextSettings : SerializableBase
     {
         #region Constructors
 

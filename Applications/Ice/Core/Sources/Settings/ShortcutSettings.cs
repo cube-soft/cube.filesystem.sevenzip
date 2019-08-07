@@ -15,10 +15,10 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Generics;
+using Cube.Mixin.Assembly;
+using Cube.Mixin.String;
 using System;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.Serialization;
 
 namespace Cube.FileSystem.SevenZip.Ice
@@ -33,7 +33,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public sealed class ShortcutSettings : ObservableProperty
+    public sealed class ShortcutSettings : SerializableBase
     {
         #region Constructors
 
@@ -263,12 +263,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetLink(string filename)
-        {
-            var asm = Assembly.GetExecutingAssembly().GetReader();
-            var dir = System.IO.Path.GetDirectoryName(asm.Location);
-            return System.IO.Path.Combine(dir, filename);
-        }
+        private string GetLink(string filename) => System.IO.Path.Combine(
+            typeof(ShortcutSettings).Assembly.GetDirectoryName(),
+            filename
+        );
 
         #endregion
 

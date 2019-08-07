@@ -29,7 +29,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public abstract class ArchiveSettingsBase : ObservableProperty
+    public abstract class ArchiveSettingsBase : SerializableBase
     {
         #region Properties
 
