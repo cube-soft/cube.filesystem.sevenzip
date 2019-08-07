@@ -28,7 +28,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ContextViewModel : ObservableProperty
+    public class ContextViewModel : ObservableBase
     {
         #region Constructors
 
@@ -314,14 +314,31 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public void Customize()
         {
-            var e = QueryEventArgs.Create(_model.IsCustomized ?
+            var e = Query.NewMessage(_model.IsCustomized ?
                 _model.Custom :
                 _model.Preset.ToContextMenuGroup()
             );
 
-            Views.ShowCustomizeView(e);
-            if (!e.Cancel) _model.Customize(e.Result);
+            // Views.ShowCustomizeView(e);
+            if (!e.Cancel) _model.Customize(e.Value);
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Dispose
+        ///
+        /// <summary>
+        /// Releases the unmanaged resources used by the object and
+        /// optionally releases the managed resources.
+        /// </summary>
+        ///
+        /// <param name="disposing">
+        /// true to release both managed and unmanaged resources;
+        /// false to release only unmanaged resources.
+        /// </param>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected override void Dispose(bool disposing) { }
 
         #endregion
 
@@ -357,7 +374,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
 
             if (e.PropertyName == nameof(ContextSettings.IsCustomized))
             {
-                RaisePropertyChanged(nameof(PresetEnabled));
+                Refresh(nameof(PresetEnabled));
             }
         }
 

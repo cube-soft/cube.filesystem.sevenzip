@@ -30,7 +30,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class CustomContextViewModel : ObservableProperty
+    public class CustomContextViewModel : ObservableBase
     {
         #region Constructors
 
@@ -97,6 +97,27 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
             Properties.Resources.Extract,
             IconFactory.Create(StockIcons.FolderOpen, IconSize.Small).ToBitmap(),
         };
+
+        #endregion
+
+        #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Dispose
+        ///
+        /// <summary>
+        /// Releases the unmanaged resources used by the object and
+        /// optionally releases the managed resources.
+        /// </summary>
+        ///
+        /// <param name="disposing">
+        /// true to release both managed and unmanaged resources;
+        /// false to release only unmanaged resources.
+        /// </param>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected override void Dispose(bool disposing) { }
 
         #endregion
     }

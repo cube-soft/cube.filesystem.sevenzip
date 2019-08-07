@@ -26,7 +26,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveViewModelBase<T> : ObservableProperty where T : ArchiveSettingsBase
+    public class ArchiveViewModelBase<T> : ObservableBase where T : ArchiveSettingsBase
     {
         #region Constructors
 
@@ -181,6 +181,23 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         #endregion
 
         #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Dispose
+        ///
+        /// <summary>
+        /// Releases the unmanaged resources used by the object and
+        /// optionally releases the managed resources.
+        /// </summary>
+        ///
+        /// <param name="disposing">
+        /// true to release both managed and unmanaged resources;
+        /// false to release only unmanaged resources.
+        /// </param>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected override void Dispose(bool disposing) { }
 
         /* ----------------------------------------------------------------- */
         ///

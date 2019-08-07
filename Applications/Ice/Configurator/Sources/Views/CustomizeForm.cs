@@ -30,7 +30,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class CustomizeForm : StandardForm
+    public partial class CustomizeForm : Window
     {
         #region Constructors
 

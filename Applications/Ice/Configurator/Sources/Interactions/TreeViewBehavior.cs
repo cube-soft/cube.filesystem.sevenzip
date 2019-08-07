@@ -16,7 +16,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.Forms.Images;
-using Cube.Generics;
+using Cube.Mixin.Generics;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -151,7 +151,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         {
             Source.ImageList = images.ToImageList();
             Source.Nodes.Clear();
-            Source.Nodes.Add(CreateRootNode(src));
+            _ = Source.Nodes.Add(CreateRootNode(src));
             IsRegistered = true;
         }
 
