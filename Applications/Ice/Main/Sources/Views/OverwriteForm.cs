@@ -15,9 +15,9 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Conversions;
 using Cube.Forms;
 using Cube.Images.Icons;
+using Cube.Mixin.ByteFormat;
 using System;
 using System.ComponentModel;
 using System.Text;
@@ -76,7 +76,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public Information Source { get; set; }
+        public Entity Source { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -89,7 +89,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public Information Destination { get; set; }
+        public Entity Destination { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///

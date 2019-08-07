@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Generics;
+using Cube.Mixin.String;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -33,7 +33,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class ProgressForm : Cube.Forms.StandardForm, IProgressView
+    public partial class ProgressForm : Cube.Forms.Window
     {
         #region Constructors
 
@@ -50,7 +50,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             InitializeComponent();
 
-            ExitButton.Click += (s, e) => Aggregator.GetEvents()?.Cancel.Publish();
+            // TODO: Implementation
+            // ExitButton.Click += (s, e) => Aggregator.GetEvents()?.Cancel.Publish();
 
             SuspendButton.Tag = false;
             SuspendButton.Click += WhenSuspendOrResume;
@@ -322,7 +323,8 @@ namespace Cube.FileSystem.SevenZip.Ice
             UpdateElapseLabel();
             Start();
 
-            Aggregator.GetEvents()?.Show.Publish();
+            // TODO: Implementations
+            // Aggregator.GetEvents()?.Show.Publish();
         }
 
         /* ----------------------------------------------------------------- */
@@ -422,7 +424,8 @@ namespace Cube.FileSystem.SevenZip.Ice
             if (suspend) Stop();
             else Start();
 
-            Aggregator.GetEvents()?.Suspend.Publish(suspend);
+            // TODO: Implementations
+            // Aggregator.GetEvents()?.Suspend.Publish(suspend);
         }
 
         #endregion

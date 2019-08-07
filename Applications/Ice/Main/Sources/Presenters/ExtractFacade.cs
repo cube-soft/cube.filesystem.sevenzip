@@ -15,10 +15,10 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.Mixin;
 using Cube.Forms;
-using Cube.Generics;
-using Cube.Log;
+using Cube.Mixin.IO;
+using Cube.Mixin.Logging;
+using Cube.Mixin.String;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -141,7 +141,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             try
             {
-                var query = new Query<string>(e => OnPasswordRequested(e));
+                var query = new Query<string>(e => /* TODO: OnPasswordRequested(e) */ { });
                 using (var reader = new ArchiveReader(Source, query, IO))
                 {
                     this.LogDebug($"Format:{reader.Format}\tSource:{Source}");
@@ -157,7 +157,6 @@ namespace Cube.FileSystem.SevenZip.Ice
                 DeleteSource();
             }
             catch (OperationCanceledException) { /* user cancel */ }
-            catch (Exception err) { Error(err); }
         }
 
         /* ----------------------------------------------------------------- */
@@ -171,8 +170,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void SetDirectories(ArchiveReader reader, KeyValuePair<SaveLocation, string> dest, bool trim)
         {
-            var name = IO.Get(Source).NameWithoutExtension;
-            var src  = trim ? IO.Get(name).NameWithoutExtension : name;
+            var name = IO.Get(Source).BaseName;
+            var src  = trim ? IO.Get(name).BaseName : name;
             var m    = Settings.Value.Extract.RootDirectory;
 
             if (m.HasFlag(CreateDirectoryMethod.Create))
@@ -220,7 +219,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 
                 if (Formats.FromFile(path) == Format.Tar)
                 {
-                    var query = new Query<string>(e => OnPasswordRequested(e));
+                    var query = new Query<string>(e => /* TODO: OnPasswordRequested(e) */ { });
                     using (var r = new ArchiveReader(path, query, IO)) Extract(r, dest);
                 }
                 else
@@ -319,7 +318,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Move(Information item)
+        private void Move(Entity item)
         {
             var src = IO.Get(IO.Combine(Tmp, item.FullName));
             if (!src.Exists) return;
@@ -343,7 +342,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Move(Information src, Information dest)
+        private void Move(Entity src, Entity dest)
         {
             if (src.IsDirectory)
             {
@@ -368,7 +367,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Overwrite(Information src, Information dest)
+        private void Overwrite(Entity src, Entity dest)
         {
             switch (OverwriteMode & OverwriteMode.Operations)
             {
@@ -376,7 +375,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                     Move(src, dest);
                     break;
                 case OverwriteMode.Rename:
-                    Move(src, IO.Get(IO.GetUniqueName(dest)));
+                    Move(src, IO.Get(IO.GetUniqueName(dest.FullName)));
                     break;
                 default:
                     break;
@@ -442,7 +441,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetRootDirectory(Information info, string alternate)
+        private string GetRootDirectory(Entity info, string alternate)
         {
             var root = info.FullName.Split(
                 System.IO.Path.DirectorySeparatorChar,
@@ -499,10 +498,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void RaiseOverwriteRequested(Information src, Information dest)
+        private void RaiseOverwriteRequested(Entity src, Entity dest)
         {
             var e = new OverwriteEventArgs(src, dest);
-            OnOverwriteRequested(e);
+            // TODO: OnOverwriteRequested(e);
             if (e.Result == OverwriteMode.Cancel) throw new OperationCanceledException();
             OverwriteMode = e.Result;
         }

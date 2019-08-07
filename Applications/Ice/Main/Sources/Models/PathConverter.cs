@@ -155,7 +155,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Information Result => _result = _result ?? Invoke();
+        public Entity Result => _result = _result ?? Invoke();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -182,12 +182,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private Information Invoke()
+        private Entity Invoke()
         {
             var src  = IO.Get(Source);
-            var tmp  = IO.Get(src.NameWithoutExtension);
+            var tmp  = IO.Get(src.BaseName);
             var name = src.IsDirectory ? src.Name :
-                       tmp.Extension.ToLower() == ".tar" ? tmp.NameWithoutExtension :
+                       tmp.Extension.ToLower() == ".tar" ? tmp.BaseName :
                        tmp.Name;
             var path = IO.Combine(src.DirectoryName, $"{name}{GetExtension()}");
 
@@ -243,7 +243,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         #endregion
 
         #region Fields
-        private Information _result;
+        private Entity _result;
         #endregion
     }
 }

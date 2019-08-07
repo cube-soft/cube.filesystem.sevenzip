@@ -28,7 +28,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class PathQueryEventArgs : QueryEventArgs<string, string>
+    public class PathQueryEventArgs : QueryMessage<string, string>
     {
         /* ----------------------------------------------------------------- */
         ///
@@ -43,10 +43,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="cancel">キャンセル状態</param>
         ///
         /* ----------------------------------------------------------------- */
-        public PathQueryEventArgs(string query, Format format, bool cancel) :
-            base(query, cancel)
+        public PathQueryEventArgs(string query, Format format, bool cancel)
         {
+            Query  = query;
             Format = format;
+            Cancel = cancel;
         }
 
         #region Properties

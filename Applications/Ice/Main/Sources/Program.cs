@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Generics;
+using Cube.Mixin.String;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -53,7 +53,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             {
                 if (args.Length <= 0) return;
 
-                var asm = Assembly.GetExecutingAssembly();
+                var asm = typeof(Program).Assembly;
 
                 Logger.ObserveTaskException();
                 Logger.Info(LogType, asm);
@@ -72,11 +72,11 @@ namespace Cube.FileSystem.SevenZip.Ice
                 switch (m.Mode)
                 {
                     case Mode.Archive:
-                        using (new ArchivePresenter(v, m, s, e)) Application.Run(v);
+                        Application.Run(v);
                         break;
                     case Mode.Extract:
                         if (m.Sources.Count() > 1 && s.Value.Extract.Bursty && !m.SuppressRecursive) Extract(m, asm);
-                        else using (new ExtractPresenter(v, m, s, e)) Application.Run(v);
+                        else Application.Run(v);
                         break;
                     default:
                         break;
@@ -96,7 +96,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         static void Extract(Request request, Assembly assembly)
         {
-            var exec = assembly.GetReader().Location;
+            var exec = assembly.Location;
             var args = new System.Text.StringBuilder();
 
             foreach (var s in request.Options) args.Append($"{s.Quote()} ");

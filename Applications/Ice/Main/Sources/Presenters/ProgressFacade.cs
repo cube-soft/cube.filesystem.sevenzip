@@ -16,13 +16,12 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.Forms;
-using Cube.Generics;
-using Cube.Log;
+using Cube.Mixin.Logging;
+using Cube.Mixin.String;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Windows.Forms;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -232,146 +231,6 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         #endregion
 
-        #region DestinationRequested
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// DestinationRequested
-        ///
-        /// <summary>
-        /// 保存パス要求時に発生するイベントです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public event PathQueryEventHandler DestinationRequested;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnDestinationRequested
-        ///
-        /// <summary>
-        /// DestinationRequested イベントを発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public virtual void OnDestinationRequested(PathQueryEventArgs e) =>
-            DestinationRequested?.Invoke(this, e);
-
-        #endregion
-
-        #region PasswordRequested
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// PasswordRequested
-        ///
-        /// <summary>
-        /// パスワード要求時に発生するイベントです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public event QueryEventHandler<string, string> PasswordRequested;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnPasswordRequested
-        ///
-        /// <summary>
-        /// PasswordRequested イベントを発生させます。
-        /// </summary>
-        ///
-        /// <remarks>
-        /// PasswordRequested イベントにハンドラが設定されていない場合、
-        /// SevenZip.EncryptionException 例外が送出されます。
-        /// </remarks>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected virtual void OnPasswordRequested(QueryEventArgs<string, string> e) =>
-            PasswordRequested?.Invoke(this, e);
-
-        #endregion
-
-        #region OpenDirectoryRequested
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OpenDirectoryRequested
-        ///
-        /// <summary>
-        /// ディレクトリを開く時に発生するイベントです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public event KeyValueEventHandler<string, string> OpenDirectoryRequested;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnOpenDirectoryRequested
-        ///
-        /// <summary>
-        /// OpenDirectoryRequested を発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected virtual void OnOpenDirectoryRequested(KeyValueEventArgs<string, string> e) =>
-            OpenDirectoryRequested?.Invoke(this, e);
-
-        #endregion
-
-        #region OverwriteRequested
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OverwriteRequested
-        ///
-        /// <summary>
-        /// ファイルの上書き時に発生するイベントです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public event OverwriteEventHandler OverwriteRequested;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnOverwriteRequested
-        ///
-        /// <summary>
-        /// OverwriteRequested イベントを発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected virtual void OnOverwriteRequested(OverwriteEventArgs e) =>
-            OverwriteRequested?.Invoke(this, e);
-
-        #endregion
-
-        #region MessageReceived
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// MessageReceived
-        ///
-        /// <summary>
-        /// メッセージ受信時に発生するイベントです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public event MessageEventHandler MessageReceived;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnMessageReceived
-        ///
-        /// <summary>
-        /// MessageReceived を発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected virtual void OnMessageReceived(MessageEventArgs e) =>
-            MessageReceived?.Invoke(this, e);
-
-        #endregion
-
         #endregion
 
         #region Methods
@@ -516,25 +375,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                        "explorer.exe";
 
             this.LogDebug($"Open:{src.Quote()}", $"Explorer:{exec.Quote()}");
-            OnOpenDirectoryRequested(KeyValueEventArgs.Create(exec, src));
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Error
-        ///
-        /// <summary>
-        /// エラー発生時の処理を実行します。
-        /// </summary>
-        ///
-        /// <param name="error">例外オブジェクト</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected void Error(Exception error)
-        {
-            this.LogError(error);
-            if (!Settings.Value.ErrorReport) return;
-            OnMessageReceived(new MessageEventArgs(GetMessage(error), Properties.Resources.TitleError));
+            // TODO: OnOpenDirectoryRequested(KeyValueEventArgs.Create(exec, src));
         }
 
         /* ----------------------------------------------------------------- */
@@ -631,9 +472,9 @@ namespace Cube.FileSystem.SevenZip.Ice
                     return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 case SaveLocation.Runtime:
                     var e = new PathQueryEventArgs(query, format, true);
-                    OnDestinationRequested(e);
+                    // TODO: OnDestinationRequested(e);
                     if (e.Cancel) throw new OperationCanceledException();
-                    return e.Result;
+                    return e.Value;
                 case SaveLocation.Source:
                     return IO.Get(Request.Sources.First()).DirectoryName;
                 case SaveLocation.Drop:
@@ -663,17 +504,8 @@ namespace Cube.FileSystem.SevenZip.Ice
             foreach (var path in e.Paths) sb.AppendLine(path);
             sb.Append($"{e.Name} {e.Exception.Message}");
 
-            var ev = new MessageEventArgs(
-                sb.ToString(),
-                Properties.Resources.TitleError,
-                MessageBoxButtons.RetryCancel,
-                MessageBoxIcon.Warning
-            );
+            // TODO: Implementation
 
-            OnMessageReceived(ev);
-            this.LogWarn(sb.ToString());
-
-            e.Cancel = ev.Result != DialogResult.Retry;
             if (e.Cancel) throw new OperationCanceledException();
         }
 

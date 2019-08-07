@@ -15,8 +15,8 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Generics;
-using Cube.Log;
+using Cube.Mixin.Logging;
+using Cube.Mixin.String;
 using System;
 using System.Linq;
 
@@ -80,7 +80,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public event QueryEventHandler<string, ArchiveRtSettings> RtSettingsRequested;
+        public event ValueCancelEventHandler<ArchiveRtSettings> RtSettingsRequested;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -94,13 +94,14 @@ namespace Cube.FileSystem.SevenZip.Ice
         private void RaiseRtSettingsRequested()
         {
             var info = IO.Get(Request.Sources.First());
-            var path = IO.Combine(info.DirectoryName, $"{info.NameWithoutExtension}.zip");
+            var path = IO.Combine(info.DirectoryName, $"{info.BaseName}.zip");
 
-            var e = new QueryEventArgs<string, ArchiveRtSettings>(path, true);
+            var value = new ArchiveRtSettings(IO) { Path = path };
+            var e = ValueEventArgs.Create(value, true);
             RtSettingsRequested?.Invoke(this, e);
             if (e.Cancel) throw new OperationCanceledException();
 
-            RtSettings = e.Result;
+            RtSettings = e.Value;
         }
 
         #endregion
@@ -159,7 +160,6 @@ namespace Cube.FileSystem.SevenZip.Ice
                 Open(Destination, Settings.Value.Archive.OpenDirectory);
             }
             catch (OperationCanceledException) { /* user cancel */ }
-            catch (Exception err) { Error(err); }
             finally { ProgressStop(); }
         }
 
@@ -273,9 +273,9 @@ namespace Cube.FileSystem.SevenZip.Ice
             if (IO.Exists(path) && Settings.Value.Archive.OverwritePrompt)
             {
                 var e = new PathQueryEventArgs(path, cvt.ResultFormat, true);
-                OnDestinationRequested(e);
+                // TODO: OnDestinationRequested(e);
                 if (e.Cancel) throw new OperationCanceledException();
-                return e.Result;
+                return e.Value;
             }
             else return path;
         }
@@ -289,14 +289,15 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void RaisePasswordRequested(QueryEventArgs<string, string> e)
+        private void RaisePasswordRequested(QueryMessage<string, string> e)
         {
-            if (RtSettings.Password.HasValue())
-            {
-                e.Result = RtSettings.Password;
-                e.Cancel = false;
-            }
-            else OnPasswordRequested(e);
+            // TODO: Implementation
+            //if (RtSettings.Password.HasValue())
+            //{
+            //    e.Value  = RtSettings.Password;
+            //    e.Cancel = false;
+            //}
+            //else OnPasswordRequested(e);
         }
 
         #endregion

@@ -354,9 +354,6 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             var cvt  = new PathConverter(Path, Format, CompressionMethod);
             var args = new PathQueryEventArgs(cvt.Result.FullName, cvt.ResultFormat, true);
-
-            Views.ShowSaveView(args);
-            if (!args.Cancel) Path = args.Result;
         }
 
         /* ----------------------------------------------------------------- */
