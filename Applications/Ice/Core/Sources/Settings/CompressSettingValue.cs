@@ -15,92 +15,71 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.String;
-using System;
-using System.ComponentModel;
-using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// MailView
+    /// CompressSettingValue
     ///
     /// <summary>
-    /// メール送信用クライアントを表すクラスです。
+    /// 圧縮に関するユーザ設定を保持するためのクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class MailView
+    [DataContract]
+    public sealed class CompressSettingValue : ArchiveSettingValue
     {
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ArchiveSettings
+        ///
+        /// <summary>
+        /// オブジェクトを初期化します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public CompressSettingValue()
+        {
+            Reset();
+        }
+
         #region Properties
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Subject
+        /// UseUtf8
         ///
         /// <summary>
-        /// 件名を取得または設定します。
+        /// 圧縮時にファイル名を UTF-8 に変換するかどうかを示す値を
+        /// 取得または設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Subject { get; set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Body
-        ///
-        /// <summary>
-        /// 本文を取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Body { get; set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Attach
-        ///
-        /// <summary>
-        /// 添付ファイルのパスを取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Attach { get; set; }
-
-        #endregion
-
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Show
-        ///
-        /// <summary>
-        /// メール画面を表示します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Show()
+        [DataMember(Name = "UseUTF8")]
+        public bool UseUtf8
         {
-            var mms = new Mapi32.MapiMessage
-            {
-                subject  = Subject,
-                noteText = Body,
-                flags    = 0x02, // MAPI_RECEIPT_REQUESTED
-            };
+            get => _useUtf8;
+            set => SetProperty(ref _useUtf8, value);
+        }
 
-            AttachFile(mms);
-
-            var result = Mapi32.NativeMethods.MAPISendMail(
-                IntPtr.Zero,
-                IntPtr.Zero,
-                mms,
-                0x09, // MAPI_DIALOG | MAPI_LOGON_UI
-                0
-            );
-
-            if (result != 0) throw new Win32Exception(result);
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OverwritePrompt
+        ///
+        /// <summary>
+        /// 保存先に指定されたパスに同名のファイルが存在している時、
+        /// 名前を付けて保存ダイアログを表示するかどうかを示す値を取得
+        /// または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [DataMember]
+        public bool OverwritePrompt
+        {
+            get => _overwritePrompt;
+            set => SetProperty(ref _overwritePrompt, value);
         }
 
         #endregion
@@ -109,30 +88,38 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// AttachFile
+        /// OnDeserializing
         ///
         /// <summary>
-        /// 添付ファイルに関する設定を実行します。
+        /// デシリアライズ直前に実行されます。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void AttachFile(Mapi32.MapiMessage mms)
+        [OnDeserializing]
+        private void OnDeserializing(StreamingContext context) => Reset();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Reset
+        ///
+        /// <summary>
+        /// 設定をリセットします。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected override void Reset()
         {
-            if (!Attach.HasValue()) return;
+            _useUtf8         = false;
+            _overwritePrompt = true;
 
-            var size = Marshal.SizeOf(typeof(Mapi32.MapiFileDesc));
-            var ptr  = Marshal.AllocHGlobal(size);
-            var cvt = (int)ptr;
-            var desc = new Mapi32.MapiFileDesc
-            {
-                position = -1,
-                path = Attach,
-                name = System.IO.Path.GetFileName(Attach),
-            };
-
-            Marshal.StructureToPtr(desc, (IntPtr)cvt, false);
+            base.Reset();
         }
 
+        #endregion
+
+        #region Fields
+        private bool _useUtf8;
+        private bool _overwritePrompt;
         #endregion
     }
 }

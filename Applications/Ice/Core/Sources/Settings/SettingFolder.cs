@@ -15,22 +15,22 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Mixin.Assembly;
 using Cube.Mixin.String;
 using System.Reflection;
-using Cube.Mixin.Assembly;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// SettingsFolder
+    /// SettingFolder
     ///
     /// <summary>
     /// 各種設定を保持するためのクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class SettingsFolder : SettingFolder<Settings>
+    public class SettingFolder : SettingFolder<SettingValue>
     {
         #region Constructors
 
@@ -46,7 +46,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="io">I/O オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public SettingsFolder(Assembly assembly, IO io) :
+        public SettingFolder(Assembly assembly, IO io) :
             this(assembly, Cube.DataContract.Format.Registry, @"CubeSoft\CubeICE\v3", io) { }
 
         /* ----------------------------------------------------------------- */
@@ -63,7 +63,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="io">I/O オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public SettingsFolder(Assembly assembly, Cube.DataContract.Format format, string location, IO io) :
+        public SettingFolder(Assembly assembly, Cube.DataContract.Format format, string location, IO io) :
             base(assembly, format, location, io)
         {
             AutoSave       = false;

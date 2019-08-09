@@ -1,6 +1,6 @@
 ﻿namespace Cube.FileSystem.SevenZip.Ice.Configurator
 {
-    partial class MainForm
+    partial class MainWindow
     {
         /// <summary>
         /// 必要なデザイナー変数です。
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.RootPanel = new System.Windows.Forms.TableLayoutPanel();
             this.SettingsPanel = new Cube.Forms.SettingControl();
             this.SettingsTabControl = new System.Windows.Forms.TabControl();
@@ -1108,7 +1108,7 @@
             //
             // AssociateSettingsBindingSource
             //
-            this.AssociateSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.AssociateSettings);
+            this.AssociateSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.AssociateSettingValue);
             //
             // MainForm
             //

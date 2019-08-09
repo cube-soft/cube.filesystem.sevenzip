@@ -15,35 +15,34 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System;
-
 namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// PathQueryEventArgs
+    /// PathQueryMessage
     ///
     /// <summary>
-    /// パス情報を保持するためのクラスです。
+    /// Represents the query information of the archive.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class PathQueryEventArgs : QueryMessage<string, string>
+    public class PathQueryMessage : QueryMessage<string, string>
     {
         /* ----------------------------------------------------------------- */
         ///
-        /// PathQueryEventArgs
+        /// PathQueryMessage
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the PathQueryMessage class with
+        /// the specified arguments.
         /// </summary>
         ///
-        /// <param name="query">ソースファイルのパス</param>
-        /// <param name="format">圧縮フォーマット</param>
-        /// <param name="cancel">キャンセル状態</param>
+        /// <param name="query">Path of the source file.</param>
+        /// <param name="format">Compression format.</param>
+        /// <param name="cancel">Cancel or not.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public PathQueryEventArgs(string query, Format format, bool cancel)
+        public PathQueryMessage(string query, Format format, bool cancel)
         {
             Query  = query;
             Format = format;
@@ -57,7 +56,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Format
         ///
         /// <summary>
-        /// 圧縮ファイルのフォーマットを取得します。
+        /// Gets the format of the target archive.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -65,16 +64,4 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         #endregion
     }
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// PathQueryEventHandler
-    ///
-    /// <summary>
-    /// 保存パスを指定するダイアログを表示するための delegate です。
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    [Serializable]
-    public delegate void PathQueryEventHandler(object sender, PathQueryEventArgs e);
 }

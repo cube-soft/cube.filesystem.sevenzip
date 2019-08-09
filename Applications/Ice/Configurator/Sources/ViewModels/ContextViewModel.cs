@@ -43,7 +43,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /// <param name="model">Model オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ContextViewModel(ContextSettings model)
+        public ContextViewModel(ContextSettingValue model)
         {
             _model = model;
             _model.PropertyChanged += WhenChanged;
@@ -372,7 +372,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         {
             OnPropertyChanged(e);
 
-            if (e.PropertyName == nameof(ContextSettings.IsCustomized))
+            if (e.PropertyName == nameof(ContextSettingValue.IsCustomized))
             {
                 Refresh(nameof(PresetEnabled));
             }
@@ -381,7 +381,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         #endregion
 
         #region Fields
-        private readonly ContextSettings _model;
+        private readonly ContextSettingValue _model;
         #endregion
     }
 }

@@ -23,14 +23,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// CustomizeForm
+    /// CustomizeWindow
     ///
     /// <summary>
     /// コンテキストメニューのカスタマイズ画面を表すクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class CustomizeForm : Window
+    public partial class CustomizeWindow : Window
     {
         #region Constructors
 
@@ -43,7 +43,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CustomizeForm()
+        public CustomizeWindow()
         {
             InitializeComponent();
 

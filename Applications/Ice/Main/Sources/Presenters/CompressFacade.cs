@@ -47,7 +47,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="settings">ユーザ設定</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveFacade(Request request, SettingsFolder settings) :
+        public ArchiveFacade(Request request, SettingFolder settings) :
             base(request, settings) { }
 
         #endregion
@@ -63,7 +63,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveRtSettings RtSettings { get; private set; }
+        public CompressRtsValue RtSettings { get; private set; }
 
         #endregion
 
@@ -80,7 +80,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public event ValueCancelEventHandler<ArchiveRtSettings> RtSettingsRequested;
+        public event ValueCancelEventHandler<CompressRtsValue> RtSettingsRequested;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -96,7 +96,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             var info = IO.Get(Request.Sources.First());
             var path = IO.Combine(info.DirectoryName, $"{info.BaseName}.zip");
 
-            var value = new ArchiveRtSettings(IO) { Path = path };
+            var value = new CompressRtsValue(IO) { Path = path };
             var e = ValueEventArgs.Create(value, true);
             RtSettingsRequested?.Invoke(this, e);
             if (e.Cancel) throw new OperationCanceledException();
@@ -220,12 +220,12 @@ namespace Cube.FileSystem.SevenZip.Ice
                 case Format.Zip:
                 case Format.SevenZip:
                 case Format.Sfx:
-                    RtSettings = new ArchiveRtSettings(f, Settings.IO);
+                    RtSettings = new CompressRtsValue(f, Settings.IO);
                     break;
                 case Format.BZip2:
                 case Format.GZip:
                 case Format.XZ:
-                    RtSettings = new ArchiveRtSettings(Format.Tar, Settings.IO) { CompressionMethod = f.ToMethod() };
+                    RtSettings = new CompressRtsValue(Format.Tar, Settings.IO) { CompressionMethod = f.ToMethod() };
                     break;
                 default:
                     RaiseRtSettingsRequested();
@@ -272,7 +272,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             var path = IO.Combine(kv.Value, cvt.Result.Name);
             if (IO.Exists(path) && Settings.Value.Archive.OverwritePrompt)
             {
-                var e = new PathQueryEventArgs(path, cvt.ResultFormat, true);
+                var e = new PathQueryMessage(path, cvt.ResultFormat, true);
                 // TODO: OnDestinationRequested(e);
                 if (e.Cancel) throw new OperationCanceledException();
                 return e.Value;

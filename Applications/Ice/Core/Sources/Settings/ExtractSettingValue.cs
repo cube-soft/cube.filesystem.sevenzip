@@ -15,35 +15,34 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ContextSettings
+    /// ExtractSettingValue
     ///
     /// <summary>
-    /// コンテキストメニューに関するユーザ設定を保持するためのクラスです。
+    /// 展開に関するユーザ設定を保持するためのクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public sealed class ContextSettings : SerializableBase
+    public sealed class ExtractSettingValue : ArchiveSettingValue
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ContextSettings
+        /// ExtractSettings
         ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ContextSettings()
+        public ExtractSettingValue()
         {
             Reset();
         }
@@ -54,91 +53,52 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Preset
+        /// RootDirectory
         ///
         /// <summary>
-        /// 予め定義されたコンテキストメニューを示す値を取得または
+        /// ルートディレクトリの扱い方を示す値を取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [DataMember]
+        public CreateDirectoryMethod RootDirectory
+        {
+            get => _rootDirectory;
+            set => SetProperty(ref _rootDirectory, value);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// DeleteSource
+        ///
+        /// <summary>
+        /// 展開後に元ファイルを削除するかどうかを示す値を取得または
         /// 設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public PresetMenu Preset
+        public bool DeleteSource
         {
-            get => _preset;
-            set => SetProperty(ref _preset, value);
+            get => _deleteSource;
+            set => SetProperty(ref _deleteSource, value);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Custom
+        /// Bursty
         ///
         /// <summary>
-        /// カスタマイズされたコンテキストメニュー一覧を取得または
+        /// 複数の圧縮ファイルを同時に展開するかどうかを示す値を取得または
         /// 設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public IList<ContextMenu> Custom
+        public bool Bursty
         {
-            get => _custom;
-            set => SetProperty(ref _custom, value);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// IsCustomized
-        ///
-        /// <summary>
-        /// カスタマイズされたコンテキストメニューを使用するかどうかを示す
-        /// 値を取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [DataMember]
-        public bool IsCustomized
-        {
-            get => _isCustomized;
-            set => SetProperty(ref _isCustomized, value);
-        }
-
-        #endregion
-
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Customize
-        ///
-        /// <summary>
-        /// コンテキストメニューのカスタマイズを実行します。
-        /// </summary>
-        ///
-        /// <param name="src">カスタマイズメニュー</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Customize(IEnumerable<ContextMenu> src)
-        {
-            Custom.Clear();
-            foreach (var m in src) Custom.Add(m);
-            IsCustomized = true;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Reset
-        ///
-        /// <summary>
-        /// 設定をリセットします。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Reset()
-        {
-            Preset       = PresetMenu.DefaultContext;
-            Custom       = new List<ContextMenu>();
-            IsCustomized = false;
+            get => _bursty;
+            set => SetProperty(ref _bursty, value);
         }
 
         #endregion
@@ -157,12 +117,30 @@ namespace Cube.FileSystem.SevenZip.Ice
         [OnDeserializing]
         private void OnDeserializing(StreamingContext context) => Reset();
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Reset
+        ///
+        /// <summary>
+        /// 設定をリセットします。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected override void Reset()
+        {
+            _deleteSource  = false;
+            _bursty        = true;
+            _rootDirectory = CreateDirectoryMethod.CreateSmart;
+
+            base.Reset();
+        }
+
         #endregion
 
         #region Fields
-        private PresetMenu _preset;
-        private IList<ContextMenu> _custom;
-        private bool _isCustomized;
+        private bool _deleteSource;
+        private bool _bursty;
+        private CreateDirectoryMethod _rootDirectory;
         #endregion
     }
 }

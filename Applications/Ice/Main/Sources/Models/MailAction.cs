@@ -15,93 +15,58 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.Runtime.Serialization;
+using Cube.Mixin.String;
+using System;
+using System.ComponentModel;
+using System.Runtime.InteropServices;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveSettingsBase
+    /// MailAction
     ///
     /// <summary>
-    /// 圧縮・解凍に共通するユーザ設定を保持するためのクラスです。
+    /// Provides functionality to show a mail dialog.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [DataContract]
-    public abstract class ArchiveSettingsBase : SerializableBase
+    public class MailAction
     {
         #region Properties
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SaveLocation
+        /// Subject
         ///
         /// <summary>
-        /// 保存場所に関する情報を取得します。
+        /// Gets or sets the subject.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [DataMember]
-        public SaveLocation SaveLocation
-        {
-            get => _saveLocation;
-            set => SetProperty(ref _saveLocation, value);
-        }
+        public string Subject { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SaveDirectoryName
+        /// Body
         ///
         /// <summary>
-        /// 保存ディレクトリのパスを取得します。
+        /// Gets or sets the main message.
         /// </summary>
         ///
-        /// <remarks>
-        /// このプロパティは SaveLocation.Others の場合に参照されます。
-        /// </remarks>
-        ///
         /* ----------------------------------------------------------------- */
-        [DataMember]
-        public string SaveDirectoryName
-        {
-            get => _saveDirectoryName;
-            set => SetProperty(ref _saveDirectoryName, value);
-        }
+        public string Body { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Filtering
+        /// Attach
         ///
         /// <summary>
-        /// 特定のファイルまたはディレクトリをフィルタリングするかどうかを
-        /// 示す値を取得または設定します。
+        /// Gets or sets the attached file.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [DataMember]
-        public bool Filtering
-        {
-            get => _filtering;
-            set => SetProperty(ref _filtering, value);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OpenDirectory
-        ///
-        /// <summary>
-        /// 展開後にディレクトリを開くかどうかを示す値を取得または
-        /// 設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [DataMember]
-        public OpenDirectoryMethod OpenDirectory
-        {
-            get => _openDirectory;
-            set => SetProperty(ref _openDirectory, value);
-        }
+        public string Attach { get; set; }
 
         #endregion
 
@@ -109,28 +74,65 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Reset
+        /// Invoke
         ///
         /// <summary>
-        /// 設定をリセットします。
+        /// Shows a mail dialog.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void Reset()
+        public void Invoke()
         {
-            _saveLocation      = SaveLocation.Others;
-            _saveDirectoryName = string.Empty;
-            _filtering         = true;
-            _openDirectory     = OpenDirectoryMethod.OpenNotDesktop;
+            var mms = new Mapi32.MapiMessage
+            {
+                subject  = Subject,
+                noteText = Body,
+                flags    = 0x02, // MAPI_RECEIPT_REQUESTED
+            };
+
+            AttachFile(mms);
+
+            var result = Mapi32.NativeMethods.MAPISendMail(
+                IntPtr.Zero,
+                IntPtr.Zero,
+                mms,
+                0x09, // MAPI_DIALOG | MAPI_LOGON_UI
+                0
+            );
+
+            if (result != 0) throw new Win32Exception(result);
         }
 
         #endregion
 
-        #region Fields
-        private SaveLocation _saveLocation;
-        private string _saveDirectoryName;
-        private bool _filtering;
-        private OpenDirectoryMethod _openDirectory;
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// AttachFile
+        ///
+        /// <summary>
+        /// Attaches the provided file.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void AttachFile(Mapi32.MapiMessage mms)
+        {
+            if (!Attach.HasValue()) return;
+
+            var size = Marshal.SizeOf(typeof(Mapi32.MapiFileDesc));
+            var ptr  = Marshal.AllocHGlobal(size);
+            var cvt = (int)ptr;
+            var desc = new Mapi32.MapiFileDesc
+            {
+                position = -1,
+                path = Attach,
+                name = System.IO.Path.GetFileName(Attach),
+            };
+
+            Marshal.StructureToPtr(desc, (IntPtr)cvt, false);
+        }
+
         #endregion
     }
 }

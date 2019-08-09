@@ -50,7 +50,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="settings">設定情報</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ExtractFacade(Request request, SettingsFolder settings) :
+        public ExtractFacade(Request request, SettingFolder settings) :
             base(request, settings)
         {
             Source = Request.Sources.First();

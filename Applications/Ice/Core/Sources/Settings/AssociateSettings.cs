@@ -24,7 +24,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// AssociateSettings
+    /// AssociateSettingValue
     ///
     /// <summary>
     /// ファイルの関連付けに関するユーザ設定を保持するためのクラスです。
@@ -32,7 +32,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public sealed class AssociateSettings : SerializableBase
+    public sealed class AssociateSettingValue : SerializableBase
     {
         #region Constructors
 
@@ -45,7 +45,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public AssociateSettings()
+        public AssociateSettingValue()
         {
             Reset();
         }

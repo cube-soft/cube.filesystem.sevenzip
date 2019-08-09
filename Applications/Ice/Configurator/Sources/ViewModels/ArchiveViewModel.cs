@@ -26,7 +26,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveViewModel : ArchiveViewModelBase<ArchiveSettings>
+    public class ArchiveViewModel : ArchiveViewModelBase<CompressSettingValue>
     {
         #region Constructors
 
@@ -41,7 +41,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /// <param name="model">Model オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveViewModel(ArchiveSettings model) : base(model) { }
+        public ArchiveViewModel(CompressSettingValue model) : base(model) { }
 
         #endregion
 

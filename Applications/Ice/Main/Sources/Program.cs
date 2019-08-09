@@ -62,9 +62,9 @@ namespace Cube.FileSystem.SevenZip.Ice
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
 
-                var s = new SettingsFolder(asm, new AfsIO());
+                var s = new SettingFolder(asm, new AfsIO());
                 var e = new Aggregator();
-                var v = new ProgressForm();
+                var v = new ProgressWindow();
                 var m = new Request(args);
 
                 s.Load();

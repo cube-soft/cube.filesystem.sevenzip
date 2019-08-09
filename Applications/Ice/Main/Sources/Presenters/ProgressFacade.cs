@@ -50,7 +50,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="settings">設定情報</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected ProgressFacade(Request request, SettingsFolder settings)
+        protected ProgressFacade(Request request, SettingFolder settings)
         {
             Request  = request;
             Settings = settings;
@@ -83,7 +83,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public SettingsFolder Settings { get; }
+        public SettingFolder Settings { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -400,7 +400,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected KeyValuePair<SaveLocation, string> GetSaveLocation(ArchiveSettingsBase settings, Format format, string query)
+        protected KeyValuePair<SaveLocation, string> GetSaveLocation(ArchiveSettingValue settings, Format format, string query)
         {
             var key = Request.Location != SaveLocation.Unknown ?
                       Request.Location :
@@ -462,7 +462,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetSavePath(SaveLocation key, ArchiveSettingsBase settings, Format format, string query)
+        private string GetSavePath(SaveLocation key, ArchiveSettingValue settings, Format format, string query)
         {
             switch (key)
             {
@@ -471,7 +471,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                 case SaveLocation.MyDocuments:
                     return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 case SaveLocation.Runtime:
-                    var e = new PathQueryEventArgs(query, format, true);
+                    var e = new PathQueryMessage(query, format, true);
                     // TODO: OnDestinationRequested(e);
                     if (e.Cancel) throw new OperationCanceledException();
                     return e.Value;

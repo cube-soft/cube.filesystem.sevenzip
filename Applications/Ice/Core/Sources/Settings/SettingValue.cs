@@ -24,7 +24,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// Settings
+    /// SettingValue
     ///
     /// <summary>
     /// ユーザ設定を保持するためのクラスです。
@@ -32,7 +32,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public sealed class Settings : SerializableBase
+    public sealed class SettingValue : SerializableBase
     {
         #region Constructors
 
@@ -45,7 +45,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Settings()
+        public SettingValue()
         {
             Reset();
         }
@@ -178,7 +178,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public ArchiveSettings Archive
+        public CompressSettingValue Archive
         {
             get => _archive;
             set => SetProperty(ref _archive, value);
@@ -194,7 +194,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public ExtractSettings Extract
+        public ExtractSettingValue Extract
         {
             get => _extract;
             set => SetProperty(ref _extract, value);
@@ -210,7 +210,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public AssociateSettings Associate
+        public AssociateSettingValue Associate
         {
             get => _associate;
             set => SetProperty(ref _associate, value);
@@ -226,7 +226,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         [DataMember(Name = "Context")]
-        public ContextSettings Menu
+        public ContextSettingValue Menu
         {
             get => _context;
             set => SetProperty(ref _context, value);
@@ -243,7 +243,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public ShortcutSettings Shortcut
+        public ShortcutSettingValue Shortcut
         {
             get => _shortcut;
             set => SetProperty(ref _shortcut, value);
@@ -305,11 +305,11 @@ namespace Cube.FileSystem.SevenZip.Ice
             _filtering    = ".DS_Store|Thumbs.db|__MACOSX|desktop.ini";
             _toolTip      = true;
             _toolTipCount = 5;
-            _archive      = new ArchiveSettings();
-            _extract      = new ExtractSettings();
-            _associate    = new AssociateSettings();
-            _context      = new ContextSettings();
-            _shortcut     = new ShortcutSettings();
+            _archive      = new CompressSettingValue();
+            _extract      = new ExtractSettingValue();
+            _associate    = new AssociateSettingValue();
+            _context      = new ContextSettingValue();
+            _shortcut     = new ShortcutSettingValue();
         }
 
         #endregion
@@ -321,11 +321,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         private string _filtering;
         private bool _toolTip;
         private int _toolTipCount;
-        private ArchiveSettings _archive;
-        private ExtractSettings _extract;
-        private AssociateSettings _associate;
-        private ContextSettings _context;
-        private ShortcutSettings _shortcut;
+        private CompressSettingValue _archive;
+        private ExtractSettingValue _extract;
+        private AssociateSettingValue _associate;
+        private ContextSettingValue _context;
+        private ShortcutSettingValue _shortcut;
         #endregion
     }
 }

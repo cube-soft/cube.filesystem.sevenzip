@@ -33,7 +33,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class ProgressForm : Cube.Forms.Window
+    public partial class ProgressWindow : Cube.Forms.Window
     {
         #region Constructors
 
@@ -46,7 +46,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ProgressForm()
+        public ProgressWindow()
         {
             InitializeComponent();
 

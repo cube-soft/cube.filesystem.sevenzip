@@ -34,7 +34,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class OverwriteForm : Form
+    public partial class OverwriteWindow : Form
     {
         #region Constructors
 
@@ -47,7 +47,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public OverwriteForm()
+        public OverwriteWindow()
         {
             InitializeComponent();
 

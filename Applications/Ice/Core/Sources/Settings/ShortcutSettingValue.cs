@@ -25,7 +25,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ShortcutSettings
+    /// ShortcutSettingValue
     ///
     /// <summary>
     /// デスクトップに作成するショートカットに関するユーザ設定を保持する
@@ -33,7 +33,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public sealed class ShortcutSettings : SerializableBase
+    public sealed class ShortcutSettingValue : SerializableBase
     {
         #region Constructors
 
@@ -46,7 +46,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ShortcutSettings()
+        public ShortcutSettingValue()
         {
             Reset();
         }
@@ -264,7 +264,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         private string GetLink(string filename) => System.IO.Path.Combine(
-            typeof(ShortcutSettings).Assembly.GetDirectoryName(),
+            typeof(ShortcutSettingValue).Assembly.GetDirectoryName(),
             filename
         );
 

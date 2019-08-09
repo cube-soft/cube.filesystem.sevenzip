@@ -32,7 +32,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class ArchiveRtSettingsForm : Form
+    public partial class ArchiveRtsWindow : Form
     {
         #region Constructors
 
@@ -45,7 +45,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveRtSettingsForm()
+        public ArchiveRtsWindow()
         {
             InitializeComponent();
 
@@ -353,7 +353,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         private void WhenPathRequested(object s, EventArgs e)
         {
             var cvt  = new PathConverter(Path, Format, CompressionMethod);
-            var args = new PathQueryEventArgs(cvt.Result.FullName, cvt.ResultFormat, true);
+            var args = new PathQueryMessage(cvt.Result.FullName, cvt.ResultFormat, true);
         }
 
         /* ----------------------------------------------------------------- */

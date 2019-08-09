@@ -41,7 +41,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /// <param name="model">Model オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ShortcutViewModel(ShortcutSettings model)
+        public ShortcutViewModel(ShortcutSettingValue model)
         {
             _model = model;
             _model.PropertyChanged += (s, e) => OnPropertyChanged(e);
@@ -181,7 +181,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         #endregion
 
         #region Fields
-        private readonly ShortcutSettings _model;
+        private readonly ShortcutSettingValue _model;
         #endregion
     }
 }

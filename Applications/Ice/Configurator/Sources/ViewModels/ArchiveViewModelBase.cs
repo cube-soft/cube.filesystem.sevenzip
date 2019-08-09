@@ -26,7 +26,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveViewModelBase<T> : ObservableBase where T : ArchiveSettingsBase
+    public class ArchiveViewModelBase<T> : ObservableBase where T : ArchiveSettingValue
     {
         #region Constructors
 

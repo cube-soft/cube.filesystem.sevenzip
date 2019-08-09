@@ -1,6 +1,6 @@
 ﻿namespace Cube.FileSystem.SevenZip.Ice
 {
-    partial class OverwriteForm
+    partial class OverwriteWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OverwriteForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OverwriteWindow));
             this.RootPanel = new System.Windows.Forms.TableLayoutPanel();
             this.IconPictureBox = new System.Windows.Forms.PictureBox();
             this.DescriptionLabel = new System.Windows.Forms.Label();

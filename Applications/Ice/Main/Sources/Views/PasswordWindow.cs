@@ -30,7 +30,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class PasswordForm : Form
+    public partial class PasswordWindow : Form
     {
         #region Constructors
 
@@ -43,7 +43,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public PasswordForm()
+        public PasswordWindow()
         {
             InitializeComponent();
 

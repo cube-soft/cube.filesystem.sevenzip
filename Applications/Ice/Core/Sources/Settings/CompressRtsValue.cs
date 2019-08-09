@@ -22,20 +22,20 @@ namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveRtSettings
+    /// CompressRtsValue
     ///
     /// <summary>
-    /// 圧縮処理の実行時詳細設定を保持するクラスです。
+    /// Represents the RunTime Settings (RTS) when compressing files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveRtSettings
+    public class CompressRtsValue
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveRtSettings
+        /// CompressRtsValue
         ///
         /// <summary>
         /// オブジェクトを初期化します。
@@ -44,10 +44,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="io">I/O オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveRtSettings(IO io)
+        public CompressRtsValue(IO io)
         {
             IO        = io;
-            SfxModule = io.Combine(typeof(ArchiveRtSettings).Assembly.GetDirectoryName(), Formats.SfxName);
+            SfxModule = io.Combine(typeof(CompressRtsValue).Assembly.GetDirectoryName(), Formats.SfxName);
         }
 
         /* ----------------------------------------------------------------- */
@@ -62,7 +62,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="io">I/O オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveRtSettings(Format format, IO io) : this(io)
+        public CompressRtsValue(Format format, IO io) : this(io)
         {
             Format = format;
         }

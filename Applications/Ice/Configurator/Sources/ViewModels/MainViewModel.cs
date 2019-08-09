@@ -43,7 +43,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /// <param name="model">Model オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public MainViewModel(SettingsFolder model)
+        public MainViewModel(SettingFolder model)
         {
             _model = model;
             _model.PropertyChanged += (s, e) => OnPropertyChanged(e);
@@ -282,7 +282,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         #endregion
 
         #region Fields
-        private readonly SettingsFolder _model;
+        private readonly SettingFolder _model;
         #endregion
     }
 }

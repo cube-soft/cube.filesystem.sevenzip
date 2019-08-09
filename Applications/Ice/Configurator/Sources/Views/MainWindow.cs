@@ -25,14 +25,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// MainForm
+    /// MainWindow
     ///
     /// <summary>
     /// 設定画面を表示するクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class MainForm : Cube.Forms.Window
+    public partial class MainWindow : Cube.Forms.Window
     {
         #region Constructors
 
@@ -45,7 +45,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public MainForm()
+        public MainWindow()
         {
             InitializeComponent();
             InitializeAssociate();
@@ -66,7 +66,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /// <param name="install">インストールモードかどうか</param>
         ///
         /* ----------------------------------------------------------------- */
-        public MainForm(bool install) : this()
+        public MainWindow(bool install) : this()
         {
             if (!install) return;
 
@@ -221,35 +221,35 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
             AssociateMenuPanel.Controls.AddRange(new[]
             {
                 // well-known
-                Create(nameof(AssociateSettings.Zip),      "*.zip",   index++),
-                Create(nameof(AssociateSettings.Lzh),      "*.lzh",   index++),
-                Create(nameof(AssociateSettings.Rar),      "*.rar",   index++),
-                Create(nameof(AssociateSettings.SevenZip), "*.7z",    index++),
-                Create(nameof(AssociateSettings.Iso),      "*.iso",   index++),
-                Create(nameof(AssociateSettings.Tar),      "*.tar",   index++),
-                Create(nameof(AssociateSettings.GZ),       "*.gz",    index++),
-                Create(nameof(AssociateSettings.Tgz),      "*.tgz",   index++),
-                Create(nameof(AssociateSettings.BZ2),      "*.bz2",   index++),
-                Create(nameof(AssociateSettings.Tbz),      "*.tbz",   index++),
-                Create(nameof(AssociateSettings.XZ),       "*.xz",    index++),
-                Create(nameof(AssociateSettings.Txz),      "*.txz",   index++),
+                Create(nameof(AssociateSettingValue.Zip),      "*.zip",   index++),
+                Create(nameof(AssociateSettingValue.Lzh),      "*.lzh",   index++),
+                Create(nameof(AssociateSettingValue.Rar),      "*.rar",   index++),
+                Create(nameof(AssociateSettingValue.SevenZip), "*.7z",    index++),
+                Create(nameof(AssociateSettingValue.Iso),      "*.iso",   index++),
+                Create(nameof(AssociateSettingValue.Tar),      "*.tar",   index++),
+                Create(nameof(AssociateSettingValue.GZ),       "*.gz",    index++),
+                Create(nameof(AssociateSettingValue.Tgz),      "*.tgz",   index++),
+                Create(nameof(AssociateSettingValue.BZ2),      "*.bz2",   index++),
+                Create(nameof(AssociateSettingValue.Tbz),      "*.tbz",   index++),
+                Create(nameof(AssociateSettingValue.XZ),       "*.xz",    index++),
+                Create(nameof(AssociateSettingValue.Txz),      "*.txz",   index++),
 
                 // others
-                Create(nameof(AssociateSettings.Arj),      "*.arj",   index++),
-                Create(nameof(AssociateSettings.Cab),      "*.cab",   index++),
-                Create(nameof(AssociateSettings.Chm),      "*.chm",   index++),
-                Create(nameof(AssociateSettings.Cpio),     "*.cpio",  index++),
-                Create(nameof(AssociateSettings.Deb),      "*.deb",   index++),
-                Create(nameof(AssociateSettings.Dmg),      "*.dmg",   index++),
-                Create(nameof(AssociateSettings.Hfs),      "*.hfs",   index++),
-                Create(nameof(AssociateSettings.Jar),      "*.jar",   index++),
-                Create(nameof(AssociateSettings.Nupkg),    "*.nupkg", index++),
-                Create(nameof(AssociateSettings.Rpm),      "*.rpm",   index++),
-                Create(nameof(AssociateSettings.Vhd),      "*.vhd",   index++),
-                Create(nameof(AssociateSettings.Vmdk),     "*.vmdk",  index++),
-                Create(nameof(AssociateSettings.Wim),      "*.wim",   index++),
-                Create(nameof(AssociateSettings.Xar),      "*.xar",   index++),
-                Create(nameof(AssociateSettings.Z),        "*.z",     index++),
+                Create(nameof(AssociateSettingValue.Arj),      "*.arj",   index++),
+                Create(nameof(AssociateSettingValue.Cab),      "*.cab",   index++),
+                Create(nameof(AssociateSettingValue.Chm),      "*.chm",   index++),
+                Create(nameof(AssociateSettingValue.Cpio),     "*.cpio",  index++),
+                Create(nameof(AssociateSettingValue.Deb),      "*.deb",   index++),
+                Create(nameof(AssociateSettingValue.Dmg),      "*.dmg",   index++),
+                Create(nameof(AssociateSettingValue.Hfs),      "*.hfs",   index++),
+                Create(nameof(AssociateSettingValue.Jar),      "*.jar",   index++),
+                Create(nameof(AssociateSettingValue.Nupkg),    "*.nupkg", index++),
+                Create(nameof(AssociateSettingValue.Rpm),      "*.rpm",   index++),
+                Create(nameof(AssociateSettingValue.Vhd),      "*.vhd",   index++),
+                Create(nameof(AssociateSettingValue.Vmdk),     "*.vmdk",  index++),
+                Create(nameof(AssociateSettingValue.Wim),      "*.wim",   index++),
+                Create(nameof(AssociateSettingValue.Xar),      "*.xar",   index++),
+                Create(nameof(AssociateSettingValue.Z),        "*.z",     index++),
             });
         }
 

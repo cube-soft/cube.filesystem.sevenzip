@@ -21,82 +21,91 @@ namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveSettings
+    /// ArchiveSettingValue
     ///
     /// <summary>
-    /// 圧縮に関するユーザ設定を保持するためのクラスです。
+    /// 圧縮・解凍に共通するユーザ設定を保持するためのクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public sealed class ArchiveSettings : ArchiveSettingsBase
+    public abstract class ArchiveSettingValue : SerializableBase
     {
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ArchiveSettings
-        ///
-        /// <summary>
-        /// オブジェクトを初期化します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public ArchiveSettings()
-        {
-            Reset();
-        }
-
         #region Properties
 
         /* ----------------------------------------------------------------- */
         ///
-        /// UseUtf8
+        /// SaveLocation
         ///
         /// <summary>
-        /// 圧縮時にファイル名を UTF-8 に変換するかどうかを示す値を
-        /// 取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [DataMember(Name = "UseUTF8")]
-        public bool UseUtf8
-        {
-            get => _useUtf8;
-            set => SetProperty(ref _useUtf8, value);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OverwritePrompt
-        ///
-        /// <summary>
-        /// 保存先に指定されたパスに同名のファイルが存在している時、
-        /// 名前を付けて保存ダイアログを表示するかどうかを示す値を取得
-        /// または設定します。
+        /// 保存場所に関する情報を取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public bool OverwritePrompt
+        public SaveLocation SaveLocation
         {
-            get => _overwritePrompt;
-            set => SetProperty(ref _overwritePrompt, value);
+            get => _saveLocation;
+            set => SetProperty(ref _saveLocation, value);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SaveDirectoryName
+        ///
+        /// <summary>
+        /// 保存ディレクトリのパスを取得します。
+        /// </summary>
+        ///
+        /// <remarks>
+        /// このプロパティは SaveLocation.Others の場合に参照されます。
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        [DataMember]
+        public string SaveDirectoryName
+        {
+            get => _saveDirectoryName;
+            set => SetProperty(ref _saveDirectoryName, value);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Filtering
+        ///
+        /// <summary>
+        /// 特定のファイルまたはディレクトリをフィルタリングするかどうかを
+        /// 示す値を取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [DataMember]
+        public bool Filtering
+        {
+            get => _filtering;
+            set => SetProperty(ref _filtering, value);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OpenDirectory
+        ///
+        /// <summary>
+        /// 展開後にディレクトリを開くかどうかを示す値を取得または
+        /// 設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [DataMember]
+        public OpenDirectoryMethod OpenDirectory
+        {
+            get => _openDirectory;
+            set => SetProperty(ref _openDirectory, value);
         }
 
         #endregion
 
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnDeserializing
-        ///
-        /// <summary>
-        /// デシリアライズ直前に実行されます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [OnDeserializing]
-        private void OnDeserializing(StreamingContext context) => Reset();
+        #region Methods
 
         /* ----------------------------------------------------------------- */
         ///
@@ -107,19 +116,21 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected override void Reset()
+        protected virtual void Reset()
         {
-            _useUtf8         = false;
-            _overwritePrompt = true;
-
-            base.Reset();
+            _saveLocation      = SaveLocation.Others;
+            _saveDirectoryName = string.Empty;
+            _filtering         = true;
+            _openDirectory     = OpenDirectoryMethod.OpenNotDesktop;
         }
 
         #endregion
 
         #region Fields
-        private bool _useUtf8;
-        private bool _overwritePrompt;
+        private SaveLocation _saveLocation;
+        private string _saveDirectoryName;
+        private bool _filtering;
+        private OpenDirectoryMethod _openDirectory;
         #endregion
     }
 }

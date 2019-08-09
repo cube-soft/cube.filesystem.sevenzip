@@ -1,6 +1,6 @@
 ﻿namespace Cube.FileSystem.SevenZip.Ice
 {
-    partial class ArchiveRtSettingsForm
+    partial class ArchiveRtsWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ArchiveRtSettingsForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ArchiveRtsWindow));
             this.RootPanel = new System.Windows.Forms.TableLayoutPanel();
             this.OutputPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.OutputLabel = new System.Windows.Forms.Label();

@@ -9,9 +9,10 @@
         <AssemblyName>CubeIce-Setting</AssemblyName>
         <AssemblyTitle>CubeICE Setting</AssemblyTitle>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net45</TargetFramework>
         <LangVersion>latest</LangVersion>
+        <TargetFramework>net45</TargetFramework>
         <Platforms>AnyCPU;x86;x64</Platforms>
+        <RuntimeIdentifiers>win7-x86;win7-x64</RuntimeIdentifiers>
         <IsPackable>false</IsPackable>
         <Optimize>true</Optimize>
         <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
@@ -31,7 +32,7 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Update="Properties\Resources.Designer.cs" DependentUpon="Resources.resx" AutoGen="True" DesignTime="True" />
-        <Compile Update="Sources\Views\*Form.cs" SubType="Form" />
+        <Compile Update="Sources\Views\*Window.cs" SubType="Form" />
         <EmbeddedResource Update="Properties\Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
         <EmbeddedResource Update="Sources\Views\*.resx" DependentUpon="%(Filename).cs" />
         <None Include="Assets\**\*" />
