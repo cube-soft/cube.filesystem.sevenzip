@@ -48,7 +48,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         public static IEnumerable<ContextMenu> ToContextMenuGroup(this PresetMenu src)
         {
             var dest = new List<ContextMenu>();
-            Add(src, PresetMenu.Archive, ArchiveMenu, dest);
+            Add(src, PresetMenu.Compress, ArchiveMenu, dest);
             Add(src, PresetMenu.Extract, ExtractMenu, dest);
             Add(src, PresetMenu.Mail,    MailMenu,    dest);
             return dest;
@@ -97,10 +97,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* --------------------------------------------------------------------- */
         public static string ToName(this PresetMenu src)
         {
-            if ((src & PresetMenu.ArchiveOptions) != 0) return Find(src, ArchiveNames);
-            if ((src & PresetMenu.ExtractOptions) != 0) return Find(src, ExtractNames);
-            if ((src & PresetMenu.MailOptions)    != 0) return Find(src, MailNames);
-            if ((src & PresetMenu.Archive)        != 0) return Properties.Resources.CtxArchive;
+            if ((src & PresetMenu.CompressMask) != 0) return Find(src, ArchiveNames);
+            if ((src & PresetMenu.ExtractMask) != 0) return Find(src, ExtractNames);
+            if ((src & PresetMenu.MailMask)    != 0) return Find(src, MailNames);
+            if ((src & PresetMenu.Compress)        != 0) return Properties.Resources.CtxArchive;
             if ((src & PresetMenu.Extract)        != 0) return Properties.Resources.CtxExtract;
             if ((src & PresetMenu.Mail)           != 0) return Properties.Resources.CtxMail;
             return string.Empty;
@@ -121,10 +121,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* --------------------------------------------------------------------- */
         public static IEnumerable<string> ToArguments(this PresetMenu src)
         {
-            if ((src & PresetMenu.ArchiveOptions) != 0) return Find(src, ArchiveArguments);
-            if ((src & PresetMenu.ExtractOptions) != 0) return Find(src, ExtractArguments);
-            if ((src & PresetMenu.MailOptions)    != 0) return Find(src, MailArguments);
-            if ((src & PresetMenu.Archive)        != 0) return Find(PresetMenu.ArchiveZip, ArchiveArguments);
+            if ((src & PresetMenu.CompressMask) != 0) return Find(src, ArchiveArguments);
+            if ((src & PresetMenu.ExtractMask) != 0) return Find(src, ExtractArguments);
+            if ((src & PresetMenu.MailMask)    != 0) return Find(src, MailArguments);
+            if ((src & PresetMenu.Compress)        != 0) return Find(PresetMenu.CompressZip, ArchiveArguments);
             if ((src & PresetMenu.Extract)        != 0) return new[] { "/x" };
             if ((src & PresetMenu.Mail)           != 0) return Find(PresetMenu.MailZip, MailArguments);
             return new string[0];
@@ -145,11 +145,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* --------------------------------------------------------------------- */
         public static int ToIconIndex(this PresetMenu src)
         {
-            var m0 = PresetMenu.Archive | PresetMenu.ArchiveOptions;
+            var m0 = PresetMenu.Compress | PresetMenu.CompressMask;
             if ((src & m0) != 0) return 1;
-            var m1 = PresetMenu.Extract | PresetMenu.ExtractOptions;
+            var m1 = PresetMenu.Extract | PresetMenu.ExtractMask;
             if ((src & m1) != 0) return 2;
-            var m2 = PresetMenu.Mail | PresetMenu.MailOptions;
+            var m2 = PresetMenu.Mail | PresetMenu.MailMask;
             if ((src & m2) != 0) return 1;
 
             return 0;
@@ -210,14 +210,14 @@ namespace Cube.FileSystem.SevenZip.Ice
         private static IDictionary<PresetMenu, string> ArchiveNames { get; } =
             new Dictionary<PresetMenu, string>
             {
-                { PresetMenu.ArchiveZip,         Properties.Resources.CtxZip         },
-                { PresetMenu.ArchiveZipPassword, Properties.Resources.CtxZipPassword },
-                { PresetMenu.ArchiveSevenZip,    Properties.Resources.CtxSevenZip    },
-                { PresetMenu.ArchiveBZip2,       Properties.Resources.CtxBZip2       },
-                { PresetMenu.ArchiveGZip,        Properties.Resources.CtxGZip        },
-                { PresetMenu.ArchiveXz,          Properties.Resources.CtxXz          },
-                { PresetMenu.ArchiveSfx,         Properties.Resources.CtxSfx         },
-                { PresetMenu.ArchiveDetails,     Properties.Resources.CtxDetails     },
+                { PresetMenu.CompressZip,         Properties.Resources.CtxZip         },
+                { PresetMenu.CompressZipPassword, Properties.Resources.CtxZipPassword },
+                { PresetMenu.CompressSevenZip,    Properties.Resources.CtxSevenZip    },
+                { PresetMenu.CompressBZip2,       Properties.Resources.CtxBZip2       },
+                { PresetMenu.CompressGZip,        Properties.Resources.CtxGZip        },
+                { PresetMenu.CompressXz,          Properties.Resources.CtxXz          },
+                { PresetMenu.CompressSfx,         Properties.Resources.CtxSfx         },
+                { PresetMenu.CompressOthers,     Properties.Resources.CtxDetails     },
             };
 
         /* --------------------------------------------------------------------- */
@@ -240,7 +240,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                 { PresetMenu.MailGZip,        Properties.Resources.CtxGZip        },
                 { PresetMenu.MailXz,          Properties.Resources.CtxXz          },
                 { PresetMenu.MailSfx,         Properties.Resources.CtxSfx         },
-                { PresetMenu.MailDetails,     Properties.Resources.CtxDetails     },
+                { PresetMenu.MailOthers,     Properties.Resources.CtxDetails     },
             };
 
         /* --------------------------------------------------------------------- */
@@ -277,14 +277,14 @@ namespace Cube.FileSystem.SevenZip.Ice
         private static IDictionary<PresetMenu, IEnumerable<string>> ArchiveArguments { get; } =
             new Dictionary<PresetMenu, IEnumerable<string>>
             {
-                { PresetMenu.ArchiveZip,         new[] { "/c:zip" }       },
-                { PresetMenu.ArchiveZipPassword, new[] { "/c:zip", "/p" } },
-                { PresetMenu.ArchiveSevenZip,    new[] { "/c:7z" }        },
-                { PresetMenu.ArchiveBZip2,       new[] { "/c:bzip2" }     },
-                { PresetMenu.ArchiveGZip,        new[] { "/c:gzip" }      },
-                { PresetMenu.ArchiveXz,          new[] { "/c:xz" }        },
-                { PresetMenu.ArchiveSfx,         new[] { "/c:exe" }       },
-                { PresetMenu.ArchiveDetails,     new[] { "/c:detail" }    },
+                { PresetMenu.CompressZip,         new[] { "/c:zip" }       },
+                { PresetMenu.CompressZipPassword, new[] { "/c:zip", "/p" } },
+                { PresetMenu.CompressSevenZip,    new[] { "/c:7z" }        },
+                { PresetMenu.CompressBZip2,       new[] { "/c:bzip2" }     },
+                { PresetMenu.CompressGZip,        new[] { "/c:gzip" }      },
+                { PresetMenu.CompressXz,          new[] { "/c:xz" }        },
+                { PresetMenu.CompressSfx,         new[] { "/c:exe" }       },
+                { PresetMenu.CompressOthers,     new[] { "/c:detail" }    },
             };
 
         /* --------------------------------------------------------------------- */
@@ -307,7 +307,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                 { PresetMenu.MailGZip,        new[] { "/c:gzip", "/m" }      },
                 { PresetMenu.MailXz,          new[] { "/c:xz", "/m" }        },
                 { PresetMenu.MailSfx,         new[] { "/c:exe", "/m" }       },
-                { PresetMenu.MailDetails,     new[] { "/c:detail", "/m" }    },
+                { PresetMenu.MailOthers,     new[] { "/c:detail", "/m" }    },
             };
 
         /* --------------------------------------------------------------------- */
@@ -345,14 +345,14 @@ namespace Cube.FileSystem.SevenZip.Ice
         private static IDictionary<PresetMenu, ContextMenu> ArchiveMenu { get; } =
             new OrderedDictionary<PresetMenu, ContextMenu>
             {
-                { PresetMenu.ArchiveZip,         ToContextMenu(PresetMenu.ArchiveZip)         },
-                { PresetMenu.ArchiveZipPassword, ToContextMenu(PresetMenu.ArchiveZipPassword) },
-                { PresetMenu.ArchiveSevenZip,    ToContextMenu(PresetMenu.ArchiveSevenZip)    },
-                { PresetMenu.ArchiveBZip2,       ToContextMenu(PresetMenu.ArchiveBZip2)       },
-                { PresetMenu.ArchiveGZip,        ToContextMenu(PresetMenu.ArchiveGZip)        },
-                { PresetMenu.ArchiveXz,          ToContextMenu(PresetMenu.ArchiveXz)          },
-                { PresetMenu.ArchiveSfx,         ToContextMenu(PresetMenu.ArchiveSfx)         },
-                { PresetMenu.ArchiveDetails,     ToContextMenu(PresetMenu.ArchiveDetails)     },
+                { PresetMenu.CompressZip,         ToContextMenu(PresetMenu.CompressZip)         },
+                { PresetMenu.CompressZipPassword, ToContextMenu(PresetMenu.CompressZipPassword) },
+                { PresetMenu.CompressSevenZip,    ToContextMenu(PresetMenu.CompressSevenZip)    },
+                { PresetMenu.CompressBZip2,       ToContextMenu(PresetMenu.CompressBZip2)       },
+                { PresetMenu.CompressGZip,        ToContextMenu(PresetMenu.CompressGZip)        },
+                { PresetMenu.CompressXz,          ToContextMenu(PresetMenu.CompressXz)          },
+                { PresetMenu.CompressSfx,         ToContextMenu(PresetMenu.CompressSfx)         },
+                { PresetMenu.CompressOthers,     ToContextMenu(PresetMenu.CompressOthers)     },
             };
 
         /* --------------------------------------------------------------------- */
@@ -375,7 +375,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                 { PresetMenu.MailGZip,        ToContextMenu(PresetMenu.MailGZip)        },
                 { PresetMenu.MailXz,          ToContextMenu(PresetMenu.MailXz)          },
                 { PresetMenu.MailSfx,         ToContextMenu(PresetMenu.MailSfx)         },
-                { PresetMenu.MailDetails,     ToContextMenu(PresetMenu.MailDetails)     },
+                { PresetMenu.MailOthers,     ToContextMenu(PresetMenu.MailOthers)     },
             };
 
         /* --------------------------------------------------------------------- */

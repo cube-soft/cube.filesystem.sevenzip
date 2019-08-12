@@ -62,9 +62,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public IEnumerable<ContextMenu> Source { get; } =
             PresetMenuExtension.ToContextMenuGroup(
-                PresetMenu.Archive | PresetMenu.ArchiveOptions |
-                PresetMenu.Extract | PresetMenu.ExtractOptions |
-                PresetMenu.Mail    | PresetMenu.MailOptions
+                PresetMenu.Compress | PresetMenu.CompressMask |
+                PresetMenu.Extract | PresetMenu.ExtractMask |
+                PresetMenu.Mail    | PresetMenu.MailMask
             );
 
         /* ----------------------------------------------------------------- */

@@ -15,8 +15,8 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Mixin.String;
 using System;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
@@ -44,33 +44,32 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [STAThread]
         static void Main(string[] args)
         {
-            var type = typeof(Program);
-            var asm  = Assembly.GetExecutingAssembly();
-
             try
             {
+                var asm = typeof(Program).Assembly;
+
+                Logger.Configure();
                 Logger.ObserveTaskException();
-                Logger.Info(type, asm);
+                Logger.Info(typeof(Program), asm);
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
 
-                var model = new SettingFolder(asm, new AfsIO());
-                model.Load();
+                var settings = new SettingFolder(asm, new AfsIO());
+                settings.Load();
 
-                var install = args.Length > 0 && args[0] == "/install";
-                if (install) Logger.Info(type, "InstallMode");
+                var im = args.Length > 0 && args[0].FuzzyEquals("/Install");
+                if (im) Logger.Info(typeof(Program), "InstallMode");
 
-                var vm = new MainViewModel(model);
-                vm.Associate.Changed = install;
-                if (!install) vm.Sync();
-
-                var view = new MainWindow(install);
+                var view = new MainWindow(im);
+                var vm   = new MainViewModel(settings);
+                vm.Associate.Changed = im;
+                if (!im) vm.Sync();
                 view.Bind(vm);
 
                 Application.Run(view);
             }
-            catch (Exception err) { Logger.Error(type, err); }
+            catch (Exception err) { Logger.Error(typeof(Program), err); }
         }
     }
 }

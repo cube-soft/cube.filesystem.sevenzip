@@ -396,7 +396,7 @@
             // ContextArchiveCheckBox
             //
             this.ContextArchiveCheckBox.AutoSize = true;
-            this.ContextArchiveCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ContextSettingsBindingSource, "Archive", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.ContextArchiveCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ContextSettingsBindingSource, "Compress", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ContextArchiveCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ContextArchiveCheckBox.Location = new System.Drawing.Point(3, 3);
             this.ContextArchiveCheckBox.Name = "ContextArchiveCheckBox";
@@ -407,7 +407,7 @@
             //
             // ContextArchivePanel
             //
-            this.ContextArchivePanel.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", this.ContextSettingsBindingSource, "Archive", true, System.Windows.Forms.DataSourceUpdateMode.Never));
+            this.ContextArchivePanel.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", this.ContextSettingsBindingSource, "Compress", true, System.Windows.Forms.DataSourceUpdateMode.Never));
             this.ContextArchivePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ContextArchivePanel.Enabled = false;
             this.ContextArchivePanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
@@ -442,7 +442,7 @@
             //
             // ShortcutArchiveCheckBox
             //
-            this.ShortcutArchiveCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ShortcutSettingsBindingSource, "Archive", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.ShortcutArchiveCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ShortcutSettingsBindingSource, "Compress", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ShortcutArchiveCheckBox.Location = new System.Drawing.Point(3, 3);
             this.ShortcutArchiveCheckBox.Name = "ShortcutArchiveCheckBox";
             this.ShortcutArchiveCheckBox.Size = new System.Drawing.Size(55, 23);
@@ -456,8 +456,8 @@
             //
             // ShortcutArchiveComboBox
             //
-            this.ShortcutArchiveComboBox.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.ShortcutSettingsBindingSource, "ArchiveOption", true));
-            this.ShortcutArchiveComboBox.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", this.ShortcutSettingsBindingSource, "Archive", true, System.Windows.Forms.DataSourceUpdateMode.Never));
+            this.ShortcutArchiveComboBox.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.ShortcutSettingsBindingSource, "CompressOption", true));
+            this.ShortcutArchiveComboBox.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", this.ShortcutSettingsBindingSource, "Compress", true, System.Windows.Forms.DataSourceUpdateMode.Never));
             this.ShortcutArchiveComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ShortcutArchiveComboBox.Enabled = false;
             this.ShortcutArchiveComboBox.FormattingEnabled = true;
@@ -1108,7 +1108,7 @@
             //
             // AssociateSettingsBindingSource
             //
-            this.AssociateSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.Settings.AssociateValue);
+            this.AssociateSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.Settings.AssociateViewModel);
             //
             // MainForm
             //

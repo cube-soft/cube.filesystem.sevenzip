@@ -57,7 +57,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             Source.ItemDrag        += WhenItemDrag;
             Source.DragOver        += WhenDragOver;
             Source.DragDrop        += WhenDragDrop;
-            Source.BeforeLabelEdit += (s, e) => e.CancelEdit = !IsEditable;
+            Source.BeforeLabelEdit += (s, e) => e.CancelEdit = !Editable;
         }
 
         #endregion
@@ -88,7 +88,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// IsRegistered
+        /// Registered
         ///
         /// <summary>
         /// Register メソッドが実行されたかどうかを示す値を取得または
@@ -96,11 +96,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool IsRegistered { get; private set; } = false;
+        public bool Registered { get; private set; } = false;
 
         /* ----------------------------------------------------------------- */
         ///
-        /// IsEditable
+        /// Editable
         ///
         /// <summary>
         /// 現在選択中の Node オブジェクトが編集可能かどうかを示す値を
@@ -108,7 +108,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool IsEditable =>
+        public bool Editable =>
             Source.SelectedNode != null &&
             Source.SelectedNode != RootNode;
 
@@ -125,7 +125,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         {
             get
             {
-                if (!IsRegistered) throw new InvalidOperationException("unregistered");
+                if (!Registered) throw new InvalidOperationException("unregistered");
                 return Source.Nodes[0];
             }
         }
@@ -152,7 +152,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             Source.ImageList = images.ToImageList();
             Source.Nodes.Clear();
             _ = Source.Nodes.Add(CreateRootNode(src));
-            IsRegistered = true;
+            Registered = true;
         }
 
         /* ----------------------------------------------------------------- */
@@ -216,7 +216,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public void Remove()
         {
-            if (IsEditable) Source.SelectedNode.Remove();
+            if (Editable) Source.SelectedNode.Remove();
         }
 
         /* ----------------------------------------------------------------- */
@@ -241,7 +241,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public void Move(int delta)
         {
-            if (!IsEditable) return;
+            if (!Editable) return;
 
             var src = Source.SelectedNode;
             Debug.Assert(src != null);

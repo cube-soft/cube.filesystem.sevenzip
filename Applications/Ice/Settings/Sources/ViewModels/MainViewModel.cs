@@ -48,7 +48,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         {
             Facade.PropertyChanged += (s, e) => OnPropertyChanged(e);
 
-            Archive   = new CompressViewModel(facade.Value.Compress);
+            Compress  = new CompressViewModel(facade.Value.Compress);
             Extract   = new ExtractViewModel(facade.Value.Extract);
             Associate = new AssociateViewModel(facade.Value.Associate);
             Menu      = new ContextViewModel(facade.Value.ContextMenu);
@@ -61,14 +61,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Archive
+        /// Compress
         ///
         /// <summary>
         /// 圧縮の設定を扱う ViewModel を取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressViewModel Archive { get; }
+        public CompressViewModel Compress { get; }
 
         /* ----------------------------------------------------------------- */
         ///

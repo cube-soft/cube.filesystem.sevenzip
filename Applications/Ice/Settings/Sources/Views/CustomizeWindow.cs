@@ -15,7 +15,6 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Forms;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
@@ -30,7 +29,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class CustomizeWindow : Window
+    public partial class CustomizeWindow : Cube.Forms.Window
     {
         #region Constructors
 
@@ -83,17 +82,21 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Bind
+        /// OnBind
         ///
         /// <summary>
-        /// ViewModel と関連付けます。
+        /// Binds the windows to the specified object.
         /// </summary>
         ///
-        /// <param name="vm">ViewModel オブジェクト</param>
+        /// <param name="src">Binding object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Bind(CustomContextViewModel vm) =>
+        protected override void OnBind(IPresentable src)
+        {
+            base.OnBind(src);
+            if (!(src is CustomContextViewModel vm)) return;
             _menu.Register(vm.Source, vm.Current, vm.Images);
+        }
 
         #endregion
 
@@ -110,10 +113,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         private void UpdateMenu()
         {
-            RenameButton.Enabled = _menu.IsEditable;
-            RemoveButton.Enabled = _menu.IsEditable;
-            UpButton.Enabled     = _menu.IsEditable;
-            DownButton.Enabled   = _menu.IsEditable;
+            RenameButton.Enabled = _menu.Editable;
+            RemoveButton.Enabled = _menu.Editable;
+            UpButton.Enabled     = _menu.Editable;
+            DownButton.Enabled   = _menu.Editable;
         }
 
         #endregion

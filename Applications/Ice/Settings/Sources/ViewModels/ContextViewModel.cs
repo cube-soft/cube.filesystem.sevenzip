@@ -68,37 +68,37 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Archive
+        /// Compress
         ///
         /// <summary>
         /// 圧縮の項目が有効かどうかを示す値を取得または設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool Archive
+        public bool Compress
         {
-            get => Facade.Preset.HasFlag(PresetMenu.Archive);
-            set => Set(PresetMenu.Archive, value);
+            get => Facade.Preset.HasFlag(PresetMenu.Compress);
+            set => Set(PresetMenu.Compress, value);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveZip
+        /// CompressZip
         ///
         /// <summary>
         /// Zip で圧縮の項目が有効かどうかを示す値を取得または設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool ArchiveZip
+        public bool CompressZip
         {
-            get => Facade.Preset.HasFlag(PresetMenu.ArchiveZip);
-            set => Set(PresetMenu.ArchiveZip, value);
+            get => Facade.Preset.HasFlag(PresetMenu.CompressZip);
+            set => Set(PresetMenu.CompressZip, value);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveZipPassword
+        /// CompressZipPassword
         ///
         /// <summary>
         /// パスワード付 Zip で圧縮の項目が有効かどうかを示す値を取得
@@ -106,75 +106,75 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool ArchiveZipPassword
+        public bool CompressZipPassword
         {
-            get => Facade.Preset.HasFlag(PresetMenu.ArchiveZipPassword);
-            set => Set(PresetMenu.ArchiveZipPassword, value);
+            get => Facade.Preset.HasFlag(PresetMenu.CompressZipPassword);
+            set => Set(PresetMenu.CompressZipPassword, value);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveSevenZip
+        /// CompressSevenZip
         ///
         /// <summary>
         /// 7z で圧縮の項目が有効かどうかを示す値を取得または設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool ArchiveSevenZip
+        public bool CompressSevenZip
         {
-            get => Facade.Preset.HasFlag(PresetMenu.ArchiveSevenZip);
-            set => Set(PresetMenu.ArchiveSevenZip, value);
+            get => Facade.Preset.HasFlag(PresetMenu.CompressSevenZip);
+            set => Set(PresetMenu.CompressSevenZip, value);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveGZip
+        /// CompressGZip
         ///
         /// <summary>
         /// GZip で圧縮の項目が有効かどうかを示す値を取得または設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool ArchiveGZip
+        public bool CompressGZip
         {
-            get => Facade.Preset.HasFlag(PresetMenu.ArchiveGZip);
-            set => Set(PresetMenu.ArchiveGZip, value);
+            get => Facade.Preset.HasFlag(PresetMenu.CompressGZip);
+            set => Set(PresetMenu.CompressGZip, value);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveBZip2
+        /// CompressBZip2
         ///
         /// <summary>
         /// BZip2 で圧縮の項目が有効かどうかを示す値を取得または設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool ArchiveBZip2
+        public bool CompressBZip2
         {
-            get => Facade.Preset.HasFlag(PresetMenu.ArchiveBZip2);
-            set => Set(PresetMenu.ArchiveBZip2, value);
+            get => Facade.Preset.HasFlag(PresetMenu.CompressBZip2);
+            set => Set(PresetMenu.CompressBZip2, value);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveXZ
+        /// CompressXZ
         ///
         /// <summary>
         /// XZ で圧縮の項目が有効かどうかを示す値を取得または設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool ArchiveXZ
+        public bool CompressXZ
         {
-            get => Facade.Preset.HasFlag(PresetMenu.ArchiveXz);
-            set => Set(PresetMenu.ArchiveXz, value);
+            get => Facade.Preset.HasFlag(PresetMenu.CompressXz);
+            set => Set(PresetMenu.CompressXz, value);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveSfx
+        /// CompressSfx
         ///
         /// <summary>
         /// 自己解凍形式で圧縮の項目が有効かどうかを示す値を取得または
@@ -182,15 +182,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool ArchiveSfx
+        public bool CompressSfx
         {
-            get => Facade.Preset.HasFlag(PresetMenu.ArchiveSfx);
-            set => Set(PresetMenu.ArchiveSfx, value);
+            get => Facade.Preset.HasFlag(PresetMenu.CompressSfx);
+            set => Set(PresetMenu.CompressSfx, value);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveDetails
+        /// CompressOthers
         ///
         /// <summary>
         /// 詳細を設定して圧縮の項目が有効かどうかを示す値を取得または
@@ -198,10 +198,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool ArchiveDetails
+        public bool CompressOthers
         {
-            get => Facade.Preset.HasFlag(PresetMenu.ArchiveDetails);
-            set => Set(PresetMenu.ArchiveDetails, value);
+            get => Facade.Preset.HasFlag(PresetMenu.CompressOthers);
+            set => Set(PresetMenu.CompressOthers, value);
         }
 
         #endregion

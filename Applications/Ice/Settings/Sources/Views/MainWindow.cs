@@ -18,7 +18,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
@@ -80,24 +79,25 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Bind
+        /// OnBind
         ///
         /// <summary>
-        /// オブジェクトを関連付けます。
+        /// Binds the windows to the specified object.
         /// </summary>
         ///
-        /// <param name="vm">ViewModel オブジェクト</param>
+        /// <param name="src">Binding object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Bind(MainViewModel vm)
+        protected override void OnBind(IPresentable src)
         {
-            if (vm == null) return;
+            base.OnBind(src);
+            if (!(src is MainViewModel vm)) return;
 
             SettingsBindingSource.DataSource          = vm;
             AssociateSettingsBindingSource.DataSource = vm.Associate;
             ContextSettingsBindingSource.DataSource   = vm.Menu;
             ShortcutSettingsBindingSource.DataSource  = vm.Shortcut;
-            ArchiveSettingsBindingSource.DataSource   = vm.Archive;
+            ArchiveSettingsBindingSource.DataSource   = vm.Compress;
             ExtractSettingsBindingSource.DataSource   = vm.Extract;
             VersionPanel.Version                      = vm.Version;
 
@@ -268,14 +268,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
             ContextArchivePanel.Controls.AddRange(new[]
             {
-                Create(PresetMenu.ArchiveZip,         Properties.Resources.MenuZip,         index++),
-                Create(PresetMenu.ArchiveZipPassword, Properties.Resources.MenuZipPassword, index++),
-                Create(PresetMenu.ArchiveSevenZip,    Properties.Resources.MenuSevenZip,    index++),
-                Create(PresetMenu.ArchiveBZip2,       Properties.Resources.MenuBZip2,       index++),
-                Create(PresetMenu.ArchiveGZip,        Properties.Resources.MenuGZip,        index++),
-                Create(PresetMenu.ArchiveXz,          Properties.Resources.MenuXZ,          index++),
-                Create(PresetMenu.ArchiveSfx,         Properties.Resources.MenuSfx,         index++),
-                Create(PresetMenu.ArchiveDetails,     Properties.Resources.MenuDetails,      index++),
+                Create(PresetMenu.CompressZip,         Properties.Resources.MenuZip,         index++),
+                Create(PresetMenu.CompressZipPassword, Properties.Resources.MenuZipPassword, index++),
+                Create(PresetMenu.CompressSevenZip,    Properties.Resources.MenuSevenZip,    index++),
+                Create(PresetMenu.CompressBZip2,       Properties.Resources.MenuBZip2,       index++),
+                Create(PresetMenu.CompressGZip,        Properties.Resources.MenuGZip,        index++),
+                Create(PresetMenu.CompressXz,          Properties.Resources.MenuXZ,          index++),
+                Create(PresetMenu.CompressSfx,         Properties.Resources.MenuSfx,         index++),
+                Create(PresetMenu.CompressOthers,     Properties.Resources.MenuDetails,      index++),
             });
 
             ContextExtractPanel.Controls.AddRange(new[]
@@ -305,13 +305,13 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             ShortcutArchiveComboBox.ValueMember   = "Value";
             ShortcutArchiveComboBox.DataSource    = new List<KeyValuePair<string, PresetMenu>>
             {
-                Create(Properties.Resources.MenuZip,         PresetMenu.ArchiveZip),
-                Create(Properties.Resources.MenuZipPassword, PresetMenu.ArchiveZipPassword),
-                Create(Properties.Resources.MenuSevenZip,    PresetMenu.ArchiveSevenZip),
-                Create(Properties.Resources.MenuBZip2,       PresetMenu.ArchiveBZip2),
-                Create(Properties.Resources.MenuGZip,        PresetMenu.ArchiveGZip),
-                Create(Properties.Resources.MenuSfx,         PresetMenu.ArchiveSfx),
-                Create(Properties.Resources.MenuDetails,     PresetMenu.ArchiveDetails),
+                Create(Properties.Resources.MenuZip,         PresetMenu.CompressZip),
+                Create(Properties.Resources.MenuZipPassword, PresetMenu.CompressZipPassword),
+                Create(Properties.Resources.MenuSevenZip,    PresetMenu.CompressSevenZip),
+                Create(Properties.Resources.MenuBZip2,       PresetMenu.CompressBZip2),
+                Create(Properties.Resources.MenuGZip,        PresetMenu.CompressGZip),
+                Create(Properties.Resources.MenuSfx,         PresetMenu.CompressSfx),
+                Create(Properties.Resources.MenuDetails,     PresetMenu.CompressOthers),
             };
         }
 
@@ -389,7 +389,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         #endregion
 
         #region Fields
-        private readonly Cube.Forms.VersionControl VersionPanel = new Cube.Forms.VersionControl(Assembly.GetExecutingAssembly());
+        private readonly Cube.Forms.VersionControl VersionPanel = new Cube.Forms.VersionControl(typeof(MainWindow).Assembly);
         #endregion
     }
 }

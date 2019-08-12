@@ -100,8 +100,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         public void Sync()
         {
             var b0 = new Shortcut { FullName = GetFileName(Properties.Resources.ScArcive) }.Exists;
-            if (b0) Preset |= PresetMenu.Archive;
-            else Preset &= ~PresetMenu.Archive;
+            if (b0) Preset |= PresetMenu.Compress;
+            else Preset &= ~PresetMenu.Compress;
 
             var b1 = new Shortcut { FullName = GetFileName(Properties.Resources.ScExtract) }.Exists;
             if (b1) Preset |= PresetMenu.Extract;
@@ -179,7 +179,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
                 IconLocation = $"{dest},1",
             };
 
-            if ((Preset & PresetMenu.Archive) != 0) sc.Create();
+            if ((Preset & PresetMenu.Compress) != 0) sc.Create();
             else sc.Delete();
         }
 

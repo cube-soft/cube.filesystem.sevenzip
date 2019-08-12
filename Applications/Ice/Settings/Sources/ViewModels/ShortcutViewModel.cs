@@ -61,8 +61,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Compress
         {
-            get => Facade.Preset.HasFlag(PresetMenu.Archive);
-            set => Set(PresetMenu.Archive, value);
+            get => Facade.Preset.HasFlag(PresetMenu.Compress);
+            set => Set(PresetMenu.Compress, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -97,19 +97,19 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveOption
+        /// CompressOption
         ///
         /// <summary>
         /// 圧縮オプションを取得または設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public PresetMenu ArchiveOption
+        public PresetMenu CompressOption
         {
-            get => Facade.Preset & PresetMenu.ArchiveOptions;
+            get => Facade.Preset & PresetMenu.CompressMask;
             set
             {
-                var strip = Facade.Preset & ~PresetMenu.ArchiveOptions;
+                var strip = Facade.Preset & ~PresetMenu.CompressMask;
                 Facade.Preset = strip | value;
             }
         }

@@ -133,7 +133,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// IsEditable
+        /// Editable
         ///
         /// <summary>
         /// 選択中の Node オブジェクトが編集可能かどうかを示す値を取得
@@ -141,18 +141,18 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool IsEditable => _core.IsEditable;
+        public bool Editable => _core.Editable;
 
         /* ----------------------------------------------------------------- */
         ///
-        /// IsRegistered
+        /// Registered
         ///
         /// <summary>
         /// データが登録されたかどうかを示す値を取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool IsRegistered => _core.IsRegistered;
+        public bool Registered => _core.Registered;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -366,10 +366,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         private void RaiseUpdated()
         {
-            RenameMenu.Enabled = IsEditable;
-            RemoveMenu.Enabled = IsEditable;
-            UpMenu.Enabled     = IsEditable;
-            DownMenu.Enabled   = IsEditable;
+            RenameMenu.Enabled = Editable;
+            RemoveMenu.Enabled = Editable;
+            UpMenu.Enabled     = Editable;
+            DownMenu.Enabled   = Editable;
 
             OnUpdated(EventArgs.Empty);
         }
