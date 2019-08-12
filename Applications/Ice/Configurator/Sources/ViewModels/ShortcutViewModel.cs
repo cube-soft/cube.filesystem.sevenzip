@@ -26,7 +26,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ShortcutViewModel : ObservableBase
+    public class ShortcutViewModel : Presentable<ShortcutSettingValue>
     {
         #region Constructors
 
@@ -38,13 +38,12 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /// オブジェクトを初期化します。
         /// </summary>
         ///
-        /// <param name="model">Model オブジェクト</param>
+        /// <param name="facade">Model オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ShortcutViewModel(ShortcutSettingValue model)
+        public ShortcutViewModel(ShortcutSettingValue facade) : base(facade)
         {
-            _model = model;
-            _model.PropertyChanged += (s, e) => OnPropertyChanged(e);
+            Facade.PropertyChanged += (s, e) => OnPropertyChanged(e);
         }
 
         #endregion
@@ -53,16 +52,16 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Archive
+        /// Compress
         ///
         /// <summary>
         /// 圧縮の項目が有効かどうかを示す値を取得または設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool Archive
+        public bool Compress
         {
-            get => _model.Preset.HasFlag(PresetMenu.Archive);
+            get => Facade.Preset.HasFlag(PresetMenu.Archive);
             set => Set(PresetMenu.Archive, value);
         }
 
@@ -77,7 +76,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Extract
         {
-            get => _model.Preset.HasFlag(PresetMenu.Extract);
+            get => Facade.Preset.HasFlag(PresetMenu.Extract);
             set => Set(PresetMenu.Extract, value);
         }
 
@@ -92,7 +91,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Settings
         {
-            get => _model.Preset.HasFlag(PresetMenu.Settings);
+            get => Facade.Preset.HasFlag(PresetMenu.Settings);
             set => Set(PresetMenu.Settings, value);
         }
 
@@ -107,11 +106,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public PresetMenu ArchiveOption
         {
-            get => _model.Preset & PresetMenu.ArchiveOptions;
+            get => Facade.Preset & PresetMenu.ArchiveOptions;
             set
             {
-                var strip = _model.Preset & ~PresetMenu.ArchiveOptions;
-                _model.Preset = strip | value;
+                var strip = Facade.Preset & ~PresetMenu.ArchiveOptions;
+                Facade.Preset = strip | value;
             }
         }
 
@@ -129,7 +128,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Sync() => _model.Sync();
+        public void Sync() => Facade.Sync();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -140,7 +139,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Update() => _model.Update();
+        public void Update() => Facade.Update();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -174,14 +173,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         private void Set(PresetMenu value, bool check)
         {
-            if (check) _model.Preset |= value;
-            else _model.Preset &= ~value;
+            if (check) Facade.Preset |= value;
+            else Facade.Preset &= ~value;
         }
 
-        #endregion
-
-        #region Fields
-        private readonly ShortcutSettingValue _model;
         #endregion
     }
 }

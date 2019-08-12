@@ -35,7 +35,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
     /// </remarks>
     ///
     /* --------------------------------------------------------------------- */
-    internal class AssociateCommand
+    public class AssociateCommand
     {
         #region Constructors
 

@@ -33,6 +33,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
+    [DataContract]
     public sealed class ShortcutSettingValue : SerializableBase
     {
         #region Constructors

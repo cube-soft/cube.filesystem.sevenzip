@@ -29,7 +29,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class AssociateViewModel : ObservableBase
+    public class AssociateViewModel : Presentable<AssociateCommand>
     {
         #region Constructors
 
@@ -44,10 +44,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /// <param name="model">Model オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public AssociateViewModel(AssociateSettingValue model)
+        public AssociateViewModel(AssociateSettingValue model) : base(new AssociateCommand(model))
         {
-            _model = new AssociateCommand(model);
-            _model.Settings.PropertyChanged += (s, e) => OnPropertyChanged(e);
+            Facade.Settings.PropertyChanged += (s, e) => OnPropertyChanged(e);
         }
 
         #endregion
@@ -66,8 +65,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Changed
         {
-            get => _model.Settings.Changed;
-            set => _model.Settings.Changed = value;
+            get => Facade.Settings.Changed;
+            set => Facade.Settings.Changed = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -82,8 +81,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public int IconIndex
         {
-            get => _model.Settings.IconIndex;
-            set => _model.Settings.IconIndex = value;
+            get => Facade.Settings.IconIndex;
+            set => Facade.Settings.IconIndex = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -97,8 +96,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool SevenZip
         {
-            get => _model.Settings.SevenZip;
-            set => _model.Settings.SevenZip = value;
+            get => Facade.Settings.SevenZip;
+            set => Facade.Settings.SevenZip = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -112,8 +111,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Arj
         {
-            get => _model.Settings.Arj;
-            set => _model.Settings.Arj = value;
+            get => Facade.Settings.Arj;
+            set => Facade.Settings.Arj = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -127,8 +126,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool BZ2
         {
-            get => _model.Settings.BZ2;
-            set => _model.Settings.BZ2 = value;
+            get => Facade.Settings.BZ2;
+            set => Facade.Settings.BZ2 = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -142,8 +141,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Cab
         {
-            get => _model.Settings.Cab;
-            set => _model.Settings.Cab = value;
+            get => Facade.Settings.Cab;
+            set => Facade.Settings.Cab = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -157,8 +156,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Chm
         {
-            get => _model.Settings.Chm;
-            set => _model.Settings.Chm = value;
+            get => Facade.Settings.Chm;
+            set => Facade.Settings.Chm = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -172,8 +171,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Cpio
         {
-            get => _model.Settings.Cpio;
-            set => _model.Settings.Cpio = value;
+            get => Facade.Settings.Cpio;
+            set => Facade.Settings.Cpio = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -187,8 +186,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Deb
         {
-            get => _model.Settings.Deb;
-            set => _model.Settings.Deb = value;
+            get => Facade.Settings.Deb;
+            set => Facade.Settings.Deb = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -202,8 +201,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Dmg
         {
-            get => _model.Settings.Dmg;
-            set => _model.Settings.Dmg = value;
+            get => Facade.Settings.Dmg;
+            set => Facade.Settings.Dmg = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -217,8 +216,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Flv
         {
-            get => _model.Settings.Flv;
-            set => _model.Settings.Flv = value;
+            get => Facade.Settings.Flv;
+            set => Facade.Settings.Flv = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -232,8 +231,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool GZ
         {
-            get => _model.Settings.GZ;
-            set => _model.Settings.GZ = value;
+            get => Facade.Settings.GZ;
+            set => Facade.Settings.GZ = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -247,8 +246,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Hfs
         {
-            get => _model.Settings.Hfs;
-            set => _model.Settings.Hfs = value;
+            get => Facade.Settings.Hfs;
+            set => Facade.Settings.Hfs = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -262,8 +261,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Jar
         {
-            get => _model.Settings.Jar;
-            set => _model.Settings.Jar = value;
+            get => Facade.Settings.Jar;
+            set => Facade.Settings.Jar = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -277,8 +276,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Iso
         {
-            get => _model.Settings.Iso;
-            set => _model.Settings.Iso = value;
+            get => Facade.Settings.Iso;
+            set => Facade.Settings.Iso = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -292,8 +291,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Lzh
         {
-            get => _model.Settings.Lzh;
-            set => _model.Settings.Lzh = value;
+            get => Facade.Settings.Lzh;
+            set => Facade.Settings.Lzh = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -307,8 +306,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Nupkg
         {
-            get => _model.Settings.Nupkg;
-            set => _model.Settings.Nupkg = value;
+            get => Facade.Settings.Nupkg;
+            set => Facade.Settings.Nupkg = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -322,8 +321,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Rar
         {
-            get => _model.Settings.Rar;
-            set => _model.Settings.Rar = value;
+            get => Facade.Settings.Rar;
+            set => Facade.Settings.Rar = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -337,8 +336,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Rpm
         {
-            get => _model.Settings.Rpm;
-            set => _model.Settings.Rpm = value;
+            get => Facade.Settings.Rpm;
+            set => Facade.Settings.Rpm = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -352,8 +351,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Swf
         {
-            get => _model.Settings.Swf;
-            set => _model.Settings.Swf = value;
+            get => Facade.Settings.Swf;
+            set => Facade.Settings.Swf = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -367,8 +366,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Tar
         {
-            get => _model.Settings.Tar;
-            set => _model.Settings.Tar = value;
+            get => Facade.Settings.Tar;
+            set => Facade.Settings.Tar = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -382,8 +381,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Tbz
         {
-            get => _model.Settings.Tbz;
-            set => _model.Settings.Tbz = value;
+            get => Facade.Settings.Tbz;
+            set => Facade.Settings.Tbz = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -397,8 +396,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Tgz
         {
-            get => _model.Settings.Tgz;
-            set => _model.Settings.Tgz = value;
+            get => Facade.Settings.Tgz;
+            set => Facade.Settings.Tgz = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -412,8 +411,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Txz
         {
-            get => _model.Settings.Txz;
-            set => _model.Settings.Txz = value;
+            get => Facade.Settings.Txz;
+            set => Facade.Settings.Txz = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -427,8 +426,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Vhd
         {
-            get => _model.Settings.Vhd;
-            set => _model.Settings.Vhd = value;
+            get => Facade.Settings.Vhd;
+            set => Facade.Settings.Vhd = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -442,8 +441,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Vmdk
         {
-            get => _model.Settings.Vmdk;
-            set => _model.Settings.Vmdk = value;
+            get => Facade.Settings.Vmdk;
+            set => Facade.Settings.Vmdk = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -457,8 +456,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Wim
         {
-            get => _model.Settings.Wim;
-            set => _model.Settings.Wim = value;
+            get => Facade.Settings.Wim;
+            set => Facade.Settings.Wim = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -472,8 +471,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Xar
         {
-            get => _model.Settings.Xar;
-            set => _model.Settings.Xar = value;
+            get => Facade.Settings.Xar;
+            set => Facade.Settings.Xar = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -487,8 +486,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool XZ
         {
-            get => _model.Settings.XZ;
-            set => _model.Settings.XZ = value;
+            get => Facade.Settings.XZ;
+            set => Facade.Settings.XZ = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -502,8 +501,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Z
         {
-            get => _model.Settings.Z;
-            set => _model.Settings.Z = value;
+            get => Facade.Settings.Z;
+            set => Facade.Settings.Z = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -517,8 +516,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Zip
         {
-            get => _model.Settings.Zip;
-            set => _model.Settings.Zip = value;
+            get => Facade.Settings.Zip;
+            set => Facade.Settings.Zip = value;
         }
 
         #endregion
@@ -556,7 +555,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Update() => _model.Execute();
+        public void Update() => Facade.Execute();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -590,17 +589,13 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         private void ApplyAll(bool enabled)
         {
-            var items = _model.Settings.Value;
+            var items = Facade.Settings.Value;
             foreach (var key in items.Keys.ToArray()) items[key] = enabled;
 
-            var e = new PropertyChangedEventArgs(nameof(_model.Settings.Value));
+            var e = new PropertyChangedEventArgs(nameof(Facade.Settings.Value));
             OnPropertyChanged(e);
         }
 
-        #endregion
-
-        #region Fields
-        private readonly AssociateCommand _model;
         #endregion
     }
 }

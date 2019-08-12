@@ -28,7 +28,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class MainViewModel : ObservableBase
+    public class MainViewModel : Presentable<SettingFolder>
     {
         #region Constructors
 
@@ -37,119 +37,27 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /// MainViewModel
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the MainViewModel class with the
+        /// specified arguments.
         /// </summary>
         ///
-        /// <param name="model">Model オブジェクト</param>
+        /// <param name="facade">Facade model.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public MainViewModel(SettingFolder model)
+        public MainViewModel(SettingFolder facade) : base(facade)
         {
-            _model = model;
-            _model.PropertyChanged += (s, e) => OnPropertyChanged(e);
+            Facade.PropertyChanged += (s, e) => OnPropertyChanged(e);
 
-            Archive   = new ArchiveViewModel(model.Value.Archive);
-            Extract   = new ExtractViewModel(model.Value.Extract);
-            Associate = new AssociateViewModel(model.Value.Associate);
-            Menu      = new ContextViewModel(model.Value.Menu);
-            Shortcut  = new ShortcutViewModel(model.Value.Shortcut);
+            Archive   = new CompressViewModel(facade.Value.Archive);
+            Extract   = new ExtractViewModel(facade.Value.Extract);
+            Associate = new AssociateViewModel(facade.Value.Associate);
+            Menu      = new ContextViewModel(facade.Value.Menu);
+            Shortcut  = new ShortcutViewModel(facade.Value.Shortcut);
         }
 
         #endregion
 
         #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Version
-        ///
-        /// <summary>
-        /// バージョンを表す文字列を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Version => $"Version {_model.Version.ToString(true)}";
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CheckUpdate
-        ///
-        /// <summary>
-        /// 起動時にアップデートの確認を実行するかどうかを示す値を取得
-        /// または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public bool CheckUpdate
-        {
-            get => _model.Value.CheckUpdate;
-            set => _model.Value.CheckUpdate = value;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ErrorReport
-        ///
-        /// <summary>
-        /// エラーレポートを表示するかどうかを示す値を取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public bool ErrorReport
-        {
-            get => _model.Value.ErrorReport;
-            set => _model.Value.ErrorReport = value;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Filtering
-        ///
-        /// <summary>
-        /// 圧縮・展開時に除外するファイルまたはディレクトリ名の一覧を
-        /// 取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Filtering
-        {
-            get => Transform(_model.Value.Filters, "|", Environment.NewLine);
-            set => _model.Value.Filters = Transform(value, Environment.NewLine, "|");
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ToolTip
-        ///
-        /// <summary>
-        /// マウスポインタを圧縮ファイルに指定した時にファイル一覧を表示
-        /// するかどうかを示す値を取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public bool ToolTip
-        {
-            get => _model.Value.ToolTip;
-            set => _model.Value.ToolTip = value;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ToolTipCount
-        ///
-        /// <summary>
-        /// マウスポインタを圧縮ファイルに指定した時に一覧を表示する
-        /// ファイル数を取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public int ToolTipCount
-        {
-            get => _model.Value.ToolTipCount;
-            set => _model.Value.ToolTipCount = value;
-        }
-
-        #region ViewModels
 
         /* ----------------------------------------------------------------- */
         ///
@@ -160,7 +68,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveViewModel Archive { get; }
+        public CompressViewModel Archive { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -207,7 +115,95 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public ShortcutViewModel Shortcut { get; }
 
-        #endregion
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Version
+        ///
+        /// <summary>
+        /// バージョンを表す文字列を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Version => $"Version {Facade.Version.ToString(true)}";
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CheckUpdate
+        ///
+        /// <summary>
+        /// 起動時にアップデートの確認を実行するかどうかを示す値を取得
+        /// または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public bool CheckUpdate
+        {
+            get => Facade.Value.CheckUpdate;
+            set => Facade.Value.CheckUpdate = value;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ErrorReport
+        ///
+        /// <summary>
+        /// エラーレポートを表示するかどうかを示す値を取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public bool ErrorReport
+        {
+            get => Facade.Value.ErrorReport;
+            set => Facade.Value.ErrorReport = value;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Filtering
+        ///
+        /// <summary>
+        /// 圧縮・展開時に除外するファイルまたはディレクトリ名の一覧を
+        /// 取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Filtering
+        {
+            get => Transform(Facade.Value.Filters, "|", Environment.NewLine);
+            set => Facade.Value.Filters = Transform(value, Environment.NewLine, "|");
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ToolTip
+        ///
+        /// <summary>
+        /// マウスポインタを圧縮ファイルに指定した時にファイル一覧を表示
+        /// するかどうかを示す値を取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public bool ToolTip
+        {
+            get => Facade.Value.ToolTip;
+            set => Facade.Value.ToolTip = value;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ToolTipCount
+        ///
+        /// <summary>
+        /// マウスポインタを圧縮ファイルに指定した時に一覧を表示する
+        /// ファイル数を取得または設定します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public int ToolTipCount
+        {
+            get => Facade.Value.ToolTipCount;
+            set => Facade.Value.ToolTipCount = value;
+        }
 
         #endregion
 
@@ -222,10 +218,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Sync()
-        {
-            Shortcut.Sync();
-        }
+        public void Sync() => Shortcut.Sync();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -238,7 +231,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public void Update()
         {
-            _model.Save();
+            Facade.Save();
             Associate.Update();
             Shortcut.Update();
         }
@@ -279,10 +272,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
             return string.Join(rep, dest);
         }
 
-        #endregion
-
-        #region Fields
-        private readonly SettingFolder _model;
         #endregion
     }
 }

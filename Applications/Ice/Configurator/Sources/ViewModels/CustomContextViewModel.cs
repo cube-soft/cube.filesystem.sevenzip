@@ -30,7 +30,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class CustomContextViewModel : ObservableBase
+    public class CustomContextViewModel : Presentable<IEnumerable<ContextMenu>>
     {
         #region Constructors
 
@@ -45,10 +45,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /// <param name="current">現在のメニュー一覧</param>
         ///
         /* ----------------------------------------------------------------- */
-        public CustomContextViewModel(IEnumerable<ContextMenu> current)
-        {
-            Current = current;
-        }
+        public CustomContextViewModel(IEnumerable<ContextMenu> current) : base(current) { }
 
         #endregion
 
@@ -79,7 +76,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IEnumerable<ContextMenu> Current { get; }
+        public IEnumerable<ContextMenu> Current => Facade;
 
         /* ----------------------------------------------------------------- */
         ///

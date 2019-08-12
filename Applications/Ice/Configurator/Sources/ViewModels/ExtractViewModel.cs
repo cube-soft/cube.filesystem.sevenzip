@@ -22,11 +22,12 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
     /// ExtractViewModel
     ///
     /// <summary>
-    /// ExtractSettings の ViewModel を表すクラスです。
+    /// Provides functionality to communicate with the ExtractSettingValue
+    /// object and a view.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ExtractViewModel : ArchiveViewModelBase<ExtractSettingValue>
+    public class ExtractViewModel : ArchiveViewModel<ExtractSettingValue>
     {
         #region Constructors
 
@@ -90,8 +91,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool DeleteSource
         {
-            get => Model.DeleteSource;
-            set => Model.DeleteSource = value;
+            get => Facade.DeleteSource;
+            set => Facade.DeleteSource = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -106,8 +107,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Bursty
         {
-            get => Model.Bursty;
-            set => Model.Bursty = value;
+            get => Facade.Bursty;
+            set => Facade.Bursty = value;
         }
 
         #endregion
@@ -124,7 +125,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool HasFlag(CreateDirectoryMethod value) => Model.RootDirectory.HasFlag(value);
+        public bool HasFlag(CreateDirectoryMethod value) => Facade.RootDirectory.HasFlag(value);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -137,8 +138,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public void SetRootDirectory(CreateDirectoryMethod value, bool check)
         {
-            if (check) Model.RootDirectory |= value;
-            else Model.RootDirectory &= ~value;
+            if (check) Facade.RootDirectory |= value;
+            else Facade.RootDirectory &= ~value;
         }
 
         #endregion

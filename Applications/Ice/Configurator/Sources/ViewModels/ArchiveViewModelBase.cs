@@ -19,32 +19,33 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveViewModelBase
+    /// ArchiveViewModel
     ///
     /// <summary>
-    /// ArchiveSettingsBase の ViewModel を表すクラスです。
+    /// Represents the base class of the compressing and extracting
+    /// archives.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveViewModelBase<T> : ObservableBase where T : ArchiveSettingValue
+    public abstract class ArchiveViewModel<T> : Presentable<T> where T : ArchiveSettingValue
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveViewModelBase
+        /// ArchiveViewModel
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the ArchiveViewModel class with
+        /// the specified arguments.
         /// </summary>
         ///
-        /// <param name="model">Model オブジェクト</param>
+        /// <param name="facade">Facade object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveViewModelBase(T model)
+        public ArchiveViewModel(T facade) : base(facade)
         {
-            Model = model;
-            Model.PropertyChanged += (s, e) => OnPropertyChanged(e);
+            Facade.PropertyChanged += (s, e) => OnPropertyChanged(e);
         }
 
         #endregion
@@ -62,7 +63,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool SaveOthers
         {
-            get => Model.SaveLocation == SaveLocation.Others;
+            get => Facade.SaveLocation == SaveLocation.Others;
             set => SetSaveLocation(SaveLocation.Others, value);
         }
 
@@ -77,7 +78,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool SaveSource
         {
-            get => Model.SaveLocation == SaveLocation.Source;
+            get => Facade.SaveLocation == SaveLocation.Source;
             set => SetSaveLocation(SaveLocation.Source, value);
         }
 
@@ -92,7 +93,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool SaveRuntime
         {
-            get => Model.SaveLocation == SaveLocation.Runtime;
+            get => Facade.SaveLocation == SaveLocation.Runtime;
             set => SetSaveLocation(SaveLocation.Runtime, value);
         }
 
@@ -107,8 +108,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public string SaveDirectoryName
         {
-            get => Model.SaveDirectoryName;
-            set => Model.SaveDirectoryName = value;
+            get => Facade.SaveDirectoryName;
+            set => Facade.SaveDirectoryName = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -123,8 +124,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Filtering
         {
-            get => Model.Filtering;
-            set => Model.Filtering = value;
+            get => Facade.Filtering;
+            set => Facade.Filtering = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -139,11 +140,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool OpenDirectory
         {
-            get => Model.OpenDirectory.HasFlag(OpenDirectoryMethod.Open);
+            get => Facade.OpenDirectory.HasFlag(OpenDirectoryMethod.Open);
             set
             {
-                if (value) Model.OpenDirectory |= OpenDirectoryMethod.Open;
-                else Model.OpenDirectory &= ~OpenDirectoryMethod.Open;
+                if (value) Facade.OpenDirectory |= OpenDirectoryMethod.Open;
+                else Facade.OpenDirectory &= ~OpenDirectoryMethod.Open;
             }
         }
 
@@ -159,24 +160,13 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool SkipDesktop
         {
-            get => Model.OpenDirectory.HasFlag(OpenDirectoryMethod.SkipDesktop);
+            get => Facade.OpenDirectory.HasFlag(OpenDirectoryMethod.SkipDesktop);
             set
             {
-                if (value) Model.OpenDirectory |= OpenDirectoryMethod.SkipDesktop;
-                else Model.OpenDirectory &= ~OpenDirectoryMethod.SkipDesktop;
+                if (value) Facade.OpenDirectory |= OpenDirectoryMethod.SkipDesktop;
+                else Facade.OpenDirectory &= ~OpenDirectoryMethod.SkipDesktop;
             }
         }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Model
-        ///
-        /// <summary>
-        /// Model オブジェクトを取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected T Model { get; }
 
         #endregion
 
@@ -216,8 +206,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         private void SetSaveLocation(SaveLocation value, bool check)
         {
-            if (!check || Model.SaveLocation == value) return;
-            Model.SaveLocation = value;
+            if (!check || Facade.SaveLocation == value) return;
+            Facade.SaveLocation = value;
         }
 
         #endregion

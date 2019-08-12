@@ -19,29 +19,31 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveViewModel
+    /// CompressViewModel
     ///
     /// <summary>
-    /// ArchiveSettings の ViewModel を表すクラスです。
+    /// Provides functionality to communicate with the CompressSettingValue
+    /// object and a view.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveViewModel : ArchiveViewModelBase<CompressSettingValue>
+    public class CompressViewModel : ArchiveViewModel<CompressSettingValue>
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveViewModel
+        /// CompressViewModel
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the CompressViewModel class
+        /// with the specified arguments.
         /// </summary>
         ///
-        /// <param name="model">Model オブジェクト</param>
+        /// <param name="facade">Facade object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveViewModel(CompressSettingValue model) : base(model) { }
+        public CompressViewModel(CompressSettingValue facade) : base(facade) { }
 
         #endregion
 
@@ -59,8 +61,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool UseUtf8
         {
-            get => Model.UseUtf8;
-            set => Model.UseUtf8 = value;
+            get => Facade.UseUtf8;
+            set => Facade.UseUtf8 = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -76,8 +78,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool OverwritePrompt
         {
-            get => Model.OverwritePrompt;
-            set => Model.OverwritePrompt = value;
+            get => Facade.OverwritePrompt;
+            set => Facade.OverwritePrompt = value;
         }
 
         #endregion

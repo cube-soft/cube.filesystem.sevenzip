@@ -15,8 +15,6 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.ComponentModel;
-
 namespace Cube.FileSystem.SevenZip.Ice.Configurator
 {
     /* --------------------------------------------------------------------- */
@@ -28,7 +26,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ContextViewModel : ObservableBase
+    public class ContextViewModel : Presentable<ContextSettingValue>
     {
         #region Constructors
 
@@ -40,13 +38,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /// オブジェクトを初期化します。
         /// </summary>
         ///
-        /// <param name="model">Model オブジェクト</param>
+        /// <param name="facade">Model オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ContextViewModel(ContextSettingValue model)
+        public ContextViewModel(ContextSettingValue facade) : base(facade)
         {
-            _model = model;
-            _model.PropertyChanged += WhenChanged;
+            Facade.PropertyChanged += (s, e) => {
+                OnPropertyChanged(e);
+                if (e.PropertyName == nameof(ContextSettingValue.IsCustomized)) Refresh(nameof(PresetEnabled));
+            };
         }
 
         #endregion
@@ -62,7 +62,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool PresetEnabled => !_model.IsCustomized;
+        public bool PresetEnabled => !Facade.IsCustomized;
 
         #region Archive
 
@@ -77,7 +77,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Archive
         {
-            get => _model.Preset.HasFlag(PresetMenu.Archive);
+            get => Facade.Preset.HasFlag(PresetMenu.Archive);
             set => Set(PresetMenu.Archive, value);
         }
 
@@ -92,7 +92,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool ArchiveZip
         {
-            get => _model.Preset.HasFlag(PresetMenu.ArchiveZip);
+            get => Facade.Preset.HasFlag(PresetMenu.ArchiveZip);
             set => Set(PresetMenu.ArchiveZip, value);
         }
 
@@ -108,7 +108,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool ArchiveZipPassword
         {
-            get => _model.Preset.HasFlag(PresetMenu.ArchiveZipPassword);
+            get => Facade.Preset.HasFlag(PresetMenu.ArchiveZipPassword);
             set => Set(PresetMenu.ArchiveZipPassword, value);
         }
 
@@ -123,7 +123,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool ArchiveSevenZip
         {
-            get => _model.Preset.HasFlag(PresetMenu.ArchiveSevenZip);
+            get => Facade.Preset.HasFlag(PresetMenu.ArchiveSevenZip);
             set => Set(PresetMenu.ArchiveSevenZip, value);
         }
 
@@ -138,7 +138,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool ArchiveGZip
         {
-            get => _model.Preset.HasFlag(PresetMenu.ArchiveGZip);
+            get => Facade.Preset.HasFlag(PresetMenu.ArchiveGZip);
             set => Set(PresetMenu.ArchiveGZip, value);
         }
 
@@ -153,7 +153,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool ArchiveBZip2
         {
-            get => _model.Preset.HasFlag(PresetMenu.ArchiveBZip2);
+            get => Facade.Preset.HasFlag(PresetMenu.ArchiveBZip2);
             set => Set(PresetMenu.ArchiveBZip2, value);
         }
 
@@ -168,7 +168,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool ArchiveXZ
         {
-            get => _model.Preset.HasFlag(PresetMenu.ArchiveXz);
+            get => Facade.Preset.HasFlag(PresetMenu.ArchiveXz);
             set => Set(PresetMenu.ArchiveXz, value);
         }
 
@@ -184,7 +184,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool ArchiveSfx
         {
-            get => _model.Preset.HasFlag(PresetMenu.ArchiveSfx);
+            get => Facade.Preset.HasFlag(PresetMenu.ArchiveSfx);
             set => Set(PresetMenu.ArchiveSfx, value);
         }
 
@@ -200,7 +200,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool ArchiveDetails
         {
-            get => _model.Preset.HasFlag(PresetMenu.ArchiveDetails);
+            get => Facade.Preset.HasFlag(PresetMenu.ArchiveDetails);
             set => Set(PresetMenu.ArchiveDetails, value);
         }
 
@@ -219,7 +219,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool Extract
         {
-            get => _model.Preset.HasFlag(PresetMenu.Extract);
+            get => Facade.Preset.HasFlag(PresetMenu.Extract);
             set => Set(PresetMenu.Extract, value);
         }
 
@@ -234,7 +234,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool ExtractSource
         {
-            get => _model.Preset.HasFlag(PresetMenu.ExtractSource);
+            get => Facade.Preset.HasFlag(PresetMenu.ExtractSource);
             set => Set(PresetMenu.ExtractSource, value);
         }
 
@@ -250,7 +250,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool ExtractDesktop
         {
-            get => _model.Preset.HasFlag(PresetMenu.ExtractDesktop);
+            get => Facade.Preset.HasFlag(PresetMenu.ExtractDesktop);
             set => Set(PresetMenu.ExtractDesktop, value);
         }
 
@@ -266,7 +266,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool ExtractMyDocuments
         {
-            get => _model.Preset.HasFlag(PresetMenu.ExtractMyDocuments);
+            get => Facade.Preset.HasFlag(PresetMenu.ExtractMyDocuments);
             set => Set(PresetMenu.ExtractMyDocuments, value);
         }
 
@@ -282,7 +282,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public bool ExtractRuntime
         {
-            get => _model.Preset.HasFlag(PresetMenu.ExtractRuntime);
+            get => Facade.Preset.HasFlag(PresetMenu.ExtractRuntime);
             set => Set(PresetMenu.ExtractRuntime, value);
         }
 
@@ -301,7 +301,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Reset() => _model.Reset();
+        public void Reset() => Facade.Reset();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -314,13 +314,13 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         public void Customize()
         {
-            var e = Query.NewMessage(_model.IsCustomized ?
-                _model.Custom :
-                _model.Preset.ToContextMenuGroup()
+            var e = Query.NewMessage(Facade.IsCustomized ?
+                Facade.Custom :
+                Facade.Preset.ToContextMenuGroup()
             );
 
             // Views.ShowCustomizeView(e);
-            if (!e.Cancel) _model.Customize(e.Value);
+            if (!e.Cancel) Facade.Customize(e.Value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -355,33 +355,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         private void Set(PresetMenu value, bool check)
         {
-            if (check) _model.Preset |= value;
-            else _model.Preset &= ~value;
+            if (check) Facade.Preset |= value;
+            else Facade.Preset &= ~value;
         }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenChanged
-        ///
-        /// <summary>
-        /// プロパティの変更時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenChanged(object s, PropertyChangedEventArgs e)
-        {
-            OnPropertyChanged(e);
-
-            if (e.PropertyName == nameof(ContextSettingValue.IsCustomized))
-            {
-                Refresh(nameof(PresetEnabled));
-            }
-        }
-
-        #endregion
-
-        #region Fields
-        private readonly ContextSettingValue _model;
         #endregion
     }
 }

@@ -549,7 +549,7 @@
             //
             // ArchiveSettingsBindingSource
             //
-            this.ArchiveSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.Configurator.ArchiveViewModel);
+            this.ArchiveSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.Configurator.CompressViewModel);
             //
             // ArchiveSaveTextBox
             //
