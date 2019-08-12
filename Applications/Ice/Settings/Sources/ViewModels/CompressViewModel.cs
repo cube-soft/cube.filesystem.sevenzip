@@ -27,7 +27,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class CompressViewModel : ArchiveViewModel<CompressSettingValue>
+    public class CompressViewModel : ArchiveViewModel<CompressValue>
     {
         #region Constructors
 
@@ -43,7 +43,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// <param name="facade">Facade object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressViewModel(CompressSettingValue facade) : base(facade) { }
+        public CompressViewModel(CompressValue facade) : base(facade) { }
 
         #endregion
 

@@ -17,120 +17,127 @@
 /* ------------------------------------------------------------------------- */
 using System.Runtime.Serialization;
 
-namespace Cube.FileSystem.SevenZip.Ice
+namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveSettingValue
+    /// ExtractValue
     ///
     /// <summary>
-    /// 圧縮・解凍に共通するユーザ設定を保持するためのクラスです。
+    /// Represents the settings when extracting archives.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public abstract class ArchiveSettingValue : SerializableBase
+    public sealed class ExtractValue : ArchiveValue
     {
+        #region Constructors
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ExtractValue
+        ///
+        /// <summary>
+        /// Initializes a new instance of the ExtractValue class.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ExtractValue() { Reset(); }
+
+        #endregion
+
         #region Properties
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SaveLocation
+        /// RootDirectory
         ///
         /// <summary>
-        /// 保存場所に関する情報を取得します。
+        /// Gets or sets the method to determine the root directory.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public SaveLocation SaveLocation
+        public CreateDirectoryMethod RootDirectory
         {
-            get => _saveLocation;
-            set => SetProperty(ref _saveLocation, value);
+            get => _rootDirectory;
+            set => SetProperty(ref _rootDirectory, value);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SaveDirectoryName
+        /// DeleteSource
         ///
         /// <summary>
-        /// 保存ディレクトリのパスを取得します。
+        /// Gets or sets a value indicating whether to delete the source
+        /// archive after extracting.
         /// </summary>
-        ///
-        /// <remarks>
-        /// このプロパティは SaveLocation.Others の場合に参照されます。
-        /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public string SaveDirectoryName
+        public bool DeleteSource
         {
-            get => _saveDirectoryName;
-            set => SetProperty(ref _saveDirectoryName, value);
+            get => _deleteSource;
+            set => SetProperty(ref _deleteSource, value);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Filtering
+        /// Bursty
         ///
         /// <summary>
-        /// 特定のファイルまたはディレクトリをフィルタリングするかどうかを
-        /// 示す値を取得または設定します。
+        /// Gets or sets a value indicating whether to extract archives
+        /// burstly.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public bool Filtering
+        public bool Bursty
         {
-            get => _filtering;
-            set => SetProperty(ref _filtering, value);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OpenDirectory
-        ///
-        /// <summary>
-        /// 展開後にディレクトリを開くかどうかを示す値を取得または
-        /// 設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [DataMember]
-        public OpenDirectoryMethod OpenDirectory
-        {
-            get => _openDirectory;
-            set => SetProperty(ref _openDirectory, value);
+            get => _bursty;
+            set => SetProperty(ref _bursty, value);
         }
 
         #endregion
 
-        #region Methods
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OnDeserializing
+        ///
+        /// <summary>
+        /// Occurs before deserializing.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [OnDeserializing]
+        private void OnDeserializing(StreamingContext context) => Reset();
 
         /* ----------------------------------------------------------------- */
         ///
         /// Reset
         ///
         /// <summary>
-        /// 設定をリセットします。
+        /// Resets the value.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected virtual void Reset()
+        protected override void Reset()
         {
-            _saveLocation      = SaveLocation.Others;
-            _saveDirectoryName = string.Empty;
-            _filtering         = true;
-            _openDirectory     = OpenDirectoryMethod.OpenNotDesktop;
+            _deleteSource  = false;
+            _bursty        = true;
+            _rootDirectory = CreateDirectoryMethod.CreateSmart;
+
+            base.Reset();
         }
 
         #endregion
 
         #region Fields
-        private SaveLocation _saveLocation;
-        private string _saveDirectoryName;
-        private bool _filtering;
-        private OpenDirectoryMethod _openDirectory;
+        private bool _deleteSource;
+        private bool _bursty;
+        private CreateDirectoryMethod _rootDirectory;
         #endregion
     }
 }

@@ -21,36 +21,32 @@ using System;
 using System.Linq;
 using System.Runtime.Serialization;
 
-namespace Cube.FileSystem.SevenZip.Ice
+namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ShortcutSettingValue
+    /// ShortcutValue
     ///
     /// <summary>
-    /// デスクトップに作成するショートカットに関するユーザ設定を保持する
-    /// ためのクラスです。
+    /// Represents the settings for creating shortcut links on the desktop.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public sealed class ShortcutSettingValue : SerializableBase
+    public sealed class ShortcutValue : SerializableBase
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ShortcutSettings
+        /// ShortcutValue
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the ShortcutValue class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ShortcutSettingValue()
-        {
-            Reset();
-        }
+        public ShortcutValue() { Reset(); }
 
         #endregion
 
@@ -61,8 +57,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Preset
         ///
         /// <summary>
-        /// 予め定義されたショートカットメニューを示す値を取得または
-        /// 設定します。
+        /// Gets or sets the preset menu.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -78,8 +73,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Directory
         ///
         /// <summary>
-        /// ショートカットを作成するディレクトリのパスを取得または
-        /// 設定します。
+        /// Gets or sets the path to create shortcut links.
         /// </summary>
         ///
         /// <remarks>
@@ -98,8 +92,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Sync
         ///
         /// <summary>
-        /// 実際にショートカットが存在するかどうかの結果に応じて
-        /// Preset の値を更新します。
+        /// Applies the current shortcut link existence to properties of
+        /// the object.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -123,7 +117,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Update
         ///
         /// <summary>
-        /// ショートカットを生成または削除します。
+        /// Creates or removes shortcut links.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -143,7 +137,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// OnDeserializing
         ///
         /// <summary>
-        /// デシリアライズ直前に実行されます。
+        /// Occurs before deserializing.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -155,7 +149,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Reset
         ///
         /// <summary>
-        /// 設定をリセットします。
+        /// Resets the value.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -169,7 +163,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// UpdateArchive
         ///
         /// <summary>
-        /// 圧縮用のショートカットを生成または削除します
+        /// Creates or removes the shortcut link for compressing.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -194,7 +188,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// UpdateExtract
         ///
         /// <summary>
-        /// 解凍用のショートカットを生成または削除します
+        /// Creates or removes the shortcut link for extracting.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -219,7 +213,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// UpdateSettings
         ///
         /// <summary>
-        /// 設定用のショートカットを生成または削除します。
+        /// Creates or removes the shortcut link for settings.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -243,7 +237,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// GetFileName
         ///
         /// <summary>
-        /// ショートカットのパスを取得します。
+        /// Gets the path of the shortcut link.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -260,12 +254,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// GetLink
         ///
         /// <summary>
-        /// リンク先のパスを取得します。
+        /// Gets the target path of the specified shortcut link.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         private string GetLink(string filename) => System.IO.Path.Combine(
-            typeof(ShortcutSettingValue).Assembly.GetDirectoryName(),
+            typeof(ShortcutValue).Assembly.GetDirectoryName(),
             filename
         );
 

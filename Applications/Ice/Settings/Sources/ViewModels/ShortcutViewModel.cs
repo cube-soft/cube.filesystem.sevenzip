@@ -26,7 +26,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ShortcutViewModel : Presentable<ShortcutSettingValue>
+    public class ShortcutViewModel : Presentable<ShortcutValue>
     {
         #region Constructors
 
@@ -41,7 +41,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// <param name="facade">Model オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ShortcutViewModel(ShortcutSettingValue facade) : base(facade)
+        public ShortcutViewModel(ShortcutValue facade) : base(facade)
         {
             Facade.PropertyChanged += (s, e) => OnPropertyChanged(e);
         }

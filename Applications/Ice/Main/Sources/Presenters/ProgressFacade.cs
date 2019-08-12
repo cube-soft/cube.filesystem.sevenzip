@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.FileSystem.SevenZip.Ice.Settings;
 using Cube.Forms;
 using Cube.Mixin.Logging;
 using Cube.Mixin.String;
@@ -400,7 +401,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected KeyValuePair<SaveLocation, string> GetSaveLocation(ArchiveSettingValue settings, Format format, string query)
+        protected KeyValuePair<SaveLocation, string> GetSaveLocation(ArchiveValue settings, Format format, string query)
         {
             var key = Request.Location != SaveLocation.Unknown ?
                       Request.Location :
@@ -462,7 +463,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetSavePath(SaveLocation key, ArchiveSettingValue settings, Format format, string query)
+        private string GetSavePath(SaveLocation key, ArchiveValue settings, Format format, string query)
         {
             switch (key)
             {

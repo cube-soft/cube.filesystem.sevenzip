@@ -27,7 +27,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ExtractViewModel : ArchiveViewModel<ExtractSettingValue>
+    public class ExtractViewModel : ArchiveViewModel<ExtractValue>
     {
         #region Constructors
 
@@ -42,7 +42,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// <param name="model">Model オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ExtractViewModel(ExtractSettingValue model) : base(model) { }
+        public ExtractViewModel(ExtractValue model) : base(model) { }
 
         #endregion
 

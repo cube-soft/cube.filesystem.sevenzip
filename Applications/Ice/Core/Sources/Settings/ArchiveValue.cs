@@ -17,109 +17,137 @@
 /* ------------------------------------------------------------------------- */
 using System.Runtime.Serialization;
 
-namespace Cube.FileSystem.SevenZip.Ice
+namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// CompressSettingValue
+    /// ArchiveValue
     ///
     /// <summary>
-    /// 圧縮に関するユーザ設定を保持するためのクラスです。
+    /// Represents the common setting of compressing or extracting
+    /// archives.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public sealed class CompressSettingValue : ArchiveSettingValue
+    public abstract class ArchiveValue : SerializableBase
     {
+        #region Constructors
+
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveSettings
+        /// ArchiveValue
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the ArchiveValue class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressSettingValue()
-        {
-            Reset();
-        }
+        protected ArchiveValue() { }
+
+        #endregion
 
         #region Properties
 
         /* ----------------------------------------------------------------- */
         ///
-        /// UseUtf8
+        /// SaveLocation
         ///
         /// <summary>
-        /// 圧縮時にファイル名を UTF-8 に変換するかどうかを示す値を
-        /// 取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [DataMember(Name = "UseUTF8")]
-        public bool UseUtf8
-        {
-            get => _useUtf8;
-            set => SetProperty(ref _useUtf8, value);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OverwritePrompt
-        ///
-        /// <summary>
-        /// 保存先に指定されたパスに同名のファイルが存在している時、
-        /// 名前を付けて保存ダイアログを表示するかどうかを示す値を取得
-        /// または設定します。
+        /// Gets or sets the value that represents the save location.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public bool OverwritePrompt
+        public SaveLocation SaveLocation
         {
-            get => _overwritePrompt;
-            set => SetProperty(ref _overwritePrompt, value);
+            get => _saveLocation;
+            set => SetProperty(ref _saveLocation, value);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SaveDirectoryName
+        ///
+        /// <summary>
+        /// Gets or sets the directory name to save.
+        /// </summary>
+        ///
+        /// <remarks>
+        /// The property is used when the SaveLocation property is set
+        /// to Others.
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        [DataMember]
+        public string SaveDirectoryName
+        {
+            get => _saveDirectoryName;
+            set => SetProperty(ref _saveDirectoryName, value);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Filtering
+        ///
+        /// <summary>
+        /// Gets or sets a value indicating whether to filter some files
+        /// and directories.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [DataMember]
+        public bool Filtering
+        {
+            get => _filtering;
+            set => SetProperty(ref _filtering, value);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OpenDirectory
+        ///
+        /// <summary>
+        /// Gets or sets the value that represents the method to open
+        /// directory.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [DataMember]
+        public OpenDirectoryMethod OpenDirectory
+        {
+            get => _openDirectory;
+            set => SetProperty(ref _openDirectory, value);
         }
 
         #endregion
 
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnDeserializing
-        ///
-        /// <summary>
-        /// デシリアライズ直前に実行されます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [OnDeserializing]
-        private void OnDeserializing(StreamingContext context) => Reset();
+        #region Methods
 
         /* ----------------------------------------------------------------- */
         ///
         /// Reset
         ///
         /// <summary>
-        /// 設定をリセットします。
+        /// Resets the settings.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected override void Reset()
+        protected virtual void Reset()
         {
-            _useUtf8         = false;
-            _overwritePrompt = true;
-
-            base.Reset();
+            _saveLocation      = SaveLocation.Others;
+            _saveDirectoryName = string.Empty;
+            _filtering         = true;
+            _openDirectory     = OpenDirectoryMethod.OpenNotDesktop;
         }
 
         #endregion
 
         #region Fields
-        private bool _useUtf8;
-        private bool _overwritePrompt;
+        private SaveLocation _saveLocation;
+        private string _saveDirectoryName;
+        private bool _filtering;
+        private OpenDirectoryMethod _openDirectory;
         #endregion
     }
 }

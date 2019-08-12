@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.FileSystem.SevenZip.Ice.Settings;
 using Cube.Mixin.Assembly;
 using Cube.Mixin.String;
 using System.Reflection;

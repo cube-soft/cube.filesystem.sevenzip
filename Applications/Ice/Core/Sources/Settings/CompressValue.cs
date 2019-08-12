@@ -17,88 +17,65 @@
 /* ------------------------------------------------------------------------- */
 using System.Runtime.Serialization;
 
-namespace Cube.FileSystem.SevenZip.Ice
+namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ExtractSettingValue
+    /// CompressValue
     ///
     /// <summary>
-    /// 展開に関するユーザ設定を保持するためのクラスです。
+    /// Represents the settings when compressing archives.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public sealed class ExtractSettingValue : ArchiveSettingValue
+    public sealed class CompressValue : ArchiveValue
     {
-        #region Constructors
-
         /* ----------------------------------------------------------------- */
         ///
-        /// ExtractSettings
+        /// CompressValue
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the CompressValue class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ExtractSettingValue()
-        {
-            Reset();
-        }
-
-        #endregion
+        public CompressValue() { Reset(); }
 
         #region Properties
 
         /* ----------------------------------------------------------------- */
         ///
-        /// RootDirectory
+        /// UseUtf8
         ///
         /// <summary>
-        /// ルートディレクトリの扱い方を示す値を取得または設定します。
+        /// Gets or sets a value indicating whether to convert to the UTF-8
+        /// encoding when compressing.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [DataMember]
-        public CreateDirectoryMethod RootDirectory
+        [DataMember(Name = "UseUTF8")]
+        public bool UseUtf8
         {
-            get => _rootDirectory;
-            set => SetProperty(ref _rootDirectory, value);
+            get => _useUtf8;
+            set => SetProperty(ref _useUtf8, value);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// DeleteSource
+        /// OverwritePrompt
         ///
         /// <summary>
-        /// 展開後に元ファイルを削除するかどうかを示す値を取得または
-        /// 設定します。
+        /// Gets or sets a value indicating whether to show the overwrite
+        /// prompt.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public bool DeleteSource
+        public bool OverwritePrompt
         {
-            get => _deleteSource;
-            set => SetProperty(ref _deleteSource, value);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Bursty
-        ///
-        /// <summary>
-        /// 複数の圧縮ファイルを同時に展開するかどうかを示す値を取得または
-        /// 設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [DataMember]
-        public bool Bursty
-        {
-            get => _bursty;
-            set => SetProperty(ref _bursty, value);
+            get => _overwritePrompt;
+            set => SetProperty(ref _overwritePrompt, value);
         }
 
         #endregion
@@ -110,7 +87,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// OnDeserializing
         ///
         /// <summary>
-        /// デシリアライズ直前に実行されます。
+        /// Occurs before deserializing.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -122,15 +99,14 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Reset
         ///
         /// <summary>
-        /// 設定をリセットします。
+        /// Resets the value.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         protected override void Reset()
         {
-            _deleteSource  = false;
-            _bursty        = true;
-            _rootDirectory = CreateDirectoryMethod.CreateSmart;
+            _useUtf8         = false;
+            _overwritePrompt = true;
 
             base.Reset();
         }
@@ -138,9 +114,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         #endregion
 
         #region Fields
-        private bool _deleteSource;
-        private bool _bursty;
-        private CreateDirectoryMethod _rootDirectory;
+        private bool _useUtf8;
+        private bool _overwritePrompt;
         #endregion
     }
 }

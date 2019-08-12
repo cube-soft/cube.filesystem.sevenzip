@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.FileSystem.SevenZip.Ice.Settings;
 using Cube.Forms;
 using Cube.Mixin.IO;
 using Cube.Mixin.Logging;

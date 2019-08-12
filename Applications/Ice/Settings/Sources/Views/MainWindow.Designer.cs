@@ -1108,7 +1108,7 @@
             //
             // AssociateSettingsBindingSource
             //
-            this.AssociateSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.AssociateSettingValue);
+            this.AssociateSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.Settings.AssociateValue);
             //
             // MainForm
             //

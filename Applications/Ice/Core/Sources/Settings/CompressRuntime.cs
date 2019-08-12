@@ -18,53 +18,53 @@
 using Cube.Mixin.Assembly;
 using System;
 
-namespace Cube.FileSystem.SevenZip.Ice
+namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// CompressRtsValue
+    /// CompressRuntime
     ///
     /// <summary>
-    /// Represents the RunTime Settings (RTS) when compressing files.
+    /// Represents the run-time settings when compressing files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class CompressRtsValue
+    public sealed class CompressRuntime
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CompressRtsValue
+        /// CompressRuntime
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the CompressRuntime class with
+        /// the specified arguments.
         /// </summary>
         ///
-        /// <param name="io">I/O オブジェクト</param>
+        /// <param name="io">I/O handler.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressRtsValue(IO io)
-        {
-            IO        = io;
-            SfxModule = io.Combine(typeof(CompressRtsValue).Assembly.GetDirectoryName(), Formats.SfxName);
-        }
+        public CompressRuntime(IO io) : this(Format.Zip, io) { }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveRtSettings
+        /// CompressRuntime
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the CompressRuntime class with
+        /// the specified arguments.
         /// </summary>
         ///
-        /// <param name="format">圧縮形式</param>
-        /// <param name="io">I/O オブジェクト</param>
+        /// <param name="format">Archive format.</param>
+        /// <param name="io">I/O handler.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressRtsValue(Format format, IO io) : this(io)
+        public CompressRuntime(Format format, IO io)
         {
             Format = format;
+            IO     = io;
+            Sfx    = io.Combine(typeof(CompressRuntime).Assembly.GetDirectoryName(), Formats.SfxName);
         }
 
         #endregion
@@ -76,7 +76,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// IO
         ///
         /// <summary>
-        /// I/O オブジェクトを取得します。
+        /// Gets the I/O handler.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -87,7 +87,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Format
         ///
         /// <summary>
-        /// ファイル形式を取得または設定します。
+        /// Gets or sets the archive format.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -98,7 +98,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Path
         ///
         /// <summary>
-        /// 保存先パスを取得または設定します。
+        /// Gets or sets the path to save.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -109,7 +109,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Password
         ///
         /// <summary>
-        /// パスワードを取得または設定します。
+        /// Gets or sets the password to be set the archive.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -117,21 +117,21 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SfxModule
+        /// Sfx
         ///
         /// <summary>
-        /// 自己解凍形式モジュールのパスを取得または設定します。
+        /// Gets or sets the path of the SFX module.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string SfxModule { get; set; }
+        public string Sfx { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
         /// CompressionLevel
         ///
         /// <summary>
-        /// 圧縮レベルを取得または設定します。
+        /// Gets or sets the compression level.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -142,7 +142,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// CompressionMethod
         ///
         /// <summary>
-        /// 圧縮方法を取得または設定します。
+        /// Gets or sets the compression method.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -153,7 +153,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// EncryptionMethod
         ///
         /// <summary>
-        /// 暗号化方法を取得または設定します。
+        /// Gets or sets the encryption method.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -164,7 +164,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// ThreadCount
         ///
         /// <summary>
-        /// 圧縮処理時の最大スレッド数を取得または設定します。
+        /// Gets or sets the maximum number of threads to use.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */

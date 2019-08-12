@@ -26,7 +26,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ContextViewModel : Presentable<ContextSettingValue>
+    public class ContextViewModel : Presentable<ContextMenuValue>
     {
         #region Constructors
 
@@ -41,11 +41,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// <param name="facade">Model オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ContextViewModel(ContextSettingValue facade) : base(facade)
+        public ContextViewModel(ContextMenuValue facade) : base(facade)
         {
             Facade.PropertyChanged += (s, e) => {
                 OnPropertyChanged(e);
-                if (e.PropertyName == nameof(ContextSettingValue.IsCustomized)) Refresh(nameof(PresetEnabled));
+                if (e.PropertyName == nameof(ContextMenuValue.UseCustom)) Refresh(nameof(PresetEnabled));
             };
         }
 
@@ -62,7 +62,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool PresetEnabled => !Facade.IsCustomized;
+        public bool PresetEnabled => !Facade.UseCustom;
 
         #region Archive
 
@@ -314,7 +314,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public void Customize()
         {
-            var e = Query.NewMessage(Facade.IsCustomized ?
+            var e = Query.NewMessage(Facade.UseCustom ?
                 Facade.Custom :
                 Facade.Preset.ToContextMenuGroup()
             );

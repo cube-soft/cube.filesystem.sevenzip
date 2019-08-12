@@ -48,10 +48,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         {
             Facade.PropertyChanged += (s, e) => OnPropertyChanged(e);
 
-            Archive   = new CompressViewModel(facade.Value.Archive);
+            Archive   = new CompressViewModel(facade.Value.Compress);
             Extract   = new ExtractViewModel(facade.Value.Extract);
             Associate = new AssociateViewModel(facade.Value.Associate);
-            Menu      = new ContextViewModel(facade.Value.Menu);
+            Menu      = new ContextViewModel(facade.Value.ContextMenu);
             Shortcut  = new ShortcutViewModel(facade.Value.Shortcut);
         }
 

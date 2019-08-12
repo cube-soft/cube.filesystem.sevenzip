@@ -20,19 +20,19 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
-namespace Cube.FileSystem.SevenZip.Ice
+namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// AssociateSettingValue
+    /// AssociateValue
     ///
     /// <summary>
-    /// ファイルの関連付けに関するユーザ設定を保持するためのクラスです。
+    /// Represents the settings about the associated files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public sealed class AssociateSettingValue : SerializableBase
+    public sealed class AssociateValue : SerializableBase
     {
         #region Constructors
 
@@ -41,14 +41,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// AssociateSettings
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the AssociateSettings class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public AssociateSettingValue()
-        {
-            Reset();
-        }
+        public AssociateValue() { Reset(); }
 
         #endregion
 
@@ -59,7 +56,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Value
         ///
         /// <summary>
-        /// ファイルの関連付け一覧を取得します。
+        /// Gets or sets the collection of associated files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -84,8 +81,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// IconIndex
         ///
         /// <summary>
-        /// 関連付けされたファイルに表示するアイコンのインデックスを
-        /// 取得または設定します。
+        /// Gets or sets the icon index of the associated files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -101,7 +97,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// SevenZip
         ///
         /// <summary>
-        /// *.7z の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.7z files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -117,7 +114,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Arj
         ///
         /// <summary>
-        /// *.arj の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.arj files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -133,7 +131,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// BZ2
         ///
         /// <summary>
-        /// *.bz2 の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.bz2 files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -149,7 +148,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Cab
         ///
         /// <summary>
-        /// *.cab の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.cab files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -165,7 +165,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Chm
         ///
         /// <summary>
-        /// *.chm の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.chm files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -181,7 +182,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Cpio
         ///
         /// <summary>
-        /// *.cpio の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.cpio files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -197,7 +199,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Deb
         ///
         /// <summary>
-        /// *.deb の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.deb files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -213,7 +216,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Dmg
         ///
         /// <summary>
-        /// *.dmg の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.dmg files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -229,7 +233,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Flv
         ///
         /// <summary>
-        /// *.flv の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.flv files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -245,7 +250,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// GZ
         ///
         /// <summary>
-        /// *.gz の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.gz files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -261,7 +267,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// hfs
         ///
         /// <summary>
-        /// *.hfs の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.hfs files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -277,7 +284,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Iso
         ///
         /// <summary>
-        /// *.iso の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.iso files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -293,7 +301,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Jar
         ///
         /// <summary>
-        /// *.jar の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.jar files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -309,7 +318,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Lzh
         ///
         /// <summary>
-        /// *.lzh の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.lzh files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -325,7 +335,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Nupkg
         ///
         /// <summary>
-        /// *.nupkg の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.nupkg files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -341,7 +352,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Rar
         ///
         /// <summary>
-        /// *.rar の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.rar files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -357,7 +369,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Rpm
         ///
         /// <summary>
-        /// *.rpm の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.rpm files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -373,7 +386,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Swf
         ///
         /// <summary>
-        /// *.swf の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.swf files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -389,7 +403,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Tar
         ///
         /// <summary>
-        /// *.tar の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.tar files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -405,7 +420,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Tbz
         ///
         /// <summary>
-        /// *.tbz の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.tbz files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -421,7 +437,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Tgz
         ///
         /// <summary>
-        /// *.tgz の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.tgz files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -437,7 +454,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Txz
         ///
         /// <summary>
-        /// *.txz の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.txz files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -453,7 +471,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Vhd
         ///
         /// <summary>
-        /// *.vhd の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.vhd files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -469,7 +488,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Vmdk
         ///
         /// <summary>
-        /// *.vmdk の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.vmdk files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -485,7 +505,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Wim
         ///
         /// <summary>
-        /// *.wim の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.wim files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -501,7 +522,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Xar
         ///
         /// <summary>
-        /// *.xar の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.xar files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -517,7 +539,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// XZ
         ///
         /// <summary>
-        /// *.xz の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.xz files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -533,7 +556,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Z
         ///
         /// <summary>
-        /// *.z の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.z files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -549,7 +573,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Zip
         ///
         /// <summary>
-        /// *.zip の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether to associate with
+        /// the *.zip files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -571,7 +596,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// OnDeserializing
         ///
         /// <summary>
-        /// デシリアライズ直前に実行されます。
+        /// Occurs before deserializing.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */

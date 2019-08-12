@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.FileSystem.SevenZip.Ice.Settings;
 using Cube.Mixin.Logging;
 using Cube.Mixin.String;
 using System;
@@ -63,7 +64,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressRtsValue RtSettings { get; private set; }
+        public CompressRuntime RtSettings { get; private set; }
 
         #endregion
 
@@ -80,7 +81,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public event ValueCancelEventHandler<CompressRtsValue> RtSettingsRequested;
+        public event ValueCancelEventHandler<CompressRuntime> RtSettingsRequested;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -96,7 +97,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             var info = IO.Get(Request.Sources.First());
             var path = IO.Combine(info.DirectoryName, $"{info.BaseName}.zip");
 
-            var value = new CompressRtsValue(IO) { Path = path };
+            var value = new CompressRuntime(IO) { Path = path };
             var e = ValueEventArgs.Create(value, true);
             RtSettingsRequested?.Invoke(this, e);
             if (e.Cancel) throw new OperationCanceledException();
@@ -157,7 +158,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                 Archive();
                 ProgressResult();
                 RaiseMailRequested();
-                Open(Destination, Settings.Value.Archive.OpenDirectory);
+                Open(Destination, Settings.Value.Compress.OpenDirectory);
             }
             catch (OperationCanceledException) { /* user cancel */ }
             finally { ProgressStop(); }
@@ -190,7 +191,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             using (var writer = new ArchiveWriter(fmt, IO))
             {
                 writer.Option = RtSettings.ToOption(Settings);
-                if (Settings.Value.Archive.Filtering) writer.Filters = Settings.Value.GetFilters();
+                if (Settings.Value.Compress.Filtering) writer.Filters = Settings.Value.GetFilters();
                 foreach (var item in Request.Sources) writer.Add(item);
                 ProgressStart();
                 writer.Save(dest, query, CreateInnerProgress(x => Report = x));
@@ -220,12 +221,12 @@ namespace Cube.FileSystem.SevenZip.Ice
                 case Format.Zip:
                 case Format.SevenZip:
                 case Format.Sfx:
-                    RtSettings = new CompressRtsValue(f, Settings.IO);
+                    RtSettings = new CompressRuntime(f, Settings.IO);
                     break;
                 case Format.BZip2:
                 case Format.GZip:
                 case Format.XZ:
-                    RtSettings = new CompressRtsValue(Format.Tar, Settings.IO) { CompressionMethod = f.ToMethod() };
+                    RtSettings = new CompressRuntime(Format.Tar, Settings.IO) { CompressionMethod = f.ToMethod() };
                     break;
                 default:
                     RaiseRtSettingsRequested();
@@ -266,11 +267,11 @@ namespace Cube.FileSystem.SevenZip.Ice
             if (!string.IsNullOrEmpty(RtSettings?.Path)) return RtSettings.Path;
 
             var cvt = new PathConverter(Request.Sources.First(), Request.Format, IO);
-            var kv = GetSaveLocation(Settings.Value.Archive, cvt.ResultFormat, cvt.Result.FullName);
+            var kv = GetSaveLocation(Settings.Value.Compress, cvt.ResultFormat, cvt.Result.FullName);
             if (kv.Key == SaveLocation.Runtime) return kv.Value;
 
             var path = IO.Combine(kv.Value, cvt.Result.Name);
-            if (IO.Exists(path) && Settings.Value.Archive.OverwritePrompt)
+            if (IO.Exists(path) && Settings.Value.Compress.OverwritePrompt)
             {
                 var e = new PathQueryMessage(path, cvt.ResultFormat, true);
                 // TODO: OnDestinationRequested(e);

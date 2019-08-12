@@ -20,14 +20,14 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace Cube.FileSystem.SevenZip.Ice
+namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
     /// SettingValue
     ///
     /// <summary>
-    /// ユーザ設定を保持するためのクラスです。
+    /// Represents the user settings.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -38,17 +38,14 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Settings
+        /// SettingValue
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the SettingValue class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public SettingValue()
-        {
-            Reset();
-        }
+        public SettingValue() { Reset(); }
 
         #endregion
 
@@ -59,8 +56,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// CheckUpdate
         ///
         /// <summary>
-        /// 起動時にアップデートの確認を実行するかどうかを示す値を取得
-        /// または設定します。
+        /// Gets or sets a value indicating whether to check the software
+        /// updates.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -76,7 +73,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// ErrorReport
         ///
         /// <summary>
-        /// エラーレポートを表示するかどうかを示す値を取得または設定します。
+        /// Gets or sets a value indicating whether to show the error
+        /// report.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -92,7 +90,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Explorer
         ///
         /// <summary>
-        /// ファイル一覧を表示するプログラムのパスを取得または設定します。
+        /// Gets or sets the path of the explorer application.
         /// </summary>
         ///
         /// <remarks>
@@ -112,8 +110,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Filters
         ///
         /// <summary>
-        /// 圧縮・展開時に除外するファイルまたはディレクトリ名の一覧を
-        /// 取得または設定します。
+        /// Gets or sets the value to filter files and directories.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -129,8 +126,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// ToolTip
         ///
         /// <summary>
-        /// マウスポインタを圧縮ファイルに指定した時にファイル一覧を表示
-        /// するかどうかを示す値を取得または設定します。
+        /// Gets or sets a value to show the tooltip.
         /// </summary>
         ///
         /// <remarks>
@@ -152,8 +148,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// ToolTipCount
         ///
         /// <summary>
-        /// マウスポインタを圧縮ファイルに指定した時に一覧を表示する
-        /// ファイル数を取得または設定します。
+        /// Gets or sets the number of items to show in the tooltip.
         /// </summary>
         ///
         /// <remarks>
@@ -170,18 +165,18 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Archive
+        /// Compress
         ///
         /// <summary>
-        /// 圧縮に関する設定を取得または設定します。
+        /// Gets or sets the settings for creating an archive.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [DataMember]
-        public CompressSettingValue Archive
+        [DataMember(Name = "Archive")]
+        public CompressValue Compress
         {
-            get => _archive;
-            set => SetProperty(ref _archive, value);
+            get => _compress;
+            set => SetProperty(ref _compress, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -189,12 +184,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Extract
         ///
         /// <summary>
-        /// 展開に関する設定を取得または設定します。
+        /// Gets or sets the settings for extracting archives.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public ExtractSettingValue Extract
+        public ExtractValue Extract
         {
             get => _extract;
             set => SetProperty(ref _extract, value);
@@ -205,12 +200,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Associate
         ///
         /// <summary>
-        /// ファイルの関連付けに関する設定を取得または設定します。
+        /// Gets or sets the settings for the file association.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public AssociateSettingValue Associate
+        public AssociateValue Associate
         {
             get => _associate;
             set => SetProperty(ref _associate, value);
@@ -218,15 +213,15 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Menu
+        /// ContextMenu
         ///
         /// <summary>
-        /// コンテキストメニューに関する設定を取得または設定します。
+        /// Gets or sets the settings for the context menu.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [DataMember(Name = "Context")]
-        public ContextSettingValue Menu
+        public ContextMenuValue ContextMenu
         {
             get => _context;
             set => SetProperty(ref _context, value);
@@ -237,13 +232,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Shortcut
         ///
         /// <summary>
-        /// デスクトップに作成するショートカットメニューに関する設定を
-        /// 取得または設定します。
+        /// Gets or sets the settings for the shortcut links.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public ShortcutSettingValue Shortcut
+        public ShortcutValue Shortcut
         {
             get => _shortcut;
             set => SetProperty(ref _shortcut, value);
@@ -258,12 +252,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// GetFilters
         ///
         /// <summary>
-        /// 圧縮・展開時に除外するファイルまたはディレクトリ名の一覧を
-        /// 取得します。
+        /// Gets the collection of filter strings.
         /// </summary>
         ///
         /// <returns>
-        /// 除外するファイルまたはディレクトリ名一覧
+        /// Collection of values to filter files and directories.
         /// </returns>
         ///
         /* ----------------------------------------------------------------- */
@@ -281,7 +274,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// OnDeserializing
         ///
         /// <summary>
-        /// デシリアライズ直前に実行されます。
+        /// Occurs before deserializing.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -293,7 +286,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Reset
         ///
         /// <summary>
-        /// 設定をリセットします。
+        /// Resets the value.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -305,11 +298,11 @@ namespace Cube.FileSystem.SevenZip.Ice
             _filtering    = ".DS_Store|Thumbs.db|__MACOSX|desktop.ini";
             _toolTip      = true;
             _toolTipCount = 5;
-            _archive      = new CompressSettingValue();
-            _extract      = new ExtractSettingValue();
-            _associate    = new AssociateSettingValue();
-            _context      = new ContextSettingValue();
-            _shortcut     = new ShortcutSettingValue();
+            _compress     = new CompressValue();
+            _extract      = new ExtractValue();
+            _associate    = new AssociateValue();
+            _context      = new ContextMenuValue();
+            _shortcut     = new ShortcutValue();
         }
 
         #endregion
@@ -321,11 +314,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         private string _filtering;
         private bool _toolTip;
         private int _toolTipCount;
-        private CompressSettingValue _archive;
-        private ExtractSettingValue _extract;
-        private AssociateSettingValue _associate;
-        private ContextSettingValue _context;
-        private ShortcutSettingValue _shortcut;
+        private CompressValue _compress;
+        private ExtractValue _extract;
+        private AssociateValue _associate;
+        private ContextMenuValue _context;
+        private ShortcutValue _shortcut;
         #endregion
     }
 }

@@ -18,35 +18,33 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace Cube.FileSystem.SevenZip.Ice
+namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ContextSettingValue
+    /// ContextMenuValue
     ///
     /// <summary>
-    /// コンテキストメニューに関するユーザ設定を保持するためのクラスです。
+    /// Represents the settings of the context menu that is displayed
+    /// in the explorer.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public sealed class ContextSettingValue : SerializableBase
+    public sealed class ContextMenuValue : SerializableBase
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ContextSettings
+        /// ContextMenuValue
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the ContextMenuValue class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ContextSettingValue()
-        {
-            Reset();
-        }
+        public ContextMenuValue() { Reset(); }
 
         #endregion
 
@@ -57,8 +55,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Preset
         ///
         /// <summary>
-        /// 予め定義されたコンテキストメニューを示す値を取得または
-        /// 設定します。
+        /// Gets or sets the value that represents the preset menu.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -74,8 +71,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Custom
         ///
         /// <summary>
-        /// カスタマイズされたコンテキストメニュー一覧を取得または
-        /// 設定します。
+        /// Gets or sets the collection of customized context menu.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -88,19 +84,19 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// IsCustomized
+        /// UseCustom
         ///
         /// <summary>
-        /// カスタマイズされたコンテキストメニューを使用するかどうかを示す
-        /// 値を取得または設定します。
+        /// Gets or sets a value indicating whether to use the customized
+        /// context menu.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [DataMember]
-        public bool IsCustomized
+        [DataMember(Name = "IsCustomized")]
+        public bool UseCustom
         {
-            get => _isCustomized;
-            set => SetProperty(ref _isCustomized, value);
+            get => _useCustom;
+            set => SetProperty(ref _useCustom, value);
         }
 
         #endregion
@@ -112,17 +108,17 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Customize
         ///
         /// <summary>
-        /// コンテキストメニューのカスタマイズを実行します。
+        /// Apply the customized context menu.
         /// </summary>
         ///
-        /// <param name="src">カスタマイズメニュー</param>
+        /// <param name="src">Customized context menu.</param>
         ///
         /* ----------------------------------------------------------------- */
         public void Customize(IEnumerable<ContextMenu> src)
         {
             Custom.Clear();
             foreach (var m in src) Custom.Add(m);
-            IsCustomized = true;
+            UseCustom = true;
         }
 
         /* ----------------------------------------------------------------- */
@@ -130,15 +126,15 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Reset
         ///
         /// <summary>
-        /// 設定をリセットします。
+        /// Resets the settings.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public void Reset()
         {
-            Preset       = PresetMenu.DefaultContext;
-            Custom       = new List<ContextMenu>();
-            IsCustomized = false;
+            Preset    = PresetMenu.DefaultContext;
+            Custom    = new List<ContextMenu>();
+            UseCustom = false;
         }
 
         #endregion
@@ -150,7 +146,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// OnDeserializing
         ///
         /// <summary>
-        /// デシリアライズ直前に実行されます。
+        /// Occurs before deserializing.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -162,7 +158,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         #region Fields
         private PresetMenu _preset;
         private IList<ContextMenu> _custom;
-        private bool _isCustomized;
+        private bool _useCustom;
         #endregion
     }
 }

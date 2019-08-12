@@ -44,7 +44,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// <param name="model">Model オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public AssociateViewModel(AssociateSettingValue model) : base(new AssociateCommand(model))
+        public AssociateViewModel(AssociateValue model) : base(new AssociateCommand(model))
         {
             Facade.Settings.PropertyChanged += (s, e) => OnPropertyChanged(e);
         }
