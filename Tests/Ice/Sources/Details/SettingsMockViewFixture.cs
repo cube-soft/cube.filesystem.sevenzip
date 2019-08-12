@@ -120,7 +120,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         public virtual void Setup()
         {
             Mock = new SettingsMockViewFactory();
-            Configurator.Views.Configure(Mock);
+            Settings.Views.Configure(Mock);
         }
 
         /* ----------------------------------------------------------------- */

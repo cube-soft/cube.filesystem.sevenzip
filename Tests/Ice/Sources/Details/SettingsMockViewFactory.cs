@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.SevenZip.Ice.Configurator;
+using Cube.FileSystem.SevenZip.Ice.Settings;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -33,7 +33,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    class SettingsMockViewFactory : Configurator.ViewFactory
+    class SettingsMockViewFactory : Settings.ViewFactory
     {
         #region Constructors
 

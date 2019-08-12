@@ -15,35 +15,33 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-namespace Cube.FileSystem.SevenZip.Ice.Configurator
+namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveViewModel
+    /// ShortcutViewModel
     ///
     /// <summary>
-    /// Represents the base class of the compressing and extracting
-    /// archives.
+    /// ShortcutSettings の ViewModel を表すクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public abstract class ArchiveViewModel<T> : Presentable<T> where T : ArchiveSettingValue
+    public class ShortcutViewModel : Presentable<ShortcutSettingValue>
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveViewModel
+        /// ShortcutViewModel
         ///
         /// <summary>
-        /// Initializes a new instance of the ArchiveViewModel class with
-        /// the specified arguments.
+        /// オブジェクトを初期化します。
         /// </summary>
         ///
-        /// <param name="facade">Facade object.</param>
+        /// <param name="facade">Model オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveViewModel(T facade) : base(facade)
+        public ShortcutViewModel(ShortcutSettingValue facade) : base(facade)
         {
             Facade.PropertyChanged += (s, e) => OnPropertyChanged(e);
         }
@@ -54,123 +52,94 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SaveOthers
+        /// Compress
         ///
         /// <summary>
-        /// SaveLocation.Others かどうかを示す値を取得または設定します。
+        /// 圧縮の項目が有効かどうかを示す値を取得または設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool SaveOthers
+        public bool Compress
         {
-            get => Facade.SaveLocation == SaveLocation.Others;
-            set => SetSaveLocation(SaveLocation.Others, value);
+            get => Facade.Preset.HasFlag(PresetMenu.Archive);
+            set => Set(PresetMenu.Archive, value);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SaveSource
+        /// Extract
         ///
         /// <summary>
-        /// SaveLocation.Source かどうかを示す値を取得または設定します。
+        /// 解凍の項目が有効かどうかを示す値を取得または設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool SaveSource
+        public bool Extract
         {
-            get => Facade.SaveLocation == SaveLocation.Source;
-            set => SetSaveLocation(SaveLocation.Source, value);
+            get => Facade.Preset.HasFlag(PresetMenu.Extract);
+            set => Set(PresetMenu.Extract, value);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SaveRuntime
+        /// Settings
         ///
         /// <summary>
-        /// SaveLocation.Runtime かどうかを示す値を取得または設定します。
+        /// 設定の項目が有効かどうかを示す値を取得または設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool SaveRuntime
+        public bool Settings
         {
-            get => Facade.SaveLocation == SaveLocation.Runtime;
-            set => SetSaveLocation(SaveLocation.Runtime, value);
+            get => Facade.Preset.HasFlag(PresetMenu.Settings);
+            set => Set(PresetMenu.Settings, value);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SaveDirectory
+        /// ArchiveOption
         ///
         /// <summary>
-        /// 保存ディレクトリのパスを取得または設定します。
+        /// 圧縮オプションを取得または設定します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string SaveDirectoryName
+        public PresetMenu ArchiveOption
         {
-            get => Facade.SaveDirectoryName;
-            set => Facade.SaveDirectoryName = value;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Filtering
-        ///
-        /// <summary>
-        /// 特定のファイルまたはディレクトリをフィルタリングするかどうかを
-        /// 示す値を取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public bool Filtering
-        {
-            get => Facade.Filtering;
-            set => Facade.Filtering = value;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OpenDirectory
-        ///
-        /// <summary>
-        /// 圧縮処理終了後にフォルダを開くかどうかを示す値を取得
-        /// または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public bool OpenDirectory
-        {
-            get => Facade.OpenDirectory.HasFlag(OpenDirectoryMethod.Open);
+            get => Facade.Preset & PresetMenu.ArchiveOptions;
             set
             {
-                if (value) Facade.OpenDirectory |= OpenDirectoryMethod.Open;
-                else Facade.OpenDirectory &= ~OpenDirectoryMethod.Open;
-            }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SkipDesktop
-        ///
-        /// <summary>
-        /// 後処理時に対象がデスクトップの場合にスキップするかどうかを
-        /// 示す値を取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public bool SkipDesktop
-        {
-            get => Facade.OpenDirectory.HasFlag(OpenDirectoryMethod.SkipDesktop);
-            set
-            {
-                if (value) Facade.OpenDirectory |= OpenDirectoryMethod.SkipDesktop;
-                else Facade.OpenDirectory &= ~OpenDirectoryMethod.SkipDesktop;
+                var strip = Facade.Preset & ~PresetMenu.ArchiveOptions;
+                Facade.Preset = strip | value;
             }
         }
 
         #endregion
 
-        #region Implementations
+        #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Sync
+        ///
+        /// <summary>
+        /// ショートカットが実際に存在するかどうかの結果を設定値に反映
+        /// させます。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Sync() => Facade.Sync();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Update
+        ///
+        /// <summary>
+        /// ユーザ設定に関わる処理を実行します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Update() => Facade.Update();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -189,25 +158,23 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /* ----------------------------------------------------------------- */
         protected override void Dispose(bool disposing) { }
 
+        #endregion
+
+        #region Implementations
+
         /* ----------------------------------------------------------------- */
         ///
-        /// SetSaveLocation
+        /// Set
         ///
         /// <summary>
-        /// SaveLocation の値を設定します。
+        /// PresetMenu に値を設定します。
         /// </summary>
         ///
-        /// <remarks>
-        /// SaveLocation は GUI 上は RadioButton で表現されています。
-        /// そこで、SetSaveLocation() では Checked = true のタイミングで
-        /// 値の内容を更新する事とします。
-        /// </remarks>
-        ///
         /* ----------------------------------------------------------------- */
-        private void SetSaveLocation(SaveLocation value, bool check)
+        private void Set(PresetMenu value, bool check)
         {
-            if (!check || Facade.SaveLocation == value) return;
-            Facade.SaveLocation = value;
+            if (check) Facade.Preset |= value;
+            else Facade.Preset &= ~value;
         }
 
         #endregion

@@ -19,7 +19,7 @@ using Cube.Mixin.Assembly;
 using Cube.Mixin.Logging;
 using System;
 
-namespace Cube.FileSystem.SevenZip.Ice.Configurator
+namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///

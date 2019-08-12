@@ -18,7 +18,7 @@
 using System.ComponentModel;
 using System.Linq;
 
-namespace Cube.FileSystem.SevenZip.Ice.Configurator
+namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///

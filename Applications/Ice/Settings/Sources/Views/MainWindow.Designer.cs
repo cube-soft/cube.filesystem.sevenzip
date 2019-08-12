@@ -1,4 +1,4 @@
-﻿namespace Cube.FileSystem.SevenZip.Ice.Configurator
+﻿namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     partial class MainWindow
     {
@@ -379,7 +379,7 @@
             //
             // ContextSettingsBindingSource
             //
-            this.ContextSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.Configurator.ContextViewModel);
+            this.ContextSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.Settings.ContextViewModel);
             //
             // ContextExtractCheckBox
             //
@@ -452,7 +452,7 @@
             //
             // ShortcutSettingsBindingSource
             //
-            this.ShortcutSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.Configurator.ShortcutViewModel);
+            this.ShortcutSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.Settings.ShortcutViewModel);
             //
             // ShortcutArchiveComboBox
             //
@@ -549,7 +549,7 @@
             //
             // ArchiveSettingsBindingSource
             //
-            this.ArchiveSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.Configurator.CompressViewModel);
+            this.ArchiveSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.Settings.CompressViewModel);
             //
             // ArchiveSaveTextBox
             //
@@ -740,7 +740,7 @@
             //
             // ExtractSettingsBindingSource
             //
-            this.ExtractSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.Configurator.ExtractViewModel);
+            this.ExtractSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.Settings.ExtractViewModel);
             //
             // ExtractSaveTextBox
             //
@@ -963,7 +963,7 @@
             //
             // SettingsBindingSource
             //
-            this.SettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.Configurator.MainViewModel);
+            this.SettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.Settings.MainViewModel);
             //
             // OthersGroupBox
             //

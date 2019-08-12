@@ -60,7 +60,7 @@ test_script:
       -filter:"%TEST_FILTERS%"
 after_test:
     - xcopy /q /Y /I "Applications\Ice\Main\%PROJECT_BIN%" "CubeIce"
-    - xcopy /q /Y /I "Applications\Ice\Configurator\%PROJECT_BIN%" "CubeIce.Settings"
+    - xcopy /q /Y /I "Applications\Ice\Settings\%PROJECT_BIN%" "CubeIce.Settings"
     - xcopy /q /Y /I "Applications\Ice\Associator\%PROJECT_BIN%" "CubeIce.Settings.Associate"
     - xcopy /q /Y /I "Applications\Ice.Com\Context\%PROJECT_VCBIN%" "CubeIce.Context"
     - xcopy /q /Y /I "Applications\Ice.Com\QueryInfo\%PROJECT_VCBIN%" "CubeIce.QueryInfo"

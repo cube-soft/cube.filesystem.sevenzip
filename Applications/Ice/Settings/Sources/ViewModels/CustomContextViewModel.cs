@@ -15,52 +15,37 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Forms;
+using Cube.Images.Icons;
 using System.Collections.Generic;
-using System.Windows.Forms;
+using System.Drawing;
 
-namespace Cube.FileSystem.SevenZip.Ice.Configurator
+namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// CustomizeWindow
+    /// CustomContextViewModel
     ///
     /// <summary>
-    /// コンテキストメニューのカスタマイズ画面を表すクラスです。
+    /// ContextSettings.Custom の ViewModel を表すクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class CustomizeWindow : Window
+    public class CustomContextViewModel : Presentable<IEnumerable<ContextMenu>>
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CustomizeForm
+        /// CustomContextViewModel
         ///
         /// <summary>
         /// オブジェクトを初期化します。
         /// </summary>
         ///
+        /// <param name="current">現在のメニュー一覧</param>
+        ///
         /* ----------------------------------------------------------------- */
-        public CustomizeWindow()
-        {
-            InitializeComponent();
-
-            _menu = new CustomizeMenu(SourceTreeView, DestinationTreeView);
-            _menu.Updated += (s, e) => UpdateMenu();
-
-            ApplyButton.Click       += (s, e) => Close();
-            ExitButton.Click        += (s, e) => Close();
-            RenameButton.Click      += (s, e) => _menu.RenameMenu.Execute();
-            AddButton.Click         += (s, e) => _menu.AddMenu.Execute();
-            NewCategoryButton.Click += (s, e) => _menu.NewCategoryMenu.Execute();
-            RemoveButton.Click      += (s, e) => _menu.RemoveMenu.Execute();
-            UpButton.Click          += (s, e) => _menu.UpMenu.Execute();
-            DownButton.Click        += (s, e) => _menu.DownMenu.Execute();
-
-            ShortcutKeys.Add(Keys.F2, () => _menu.RenameMenu.Execute());
-        }
+        public CustomContextViewModel(IEnumerable<ContextMenu> current) : base(current) { }
 
         #endregion
 
@@ -68,14 +53,47 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Result
+        /// Source
         ///
         /// <summary>
-        /// 操作結果を取得します。
+        /// 追加可能なメニュー一覧を取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IEnumerable<ContextMenu> Result => _menu.Result;
+        public IEnumerable<ContextMenu> Source { get; } =
+            PresetMenuExtension.ToContextMenuGroup(
+                PresetMenu.Archive | PresetMenu.ArchiveOptions |
+                PresetMenu.Extract | PresetMenu.ExtractOptions |
+                PresetMenu.Mail    | PresetMenu.MailOptions
+            );
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Current
+        ///
+        /// <summary>
+        /// 現在のメニュー一覧を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public IEnumerable<ContextMenu> Current => Facade;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Images
+        ///
+        /// <summary>
+        /// 表示イメージ一覧を取得します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public IList<Image> Images { get; } = new List<Image>
+        {
+            IconFactory.Create(StockIcons.Folder, IconSize.Small).ToBitmap(),
+            Properties.Resources.Archive,
+            Properties.Resources.Extract,
+            IconFactory.Create(StockIcons.FolderOpen, IconSize.Small).ToBitmap(),
+        };
 
         #endregion
 
@@ -83,43 +101,21 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Bind
+        /// Dispose
         ///
         /// <summary>
-        /// ViewModel と関連付けます。
+        /// Releases the unmanaged resources used by the object and
+        /// optionally releases the managed resources.
         /// </summary>
         ///
-        /// <param name="vm">ViewModel オブジェクト</param>
+        /// <param name="disposing">
+        /// true to release both managed and unmanaged resources;
+        /// false to release only unmanaged resources.
+        /// </param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Bind(CustomContextViewModel vm) =>
-            _menu.Register(vm.Source, vm.Current, vm.Images);
+        protected override void Dispose(bool disposing) { }
 
-        #endregion
-
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// UpdateMenu
-        ///
-        /// <summary>
-        /// ボタンおよびメニュー項目の状態を更新します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void UpdateMenu()
-        {
-            RenameButton.Enabled = _menu.IsEditable;
-            RemoveButton.Enabled = _menu.IsEditable;
-            UpButton.Enabled     = _menu.IsEditable;
-            DownButton.Enabled   = _menu.IsEditable;
-        }
-
-        #endregion
-
-        #region Fields
-        private readonly CustomizeMenu _menu;
         #endregion
     }
 }

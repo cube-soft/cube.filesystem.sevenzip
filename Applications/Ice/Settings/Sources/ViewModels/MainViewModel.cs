@@ -17,7 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 
-namespace Cube.FileSystem.SevenZip.Ice.Configurator
+namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
