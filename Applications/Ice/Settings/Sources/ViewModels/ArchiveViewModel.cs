@@ -15,6 +15,8 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System.Threading;
+
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
@@ -23,11 +25,12 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     ///
     /// <summary>
     /// Represents the base class of the compressing and extracting
-    /// archives.
+    /// view-models.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public abstract class ArchiveViewModel<T> : Presentable<T> where T : ArchiveValue
+    public abstract class ArchiveViewModel<TModel> : Presentable<TModel>
+        where TModel : ArchiveValue
     {
         #region Constructors
 
@@ -40,10 +43,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// the specified arguments.
         /// </summary>
         ///
-        /// <param name="facade">Facade object.</param>
+        /// <param name="facade">Facade of models.</param>
+        /// <param name="aggregator">Message aggregator.</param>
+        /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveViewModel(T facade) : base(facade)
+        public ArchiveViewModel(TModel facade,
+            Aggregator aggregator,
+            SynchronizationContext context
+        ) : base(facade, aggregator, context)
         {
             Facade.PropertyChanged += (s, e) => OnPropertyChanged(e);
         }

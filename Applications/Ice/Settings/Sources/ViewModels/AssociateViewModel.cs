@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
@@ -25,7 +26,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// AssociateViewModel
     ///
     /// <summary>
-    /// AssociateSettings の ViewModel を表すクラスです。
+    /// Provides functionality to associate the AssociateValue object
+    /// and a view.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -38,13 +40,20 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// AssociateViewModel
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the AssociateViewModel class
+        /// with the specified arguments.
         /// </summary>
         ///
-        /// <param name="model">Model オブジェクト</param>
+        /// <param name="src">Settings for file association.</param>
+        /// <param name="aggregator">Message aggregator.</param>
+        /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public AssociateViewModel(AssociateValue model) : base(new AssociateCommand(model))
+        public AssociateViewModel(
+            AssociateValue src,
+            Aggregator aggregator,
+            SynchronizationContext context
+        ) : base(new AssociateCommand(src), aggregator, context)
         {
             Facade.Settings.PropertyChanged += (s, e) => OnPropertyChanged(e);
         }

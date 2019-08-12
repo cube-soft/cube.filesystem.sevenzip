@@ -15,6 +15,8 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System.Threading;
+
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
@@ -22,8 +24,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// ExtractViewModel
     ///
     /// <summary>
-    /// Provides functionality to communicate with the ExtractSettingValue
-    /// object and a view.
+    /// Provides functionality to associate the ExtractValue object
+    /// and a view.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -36,13 +38,19 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// ExtractViewModel
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the ExtractViewModel class
+        /// with the specified arguments.
         /// </summary>
         ///
-        /// <param name="model">Model オブジェクト</param>
+        /// <param name="facade">Facade of models.</param>
+        /// <param name="aggregator">Message aggregator.</param>
+        /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ExtractViewModel(ExtractValue model) : base(model) { }
+        public ExtractViewModel(ExtractValue facade,
+            Aggregator aggregator,
+            SynchronizationContext context
+        ) : base(facade, aggregator, context) { }
 
         #endregion
 

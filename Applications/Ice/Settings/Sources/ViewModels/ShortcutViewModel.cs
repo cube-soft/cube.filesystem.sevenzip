@@ -15,6 +15,8 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System.Threading;
+
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
@@ -22,7 +24,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// ShortcutViewModel
     ///
     /// <summary>
-    /// ShortcutSettings の ViewModel を表すクラスです。
+    /// Provides functionality to associate the ShortcutValue object
+    /// and a view.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -35,13 +38,19 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// ShortcutViewModel
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the ShortcutViewModel class
+        /// with the specified arguments.
         /// </summary>
         ///
-        /// <param name="facade">Model オブジェクト</param>
+        /// <param name="facade">Facade of models.</param>
+        /// <param name="aggregator">Message aggregator.</param>
+        /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ShortcutViewModel(ShortcutValue facade) : base(facade)
+        public ShortcutViewModel(ShortcutValue facade,
+            Aggregator aggregator,
+            SynchronizationContext context
+        ) : base(facade, aggregator, context)
         {
             Facade.PropertyChanged += (s, e) => OnPropertyChanged(e);
         }

@@ -15,33 +15,42 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System.Threading;
+
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ContextViewModel
+    /// ContextMenuViewModel
     ///
     /// <summary>
-    /// ContextSettings の ViewModel を表すクラスです。
+    /// Provides functionality to associate the ContextMenuValue object
+    /// and a view.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ContextViewModel : Presentable<ContextMenuValue>
+    public class ContextMenuViewModel : Presentable<ContextMenuValue>
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ContextViewModel
+        /// ContextMenuViewModel
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the ContextMenuViewModel class
+        /// with the specified arguments.
         /// </summary>
         ///
-        /// <param name="facade">Model オブジェクト</param>
+        /// <param name="facade">Facade of models.</param>
+        /// <param name="aggregator">Message aggregator.</param>
+        /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ContextViewModel(ContextMenuValue facade) : base(facade)
+        public ContextMenuViewModel(ContextMenuValue facade,
+            Aggregator aggregator,
+            SynchronizationContext context
+        ) : base(facade, aggregator, context)
         {
             Facade.PropertyChanged += (s, e) => {
                 OnPropertyChanged(e);
@@ -64,7 +73,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool PresetEnabled => !Facade.UseCustom;
 
-        #region Archive
+        #region Compress
 
         /* ----------------------------------------------------------------- */
         ///

@@ -15,6 +15,8 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System.Threading;
+
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
@@ -22,8 +24,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// CompressViewModel
     ///
     /// <summary>
-    /// Provides functionality to communicate with the CompressSettingValue
-    /// object and a view.
+    /// Provides functionality to associate the CompressValue object
+    /// and a view.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -40,10 +42,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// with the specified arguments.
         /// </summary>
         ///
-        /// <param name="facade">Facade object.</param>
+        /// <param name="facade">Facade of models.</param>
+        /// <param name="aggregator">Message aggregator.</param>
+        /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressViewModel(CompressValue facade) : base(facade) { }
+        public CompressViewModel(CompressValue facade,
+            Aggregator aggregator,
+            SynchronizationContext context
+        ) : base(facade, aggregator, context) { }
 
         #endregion
 

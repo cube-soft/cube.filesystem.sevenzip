@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Mixin.Collections;
 using System;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
@@ -48,11 +49,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         {
             Facade.PropertyChanged += (s, e) => OnPropertyChanged(e);
 
-            Compress  = new CompressViewModel(facade.Value.Compress);
-            Extract   = new ExtractViewModel(facade.Value.Extract);
-            Associate = new AssociateViewModel(facade.Value.Associate);
-            Menu      = new ContextViewModel(facade.Value.ContextMenu);
-            Shortcut  = new ShortcutViewModel(facade.Value.Shortcut);
+            Compress    = new CompressViewModel(facade.Value.Compress, Aggregator, Context);
+            Extract     = new ExtractViewModel(facade.Value.Extract, Aggregator, Context);
+            Associate   = new AssociateViewModel(facade.Value.Associate, Aggregator, Context);
+            ContextMenu = new ContextMenuViewModel(facade.Value.ContextMenu, Aggregator, Context);
+            Shortcut    = new ShortcutViewModel(facade.Value.Shortcut, Aggregator, Context);
         }
 
         #endregion
@@ -94,14 +95,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Menu
+        /// ContextMenu
         ///
         /// <summary>
         /// コンテキストメニューの設定を扱う ViewModel を取得します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ContextViewModel Menu { get; }
+        public ContextMenuViewModel ContextMenu { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -266,11 +267,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string Transform(string src, string sch, string rep)
-        {
-            var dest = src.Split(new[] { sch }, StringSplitOptions.RemoveEmptyEntries);
-            return string.Join(rep, dest);
-        }
+        private string Transform(string src, string sch, string rep) =>
+            src.Split(new[] { sch }, StringSplitOptions.RemoveEmptyEntries).Join(rep);
 
         #endregion
     }

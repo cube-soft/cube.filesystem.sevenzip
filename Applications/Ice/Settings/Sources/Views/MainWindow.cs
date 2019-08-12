@@ -95,7 +95,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
             SettingsBindingSource.DataSource          = vm;
             AssociateSettingsBindingSource.DataSource = vm.Associate;
-            ContextSettingsBindingSource.DataSource   = vm.Menu;
+            ContextSettingsBindingSource.DataSource   = vm.ContextMenu;
             ShortcutSettingsBindingSource.DataSource  = vm.Shortcut;
             ArchiveSettingsBindingSource.DataSource   = vm.Compress;
             ExtractSettingsBindingSource.DataSource   = vm.Extract;
@@ -105,10 +105,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             Enable(ExtractSaveOthersRadioButton, ExtractSaveTextBox, ExtractSaveButton);
 
             SettingsPanel.Apply          += (s, e) => vm.Update();
-            ContextResetButton.Click     += (s, e) => vm.Menu.Reset();
+            ContextResetButton.Click     += (s, e) => vm.ContextMenu.Reset();
+            ContextCustomizeButton.Click += (s, e) => vm.ContextMenu.Customize();
             AssociateAllButton.Click     += (s, e) => vm.Associate.SelectAll();
             AssociateClearButton.Click   += (s, e) => vm.Associate.Clear();
-            ContextCustomizeButton.Click += (s, e) => vm.Menu.Customize();
         }
 
         #endregion

@@ -18,34 +18,41 @@
 using Cube.Images.Icons;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Threading;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// CustomContextViewModel
+    /// CustomMenuViewModel
     ///
     /// <summary>
-    /// ContextSettings.Custom の ViewModel を表すクラスです。
+    /// Represents the ViewModel of the customized context menu.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class CustomContextViewModel : Presentable<IEnumerable<ContextMenu>>
+    public class CustomMenuViewModel : Presentable<IEnumerable<ContextMenu>>
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CustomContextViewModel
+        /// CustomMenuViewModel
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the CustomMenuViewModel class
+        /// with the specified arguments.
         /// </summary>
         ///
-        /// <param name="current">現在のメニュー一覧</param>
+        /// <param name="menu">Current context menu.</param>
+        /// <param name="aggregator">Message aggregator.</param>
+        /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public CustomContextViewModel(IEnumerable<ContextMenu> current) : base(current) { }
+        public CustomMenuViewModel(IEnumerable<ContextMenu> menu,
+            Aggregator aggregator,
+            SynchronizationContext context
+        ) : base(menu, aggregator, context) { }
 
         #endregion
 
