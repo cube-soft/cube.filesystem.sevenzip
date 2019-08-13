@@ -73,7 +73,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             switch (mode[1])
             {
                 case 'c':
-                    Mode   = Mode.Archive;
+                    Mode   = Mode.Compress;
                     Format = GetFormat(mode);
                     break;
                 case 'x':
@@ -235,7 +235,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 
             var droppable = Location == SaveLocation.Unknown ||
                             Location == SaveLocation.Source;
-            if (DropDirectory.HasValue() && droppable) Location = SaveLocation.Drop;
+            if (DropDirectory.HasValue() && droppable) Location = SaveLocation.Explicit;
 
             Sources = sources;
             Options = options;

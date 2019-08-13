@@ -15,63 +15,75 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.FileSystem.SevenZip.Ice.Settings;
+using Cube.Mixin.Environment;
 using Cube.Mixin.Logging;
 using Cube.Mixin.String;
 using System;
-using System.Threading;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ProgressFacade
+    /// PathSelector
     ///
     /// <summary>
-    /// Provides functionality to report the progress for compressing or
-    /// extracting archives.
+    /// Provides functionality to select the path of file or directory
+    /// to save.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public abstract class ProgressFacade : ObservableBase
+    internal sealed class PathSelector
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ProgressFacade
+        /// PathSelector
         ///
         /// <summary>
-        /// Initializes a new instance of the ProgressFacade class with the
-        /// specified arguments.
+        /// Initializes a new instance of the PathSelector class with
+        /// the specified arguments.
         /// </summary>
         ///
         /// <param name="request">Request for the transaction.</param>
         /// <param name="settings">User settings.</param>
-        /// <param name="invoker">Invoker object.</param>
+        /// <param name="io">I/O handler.</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected ProgressFacade(Request request, SettingFolder settings, Invoker invoker) : base(invoker)
+        public PathSelector(Request request, ArchiveValue settings, IO io)
         {
             Request  = request;
             Settings = settings;
+            IO       = io;
+        }
 
-            _timer.Elapsed += (s, e) => Refresh(nameof(Report));
+        /* ----------------------------------------------------------------- */
+        ///
+        /// PathSelector
+        ///
+        /// <summary>
+        /// Initializes a new instance of the PathSelector class with
+        /// the specified arguments.
+        /// </summary>
+        ///
+        /// <param name="request">Request for the transaction.</param>
+        /// <param name="settings">User settings.</param>
+        /// <param name="converter">
+        /// preprocessing for the select action.
+        /// </param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public PathSelector(Request request, ArchiveValue settings, PathConverter converter) :
+            this(request, settings, converter.IO)
+        {
+            Format = converter.Format;
+            Source = converter.Result.FullName;
         }
 
         #endregion
 
         #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Report
-        ///
-        /// <summary>
-        /// Gets the current progress report.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public Report Report { get; } = new Report();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -89,173 +101,133 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Settings
         ///
         /// <summary>
-        /// Gets the user settings.
+        /// Gets the settings for compressing or extracting archives.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public SettingFolder Settings { get; }
+        public ArchiveValue Settings { get; }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Destination
+        /// IO
         ///
         /// <summary>
-        /// Gets or sets the path of file or directory to save.
+        /// Gets the I/O handler.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Destination
-        {
-            get => GetProperty<string>();
-            protected set { if (SetProperty(value)) this.LogDebug($"{nameof(Destination)}:{value}"); }
-        }
+        public IO IO { get; }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Temp
+        /// Query
         ///
         /// <summary>
-        /// Gets or sets the path of the working directory.
+        /// Gets or sets the object to ask the user to select the save path.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Temp
+        public PathQuery Query { get; set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Format
+        ///
+        /// <summary>
+        /// Gets or sets the archive format.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public Format Format { get; set; } = Format.Zip;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Source
+        ///
+        /// <summary>
+        /// Gets or sets the path of the source file.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Source { get; set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Result
+        ///
+        /// <summary>
+        /// Gets the result of the select action.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Result => _result ?? (_result = Select());
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Location
+        ///
+        /// <summary>
+        /// Gets the kind of save path.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public SaveLocation Location
         {
-            get => GetProperty<string>();
-            private set => SetProperty(value);
+            get
+            {
+                var dest = Request.Location != SaveLocation.Unknown ?
+                           Request.Location :
+                           Settings.SaveLocation;
+
+                this.LogDebug(string.Format("SaveLocation:({0},{1})->{2}",
+                    Request.Location, Settings.SaveLocation, dest));
+                return dest;
+            }
         }
 
         #endregion
 
-        #region Methods
+        #region Implementations
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Start
+        /// Select
         ///
         /// <summary>
-        /// Starts the operation.
+        /// Invoke the select action.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public virtual void Start() => _timer.Start();
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Cancel
-        ///
-        /// <summary>
-        /// Cancels the current operation.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Cancel()
+        private string Select()
         {
-            _cancel.Cancel();
-            Resume();
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Suspend
-        ///
-        /// <summary>
-        /// Suspends the current operation.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Suspend() => _supend.Reset();
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Resume
-        ///
-        /// <summary>
-        /// Resumes the operation.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Resume() => _supend.Set();
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Terminate
-        ///
-        /// <summary>
-        /// Notifies that the operation has been completed.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected void Terminate()
-        {
-            _timer.Stop();
-
-            if (Report.Count < Report.TotalCount || Report.Bytes < Report.TotalBytes) // hack
+            switch (Location)
             {
-                this.LogDebug(
-                    $"{nameof(Report.Count)}:{Report.Count:#,0} / {Report.TotalCount:#,0}",
-                    $"{nameof(Report.Bytes)}:{Report.Bytes:#,0} / {Report.TotalBytes:#,0}"
-                );
-
-                Report.Count = Report.TotalCount;
-                Report.Bytes = Report.TotalBytes;
-
-                Refresh(nameof(Report));
-            }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SetTemp
-        ///
-        /// <summary>
-        /// Sets the value to the Temp property with the specified
-        /// directory.
-        /// </summary>
-        ///
-        /// <param name="directory">Path of the root directory.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected void SetTemp(string directory)
-        {
-            if (Temp.HasValue()) return;
-            var dest = Settings.IO.Combine(directory, Guid.NewGuid().ToString("D"));
-            this.LogDebug($"{nameof(Temp)}:{dest}");
-            Temp = dest;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Dispose
-        ///
-        /// <summary>
-        /// Releases the unmanaged resources used by the object and
-        /// optionally releases the managed resources.
-        /// </summary>
-        ///
-        /// <param name="disposing">
-        /// true to release both managed and unmanaged resources;
-        /// false to release only unmanaged resources.
-        /// </param>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _timer.Dispose();
-                _supend.Dispose();
+                case SaveLocation.Desktop:
+                    return Environment.SpecialFolder.Desktop.GetName();
+                case SaveLocation.MyDocuments:
+                    return Environment.SpecialFolder.MyDocuments.GetName();
+                case SaveLocation.Source:
+                    return IO.Get(Source).DirectoryName;
+                case SaveLocation.Explicit:
+                    return Request.DropDirectory;
+                case SaveLocation.Query:
+                    var msg = PathQuery.NewMessage(Source, Format);
+                    Query?.Request(msg);
+                    if (msg.Cancel) throw new OperationCanceledException();
+                    return msg.Value;
+                case SaveLocation.Others:
+                    break;
             }
 
-            _ = Settings.IO.TryDelete(Temp);
+            return Settings.SaveDirectoryName.HasValue() ?
+                   Settings.SaveDirectoryName :
+                   Environment.SpecialFolder.Desktop.GetName();
         }
 
         #endregion
 
         #region Fields
-        private readonly System.Timers.Timer _timer = new System.Timers.Timer(100.0);
-        private readonly ManualResetEvent _supend = new ManualResetEvent(true);
-        private readonly CancellationTokenSource _cancel = new CancellationTokenSource();
+        private string _result;
         #endregion
     }
 }

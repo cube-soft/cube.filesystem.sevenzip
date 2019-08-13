@@ -33,7 +33,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <summary>無し</summary>
         None,
         /// <summary>圧縮</summary>
-        Archive,
+        Compress,
         /// <summary>解凍</summary>
         Extract,
     }
@@ -43,25 +43,25 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// SaveLocation
     ///
     /// <summary>
-    /// 保存場所を表す列挙型です。
+    /// Specifies the kind of save path.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     public enum SaveLocation
     {
-        /// <summary>その他</summary>
+        /// <summary>Others</summary>
         Others = 0,
-        /// <summary>元のファイルと同じ場所</summary>
+        /// <summary>Same as the source file</summary>
         Source = 1,
-        /// <summary>実行時に指定</summary>
-        Runtime = 2,
-        /// <summary>デスクトップ</summary>
+        /// <summary>Ask the user to select</summary>
+        Query = 2,
+        /// <summary>Desktop folder</summary>
         Desktop = 3,
-        /// <summary>マイドキュメント</summary>
+        /// <summary>My documents folder</summary>
         MyDocuments = 4,
-        /// <summary>ドラッグ&amp;ドロップで指定</summary>
-        Drop = 10,
-        /// <summary>不明</summary>
+        /// <summary>Explicitly specified, which is used when Drag-and-Drop</summary>
+        Explicit = 10,
+        /// <summary>Unknown</summary>
         Unknown = -1,
     }
 
