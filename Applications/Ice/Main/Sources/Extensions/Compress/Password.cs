@@ -56,15 +56,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Compress
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static void AskPassword(CompressFacade fc, CompressRuntime src, QueryMessage<string, string> e)
+        private static void AskPassword(CompressFacade src, CompressRuntime rts, QueryMessage<string, string> e)
         {
-            if (src.Password.HasValue())
+            if (rts.Password.HasValue())
             {
-                e.Value = src.Password;
+                e.Value  = rts.Password;
                 e.Cancel = false;
             }
-            else if (fc.Password != null) fc.Password.Request(e);
-            else e.Cancel = true;
+            else src.Password.Request(e);
         }
 
         #endregion
