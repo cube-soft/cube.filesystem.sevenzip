@@ -67,7 +67,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SaveDirectoryName
+        /// SaveDirectory
         ///
         /// <summary>
         /// Gets or sets the directory name to save.
@@ -79,11 +79,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        [DataMember]
-        public string SaveDirectoryName
+        [DataMember(Name = "SaveDirectoryName")]
+        public string SaveDirectory
         {
-            get => _saveDirectoryName;
-            set => SetProperty(ref _saveDirectoryName, value);
+            get => _saveDirectory;
+            set => SetProperty(ref _saveDirectory, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -113,11 +113,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [DataMember]
-        public OpenDirectoryMethod OpenDirectory
+        [DataMember(Name = "OpenDirectory")]
+        public OpenMethod OpenMethod
         {
-            get => _openDirectory;
-            set => SetProperty(ref _openDirectory, value);
+            get => _openMethod;
+            set => SetProperty(ref _openMethod, value);
         }
 
         #endregion
@@ -135,19 +135,19 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         protected virtual void Reset()
         {
-            _saveLocation      = SaveLocation.Others;
-            _saveDirectoryName = string.Empty;
-            _filtering         = true;
-            _openDirectory     = OpenDirectoryMethod.OpenNotDesktop;
+            _saveLocation  = SaveLocation.Others;
+            _saveDirectory = string.Empty;
+            _filtering     = true;
+            _openMethod    = OpenMethod.OpenNotDesktop;
         }
 
         #endregion
 
         #region Fields
         private SaveLocation _saveLocation;
-        private string _saveDirectoryName;
+        private string _saveDirectory;
         private bool _filtering;
-        private OpenDirectoryMethod _openDirectory;
+        private OpenMethod _openMethod;
         #endregion
     }
 }

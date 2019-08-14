@@ -31,6 +31,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     [DataContract]
     public sealed class CompressValue : ArchiveValue
     {
+        #region Constructors
+
         /* ----------------------------------------------------------------- */
         ///
         /// CompressValue
@@ -41,6 +43,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         public CompressValue() { Reset(); }
+
+        #endregion
 
         #region Properties
 

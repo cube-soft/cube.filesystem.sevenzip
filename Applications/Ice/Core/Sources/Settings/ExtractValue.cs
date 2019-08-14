@@ -57,11 +57,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [DataMember]
-        public CreateDirectoryMethod RootDirectory
+        [DataMember(Name = "RootDirectory")]
+        public SaveMethod SaveMethod
         {
-            get => _rootDirectory;
-            set => SetProperty(ref _rootDirectory, value);
+            get => _saveMethod;
+            set => SetProperty(ref _saveMethod, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -125,11 +125,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         protected override void Reset()
         {
-            _deleteSource  = false;
-            _bursty        = true;
-            _rootDirectory = CreateDirectoryMethod.CreateSmart;
-
             base.Reset();
+
+            _deleteSource = false;
+            _bursty       = true;
+            _saveMethod   = SaveMethod.CreateSmart;
         }
 
         #endregion
@@ -137,7 +137,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         #region Fields
         private bool _deleteSource;
         private bool _bursty;
-        private CreateDirectoryMethod _rootDirectory;
+        private SaveMethod _saveMethod;
         #endregion
     }
 }

@@ -67,7 +67,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 
     /* --------------------------------------------------------------------- */
     ///
-    /// CreateDirectoryMethod
+    /// SaveMethod
     ///
     /// <summary>
     /// ディレクトリの生成方法を表す列挙型です。
@@ -75,7 +75,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     ///
     /* --------------------------------------------------------------------- */
     [Flags]
-    public enum CreateDirectoryMethod
+    public enum SaveMethod
     {
         /// <summary>作成しない</summary>
         None = 0x00,
@@ -93,7 +93,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 
     /* --------------------------------------------------------------------- */
     ///
-    /// OpenDirectoryMethod
+    /// OpenMethod
     ///
     /// <summary>
     /// 圧縮・展開後にディレクトリを開く処理を表す列挙型です。
@@ -101,7 +101,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     ///
     /* --------------------------------------------------------------------- */
     [Flags]
-    public enum OpenDirectoryMethod
+    public enum OpenMethod
     {
         /// <summary>開かない</summary>
         None = 0x0000,

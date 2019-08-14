@@ -94,7 +94,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /// <remarks>
-        /// 設定値が空文字列の場合 explorer.exe が使用されます。
+        /// Use explorer.exe if the property is empty.
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
