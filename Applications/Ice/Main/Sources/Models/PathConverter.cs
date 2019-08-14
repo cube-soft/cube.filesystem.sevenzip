@@ -15,6 +15,8 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Mixin.String;
+
 namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
@@ -22,11 +24,11 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// PathConverter
     ///
     /// <summary>
-    /// パスを変換するためのクラスです。
+    /// Provides functionality to convert the archive filename.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class PathConverter
+    public sealed class PathConverter
     {
         #region Constructors
 
@@ -35,26 +37,13 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// PathConverter
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the PathConverter class with
+        /// the specified arguments.
         /// </summary>
         ///
-        /// <param name="format">変換後のフォーマット</param>
-        /// <param name="src">元ファイルのパス</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public PathConverter(string src, Format format) : this(src, format, new IO()) { }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// PathConverter
-        ///
-        /// <summary>
-        /// オブジェクトを初期化します。
-        /// </summary>
-        ///
-        /// <param name="src">元ファイルのパス</param>
-        /// <param name="format">変換後のフォーマット</param>
-        /// <param name="io">入出力用のオブジェクト</param>
+        /// <param name="src">Path of the source file.</param>
+        /// <param name="format">Archive format.</param>
+        /// <param name="io">I/O handler.</param>
         ///
         /* ----------------------------------------------------------------- */
         public PathConverter(string src, Format format, IO io) :
@@ -65,12 +54,13 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// PathConverter
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the PathConverter class with
+        /// the specified arguments.
         /// </summary>
         ///
-        /// <param name="src">元ファイルのパス</param>
-        /// <param name="format">変換後のフォーマット</param>
-        /// <param name="method">圧縮方法</param>
+        /// <param name="src">Path of the source file.</param>
+        /// <param name="format">Archive format.</param>
+        /// <param name="method">Compression method.</param>
         ///
         /* ----------------------------------------------------------------- */
         public PathConverter(string src, Format format, CompressionMethod method) :
@@ -81,21 +71,22 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// PathConverter
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the PathConverter class with
+        /// the specified arguments.
         /// </summary>
         ///
-        /// <param name="src">元ファイルのパス</param>
-        /// <param name="format">変換後のフォーマット</param>
-        /// <param name="method">圧縮方法</param>
-        /// <param name="io">入出力用のオブジェクト</param>
+        /// <param name="src">Path of the source file.</param>
+        /// <param name="format">Archive format.</param>
+        /// <param name="method">Compression method.</param>
+        /// <param name="io">I/O handler.</param>
         ///
         /* ----------------------------------------------------------------- */
         public PathConverter(string src, Format format, CompressionMethod method, IO io)
         {
             Source = src;
             Format = format;
-            CompressionMethod = method;
-            IO = io;
+            Method = method;
+            IO     = io;
         }
 
         #endregion
@@ -107,7 +98,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Source
         ///
         /// <summary>
-        /// 元ファイルのパスを取得します。
+        /// Gets the path of the source file.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -118,7 +109,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Format
         ///
         /// <summary>
-        /// 変換後のフォーマットを取得します。
+        /// Gets the archive format.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -129,18 +120,18 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Method
         ///
         /// <summary>
-        /// 変換後の圧縮方法を取得します。
+        /// Gets the compression method.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressionMethod CompressionMethod { get; }
+        public CompressionMethod Method { get; }
 
         /* ----------------------------------------------------------------- */
         ///
         /// IO
         ///
         /// <summary>
-        /// 入出力用オブジェクトを取得します。
+        /// Gets the I/O handler.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -151,23 +142,38 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Result
         ///
         /// <summary>
-        /// 変換結果を取得します。
+        /// Gets the path of the conversion result.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Entity Result => _result = _result ?? Invoke();
+        public Entity Result => _result ?? (_result = Convert());
 
         /* ----------------------------------------------------------------- */
         ///
         /// ResultFormat
         ///
         /// <summary>
-        /// Format および CompressionMethod の情報を基に変換された
-        /// 新たな Format オブジェクトを取得します。
+        /// Gets the archive format corresponding to the conversion result.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Format ResultFormat => GetFormat();
+        public Format ResultFormat
+        {
+            get
+            {
+                if (Format == Format.Tar)
+                {
+                    switch (Method)
+                    {
+                        case CompressionMethod.BZip2: return Format.BZip2;
+                        case CompressionMethod.GZip:  return Format.GZip;
+                        case CompressionMethod.XZ:    return Format.XZ;
+                        default: break;
+                    }
+                }
+                return Format;
+            }
+        }
 
         #endregion
 
@@ -175,19 +181,19 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Invoke
+        /// Convert
         ///
         /// <summary>
-        /// 変換処理を実行します。
+        /// Invokes the conversion.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private Entity Invoke()
+        private Entity Convert()
         {
             var src  = IO.Get(Source);
             var tmp  = IO.Get(src.BaseName);
             var name = src.IsDirectory ? src.Name :
-                       tmp.Extension.ToLower() == ".tar" ? tmp.BaseName :
+                       tmp.Extension.FuzzyEquals(".tar") ? tmp.BaseName :
                        tmp.Name;
             var path = IO.Combine(src.DirectoryName, $"{name}{GetExtension()}");
 
@@ -196,35 +202,10 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetFormat
-        ///
-        /// <summary>
-        /// 拡張子フィルタを取得するために必要な Format オブジェクトを
-        /// 取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private Format GetFormat()
-        {
-            if (Format == Format.Tar)
-            {
-                switch (CompressionMethod)
-                {
-                    case CompressionMethod.BZip2: return Format.BZip2;
-                    case CompressionMethod.GZip:  return Format.GZip;
-                    case CompressionMethod.XZ:    return Format.XZ;
-                    default: break;
-                }
-            }
-            return Format;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// GetExtension
         ///
         /// <summary>
-        /// 圧縮ファイル形式に対応する拡張子を取得します。
+        /// Gets the extension of the archive.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */

@@ -16,22 +16,21 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.Mixin.Logging;
+using Cube.Mixin.String;
 using System;
-using System.Threading;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ProgressFacade
+    /// ArchiveFacade
     ///
     /// <summary>
-    /// Provides functionality to report the progress for compressing or
-    /// extracting archives.
+    /// Represents the base class for compressing or extracting archives.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public abstract class ProgressFacade : ObservableBase
+    public abstract class ArchiveFacade : ProgressFacade
     {
         #region Constructors
 
@@ -44,12 +43,15 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// specified arguments.
         /// </summary>
         ///
+        /// <param name="src">Request for the transaction.</param>
+        /// <param name="settings">User settings.</param>
         /// <param name="invoker">Invoker object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected ProgressFacade(Invoker invoker) : base(invoker)
+        protected ArchiveFacade(Request src, SettingFolder settings, Invoker invoker) : base(invoker)
         {
-            _timer.Elapsed += (s, e) => Refresh(nameof(Report));
+            Request  = src;
+            Settings = settings;
         }
 
         #endregion
@@ -58,27 +60,55 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Report
+        /// Request
         ///
         /// <summary>
-        /// Gets the current progress report.
+        /// Gets the request for the transaction.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Report Report { get; } = new Report();
+        public Request Request { get; }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Progress
+        /// Settings
         ///
         /// <summary>
-        /// Gets the object to report the progress.
+        /// Gets the user settings.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IProgress<Report> Progress => _progress ?? (
-            _progress = new SuspendableProgress<Report>(_cancel.Token, _supend, OnReceive)
-        );
+        public SettingFolder Settings { get; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Destination
+        ///
+        /// <summary>
+        /// Gets or sets the path of file or directory to save.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Destination
+        {
+            get => GetProperty<string>();
+            protected set { if (SetProperty(value)) this.LogDebug($"{nameof(Destination)}:{value}"); }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Temp
+        ///
+        /// <summary>
+        /// Gets or sets the path of the working directory.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Temp
+        {
+            get => GetProperty<string>();
+            private set => SetProperty(value);
+        }
 
         #endregion
 
@@ -86,98 +116,22 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Start
+        /// SetTemp
         ///
         /// <summary>
-        /// Starts the operation.
+        /// Sets the value to the Temp property with the specified
+        /// directory.
         /// </summary>
         ///
-        /* ----------------------------------------------------------------- */
-        public virtual void Start() => _timer.Start();
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Cancel
-        ///
-        /// <summary>
-        /// Cancels the current operation.
-        /// </summary>
+        /// <param name="directory">Path of the root directory.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Cancel()
+        protected void SetTemp(string directory)
         {
-            _cancel.Cancel();
-            Resume();
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Suspend
-        ///
-        /// <summary>
-        /// Suspends the current operation.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Suspend() => _supend.Reset();
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Resume
-        ///
-        /// <summary>
-        /// Resumes the operation.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Resume() => _supend.Set();
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Terminate
-        ///
-        /// <summary>
-        /// Notifies that the operation has been completed.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected void Terminate()
-        {
-            _timer.Stop();
-
-            if (Report.Count < Report.TotalCount || Report.Bytes < Report.TotalBytes) // hack
-            {
-                this.LogDebug(
-                    $"{nameof(Report.Count)}:{Report.Count:#,0} / {Report.TotalCount:#,0}",
-                    $"{nameof(Report.Bytes)}:{Report.Bytes:#,0} / {Report.TotalBytes:#,0}"
-                );
-
-                Report.Count = Report.TotalCount;
-                Report.Bytes = Report.TotalBytes;
-
-                Refresh(nameof(Report));
-            }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnReceive
-        ///
-        /// <summary>
-        /// Occurs when the current progress report is received.
-        /// </summary>
-        ///
-        /// <param name="src">Current progress report.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected virtual void OnReceive(Report src)
-        {
-            Report.Current    = src.Current;
-            Report.Status     = src.Status;
-            Report.Count      = src.Count;
-            Report.TotalCount = src.TotalCount;
-            Report.Bytes      = src.Bytes;
-            Report.TotalBytes = src.TotalBytes;
+            if (Temp.HasValue()) return;
+            var dest = Settings.IO.Combine(directory, Guid.NewGuid().ToString("D"));
+            this.LogDebug($"{nameof(Temp)}:{dest}");
+            Temp = dest;
         }
 
         /* ----------------------------------------------------------------- */
@@ -197,19 +151,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         protected override void Dispose(bool disposing)
         {
-            if (!disposing) return;
-
-            _timer.Dispose();
-            _supend.Dispose();
+            try { _ = Settings.IO.TryDelete(Temp); }
+            finally { base.Dispose(disposing); }
         }
 
-        #endregion
-
-        #region Fields
-        private readonly System.Timers.Timer _timer = new System.Timers.Timer(100.0);
-        private readonly ManualResetEvent _supend = new ManualResetEvent(true);
-        private readonly CancellationTokenSource _cancel = new CancellationTokenSource();
-        private IProgress<Report> _progress;
         #endregion
     }
 }

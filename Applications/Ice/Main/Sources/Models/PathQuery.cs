@@ -62,7 +62,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         public static QueryMessage<PathQuerySource, string> NewMessage(string src, Format format) =>
             new QueryMessage<PathQuerySource, string>()
         {
-            Query  = new PathQuerySource(src, format),
+            Source = new PathQuerySource(src, format),
             Value  = string.Empty,
             Cancel = true,
         };
