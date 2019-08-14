@@ -101,8 +101,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool SaveRuntime
         {
-            get => Facade.SaveLocation == SaveLocation.Runtime;
-            set => SetSaveLocation(SaveLocation.Runtime, value);
+            get => Facade.SaveLocation == SaveLocation.Query;
+            set => SetSaveLocation(SaveLocation.Query, value);
         }
 
         /* ----------------------------------------------------------------- */

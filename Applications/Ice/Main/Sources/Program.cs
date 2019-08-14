@@ -71,7 +71,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 
                 switch (m.Mode)
                 {
-                    case Mode.Archive:
+                    case Mode.Compress:
                         Application.Run(v);
                         break;
                     case Mode.Extract:
