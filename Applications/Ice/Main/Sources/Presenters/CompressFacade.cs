@@ -88,9 +88,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             try
             {
-                var src = Runtime.GetValue(Request.Sources.First(), Request.Format, IO);
-
                 base.Start();
+                var src = Runtime.GetValue(Request.Sources.First(), Request.Format, IO);
                 InvokePreProcess(src);
                 Invoke(src);
                 InvokePostProcess();
@@ -153,12 +152,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void InvokePostProcess()
         {
-            Request.Mail.Then(() => MailAction.Invoke(Destination));
-            OpenAction.Invoke(
-                IO.Get(Destination),
+            OpenAction.Invoke(IO.Get(Destination),
                 Settings.Value.Compress.OpenDirectory,
                 Settings.Value.Explorer
             );
+            if (Request.Mail) MailAction.Invoke(Destination);
         }
 
         /* ----------------------------------------------------------------- */
@@ -172,9 +170,9 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void Contract(Action action)
         {
-            _ = Select   ?? throw new NullReferenceException(nameof(Select));
-            _ = Password ?? throw new NullReferenceException(nameof(Password));
-            _ = Runtime  ?? throw new NullReferenceException(nameof(Runtime));
+            Require(Select,   nameof(Select));
+            Require(Password, nameof(Password));
+            Require(Runtime,  nameof(Runtime));
 
             action();
         }

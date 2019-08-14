@@ -138,7 +138,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Format Format { get; set; } = Format.Zip;
+        public Format Format { get; set; } = Format.Unknown;
 
         /* ----------------------------------------------------------------- */
         ///

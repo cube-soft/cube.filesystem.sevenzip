@@ -195,6 +195,25 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Require
+        ///
+        /// <summary>
+        /// Requires the specified object is not null.
+        /// A NullReferenceException exception is thrown when the object
+        /// is null.
+        /// </summary>
+        ///
+        /// <param name="src">Source object.</param>
+        /// <param name="name">Object name.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected void Require(object src, string name)
+        {
+            if (src == null) throw new ArgumentNullException(name);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Dispose
         ///
         /// <summary>
