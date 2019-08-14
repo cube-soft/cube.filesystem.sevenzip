@@ -36,21 +36,21 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ProgressFacade
+        /// ArchiveFacade
         ///
         /// <summary>
-        /// Initializes a new instance of the ProgressFacade class with the
+        /// Initializes a new instance of the ArchiveFacade class with the
         /// specified arguments.
         /// </summary>
         ///
-        /// <param name="src">Request for the transaction.</param>
+        /// <param name="request">Request for the transaction.</param>
         /// <param name="settings">User settings.</param>
         /// <param name="invoker">Invoker object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected ArchiveFacade(Request src, SettingFolder settings, Invoker invoker) : base(invoker)
+        protected ArchiveFacade(Request request, SettingFolder settings, Invoker invoker) : base(invoker)
         {
-            Request  = src;
+            Request  = request;
             Settings = settings;
         }
 
@@ -82,6 +82,17 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// IO
+        ///
+        /// <summary>
+        /// Gets the I/O handler.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public IO IO => Settings.IO;
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Destination
         ///
         /// <summary>
@@ -92,7 +103,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         public string Destination
         {
             get => GetProperty<string>();
-            protected set { if (SetProperty(value)) this.LogDebug($"{nameof(Destination)}:{value}"); }
+            private set => SetProperty(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -110,9 +121,54 @@ namespace Cube.FileSystem.SevenZip.Ice
             private set => SetProperty(value);
         }
 
+        #region Queries
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Select
+        ///
+        /// <summary>
+        /// Gets or sets the query object to select the destination.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public PathQuery Select { get; set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Password
+        ///
+        /// <summary>
+        /// Gets or sets the query object to get the password.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public IQuery<string> Password { get; set; }
+
+        #endregion
+
         #endregion
 
         #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetDestination
+        ///
+        /// <summary>
+        /// Sets the value to the Destination property with the specified
+        /// value.
+        /// </summary>
+        ///
+        /// <param name="value">Path value.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected void SetDestination(string value)
+        {
+            if (value.FuzzyEquals(Destination)) return;
+            this.LogDebug($"{nameof(Destination)}:{value}");
+            Destination = value;
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -128,10 +184,13 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         protected void SetTemp(string directory)
         {
-            if (Temp.HasValue()) return;
-            var dest = Settings.IO.Combine(directory, Guid.NewGuid().ToString("D"));
-            this.LogDebug($"{nameof(Temp)}:{dest}");
-            Temp = dest;
+            if (!Temp.HasValue())
+            {
+                var dest = Settings.IO.Combine(directory, Guid.NewGuid().ToString("D"));
+                this.LogDebug($"{nameof(Temp)}:{dest}");
+                Temp = dest;
+            }
+            else this.LogDebug($"Ignore:{directory}");
         }
 
         /* ----------------------------------------------------------------- */

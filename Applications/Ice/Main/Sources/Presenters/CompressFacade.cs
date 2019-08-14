@@ -15,9 +15,10 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.FileSystem.SevenZip.Ice.Compress;
 using Cube.FileSystem.SevenZip.Ice.Settings;
 using Cube.Mixin.Logging;
-using Cube.Mixin.String;
+using Cube.Mixin.Syntax;
 using System;
 using System.Linq;
 
@@ -25,31 +26,35 @@ namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveFacade
+    /// CompressFacade
     ///
     /// <summary>
-    /// 圧縮処理を実行するクラスです。
+    /// Provides functionality to compress files and directories.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public sealed class ArchiveFacade : ProgressFacade
+    public sealed class CompressFacade : ArchiveFacade
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveFacade
+        /// CompressFacade
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the CompressFacade class with the
+        /// specified arguments.
         /// </summary>
         ///
-        /// <param name="request">コマンドライン</param>
-        /// <param name="settings">ユーザ設定</param>
+        /// <param name="request">Request for the transaction.</param>
+        /// <param name="settings">User settings.</param>
+        /// <param name="invoker">Invoker object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveFacade(Request request, SettingFolder settings) :
-            base(request, settings) { }
+        public CompressFacade(Request request,
+            SettingFolder settings,
+            Invoker invoker
+        ) : base(request, settings, invoker) { }
 
         #endregion
 
@@ -57,85 +62,14 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// RtSettings
+        /// Runtime
         ///
         /// <summary>
-        /// 圧縮処理の実行時詳細設定を取得します。
+        /// Gets the runtime settings for creating an archive.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressRuntime RtSettings { get; private set; }
-
-        #endregion
-
-        #region Events
-
-        #region RtSettingsRequested
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// RtSettingsRequested
-        ///
-        /// <summary>
-        /// 圧縮の詳細設定が要求された時に発生するイベントです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public event ValueCancelEventHandler<CompressRuntime> RtSettingsRequested;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// RaiseRtSettingsRequested
-        ///
-        /// <summary>
-        /// RuntimeSettingsRequested イベントを発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void RaiseRtSettingsRequested()
-        {
-            var info = IO.Get(Request.Sources.First());
-            var path = IO.Combine(info.DirectoryName, $"{info.BaseName}.zip");
-
-            var value = new CompressRuntime(IO) { Path = path };
-            var e = ValueEventArgs.Create(value, true);
-            RtSettingsRequested?.Invoke(this, e);
-            if (e.Cancel) throw new OperationCanceledException();
-
-            RtSettings = e.Value;
-        }
-
-        #endregion
-
-        #region MailRequired
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// MailRequested
-        ///
-        /// <summary>
-        /// メール画面の表示が要求された時に発生するイベントです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public event ValueEventHandler<string> MailRequested;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// RaiseMailRequested
-        ///
-        /// <summary>
-        /// MailRequested イベントを発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void RaiseMailRequested()
-        {
-            if (!Request.Mail) return;
-            MailRequested?.Invoke(this, ValueEventArgs.Create(Destination));
-        }
-
-        #endregion
+        public CompressRuntimeQuery Runtime { get; set; }
 
         #endregion
 
@@ -146,23 +80,24 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Start
         ///
         /// <summary>
-        /// 圧縮を開始します。
+        /// Starts the compression with the provided settings.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public override void Start()
+        public override void Start() => Contract(() =>
         {
             try
             {
-                OnProgressReset(EventArgs.Empty);
-                Archive();
-                ProgressResult();
-                RaiseMailRequested();
-                Open(Destination, Settings.Value.Compress.OpenDirectory);
+                var src = Runtime.GetValue(Request.Sources.First(), Request.Format, IO);
+
+                base.Start();
+                InvokePreProcess(src);
+                Invoke(src);
+                InvokePostProcess();
             }
             catch (OperationCanceledException) { /* user cancel */ }
-            finally { ProgressStop(); }
-        }
+            finally { Terminate(); }
+        });
 
         #endregion
 
@@ -170,135 +105,78 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Archive
+        /// Invoke
         ///
         /// <summary>
-        /// 圧縮処理を実行します。
+        /// Invokes the compression and saves the archive.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Archive()
+        private void Invoke(CompressRuntime src)
         {
-            var fmt   = GetFormat();
-            var dest  = GetTmp();
-            var query = RtSettings.Password.HasValue() || Request.Password ?
-                        new Query<string>(e => RaisePasswordRequested(e)) :
-                        null;
+            this.LogDebug($"{nameof(src.Format)}:{src.Format}", $"Method:{src.CompressionMethod}");
 
-            System.Diagnostics.Debug.Assert(RtSettings != null);
-            this.LogDebug(string.Format("Format:{0}\tMethod:{1}", fmt, RtSettings.CompressionMethod));
-
-            using (var writer = new ArchiveWriter(fmt, IO))
+            using (var writer = new ArchiveWriter(src.Format, IO))
             {
-                writer.Option = RtSettings.ToOption(Settings);
                 if (Settings.Value.Compress.Filtering) writer.Filters = Settings.Value.GetFilters();
-                foreach (var item in Request.Sources) writer.Add(item);
-                ProgressStart();
-                writer.Save(dest, query, CreateInnerProgress(x => Report = x));
+                Request.Sources.Each(e => writer.Add(e));
+                writer.Option = src.ToOption(Settings);
+                writer.Save(Temp, this.GetPasswordQuery(src), Progress);
             }
 
-            // Move
-            if (!IO.Exists(Tmp)) return;
-            IO.Move(Tmp, Destination, true);
+            if (IO.Exists(Temp)) IO.Move(Temp, Destination, true);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetFormat
+        /// InvokePreProcess
         ///
         /// <summary>
-        /// 圧縮フォーマットを取得します。
+        /// Invokes the pre-processes.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private Format GetFormat()
+        private void InvokePreProcess(CompressRuntime src)
         {
-            var f = Request.Format;
-
-            switch (f)
-            {
-                case Format.Tar:
-                case Format.Zip:
-                case Format.SevenZip:
-                case Format.Sfx:
-                    RtSettings = new CompressRuntime(f, Settings.IO);
-                    break;
-                case Format.BZip2:
-                case Format.GZip:
-                case Format.XZ:
-                    RtSettings = new CompressRuntime(Format.Tar, Settings.IO) { CompressionMethod = f.ToMethod() };
-                    break;
-                default:
-                    RaiseRtSettingsRequested();
-                    break;
-            }
-
-            return RtSettings.Format;
+            SetDestination(this.GetDestination(src));
+            SetTemp(IO.Get(Destination).DirectoryName);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetTmp
+        /// InvokePostProcess
         ///
         /// <summary>
-        /// 保存先パスを決定後、一時ファイルのパスを取得します。
+        /// Invokes the post-processes.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetTmp()
+        private void InvokePostProcess()
         {
-            Destination = GetDestination();
-            var info = IO.Get(Destination);
-            SetTmp(info.DirectoryName);
-            return Tmp;
+            Request.Mail.Then(() => MailAction.Invoke(Destination));
+            OpenAction.Invoke(
+                IO.Get(Destination),
+                Settings.Value.Compress.OpenDirectory,
+                Settings.Value.Explorer
+            );
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetDestination
+        /// Contract
         ///
         /// <summary>
-        /// 保存先パスを取得します。
+        /// Checks the conditions before executing the main operation.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetDestination()
+        private void Contract(Action action)
         {
-            if (!string.IsNullOrEmpty(RtSettings?.Path)) return RtSettings.Path;
+            _ = Select   ?? throw new NullReferenceException(nameof(Select));
+            _ = Password ?? throw new NullReferenceException(nameof(Password));
+            _ = Runtime  ?? throw new NullReferenceException(nameof(Runtime));
 
-            var cvt = new PathConverter(Request.Sources.First(), Request.Format, IO);
-            var kv = GetSaveLocation(Settings.Value.Compress, cvt.ResultFormat, cvt.Result.FullName);
-            if (kv.Key == SaveLocation.Runtime) return kv.Value;
-
-            var path = IO.Combine(kv.Value, cvt.Result.Name);
-            if (IO.Exists(path) && Settings.Value.Compress.OverwritePrompt)
-            {
-                var e = new PathQueryMessage(path, cvt.ResultFormat, true);
-                // TODO: OnDestinationRequested(e);
-                if (e.Cancel) throw new OperationCanceledException();
-                return e.Value;
-            }
-            else return path;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// RaisePasswordRequested
-        ///
-        /// <summary>
-        /// 必要に応じて PasswordRequested イベントを発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void RaisePasswordRequested(QueryMessage<string, string> e)
-        {
-            // TODO: Implementation
-            //if (RtSettings.Password.HasValue())
-            //{
-            //    e.Value  = RtSettings.Password;
-            //    e.Cancel = false;
-            //}
-            //else OnPasswordRequested(e);
+            action();
         }
 
         #endregion

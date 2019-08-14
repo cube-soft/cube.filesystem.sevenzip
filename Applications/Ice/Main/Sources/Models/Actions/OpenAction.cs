@@ -16,7 +16,6 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.Mixin.Environment;
-using Cube.Mixin.Logging;
 using Cube.Mixin.String;
 using System;
 using System.Diagnostics;
@@ -32,41 +31,8 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal sealed class OpenAction
+    internal static class OpenAction
     {
-        #region Constructors
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OpenAction
-        ///
-        /// <summary>
-        /// Initializes a new instance of the OpenAction class with the
-        /// specified arguments.
-        /// </summary>
-        ///
-        /// <param name="settings">User settings.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public OpenAction(SettingFolder settings) { Settings = settings; }
-
-        #endregion
-
-        #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Settings
-        ///
-        /// <summary>
-        /// Gets the user settings.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public SettingFolder Settings { get; }
-
-        #endregion
-
         #region Methods
 
         /* ----------------------------------------------------------------- */
@@ -78,24 +44,19 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /// <param name="src">Path to open.</param>
-        /// <param name="method">
-        /// Method to open the specified path.
-        /// </param>
+        /// <param name="method">Method to open.</param>
+        /// <param name="exec">Path of the application.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Invok(string src, OpenDirectoryMethod method)
+        public static void Invoke(Entity src, OpenDirectoryMethod method, string exec)
         {
             if (!method.HasFlag(OpenDirectoryMethod.Open)) return;
-            var fi = Settings.IO.Get(src);
-            var dest = fi.IsDirectory ? fi.FullName : fi.DirectoryName;
+            var dest = src.IsDirectory ? src.FullName : src.DirectoryName;
             if (IsSkip(dest, method)) return;
 
-            var exec = Settings.Value.Explorer.HasValue() ?
-                       Settings.Value.Explorer :
-                       "explorer.exe";
-
-            this.LogDebug($"Open:{src.Quote()}", $"Explorer:{exec.Quote()}");
-            Start(exec, src.Quote());
+            var cvt = exec.HasValue() ? exec : "explorer.exe";
+            Logger.Debug(typeof(OpenAction), $"Path:{src.FullName.Quote()}", $"Explorer:{cvt.Quote()}");
+            Start(cvt, src.FullName.Quote());
         }
 
         #endregion
@@ -111,7 +72,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private bool IsSkip(string src, OpenDirectoryMethod method) =>
+        private static bool IsSkip(string src, OpenDirectoryMethod method) =>
             method.HasFlag(OpenDirectoryMethod.SkipDesktop) ?
             src.FuzzyEquals(Environment.SpecialFolder.Desktop.GetName()) :
             false;
@@ -126,16 +87,16 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Start(string exec, string args) => new Process
+        private static void Start(string exec, string args) => new Process
         {
             StartInfo = new ProcessStartInfo
             {
-                FileName = exec,
-                Arguments = args,
-                CreateNoWindow = false,
+                FileName        = exec,
+                Arguments       = args,
+                CreateNoWindow  = false,
                 UseShellExecute = true,
                 LoadUserProfile = false,
-                WindowStyle = ProcessWindowStyle.Normal,
+                WindowStyle     = ProcessWindowStyle.Normal,
             }
         }.Start();
 

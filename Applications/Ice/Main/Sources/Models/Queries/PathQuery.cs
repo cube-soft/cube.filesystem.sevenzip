@@ -42,9 +42,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /// <param name="callback">User action.</param>
+        /// <param name="invoker">Invoker object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public PathQuery(Action<QueryMessage<PathQuerySource, string>> callback) : base(callback) { }
+        public PathQuery(Action<QueryMessage<PathQuerySource, string>> callback, Invoker invoker) :
+            base(callback, invoker) { }
 
         /* ----------------------------------------------------------------- */
         ///

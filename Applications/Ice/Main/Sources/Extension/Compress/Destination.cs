@@ -15,87 +15,72 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.FileSystem.SevenZip.Ice.Settings;
 using Cube.Mixin.String;
 using System;
-using System.ComponentModel;
-using System.Runtime.InteropServices;
+using System.Linq;
 
-namespace Cube.FileSystem.SevenZip.Ice
+namespace Cube.FileSystem.SevenZip.Ice.Compress
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// MailAction
+    /// DestinationExtension
     ///
     /// <summary>
-    /// Provides functionality to show a mail dialog.
+    /// Provides extended methods to get the destination.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal static class MailAction
+    internal static class DestinationExtension
     {
         #region Methods
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Invoke
+        /// GetDestination
         ///
         /// <summary>
-        /// Shows a mail dialog.
+        /// Gets the destination path.
         /// </summary>
         ///
+        /// <param name="src">Source object.</param>
+        /// <param name="rts">Runtime settings.</param>
+        ///
+        /// <returns>Path to save.</returns>
+        ///
         /* ----------------------------------------------------------------- */
-        public static void Invoke(string src)
+        public static string GetDestination(this CompressFacade src, CompressRuntime rts)
         {
-            var mms = new Mapi32.MapiMessage
-            {
-                subject  = "CubeICE",
-                noteText = "Attached by CubeICE",
-                flags    = 0x02, // MAPI_RECEIPT_REQUESTED
-            };
+            if (rts.Path.HasValue()) return rts.Path;
 
-            AttachFile(mms, src);
+            var io = src.IO;
+            var settings = src.Settings.Value.Compress;
 
-            var result = Mapi32.NativeMethods.MAPISendMail(
-                IntPtr.Zero,
-                IntPtr.Zero,
-                mms,
-                0x09, // MAPI_DIALOG | MAPI_LOGON_UI
-                0
-            );
+            var pc = new PathConverter(src.Request.Sources.First(), src.Request.Format, io);
+            var ps = new PathSelector(src.Request, settings, pc) { Query = src.Select };
+            if (ps.Location == SaveLocation.Query) return ps.Result;
 
-            if (result != 0) throw new Win32Exception(result);
+            var dest = io.Combine(ps.Result, pc.Result.Name);
+            return io.Exists(dest) && settings.OverwritePrompt ?
+                   AskDestination(src, dest, pc.ResultFormat) :
+                   dest;
         }
 
-        #endregion
-
-        #region Implementations
-
         /* ----------------------------------------------------------------- */
         ///
-        /// AttachFile
+        /// AskDestination
         ///
         /// <summary>
-        /// Attaches the provided file.
+        /// Asks the user to select the destination.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static void AttachFile(Mapi32.MapiMessage mms, string path)
+        private static string AskDestination(CompressFacade fc, string src, Format format)
         {
-            if (!path.HasValue()) return;
-
-            var size = Marshal.SizeOf(typeof(Mapi32.MapiFileDesc));
-            var dest = Marshal.AllocHGlobal(size);
-            var src  = new Mapi32.MapiFileDesc
-            {
-                position = -1,
-                path     = path,
-                name     = System.IO.Path.GetFileName(path),
-            };
-
-            Marshal.StructureToPtr(src, dest, false);
-
-            mms.fileCount = 1;
-            mms.files     = dest;
+            var msg = PathQuery.NewMessage(src, format);
+            fc.Select?.Request(msg);
+            if (msg.Cancel) throw new OperationCanceledException();
+            return msg.Value;
         }
 
         #endregion
