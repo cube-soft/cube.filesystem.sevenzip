@@ -24,17 +24,17 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// Mode
     ///
     /// <summary>
-    /// 実行モードを表す列挙型です。
+    /// Specifies the operation mode.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     public enum Mode
     {
-        /// <summary>無し</summary>
+        /// <summary>None</summary>
         None,
-        /// <summary>圧縮</summary>
+        /// <summary>Compress</summary>
         Compress,
-        /// <summary>解凍</summary>
+        /// <summary>Extract</summary>
         Extract,
     }
 
@@ -70,25 +70,60 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// SaveMethod
     ///
     /// <summary>
-    /// ディレクトリの生成方法を表す列挙型です。
+    /// Specifies the method to create the save directory.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [Flags]
     public enum SaveMethod
     {
-        /// <summary>作成しない</summary>
+        /// <summary>Not create</summary>
         None = 0x00,
-        /// <summary>単一フォルダの場合スキップ</summary>
+        /// <summary>Skip if all items are contained in a single directory</summary>
         SkipSingleDirectory = 0x02,
-        /// <summary>単一ファイルの場合スキップ</summary>
+        /// <summary>Skip if the archive has a file.</summary>
         SkipSingleFile = 0x04,
-        /// <summary>スキップオプション用マスク</summary>
+        /// <summary>Skip options</summary>
         SkipOptions = SkipSingleDirectory | SkipSingleFile,
-        /// <summary>作成する</summary>
+        /// <summary>Create directory</summary>
         Create = 0x01,
-        /// <summary>必要な場合に作成する</summary>
+        /// <summary>Create directory if needed</summary>
         CreateSmart = Create | SkipSingleDirectory,
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// OverwriteMethod
+    ///
+    /// <summary>
+    /// Specifies the method to overwrite a file or directory.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    [Flags]
+    public enum OverwriteMethod
+    {
+        /// <summary>Ask the user</summary>
+        Query = 0x000,
+        /// <summary>Cancel</summary>
+        Cancel = 0x002,
+        /// <summary>Yes</summary>
+        Yes = 0x006,
+        /// <summary>No</summary>
+        No = 0x007,
+        /// <summary>Rename instead of overwriting</summary>
+        Rename = 0x010,
+        /// <summary>Mask for operations</summary>
+        Operations = 0x01f,
+
+        /// <summary>Same as the previous operation</summary>
+        Always = 0x100,
+        /// <summary>Always yes</summary>
+        AlwaysYes = Always | Yes,
+        /// <summary>Always no</summary>
+        AlwaysNo = Always | No,
+        /// <summary>Always rename</summary>
+        AlwaysRename = Always | Rename,
     }
 
     /* --------------------------------------------------------------------- */
@@ -96,20 +131,20 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// OpenMethod
     ///
     /// <summary>
-    /// 圧縮・展開後にディレクトリを開く処理を表す列挙型です。
+    /// Specifies the method to open the directory.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [Flags]
     public enum OpenMethod
     {
-        /// <summary>開かない</summary>
+        /// <summary>Not open</summary>
         None = 0x0000,
-        /// <summary>デスクトップの場合は開かない</summary>
+        /// <summary>Skip if the specified path represents the Desktop</summary>
         SkipDesktop = 0x0002,
-        /// <summary>開く</summary>
+        /// <summary>Open directory</summary>
         Open = 0x0001,
-        /// <summary>デスクトップ以外の場合に開く</summary>
+        /// <summary>Open directory if needed</summary>
         OpenNotDesktop = Open | SkipDesktop,
     }
 }
