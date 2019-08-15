@@ -48,7 +48,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         public static IEnumerable<ContextMenu> ToContextMenuGroup(this PresetMenu src)
         {
             var dest = new List<ContextMenu>();
-            Add(src, PresetMenu.Compress, ArchiveMenu, dest);
+            Add(src, PresetMenu.Compress, CompressMenu, dest);
             Add(src, PresetMenu.Extract, ExtractMenu, dest);
             Add(src, PresetMenu.Mail,    MailMenu,    dest);
             return dest;
@@ -97,12 +97,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* --------------------------------------------------------------------- */
         public static string ToName(this PresetMenu src)
         {
-            if ((src & PresetMenu.CompressMask) != 0) return Find(src, ArchiveNames);
-            if ((src & PresetMenu.ExtractMask) != 0) return Find(src, ExtractNames);
-            if ((src & PresetMenu.MailMask)    != 0) return Find(src, MailNames);
-            if ((src & PresetMenu.Compress)        != 0) return Properties.Resources.CtxArchive;
-            if ((src & PresetMenu.Extract)        != 0) return Properties.Resources.CtxExtract;
-            if ((src & PresetMenu.Mail)           != 0) return Properties.Resources.CtxMail;
+            if ((src & PresetMenu.CompressMask) != 0) return Find(src, CompressNames);
+            if ((src & PresetMenu.ExtractMask)  != 0) return Find(src, ExtractNames);
+            if ((src & PresetMenu.MailMask)     != 0) return Find(src, MailNames);
+            if ((src & PresetMenu.Compress)     != 0) return Properties.Resources.CtxArchive;
+            if ((src & PresetMenu.Extract)      != 0) return Properties.Resources.CtxExtract;
+            if ((src & PresetMenu.Mail)         != 0) return Properties.Resources.CtxMail;
             return string.Empty;
         }
 
@@ -122,11 +122,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         public static IEnumerable<string> ToArguments(this PresetMenu src)
         {
             if ((src & PresetMenu.CompressMask) != 0) return Find(src, ArchiveArguments);
-            if ((src & PresetMenu.ExtractMask) != 0) return Find(src, ExtractArguments);
-            if ((src & PresetMenu.MailMask)    != 0) return Find(src, MailArguments);
-            if ((src & PresetMenu.Compress)        != 0) return Find(PresetMenu.CompressZip, ArchiveArguments);
-            if ((src & PresetMenu.Extract)        != 0) return new[] { "/x" };
-            if ((src & PresetMenu.Mail)           != 0) return Find(PresetMenu.MailZip, MailArguments);
+            if ((src & PresetMenu.ExtractMask)  != 0) return Find(src, ExtractArguments);
+            if ((src & PresetMenu.MailMask)     != 0) return Find(src, MailArguments);
+            if ((src & PresetMenu.Compress)     != 0) return Find(PresetMenu.CompressZip, ArchiveArguments);
+            if ((src & PresetMenu.Extract)      != 0) return new[] { "/x" };
+            if ((src & PresetMenu.Mail)         != 0) return Find(PresetMenu.MailZip, MailArguments);
             return new string[0];
         }
 
@@ -200,14 +200,14 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* --------------------------------------------------------------------- */
         ///
-        /// ArchiveNames
+        /// CompressNames
         ///
         /// <summary>
         /// 圧縮に関連するメニューと名前の対応関係一覧を取得します。
         /// </summary>
         ///
         /* --------------------------------------------------------------------- */
-        private static IDictionary<PresetMenu, string> ArchiveNames { get; } =
+        private static IDictionary<PresetMenu, string> CompressNames { get; } =
             new Dictionary<PresetMenu, string>
             {
                 { PresetMenu.CompressZip,         Properties.Resources.CtxZip         },
@@ -217,7 +217,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                 { PresetMenu.CompressGZip,        Properties.Resources.CtxGZip        },
                 { PresetMenu.CompressXz,          Properties.Resources.CtxXz          },
                 { PresetMenu.CompressSfx,         Properties.Resources.CtxSfx         },
-                { PresetMenu.CompressOthers,     Properties.Resources.CtxDetails     },
+                { PresetMenu.CompressOthers,      Properties.Resources.CtxDetails     },
             };
 
         /* --------------------------------------------------------------------- */
@@ -240,7 +240,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                 { PresetMenu.MailGZip,        Properties.Resources.CtxGZip        },
                 { PresetMenu.MailXz,          Properties.Resources.CtxXz          },
                 { PresetMenu.MailSfx,         Properties.Resources.CtxSfx         },
-                { PresetMenu.MailOthers,     Properties.Resources.CtxDetails     },
+                { PresetMenu.MailOthers,      Properties.Resources.CtxDetails     },
             };
 
         /* --------------------------------------------------------------------- */
@@ -284,7 +284,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                 { PresetMenu.CompressGZip,        new[] { "/c:gzip" }      },
                 { PresetMenu.CompressXz,          new[] { "/c:xz" }        },
                 { PresetMenu.CompressSfx,         new[] { "/c:exe" }       },
-                { PresetMenu.CompressOthers,     new[] { "/c:detail" }    },
+                { PresetMenu.CompressOthers,      new[] { "/c:detail" }    },
             };
 
         /* --------------------------------------------------------------------- */
@@ -307,7 +307,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                 { PresetMenu.MailGZip,        new[] { "/c:gzip", "/m" }      },
                 { PresetMenu.MailXz,          new[] { "/c:xz", "/m" }        },
                 { PresetMenu.MailSfx,         new[] { "/c:exe", "/m" }       },
-                { PresetMenu.MailOthers,     new[] { "/c:detail", "/m" }    },
+                { PresetMenu.MailOthers,      new[] { "/c:detail", "/m" }    },
             };
 
         /* --------------------------------------------------------------------- */
@@ -334,7 +334,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* --------------------------------------------------------------------- */
         ///
-        /// ArchiveMenu
+        /// CompressMenu
         ///
         /// <summary>
         /// 圧縮に関連するメニューと ContextMenu オブジェクトの対応関係一覧を
@@ -342,7 +342,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* --------------------------------------------------------------------- */
-        private static IDictionary<PresetMenu, ContextMenu> ArchiveMenu { get; } =
+        private static IDictionary<PresetMenu, ContextMenu> CompressMenu { get; } =
             new OrderedDictionary<PresetMenu, ContextMenu>
             {
                 { PresetMenu.CompressZip,         ToContextMenu(PresetMenu.CompressZip)         },
@@ -352,7 +352,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                 { PresetMenu.CompressGZip,        ToContextMenu(PresetMenu.CompressGZip)        },
                 { PresetMenu.CompressXz,          ToContextMenu(PresetMenu.CompressXz)          },
                 { PresetMenu.CompressSfx,         ToContextMenu(PresetMenu.CompressSfx)         },
-                { PresetMenu.CompressOthers,     ToContextMenu(PresetMenu.CompressOthers)     },
+                { PresetMenu.CompressOthers,      ToContextMenu(PresetMenu.CompressOthers)      },
             };
 
         /* --------------------------------------------------------------------- */
@@ -375,7 +375,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                 { PresetMenu.MailGZip,        ToContextMenu(PresetMenu.MailGZip)        },
                 { PresetMenu.MailXz,          ToContextMenu(PresetMenu.MailXz)          },
                 { PresetMenu.MailSfx,         ToContextMenu(PresetMenu.MailSfx)         },
-                { PresetMenu.MailOthers,     ToContextMenu(PresetMenu.MailOthers)     },
+                { PresetMenu.MailOthers,      ToContextMenu(PresetMenu.MailOthers)      },
             };
 
         /* --------------------------------------------------------------------- */

@@ -34,7 +34,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// PathConverter
+        /// ArchiveName
         ///
         /// <summary>
         /// Initializes a new instance of the PathConverter class with
@@ -51,7 +51,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// PathConverter
+        /// ArchiveName
         ///
         /// <summary>
         /// Initializes a new instance of the PathConverter class with
@@ -68,7 +68,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// PathConverter
+        /// ArchiveName
         ///
         /// <summary>
         /// Initializes a new instance of the PathConverter class with

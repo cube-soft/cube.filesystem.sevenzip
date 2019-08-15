@@ -225,7 +225,6 @@ namespace Cube.FileSystem.SevenZip.Ice
         private readonly System.Timers.Timer _timer = new System.Timers.Timer(100.0);
         private readonly ManualResetEvent _supend = new ManualResetEvent(true);
         private readonly CancellationTokenSource _cancel = new CancellationTokenSource();
-        private IProgress<Report> _progress;
         #endregion
     }
 }

@@ -15,11 +15,9 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.IO;
 using Cube.Mixin.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -50,13 +48,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="invoker">Invoker object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ExtractFacade(Request request,
-            SettingFolder settings,
-            Invoker invoker
-        ) : base(request, settings, invoker)
-        {
-            Source = Request.Sources.First();
-        }
+        public ExtractFacade(Request request, SettingFolder settings, Invoker invoker) :
+            base(request, settings, invoker) { }
 
         #endregion
 
@@ -64,29 +57,14 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Source
+        /// Overwrite
         ///
         /// <summary>
-        /// 解凍するファイルのパスを取得します。
+        /// Gets or sets the query object to determine the overwrite method.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Source { get; private set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OpenDirectoryName
-        ///
-        /// <summary>
-        /// 保存後に開くディレクトリ名を取得します。
-        /// </summary>
-        ///
-        /// <remarks>
-        /// 取得できる値は Destination からの相対パスとなります。
-        /// </remarks>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string OpenDirectoryName { get; private set; }
+        public OverwriteQuery Overwrite { get; set; }
 
         #endregion
 
@@ -97,7 +75,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Start
         ///
         /// <summary>
-        /// 展開を開始します。
+        /// Starts to extract the provided archives.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -105,9 +83,16 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             foreach (var src in Request.Sources)
             {
-                Source = src;
-                OnProgressReset(EventArgs.Empty);
-                StartCore();
+                try
+                {
+                    base.Start();
+                    var explorer = new DirectoryExplorer(SelectAction.Get(this, src), Settings);
+                    InvokePreProcess(explorer);
+                    Invoke(src, explorer);
+                    InvokePostProcess(src, explorer);
+                }
+                catch (OperationCanceledException) { /* user cancel */ }
+                finally { Terminate(); }
             }
         }
 
@@ -117,64 +102,65 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// StartCore
+        /// Invoke
         ///
         /// <summary>
-        /// 展開を開始します。
+        /// Invokes the main operation.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void StartCore()
+        private void Invoke(string src, DirectoryExplorer explorer) => Create(src, e =>
         {
-            try
-            {
-                using (var reader = new ArchiveReader(Source, Password, IO))
-                {
-                    this.LogDebug($"Format:{reader.Format}\tSource:{Source}");
+            this.LogDebug($"{nameof(e.Format)}:{e.Format}", $"{nameof(e.Source)}:{e.Source}");
+            if (e.Items.Count == 1) ExtractItem(e, 0, explorer);
+            else Extract(e, explorer);
+        });
 
-                    var dirs = new DirectoryExplorer(
-                        new PathSelector(Request, Settings.Value.Extract, IO) { Source = Source }.Result,
-                        Settings
-                    );
-
-                    SetTemp(dirs.RootDirectory);
-
-                    if (reader.Items.Count == 1) ExtractOne(reader, dirs);
-                    else Extract(reader, dirs);
-
-                    Open(IO.Combine(Destination, OpenDirectoryName), Settings.Value.Extract.OpenDirectory);
-                }
-                DeleteSource();
-            }
-            catch (OperationCanceledException) { /* user cancel */ }
-            finally { Terminate(); }
+        /* ----------------------------------------------------------------- */
+        ///
+        /// InvokePreProcess
+        ///
+        /// <summary>
+        /// Invokes the pre-process.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void InvokePreProcess(DirectoryExplorer explorer)
+        {
+            SetTemp(explorer.RootDirectory);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ExtractOne
+        /// InvokePostProcess
         ///
         /// <summary>
-        /// 1 項目のみの圧縮ファイルを展開します。展開後のファイルが TAR
-        /// 形式の場合、さらに展開を試みます。
+        /// Invokes the post-process.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void ExtractOne(ArchiveReader reader, DirectoryExplorer dirs)
+        private void InvokePostProcess(string src, DirectoryExplorer explorer)
         {
-            var item = reader.Items[0];
-            var path = IO.Combine(Temp, item.FullName);
-            item.Extract(Temp, Progress);
+            OpenAction.Invoke(IO.Get(explorer.OpenDirectory),
+                Settings.Value.Extract.OpenMethod,
+                Settings.Value.Explorer
+            );
+            if (Settings.Value.Extract.DeleteSource) _ = IO.TryDelete(src);
+        }
 
-            if (Formats.FromFile(path) != Format.Tar)
-            {
-                Report.TotalBytes = IO.Get(path).Length;
-                // IsTrimExtension(reader.Format)
-                dirs.Invoke(IO.Get(Source).BaseName, reader.Items);
-                SetDestination(dirs.SaveDirectory);
-                Move(item);
-            }
-            else using (var r = new ArchiveReader(path, Password, IO)) Extract(r, dirs);
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create
+        ///
+        /// <summary>
+        /// Creates a new instance of the ArchiveReader class and invokes
+        /// the specified action.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Create(string src, Action<ArchiveReader> callback)
+        {
+            using (var e = new ArchiveReader(src, Password, IO)) callback(e);
         }
 
         /* ----------------------------------------------------------------- */
@@ -182,85 +168,55 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Extract
         ///
         /// <summary>
-        /// 圧縮ファイルを展開します。
+        /// Extracts the specified archive.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Extract(ArchiveReader reader, DirectoryExplorer dirs)
+        private void Extract(ArchiveReader src, DirectoryExplorer explorer)
         {
-            dirs.Invoke(IO.Get(Source).BaseName, reader.Items);
-            SetDestination(dirs.SaveDirectory);
-
-            if (Settings.Value.Extract.Filtering) reader.Filters = Settings.Value.GetFilters();
-            ExtractCore(reader, CreateInnerProgress(e =>
+            SetDestination(explorer, IO.Get(src.Source).BaseName, src.Items);
+            src.Filters = Settings.Value.GetFilters(Settings.Value.Extract.Filtering);
+            src.Invoke(Temp, GetProgress(e =>
             {
-                Report = e;
+                OnReceive(e);
                 if (Report.Status == ReportStatus.End) Move(e.Current);
             }));
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ExtractCore
+        /// ExtractItem
         ///
         /// <summary>
-        /// 展開処理を実行します。
+        /// Extracts an archive item.
         /// </summary>
         ///
-        /// <remarks>
-        /// ArchiveItem.Extract は、入力されたパスワードが間違っていた場合
-        /// には EncryptionException を送出し、ユーザがパスワード入力を
-        /// キャンセルした場合には UserCancelException を送出します。
-        /// ここでは、EncryptionException が送出された場合には再実行し、
-        /// ユーザに再度パスワード入力を促しています。
-        /// </remarks>
-        ///
         /* ----------------------------------------------------------------- */
-        private void ExtractCore(ArchiveReader src, IProgress<Report> progress)
+        private void ExtractItem(ArchiveReader src, int index, DirectoryExplorer explorer)
         {
-            bool retry;
-            do
-            {
-                try
-                {
-                    src.Extract(Temp, progress);
-                    retry = false;
-                }
-                catch (EncryptionException /* e */) { retry = true; }
-            }
-            while (retry);
+            SetDestination(explorer, IO.Get(src.Source).GetBaseName(src.Format), src.Items);
+
+            var item = src.Items[index];
+            item.Invoke(Temp, GetProgress());
+
+            var dest = IO.Combine(Temp, item.FullName);
+            if (Formats.FromFile(dest) != Format.Tar) Move(item);
+            else Create(dest, e => Extract(e, explorer)); // *.tar
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// IsTrimExtension
+        /// SetDestination
         ///
         /// <summary>
-        /// 拡張子を除去すべきかどうかを判別します。
+        /// Sets the destination path.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private bool IsTrimExtension(Format src) =>
-            new List<Format>
-            {
-                Format.BZip2,
-                Format.GZip,
-                Format.XZ,
-            }.Contains(src);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// DeleteSource
-        ///
-        /// <summary>
-        /// 展開対象となった圧縮ファイルを削除します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void DeleteSource()
+        private void SetDestination(DirectoryExplorer src, string basename, IEnumerable<ArchiveItem> items)
         {
-            if (!Settings.Value.Extract.DeleteSource) return;
-            IO.Delete(Source);
+            src.Invoke(basename, items);
+            SetDestination(src.SaveDirectory);
         }
 
         /* ----------------------------------------------------------------- */
@@ -268,7 +224,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Move
         ///
         /// <summary>
-        /// Moves from the temporary directory to the specified directory.
+        /// Moves from the temporary directory to the provided directory.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -278,79 +234,8 @@ namespace Cube.FileSystem.SevenZip.Ice
             if (!src.Exists) return;
 
             var dest = IO.Get(IO.Combine(Destination, item.FullName));
-            if (dest.Exists)
-            {
-                if (item.IsDirectory) return;
-                if (!base.Overwrite.HasFlag(OverwriteMode.Always)) RaiseOverwriteRequested(src, dest);
-                Overwrite(src, dest);
-            }
-            else Move(src, dest);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Move
-        ///
-        /// <summary>
-        /// ファイルを移動します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Move(Entity src, Entity dest)
-        {
-            if (src.IsDirectory)
-            {
-                if (!dest.Exists)
-                {
-                    IO.CreateDirectory(dest.FullName);
-                    IO.SetAttributes(dest.FullName, src.Attributes);
-                    IO.SetCreationTime(dest.FullName, src.CreationTime);
-                    IO.SetLastWriteTime(dest.FullName, src.LastWriteTime);
-                    IO.SetLastAccessTime(dest.FullName, src.LastAccessTime);
-                }
-            }
-            else IO.Move(src.FullName, dest.FullName, true);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Overwrite
-        ///
-        /// <summary>
-        /// ファイルを上書きコピーします。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Overwrite(Entity src, Entity dest)
-        {
-            switch (base.Overwrite & OverwriteMode.Operations)
-            {
-                case OverwriteMode.Yes:
-                    Move(src, dest);
-                    break;
-                case OverwriteMode.Rename:
-                    Move(src, IO.Get(IO.GetUniqueName(dest.FullName)));
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// RaiseOverwriteRequested
-        ///
-        /// <summary>
-        /// OverwriteRequested イベントを発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void RaiseOverwriteRequested(Entity src, Entity dest)
-        {
-            var e = new OverwriteEventArgs(src, dest);
-            // TODO: OnOverwriteRequested(e);
-            if (e.Result == OverwriteMode.Cancel) throw new OperationCanceledException();
-            base.Overwrite = e.Result;
+            if (dest.Exists) IO.Move(src, dest, Overwrite.GetValue(src, dest));
+            else IO.Move(src, dest);
         }
 
         #endregion

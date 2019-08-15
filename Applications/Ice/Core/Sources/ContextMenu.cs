@@ -143,10 +143,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void Reset()
         {
-            _name         = string.Empty;
-            _arguments    = string.Empty;
-            _iconIndex    = 0;
-            _children     = new List<ContextMenu>();
+            _name      = string.Empty;
+            _arguments = string.Empty;
+            _iconIndex = 0;
+            _children  = new List<ContextMenu>();
         }
 
         #endregion

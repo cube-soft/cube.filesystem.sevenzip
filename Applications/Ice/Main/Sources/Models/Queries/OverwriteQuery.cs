@@ -1,39 +1,193 @@
-﻿using System;
+﻿/* ------------------------------------------------------------------------- */
+//
+// Copyright (c) 2010 CubeSoft, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+/* ------------------------------------------------------------------------- */
+using Cube.Mixin.Generics;
+using System;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
+    #region OverwriteQuery
+
     /* --------------------------------------------------------------------- */
     ///
-    /// OverwriteMethod
+    /// OverwriteQuery
     ///
     /// <summary>
-    /// Specifies the method to overwrite a file or directory.
+    /// Provides functionality to determine the overwrite method.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [Flags]
-    public enum OverwriteMethod
+    public sealed class OverwriteQuery : Query<OverwriteQuerySource, OverwriteMethod>
     {
-        /// <summary>Ask the user</summary>
-        Query = 0x000,
-        /// <summary>Cancel</summary>
-        Cancel = 0x002,
-        /// <summary>Yes</summary>
-        Yes = 0x006,
-        /// <summary>No</summary>
-        No = 0x007,
-        /// <summary>Rename instead of overwriting</summary>
-        Rename = 0x010,
-        /// <summary>Mask for operations</summary>
-        Operations = 0x01f,
+        #region Constructors
 
-        /// <summary>Same as the previous action</summary>
-        Always = 0x100,
-        /// <summary>Always yes</summary>
-        AlwaysYes = Always | Yes,
-        /// <summary>Always no</summary>
-        AlwaysNo = Always | No,
-        /// <summary>Always rename</summary>
-        AlwaysRename = Always | Rename,
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OverwriteQuery
+        ///
+        /// <summary>
+        /// Initializes a new instance of the OverwriteQuery class
+        /// with the specified arguments.
+        /// </summary>
+        ///
+        /// <param name="callback">Callback action for the request.</param>
+        /// <param name="invoker">Invoker object.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public OverwriteQuery(Action<OverwriteQueryMessage> callback, Invoker invoker) :
+            base(e => callback(e.TryCast<OverwriteQueryMessage>()), invoker) { }
+
+        #endregion
+
+        #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetValue
+        ///
+        /// <summary>
+        /// Gets the overwrite method.
+        /// </summary>
+        ///
+        /// <param name="src">File information to overwrite.</param>
+        /// <param name="dest">File information to be overwritten.</param>
+        ///
+        /// <returns>Overwrite method.</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public OverwriteMethod GetValue(Entity src, Entity dest)
+        {
+            if (!_value.HasFlag(OverwriteMethod.Always)) _value = Request(src, dest);
+            return _value;
+        }
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Request
+        ///
+        /// <summary>
+        /// Asks the user to select the overwrite method.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private OverwriteMethod Request(Entity src, Entity dest)
+        {
+            var msg = new OverwriteQueryMessage
+            {
+                Source = new OverwriteQuerySource(src, dest),
+                Value  = OverwriteMethod.Query,
+                Cancel = false,
+            };
+
+            Request(msg);
+            if (msg.Cancel) throw new OperationCanceledException();
+            return msg.Value;
+        }
+
+        #endregion
+
+        #region Fields
+        private OverwriteMethod _value = OverwriteMethod.Query;
+        #endregion
     }
+
+    #endregion
+
+    #region OverwriteQuerySource
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// OverwriteQuerySource
+    ///
+    /// <summary>
+    /// Represents the request information to query an overwrite method.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public sealed class OverwriteQuerySource
+    {
+        #region Constructors
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OverwriteQuerySource
+        ///
+        /// <summary>
+        /// Initializes a new instance of the OverwriteQuerySource class
+        /// with the specified arguments.
+        /// </summary>
+        ///
+        /// <param name="src">File information to overwrite.</param>
+        /// <param name="dest">File information to be overwritten.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public OverwriteQuerySource(Entity src, Entity dest)
+        {
+            Source      = src;
+            Destination = dest;
+        }
+
+        #endregion
+
+        #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Source
+        ///
+        /// <summary>
+        /// Gets the file information to overwrite.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public Entity Source { get; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Destination
+        ///
+        /// <summary>
+        /// Gets the file information to be overwritten.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public Entity Destination { get; }
+
+        #endregion
+    }
+
+    #endregion
+
+    #region OverwriteQueryMessage
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// OverwriteQueryMessage
+    ///
+    /// <summary>
+    /// Represents the message for the OverwriteQuery class.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public sealed class OverwriteQueryMessage : QueryMessage<OverwriteQuerySource, OverwriteMethod> { }
+
+    #endregion
 }

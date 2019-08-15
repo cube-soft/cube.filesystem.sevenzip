@@ -51,10 +51,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="invoker">Invoker object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressFacade(Request request,
-            SettingFolder settings,
-            Invoker invoker
-        ) : base(request, settings, invoker) { }
+        public CompressFacade(Request request, SettingFolder settings, Invoker invoker) :
+            base(request, settings, invoker) { }
 
         #endregion
 

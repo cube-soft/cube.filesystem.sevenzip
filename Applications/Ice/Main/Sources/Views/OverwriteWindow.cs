@@ -15,7 +15,6 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Forms;
 using Cube.Images.Icons;
 using Cube.Mixin.ByteFormat;
 using System;
@@ -53,12 +52,12 @@ namespace Cube.FileSystem.SevenZip.Ice
 
             IconPictureBox.Image = StockIcons.Warning.GetIcon(IconSize.Large).ToBitmap();
 
-            YesButton.Click          += (s, e) => Execute(OverwriteMode.Yes);
-            NoButton.Click           += (s, e) => Execute(OverwriteMode.No);
-            ExitButton.Click         += (s, e) => Execute(OverwriteMode.Cancel);
-            AlwaysYesButton.Click    += (s, e) => Execute(OverwriteMode.AlwaysYes);
-            AlwaysNoButton.Click     += (s, e) => Execute(OverwriteMode.AlwaysNo);
-            AlwaysRenameButton.Click += (s, e) => Execute(OverwriteMode.AlwaysRename);
+            YesButton.Click          += (s, e) => Execute(OverwriteMethod.Yes);
+            NoButton.Click           += (s, e) => Execute(OverwriteMethod.No);
+            ExitButton.Click         += (s, e) => Execute(OverwriteMethod.Cancel);
+            AlwaysYesButton.Click    += (s, e) => Execute(OverwriteMethod.AlwaysYes);
+            AlwaysNoButton.Click     += (s, e) => Execute(OverwriteMethod.AlwaysNo);
+            AlwaysRenameButton.Click += (s, e) => Execute(OverwriteMethod.AlwaysRename);
         }
 
         #endregion
@@ -102,7 +101,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public OverwriteMode OverwriteMode { get; private set; } = OverwriteMode.Cancel;
+        public OverwriteMethod Value { get; private set; } = OverwriteMethod.Cancel;
 
         #endregion
 
@@ -181,9 +180,9 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Execute(OverwriteMode mode)
+        private void Execute(OverwriteMethod mode)
         {
-            OverwriteMode = mode;
+            Value = mode;
             Close();
         }
 

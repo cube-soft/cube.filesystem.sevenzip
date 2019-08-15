@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Mixin.Generics;
 using System;
 
 namespace Cube.FileSystem.SevenZip.Ice
@@ -45,8 +46,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="invoker">Invoker object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public PathQuery(Action<QueryMessage<PathQuerySource, string>> callback, Invoker invoker) :
-            base(callback, invoker) { }
+        public PathQuery(Action<PathQueryMessage> callback, Invoker invoker) :
+            base(e => callback(e.TryCast<PathQueryMessage>()), invoker) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -61,8 +62,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="format">Compression format.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static QueryMessage<PathQuerySource, string> NewMessage(string src, Format format) =>
-            new QueryMessage<PathQuerySource, string>()
+        public static PathQueryMessage NewMessage(string src, Format format) => new PathQueryMessage
         {
             Source = new PathQuerySource(src, format),
             Value  = string.Empty,
@@ -126,6 +126,21 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         public Format Format { get; }
     }
+
+    #endregion
+
+    #region PathQueryMessage
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// PathQueryMessage
+    ///
+    /// <summary>
+    /// Represents the message for the PathQuery class.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public sealed class PathQueryMessage : QueryMessage<PathQuerySource, string> { }
 
     #endregion
 }
