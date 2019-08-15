@@ -24,31 +24,35 @@ namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// DirectoryExplorer
+    /// PathExplorer
     ///
     /// <summary>
-    /// Provides functionality to search directories.
+    /// Provides functionality to determine the paths of directories.
     /// </summary>
     ///
+    /// <remarks>
+    /// The class is used in the ExtractFacade class.
+    /// </remarks>
+    ///
     /* --------------------------------------------------------------------- */
-    internal sealed class DirectoryExplorer
+    internal sealed class PathExplorer
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// DirectoryExplorer
+        /// PathExplorer
         ///
         /// <summary>
-        /// Initializes a new instance of the DirectoryExplorer class
-        /// with the specified arguments.
+        /// Initializes a new instance of the PathExplorer class with the
+        /// specified arguments.
         /// </summary>
         ///
         /// <param name="root">Path of the root directory.</param>
         /// <param name="settings">User settings.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public DirectoryExplorer(string root, SettingFolder settings)
+        public PathExplorer(string root, SettingFolder settings)
         {
             IO      = settings.IO;
             Method  = settings.Value.Extract.SaveMethod;

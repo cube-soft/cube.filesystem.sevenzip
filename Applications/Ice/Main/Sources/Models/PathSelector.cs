@@ -29,7 +29,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     ///
     /// <summary>
     /// Provides functionality to select the path of file or directory
-    /// to save.
+    /// that is saved the compression or extraction results.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */

@@ -86,7 +86,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                 try
                 {
                     base.Start();
-                    var explorer = new DirectoryExplorer(SelectAction.Get(this, src), Settings);
+                    var explorer = new PathExplorer(SelectAction.Get(this, src), Settings);
                     InvokePreProcess(explorer);
                     Invoke(src, explorer);
                     InvokePostProcess(src, explorer);
@@ -109,7 +109,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Invoke(string src, DirectoryExplorer explorer) => Create(src, e =>
+        private void Invoke(string src, PathExplorer explorer) => Create(src, e =>
         {
             this.LogDebug($"{nameof(e.Format)}:{e.Format}", $"{nameof(e.Source)}:{e.Source}");
             if (e.Items.Count == 1) ExtractItem(e, 0, explorer);
@@ -125,7 +125,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void InvokePreProcess(DirectoryExplorer explorer)
+        private void InvokePreProcess(PathExplorer explorer)
         {
             SetTemp(explorer.RootDirectory);
         }
@@ -139,7 +139,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void InvokePostProcess(string src, DirectoryExplorer explorer)
+        private void InvokePostProcess(string src, PathExplorer explorer)
         {
             OpenAction.Invoke(IO.Get(explorer.OpenDirectory),
                 Settings.Value.Extract.OpenMethod,
@@ -172,7 +172,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Extract(ArchiveReader src, DirectoryExplorer explorer)
+        private void Extract(ArchiveReader src, PathExplorer explorer)
         {
             SetDestination(explorer, IO.Get(src.Source).BaseName, src.Items);
             src.Filters = Settings.Value.GetFilters(Settings.Value.Extract.Filtering);
@@ -192,7 +192,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void ExtractItem(ArchiveReader src, int index, DirectoryExplorer explorer)
+        private void ExtractItem(ArchiveReader src, int index, PathExplorer explorer)
         {
             SetDestination(explorer, IO.Get(src.Source).GetBaseName(src.Format), src.Items);
 
@@ -213,7 +213,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void SetDestination(DirectoryExplorer src, string basename, IEnumerable<ArchiveItem> items)
+        private void SetDestination(PathExplorer src, string basename, IEnumerable<ArchiveItem> items)
         {
             src.Invoke(basename, items);
             SetDestination(src.SaveDirectory);
