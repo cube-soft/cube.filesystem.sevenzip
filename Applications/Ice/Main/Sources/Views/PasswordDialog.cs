@@ -61,14 +61,14 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Password
+        /// Value
         ///
         /// <summary>
         /// Gets the password.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Password => PasswordTextBox.Text;
+        public string Value => PasswordTextBox.Text;
 
         #endregion
     }

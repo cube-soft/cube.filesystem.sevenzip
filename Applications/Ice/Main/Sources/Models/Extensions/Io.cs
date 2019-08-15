@@ -15,8 +15,10 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Mixin.ByteFormat;
 using Cube.Mixin.IO;
 using System.Linq;
+using System.Text;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -110,6 +112,27 @@ namespace Cube.FileSystem.SevenZip.Ice
             TrimExtension(src.BaseName) :
             src.BaseName;
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// AppendLine
+        ///
+        /// <summary>
+        /// Appends the string of the specified file information.
+        /// </summary>
+        ///
+        /// <param name="src">String builder.</param>
+        /// <param name="entity">File information.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static StringBuilder AppendLine(this StringBuilder src, Entity entity) =>
+            entity == null ?
+            src.AppendLine(Properties.Resources.MessageUnknownFile) :
+            src.AppendLine(entity.FullName)
+               .AppendBytes(entity)
+               .AppendLine()
+               .AppendTime(entity)
+               .AppendLine();
+
         #endregion
 
         #region Implementations
@@ -128,6 +151,38 @@ namespace Cube.FileSystem.SevenZip.Ice
             var index = src.LastIndexOf('.');
             return index < 0 ? src : src.Substring(0, index);
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// AppendBytes
+        ///
+        /// <summary>
+        /// Appends the string that represents the bytes of the specified
+        /// file.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private static StringBuilder AppendBytes(this StringBuilder src, Entity entity) =>
+            src.AppendFormat("{0} : {1}",
+                Properties.Resources.MessageBytes,
+                entity.Length.ToPrettyBytes()
+            );
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// AppendTime
+        ///
+        /// <summary>
+        /// Appends the string that represents the last updated time of
+        /// the specified file.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private static StringBuilder AppendTime(this StringBuilder src, Entity entity) =>
+            src.AppendFormat("{0} : {1}",
+                Properties.Resources.MessageLastWriteTime,
+                entity.LastWriteTime.ToString("yyyy/MM/dd HH:mm:ss")
+            );
 
         #endregion
     }

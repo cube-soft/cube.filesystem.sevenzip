@@ -16,7 +16,6 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.Images.Icons;
-using Cube.Mixin.ByteFormat;
 using System;
 using System.ComponentModel;
 using System.Text;
@@ -39,10 +38,10 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OverwriteForm
+        /// OverwriteDialog
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the OverwriteDialog class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -52,12 +51,12 @@ namespace Cube.FileSystem.SevenZip.Ice
 
             IconPictureBox.Image = StockIcons.Warning.GetIcon(IconSize.Large).ToBitmap();
 
-            YesButton.Click          += (s, e) => Execute(OverwriteMethod.Yes);
-            NoButton.Click           += (s, e) => Execute(OverwriteMethod.No);
-            ExitButton.Click         += (s, e) => Execute(OverwriteMethod.Cancel);
-            AlwaysYesButton.Click    += (s, e) => Execute(OverwriteMethod.AlwaysYes);
-            AlwaysNoButton.Click     += (s, e) => Execute(OverwriteMethod.AlwaysNo);
-            AlwaysRenameButton.Click += (s, e) => Execute(OverwriteMethod.AlwaysRename);
+            YesButton.Click          += (s, e) => Close(OverwriteMethod.Yes);
+            NoButton.Click           += (s, e) => Close(OverwriteMethod.No);
+            ExitButton.Click         += (s, e) => Close(OverwriteMethod.Cancel);
+            AlwaysYesButton.Click    += (s, e) => Close(OverwriteMethod.AlwaysYes);
+            AlwaysNoButton.Click     += (s, e) => Close(OverwriteMethod.AlwaysNo);
+            AlwaysRenameButton.Click += (s, e) => Close(OverwriteMethod.AlwaysRename);
         }
 
         #endregion
@@ -69,7 +68,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Source
         ///
         /// <summary>
-        /// 上書き元の情報を取得または設定します。
+        /// Gets the file information to overwrite.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -82,7 +81,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Destination
         ///
         /// <summary>
-        /// 上書き先の情報を取得または設定します。
+        /// Gets the file information to be overwritten.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -92,10 +91,10 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OverwriteMode
+        /// Value
         ///
         /// <summary>
-        /// 上書き方法を示す値を取得します。
+        /// Gets the overwrite method.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -112,77 +111,37 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// OnShown
         ///
         /// <summary>
-        /// フォーム表示時に実行されます。
+        /// Occurs when the dialog is displayed.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         protected override void OnShown(EventArgs e)
         {
-            UpdateDescription();
+            DescriptionLabel.Text = new StringBuilder()
+                .AppendLine(Properties.Resources.MessageOverwrite)
+                .AppendLine()
+                .AppendLine(Properties.Resources.MessageCurrent)
+                .AppendLine(Destination)
+                .AppendLine()
+                .AppendLine(Properties.Resources.MessageNewFile)
+                .AppendLine(Source)
+                .ToString();
+
             base.OnShown(e);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// UpdateDescription
+        /// Close
         ///
         /// <summary>
-        /// ラベルの内容を更新します。
+        /// Sets the overwrite method and close the dialog.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void UpdateDescription()
+        private void Close(OverwriteMethod value)
         {
-            var ss = new StringBuilder();
-            ss.AppendLine(Properties.Resources.MessageOverwrite);
-            ss.AppendLine();
-
-            ss.AppendLine(Properties.Resources.MessageCurrent);
-            if (Destination != null)
-            {
-                ss.AppendLine(Destination.FullName);
-                ss.AppendLine(string.Format("{0} : {1}",
-                    Properties.Resources.MessageBytes,
-                    Destination.Length.ToPrettyBytes()
-                ));
-                ss.AppendLine(string.Format("{0} : {1}",
-                    Properties.Resources.MessageLastWriteTime,
-                    Destination.LastWriteTime.ToString("yyyy/MM/dd HH:mm:ss")
-                ));
-            }
-            else ss.AppendLine(Properties.Resources.MessageUnknownFile);
-            ss.AppendLine();
-
-            ss.AppendLine(Properties.Resources.MessageNewFile);
-            if (Source != null)
-            {
-                ss.AppendLine(Source.FullName);
-                ss.AppendLine(string.Format("{0} : {1}",
-                    Properties.Resources.MessageBytes,
-                    Source.Length.ToPrettyBytes()
-                ));
-                ss.AppendLine(string.Format("{0} : {1}",
-                    Properties.Resources.MessageLastWriteTime,
-                    Source.LastWriteTime.ToString("yyyy/MM/dd HH:mm:ss")
-                ));
-            }
-            else ss.AppendLine(Properties.Resources.MessageUnknownFile);
-
-            DescriptionLabel.Text = ss.ToString();
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Execute
-        ///
-        /// <summary>
-        /// 上書き内容を設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Execute(OverwriteMethod mode)
-        {
-            Value = mode;
+            Value = value;
             Close();
         }
 
