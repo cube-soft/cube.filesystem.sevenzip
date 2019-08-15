@@ -153,7 +153,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         private void InvokePostProcess()
         {
             OpenAction.Invoke(IO.Get(Destination),
-                Settings.Value.Compress.OpenDirectory,
+                Settings.Value.Compress.OpenMethod,
                 Settings.Value.Explorer
             );
             if (Request.Mail) MailAction.Invoke(Destination);

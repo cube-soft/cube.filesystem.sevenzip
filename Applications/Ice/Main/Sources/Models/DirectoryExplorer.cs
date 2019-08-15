@@ -51,7 +51,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         public DirectoryExplorer(string root, SettingFolder settings)
         {
             IO      = settings.IO;
-            Method  = settings.Value.Extract.RootDirectory;
+            Method  = settings.Value.Extract.SaveMethod;
             Filters = settings.Value.Extract.Filtering ?
                       settings.Value.GetFilters() :
                       Enumerable.Empty<string>();
@@ -74,7 +74,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CreateDirectoryMethod Method { get; }
+        public SaveMethod Method { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -178,8 +178,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private IEnumerable<string> GetHints(IEnumerable<ArchiveItem> src)
         {
-            if (Method.HasFlag(CreateDirectoryMethod.Create) &&
-               !Method.HasFlag(CreateDirectoryMethod.SkipOptions)) return Enumerable.Empty<string>();
+            if (Method.HasFlag(SaveMethod.Create) &&
+               !Method.HasFlag(SaveMethod.SkipOptions)) return Enumerable.Empty<string>();
 
             var dest = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
             var cvt  = Filters.Any() ?
@@ -241,10 +241,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private bool IsSame(IEnumerable<string> hints)
         {
-            if (!Method.HasFlag(CreateDirectoryMethod.Create)) return true;
+            if (!Method.HasFlag(SaveMethod.Create)) return true;
             if (hints.Take(2).Count() != 1) return false;
-            return Method.HasFlag(CreateDirectoryMethod.SkipSingleFile     ) && hints.First() == WildCard ||
-                   Method.HasFlag(CreateDirectoryMethod.SkipSingleDirectory) && hints.First() != WildCard;
+            return Method.HasFlag(SaveMethod.SkipSingleFile     ) && hints.First() == WildCard ||
+                   Method.HasFlag(SaveMethod.SkipSingleDirectory) && hints.First() != WildCard;
         }
 
         #endregion

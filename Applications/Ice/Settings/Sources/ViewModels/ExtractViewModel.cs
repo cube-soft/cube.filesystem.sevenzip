@@ -67,8 +67,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool CreateDirectory
         {
-            get => HasFlag(CreateDirectoryMethod.Create);
-            set => SetRootDirectory(CreateDirectoryMethod.Create, value);
+            get => HasFlag(SaveMethod.Create);
+            set => SetRootDirectory(SaveMethod.Create, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -83,8 +83,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool SkipSingleDirectory
         {
-            get => HasFlag(CreateDirectoryMethod.SkipSingleDirectory);
-            set => SetRootDirectory(CreateDirectoryMethod.SkipSingleDirectory, value);
+            get => HasFlag(SaveMethod.SkipSingleDirectory);
+            set => SetRootDirectory(SaveMethod.SkipSingleDirectory, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -133,7 +133,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool HasFlag(CreateDirectoryMethod value) => Facade.RootDirectory.HasFlag(value);
+        public bool HasFlag(SaveMethod value) => Facade.SaveMethod.HasFlag(value);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -144,10 +144,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void SetRootDirectory(CreateDirectoryMethod value, bool check)
+        public void SetRootDirectory(SaveMethod value, bool check)
         {
-            if (check) Facade.RootDirectory |= value;
-            else Facade.RootDirectory &= ~value;
+            if (check) Facade.SaveMethod |= value;
+            else Facade.SaveMethod &= ~value;
         }
 
         #endregion

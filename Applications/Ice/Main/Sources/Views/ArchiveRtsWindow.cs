@@ -352,8 +352,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void WhenPathRequested(object s, EventArgs e)
         {
-            var cvt  = new PathConverter(Path, Format, CompressionMethod);
-            var args = new PathQueryMessage(cvt.Result.FullName, cvt.ResultFormat, true);
+            var cvt  = new ArchiveName(Path, Format, CompressionMethod);
+            var args = new PathQueryMessage(cvt.Value.FullName, cvt.Format, true);
         }
 
         /* ----------------------------------------------------------------- */
@@ -378,7 +378,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         private void WhenCompressionMethodChanged(object s, EventArgs e) =>
-            Path = new PathConverter(Path, Format, CompressionMethod).Result.FullName;
+            Path = new ArchiveName(Path, Format, CompressionMethod).Value.FullName;
 
         #endregion
 

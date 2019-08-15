@@ -114,10 +114,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string SaveDirectoryName
+        public string SaveDirectory
         {
-            get => Facade.SaveDirectoryName;
-            set => Facade.SaveDirectoryName = value;
+            get => Facade.SaveDirectory;
+            set => Facade.SaveDirectory = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -148,11 +148,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool OpenDirectory
         {
-            get => Facade.OpenDirectory.HasFlag(OpenDirectoryMethod.Open);
+            get => Facade.OpenMethod.HasFlag(OpenMethod.Open);
             set
             {
-                if (value) Facade.OpenDirectory |= OpenDirectoryMethod.Open;
-                else Facade.OpenDirectory &= ~OpenDirectoryMethod.Open;
+                if (value) Facade.OpenMethod |= OpenMethod.Open;
+                else Facade.OpenMethod &= ~OpenMethod.Open;
             }
         }
 
@@ -168,11 +168,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool SkipDesktop
         {
-            get => Facade.OpenDirectory.HasFlag(OpenDirectoryMethod.SkipDesktop);
+            get => Facade.OpenMethod.HasFlag(OpenMethod.SkipDesktop);
             set
             {
-                if (value) Facade.OpenDirectory |= OpenDirectoryMethod.SkipDesktop;
-                else Facade.OpenDirectory &= ~OpenDirectoryMethod.SkipDesktop;
+                if (value) Facade.OpenMethod |= OpenMethod.SkipDesktop;
+                else Facade.OpenMethod &= ~OpenMethod.SkipDesktop;
             }
         }
 

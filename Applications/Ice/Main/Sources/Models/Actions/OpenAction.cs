@@ -48,9 +48,9 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="exec">Path of the application.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void Invoke(Entity src, OpenDirectoryMethod method, string exec)
+        public static void Invoke(Entity src, OpenMethod method, string exec)
         {
-            if (!method.HasFlag(OpenDirectoryMethod.Open)) return;
+            if (!method.HasFlag(OpenMethod.Open)) return;
             var dest = src.IsDirectory ? src.FullName : src.DirectoryName;
             if (IsSkip(dest, method)) return;
 
@@ -72,8 +72,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static bool IsSkip(string src, OpenDirectoryMethod method) =>
-            method.HasFlag(OpenDirectoryMethod.SkipDesktop) ?
+        private static bool IsSkip(string src, OpenMethod method) =>
+            method.HasFlag(OpenMethod.SkipDesktop) ?
             src.FuzzyEquals(Environment.SpecialFolder.Desktop.GetName()) :
             false;
 
