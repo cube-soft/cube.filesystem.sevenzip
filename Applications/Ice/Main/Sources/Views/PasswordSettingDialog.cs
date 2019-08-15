@@ -15,44 +15,45 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Forms.Behaviors;
 using Cube.Images.Icons;
-using System;
-using System.Windows.Forms;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// PasswordForm
+    /// PasswordSettingDialog
     ///
     /// <summary>
-    /// パスワード入力用画面を表示するクラスです。
+    /// Represents a dialog to set a new password.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class PasswordWindow : Form
+    public partial class PasswordSettingDialog : Cube.Forms.Window
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// PasswordForm
+        /// CompressPasswordDialog
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the CompressPasswordDialog class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public PasswordWindow()
+        public PasswordSettingDialog()
         {
             InitializeComponent();
 
             IconPictureBox.Image = StockIcons.Warning.GetIcon(IconSize.Large).ToBitmap();
 
-            ExecButton.Click += (s, e) => Close();
-            ExitButton.Click += (s, e) => Close();
-            PasswordTextBox.TextChanged    += WhenTextChanged;
-            VisibleCheckBox.CheckedChanged += WhenCheckedChanged;
+            ExecuteButton.Click += (s, e) => Close();
+            ExitButton.Click    += (s, e) => Close();
+
+            var b = new PasswordBehavior(PasswordTextBox, ConfirmTextBox, ShowPasswordCheckBox);
+            b.Updated += (s, e) => ExecuteButton.Enabled = b.IsValid;
+            Behaviors.Add(b);
         }
 
         #endregion
@@ -64,39 +65,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Password
         ///
         /// <summary>
-        /// パスワードを取得します。
+        /// Gets the password.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public string Password => PasswordTextBox.Text;
-
-        #endregion
-
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenTextChanged
-        ///
-        /// <summary>
-        /// テキストボックスの入力が変更された時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenTextChanged(object s, EventArgs e) =>
-            ExecButton.Enabled = PasswordTextBox.TextLength > 0;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenCheckedChanged
-        ///
-        /// <summary>
-        /// チェックボックスの状態が変更された時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenCheckedChanged(object s, EventArgs e) =>
-            PasswordTextBox.UseSystemPasswordChar = !VisibleCheckBox.Checked;
 
         #endregion
     }

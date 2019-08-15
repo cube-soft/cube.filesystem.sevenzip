@@ -34,9 +34,12 @@
     <ItemGroup>
         <Compile Update="Properties\Resources.Designer.cs" DependentUpon="Resources.resx" AutoGen="True" DesignTime="True" />
         <Compile Update="Sources\Views\*Window.cs" SubType="Form" />
+        <Compile Update="Sources\Views\*Dialog.cs" SubType="Form" />
         <EmbeddedResource Update="Properties\Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
         <EmbeddedResource Update="Sources\Views\*.resx" DependentUpon="%(Filename).cs" />
         <None Include="Assets\**\*" />
+        <None Include="App.ico" />
         <None Include="App.config" />
+        <None Include="App.manifest" />
     </ItemGroup>
 </Project>

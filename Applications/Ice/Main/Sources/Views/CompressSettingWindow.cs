@@ -25,14 +25,14 @@ namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveRtSettingsForm
+    /// CompressSettingWindow
     ///
     /// <summary>
-    /// 圧縮処理の実行時詳細設定画面を表示するクラスです。
+    /// Represents the window for the runtime compression settings.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class ArchiveRtsWindow : Form
+    public partial class CompressSettingWindow : Form
     {
         #region Constructors
 
@@ -45,7 +45,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveRtsWindow()
+        public CompressSettingWindow()
         {
             InitializeComponent();
 

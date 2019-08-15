@@ -26,14 +26,14 @@ namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// OverwriteForm
+    /// OverwriteDialog
     ///
     /// <summary>
-    /// 上書き確認ダイアログを表示するクラスです。
+    /// Represents a dialog to confirm the overwrite method.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class OverwriteWindow : Form
+    public partial class OverwriteDialog : Form
     {
         #region Constructors
 
@@ -46,7 +46,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public OverwriteWindow()
+        public OverwriteDialog()
         {
             InitializeComponent();
 
