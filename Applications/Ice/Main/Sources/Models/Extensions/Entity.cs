@@ -15,72 +15,57 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.SevenZip.Ice.Settings;
-using Cube.Mixin.String;
-using System;
 using System.Linq;
 
-namespace Cube.FileSystem.SevenZip.Ice.Compress
+namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// DestinationExtension
+    /// EntityExtension
     ///
     /// <summary>
-    /// Provides extended methods to get the destination.
+    /// Provides extended methods of the Entity class.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal static class DestinationExtension
+    internal static class EntityExtension
     {
         #region Methods
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetDestination
+        /// GetBaseName
         ///
         /// <summary>
-        /// Gets the destination path.
+        /// Gets the base-name from the specified arguments.
         /// </summary>
         ///
-        /// <param name="src">Source object.</param>
-        /// <param name="rts">Runtime settings.</param>
-        ///
-        /// <returns>Path to save.</returns>
+        /// <param name="src">File information.</param>
+        /// <param name="format">Archive format.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static string GetDestination(this CompressFacade src, CompressRuntime rts)
-        {
-            if (rts.Path.HasValue()) return rts.Path;
+        public static string GetBaseName(this Entity src, Format format) =>
+            new[] { Format.BZip2, Format.GZip, Format.XZ }.Contains(format) ?
+            TrimExtension(src.BaseName) :
+            src.BaseName;
 
-            var io = src.IO;
-            var settings = src.Settings.Value.Compress;
+        #endregion
 
-            var pc = new ArchiveName(src.Request.Sources.First(), src.Request.Format, io);
-            var ps = new PathSelector(src.Request, settings, pc) { Query = src.Select };
-            if (ps.Location == SaveLocation.Query) return ps.Value;
-
-            var dest = io.Combine(ps.Value, pc.Value.Name);
-            return io.Exists(dest) && settings.OverwritePrompt ?
-                   AskDestination(src, dest, pc.Format) :
-                   dest;
-        }
+        #region Implementations
 
         /* ----------------------------------------------------------------- */
         ///
-        /// AskDestination
+        /// TrimExtension
         ///
         /// <summary>
-        /// Asks the user to select the destination.
+        /// Trims the extension of the specified filename.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static string AskDestination(CompressFacade fc, string src, Format format)
+        private static string TrimExtension(string src)
         {
-            var msg = PathQuery.NewMessage(src, format);
-            fc.Select?.Request(msg);
-            if (msg.Cancel) throw new OperationCanceledException();
-            return msg.Value;
+            var index = src.LastIndexOf('.');
+            return index < 0 ? src : src.Substring(0, index);
         }
 
         #endregion

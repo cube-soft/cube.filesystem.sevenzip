@@ -18,6 +18,7 @@
 using Cube.Mixin.String;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
@@ -260,10 +261,29 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </returns>
         ///
         /* ----------------------------------------------------------------- */
-        public IEnumerable<string> GetFilters() =>
-            Filters.HasValue() ?
+        public IEnumerable<string> GetFilters() => GetFilters(true);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetFilters
+        ///
+        /// <summary>
+        /// Gets the collection of filter strings.
+        /// </summary>
+        ///
+        /// <param name="enabled">
+        /// Value indicating whether the filtering is enabled.
+        /// </param>
+        ///
+        /// <returns>
+        /// Collection of values to filter files and directories.
+        /// </returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public IEnumerable<string> GetFilters(bool enabled) =>
+            enabled && Filters.HasValue() ?
             Filters.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries) :
-            new string[0];
+            Enumerable.Empty<string>();
 
         #endregion
 

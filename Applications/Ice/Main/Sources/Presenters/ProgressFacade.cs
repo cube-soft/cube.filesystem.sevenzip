@@ -67,6 +67,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         public Report Report { get; } = new Report();
 
+        #endregion
+
+        #region Methods
+
         /* ----------------------------------------------------------------- */
         ///
         /// Progress
@@ -75,14 +79,26 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Gets the object to report the progress.
         /// </summary>
         ///
+        /// <returns>Progress object.</returns>
+        ///
         /* ----------------------------------------------------------------- */
-        public IProgress<Report> Progress => _progress ?? (
-            _progress = new SuspendableProgress<Report>(_cancel.Token, _supend, OnReceive)
-        );
+        public IProgress<Report> GetProgress() => GetProgress(OnReceive);
 
-        #endregion
-
-        #region Methods
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Progress
+        ///
+        /// <summary>
+        /// Gets the object to report the progress.
+        /// </summary>
+        ///
+        /// <param name="callback">Callback action to report.</param>
+        ///
+        /// <returns>Progress object.</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public IProgress<Report> GetProgress(Action<Report> callback) =>
+            new SuspendableProgress<Report>(_cancel.Token, _supend, callback);
 
         /* ----------------------------------------------------------------- */
         ///

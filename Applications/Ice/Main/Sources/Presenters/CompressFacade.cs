@@ -15,9 +15,9 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.SevenZip.Ice.Compress;
 using Cube.FileSystem.SevenZip.Ice.Settings;
 using Cube.Mixin.Logging;
+using Cube.Mixin.String;
 using Cube.Mixin.Syntax;
 using System;
 using System.Linq;
@@ -117,10 +117,10 @@ namespace Cube.FileSystem.SevenZip.Ice
 
             using (var writer = new ArchiveWriter(src.Format, IO))
             {
-                if (Settings.Value.Compress.Filtering) writer.Filters = Settings.Value.GetFilters();
                 Request.Sources.Each(e => writer.Add(e));
-                writer.Option = src.ToOption(Settings);
-                writer.Save(Temp, this.GetPasswordQuery(src), Progress);
+                writer.Option  = src.ToOption(Settings);
+                writer.Filters = Settings.Value.GetFilters(Settings.Value.Compress.Filtering);
+                writer.Save(Temp, GetPassword(src), GetProgress());
             }
 
             if (IO.Exists(Temp)) IO.Move(Temp, Destination, true);
@@ -137,7 +137,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void InvokePreProcess(CompressRuntime src)
         {
-            SetDestination(this.GetDestination(src));
+            SetDestination(SelectAction.Get(this, src));
             SetTemp(IO.Get(Destination).DirectoryName);
         }
 
@@ -158,6 +158,27 @@ namespace Cube.FileSystem.SevenZip.Ice
             );
             if (Request.Mail) MailAction.Invoke(Destination);
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetPassword
+        ///
+        /// <summary>
+        /// Gets the query object to get the password.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private IQuery<string> GetPassword(CompressRuntime src) =>
+            src.Password.HasValue() || Request.Password ?
+            new Query<string>(e =>
+            {
+                if (src.Password.HasValue())
+                {
+                    e.Value  = src.Password;
+                    e.Cancel = false;
+                }
+                else Password.Request(e);
+            }) : null;
 
         /* ----------------------------------------------------------------- */
         ///
