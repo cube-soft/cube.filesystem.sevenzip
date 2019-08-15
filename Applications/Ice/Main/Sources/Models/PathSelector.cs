@@ -69,16 +69,14 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /// <param name="request">Request for the transaction.</param>
         /// <param name="settings">User settings.</param>
-        /// <param name="converter">
-        /// preprocessing for the select action.
-        /// </param>
+        /// <param name="name">Normalized archive name.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public PathSelector(Request request, ArchiveValue settings, PathConverter converter) :
-            this(request, settings, converter.IO)
+        public PathSelector(Request request, ArchiveValue settings, ArchiveName name) :
+            this(request, settings, name.IO)
         {
-            Format = converter.Format;
-            Source = converter.Result.FullName;
+            Format = name.Format;
+            Source = name.Value.FullName;
         }
 
         #endregion
@@ -153,14 +151,14 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Result
+        /// Value
         ///
         /// <summary>
         /// Gets the result of the select action.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Result => _result ?? (_result = Select());
+        public string Value => _value ?? (_value = Select());
 
         /* ----------------------------------------------------------------- */
         ///
@@ -219,15 +217,15 @@ namespace Cube.FileSystem.SevenZip.Ice
                     break;
             }
 
-            return Settings.SaveDirectoryName.HasValue() ?
-                   Settings.SaveDirectoryName :
+            return Settings.SaveDirectory.HasValue() ?
+                   Settings.SaveDirectory :
                    Environment.SpecialFolder.Desktop.GetName();
         }
 
         #endregion
 
         #region Fields
-        private string _result;
+        private string _value;
         #endregion
     }
 }

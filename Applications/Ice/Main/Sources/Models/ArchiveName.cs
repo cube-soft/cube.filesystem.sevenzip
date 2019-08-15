@@ -21,14 +21,14 @@ namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// PathConverter
+    /// ArchiveName
     ///
     /// <summary>
     /// Provides functionality to convert the archive filename.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public sealed class PathConverter
+    public sealed class ArchiveName
     {
         #region Constructors
 
@@ -46,7 +46,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="io">I/O handler.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public PathConverter(string src, Format format, IO io) :
+        public ArchiveName(string src, Format format, IO io) :
             this(src, format, CompressionMethod.Default, io) { }
 
         /* ----------------------------------------------------------------- */
@@ -63,7 +63,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="method">Compression method.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public PathConverter(string src, Format format, CompressionMethod method) :
+        public ArchiveName(string src, Format format, CompressionMethod method) :
             this(src, format, method, new IO()) { }
 
         /* ----------------------------------------------------------------- */
@@ -81,50 +81,17 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="io">I/O handler.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public PathConverter(string src, Format format, CompressionMethod method, IO io)
+        public ArchiveName(string src, Format format, CompressionMethod method, IO io)
         {
-            Source = src;
-            Format = format;
-            Method = method;
-            IO     = io;
+            IO = io;
+            _source       = src;
+            _souceFormat  = format;
+            _sourceMethod = method;
         }
 
         #endregion
 
         #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Source
-        ///
-        /// <summary>
-        /// Gets the path of the source file.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Source { get; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Format
-        ///
-        /// <summary>
-        /// Gets the archive format.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public Format Format { get; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Method
-        ///
-        /// <summary>
-        /// Gets the compression method.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public CompressionMethod Method { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -139,39 +106,38 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Result
+        /// Value
         ///
         /// <summary>
         /// Gets the path of the conversion result.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Entity Result => _result ?? (_result = Convert());
+        public Entity Value => _value ?? (_value = Convert());
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ResultFormat
+        /// Format
         ///
         /// <summary>
         /// Gets the archive format corresponding to the conversion result.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Format ResultFormat
+        public Format Format
         {
             get
             {
-                if (Format == Format.Tar)
+                if (_souceFormat == Format.Tar)
                 {
-                    switch (Method)
+                    switch (_sourceMethod)
                     {
                         case CompressionMethod.BZip2: return Format.BZip2;
                         case CompressionMethod.GZip:  return Format.GZip;
                         case CompressionMethod.XZ:    return Format.XZ;
-                        default: break;
                     }
                 }
-                return Format;
+                return _souceFormat;
             }
         }
 
@@ -190,14 +156,14 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private Entity Convert()
         {
-            var src  = IO.Get(Source);
+            var src  = IO.Get(_source);
             var tmp  = IO.Get(src.BaseName);
             var name = src.IsDirectory ? src.Name :
                        tmp.Extension.FuzzyEquals(".tar") ? tmp.BaseName :
                        tmp.Name;
-            var path = IO.Combine(src.DirectoryName, $"{name}{GetExtension()}");
+            var dest = IO.Combine(src.DirectoryName, $"{name}{GetExtension()}");
 
-            return IO.Get(path);
+            return IO.Get(dest);
         }
 
         /* ----------------------------------------------------------------- */
@@ -211,20 +177,22 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private string GetExtension()
         {
-            switch (ResultFormat)
+            switch (Format)
             {
                 case Format.BZip2: return ".tar.bz2";
                 case Format.GZip:  return ".tar.gz";
                 case Format.XZ:    return ".tar.xz";
-                default: break;
             }
-            return ResultFormat.ToExtension();
+            return Format.ToExtension();
         }
 
         #endregion
 
         #region Fields
-        private Entity _result;
+        private readonly string _source;
+        private readonly Format _souceFormat;
+        private readonly CompressionMethod _sourceMethod;
+        private Entity _value;
         #endregion
     }
 }

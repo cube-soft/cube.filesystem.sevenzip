@@ -56,13 +56,13 @@ namespace Cube.FileSystem.SevenZip.Ice.Compress
             var io = src.IO;
             var settings = src.Settings.Value.Compress;
 
-            var pc = new PathConverter(src.Request.Sources.First(), src.Request.Format, io);
+            var pc = new ArchiveName(src.Request.Sources.First(), src.Request.Format, io);
             var ps = new PathSelector(src.Request, settings, pc) { Query = src.Select };
-            if (ps.Location == SaveLocation.Query) return ps.Result;
+            if (ps.Location == SaveLocation.Query) return ps.Value;
 
-            var dest = io.Combine(ps.Result, pc.Result.Name);
+            var dest = io.Combine(ps.Value, pc.Value.Name);
             return io.Exists(dest) && settings.OverwritePrompt ?
-                   AskDestination(src, dest, pc.ResultFormat) :
+                   AskDestination(src, dest, pc.Format) :
                    dest;
         }
 
