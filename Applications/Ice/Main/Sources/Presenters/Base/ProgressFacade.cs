@@ -67,6 +67,21 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         public Report Report { get; } = new Report();
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Busy
+        ///
+        /// <summary>
+        /// Gets a value indicating whether to work in progress.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public bool Busy
+        {
+            get => GetProperty<bool>();
+            private set => SetProperty(value);
+        }
+
         #endregion
 
         #region Methods
@@ -109,7 +124,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public virtual void Start() => _timer.Start();
+        public virtual void Start()
+        {
+            Busy = true;
+            _timer.Start();
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -159,20 +178,24 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         protected void Terminate()
         {
-            _timer.Stop();
-
-            if (Report.Count < Report.TotalCount || Report.Bytes < Report.TotalBytes) // hack
+            try
             {
-                this.LogDebug(
-                    $"{nameof(Report.Count)}:{Report.Count:#,0} / {Report.TotalCount:#,0}",
-                    $"{nameof(Report.Bytes)}:{Report.Bytes:#,0} / {Report.TotalBytes:#,0}"
-                );
+                _timer.Stop();
 
-                Report.Count = Report.TotalCount;
-                Report.Bytes = Report.TotalBytes;
+                if (Report.Count < Report.TotalCount || Report.Bytes < Report.TotalBytes) // hack
+                {
+                    this.LogDebug(
+                        $"{nameof(Report.Count)}:{Report.Count:#,0} / {Report.TotalCount:#,0}",
+                        $"{nameof(Report.Bytes)}:{Report.Bytes:#,0} / {Report.TotalBytes:#,0}"
+                    );
 
-                Refresh(nameof(Report));
+                    Report.Count = Report.TotalCount;
+                    Report.Bytes = Report.TotalBytes;
+
+                    Refresh(nameof(Report));
+                }
             }
+            finally { Busy = false; }
         }
 
         /* ----------------------------------------------------------------- */

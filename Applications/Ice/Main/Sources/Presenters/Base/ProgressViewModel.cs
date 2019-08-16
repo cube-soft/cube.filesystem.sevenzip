@@ -56,7 +56,10 @@ namespace Cube.FileSystem.SevenZip.Ice
             SynchronizationContext context
         ) : base(facade, aggregator, context)
         {
-            Add(Facade.Subscribe(e => { if (e == nameof(Facade.Report)) Refresh(nameof(Title)); }));
+            Add(Facade.Subscribe(e => {
+                if (e == nameof(Facade.Busy)) Refresh(nameof(Busy));
+                else if (e == nameof(Facade.Report)) Refresh(nameof(Title));
+            }));
         }
 
         #endregion
@@ -95,6 +98,17 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         public string Text => GetText();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Busy
+        ///
+        /// <summary>
+        /// Gets a value indicating whether to work in progress.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public bool Busy => Facade.Busy;
 
         /* ----------------------------------------------------------------- */
         ///
