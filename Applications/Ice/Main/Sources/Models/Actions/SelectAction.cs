@@ -103,7 +103,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private static string AskDestination(CompressFacade facade, string src, Format format)
         {
-            var msg = PathQuery.NewMessage(src, format);
+            var msg = SelectQuery.NewMessage(src, format);
             facade.Select?.Request(msg);
             if (msg.Cancel) throw new OperationCanceledException();
             return msg.Value;

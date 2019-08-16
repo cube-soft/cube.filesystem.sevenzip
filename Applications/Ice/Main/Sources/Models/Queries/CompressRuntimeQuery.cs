@@ -16,7 +16,6 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.FileSystem.SevenZip.Ice.Settings;
-using Cube.Mixin.Generics;
 using System;
 
 namespace Cube.FileSystem.SevenZip.Ice
@@ -49,8 +48,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="invoker">Invoker object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressRuntimeQuery(Action<CompressRuntimeQueryMessage> callback, Invoker invoker) :
-            base(e => callback(e.TryCast<CompressRuntimeQueryMessage>()), invoker) { }
+        public CompressRuntimeQuery(
+            Action<QueryMessage<string, CompressRuntime>> callback,
+            Invoker invoker
+        ) : base(callback, invoker) { }
 
         #endregion
 
@@ -115,11 +116,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         private CompressRuntime Request(string src, IO io)
         {
             var fi  = io.Get(src);
-            var msg = new CompressRuntimeQueryMessage
+            var msg = new QueryMessage<string, CompressRuntime>
             {
                 Source = io.Combine(fi.DirectoryName, $"{fi.BaseName}.zip"),
                 Value  = new CompressRuntime(io),
-                Cancel = false,
+                Cancel = true,
             };
 
             Request(msg);
@@ -133,21 +134,6 @@ namespace Cube.FileSystem.SevenZip.Ice
         private CompressRuntime _value;
         #endregion
     }
-
-    #endregion
-
-    #region CompressRuntimeQueryMessage
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// CompressRuntimeQueryMessage
-    ///
-    /// <summary>
-    /// Represents the message for the CompressRuntimeQuery class.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    public sealed class CompressRuntimeQueryMessage : QueryMessage<string, CompressRuntime> { }
 
     #endregion
 }

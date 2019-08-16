@@ -15,7 +15,6 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.Generics;
 using System;
 
 namespace Cube.FileSystem.SevenZip.Ice
@@ -48,8 +47,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="invoker">Invoker object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public OverwriteQuery(Action<OverwriteQueryMessage> callback, Invoker invoker) :
-            base(e => callback(e.TryCast<OverwriteQueryMessage>()), invoker) { }
+        public OverwriteQuery(
+            Action<QueryMessage<OverwriteQuerySource, OverwriteMethod>> callback,
+            Invoker invoker
+        ) : base(callback, invoker) { }
 
         #endregion
 
@@ -90,11 +91,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private OverwriteMethod Request(Entity src, Entity dest)
         {
-            var msg = new OverwriteQueryMessage
+            var msg = new QueryMessage<OverwriteQuerySource, OverwriteMethod>
             {
                 Source = new OverwriteQuerySource(src, dest),
                 Value  = OverwriteMethod.Query,
-                Cancel = false,
+                Cancel = true,
             };
 
             Request(msg);
@@ -173,21 +174,6 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         #endregion
     }
-
-    #endregion
-
-    #region OverwriteQueryMessage
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// OverwriteQueryMessage
-    ///
-    /// <summary>
-    /// Represents the message for the OverwriteQuery class.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    public sealed class OverwriteQueryMessage : QueryMessage<OverwriteQuerySource, OverwriteMethod> { }
 
     #endregion
 }

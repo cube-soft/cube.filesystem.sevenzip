@@ -132,7 +132,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public PathQuery Select { get; set; }
+        public SelectQuery Select { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///

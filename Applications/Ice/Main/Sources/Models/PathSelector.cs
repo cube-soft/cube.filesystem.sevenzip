@@ -125,7 +125,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public PathQuery Query { get; set; }
+        public SelectQuery Query { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -209,7 +209,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                 case SaveLocation.Explicit:
                     return Request.DropDirectory;
                 case SaveLocation.Query:
-                    var msg = PathQuery.NewMessage(Source, Format);
+                    var msg = SelectQuery.NewMessage(Source, Format);
                     Query?.Request(msg);
                     if (msg.Cancel) throw new OperationCanceledException();
                     return msg.Value;

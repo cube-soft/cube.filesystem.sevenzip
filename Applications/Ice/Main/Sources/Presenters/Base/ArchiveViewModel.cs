@@ -54,7 +54,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         ) : base(facade, aggregator, context)
         {
             Facade.Password = new Query<string>(Send, GetInvoker(true));
-            Facade.Select   = new PathQuery(Send, GetInvoker(true));
+            Facade.Select   = new SelectQuery(Send, GetInvoker(true));
         }
 
         #endregion

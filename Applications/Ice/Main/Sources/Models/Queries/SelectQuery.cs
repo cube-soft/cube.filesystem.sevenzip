@@ -15,30 +15,29 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.Generics;
 using System;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
-    #region PathQuery
+    #region SelectQuery
 
     /* --------------------------------------------------------------------- */
     ///
-    /// PathQuery
+    /// SelectQuery
     ///
     /// <summary>
     /// Provides functionality to query a save path.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public sealed class PathQuery : Query<PathQuerySource, string>
+    public sealed class SelectQuery : Query<SelectQuerySource, string>
     {
         /* ----------------------------------------------------------------- */
         ///
-        /// PathQuery
+        /// SelectPathQuery
         ///
         /// <summary>
-        /// Initializes a new instance of the PathQuery class with
+        /// Initializes a new instance of the SelectPathQuery class with
         /// the specified action.
         /// </summary>
         ///
@@ -46,8 +45,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="invoker">Invoker object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public PathQuery(Action<PathQueryMessage> callback, Invoker invoker) :
-            base(e => callback(e.TryCast<PathQueryMessage>()), invoker) { }
+        public SelectQuery(
+            Action<QueryMessage<SelectQuerySource, string>> callback,
+            Invoker invoker
+        ) : base(callback, invoker) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -62,9 +63,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="format">Compression format.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static PathQueryMessage NewMessage(string src, Format format) => new PathQueryMessage
+        public static QueryMessage<SelectQuerySource, string> NewMessage(
+            string src, Format format) =>
+            new QueryMessage<SelectQuerySource, string>
         {
-            Source = new PathQuerySource(src, format),
+            Source = new SelectQuerySource(src, format),
             Value  = string.Empty,
             Cancel = true,
         };
@@ -72,33 +75,33 @@ namespace Cube.FileSystem.SevenZip.Ice
 
     #endregion
 
-    #region PathQuerySource
+    #region SelectQuerySource
 
     /* --------------------------------------------------------------------- */
     ///
-    /// PathQuerySource
+    /// SelectQuerySource
     ///
     /// <summary>
     /// Represents the request information to query a save path.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public sealed class PathQuerySource
+    public sealed class SelectQuerySource
     {
         /* ----------------------------------------------------------------- */
         ///
-        /// PathQueryRequest
+        /// SelectQuerySource
         ///
         /// <summary>
-        /// Initializes a new instance of the PathRequest class with the
-        /// specified arguments.
+        /// Initializes a new instance of the SelectQuerySource class
+        /// with the specified arguments.
         /// </summary>
         ///
         /// <param name="src">Path of the source file.</param>
         /// <param name="format">Compression format.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public PathQuerySource(string src, Format format)
+        public SelectQuerySource(string src, Format format)
         {
             Source = src;
             Format = format;
@@ -126,21 +129,6 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         public Format Format { get; }
     }
-
-    #endregion
-
-    #region PathQueryMessage
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// PathQueryMessage
-    ///
-    /// <summary>
-    /// Represents the message for the PathQuery class.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    public sealed class PathQueryMessage : QueryMessage<PathQuerySource, string> { }
 
     #endregion
 }

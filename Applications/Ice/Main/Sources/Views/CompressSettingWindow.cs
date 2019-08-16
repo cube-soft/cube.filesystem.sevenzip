@@ -353,7 +353,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         private void WhenPathRequested(object s, EventArgs e)
         {
             var cvt  = new ArchiveName(Path, Format, CompressionMethod);
-            var args = PathQuery.NewMessage(cvt.Value.FullName, cvt.Format);
+            var args = SelectQuery.NewMessage(cvt.Value.FullName, cvt.Format);
         }
 
         /* ----------------------------------------------------------------- */
