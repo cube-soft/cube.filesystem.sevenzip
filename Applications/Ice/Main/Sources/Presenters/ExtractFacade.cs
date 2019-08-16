@@ -17,7 +17,6 @@
 /* ------------------------------------------------------------------------- */
 using Cube.Mixin.Logging;
 using System;
-using System.Collections.Generic;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -79,7 +78,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public override void Start()
+        public override void Start() => Contract(() =>
         {
             foreach (var src in Request.Sources)
             {
@@ -94,7 +93,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                 catch (OperationCanceledException) { /* user cancel */ }
                 finally { Terminate(); }
             }
-        }
+        });
 
         #endregion
 
@@ -109,10 +108,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Invoke(string src, PathExplorer explorer) => Create(src, e =>
+        private void Invoke(string src, PathExplorer explorer) => Open(src, e =>
         {
             this.LogDebug($"{nameof(e.Format)}:{e.Format}", $"{nameof(e.Source)}:{e.Source}");
-            if (e.Items.Count == 1) ExtractItem(e, 0, explorer);
+            if (e.Items.Count == 1) Extract(e, 0, explorer);
             else Extract(e, explorer);
         });
 
@@ -150,21 +149,6 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Create
-        ///
-        /// <summary>
-        /// Creates a new instance of the ArchiveReader class and invokes
-        /// the specified action.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Create(string src, Action<ArchiveReader> callback)
-        {
-            using (var e = new ArchiveReader(src, Password, IO)) callback(e);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// Extract
         ///
         /// <summary>
@@ -174,7 +158,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void Extract(ArchiveReader src, PathExplorer explorer)
         {
-            SetDestination(explorer, IO.Get(src.Source).BaseName, src.Items);
+            SetDestination(src, explorer);
             src.Filters = Settings.Value.GetFilters(Settings.Value.Extract.Filtering);
             src.Invoke(Temp, GetProgress(e =>
             {
@@ -185,38 +169,38 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ExtractItem
+        /// Extract
         ///
         /// <summary>
-        /// Extracts an archive item.
+        /// Extracts an archive item of the specified index.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void ExtractItem(ArchiveReader src, int index, PathExplorer explorer)
+        private void Extract(ArchiveReader src, int index, PathExplorer explorer)
         {
-            SetDestination(explorer, IO.Get(src.Source).GetBaseName(src.Format), src.Items);
+            SetDestination(src, explorer);
 
             var item = src.Items[index];
             item.Invoke(Temp, GetProgress());
 
             var dest = IO.Combine(Temp, item.FullName);
             if (Formats.FromFile(dest) != Format.Tar) Move(item);
-            else Create(dest, e => Extract(e, explorer)); // *.tar
+            else Open(dest, e => Extract(e, explorer)); // *.tar
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SetDestination
+        /// Open
         ///
         /// <summary>
-        /// Sets the destination path.
+        /// Open the specified archive file with the ArchiveReader class
+        /// and invokes the specified action.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void SetDestination(PathExplorer src, string basename, IEnumerable<ArchiveItem> items)
+        private void Open(string src, Action<ArchiveReader> callback)
         {
-            src.Invoke(basename, items);
-            SetDestination(src.SaveDirectory);
+            using (var e = new ArchiveReader(src, Password, IO)) callback(e);
         }
 
         /* ----------------------------------------------------------------- */
@@ -236,6 +220,40 @@ namespace Cube.FileSystem.SevenZip.Ice
             var dest = IO.Get(IO.Combine(Destination, item.FullName));
             if (dest.Exists) IO.Move(src, dest, Overwrite.GetValue(src, dest));
             else IO.Move(src, dest);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Contract
+        ///
+        /// <summary>
+        /// Checks the conditions before executing the main operation.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Contract(Action callback)
+        {
+            Require(Select,    nameof(Select));
+            Require(Password,  nameof(Password));
+            Require(Overwrite, nameof(Overwrite));
+
+            callback();
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetDestination
+        ///
+        /// <summary>
+        /// Sets the destination path.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void SetDestination(ArchiveReader src, PathExplorer explorer)
+        {
+            var basename = IO.Get(src.Source).GetBaseName(src.Format);
+            explorer.Invoke(basename, src.Items);
+            SetDestination(explorer.SaveDirectory);
         }
 
         #endregion

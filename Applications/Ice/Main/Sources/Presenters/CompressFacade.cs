@@ -187,13 +187,13 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Contract(Action action)
+        private void Contract(Action callback)
         {
             Require(Select,   nameof(Select));
             Require(Password, nameof(Password));
             Require(Runtime,  nameof(Runtime));
 
-            action();
+            callback();
         }
 
         #endregion
