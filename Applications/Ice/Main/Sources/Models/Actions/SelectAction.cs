@@ -75,17 +75,16 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /// <param name="facade">Facade for extracting.</param>
-        /// <param name="src">Path of the source archive.</param>
         ///
         /// <returns>Path to save.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static string Get(ExtractFacade facade, string src) => new PathSelector(
+        public static string Get(ExtractFacade facade) => new PathSelector(
             facade.Request,
             facade.Settings.Value.Extract,
             facade.IO
         ) {
-            Source = src,
+            Source = facade.Source,
             Query  = facade.Select,
         }.Value;
 

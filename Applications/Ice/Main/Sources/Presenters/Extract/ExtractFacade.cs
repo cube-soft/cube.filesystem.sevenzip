@@ -56,6 +56,17 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Source
+        ///
+        /// <summary>
+        /// Gets the path of the archive to extract.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Source { get; private set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Overwrite
         ///
         /// <summary>
@@ -84,11 +95,12 @@ namespace Cube.FileSystem.SevenZip.Ice
             {
                 try
                 {
+                    Source = src;
                     base.Start();
-                    var explorer = new PathExplorer(SelectAction.Get(this, src), Settings);
+                    var explorer = new PathExplorer(SelectAction.Get(this), Settings);
                     InvokePreProcess(explorer);
-                    Invoke(src, explorer);
-                    InvokePostProcess(src, explorer);
+                    Invoke(explorer);
+                    InvokePostProcess(explorer);
                 }
                 catch (OperationCanceledException) { /* user cancel */ }
                 finally { Terminate(); }
@@ -108,7 +120,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Invoke(string src, PathExplorer explorer) => Open(src, e =>
+        private void Invoke(PathExplorer explorer) => Open(Source, e =>
         {
             this.LogDebug($"{nameof(e.Format)}:{e.Format}", $"{nameof(e.Source)}:{e.Source}");
             if (e.Items.Count == 1) Extract(e, 0, explorer);
@@ -138,13 +150,13 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void InvokePostProcess(string src, PathExplorer explorer)
+        private void InvokePostProcess(PathExplorer explorer)
         {
             OpenAction.Invoke(IO.Get(explorer.OpenDirectory),
                 Settings.Value.Extract.OpenMethod,
                 Settings.Value.Explorer
             );
-            if (Settings.Value.Extract.DeleteSource) _ = IO.TryDelete(src);
+            if (Settings.Value.Extract.DeleteSource) _ = IO.TryDelete(Source);
         }
 
         /* ----------------------------------------------------------------- */

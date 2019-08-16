@@ -16,8 +16,10 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.Mixin.Observing;
+using System;
 using System.Drawing;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -70,7 +72,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Image Logo { get; }
+        public Image Logo => GetLogo();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -96,11 +98,42 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Unit
+        ///
+        /// <summary>
+        /// Gets the maximum value of the progress bar.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public int Unit => 1000;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Value
+        ///
+        /// <summary>
+        /// Gets the current value of the progress bar.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public int Value
+        {
+            get
+            {
+                var src = Math.Max((int)(Facade.Report.Ratio * Unit), 1);
+                var cmp = GetProperty<int>();
+                if (src > cmp) { _ = SetProperty(src); return src; }
+                else return cmp;
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Count
         ///
         /// <summary>
-        /// Gets the string that represents the compressing or extracting
-        /// files or directories.
+        /// Gets the string that represents the number of compressing or
+        /// extracting files or directories.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -122,6 +155,19 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         public bool CountVisible => Facade.Report.TotalCount > 0;
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Style
+        ///
+        /// <summary>
+        /// Gets the current progress bar style.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ProgressBarStyle Style => Facade.Report.TotalCount > 0 ?
+            ProgressBarStyle.Continuous :
+            ProgressBarStyle.Marquee;
+
         #endregion
 
         #region Methods
@@ -140,6 +186,17 @@ namespace Cube.FileSystem.SevenZip.Ice
             try { Facade.Start(); }
             finally { Send<CloseMessage>(); }
         });
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetLogo
+        ///
+        /// <summary>
+        /// Gets the log image of the window.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected abstract Image GetLogo();
 
         /* ----------------------------------------------------------------- */
         ///
