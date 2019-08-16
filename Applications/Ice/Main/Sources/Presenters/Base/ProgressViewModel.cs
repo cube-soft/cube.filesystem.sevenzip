@@ -57,7 +57,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         ) : base(facade, aggregator, context)
         {
             Add(Facade.Subscribe(e => {
-                if (e == nameof(Facade.Busy)) Refresh(nameof(Busy));
+                if (e == nameof(Facade.State)) Refresh(nameof(State));
                 else if (e == nameof(Facade.Report)) Refresh(nameof(Title));
             }));
         }
@@ -98,17 +98,6 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         public string Text => GetText();
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Busy
-        ///
-        /// <summary>
-        /// Gets a value indicating whether to work in progress.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public bool Busy => Facade.Busy;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -181,6 +170,17 @@ namespace Cube.FileSystem.SevenZip.Ice
         public ProgressBarStyle Style => Facade.Report.TotalCount > 0 ?
             ProgressBarStyle.Continuous :
             ProgressBarStyle.Marquee;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// State
+        ///
+        /// <summary>
+        /// Gets the current state;
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public TimerState State => Facade.State;
 
         #endregion
 

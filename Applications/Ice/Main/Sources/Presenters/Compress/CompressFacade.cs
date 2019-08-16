@@ -75,25 +75,19 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Start
+        /// OnExecute
         ///
         /// <summary>
-        /// Starts the compression with the provided settings.
+        /// Executes the main operation.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public override void Start() => Contract(() =>
+        protected override void OnExecute() => Contract(() =>
         {
-            try
-            {
-                base.Start();
-                var src = Runtime.GetValue(Request.Sources.First(), Request.Format, IO);
-                InvokePreProcess(src);
-                Invoke(src);
-                InvokePostProcess();
-            }
-            catch (OperationCanceledException) { /* user cancel */ }
-            finally { Terminate(); }
+            var src = Runtime.GetValue(Request.Sources.First(), Request.Format, IO);
+            InvokePreProcess(src);
+            Invoke(src);
+            InvokePostProcess();
         });
 
         #endregion

@@ -82,28 +82,22 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Start
+        /// OnExecute
         ///
         /// <summary>
-        /// Starts to extract the provided archives.
+        /// Executes the main operation.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public override void Start() => Contract(() =>
+        protected override void OnExecute() => Contract(() =>
         {
             foreach (var src in Request.Sources)
             {
-                try
-                {
-                    Source = src;
-                    base.Start();
-                    var explorer = new PathExplorer(SelectAction.Get(this), Settings);
-                    InvokePreProcess(explorer);
-                    Invoke(explorer);
-                    InvokePostProcess(explorer);
-                }
-                catch (OperationCanceledException) { /* user cancel */ }
-                finally { Terminate(); }
+                Source = src;
+                var explorer = new PathExplorer(SelectAction.Get(this), Settings);
+                InvokePreProcess(explorer);
+                Invoke(explorer);
+                InvokePostProcess(explorer);
             }
         });
 

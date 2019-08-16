@@ -49,6 +49,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         protected ProgressFacade(Invoker invoker) : base(invoker)
         {
+            State = TimerState.Stop;
             _timer.Elapsed += (s, e) => Refresh(nameof(Report));
         }
 
@@ -69,16 +70,16 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Busy
+        /// State
         ///
         /// <summary>
-        /// Gets a value indicating whether to work in progress.
+        /// Gets the current state.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool Busy
+        public TimerState State
         {
-            get => GetProperty<bool>();
+            get => GetProperty<TimerState>();
             private set => SetProperty(value);
         }
 
@@ -88,7 +89,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Progress
+        /// GetProgress
         ///
         /// <summary>
         /// Gets the object to report the progress.
@@ -101,7 +102,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Progress
+        /// GetProgress
         ///
         /// <summary>
         /// Gets the object to report the progress.
@@ -124,10 +125,21 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public virtual void Start()
+        public void Start()
         {
-            Busy = true;
-            _timer.Start();
+            try
+            {
+                _timer.Start();
+                State = TimerState.Run;
+                OnExecute();
+                Terminate();
+            }
+            catch (OperationCanceledException) { /* user cancel */ }
+            finally
+            {
+                State = TimerState.Stop;
+                _timer.Stop();
+            }
         }
 
         /* ----------------------------------------------------------------- */
@@ -154,7 +166,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Suspend() => _supend.Reset();
+        public void Suspend()
+        {
+            if (State != TimerState.Run) return;
+            State = TimerState.Suspend;
+            _ = _supend.Reset();
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -165,38 +182,23 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Resume() => _supend.Set();
+        public void Resume()
+        {
+            if (State != TimerState.Suspend) return;
+            _ = _supend.Set();
+            State = TimerState.Run;
+        }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Terminate
+        /// OnExecute
         ///
         /// <summary>
-        /// Notifies that the operation has been completed.
+        /// Executes the main operation.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected void Terminate()
-        {
-            try
-            {
-                _timer.Stop();
-
-                if (Report.Count < Report.TotalCount || Report.Bytes < Report.TotalBytes) // hack
-                {
-                    this.LogDebug(
-                        $"{nameof(Report.Count)}:{Report.Count:#,0} / {Report.TotalCount:#,0}",
-                        $"{nameof(Report.Bytes)}:{Report.Bytes:#,0} / {Report.TotalBytes:#,0}"
-                    );
-
-                    Report.Count = Report.TotalCount;
-                    Report.Bytes = Report.TotalBytes;
-
-                    Refresh(nameof(Report));
-                }
-            }
-            finally { Busy = false; }
-        }
+        protected abstract void OnExecute();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -240,6 +242,35 @@ namespace Cube.FileSystem.SevenZip.Ice
 
             _timer.Dispose();
             _supend.Dispose();
+        }
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Terminate
+        ///
+        /// <summary>
+        /// Executes the termination.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Terminate()
+        {
+            if (Report.Count < Report.TotalCount || Report.Bytes < Report.TotalBytes) // hack
+            {
+                this.LogDebug(
+                    $"{nameof(Report.Count)}:{Report.Count:#,0} / {Report.TotalCount:#,0}",
+                    $"{nameof(Report.Bytes)}:{Report.Bytes:#,0} / {Report.TotalBytes:#,0}"
+                );
+
+                Report.Count = Report.TotalCount;
+                Report.Bytes = Report.TotalBytes;
+
+                Refresh(nameof(Report));
+            }
         }
 
         #endregion
