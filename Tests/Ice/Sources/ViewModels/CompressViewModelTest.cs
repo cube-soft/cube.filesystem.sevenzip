@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.SevenZip.Ice;
+using Cube.FileSystem.SevenZip.Ice.Settings;
 using Cube.Tests;
 using NUnit.Framework;
 using System.Linq;
@@ -32,134 +32,148 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class CompressViewModelTest : FileFixture
+    class CompressViewModelTest : ArchiveFixture
     {
+        #region Tests
+
         /* ----------------------------------------------------------------- */
         ///
-        /// Archive_Exists
+        /// OverwritePrompt
         ///
         /// <summary>
-        /// 保存パスに指定されたファイルが既に存在する場合の挙動を確認
-        /// します。
+        /// Tests to send the SaveDialogMessage because the specified
+        /// file exists.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Archive_Exists()
+        public void OverwritePrompt()
         {
-            var src = GetSource("Sample.txt");
-            var exists = Get("Exists", "Sample.zip");
-            var dest = Get("Exists", "SampleRuntime.zip");
-            var args = PresetMenu.Archive.ToArguments().Concat(new[] { src });
-
-            Mock.Destination = dest;
-            IO.Copy(GetSource("Single.1.0.0.zip"), exists);
-
-            using (var p = Create(new Request(args)))
+            var dir   = Get("Exists");
+            var src   = new[] { GetSource("Sample.txt") };
+            var dest  = IO.Combine(dir, "SampleRuntime.zip");
+            var args  = PresetMenu.Compress.ToArguments().Concat(src);
+            var value = new CompressValue
             {
-                p.Settings.Value.ErrorReport = false;
-                p.Settings.Value.Archive.SaveLocation = SaveLocation.Others;
-                p.Settings.Value.Archive.SaveDirectoryName = Get("Exists");
-                p.View.Show();
+                SaveLocation  = SaveLocation.Others,
+                SaveDirectory = dir,
+            };
 
-                Assert.That(Wait(p.View).Result, Is.True, "Timeout");
-            }
-
+            IO.Copy(GetSource("Single.1.0.0.zip"), IO.Combine(dir, "Sample.zip"), true);
+            Create(src, args, value, vm => {
+                using (vm.SetDestination(dest))
+                {
+                    var token = vm.GetToken();
+                    vm.Start();
+                    Assert.That(Wait.For(token), "Timeout");
+                }
+            });
             Assert.That(IO.Exists(dest), Is.True, dest);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Archive_Overwrite
+        /// Overwrite
         ///
         /// <summary>
-        /// 保存パスに指定されたファイルが既に存在する場合の挙動を確認
-        /// します。
+        /// Tests to overwrite the archive.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Archive_Overwrite()
+        public void Overwrite()
         {
-            var src = GetSource("Sample.txt");
-            var dest = Get("Overwrite", "Sample.zip");
-            var args = PresetMenu.Archive.ToArguments().Concat(new[] { src });
-            var tmp = string.Empty;
-
-            Mock.Destination = dest;
-            IO.Copy(GetSource("Single.1.0.0.zip"), dest);
-
-            using (var p = Create(new Request(args)))
+            var dir  = Get("Overwrite");
+            var src  = new[] { GetSource("Sample.txt") };
+            var dest = IO.Combine("Sample.zip");
+            var args = PresetMenu.Compress.ToArguments().Concat(src);
+            var value = new CompressValue
             {
-                p.Settings.Value.Archive.SaveLocation = SaveLocation.Runtime;
-                p.View.Show();
+                SaveLocation  = SaveLocation.Query,
+                SaveDirectory = dir,
+            };
 
-                Assert.That(Wait(p.View).Result, Is.True, "Timeout");
-
-                tmp = p.Model.Tmp;
-            }
-
-            Assert.That(tmp, Is.Not.Null.And.Not.Empty);
-            Assert.That(IO.Exists(tmp), Is.False, tmp);
+            IO.Copy(GetSource("Single.1.0.0.zip"), dest, true);
+            Create(src, args, value, vm => {
+                using (vm.SetDestination(dest))
+                {
+                    var token = vm.GetToken();
+                    vm.Start();
+                    Assert.That(Wait.For(token), "Timeout");
+                }
+            });
             Assert.That(IO.Exists(dest), Is.True, dest);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Archive_PasswordCancel
+        /// CancelPassword
         ///
         /// <summary>
-        /// パスワードの設定をキャンセルするテストを実行します。
+        /// Tests to cancel the password input.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Archive_PasswordCancel()
+        public void CancelPassword()
         {
-            var dir = Get("PasswordCancel");
-            var src = GetSource("Sample.txt");
-            var dest = IO.Combine(dir, "Sample.zip");
-            var args = PresetMenu.ArchiveZipPassword.ToArguments().Concat(new[] { src });
-
-            using (var p = Create(new Request(args)))
+            var dir   = Get("CancelPassword");
+            var src   = new[] { GetSource("Sample.txt") };
+            var dest  = IO.Combine(dir, "Sample.zip");
+            var args  = PresetMenu.CompressZipPassword.ToArguments().Concat(src);
+            var value = new CompressValue
             {
-                p.Settings.Value.Archive.SaveLocation = SaveLocation.Others;
-                p.Settings.Value.Archive.SaveDirectoryName = dir;
-                p.View.Show();
+                SaveLocation = SaveLocation.Others,
+                SaveDirectory = dir,
+            };
 
-                Assert.That(Wait(p.View).Result, Is.True, "Timeout");
-            }
-
+            IO.Copy(GetSource("Single.1.0.0.zip"), dest, true);
+            Create(src, args, value, vm => {
+                using (vm.SetDestination(dest))
+                {
+                    var token = vm.GetToken();
+                    vm.Start();
+                    Assert.That(Wait.For(token), "Timeout");
+                }
+            });
             Assert.That(IO.Exists(dest), Is.False, dest);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Archive_MoveFailed
+        /// MoveFailed
         ///
         /// <summary>
-        /// ファイルの移動に失敗するテストを実行します。
+        /// Confirms the behavior when the compressed file is failed to
+        /// move.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Archive_MoveFailed()
+        public void MoveFailed()
         {
-            var dir = Get("MoveFailed");
-            var src = GetSource("Sample.txt");
-            var dest = IO.Combine(dir, "Sample.zip");
-
-            Mock.Destination = dir;
-            IO.Copy(GetSource("Single.1.0.0.zip"), dest, true);
-
-            var args = PresetMenu.ArchiveZip.ToArguments().Concat(new[] { "/o:runtime", src });
-
-            using (var _ = IO.OpenRead(dest))
-            using (var p = Create(new Request(args)))
+            var dir   = Get("MoveFailed");
+            var src   = new[] { GetSource("Sample.txt") };
+            var dest  = IO.Combine(dir, "Sample.zip");
+            var args  = PresetMenu.CompressZip.ToArguments().Concat(new[] { "/o:runtime" }).Concat(src);
+            var value = new CompressValue
             {
-                p.View.Show();
-                Assert.That(Wait(p.View).Result, Is.True, "Timeout");
-            }
+                SaveLocation  = SaveLocation.Others,
+                SaveDirectory = dir,
+            };
+
+            IO.Copy(GetSource("Single.1.0.0.zip"), dest, true);
+            Create(src, args, value, vm => {
+                using (IO.OpenRead(dest))
+                using (vm.SetDestination(dest))
+                {
+                    var token = vm.GetToken();
+                    vm.Start();
+                    Assert.That(Wait.For(token), "Timeout");
+                }
+            });
         }
+
+        #endregion
     }
 }
