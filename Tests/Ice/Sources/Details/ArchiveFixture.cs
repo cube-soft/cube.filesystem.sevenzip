@@ -67,6 +67,37 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             using (var vm = new CompressViewModel(request, folder, context)) callback(vm);
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create
+        ///
+        /// <summary>
+        /// Creates a new instance of the ExtractViewModel class with
+        /// the specified arguments and invokes the specified callback.
+        /// </summary>
+        ///
+        /// <param name="files">Source files.</param>
+        /// <param name="args">Program arguments.</param>
+        /// <param name="settings">User settings for compression.</param>
+        /// <param name="callback">Callback action.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected void Create(IEnumerable<string> files,
+            IEnumerable<string> args,
+            ExtractValue settings,
+            Action<ExtractViewModel> callback
+        ) {
+            var context = new SynchronizationContext();
+            var request = new Request(args.Concat(files.Select(e => GetSource(e))));
+            var folder  = new SettingFolder(GetType().Assembly, IO);
+
+            folder.Value.Extract  = settings;
+            folder.Value.Filters  = "Filter.txt|FilterDirectory";
+            folder.Value.Explorer = "dummy.exe";
+
+            using (var vm = new ExtractViewModel(request, folder, context)) callback(vm);
+        }
+
         #endregion
     }
 }

@@ -16,7 +16,6 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.FileSystem.SevenZip.Ice.Settings;
-using Cube.Tests;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,9 +65,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 Assert.That(vm.Count, Is.Not.Null.And.Not.Empty);
                 Assert.That(vm.CountVisible, Is.False);
 
-                var token = vm.GetToken();
-                vm.Start();
-                Assert.That(Wait.For(token), "Timeout");
+                vm.Test();
             }
 
             Assert.That(IO.Exists(Get(dest)), Is.True, dest);

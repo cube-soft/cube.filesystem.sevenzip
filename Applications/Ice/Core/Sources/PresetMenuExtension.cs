@@ -49,8 +49,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             var dest = new List<ContextMenu>();
             Add(src, PresetMenu.Compress, CompressMenu, dest);
-            Add(src, PresetMenu.Extract, ExtractMenu, dest);
-            Add(src, PresetMenu.Mail,    MailMenu,    dest);
+            Add(src, PresetMenu.Extract,  ExtractMenu,  dest);
+            Add(src, PresetMenu.Mail,     MailMenu,     dest);
             return dest;
         }
 
@@ -77,9 +77,9 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* --------------------------------------------------------------------- */
         public static ContextMenu ToContextMenu(this PresetMenu src) => new ContextMenu
         {
-            Name         = ToName(src),
-            Arguments    = string.Join(" ", ToArguments(src)),
-            IconIndex    = ToIconIndex(src),
+            Name      = ToName(src),
+            Arguments = string.Join(" ", ToArguments(src)),
+            IconIndex = ToIconIndex(src),
         };
 
         /* --------------------------------------------------------------------- */

@@ -203,6 +203,29 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Cancel
+        ///
+        /// <summary>
+        /// Cancels the current operation.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Cancel() => Facade.Cancel();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SuspendOrResume
+        ///
+        /// <summary>
+        /// Invokes the Suspend or Resume method according to the current
+        /// state.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void SuspendOrResume() => Facade.SuspendOrResume();
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// GetLogo
         ///
         /// <summary>

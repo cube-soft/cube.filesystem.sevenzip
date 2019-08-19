@@ -16,7 +16,6 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.FileSystem.SevenZip.Ice.Settings;
-using Cube.Tests;
 using NUnit.Framework;
 using System.Linq;
 
@@ -24,10 +23,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// CompressTest
+    /// CompressViewModelTest
     ///
     /// <summary>
-    /// Tests the CompressViewModel class.
+    /// Tests the CompressViewModel class except for the main operation.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -60,14 +59,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             };
 
             IO.Copy(GetSource("Single.1.0.0.zip"), IO.Combine(dir, "Sample.zip"), true);
-            Create(src, args, value, vm => {
-                using (vm.SetDestination(dest))
-                {
-                    var token = vm.GetToken();
-                    vm.Start();
-                    Assert.That(Wait.For(token), "Timeout");
-                }
-            });
+            Create(src, args, value, vm => { using (vm.SetDestination(dest)) vm.Test(); });
             Assert.That(IO.Exists(dest), Is.True, dest);
         }
 
@@ -94,14 +86,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             };
 
             IO.Copy(GetSource("Single.1.0.0.zip"), dest, true);
-            Create(src, args, value, vm => {
-                using (vm.SetDestination(dest))
-                {
-                    var token = vm.GetToken();
-                    vm.Start();
-                    Assert.That(Wait.For(token), "Timeout");
-                }
-            });
+            Create(src, args, value, vm => { using (vm.SetDestination(dest)) vm.Test(); });
             Assert.That(IO.Exists(dest), Is.True, dest);
         }
 
@@ -128,14 +113,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             };
 
             IO.Copy(GetSource("Single.1.0.0.zip"), dest, true);
-            Create(src, args, value, vm => {
-                using (vm.SetDestination(dest))
-                {
-                    var token = vm.GetToken();
-                    vm.Start();
-                    Assert.That(Wait.For(token), "Timeout");
-                }
-            });
+            Create(src, args, value, vm => { using (vm.SetDestination(dest)) vm.Test(); });
             Assert.That(IO.Exists(dest), Is.False, dest);
         }
 
@@ -167,9 +145,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 using (IO.OpenRead(dest))
                 using (vm.SetDestination(dest))
                 {
-                    var token = vm.GetToken();
-                    vm.Start();
-                    Assert.That(Wait.For(token), "Timeout");
+                    vm.Test();
                 }
             });
         }

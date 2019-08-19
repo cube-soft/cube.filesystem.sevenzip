@@ -102,6 +102,34 @@ namespace Cube.FileSystem.SevenZip.Ice
             src.Report.Current.FullName :
             Properties.Resources.MessagePreExtract;
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SuspendOrResume
+        ///
+        /// <summary>
+        /// Invokes the Suspend or Resume method according to the current
+        /// state.
+        /// </summary>
+        ///
+        /// <param name="src">Facade to report progress.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static void SuspendOrResume(this ProgressFacade src)
+        {
+            switch (src.State)
+            {
+                case TimerState.Run:
+                    src.Suspend();
+                    break;
+                case TimerState.Suspend:
+                    src.Resume();
+                    break;
+                case TimerState.Stop:
+                case TimerState.Unknown:
+                    break;
+            }
+        }
+
         #endregion
 
         #region Implementations

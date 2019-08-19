@@ -17,6 +17,8 @@
 /* ------------------------------------------------------------------------- */
 using Cube.Mixin.Assembly;
 using Cube.Mixin.Observing;
+using Cube.Tests;
+using NUnit.Framework;
 using System;
 using System.Threading;
 
@@ -38,11 +40,55 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Test
+        ///
+        /// <summary>
+        /// Tests the main operation.
+        /// </summary>
+        ///
+        /// <param name="src">Source ViewModel.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static void Test<T>(this ArchiveViewModel<T> src)
+            where T : ArchiveFacade => src.Test(() => { });
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Test
+        ///
+        /// <summary>
+        /// Tests the main operation.
+        /// </summary>
+        ///
+        /// <param name="src">Source ViewModel.</param>
+        /// <param name="callback">Action after starting.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static void Test<T>(this ArchiveViewModel<T> src, Action callback)
+            where T : ArchiveFacade
+        {
+            var cts = new CancellationTokenSource();
+            using (src.Subscribe(e => {
+                if (e == nameof(src.State) && src.State == TimerState.Stop) cts.Cancel();
+            })) {
+                src.Start();
+                callback();
+                Assert.That(Wait.For(cts.Token), "Timeout");
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// SetPassword
         ///
         /// <summary>
         /// Subscribes the message to set password.
         /// </summary>
+        ///
+        /// <param name="src">Source ViewModel.</param>
+        /// <param name="value">Password to set when requested.</param>
+        ///
+        /// <returns>Object to clear the subscription.</returns>
         ///
         /* ----------------------------------------------------------------- */
         public static IDisposable SetPassword<T>(this ArchiveViewModel<T> src, string value)
@@ -60,6 +106,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// Subscribes the message to select the save path.
         /// </summary>
         ///
+        /// <param name="src">Source ViewModel.</param>
+        /// <param name="value">Save path to set when requested.</param>
+        ///
+        /// <returns>Object to clear the subscription.</returns>
+        ///
         /* ----------------------------------------------------------------- */
         public static IDisposable SetDestination<T>(this ArchiveViewModel<T> src, string value)
             where T : ArchiveFacade => src.Subscribe<QueryMessage<SelectQuerySource, string>>(e =>
@@ -70,22 +121,26 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetToken
+        /// SetOverwrite
         ///
         /// <summary>
-        /// Gets token to wait for the main operation.
+        /// Subscribes the message to select the overwrite method.
         /// </summary>
         ///
+        /// <param name="src">Source ViewModel.</param>
+        /// <param name="value">
+        /// Overwrite method to set when requested.
+        /// </param>
+        ///
+        /// <returns>Object to clear the subscription.</returns>
+        ///
         /* ----------------------------------------------------------------- */
-        public static CancellationToken GetToken<T>(this ArchiveViewModel<T> src)
-            where T : ArchiveFacade
+        public static IDisposable SetOverwrite(this ExtractViewModel src, OverwriteMethod value) =>
+            src.Subscribe<QueryMessage<OverwriteQuerySource, OverwriteMethod>>(e =>
         {
-            var dest = new CancellationTokenSource();
-            _ = src.Subscribe(e => {
-                if (e == nameof(src.State) && src.State == TimerState.Stop) dest.Cancel();
-            });
-            return dest.Token;
-        }
+            e.Value  = value;
+            e.Cancel = false;
+        });
 
         /* ----------------------------------------------------------------- */
         ///
@@ -94,6 +149,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// <summary>
         /// Gets the absolute path of the specified filename.
         /// </summary>
+        ///
+        /// <param name="src">Source type.</param>
+        /// <param name="filename">Filename or relative path.</param>
+        ///
+        /// <returns>Absolute path.</returns>
         ///
         /// <remarks>
         /// FileFixture.Get と同じ内容を返す静的メソッドです。
