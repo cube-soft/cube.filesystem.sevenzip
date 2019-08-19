@@ -239,6 +239,17 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Customize
+        ///
+        /// <summary>
+        /// Shows the custom context-menu dialog.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Customize() { /* TODO: implementation */ }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Dispose
         ///
         /// <summary>

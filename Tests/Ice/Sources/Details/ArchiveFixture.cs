@@ -29,12 +29,28 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
     /// ArchiveFixture
     ///
     /// <summary>
-    /// Provides functionality to
+    /// Provides functionality to help the tests for ArchiveViewModel
+    /// and its inherited classes.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     abstract class ArchiveFixture : FileFixture
     {
+        #region Constructors
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ArchiveFixture
+        ///
+        /// <summary>
+        /// Initializes a new instance of the ArchiveFixture class.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected ArchiveFixture() : base(new AfsIO()) { }
+
+        #endregion
+
         #region Methods
 
         /* ----------------------------------------------------------------- */
