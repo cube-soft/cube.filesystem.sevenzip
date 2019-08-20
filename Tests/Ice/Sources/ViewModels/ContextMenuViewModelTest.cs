@@ -66,7 +66,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             }
 
             var m    = Create();
-            var vm   = new MainViewModel(m);
+            var vm   = new MainViewModel(m, new SynchronizationContext());
             var src  = vm.ContextMenu;
             var dest = m.Value.ContextMenu;
 
@@ -161,7 +161,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         private ContextMenuValue InvokeCustomize()
         {
             var dest = Create();
-            using (var vm = new MainViewModel(dest)) vm.Customize();
+            using (var vm = new MainViewModel(dest, new SynchronizationContext())) vm.Customize();
             return dest.Value.ContextMenu;
         }
 

@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using Cube.Mixin.String;
 using System;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
@@ -62,7 +63,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
                 if (im) Logger.Info(typeof(Program), "InstallMode");
 
                 var view = new MainWindow(im);
-                var vm   = new MainViewModel(settings);
+                var vm   = new MainViewModel(settings, SynchronizationContext.Current);
                 vm.Associate.Changed = im;
                 if (!im) vm.Sync();
                 view.Bind(vm);

@@ -19,6 +19,7 @@ using Cube.FileSystem.SevenZip.Ice.Settings;
 using NUnit.Framework;
 using System;
 using System.Linq;
+using System.Threading;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
@@ -50,7 +51,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         {
             var m = Create();
 
-            var vm = new MainViewModel(m)
+            var vm = new MainViewModel(m, new SynchronizationContext())
             {
                 CheckUpdate  = true,
                 ErrorReport  = true,
@@ -112,7 +113,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         public void ArchiveSettings()
         {
             var m    = Create();
-            var vm   = new MainViewModel(m);
+            var vm   = new MainViewModel(m, new SynchronizationContext());
             var src  = vm.Compress;
             var dest = m.Value.Compress;
 
@@ -205,7 +206,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         public void ExtractSettings()
         {
             var m    = Create();
-            var vm   = new MainViewModel(m);
+            var vm   = new MainViewModel(m, new SynchronizationContext());
             var src  = vm.Extract;
             var dest = m.Value.Extract;
 
@@ -325,7 +326,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         public void AssociateSettings()
         {
             var m    = Create();
-            var vm   = new MainViewModel(m);
+            var vm   = new MainViewModel(m, new SynchronizationContext());
             var src  = vm.Associate;
             var dest = m.Value.Associate;
 
@@ -444,7 +445,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         public void ShortcutSettings()
         {
             var m    = Create();
-            var vm   = new MainViewModel(m);
+            var vm   = new MainViewModel(m, new SynchronizationContext());
             var src  = vm.Shortcut;
             var dest = m.Value.Shortcut;
 
@@ -485,7 +486,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var m0 = Create();
             m0.Value.Shortcut.Directory = Results;
 
-            var vm0 = new MainViewModel(m0) { CheckUpdate = true };
+            var vm0 = new MainViewModel(m0, new SynchronizationContext()) { CheckUpdate = true };
             vm0.Associate.Changed = install;
             vm0.Sync();
             vm0.Associate.Clear();
@@ -495,7 +496,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             m1.Load();
             m1.Value.Shortcut.Directory = Results;
 
-            var vm1 = new MainViewModel(m1) { CheckUpdate = false };
+            var vm1 = new MainViewModel(m1, new SynchronizationContext()) { CheckUpdate = false };
             vm1.Update();
         });
 

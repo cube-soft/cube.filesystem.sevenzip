@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using Cube.Mixin.Collections;
 using System;
+using System.Threading;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
@@ -42,10 +43,12 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// specified arguments.
         /// </summary>
         ///
-        /// <param name="facade">Facade model.</param>
+        /// <param name="facade">Facade of other models.</param>
+        /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public MainViewModel(SettingFolder facade) : base(facade)
+        public MainViewModel(SettingFolder facade, SynchronizationContext context) :
+            base(facade, new Aggregator(), context)
         {
             Facade.PropertyChanged += (s, e) => OnPropertyChanged(e);
 
