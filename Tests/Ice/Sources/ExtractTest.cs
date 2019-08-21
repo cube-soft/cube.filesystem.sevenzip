@@ -67,7 +67,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 vm.Test();
             }
 
-            Assert.That(IO.Exists(dest), Is.True, dest);
+            Assert.That(IO.Exists(Get(dest)), Is.True, dest);
         });
 
         #endregion

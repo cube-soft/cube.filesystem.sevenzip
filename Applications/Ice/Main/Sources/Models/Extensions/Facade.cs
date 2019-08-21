@@ -48,7 +48,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         public static string GetTitle(this CompressFacade src) =>
-            GetTitle(src, src.IO.Get(src.Destination).Name);
+            GetTitle(src, src.Destination);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -64,7 +64,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         public static string GetTitle(this ExtractFacade src) =>
-            GetTitle(src, src.IO.Get(src.Source).Name);
+            GetTitle(src, src.Source);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -143,17 +143,17 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /// <param name="src">Facade object.</param>
-        /// <param name="filename">Target filename.</param>
+        /// <param name="path">Target filename.</param>
         ///
         /// <returns>Title of application.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        private static string GetTitle(ArchiveFacade src, string filename)
+        private static string GetTitle(ArchiveFacade src, string path)
         {
             var percentage = (int)(src.Report.Ratio * 100.0);
             var dest = new StringBuilder();
             _ = dest.Append($"{percentage}%");
-            if (filename.HasValue()) _ = dest.Append($" - {filename}");
+            if (path.HasValue()) _ = dest.Append($" - {src.IO.Get(path).Name}");
             _ = dest.Append($" - {src.GetType().Assembly.GetProduct()}");
             return dest.ToString();
         }
