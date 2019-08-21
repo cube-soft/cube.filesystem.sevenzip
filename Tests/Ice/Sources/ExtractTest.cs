@@ -51,7 +51,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             IEnumerable<string> files,
             IEnumerable<string> args,
             ExtractValue settings
-        ) => Create(files, args, Make(settings), vm =>
+        ) => Create(files, args, settings, vm =>
         {
             using (vm.SetPassword("password")) // if needed
             using (vm.SetDestination(Get("Runtime")))
@@ -96,7 +96,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             get
             {
                 yield return new TestCaseData(
-                    @"Others\Complex.1.0.0",
+                    @"Preset\Complex.1.0.0",
                     new[] { "Complex.1.0.0.zip" },
                     PresetMenu.Extract.ToArguments(),
                     new ExtractValue
@@ -120,7 +120,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 );
 
                 yield return new TestCaseData(
-                    @"Others\Sample",
+                    @"Preset\Sample\Empty",
                     new[] { "SampleEmpty.zip" },
                     PresetMenu.Extract.ToArguments(),
                     new ExtractValue
@@ -132,7 +132,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 );
 
                 yield return new TestCaseData(
-                    @"Others\フィルタリング テスト用",
+                    @"Preset\フィルタリング テスト用",
                     new[] { "SampleFilter.zip" },
                     PresetMenu.Extract.ToArguments(),
                     new ExtractValue
@@ -144,7 +144,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 );
 
                 yield return new TestCaseData(
-                    @"Others\名称未設定フォルダ",
+                    @"Preset\名称未設定フォルダ",
                     new[] { "SampleMac.zip" },
                     PresetMenu.Extract.ToArguments(),
                     new ExtractValue
@@ -156,7 +156,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 );
 
                 yield return new TestCaseData(
-                    @"Others\Sample 2018.02.13",
+                    @"Preset\Sample 2018.02.13",
                     new[] { "Sample 2018.02.13.zip" },
                     PresetMenu.Extract.ToArguments(),
                     new ExtractValue
@@ -168,7 +168,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 );
 
                 yield return new TestCaseData(
-                    @"Others\Sample..DoubleDot",
+                    @"Preset\Sample..DoubleDot",
                     new[] { "Sample..DoubleDot.zip" },
                     PresetMenu.Extract.ToArguments(),
                     new ExtractValue
@@ -180,7 +180,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 );
 
                 yield return new TestCaseData(
-                    @"Others\Password",
+                    @"Preset\Password",
                     new[] { "Password.7z" },
                     PresetMenu.Extract.ToArguments(),
                     new ExtractValue
@@ -512,21 +512,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         #endregion
 
         #region Others
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Make
-        ///
-        /// <summary>
-        /// Adds some settings to the specified value.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private ExtractValue Make(ExtractValue src)
-        {
-            src.SaveDirectory = Get("Others");
-            return src;
-        }
 
         /* ----------------------------------------------------------------- */
         ///

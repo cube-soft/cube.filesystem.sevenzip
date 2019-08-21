@@ -51,7 +51,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             IEnumerable<string> files,
             IEnumerable<string> args,
             CompressValue settings
-        ) => Create(files, args, Make(settings), vm => {
+        ) => Create(files, args, settings, vm => {
             var filename = GetFileName(GetSource(files.First()), dest);
 
             using (vm.SetPassword("password"))
@@ -97,7 +97,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             get
             {
                 yield return new TestCaseData(
-                    @"Others\Sample.zip",
+                    @"Preset\Sample.zip",
                     new[] { "Sample.txt" },
                     PresetMenu.Compress.ToArguments(),
                     new CompressValue
@@ -109,7 +109,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 );
 
                 yield return new TestCaseData(
-                    @"Others\Sample 00..01.zip",
+                    @"Preset\Sample 00..01.zip",
                     new[] { "Sample 00..01" },
                     PresetMenu.Compress.ToArguments(),
                     new CompressValue
@@ -121,7 +121,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 );
 
                 yield return new TestCaseData(
-                    @"Others\Sample.7z",
+                    @"Preset\Sample.7z",
                     new[] { "Sample.txt", "Sample 00..01" },
                     PresetMenu.CompressSevenZip.ToArguments(),
                     new CompressValue
@@ -133,7 +133,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 );
 
                 yield return new TestCaseData(
-                    @"Others\Sample.tar.bz2",
+                    @"Preset\Sample.tar.bz2",
                     new[] { "Sample.txt", "Sample 00..01" },
                     PresetMenu.CompressBZip2.ToArguments(),
                     new CompressValue
@@ -145,7 +145,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 );
 
                 yield return new TestCaseData(
-                    @"Others\Sample.exe",
+                    @"Preset\Sample.exe",
                     new[] { "Sample.txt", "Sample 00..01" },
                     PresetMenu.CompressSfx.ToArguments(),
                     new CompressValue
@@ -233,21 +233,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         #endregion
 
         #region Others
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Make
-        ///
-        /// <summary>
-        /// Adds some settings to the specified value.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private CompressValue Make(CompressValue src)
-        {
-            src.SaveDirectory = Get("Others");
-            return src;
-        }
 
         /* ----------------------------------------------------------------- */
         ///
