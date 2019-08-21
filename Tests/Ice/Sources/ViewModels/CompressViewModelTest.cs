@@ -56,6 +56,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             {
                 SaveLocation  = SaveLocation.Others,
                 SaveDirectory = dir,
+                OpenMethod    = OpenMethod.None,
             };
 
             IO.Copy(GetSource("Single.1.0.0.zip"), IO.Combine(dir, "Sample.zip"), true);
@@ -83,7 +84,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             {
                 SaveLocation  = SaveLocation.Query,
                 SaveDirectory = dir,
-            };
+                OpenMethod    = OpenMethod.None,
+           };
 
             IO.Copy(GetSource("Single.1.0.0.zip"), dest, true);
             Create(src, args, value, vm => { using (vm.SetDestination(dest)) vm.Test(); });
@@ -108,8 +110,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var args  = PresetMenu.CompressZipPassword.ToArguments().Concat(src);
             var value = new CompressValue
             {
-                SaveLocation = SaveLocation.Others,
+                SaveLocation  = SaveLocation.Others,
                 SaveDirectory = dir,
+                OpenMethod    = OpenMethod.None,
             };
 
             IO.Copy(GetSource("Single.1.0.0.zip"), dest, true);
@@ -138,6 +141,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             {
                 SaveLocation  = SaveLocation.Others,
                 SaveDirectory = dir,
+                OpenMethod    = OpenMethod.None,
             };
 
             IO.Copy(GetSource("Single.1.0.0.zip"), dest, true);
