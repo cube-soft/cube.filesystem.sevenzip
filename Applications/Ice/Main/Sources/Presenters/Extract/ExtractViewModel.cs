@@ -52,7 +52,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             SettingFolder settings,
             SynchronizationContext context
         ) : base(
-            new ExtractFacade(request, settings, new ContextInvoker(false)),
+            new ExtractFacade(request, settings, new ContextInvoker(context, false)),
             new Aggregator(),
             context
         ) {
