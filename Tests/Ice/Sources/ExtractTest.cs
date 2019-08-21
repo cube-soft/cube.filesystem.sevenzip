@@ -113,7 +113,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     PresetMenu.ExtractRuntime.ToArguments(),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Preset,
+                        SaveLocation = SaveLocation.Query,
                         SaveMethod   = SaveMethod.CreateSmart,
                         Filtering    = false,
                     }
@@ -396,8 +396,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
                 yield return new TestCaseData(
                     @"RootDirectory\Complex-0x05\Complex.1.0.0",
-                    "Complex.1.0.0.zip",
-                    "",
+                    new[] { "Complex.1.0.0.zip" },
                     GetPathArgs(@"RootDirectory\Complex-0x05"),
                     new ExtractValue
                     {

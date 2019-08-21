@@ -182,8 +182,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private IEnumerable<string> GetHints(IEnumerable<ArchiveItem> src)
         {
-            if (Method.HasFlag(SaveMethod.Create) &&
-               !Method.HasFlag(SaveMethod.SkipOptions)) return Enumerable.Empty<string>();
+            var force = Method.HasFlag(SaveMethod.Create) && (Method & SaveMethod.SkipOptions) == 0;
+            if (force) return Enumerable.Empty<string>();
 
             var dest = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
             var cvt  = Filters.Any() ?

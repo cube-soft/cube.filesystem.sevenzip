@@ -126,7 +126,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /* ----------------------------------------------------------------- */
         private SettingFolder Make(SettingFolder src)
         {
-            src.Value.Filters  = "Filter.txt|FilterDirectory";
+            src.Value.Filters  = "Filter.txt|FilterDirectory|__MACOSX";
             src.Value.Explorer = "dummy.exe";
             return src;
         }
