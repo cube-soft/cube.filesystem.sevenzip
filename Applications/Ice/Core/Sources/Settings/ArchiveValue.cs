@@ -135,7 +135,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         protected virtual void Reset()
         {
-            _saveLocation  = SaveLocation.Others;
+            _saveLocation  = SaveLocation.Preset;
             _saveDirectory = string.Empty;
             _filtering     = true;
             _openMethod    = OpenMethod.OpenNotDesktop;

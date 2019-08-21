@@ -49,8 +49,8 @@ namespace Cube.FileSystem.SevenZip.Ice
     /* --------------------------------------------------------------------- */
     public enum SaveLocation
     {
-        /// <summary>Others</summary>
-        Others = 0,
+        /// <summary>Use the preset path setting</summary>
+        Preset = 0,
         /// <summary>Same as the source file</summary>
         Source = 1,
         /// <summary>Ask the user to select</summary>

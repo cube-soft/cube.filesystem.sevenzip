@@ -71,8 +71,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool SaveOthers
         {
-            get => Facade.SaveLocation == SaveLocation.Others;
-            set => SetSaveLocation(SaveLocation.Others, value);
+            get => Facade.SaveLocation == SaveLocation.Preset;
+            set => SetSaveLocation(SaveLocation.Preset, value);
         }
 
         /* ----------------------------------------------------------------- */

@@ -213,7 +213,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                     Query?.Request(msg);
                     if (msg.Cancel) throw new OperationCanceledException();
                     return msg.Value;
-                case SaveLocation.Others:
+                case SaveLocation.Preset:
                     break;
             }
 
