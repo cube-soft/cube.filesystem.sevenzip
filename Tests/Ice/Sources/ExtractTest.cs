@@ -101,7 +101,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     PresetMenu.Extract.ToArguments(),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.CreateSmart,
                         Filtering    = false,
                     }
@@ -113,7 +113,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     PresetMenu.ExtractRuntime.ToArguments(),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.CreateSmart,
                         Filtering    = false,
                     }
@@ -125,7 +125,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     PresetMenu.Extract.ToArguments(),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.CreateSmart,
                         Filtering    = false,
                     }
@@ -137,7 +137,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     PresetMenu.Extract.ToArguments(),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.CreateSmart,
                         Filtering    = true,
                     }
@@ -149,7 +149,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     PresetMenu.Extract.ToArguments(),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.CreateSmart,
                         Filtering    = true,
                     }
@@ -161,7 +161,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     PresetMenu.Extract.ToArguments(),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.CreateSmart,
                         Filtering    = true,
                     }
@@ -173,7 +173,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     PresetMenu.Extract.ToArguments(),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.CreateSmart,
                         Filtering    = true,
                     }
@@ -185,7 +185,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     PresetMenu.Extract.ToArguments(),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.CreateSmart,
                     }
                 );
@@ -196,7 +196,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs(@"RootDirectory\Single-0x00"),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.None,
                     }
                 );
@@ -207,7 +207,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs(@"RootDirectory\Single-0x01"),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.Create,
                     }
                 );
@@ -218,7 +218,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs(@"RootDirectory\Single-0x03"),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.CreateSmart,
                     }
                 );
@@ -229,7 +229,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs(@"RootDirectory\Single-0x05"),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.Create | SaveMethod.SkipSingleFile,
                     }
                 );
@@ -240,7 +240,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs(@"RootDirectory\Single-0x07"),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.Create |
                                        SaveMethod.SkipSingleFile |
                                        SaveMethod.SkipSingleDirectory,
@@ -253,7 +253,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs(@"RootDirectory\SingleDirectory-0x00"),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.None,
                     }
                 );
@@ -264,7 +264,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs(@"RootDirectory\SingleDirectory-0x01"),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.Create,
                     }
                 );
@@ -275,7 +275,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs(@"RootDirectory\SingleDirectory-0x03"),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.CreateSmart,
                     }
                 );
@@ -286,7 +286,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs(@"RootDirectory\SingleDirectory-0x05"),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.Create | SaveMethod.SkipSingleFile,
                     }
                 );
@@ -297,7 +297,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs(@"RootDirectory\SingleDirectory-0x07"),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.Create |
                                        SaveMethod.SkipSingleFile |
                                        SaveMethod.SkipSingleDirectory,
@@ -310,7 +310,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs(@"RootDirectory\MultiDirectory-0x00"),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.None,
                     }
                 );
@@ -321,7 +321,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs(@"RootDirectory\MultiDirectory-0x01"),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.Create,
                     }
                 );
@@ -332,7 +332,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs(@"RootDirectory\MultiDirectory-0x03"),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.CreateSmart,
                     }
                 );
@@ -343,7 +343,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs(@"RootDirectory\MultiDirectory-0x05"),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.Create | SaveMethod.SkipSingleFile,
                     }
                 );
@@ -354,7 +354,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs(@"RootDirectory\MultiDirectory-0x07"),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.Create |
                                        SaveMethod.SkipSingleFile |
                                        SaveMethod.SkipSingleDirectory,
@@ -367,7 +367,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs(@"RootDirectory\Complex-0x00"),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.None,
                     }
                 );
@@ -378,7 +378,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs(@"RootDirectory\Complex-0x01"),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.Create,
                     }
                 );
@@ -389,7 +389,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs(@"RootDirectory\Complex-0x03"),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.CreateSmart,
                     }
                 );
@@ -401,7 +401,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs(@"RootDirectory\Complex-0x05"),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.Create | SaveMethod.SkipSingleFile,
                     }
                 );
@@ -412,7 +412,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs(@"RootDirectory\Complex-0x07"),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.Create |
                                        SaveMethod.SkipSingleFile |
                                        SaveMethod.SkipSingleDirectory,
@@ -425,7 +425,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs("Tar"),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.CreateSmart,
                     }
                 );
@@ -436,7 +436,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs(@"Tar\BZipSample"),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.CreateSmart,
                     }
                 );
@@ -447,7 +447,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs(@"Tar\GZipSample"),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.CreateSmart,
                     }
                 );
@@ -458,7 +458,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs(@"Tar\LzmaSample"),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.CreateSmart,
                     }
                 );
@@ -469,7 +469,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs(@"Tar\LzwSample"),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod  = SaveMethod.CreateSmart,
                     }
                 );
@@ -480,7 +480,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs("Bz2Sample"),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.CreateSmart,
                     }
                 );
@@ -491,7 +491,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs("SfxSample"),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod   = SaveMethod.CreateSmart,
                     }
                 );
@@ -502,7 +502,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs("Multiple"),
                     new ExtractValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         SaveMethod = SaveMethod.CreateSmart,
                     }
                 );
@@ -525,7 +525,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         private ExtractValue Make(ExtractValue src)
         {
             src.SaveDirectory = Get("Others");
-            src.OpenMethod    = OpenMethod.None;
             return src;
         }
 

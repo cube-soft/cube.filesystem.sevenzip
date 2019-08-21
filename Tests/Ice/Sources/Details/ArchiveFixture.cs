@@ -75,11 +75,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         ) {
             var context = new SynchronizationContext();
             var request = new Request(args.Concat(files.Select(e => GetSource(e))));
-            var folder  = new SettingFolder(GetType().Assembly, IO);
+            var folder  = Make(new SettingFolder(GetType().Assembly, IO));
 
             folder.Value.Compress = settings;
-            folder.Value.Filters = "Filter.txt|FilterDirectory";
-
             using (var vm = new CompressViewModel(request, folder, context)) callback(vm);
         }
 
@@ -105,13 +103,30 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         ) {
             var context = new SynchronizationContext();
             var request = new Request(args.Concat(files.Select(e => GetSource(e))));
-            var folder  = new SettingFolder(GetType().Assembly, IO);
+            var folder  = Make(new SettingFolder(GetType().Assembly, IO));
 
-            folder.Value.Extract  = settings;
-            folder.Value.Filters  = "Filter.txt|FilterDirectory";
-            folder.Value.Explorer = "dummy.exe";
-
+            folder.Value.Extract = settings;
             using (var vm = new ExtractViewModel(request, folder, context)) callback(vm);
+        }
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Make
+        ///
+        /// <summary>
+        /// Sets the common settings to the specified value.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private SettingFolder Make(SettingFolder src)
+        {
+            src.Value.Filters  = "Filter.txt|FilterDirectory";
+            src.Value.Explorer = "dummy.exe";
+            return src;
         }
 
         #endregion

@@ -51,7 +51,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             IEnumerable<string> files,
             IEnumerable<string> args,
             CompressValue settings
-        ) => Create(files, args, settings, vm => {
+        ) => Create(files, args, Make(settings), vm => {
             var filename = GetFileName(GetSource(files.First()), dest);
 
             using (vm.SetPassword("password"))
@@ -102,7 +102,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     PresetMenu.Compress.ToArguments(),
                     new CompressValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         OpenMethod   = OpenMethod.None,
                         Filtering    = true,
                     }
@@ -114,7 +114,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     PresetMenu.Compress.ToArguments(),
                     new CompressValue
                     {
-                        SaveLocation  = SaveLocation.Others,
+                        SaveLocation  = SaveLocation.Preset,
                         OpenMethod    = OpenMethod.None,
                         Filtering     = true,
                     }
@@ -126,7 +126,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     PresetMenu.CompressSevenZip.ToArguments(),
                     new CompressValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         OpenMethod   = OpenMethod.None,
                         Filtering    = false,
                     }
@@ -138,7 +138,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     PresetMenu.CompressBZip2.ToArguments(),
                     new CompressValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         OpenMethod   = OpenMethod.None,
                         Filtering    = true,
                     }
@@ -150,7 +150,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     PresetMenu.CompressSfx.ToArguments(),
                     new CompressValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         OpenMethod   = OpenMethod.None,
                         Filtering    = true,
                     }
@@ -162,7 +162,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     PresetMenu.CompressOthers.ToArguments(),
                     new CompressValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         OpenMethod   = OpenMethod.None,
                         Filtering    = true,
                     }
@@ -186,7 +186,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     PresetMenu.CompressBZip2.ToArguments().Concat(new[] { "/o:runtime" }),
                     new CompressValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         OpenMethod   = OpenMethod.None,
                         Filtering    = true,
                     }
@@ -198,7 +198,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs(PresetMenu.CompressGZip, "Drop"),
                     new CompressValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         OpenMethod   = OpenMethod.None,
                         Filtering    = true,
                     }
@@ -210,7 +210,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs(PresetMenu.CompressXz, "Drop"),
                     new CompressValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         OpenMethod   = OpenMethod.None,
                         Filtering    = true,
                     }
@@ -222,7 +222,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     GetPathArgs(PresetMenu.MailZip, "Mail"),
                     new CompressValue
                     {
-                        SaveLocation = SaveLocation.Others,
+                        SaveLocation = SaveLocation.Preset,
                         OpenMethod   = OpenMethod.None,
                         Filtering    = true,
                     }
@@ -233,6 +233,21 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         #endregion
 
         #region Others
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Make
+        ///
+        /// <summary>
+        /// Adds some settings to the specified value.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private CompressValue Make(CompressValue src)
+        {
+            src.SaveDirectory = Get("Others");
+            return src;
+        }
 
         /* ----------------------------------------------------------------- */
         ///

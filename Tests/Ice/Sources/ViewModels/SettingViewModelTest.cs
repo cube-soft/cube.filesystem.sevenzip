@@ -133,26 +133,26 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             Assert.That(src.SaveSource,    Is.False);
             Assert.That(src.SaveRuntime,   Is.False);
             Assert.That(src.SaveOthers,    Is.True);
-            Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Others));
+            Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Preset));
 
             // update only when set to true
             src.SaveOthers = false;
             Assert.That(src.SaveSource,    Is.False);
             Assert.That(src.SaveRuntime,   Is.False);
             Assert.That(src.SaveOthers,    Is.True);
-            Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Others));
+            Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Preset));
 
             src.SaveSource = false;
             Assert.That(src.SaveSource,    Is.False);
             Assert.That(src.SaveRuntime,   Is.False);
             Assert.That(src.SaveOthers,    Is.True);
-            Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Others));
+            Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Preset));
 
             src.SaveRuntime = false;
             Assert.That(src.SaveSource,    Is.False);
             Assert.That(src.SaveRuntime,   Is.False);
             Assert.That(src.SaveOthers,    Is.True);
-            Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Others));
+            Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Preset));
 
             src.UseUtf8 = true;
             Assert.That(dest.UseUtf8, Is.EqualTo(src.UseUtf8).And.True);
@@ -226,26 +226,26 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             Assert.That(src.SaveSource,    Is.False);
             Assert.That(src.SaveRuntime,   Is.False);
             Assert.That(src.SaveOthers,    Is.True);
-            Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Others));
+            Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Preset));
 
             // update only when set to true
             src.SaveOthers = false;
             Assert.That(src.SaveSource,    Is.False);
             Assert.That(src.SaveRuntime,   Is.False);
             Assert.That(src.SaveOthers,    Is.True);
-            Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Others));
+            Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Preset));
 
             src.SaveSource = false;
             Assert.That(src.SaveSource,    Is.False);
             Assert.That(src.SaveRuntime,   Is.False);
             Assert.That(src.SaveOthers,    Is.True);
-            Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Others));
+            Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Preset));
 
             src.SaveRuntime = false;
             Assert.That(src.SaveSource,    Is.False);
             Assert.That(src.SaveRuntime,   Is.False);
             Assert.That(src.SaveOthers,    Is.True);
-            Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Others));
+            Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Preset));
 
             src.OpenDirectory = true;
             src.SkipDesktop = true;

@@ -53,7 +53,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var args  = PresetMenu.Extract.ToArguments().Concat(src);
             var value = new ExtractValue
             {
-                SaveLocation  = SaveLocation.Others,
+                SaveLocation  = SaveLocation.Preset,
                 SaveDirectory = dest,
             };
 
@@ -86,7 +86,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var args  = PresetMenu.Extract.ToArguments().Concat(src);
             var value = new ExtractValue
             {
-                SaveLocation = SaveLocation.Others,
+                SaveLocation = SaveLocation.Preset,
                 SaveDirectory = dest,
             };
 
@@ -110,7 +110,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var args  = PresetMenu.Extract.ToArguments().Concat(src);
             var value = new ExtractValue
             {
-                SaveLocation  = SaveLocation.Others,
+                SaveLocation  = SaveLocation.Preset,
                 SaveDirectory = dest,
             };
 
@@ -134,7 +134,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var args = PresetMenu.Extract.ToArguments().Concat(src);
             var value = new ExtractValue
             {
-                SaveLocation  = SaveLocation.Others,
+                SaveLocation  = SaveLocation.Preset,
                 SaveDirectory = dest,
                 DeleteSource  = true,
             };
@@ -163,7 +163,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var args  = PresetMenu.Extract.ToArguments().Concat(src);
             var value = new ExtractValue
             {
-                SaveLocation  = SaveLocation.Others,
+                SaveLocation  = SaveLocation.Preset,
                 SaveDirectory = dest,
             };
 
@@ -196,7 +196,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var args  = PresetMenu.Extract.ToArguments().Concat(src);
             var value = new ExtractValue
             {
-                SaveLocation  = SaveLocation.Others,
+                SaveLocation  = SaveLocation.Preset,
                 SaveDirectory = dest,
             };
 
