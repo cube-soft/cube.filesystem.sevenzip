@@ -53,8 +53,27 @@ namespace Cube.FileSystem.SevenZip.Ice
             SynchronizationContext context
         ) : base(facade, aggregator, context)
         {
-            Facade.Password = new Query<string>(Send, GetInvoker(true));
             Facade.Select   = new SelectQuery(Send, GetInvoker(true));
+            Facade.Password = new Query<string>(Request, GetInvoker(true));
+        }
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Request
+        ///
+        /// <summary>
+        /// Sends the message to ask a user to input the password.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Request(QueryMessage<string, string> e)
+        {
+            e.Cancel = true;
+            Send(e);
         }
 
         #endregion
