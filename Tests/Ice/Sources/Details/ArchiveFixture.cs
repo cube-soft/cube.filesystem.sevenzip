@@ -78,6 +78,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var folder  = Make(new SettingFolder(GetType().Assembly, IO));
 
             folder.Value.Compress = settings;
+            folder.Value.Compress.OpenMethod = OpenMethod.None;
             folder.Value.Compress.SaveDirectory = Get("Preset");
             using (var vm = new CompressViewModel(request, folder, context)) callback(vm);
         }
@@ -107,6 +108,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var folder  = Make(new SettingFolder(GetType().Assembly, IO));
 
             folder.Value.Extract = settings;
+            folder.Value.Extract.OpenMethod = OpenMethod.None;
             folder.Value.Extract.SaveDirectory = Get("Preset");
             using (var vm = new ExtractViewModel(request, folder, context)) callback(vm);
         }
