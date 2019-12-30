@@ -56,7 +56,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             SynchronizationContext context
         ) : base(facade, aggregator, context)
         {
-            Add(Facade.Subscribe(e => {
+            Take(Facade.Subscribe(e => {
                 if (e == nameof(Facade.State)) Refresh(nameof(State));
                 else if (e == nameof(Facade.Report)) Refresh(nameof(Title));
             }));
