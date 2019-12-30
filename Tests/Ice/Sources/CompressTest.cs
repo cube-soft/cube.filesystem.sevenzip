@@ -53,9 +53,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             CompressValue settings
         ) => Create(files, args, settings, vm => {
             var filename = GetFileName(GetSource(files.First()), dest);
+            var cvt      = Get("Runtime", filename);
 
             using (vm.SetPassword("password"))
-            using (vm.SetDestination(Get("Runtime", filename)))
+            using (vm.SetDestination(cvt))
+            using (vm.SetRuntime(cvt))
             {
                 Assert.That(vm.State, Is.EqualTo(TimerState.Stop));
                 Assert.That(vm.Logo,  Is.Not.Null);

@@ -121,6 +121,27 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// SetRuntime
+        ///
+        /// <summary>
+        /// Subscribes the message to select the details of compressing
+        /// settings.
+        /// </summary>
+        ///
+        /// <param name="src">Source ViewModel.</param>
+        ///
+        /// <returns>Object to clear the subscription.</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static IDisposable SetRuntime(this CompressViewModel src, string value) =>
+            src.Subscribe<QueryMessage<string, Settings.CompressRuntime>>(e =>
+        {
+            e.Cancel     = false;
+            e.Value.Path = value;
+        });
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// SetOverwrite
         ///
         /// <summary>
