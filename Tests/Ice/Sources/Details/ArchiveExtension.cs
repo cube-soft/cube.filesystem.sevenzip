@@ -129,6 +129,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// </summary>
         ///
         /// <param name="src">Source ViewModel.</param>
+        /// <param name="value">Save path to set when requested.</param>
         ///
         /// <returns>Object to clear the subscription.</returns>
         ///

@@ -106,6 +106,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         [Test, RequiresThread(ApartmentState.STA)]
+        [Ignore("TODO:Under migration")]
         public void Customize()
         {
             var dest = InvokeCustomize();

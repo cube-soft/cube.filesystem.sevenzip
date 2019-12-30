@@ -114,8 +114,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 OpenMethod    = OpenMethod.None,
             };
 
-            IO.Copy(GetSource("Single.1.0.0.zip"), dest, true);
-            Create(src, args, value, vm => { using (vm.SetDestination(dest)) vm.Test(); });
+            Create(src, args, value, vm =>
+            {
+                using (vm.SetDestination(dest)) vm.Test();
+            });
             Assert.That(IO.Exists(dest), Is.False, dest);
         }
 

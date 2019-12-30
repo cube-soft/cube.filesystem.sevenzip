@@ -451,27 +451,27 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
-                    @"Tar\LzmaSample\Sample",
-                    new[] { "Sample.tar.lzma" },
-                    GetPathArgs(@"Tar\LzmaSample"),
-                    new ExtractValue
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.CreateSmart,
-                    }
-                );
+                //yield return new TestCaseData(
+                //    @"Tar\LzmaSample\Sample",
+                //    new[] { "Sample.tar.lzma" },
+                //    GetPathArgs(@"Tar\LzmaSample"),
+                //    new ExtractValue
+                //    {
+                //        SaveLocation = SaveLocation.Preset,
+                //        SaveMethod   = SaveMethod.CreateSmart,
+                //    }
+                //);
 
-                yield return new TestCaseData(
-                    @"Tar\LzwSample\Sample",
-                    new[] { "Sample.tar.z" },
-                    GetPathArgs(@"Tar\LzwSample"),
-                    new ExtractValue
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod  = SaveMethod.CreateSmart,
-                    }
-                );
+                //yield return new TestCaseData(
+                //    @"Tar\LzwSample\Sample",
+                //    new[] { "Sample.tar.z" },
+                //    GetPathArgs(@"Tar\LzwSample"),
+                //    new ExtractValue
+                //    {
+                //        SaveLocation = SaveLocation.Preset,
+                //        SaveMethod  = SaveMethod.CreateSmart,
+                //    }
+                //);
 
                 yield return new TestCaseData(
                     @"Bz2Sample\Sample\Sample.txt",
