@@ -7,22 +7,19 @@ https://www.cube-soft.jp/cubeice/
 
 ## はじめに
 
-CubeICE は、様々な形式に対応した圧縮・解凍ソフトです。
-圧縮・解凍したいファイルを選択して右クリックから表示されるコンテキストメニューで
+CubeICE は、様々な形式に対応した圧縮・解凍（展開）ソフトです。
+圧縮・解凍（展開）したいファイルを選択して右クリックから表示されるコンテキストメニューで
 選択するかショートカットにドラッグ&ドロップする事によって圧縮・解凍を行う事ができます。
+詳細な利用方法については下記 URL を参照下さい。
 
-CubeICE を使用するためには .NET Framework 3.5 以降がインストールされている必要があります。
+* CubeICE ユーザーマニュアル  
+  https://docs.cube-soft.jp/entry/cubeice
+
+CubeICE を使用するためには .NET Framework 3.5 以降がインストールされている必要があります（4.5.2 以降を推奨）。
 .NET Framework は、以下の URL からダウンロードして下さい。
 
-* .NET Downloads for Linux, macOS, and Windows  
-  https://dotnet.microsoft.com/download
-
-### 動作環境
-
-* OS   ... Windows 7 以降
-* 圧縮 ... zip, 7z, gzip, bzip2
-* 解凍 ... zip, lzh, rar, 7z, iso, tar, gz, tgz, bz2, tbz, xz, txz, arj, cab,
-           chm, cpio, deb, dmg, hfs, jar, nupkg, rpm, vhd, vmdk, wim, xar, z
+* Download .NET Framework  
+  https://dotnet.microsoft.com/download/dotnet-framework
 
 ### アンインストール時の注意
 
@@ -55,9 +52,17 @@ CubeICE は、以下のライブラリを利用しています。
     - MIT License
     - https://alphafs.alphaleonis.com/
     - https://www.nuget.org/packages/AlphaFS/
+* AsyncBridge (.NET Framework 3.5 のみ)
+    - MIT license
+    - https://omermor.github.io/AsyncBridge/
+    - https://www.nuget.org/packages/AsyncBridge/
 
 ## バージョン履歴
 
+* 2020/05/01 version 0.9.2β
+    - 高 DPI 設定時の表示方法を修正
+    - 64bit 版作成された自己解凍形式の圧縮ファイルが 32bit 版 Windows で解凍できない不都合を修正
+    - CubeICE ユーザーマニュアルを Web 版に移行
 * 2019/04/05 version 0.9.1β
     - 特定の条件でファイルの関連付け設定が機能しない不都合を修正
     - ファイル一覧の表示機能を完全に無効化できるように修正

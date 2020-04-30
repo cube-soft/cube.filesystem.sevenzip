@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <Version>1.15.0</Version>
+        <Version>1.15.1</Version>
         <Authors>clown;cube-soft</Authors>
         <Company>CubeSoft</Company>
         <Description>7-Zip wrapper library for .NET Framework.</Description>
@@ -8,7 +8,7 @@
         <PackageTags>Cube;7-Zip;7z;SevenZip;Zip</PackageTags>
         <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/cube-soft/$(AssemblyName)</PackageProjectUrl>
-        <PackageIconUrl>https://github.com/cube-soft/$(AssemblyName)/blob/master/Icon.png?raw=true</PackageIconUrl>
+        <PackageIcon>images\Icon.png</PackageIcon>
         <TargetFramework>net45</TargetFramework>
         <LangVersion>latest</LangVersion>
         <Optimize>true</Optimize>
@@ -24,5 +24,8 @@
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Cube.FileSystem" Version="1.15.0" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="..\Icon.png" Pack="true" PackagePath="images" />
     </ItemGroup>
 </Project>
