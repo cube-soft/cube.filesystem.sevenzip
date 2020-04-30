@@ -221,6 +221,6 @@ CubeICE のアイコンを選択してアンインストールの項目を実行
 
 ## CubeICE で問題が発生した場合
 
-CubeICE は、```C:\Users\＜ユーザ名＞\AppData\Local\CubeSoft\CubeIce\Log``` フォルダーに実行ログを出力しています
-（＜ユーザ名＞の部分はログオン中のユーザ名に置換して下さい）。
-問題が発生した時は、これらのログを添付して support@cube-soft.jp までご連絡お願いします。
+CubeICE は、以下のフォルダに実行ログを出力しています（%UserName% は、ログオン中のユーザ名に置換）。  
+```C:\Users\%UserName%\AppData\Local\CubeSoft\CubeIce\Log```  
+問題が発生した時は、これらのログを添付して support@cube-soft.jp までご連絡をお願いいたします。
