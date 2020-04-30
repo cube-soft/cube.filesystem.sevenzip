@@ -26,6 +26,6 @@
         <PackageReference Include="Cube.FileSystem" Version="1.15.0" />
     </ItemGroup>
     <ItemGroup>
-        <None Include="..\Icon.png" Pack="true" PackagePath="images" />
+        <None Include="..\..\Icon.png" Pack="true" PackagePath="images" />
     </ItemGroup>
 </Project>
