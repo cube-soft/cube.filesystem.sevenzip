@@ -1,5 +1,5 @@
 version: 1.15.1.{build}
-image: Visual Studio 2019 Preview
+image: Visual Studio 2019
 platform: Any CPU
 configuration: Release
 environment:
