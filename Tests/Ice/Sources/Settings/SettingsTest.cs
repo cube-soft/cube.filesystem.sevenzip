@@ -50,7 +50,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var dest = new SettingsFolder(asm, IO);
             Assert.That(dest.AutoSave,           Is.False);
             Assert.That(dest.AutoSaveDelay,      Is.EqualTo(TimeSpan.FromSeconds(1)));
-            Assert.That(dest.Version.ToString(), Is.EqualTo("0.9.2β"));
+            Assert.That(dest.Version.ToString(), Is.EqualTo("0.10.0β"));
             Assert.That(dest.Format,             Is.EqualTo(Cube.DataContract.Format.Registry));
             Assert.That(dest.Location,           Is.EqualTo(@"CubeSoft\CubeICE\v3"));
             Assert.That(dest.Value,              Is.Not.Null);

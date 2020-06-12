@@ -22,101 +22,102 @@ require 'rake/clean'
 # configuration
 # --------------------------------------------------------------------------- #
 PROJECT     = 'Cube.FileSystem.SevenZip'
-LIB         = '../packages'
-NATIVE      = '../resources/native'
-BRANCHES    = ['stable', 'net35']
+BRANCHES    = ['master', 'net35']
 FRAMEWORKS  = ['net45', 'net35']
-PLATFORMS   = ['Any CPU', 'x86', 'x64']
 CONFIGS     = ['Release', 'Debug']
-LIB_DEST    = ['Libraries/Tests', 'Applications/Ice/Tests', 'Applications/Ice/Main']
-PACKAGES    = ["Libraries/Core/#{PROJECT}.nuspec"]
-TESTCASES   = {"#{PROJECT}.Tests"     => 'Libraries/Tests',
-               "#{PROJECT}.Ice.Tests" => 'Applications/Ice/Tests'}
-
-# --------------------------------------------------------------------------- #
-# commands
-# --------------------------------------------------------------------------- #
-BUILD = "msbuild -v:m -t:build -p:Configuration=#{CONFIGS[0]}"
-PACK  = %(nuget pack -Properties "Configuration=#{CONFIGS[0]};Platform=AnyCPU")
-TEST  = "../packages/NUnit.ConsoleRunner/3.10.0/tools/nunit3-console.exe"
+PLATFORMS   = ['Any CPU', 'x86', 'x64']
+PACKAGES    = ["Libraries/#{PROJECT}"]
 
 # --------------------------------------------------------------------------- #
 # clean
 # --------------------------------------------------------------------------- #
-CLEAN.include("#{PROJECT}.*.nupkg")
-CLEAN.include("../packages/cube.*")
-CLEAN.include(['bin', 'obj'].map{ |e| "**/#{e}" })
+CLEAN.include(["*.nupkg", "**/bin", "**/obj"])
+CLOBBER.include("../packages/cube.*")
 
 # --------------------------------------------------------------------------- #
 # default
 # --------------------------------------------------------------------------- #
-desc "Build the solution and create NuGet packages."
-task :default => [:clean_build, :pack]
-
-# --------------------------------------------------------------------------- #
-# pack
-# --------------------------------------------------------------------------- #
-desc "Create NuGet packages in the net35 branch."
-task :pack do
-    sh("git checkout net35")
-    PACKAGES.each { |e| sh("#{PACK} #{e}") }
-    sh("git checkout master")
+desc "Clean, build, test, and create NuGet packages."
+task :default => [:clean] do
+    Rake::Task[:build_all].invoke(false)
+    checkout("net35") { Rake::Task[:pack].execute }
 end
 
 # --------------------------------------------------------------------------- #
-# clean_build
+# restore
 # --------------------------------------------------------------------------- #
-desc "Clean objects and build the solution in pre-defined branches and platforms."
-task :clean_build => [:clean] do
-    BRANCHES.product(['Any CPU']) { |e|
-        sh("git checkout #{e[0]}")
-        RakeFileUtils::rm_rf(FileList.new("#{LIB}/cube.*"))
-        Rake::Task[:build].reenable
-        Rake::Task[:build].invoke(e[1])
-    }
+desc "Resote NuGet packages in the current branch."
+task :restore do
+    cmd("nuget restore #{PROJECT}.sln")
 end
 
 # --------------------------------------------------------------------------- #
 # build
 # --------------------------------------------------------------------------- #
-desc "Build the solution in the current branch."
+desc "Build projects in the current branch."
 task :build, [:platform] do |_, e|
     e.with_defaults(:platform => PLATFORMS[0])
-    sh("nuget restore #{PROJECT}.Apps.sln")
-    sh(%(#{BUILD} -p:Platform="#{e.platform}" #{PROJECT}.Apps.sln))
+
+    Rake::Task[:restore].execute
+    branch = %x(git rev-parse --abbrev-ref HEAD).chomp
+    build  = branch.start_with?("netstandard") || branch.start_with?("netcore") ?
+             "dotnet build -c Release" :
+             "msbuild -v:m -p:Configuration=Release"
+    cmd(%(#{build} -p:Platform="#{e.platform}" #{PROJECT}.sln))
+end
+
+# --------------------------------------------------------------------------- #
+# build_all
+# --------------------------------------------------------------------------- #
+desc "Build projects in pre-defined branches and platforms."
+task :build_all, [:test] do |_, e|
+    e.with_defaults(:test => false)
+    
+    BRANCHES.product(PLATFORMS).each do |bp|
+        checkout(bp[0]) do
+            Rake::Task[:build].reenable
+            Rake::Task[:build].invoke(bp[1])
+            Rake::Task[:test].execute if (e.test)
+        end
+    end
 end
 
 # --------------------------------------------------------------------------- #
 # test
 # --------------------------------------------------------------------------- #
-desc "Build and test projects in the current branch."
-task :test => [:build] do
-    pf  = PLATFORMS[0]
-    fw  = %x(git symbolic-ref --short HEAD).chomp
-    fw  = 'net45' if (fw != 'net35')
-    bin = ['bin', pf, CONFIGS[0], fw].join('/')
-    Rake::Task[:copy].reenable
-    Rake::Task[:copy].invoke(pf, fw)
-    TESTCASES.each { |p, d| sh(%(#{TEST} "#{d}/#{bin}/#{p}.dll" --work="#{d}/#{bin}")) }
+desc "Test projects in the current branch."
+task :test do
+    cmd("dotnet test -c Release --no-restore --no-build #{PROJECT}.sln")
 end
 
 # --------------------------------------------------------------------------- #
-# copy
+# pack
 # --------------------------------------------------------------------------- #
-desc "Copy resources to the bin directories."
-task :copy, [:platform, :framework] do |_, e|
-    v0 = (e.platform  != nil) ? [e.platform ] : PLATFORMS
-    v1 = (e.framework != nil) ? [e.framework] : FRAMEWORKS
+desc "Create NuGet packages."
+task :pack do
+    PACKAGES.each do |e|
+        spec = File.exists?("#{e}.nuspec")
+        pack = spec ?
+               %(nuget pack -Properties "Configuration=Release;Platform=AnyCPU") :
+               "dotnet pack -c Release --no-restore --no-build -o ."
+        ext  = spec ? "nuspec" : "csproj"
+        cmd("#{pack} #{e}.#{ext}")
+    end
+end
 
-    v0.product(CONFIGS, v1) { |set|
-        pf  = (set[0] == 'Any CPU') ? 'x64' : set[0]
-        bin = ['bin', set[0], set[1], set[2]].join('/')
+# --------------------------------------------------------------------------- #
+# checkout
+# --------------------------------------------------------------------------- #
+def checkout(branch, &callback)
+    cmd("git checkout #{branch}")
+    callback.call()
+ensure
+    cmd("git checkout master")
+end
 
-        LIB_DEST.each { |root|
-            src  = FileList.new("#{NATIVE}/#{pf}/7z/7z.*")
-            dest = "#{root}/#{bin}"
-            RakeFileUtils::mkdir_p(dest)
-            RakeFileUtils::cp_r(src, dest)
-        }
-    }
+# --------------------------------------------------------------------------- #
+# cmd
+# --------------------------------------------------------------------------- #
+def cmd(args)
+    sh("cmd.exe /c #{args}")
 end

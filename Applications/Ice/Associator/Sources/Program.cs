@@ -48,7 +48,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Associator
 
             try
             {
-                Logger.Configure();
                 Logger.Info(type, Assembly.GetExecutingAssembly());
                 Logger.Info(type, string.Join(" ", args));
 
