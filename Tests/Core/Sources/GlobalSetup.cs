@@ -15,62 +15,37 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System;
+using NUnit.Framework;
 using System.Reflection;
-using System.Windows.Forms;
 
-namespace Cube.FileSystem.SevenZip.Ice.Configurator
+namespace Cube.FileSystem.SevenZip.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// Program
+    /// GlobalSetup
     ///
     /// <summary>
-    /// メインプログラムを表すクラスです。
+    /// NUnit で最初に実行する処理を記述するテストです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    static class Program
+    [SetUpFixture]
+    public class GlobalSetup
     {
         /* ----------------------------------------------------------------- */
         ///
-        /// Main
+        /// OneTimeSetup
         ///
         /// <summary>
-        /// アプリケーションのエントリポイントです。
+        /// 一度だけ実行される初期化処理です。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [STAThread]
-        static void Main(string[] args)
+        [OneTimeSetUp]
+        public void OneTimeSetup()
         {
-            var type = typeof(Program);
-            var asm  = Assembly.GetExecutingAssembly();
-
-            try
-            {
-                Logger.ObserveTaskException();
-                Logger.Info(type, asm);
-
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-
-                var model = new SettingsFolder(asm, new AfsIO());
-                model.Load();
-
-                var install = args.Length > 0 && args[0] == "/install";
-                if (install) Logger.Info(type, "InstallMode");
-
-                var vm = new MainViewModel(model);
-                vm.Associate.Changed = install;
-                if (!install) vm.Sync();
-
-                var view = new MainForm(install);
-                view.Bind(vm);
-
-                Application.Run(view);
-            }
-            catch (Exception err) { Logger.Error(type, err); }
+            Logger.ObserveTaskException();
+            Logger.Info(typeof(GlobalSetup), Assembly.GetExecutingAssembly());
         }
     }
 }

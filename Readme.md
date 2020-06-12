@@ -8,12 +8,17 @@ Cube.FileSystem.SevenZip
 Cube.FileSystem.SevenZip is a wrapper library of the [7-Zip](http://www.7-zip.org/) via COM interface.
 The repository also has an archiving or extracting application, which name is [CubeICE](https://www.cube-soft.jp/cubeice/).
 These libraries and applications are available for .NET Framework 3.5, 4.5 or later.
-Note that the Cube.FileSystem.SevenZip project (files in the [Libraries](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries) directory) is licensed under the GNU LGPLv3 and the other projects are Apache 2.0.
 
 ## Usage
 
-The Cube.FileSystem.SevenZip library is available for NuGet, but you need to copy the 7z.dll to the executing directory manually. 
-You can download the library from [www.7-zip.org](https://www.7-zip.org/) or our [GitHub releases](https://github.com/cube-soft/Cube.FileSystem.SevenZip/releases).
+You can install the library through the NuGet package.
+Add a dependency in your project file using the following syntax:
+
+    <ItemGroup>
+        <PackageReference Include="Cube.FileSystem.SevenZip" Version="1.15.10" />
+    </ItemGroup>
+
+Or select it from the NuGet packages UI on Visual Studio.
 
 ### Examples for archiving files
 
@@ -93,13 +98,13 @@ Use Task.Run() in the whole transaction if you need to archive or extract files 
 
 ## Dependencies
 
-* [7-Zip](https://www.7-zip.org/) ... [cube-soft/7z](https://github.com/cube-soft/7z) is optimized for Japanese encoding.
+* [7-Zip](https://www.7-zip.org/) ... [Cube.Native.SevenZip](https://github.com/cube-soft/Cube.Native.SevenZip) is optimized for Japanese encoding.
 * [AlphaFS](https://alphafs.alphaleonis.com/)
-* [Cube.Core](https://github.com/cube-soft/Cube.Core)
-* [Cube.FileSystem](https://github.com/cube-soft/Cube.FileSystem)
-* [log4net](https://logging.apache.org/log4net/)
+* [NLog](https://nlog-project.org/)
 
-## Thanks
+## References
+
+Cube.FileSystem.SevenZip referred to the code of the following projects to implement some functions.
 
 * [SevenZipSharp](https://www.nuget.org/packages/SevenZipSharp/)
 
@@ -109,11 +114,11 @@ Use Task.Run() in the whole transaction if you need to archive or extract files 
 2. Create a feature branch from the master or stable branch (e.g. git checkout -b my-new-feature origin/master). Note that the master branch may refer some pre-released NuGet packages. Try the [rake clean](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Rakefile) command when build errors occur.
 3. Commit your changes.
 4. Rebase your local changes against the master or stable branch.
-5. Run test suite with the [NUnit](http://nunit.org/) console or the Visual Studio (NUnit 3 test adapter) and confirm that it passes.
+5. Run the dotnet test command or the Visual Studio (NUnit 3 test adapter) and confirm that it passes.
 6. Create new Pull Request.
 
 ## License
  
-Copyright © 2010 [CubeSoft, Inc.](http://www.cube-soft.jp/) The Cube.FileSystem.SevenZip project (files in the [Libraries](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries) directory) is licensed under the [GNU LGPLv3](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Libraries/License.txt)
-and the other projects are [Apache 2.0](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/License.txt).
+Copyright © 2010 [CubeSoft, Inc.](http://www.cube-soft.jp/)
+The project is licensed under the [Apache 2.0](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/License.txt).
 Note that trade names, trademarks, service marks, or logo images distributed in CubeSoft applications are not allowed to reuse or modify all or parts of them.

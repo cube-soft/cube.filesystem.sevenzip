@@ -55,7 +55,6 @@ namespace Cube.FileSystem.SevenZip.Ice
 
                 var asm = Assembly.GetExecutingAssembly();
 
-                Logger.Configure();
                 Logger.ObserveTaskException();
                 Logger.Info(LogType, asm);
                 Logger.Info(LogType, $"[ {string.Join(" ", args)} ]");

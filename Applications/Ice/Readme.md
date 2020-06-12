@@ -2,6 +2,7 @@ CubeICE
 ====
 
 Copyright © 2010 CubeSoft, Inc.  
+Apache License, Version 2.0 (Apache 2.0)  
 support@cube-soft.jp  
 https://www.cube-soft.jp/cubeice/
 
@@ -44,14 +45,14 @@ CubeICE は、以下のライブラリを利用しています。
 * 7-Zip
     - GNU Lesser General Public License
     - https://www.7-zip.org/
-* log4net
-    - Apache License, Version 2.0
-    - https://logging.apache.org/log4net/
-    - https://www.nuget.org/packages/log4net/
 * AlphaFS
     - MIT License
     - https://alphafs.alphaleonis.com/
     - https://www.nuget.org/packages/AlphaFS/
+* NLog
+    - 3-clause BSD License
+    - https://nlog-project.org/
+    - https://www.nuget.org/packages/NLog/
 * AsyncBridge (.NET Framework 3.5 のみ)
     - MIT license
     - https://omermor.github.io/AsyncBridge/
@@ -59,6 +60,9 @@ CubeICE は、以下のライブラリを利用しています。
 
 ## バージョン履歴
 
+* 2020/06/16 version 0.10.0β
+    - ログ出力用ライブラリを log4net から NLog に変更
+    - ライセンスを Apache 2.0 に統一
 * 2020/05/01 version 0.9.2β
     - 高 DPI 設定時の表示方法を修正
     - 64bit 版作成された自己解凍形式の圧縮ファイルが 32bit 版 Windows で解凍できない不都合を修正

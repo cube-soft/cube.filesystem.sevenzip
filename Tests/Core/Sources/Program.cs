@@ -16,17 +16,15 @@
 //
 /* ------------------------------------------------------------------------- */
 using System;
-using System.Reflection;
-using System.Windows.Forms;
 
-namespace Cube.FileSystem.SevenZip.Ice.Configurator
+namespace Cube.FileSystem.SevenZip.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
     /// Program
     ///
     /// <summary>
-    /// メインプログラムを表すクラスです。
+    /// Represetns the main program.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -37,40 +35,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
         /// Main
         ///
         /// <summary>
-        /// アプリケーションのエントリポイントです。
+        /// Represents the main method.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [STAThread]
-        static void Main(string[] args)
-        {
-            var type = typeof(Program);
-            var asm  = Assembly.GetExecutingAssembly();
-
-            try
-            {
-                Logger.ObserveTaskException();
-                Logger.Info(type, asm);
-
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-
-                var model = new SettingsFolder(asm, new AfsIO());
-                model.Load();
-
-                var install = args.Length > 0 && args[0] == "/install";
-                if (install) Logger.Info(type, "InstallMode");
-
-                var vm = new MainViewModel(model);
-                vm.Associate.Changed = install;
-                if (!install) vm.Sync();
-
-                var view = new MainForm(install);
-                view.Bind(vm);
-
-                Application.Run(view);
-            }
-            catch (Exception err) { Logger.Error(type, err); }
-        }
+        static void Main(string[] args) { }
     }
 }

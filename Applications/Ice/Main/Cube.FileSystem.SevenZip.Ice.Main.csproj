@@ -1,6 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
     <PropertyGroup>
-        <Version>0.9.2</Version>
+        <Version>0.10.0</Version>
         <Authors>clown;cube-soft</Authors>
         <Company>CubeSoft</Company>
         <Product>CubeIce</Product>
@@ -11,8 +11,10 @@
         <AssemblyTitle>CubeICE</AssemblyTitle>
         <OutputType>WinExe</OutputType>
         <TargetFramework>net35</TargetFramework>
-        <LangVersion>latest</LangVersion>
+        <UseWindowsForms>true</UseWindowsForms>
         <Platforms>AnyCPU;x86;x64</Platforms>
+        <RuntimeIdentifiers>win7-x86;win7-x64</RuntimeIdentifiers>
+        <LangVersion>latest</LangVersion>
         <IsPackable>false</IsPackable>
         <Optimize>true</Optimize>
         <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
@@ -27,8 +29,8 @@
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\Core\Cube.FileSystem.SevenZip.Ice.csproj" />
-        <PackageReference Include="Cube.Forms" Version="1.15.0" />
-        <Reference Include="System.Windows.Forms" />
+        <PackageReference Include="Cube.Forms" Version="1.15.10" />
+        <PackageReference Include="Cube.Images" Version="1.15.10" />
     </ItemGroup>
     <ItemGroup>
         <Compile Update="Properties\Resources.Designer.cs" DependentUpon="Resources.resx" AutoGen="True" DesignTime="True" />
@@ -36,6 +38,6 @@
         <EmbeddedResource Update="Properties\Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
         <EmbeddedResource Update="Sources\Views\*.resx" DependentUpon="%(Filename).cs" />
         <None Include="Assets\**\*" />
-        <None Include="App.config" />
+        <None Include="App.*" />
     </ItemGroup>
 </Project>
