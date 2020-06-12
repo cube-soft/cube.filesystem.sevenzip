@@ -27,6 +27,6 @@
         <PackageReference Include="Cube.Native.SevenZip" Version="19.0.1" />
     </ItemGroup>
     <ItemGroup>
-        <None Include="..\..\Icon.png" Pack="true" PackagePath="images" />
+        <None Include="..\Icon.png" Pack="true" PackagePath="images" />
     </ItemGroup>
 </Project>
