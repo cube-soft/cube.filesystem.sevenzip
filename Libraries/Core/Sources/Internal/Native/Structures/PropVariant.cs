@@ -39,7 +39,7 @@ namespace Cube.FileSystem.SevenZip
         /// VarType
         ///
         /// <summary>
-        /// オブジェクトの種類を取得します。
+        /// Gets the object type.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -51,10 +51,10 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// VarType
+        /// Object
         ///
         /// <summary>
-        /// オブジェクトの内容を取得します。
+        /// Gets the content.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -85,7 +85,7 @@ namespace Cube.FileSystem.SevenZip
         /// Clear
         ///
         /// <summary>
-        /// 各種フィールドをクリアします。
+        /// Clears the fields.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -98,10 +98,10 @@ namespace Cube.FileSystem.SevenZip
         /// Set
         ///
         /// <summary>
-        /// 真偽値を設定します。
+        /// Sets the specified boolean value.
         /// </summary>
         ///
-        /// <param name="value">設定値</param>
+        /// <param name="value">Setting value.</param>
         ///
         /* ----------------------------------------------------------------- */
         public void Set(bool value)
@@ -115,10 +115,10 @@ namespace Cube.FileSystem.SevenZip
         /// Set
         ///
         /// <summary>
-        /// 整数値を設定します。
+        /// Sets the specified uint value.
         /// </summary>
         ///
-        /// <param name="value">設定値</param>
+        /// <param name="value">Setting value.</param>
         ///
         /* ----------------------------------------------------------------- */
         public void Set(uint value)
@@ -132,10 +132,10 @@ namespace Cube.FileSystem.SevenZip
         /// Set
         ///
         /// <summary>
-        /// 整数値を設定します。
+        /// Sets the specified ulong value.
         /// </summary>
         ///
-        /// <param name="value">設定値</param>
+        /// <param name="value">Setting value.</param>
         ///
         /* ----------------------------------------------------------------- */
         public void Set(ulong value)
@@ -149,10 +149,10 @@ namespace Cube.FileSystem.SevenZip
         /// Set
         ///
         /// <summary>
-        /// 文字列を設定します。
+        /// Sets the specified string.
         /// </summary>
         ///
-        /// <param name="value">設定値</param>
+        /// <param name="value">Setting value.</param>
         ///
         /* ----------------------------------------------------------------- */
         public void Set(string value)
@@ -166,10 +166,10 @@ namespace Cube.FileSystem.SevenZip
         /// Set
         ///
         /// <summary>
-        /// DateTime オブジェクトを設定します。
+        /// Sets the specified DateTime object.
         /// </summary>
         ///
-        /// <param name="value">設定値</param>
+        /// <param name="value">Setting value.</param>
         ///
         /* ----------------------------------------------------------------- */
         public void Set(DateTime value)
@@ -187,10 +187,13 @@ namespace Cube.FileSystem.SevenZip
         /// Create
         ///
         /// <summary>
-        /// オブジェクトを生成します。
+        /// Creates a new instance of the PropVariant class with the
+        /// specified boolean value.
         /// </summary>
         ///
-        /// <param name="value">設定値</param>
+        /// <param name="value">Setting value</param>
+        ///
+        /// <returns>PropVariant object.</returns>
         ///
         /* ----------------------------------------------------------------- */
         public static PropVariant Create(bool value)
@@ -205,10 +208,13 @@ namespace Cube.FileSystem.SevenZip
         /// Create
         ///
         /// <summary>
-        /// オブジェクトを生成します。
+        /// Creates a new instance of the PropVariant class with the
+        /// specified uint value.
         /// </summary>
         ///
-        /// <param name="value">設定値</param>
+        /// <param name="value">Setting value</param>
+        ///
+        /// <returns>PropVariant object.</returns>
         ///
         /* ----------------------------------------------------------------- */
         public static PropVariant Create(uint value)
@@ -223,10 +229,13 @@ namespace Cube.FileSystem.SevenZip
         /// Create
         ///
         /// <summary>
-        /// オブジェクトを生成します。
+        /// Creates a new instance of the PropVariant class with the
+        /// specified string.
         /// </summary>
         ///
-        /// <param name="value">設定値</param>
+        /// <param name="value">Setting value</param>
+        ///
+        /// <returns>PropVariant object.</returns>
         ///
         /* ----------------------------------------------------------------- */
         public static PropVariant Create(string value)
@@ -255,7 +264,7 @@ namespace Cube.FileSystem.SevenZip
     /// PropArray
     ///
     /// <summary>
-    /// x86/x64 のサイズの違いを埋める用途で使用するクラスです。
+    /// The class is used to bridge the x86/x64 size difference.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */

@@ -15,43 +15,44 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.Runtime.ConstrainedExecution;
-using Microsoft.Win32.SafeHandles;
+using System;
+using System.Runtime.InteropServices;
 
 namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// SafeLibraryHandle
+    /// ISetProperties
     ///
     /// <summary>
-    /// Provides the functionality to hold a DLL handle.
+    /// Represents an interface for setting various properties.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal sealed class SafeLibraryHandle : SafeHandleZeroOrMinusOneIsInvalid
+    [ComImport]
+    [Guid("23170F69-40C1-278A-0000-000600030000")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    internal interface ISetProperties
     {
         /* ----------------------------------------------------------------- */
         ///
-        /// SafeLibraryHandle
+        /// SetProperties
         ///
         /// <summary>
-        /// Initializes a new instance of the SafeLibraryHandle class.
+        /// Sets properties to the compressing file.
         /// </summary>
         ///
-        /* ----------------------------------------------------------------- */
-        public SafeLibraryHandle() : base(true) { }
-
-        /* ----------------------------------------------------------------- */
+        /// <param name="names">Property names.</param>
+        /// <param name="values">Property values.</param>
+        /// <param name="numProperties">Number of properties.</param>
         ///
-        /// ReleaseHandle
-        ///
-        /// <summary>
-        /// Releases the handle.
-        /// </summary>
+        /// <returns>OperationResult</returns>
         ///
         /* ----------------------------------------------------------------- */
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
-        protected override bool ReleaseHandle() => Kernel32.NativeMethods.FreeLibrary(handle);
+        int SetProperties(
+            [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPWStr, SizeParamIndex = 2)] string[] names,
+            IntPtr values,
+            uint numProperties
+        );
     }
 }

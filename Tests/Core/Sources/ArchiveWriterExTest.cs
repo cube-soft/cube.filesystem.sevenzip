@@ -58,7 +58,7 @@ namespace Cube.FileSystem.SevenZip.Tests
 
             using (var archive = new ArchiveWriter(zip))
             {
-                archive.Option = new ZipOption { CodePage = utf8 ? CodePage.Utf8 : CodePage.Japanese };
+                archive.Options = new ZipOption { CodePage = utf8 ? CodePage.Utf8 : CodePage.Japanese };
                 archive.Add(src);
                 archive.Save(dest);
             }
@@ -147,7 +147,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             var dest = Get("SfxNotFound.exe");
             using var archive = new ArchiveWriter(Format.Sfx);
 
-            archive.Option = new SfxOption { Module = "dummy.sfx" };
+            archive.Options = new SfxOption { Module = "dummy.sfx" };
             archive.Add(GetSource("Sample.txt"));
 
             Assert.That(() => archive.Save(dest),

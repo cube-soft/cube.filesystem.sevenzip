@@ -31,21 +31,6 @@ namespace Cube.FileSystem.SevenZip.Tests
     /* --------------------------------------------------------------------- */
     internal class Counter : IProgress<Report>
     {
-        #region Constructors
-
-        /* --------------------------------------------------------------------- */
-        ///
-        /// Counter
-        ///
-        /// <summary>
-        /// Initializes a new instance of the Counter class.
-        /// </summary>
-        ///
-        /* --------------------------------------------------------------------- */
-        public Counter() { }
-
-        #endregion
-
         #region Properties
 
         /* --------------------------------------------------------------------- */

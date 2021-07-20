@@ -15,39 +15,30 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.Runtime.InteropServices;
-
-namespace Cube.FileSystem.SevenZip.Ole32
+namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// Ole32.NativeMethods
+    /// CompressionLevel
     ///
     /// <summary>
-    /// Provides native methods defined in the ole32.dll.
+    /// Specifies compression levels.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal static class NativeMethods
+    public enum CompressionLevel
     {
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// PropVariantClear
-        ///
-        /// <summary>
-        /// https://msdn.microsoft.com/en-us/library/windows/desktop/aa380073.aspx
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [DllImport(LibName)]
-        public static extern int PropVariantClear(ref PropVariant pvar);
-
-        #endregion
-
-        #region Fields
-        private const string LibName = "ole32.dll";
-        #endregion
+        /// <summary>None</summary>
+        None = 0,
+        /// <summary>Fast</summary>
+        Fast = 1,
+        /// <summary>Low</summary>
+        Low = 3,
+        /// <summary>Normal</summary>
+        Normal = 5,
+        /// <summary>High</summary>
+        High = 7,
+        /// <summary>Ultra</summary>
+        Ultra = 9,
     }
 }

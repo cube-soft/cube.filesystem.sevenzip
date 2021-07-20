@@ -26,12 +26,14 @@ namespace Cube.FileSystem.SevenZip.Kernel32
     /// Kernel32.NativeMethods
     ///
     /// <summary>
-    /// kernel32.dll に定義された関数を宣言するためのクラスです。
+    /// Provides native methods defined in the kernel32.dll.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     internal static class NativeMethods
     {
+        #region Methods
+
         /* ----------------------------------------------------------------- */
         ///
         /// LoadLibrary
@@ -72,6 +74,8 @@ namespace Cube.FileSystem.SevenZip.Kernel32
         [DllImport(LibName)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool FreeLibrary(IntPtr hModule);
+
+        #endregion
 
         #region Fields
         private const string LibName = "kernel32.dll";

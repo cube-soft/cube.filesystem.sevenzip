@@ -24,7 +24,7 @@ namespace Cube.FileSystem.SevenZip
     /// ZipOptionSetter
     ///
     /// <summary>
-    /// ZIP 圧縮ファイルのオプション項目を設定するためのクラスです。
+    /// Provides the functionality to set optional settings for Zip archives.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -37,13 +37,14 @@ namespace Cube.FileSystem.SevenZip
         /// ZipOptionSetter
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the ZipOptionSetter class with the
+        /// specified options.
         /// </summary>
         ///
-        /// <param name="option">オプション</param>
+        /// <param name="options">Archive options.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ZipOptionSetter(ArchiveOption option) : base(option) { }
+        public ZipOptionSetter(ArchiveOption options) : base(options) { }
 
         #endregion
 
@@ -54,7 +55,7 @@ namespace Cube.FileSystem.SevenZip
         /// SupportedMethods
         ///
         /// <summary>
-        /// 設定可能な圧縮方法一覧を取得します。
+        /// Gets the supported compression methods.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -77,15 +78,15 @@ namespace Cube.FileSystem.SevenZip
         /// Execute
         ///
         /// <summary>
-        /// オプションをアーカイブ・オブジェクトに設定します。
+        /// Sets the current options to the specified archive.
         /// </summary>
         ///
-        /// <param name="dest">アーカイブ・オブジェクト</param>
+        /// <param name="dest">Archive object.</param>
         ///
         /* ----------------------------------------------------------------- */
         public override void Execute(ISetProperties dest)
         {
-            if (Option is ZipOption zo)
+            if (Options is ZipOption zo)
             {
                 AddCompressionMethod(zo);
                 AddEncryptionMethod(zo);
@@ -102,7 +103,7 @@ namespace Cube.FileSystem.SevenZip
         /// AddCompressionMethod
         ///
         /// <summary>
-        /// 圧縮方式を追加します。
+        /// Adds the specified compression method.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -118,7 +119,7 @@ namespace Cube.FileSystem.SevenZip
         /// AddEncryptionMethod
         ///
         /// <summary>
-        /// 暗号化方式を追加します。
+        /// Adds the specified encryption method.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */

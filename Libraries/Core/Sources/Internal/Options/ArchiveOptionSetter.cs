@@ -27,7 +27,7 @@ namespace Cube.FileSystem.SevenZip
     /// ArchiveOptionSetter
     ///
     /// <summary>
-    /// 圧縮ファイルのオプション項目を設定するためのクラスです。
+    /// Provides the functionality to set optional settings for archives.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -40,16 +40,14 @@ namespace Cube.FileSystem.SevenZip
         /// ArchiveOptionSetter
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the ArchiveOptionSetter class
+        /// with the specified options.
         /// </summary>
         ///
-        /// <param name="option">オプション</param>
+        /// <param name="options">Archive options.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveOptionSetter(ArchiveOption option)
-        {
-            Option = option;
-        }
+        public ArchiveOptionSetter(ArchiveOption options) { Options = options; }
 
         #endregion
 
@@ -57,14 +55,14 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Option
+        /// Options
         ///
         /// <summary>
-        /// オプション内容を取得します。
+        /// Gets the archive options.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveOption Option { get; }
+        public ArchiveOption Options { get; }
 
         #endregion
 
@@ -75,20 +73,20 @@ namespace Cube.FileSystem.SevenZip
         /// Execute
         ///
         /// <summary>
-        /// オプションをアーカイブ・オブジェクトに設定します。
+        /// Sets the current options to the specified archive.
         /// </summary>
         ///
-        /// <param name="dest">アーカイブ・オブジェクト</param>
+        /// <param name="dest">Archive object.</param>
         ///
         /* ----------------------------------------------------------------- */
         public virtual void Execute(ISetProperties dest)
         {
-            Debug.Assert(Option != null && dest != null);
+            Debug.Assert(Options != null && dest != null);
 
             var src = new Dictionary<string, PropVariant>(_dic);
-            if (Option.CodePage != CodePage.Oem)
+            if (Options.CodePage != CodePage.Oem)
             {
-                src.Add("cp", PropVariant.Create((uint)Option.CodePage));
+                src.Add("cp", PropVariant.Create((uint)Options.CodePage));
             }
 
             var values = CreateValues(src.Values);
@@ -108,11 +106,11 @@ namespace Cube.FileSystem.SevenZip
         /// Add
         ///
         /// <summary>
-        /// オプションを追加します。
+        /// Adds the options.
         /// </summary>
         ///
-        /// <param name="name">名前</param>
-        /// <param name="value">値</param>
+        /// <param name="name">Option name.</param>
+        /// <param name="value">Option value.</param>
         ///
         /* ----------------------------------------------------------------- */
         protected void Add(string name, PropVariant value) => _dic.Add(name, value);
@@ -126,7 +124,7 @@ namespace Cube.FileSystem.SevenZip
         /// CreateNames
         ///
         /// <summary>
-        /// ISetProperties オブジェクトに設定する名前一覧を生成します。
+        /// Creates a list of names to be set in the ISetProperties object.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -141,15 +139,14 @@ namespace Cube.FileSystem.SevenZip
         /// CreateValues
         ///
         /// <summary>
-        /// ISetProperties オブジェクトに設定する値一覧を生成します。
+        /// Creates a list of values to be set in the ISetProperties object.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         private GCHandle CreateValues(IEnumerable<PropVariant> src) => GCHandle.Alloc(
-            new[]
-            {
-                PropVariant.Create((uint)Option.CompressionLevel),
-                PropVariant.Create((uint)Option.ThreadCount),
+            new[] {
+                PropVariant.Create((uint)Options.CompressionLevel),
+                PropVariant.Create((uint)Options.ThreadCount),
             }.Concat(src).ToArray(),
             GCHandleType.Pinned
         );
@@ -157,46 +154,7 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Fields
-        private readonly IDictionary<string, PropVariant> _dic = new Dictionary<string, PropVariant>();
-        #endregion
-    }
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// ArchiveOptionSetterExtension
-    ///
-    /// <summary>
-    /// Provides extended methods for the ArchiveOptionSetter class.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    internal static class ArchiveOptionSetterExtension
-    {
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Convert
-        ///
-        /// <summary>
-        /// Converts from the specified object to the new instance of
-        /// the ArchiveOptionSetter class.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static ArchiveOptionSetter Convert(this ArchiveOption src, Format format)
-        {
-            if (src == null) return null;
-            switch (format)
-            {
-                case Format.Zip:      return new ZipOptionSetter(src);
-                case Format.SevenZip: return new SevenZipOptionSetter(src);
-                case Format.Sfx:      return new SevenZipOptionSetter(src);
-                case Format.Tar:      return null;
-                default:              return new ArchiveOptionSetter(src);
-            }
-        }
-
+        private readonly Dictionary<string, PropVariant> _dic = new();
         #endregion
     }
 }

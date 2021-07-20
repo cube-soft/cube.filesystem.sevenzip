@@ -17,8 +17,6 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
 using System.Runtime.InteropServices;
 using Cube.Mixin.Assembly;
 
@@ -29,7 +27,7 @@ namespace Cube.FileSystem.SevenZip
     /// SevenZipLibrary
     ///
     /// <summary>
-    /// 7z.dll を扱うためのクラスです。
+    /// Provides functionality of the 7z.dll.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -42,15 +40,14 @@ namespace Cube.FileSystem.SevenZip
         /// SevenZipLibrary
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the SevenZipLibrary class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public SevenZipLibrary()
         {
-            var asm = GetType().Assembly;
-            var dir = asm.GetDirectoryName();
-            _handle = Kernel32.NativeMethods.LoadLibrary(Path.Combine(dir, "7z.dll"));
+            var dll = Io.Combine(GetType().Assembly.GetDirectoryName(), "7z.dll");
+            _handle = Kernel32.NativeMethods.LoadLibrary(dll);
             if (_handle.IsInvalid) throw new Win32Exception("LoadLibrary");
         }
 
@@ -63,12 +60,12 @@ namespace Cube.FileSystem.SevenZip
         /// GetInArchive
         ///
         /// <summary>
-        /// InArchive オブジェクトを取得します。
+        /// Gets the InArchive object with the specified format.
         /// </summary>
         ///
-        /// <param name="format">フォーマット</param>
+        /// <param name="format">Archive format.</param>
         ///
-        /// <returns>InArchive オブジェクト</returns>
+        /// <returns>InArchive object.</returns>
         ///
         /* ----------------------------------------------------------------- */
         public IInArchive GetInArchive(Format format) => GetInArchive(format.ToClassId());
@@ -78,25 +75,19 @@ namespace Cube.FileSystem.SevenZip
         /// GetInArchive
         ///
         /// <summary>
-        /// InArchive オブジェクトを取得します。
+        /// Gets the InArchive object with the specified class ID.
         /// </summary>
         ///
-        /// <param name="clsid">Class ID</param>
+        /// <param name="clsid">Class ID.</param>
         ///
-        /// <returns>InArchive オブジェクト</returns>
+        /// <returns>InArchive object.</returns>
         ///
         /* ----------------------------------------------------------------- */
         public IInArchive GetInArchive(Guid clsid)
         {
-            var func = Marshal.GetDelegateForFunctionPointer(
-                Kernel32.NativeMethods.GetProcAddress(_handle, "CreateObject"),
-                typeof(CreateObjectDelegate)
-            ) as CreateObjectDelegate;
-
-            Debug.Assert(func != null);
-
-            var iid = typeof(IInArchive).GUID;
-            func(ref clsid, ref iid, out object result);
+            var iid  = typeof(IInArchive).GUID;
+            var func = GetDelegate();
+            _ = func(ref clsid, ref iid, out object result);
             return result as IInArchive;
         }
 
@@ -105,12 +96,12 @@ namespace Cube.FileSystem.SevenZip
         /// GetOutArchive
         ///
         /// <summary>
-        /// OutArchive オブジェクトを取得します。
+        /// Gets the OutArchive object with the specified archive format.
         /// </summary>
         ///
-        /// <param name="format">フォーマット</param>
+        /// <param name="format">Archive format.</param>
         ///
-        /// <returns>OutArchive オブジェクト</returns>
+        /// <returns>OutArchive object.</returns>
         ///
         /* ----------------------------------------------------------------- */
         public IOutArchive GetOutArchive(Format format) => GetOutArchive(format.ToClassId());
@@ -120,25 +111,19 @@ namespace Cube.FileSystem.SevenZip
         /// GetOutArchive
         ///
         /// <summary>
-        /// OutArchive オブジェクトを取得します。
+        /// Gets the OutArchive object with the specified class ID.
         /// </summary>
         ///
-        /// <param name="clsid">Class ID</param>
+        /// <param name="clsid">Class ID.</param>
         ///
-        /// <returns>OutArchive オブジェクト</returns>
+        /// <returns>OutArchive object.</returns>
         ///
         /* ----------------------------------------------------------------- */
         public IOutArchive GetOutArchive(Guid clsid)
         {
-            var func = Marshal.GetDelegateForFunctionPointer(
-                Kernel32.NativeMethods.GetProcAddress(_handle, "CreateObject"),
-                typeof(CreateObjectDelegate)
-            ) as CreateObjectDelegate;
-
-            Debug.Assert(func != null);
-
-            var iid = typeof(IOutArchive).GUID;
-            func(ref clsid, ref iid, out object result);
+            var iid  = typeof(IOutArchive).GUID;
+            var func = GetDelegate();
+            _ = func(ref clsid, ref iid, out object result);
             return result as IOutArchive;
         }
 
@@ -147,8 +132,14 @@ namespace Cube.FileSystem.SevenZip
         /// Dispose
         ///
         /// <summary>
-        /// リソースを破棄します。
+        /// Releases the unmanaged resources used by the object and
+        /// optionally releases the managed resources.
         /// </summary>
+        ///
+        /// <param name="disposing">
+        /// true to release both managed and unmanaged resources;
+        /// false to release only unmanaged resources.
+        /// </param>
         ///
         /* ----------------------------------------------------------------- */
         protected override void Dispose(bool disposing)
@@ -162,10 +153,25 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
+        /// GetDelegate
+        ///
+        /// <summary>
+        /// Gets the delegate object.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private CreateObjectDelegate GetDelegate() =>
+            Marshal.GetDelegateForFunctionPointer(
+                Kernel32.NativeMethods.GetProcAddress(_handle, "CreateObject"),
+                typeof(CreateObjectDelegate)
+            ) as CreateObjectDelegate;
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// CreateObjectDelegate
         ///
         /// <summary>
-        /// CreateObject のデリゲートです。
+        /// Represents the delegate of the CreateObject function.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */

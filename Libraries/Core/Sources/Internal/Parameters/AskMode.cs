@@ -15,39 +15,21 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.Runtime.InteropServices;
-
-namespace Cube.FileSystem.SevenZip.Ole32
+namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// Ole32.NativeMethods
+    /// AskMode
     ///
     /// <summary>
-    /// Provides native methods defined in the ole32.dll.
+    /// Specifies processing mode.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal static class NativeMethods
+    internal enum AskMode
     {
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// PropVariantClear
-        ///
-        /// <summary>
-        /// https://msdn.microsoft.com/en-us/library/windows/desktop/aa380073.aspx
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [DllImport(LibName)]
-        public static extern int PropVariantClear(ref PropVariant pvar);
-
-        #endregion
-
-        #region Fields
-        private const string LibName = "ole32.dll";
-        #endregion
+        Extract = 0,
+        Test,
+        Skip
     }
 }

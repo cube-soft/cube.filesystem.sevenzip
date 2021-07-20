@@ -21,12 +21,14 @@ using System.Runtime.InteropServices;
 
 namespace Cube.FileSystem.SevenZip
 {
+    #region ArchiveStreamBase
+
     /* --------------------------------------------------------------------- */
     ///
     /// ArchiveStreamBase
     ///
     /// <summary>
-    /// 圧縮ファイルを扱うストリームの基底クラスです。
+    /// Represents the base class for streams that handle archives.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -39,15 +41,14 @@ namespace Cube.FileSystem.SevenZip
         /// ArchiveStreamBase
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the ArchiveStreamBase class with
+        /// the specified arguments.
         /// </summary>
         ///
-        /// <param name="baseStream">
-        /// ラップ対象となる Stream オブジェクト
-        /// </param>
-        ///
+        /// <param name="baseStream">Target stream.</param>
         /// <param name="disposeStream">
-        /// Dispose 時に BaseStream オブジェクトも破棄するかどうかを示す値
+        /// Value indicating whether to discard the BaseStream object when
+        /// disposed.
         /// </param>
         ///
         /* ----------------------------------------------------------------- */
@@ -66,7 +67,7 @@ namespace Cube.FileSystem.SevenZip
         /// BaseStream
         ///
         /// <summary>
-        /// ラップ対象となる Stream オブジェクトを取得します。
+        /// Gets the target stream.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -81,16 +82,13 @@ namespace Cube.FileSystem.SevenZip
         /// Seek
         ///
         /// <summary>
-        /// ストリームの位置を設定します。
+        /// Sets the position of the stream.
+        /// The metod implements IInStream.Seek(long, SeekOrigin, IntPtr).
         /// </summary>
         ///
-        /// <param name="offset">起点からのオフセット値</param>
-        /// <param name="origin">起点となる位置</param>
-        /// <param name="result">設定後の位置</param>
-        ///
-        /// <remarks>
-        /// IInStream.Seek(long, SeekOrigin, IntPtr) の実装です。
-        /// </remarks>
+        /// <param name="offset">Offset value from the origin.</param>
+        /// <param name="origin">Starting position.</param>
+        /// <param name="result">Position after setting.</param>
         ///
         /* ----------------------------------------------------------------- */
         public virtual void Seek(long offset, SeekOrigin origin, IntPtr result)
@@ -104,8 +102,14 @@ namespace Cube.FileSystem.SevenZip
         /// Dispose
         ///
         /// <summary>
-        /// リソースを破棄します。
+        /// Releases the unmanaged resources used by the object and
+        /// optionally releases the managed resources.
         /// </summary>
+        ///
+        /// <param name="disposing">
+        /// true to release both managed and unmanaged resources;
+        /// false to release only unmanaged resources.
+        /// </param>
         ///
         /* ----------------------------------------------------------------- */
         protected override void Dispose(bool disposing)
@@ -120,12 +124,16 @@ namespace Cube.FileSystem.SevenZip
         #endregion
     }
 
+    #endregion
+
+    #region ArchiveStreamReader
+
     /* --------------------------------------------------------------------- */
     ///
     /// ArchiveStreamReader
     ///
     /// <summary>
-    /// 圧縮ファイルの読み込み用ストリームを表すクラスです。
+    /// Represents a stream for reading an archive.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -138,17 +146,11 @@ namespace Cube.FileSystem.SevenZip
         /// ArchiveStreamReader
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the ArchiveStreamReader class
+        /// with the specified stream. BaseStream is disposed when disposed.
         /// </summary>
         ///
-        /// <param name="baseStream">
-        /// ラップ対象となる Stream オブジェクト
-        /// </param>
-        ///
-        /// <remarks>
-        /// ArchiveStreamReader.Dispose() 実行時に BaseStream.Dispose() が
-        /// 実行されます。
-        /// </remarks>
+        /// <param name="baseStream">Target stream.</param>
         ///
         /* ----------------------------------------------------------------- */
         public ArchiveStreamReader(Stream baseStream) : this(baseStream, true) { }
@@ -158,15 +160,14 @@ namespace Cube.FileSystem.SevenZip
         /// ArchiveStreamReader
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the ArchiveStreamReader class
+        /// with the specified arguments.
         /// </summary>
         ///
-        /// <param name="baseStream">
-        /// ラップ対象となる Stream オブジェクト
-        /// </param>
-        ///
+        /// <param name="baseStream">Target stream.</param>
         /// <param name="disposeStream">
-        /// Dispose 時に BaseStream オブジェクトも破棄するかどうかを示す値
+        /// Value indicating whether to discard the BaseStream object when
+        /// disposed.
         /// </param>
         ///
         /* ----------------------------------------------------------------- */
@@ -182,13 +183,13 @@ namespace Cube.FileSystem.SevenZip
         /// Read
         ///
         /// <summary>
-        /// データを読み込みます。
+        /// Reads the data.
         /// </summary>
         ///
-        /// <param name="buffer">バッファ</param>
-        /// <param name="size">読み込むサイズ</param>
+        /// <param name="buffer">Buffer.</param>
+        /// <param name="size">Size to read.</param>
         ///
-        /// <returns>実際に読み込まれたサイズ</returns>
+        /// <returns>Actual size read.</returns>
         ///
         /* ----------------------------------------------------------------- */
         public int Read(byte[] buffer, uint size) => BaseStream.Read(buffer, 0, (int)size);
@@ -196,12 +197,16 @@ namespace Cube.FileSystem.SevenZip
         #endregion
     }
 
+    #endregion
+
+    #region ArchiveStreamWriter
+
     /* --------------------------------------------------------------------- */
     ///
     /// ArchiveStreamWriter
     ///
     /// <summary>
-    /// 圧縮ファイルの書き込み用ストリームを表すクラスです。
+    /// Represents a stream for writing an archive.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -214,17 +219,11 @@ namespace Cube.FileSystem.SevenZip
         /// ArchiveStreamWriter
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the ArchiveStreamReader class
+        /// with the specified stream. BaseStream is disposed when disposed.
         /// </summary>
         ///
-        /// <param name="baseStream">
-        /// ラップ対象となる Stream オブジェクト
-        /// </param>
-        ///
-        /// <remarks>
-        /// ArchiveStreamWriter.Dispose() 実行時に BaseStream.Dispose() が
-        /// 実行されます。
-        /// </remarks>
+        /// <param name="baseStream">Target stream.</param>
         ///
         /* ----------------------------------------------------------------- */
         public ArchiveStreamWriter(Stream baseStream) : this(baseStream, true) { }
@@ -234,15 +233,14 @@ namespace Cube.FileSystem.SevenZip
         /// ArchiveStreamWriter
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the ArchiveStreamReader class
+        /// with the specified arguments.
         /// </summary>
         ///
-        /// <param name="baseStream">
-        /// ラップ対象となる Stream オブジェクト
-        /// </param>
-        ///
+        /// <param name="baseStream">Target stream.</param>
         /// <param name="disposeStream">
-        /// Dispose 時に BaseStream オブジェクトも破棄するかどうかを示す値
+        /// Value indicating whether to discard the BaseStream object when
+        /// disposed.
         /// </param>
         ///
         /* ----------------------------------------------------------------- */
@@ -258,16 +256,13 @@ namespace Cube.FileSystem.SevenZip
         /// SetSize
         ///
         /// <summary>
-        /// 現在のストリームの長さを設定します。
+        /// Sets the length of the current stream.
+        /// The method implements IOutStream.SetSize(long).
         /// </summary>
         ///
-        /// <param name="size">設定サイズ</param>
+        /// <param name="size">Size to set.</param>
         ///
-        /// <returns>0 (ゼロ)</returns>
-        ///
-        /// <remarks>
-        /// IOutStream.SetSize(long) の実装です。
-        /// </remarks>
+        /// <returns>Zero.</returns>
         ///
         /* ----------------------------------------------------------------- */
         public int SetSize(long size)
@@ -281,19 +276,16 @@ namespace Cube.FileSystem.SevenZip
         /// Write
         ///
         /// <summary>
-        /// 現在のストリームにバイトシーケンスを書き込み、書き込んだ
-        /// バイト数だけストリームの現在位置を進めます。
+        /// Writes a byte sequence to the current stream and advances the
+        /// current position of the stream by the number of bytes written.
+        /// The method implements IOutStream.Write(byte[], uint, IntPtr).
         /// </summary>
         ///
-        /// <param name="data">書き込み用データ</param>
-        /// <param name="size">書き込むバイト数</param>
-        /// <param name="result">実際に書き込まれたバイト数</param>
+        /// <param name="data">data for writing</param>
+        /// <param name="size">size to write.</param>
+        /// <param name="result">written size.</param>
         ///
-        /// <returns>0 (ゼロ)</returns>
-        ///
-        /// <remarks>
-        /// IOutStream.Write(byte[], uint, IntPtr) の実装です。
-        /// </remarks>
+        /// <returns>Zero.</returns>
         ///
         /* ----------------------------------------------------------------- */
         public int Write(byte[] data, uint size, IntPtr result)
@@ -306,4 +298,6 @@ namespace Cube.FileSystem.SevenZip
 
         #endregion
     }
+
+    #endregion
 }

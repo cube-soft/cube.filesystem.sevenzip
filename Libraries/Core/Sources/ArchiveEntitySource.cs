@@ -30,7 +30,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal sealed class ArchiveEntitySource : EntitySource
+    internal class ArchiveEntitySource : EntitySource
     {
         #region Constructors
 

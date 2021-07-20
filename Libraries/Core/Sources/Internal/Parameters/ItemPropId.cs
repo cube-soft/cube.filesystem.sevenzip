@@ -19,48 +19,6 @@ namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// AskMode
-    ///
-    /// <summary>
-    /// Specifies processing mode.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    internal enum AskMode
-    {
-        Extract = 0,
-        Test,
-        Skip
-    }
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// OperationResult
-    ///
-    /// <summary>
-    /// Specifies the operation result.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    internal enum OperationResult
-    {
-        OK = 0,
-        UnsupportedMethod,
-        DataError,
-        CrcError,
-        Unavailable,
-        UnexpectedEnd,
-        DataAfterEnd,
-        IsNotArc,
-        HeadersError,
-        WrongPassword,
-
-        // Extended for Cube.FileSystem
-        UserCancel  = -2,
-    }
-
-    /* --------------------------------------------------------------------- */
-    ///
     /// ItemPropId
     ///
     /// <summary>
@@ -107,27 +65,5 @@ namespace Cube.FileSystem.SevenZip
         LocalName           = 0x01200,
         Provider,
         UserDefined         = 0x10000
-    }
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// ArchivePropId
-    ///
-    /// <summary>
-    /// Specifies the property ID in an archive.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    internal enum ArchivePropId : uint
-    {
-        Name = 0,
-        ClassID,
-        Extension,
-        AddExtension,
-        Update,
-        KeepName,
-        StartSignature,
-        FinishSignature,
-        Associate
     }
 }

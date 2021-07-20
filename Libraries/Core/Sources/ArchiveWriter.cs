@@ -86,7 +86,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveOption Option { get; set; }
+        public ArchiveOption Options { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -261,7 +261,7 @@ namespace Cube.FileSystem.SevenZip
             {
                 using var ss = new ArchiveStreamWriter(Io.Create(dest));
                 var archive = _lib.GetOutArchive(fmt);
-                Option.Convert(Format)?.Execute(archive as ISetProperties);
+                Options.Convert(Format)?.Execute(archive as ISetProperties);
                 _ = archive.UpdateItems(ss, (uint)src.Count, cb);
             });
         }
@@ -286,7 +286,7 @@ namespace Cube.FileSystem.SevenZip
             {
                 Invoke(src, Format.Tar, tmp, query, progress);
 
-                var m = (Option as TarOption)?.CompressionMethod ?? CompressionMethod.Copy;
+                var m = (Options as TarOption)?.CompressionMethod ?? CompressionMethod.Copy;
                 if (m == CompressionMethod.BZip2 || m == CompressionMethod.GZip || m == CompressionMethod.XZ)
                 {
                     var f = new List<RawEntity> { new(IoEx.GetEntitySource(tmp)) };
@@ -310,7 +310,7 @@ namespace Cube.FileSystem.SevenZip
         private void InvokeSfx(IList<RawEntity> src, string dest,
             IQuery<string> password, IProgress<Report> progress)
         {
-            var sfx = (Option as SfxOption)?.Module;
+            var sfx = (Options as SfxOption)?.Module;
             if (!Io.Exists(sfx)) throw new System.IO.FileNotFoundException("SFX");
             var tmp = Io.Combine(Io.Get(dest).DirectoryName, Guid.NewGuid().ToString("N"));
 

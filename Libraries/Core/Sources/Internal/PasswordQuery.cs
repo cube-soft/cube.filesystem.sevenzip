@@ -38,22 +38,14 @@ namespace Cube.FileSystem.SevenZip
         ///
         /// <summary>
         /// Initializes a new instance of the PasswordQuery class with the
-        /// specified value.
+        /// specified value. If you specify a password in the constructor,
+        /// the result of the Request method will always be set to the value.
         /// </summary>
         ///
         /// <param name="password">Password result of the request.</param>
         ///
-        /// <remarks>
-        /// 実行前に既にパスワードを把握している場合に使用します。
-        /// コンストラクタでパスワードを指定した場合、Request の結果は
-        /// 常にこの値が設定されます。
-        /// </remarks>
-        ///
         /* ----------------------------------------------------------------- */
-        public PasswordQuery(string password)
-        {
-            Password = password;
-        }
+        public PasswordQuery(string password) { Password = password; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -67,10 +59,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="inner">Object to request the password.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public PasswordQuery(IQuery<string> inner)
-        {
-            InnerQuery = inner;
-        }
+        public PasswordQuery(IQuery<string> inner) { Query = inner; }
 
         #endregion
 
@@ -89,14 +78,14 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// InnerQuery
+        /// Query
         ///
         /// <summary>
         /// Gets the query to invokes the password request.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IQuery<string> InnerQuery { get; private set; }
+        public IQuery<string> Query { get; private set; }
 
         #endregion
 
@@ -122,7 +111,7 @@ namespace Cube.FileSystem.SevenZip
             }
             else
             {
-                InnerQuery?.Request(e);
+                Query?.Request(e);
                 if (!e.Cancel && e.Value.HasValue()) _cache = e.Value;
             }
         }
@@ -136,10 +125,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Reset()
-        {
-            _cache = null;
-        }
+        public void Reset() => _cache = null;
 
         #endregion
 

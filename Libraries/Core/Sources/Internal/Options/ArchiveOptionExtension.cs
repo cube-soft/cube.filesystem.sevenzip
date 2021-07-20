@@ -15,43 +15,41 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.Runtime.ConstrainedExecution;
-using Microsoft.Win32.SafeHandles;
-
 namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// SafeLibraryHandle
+    /// ArchiveOptionSetterExtension
     ///
     /// <summary>
-    /// Provides the functionality to hold a DLL handle.
+    /// Provides extended methods for the ArchiveOptionSetter class.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal sealed class SafeLibraryHandle : SafeHandleZeroOrMinusOneIsInvalid
+    internal static class ArchiveOptionExtension
     {
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SafeLibraryHandle
-        ///
-        /// <summary>
-        /// Initializes a new instance of the SafeLibraryHandle class.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public SafeLibraryHandle() : base(true) { }
+        #region Methods
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ReleaseHandle
+        /// Convert
         ///
         /// <summary>
-        /// Releases the handle.
+        /// Converts from the specified object to the new instance of
+        /// the ArchiveOptionSetter class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
-        protected override bool ReleaseHandle() => Kernel32.NativeMethods.FreeLibrary(handle);
+        public static ArchiveOptionSetter Convert(this ArchiveOption src, Format format) =>
+            src != null ? format switch
+        {
+            Format.Zip      => new ZipOptionSetter(src),
+            Format.SevenZip => new SevenZipOptionSetter(src),
+            Format.Sfx      => new SevenZipOptionSetter(src),
+            Format.Tar      => null,
+            _               => new ArchiveOptionSetter(src),
+        } : default;
+
+        #endregion
     }
 }

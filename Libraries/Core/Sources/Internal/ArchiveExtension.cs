@@ -22,14 +22,14 @@ namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// SevenZipExtension
+    /// ArchiveExtension
     ///
     /// <summary>
-    /// Provides extended methods for the 7-Zip library.
+    /// Provides extended methods for the IInArchive interface.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal static class SevenZipExtension
+    internal static class ArchiveExtension
     {
         #region Methods
 

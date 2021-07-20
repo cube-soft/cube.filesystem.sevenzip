@@ -15,43 +15,60 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.Runtime.ConstrainedExecution;
-using Microsoft.Win32.SafeHandles;
+using System;
+using System.Runtime.InteropServices;
 
 namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// SafeLibraryHandle
+    /// IOutArchive
     ///
     /// <summary>
-    /// Provides the functionality to hold a DLL handle.
+    /// Represents an interface for creating an archive.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal sealed class SafeLibraryHandle : SafeHandleZeroOrMinusOneIsInvalid
+    [ComImport]
+    [Guid("23170F69-40C1-278A-0000-000600A00000")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    internal interface IOutArchive
     {
         /* ----------------------------------------------------------------- */
         ///
-        /// SafeLibraryHandle
+        /// UpdateItems
         ///
         /// <summary>
-        /// Initializes a new instance of the SafeLibraryHandle class.
+        /// Updates archive items
         /// </summary>
         ///
+        /// <param name="stream">
+        /// Stream pointer for writing the archive data
+        /// </param>
+        /// <param name="count">Number of archive items</param>
+        /// <param name="callback">The Callback pointer</param>
+        ///
+        /// <returns>Zero if Ok</returns>
+        ///
         /* ----------------------------------------------------------------- */
-        public SafeLibraryHandle() : base(true) { }
+        [PreserveSig]
+        int UpdateItems(
+            [MarshalAs(UnmanagedType.Interface)] ISequentialOutStream stream,
+            uint count,
+            [MarshalAs(UnmanagedType.Interface)] IArchiveUpdateCallback callback
+        );
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ReleaseHandle
+        /// GetFileTimeType
         ///
         /// <summary>
-        /// Releases the handle.
+        /// Gets file time type(?)
         /// </summary>
         ///
+        /// <param name="type">Type pointer</param>
+        ///
         /* ----------------------------------------------------------------- */
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
-        protected override bool ReleaseHandle() => Kernel32.NativeMethods.FreeLibrary(handle);
+        void GetFileTimeType(IntPtr type);
     }
 }

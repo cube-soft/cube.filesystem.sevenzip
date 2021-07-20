@@ -54,7 +54,7 @@ namespace Cube.FileSystem.SevenZip.Tests
 
             using (var archive = new ArchiveWriter(format))
             {
-                archive.Option = option;
+                archive.Options = option;
                 foreach (var e in items) archive.Add(GetSource(e));
                 archive.Save(dest, password);
                 archive.Clear();
