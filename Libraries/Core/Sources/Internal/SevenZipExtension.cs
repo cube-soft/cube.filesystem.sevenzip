@@ -56,28 +56,34 @@ namespace Cube.FileSystem.SevenZip
         /// GetPath
         ///
         /// <summary>
-        /// Gets the path of the specified item.
+        /// Gets the path of the specified index.
         /// </summary>
         ///
+        /// <param name="src">7-zip core object.</param>
+        /// <param name="index">Target index in the archive.</param>
+        /// <param name="path">Path of the archive file.</param>
+        ///
+        /// <returns>Path of the specified index.</returns>
+        ///
         /// <remarks>
-        /// TAR 系に関してはパス情報を取得する事ができないため、元の
-        /// ファイル名の拡張子を .tar に変更したものをパスにする事として
-        /// います。
+        /// For TAR files, it is not possible to get the path information,
+        /// so we use the original file name with the extension changed to
+        /// .tar as the path.
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public static string GetPath(this IInArchive src, int index, string path, IO io)
+        public static string GetPath(this IInArchive src, int index, string path)
         {
             var dest = src.Get<string>(index, ItemPropId.Path);
             if (dest.HasValue()) return dest;
 
-            var i0  = io.Get(path);
-            var i1  = io.Get(i0.BaseName);
-            var fmt = Formats.FromExtension(i1.Extension);
-            if (fmt != Format.Unknown) return i1.Name;
+            var e0  = Io.Get(path);
+            var e1  = Io.Get(e0.BaseName);
+            var fmt = Formatter.FromExtension(e1.Extension);
+            if (fmt != Format.Unknown) return e1.Name;
 
-            var name = index == 0 ? i1.Name : $"{i1.Name}({index})";
-            var ext  = i0.Extension.ToLowerInvariant();
+            var name = index == 0 ? e1.Name : $"{e1.Name}({index})";
+            var ext  = e0.Extension.ToLowerInvariant();
             var tar  = ext == ".tb2" ||
                        ext.Length == 4 && ext[0] == '.' && ext[1] == 't' && ext[3] == 'z';
             return tar ? $"{name}.tar" : name;

@@ -15,45 +15,44 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.Logging;
-using Cube.Mixin.String;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Cube.Logging;
+using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveUpdateCallback
+    /// UpdateCallback
     ///
     /// <summary>
-    /// 圧縮ファイルを作成する際のコールバック関数群を定義したクラスです。
+    /// Represents callback functions to create an archive.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal sealed class ArchiveUpdateCallback : ArchiveCallbackBase,
-        IArchiveUpdateCallback, ICryptoGetTextPassword2, IDisposable
+    internal sealed class UpdateCallback : CallbackBase, IArchiveUpdateCallback, ICryptoGetTextPassword2
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveUpdateCallback
+        /// UpdateCallback
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the UpdateCallback class with the
+        /// specified arguments.
         /// </summary>
         ///
-        /// <param name="items">圧縮するファイル一覧</param>
-        /// <param name="dest">保存パス</param>
-        /// <param name="io">ファイル操作用オブジェクト</param>
+        /// <param name="items">List of files to be compressed.</param>
+        /// <param name="dest">Path to save.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveUpdateCallback(IList<FileItem> items, string dest, IO io) : base(io)
+        public UpdateCallback(IList<RawEntity> items, string dest)
         {
-            _dispose = new OnceAction<bool>(Dispose);
             Items = items;
+            Destination = dest;
             Report.TotalCount = items.Count;
         }
 
@@ -66,18 +65,18 @@ namespace Cube.FileSystem.SevenZip
         /// Items
         ///
         /// <summary>
-        /// 圧縮するファイル一覧を取得します。
+        /// Gets the list of files to be compressed.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IList<FileItem> Items { get; }
+        public IList<RawEntity> Items { get; }
 
         /* ----------------------------------------------------------------- */
         ///
         /// Destination
         ///
         /// <summary>
-        /// 圧縮ファイルの保存パスを取得します。
+        /// Gets the path where the compressed file is saved.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -94,11 +93,11 @@ namespace Cube.FileSystem.SevenZip
         /// CryptoGetTextPassword2
         ///
         /// <summary>
-        /// 圧縮ファイルに設定するパスワードを取得します。
+        /// Get the password to be set for the compressed file.
         /// </summary>
         ///
-        /// <param name="enabled">パスワードが有効かどうかを示す値</param>
-        /// <param name="password">パスワード</param>
+        /// <param name="enabled">Password is enabled or not.</param>
+        /// <param name="password">Password value.</param>
         ///
         /// <returns>OperationResult</returns>
         ///
@@ -157,7 +156,7 @@ namespace Cube.FileSystem.SevenZip
         public void SetCompleted(ref ulong bytes)
         {
             var cvt = (long)bytes;
-            Invoke(() => Report.Bytes = cvt);
+            _ = Invoke(() => Report.Bytes = cvt);
         }
 
         /* ----------------------------------------------------------------- */
@@ -176,7 +175,7 @@ namespace Cube.FileSystem.SevenZip
         /// <returns>OperationResult</returns>
         ///
         /// <remarks>
-        /// 追加や修正時の挙動が未実装なので要実装。
+        /// TODO: 追加や修正時の挙動が未実装なので要実装。
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
@@ -211,7 +210,7 @@ namespace Cube.FileSystem.SevenZip
             switch (pid)
             {
                 case ItemPropId.Path:
-                    value.Set(src.PathInArchive);
+                    value.Set(src.RelativeName);
                     break;
                 case ItemPropId.Attributes:
                     value.Set((uint)src.Attributes);
@@ -235,7 +234,7 @@ namespace Cube.FileSystem.SevenZip
                     value.Set((ulong)src.Length);
                     break;
                 default:
-                    this.LogDebug($"Unknown\tPid:{pid}");
+                    GetType().LogDebug($"Unknown\tPid:{pid}");
                     value.Clear();
                     break;
             }
@@ -303,45 +302,27 @@ namespace Cube.FileSystem.SevenZip
 
         #endregion
 
-        #region IDisposable
+        #endregion
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ~ArchiveUpdateCallback
-        ///
-        /// <summary>
-        /// Finalizes the object.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        ~ArchiveUpdateCallback() { _dispose.Invoke(false); }
+        #region Implementations
 
         /* ----------------------------------------------------------------- */
         ///
         /// Dispose
         ///
         /// <summary>
-        /// Releases the managed resources used by the object.
+        /// Releases the unmanaged resources used by the
+        /// ArchiveExtractCallback and optionally releases the managed
+        /// resources.
         /// </summary>
         ///
-        /* ----------------------------------------------------------------- */
-        public void Dispose()
-        {
-            _dispose.Invoke(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Dispose
-        ///
-        /// <summary>
-        /// Releases the unmanaged resources used by the object
-        /// and optionally releases the managed resources.
-        /// </summary>
+        /// <param name="disposing">
+        /// true to release both managed and unmanaged resources;
+        /// false to release only unmanaged resources.
+        /// </param>
         ///
         /* ----------------------------------------------------------------- */
-        private void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
@@ -349,12 +330,6 @@ namespace Cube.FileSystem.SevenZip
                 _streams.Clear();
             }
         }
-
-        #endregion
-
-        #endregion
-
-        #region Implementations
 
         /* ----------------------------------------------------------------- */
         ///
@@ -365,7 +340,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private FileItem GetItem(uint index)
+        private RawEntity GetItem(uint index)
         {
             Debug.Assert(index >= 0 && index < Items.Count);
             return Items[(int)index];
@@ -383,7 +358,7 @@ namespace Cube.FileSystem.SevenZip
         private ArchiveStreamReader GetStream(Entity src)
         {
             if (!src.Exists || src.IsDirectory) return null;
-            var dest = new ArchiveStreamReader(IO.OpenRead(src.FullName));
+            var dest = new ArchiveStreamReader(Io.Open(src.FullName));
             _streams.Add(dest);
             return dest;
         }
@@ -391,8 +366,7 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Fields
-        private readonly OnceAction<bool> _dispose;
-        private readonly IList<ArchiveStreamReader> _streams = new List<ArchiveStreamReader>();
+        private readonly List<ArchiveStreamReader> _streams = new();
         #endregion
     }
 }

@@ -15,12 +15,12 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.Assembly;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using Cube.Mixin.Assembly;
 
 namespace Cube.FileSystem.SevenZip
 {

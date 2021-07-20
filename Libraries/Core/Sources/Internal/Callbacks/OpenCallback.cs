@@ -23,34 +23,32 @@ namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveOpenCallback
+    /// OpenCallback
     ///
     /// <summary>
-    /// 圧縮ファイルを開く際のコールバック関数群を定義したクラスです。
+    /// Provides callback functions to open an archive.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal sealed class ArchiveOpenCallback : ArchivePasswordCallback,
-        IArchiveOpenCallback, IArchiveOpenVolumeCallback, IDisposable
+    internal class OpenCallback : PasswordCallback, IArchiveOpenCallback, IArchiveOpenVolumeCallback
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveOpenCallback
+        /// OpenCallback
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the OpenCallback class with the
+        /// specified arguments.
         /// </summary>
         ///
-        /// <param name="src">圧縮ファイルのパス</param>
-        /// <param name="stream">圧縮ファイルの入力ストリーム</param>
-        /// <param name="io">入出力用のオブジェクト</param>
+        /// <param name="src">Path of the archived file.</param>
+        /// <param name="stream">Input stream of the archived file.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveOpenCallback(string src, ArchiveStreamReader stream, IO io) : base(src, io)
+        public OpenCallback(string src, ArchiveStreamReader stream) : base(src)
         {
-            _dispose = new OnceAction<bool>(Dispose);
             _streams.Add(stream);
         }
 
@@ -65,17 +63,11 @@ namespace Cube.FileSystem.SevenZip
         /// SetTotal
         ///
         /// <summary>
-        /// 圧縮ファイルの展開時の合計サイズを取得します。
+        /// Gets the total size of the compressed file upon decompression.
         /// </summary>
         ///
-        /// <param name="count">ファイル数</param>
-        /// <param name="bytes">バイト数</param>
-        ///
-        /// <remarks>
-        /// 7z.dll で null が設定される事が多いため、ref ulong の代わりに
-        /// IntPtr を使用しています。非 null 時に値を取得する場合、
-        /// Marshal.ReadInt64 を使用して下さい。
-        /// </remarks>
+        /// <param name="count">Total number of files.</param>
+        /// <param name="bytes">Total compressed bytes.</param>
         ///
         /* ----------------------------------------------------------------- */
         public void SetTotal(IntPtr count, IntPtr bytes) => Invoke(() =>
@@ -89,11 +81,11 @@ namespace Cube.FileSystem.SevenZip
         /// SetCompleted
         ///
         /// <summary>
-        /// ストリームの読み込み準備が完了したサイズを取得します。
+        /// Get the size of the stream ready to be read.
         /// </summary>
         ///
-        /// <param name="count">ファイル数</param>
-        /// <param name="bytes">バイト数</param>
+        /// <param name="count">Number of files.</param>
+        /// <param name="bytes">Completed bytes.</param>
         ///
         /* ----------------------------------------------------------------- */
         public void SetCompleted(IntPtr count, IntPtr bytes) => Invoke(() =>
@@ -112,18 +104,20 @@ namespace Cube.FileSystem.SevenZip
         /// GetProperty
         ///
         /// <summary>
-        /// 圧縮ファイルのプロパティを取得します。
+        /// Gets the property of the compressed file for the specified ID.
         /// </summary>
         ///
-        /// <param name="pid">プロパティ ID</param>
-        /// <param name="value">プロパティ ID に対応する値</param>
+        /// <param name="pid">Property ID</param>
+        /// <param name="value">
+        /// Value corresponding to the property ID.
+        /// </param>
         ///
         /// <returns>OperationResult</returns>
         ///
         /* ----------------------------------------------------------------- */
         public int GetProperty(ItemPropId pid, ref PropVariant value)
         {
-            if (pid == ItemPropId.Name) value.Set(IO.Get(Source).FullName);
+            if (pid == ItemPropId.Name) value.Set(Io.Get(Source).FullName);
             else value.Clear();
             return Invoke(() => (int)Result);
         }
@@ -133,11 +127,11 @@ namespace Cube.FileSystem.SevenZip
         /// GetStream
         ///
         /// <summary>
-        /// 読み込むボリュームに対応するストリームを取得します。
+        /// Get the stream corresponding to the volume to be read.
         /// </summary>
         ///
-        /// <param name="name">ボリューム名</param>
-        /// <param name="stream">読み込みストリーム</param>
+        /// <param name="name">Volume name.</param>
+        /// <param name="stream">Target input stream.</param>
         ///
         /// <returns>OperationResult</returns>
         ///
@@ -146,10 +140,10 @@ namespace Cube.FileSystem.SevenZip
         {
             stream = Invoke(() =>
             {
-                var src = IO.Exists(name) ? name : IO.Combine(IO.Get(Source).DirectoryName, name);
-                if (!IO.Exists(src)) return default;
+                var src = Io.Exists(name) ? name : Io.Combine(Io.Get(Source).DirectoryName, name);
+                if (!Io.Exists(src)) return default;
 
-                var dest = new ArchiveStreamReader(IO.OpenRead(src));
+                var dest = new ArchiveStreamReader(Io.Open(src));
                 _streams.Add(dest);
                 return dest;
             });
@@ -160,44 +154,22 @@ namespace Cube.FileSystem.SevenZip
 
         #endregion
 
-        #region IDisposable
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ~ArchiveOpenCallback
-        ///
-        /// <summary>
-        /// オブジェクトを破棄します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        ~ArchiveOpenCallback() { _dispose.Invoke(false); }
-
         /* ----------------------------------------------------------------- */
         ///
         /// Dispose
         ///
         /// <summary>
-        /// リソースを開放します。
+        /// Releases the unmanaged resources used by the object and
+        /// optionally releases the managed resources.
         /// </summary>
         ///
-        /* ----------------------------------------------------------------- */
-        public void Dispose()
-        {
-            _dispose.Invoke(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Dispose
-        ///
-        /// <summary>
-        /// リソースを開放します。
-        /// </summary>
+        /// <param name="disposing">
+        /// true to release both managed and unmanaged resources;
+        /// false to release only unmanaged resources.
+        /// </param>
         ///
         /* ----------------------------------------------------------------- */
-        private void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
@@ -208,11 +180,8 @@ namespace Cube.FileSystem.SevenZip
 
         #endregion
 
-        #endregion
-
         #region Fields
-        private readonly OnceAction<bool> _dispose;
-        private readonly IList<ArchiveStreamReader> _streams = new List<ArchiveStreamReader>();
+        private readonly List<ArchiveStreamReader> _streams = new();
         #endregion
     }
 }

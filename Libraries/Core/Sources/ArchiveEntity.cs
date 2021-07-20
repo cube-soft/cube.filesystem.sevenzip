@@ -15,40 +15,37 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.SevenZip.Mixin;
-using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveItem
+    /// ArchiveEntity
     ///
     /// <summary>
     /// Represents an item in the archive.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveItem : Entity
+    public sealed class ArchiveEntity : Entity
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveItem
+        /// ArchiveEntity
         ///
         /// <summary>
-        /// Initializes a new instance of the ArchiveItem class with the
+        /// Initializes a new instance of the ArchiveEntity class with the
         /// specified arguments.
         /// </summary>
         ///
-        /// <param name="index">Index of the archive.</param>
-        /// <param name="controller">Controller object.</param>
+        /// <param name="src">Source object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        internal ArchiveItem(ArchiveReaderController controller, int index) :
-            base(controller.Source, controller, index) { }
+        internal ArchiveEntity(ArchiveEntitySource src) : base(src) { }
 
         #endregion
 
@@ -63,24 +60,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public int Index => Controllable.ToAi().Index;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// RawName
-        ///
-        /// <summary>
-        /// Gets the original name that represents the relative path
-        /// in the archive.
-        /// </summary>
-        ///
-        /// <remarks>
-        /// FullName property represents the normalized result against
-        /// the RawName property.
-        /// </remarks>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string RawName => Controllable.ToAi().RawName;
+        public int Index => GetSource().Index;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -91,7 +71,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public uint Crc => Controllable.ToAi().Crc;
+        public uint Crc => GetSource().Crc;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -102,7 +82,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool Encrypted => Controllable.ToAi().Encrypted;
+        public bool Encrypted => GetSource().Encrypted;
 
         #endregion
 
@@ -122,61 +102,27 @@ namespace Cube.FileSystem.SevenZip
         /// <returns>true for match.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public bool Match(IEnumerable<string> names) =>
-            names != null && Controllable.ToAi().Filter.MatchAny(names);
+        public bool Match(IEnumerable<string> names) => names != null && GetSource().Filter.MatchAny(names);
+
+        #endregion
+
+        #region Implementations
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract
+        /// GetSource
         ///
         /// <summary>
-        /// Extracts the archived item and saves to the specified path.
-        /// </summary>
-        ///
-        /// <param name="directory">Directory to save.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Extract(string directory) => Extract(directory, null);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extract
-        ///
-        /// <summary>
-        /// Extracts the archived item and saves to the specified path.
-        /// </summary>
-        ///
-        /// <param name="directory">Directory to save.</param>
-        /// <param name="progress">Progress report.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Extract(string directory, IProgress<Report> progress) =>
-            ((ArchiveReaderController)Controller).Extract(Index, directory, false, progress);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extract
-        ///
-        /// <summary>
-        /// Tests the extract operation on the item.
+        /// Gets the source object.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Extract() => Extract(default(IProgress<Report>));
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extract
-        ///
-        /// <summary>
-        /// Tests the extract operation on the item.
-        /// </summary>
-        ///
-        /// <param name="progress">Progress report.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Extract(IProgress<Report> progress) =>
-            ((ArchiveReaderController)Controller).Extract(Index, string.Empty, true, progress);
+        private ArchiveEntitySource GetSource()
+        {
+            var dest = Source as ArchiveEntitySource;
+            Debug.Assert(dest is not null);
+            return dest;
+        }
 
         #endregion
     }

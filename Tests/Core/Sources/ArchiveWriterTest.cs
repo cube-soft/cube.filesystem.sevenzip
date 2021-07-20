@@ -15,10 +15,11 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.Assembly;
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using Cube.Mixin.Assembly;
+using Cube.Tests;
+using NUnit.Framework;
 
 namespace Cube.FileSystem.SevenZip.Tests
 {
@@ -27,39 +28,39 @@ namespace Cube.FileSystem.SevenZip.Tests
     /// ArchiveWriterTest
     ///
     /// <summary>
-    /// ArchiveWriter のテスト用クラスです。
+    /// Tests the ArchiveWriter class.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ArchiveWriterTest : ArchiveFixture
+    class ArchiveWriterTest : FileFixture
     {
         #region Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Archive
+        /// Invoke
         ///
         /// <summary>
-        /// 圧縮ファイルを作成するテストを実行します。
+        /// Tests the methods to create an archive file.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
-        public Format Archive(Format format, string filename, string password,
+        public Format Invoke(Format format, string filename, string password,
             string[] items, ArchiveOption option)
         {
             var dest = Get(filename);
 
-            using (var writer = new ArchiveWriter(format))
+            using (var archive = new ArchiveWriter(format))
             {
-                writer.Option = option;
-                foreach (var item in items) writer.Add(GetSource(item));
-                writer.Save(dest, password);
-                writer.Clear();
+                archive.Option = option;
+                foreach (var e in items) archive.Add(GetSource(e));
+                archive.Save(dest, password);
+                archive.Clear();
             }
 
-            using (var ss = IO.OpenRead(dest)) return Formats.FromStream(ss);
+            using (var ss = Io.Open(dest)) return Formatter.FromStream(ss);
         }
 
         #endregion
@@ -71,16 +72,16 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// TestCases
         ///
         /// <summary>
-        /// Archive のテスト用データを取得します。
+        /// Gets the test cases.
         /// </summary>
         ///
         /// <remarks>
-        /// テストケースには、以下の順で指定します。
-        /// - 圧縮形式
-        /// - 圧縮ファイル名
-        /// - パスワード
-        /// - 圧縮するファイル名一覧
-        /// - 圧縮オプション
+        /// The test cases should be specified in the following order:
+        /// - Archive format
+        /// - Path to save
+        /// - Password
+        /// - Source files
+        /// - Archive options
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
@@ -261,7 +262,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     {
                         CompressionMethod = CompressionMethod.Lzma,
                         CompressionLevel  = CompressionLevel.Ultra,
-                        Module            = Current(Formats.SfxName),
+                        Module            = Pwd(Formatter.SfxName),
                     }
                 ).Returns(Format.PE);
             }
@@ -273,19 +274,16 @@ namespace Cube.FileSystem.SevenZip.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Current
+        /// Pwd
         ///
         /// <summary>
-        /// カレントディレクトリとパス結合を実行します。
+        /// Get the path combining the current directory and the specified
+        /// filename.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static string Current(string filename)
-        {
-            var asm = typeof(ArchiveWriterTest).Assembly;
-            var dir = asm.GetDirectoryName();
-            return System.IO.Path.Combine(dir, filename);
-        }
+        private static string Pwd(string filename) =>
+            Io.Combine(typeof(ArchiveWriterTest).Assembly.GetDirectoryName(), filename);
 
         #endregion
     }

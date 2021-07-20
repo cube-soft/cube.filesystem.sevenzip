@@ -17,6 +17,8 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -29,7 +31,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveReader : DisposableBase
+    public sealed class ArchiveReader : DisposableBase
     {
         #region Constructors
 
@@ -61,7 +63,7 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public ArchiveReader(string src, string password) :
-            this(src, password, new IO()) { }
+            this(Formatter.FromFile(src), src, new PasswordQuery(password)) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -77,41 +79,7 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public ArchiveReader(string src, IQuery<string> password) :
-            this(src, password, new IO()) { }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ArchiveReader
-        ///
-        /// <summary>
-        /// Initializes a new instance of the ArchiveReader class with
-        /// the specified arguments.
-        /// </summary>
-        ///
-        /// <param name="src">Path of the archive.</param>
-        /// <param name="password">Password of the archive.</param>
-        /// <param name="io">I/O handler.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public ArchiveReader(string src, string password, IO io) :
-            this(Formats.FromFile(src), src, new PasswordQuery(password), io) { }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ArchiveReader
-        ///
-        /// <summary>
-        /// Initializes a new instance of the ArchiveReader class with
-        /// the specified arguments.
-        /// </summary>
-        ///
-        /// <param name="src">Path of the archive.</param>
-        /// <param name="password">Query object to get password.</param>
-        /// <param name="io">I/O handler.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public ArchiveReader(string src, IQuery<string> password, IO io) :
-            this(Formats.FromFile(src), src, new PasswordQuery(password), io) { }
+            this(Formatter.FromFile(src), src, new PasswordQuery(password)) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -123,9 +91,21 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private ArchiveReader(Format format, string src, PasswordQuery password, IO io)
+        private ArchiveReader(Format format, string src, PasswordQuery password)
         {
-            _controller = new ArchiveReaderController(format, src, password, io);
+            if (format == Format.Unknown) throw new UnknownFormatException();
+
+            Source = src;
+            Format = format;
+            _password = password;
+
+            var ss = new ArchiveStreamReader(Io.Open(src));
+            _callback = new OpenCallback(src, ss) { Password = password };
+            _core = _7zip.GetInArchive(format);
+            _ = _core.Open(ss, IntPtr.Zero, _callback);
+
+            var n = (int)Math.Max(_core.GetNumberOfItems(), 1);
+            Items = new ArchiveCollection(_core, n, src);
         }
 
         #endregion
@@ -137,22 +117,22 @@ namespace Cube.FileSystem.SevenZip
         /// Source
         ///
         /// <summary>
-        /// Gets the path of archive.
+        /// Gets the archive path.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Source => _controller.Source;
+        public string Source { get; }
 
         /* ----------------------------------------------------------------- */
         ///
         /// Format
         ///
         /// <summary>
-        /// Gets the format of archive.
+        /// Gets the archive format.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Format Format => _controller.Format;
+        public Format Format { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -163,23 +143,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IReadOnlyList<ArchiveItem> Items => _controller.Items;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Filters
-        ///
-        /// <summary>
-        /// Gets or sets the collection of file or directory names to
-        /// filter.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public IEnumerable<string> Filters
-        {
-            get => _controller.Filters;
-            set => _controller.Filters = value;
-        }
+        public IReadOnlyList<ArchiveEntity> Items { get; }
 
         #endregion
 
@@ -190,53 +154,53 @@ namespace Cube.FileSystem.SevenZip
         /// Extract
         ///
         /// <summary>
-        /// Extracts files and saves to the specified directory.
+        /// Extracts the files corresponding to the specified indices and
+        /// saves them in the specified directory.
         /// </summary>
         ///
-        /// <param name="directory">Save directory.</param>
+        /// <param name="dest">
+        /// Path of the directory to save. If the parameter is set to null
+        /// or empty, the method invokes as a test mode.
+        /// </param>
         ///
-        /* ----------------------------------------------------------------- */
-        public void Extract(string directory) => Extract(directory, null);
-
-        /* ----------------------------------------------------------------- */
+        /// <param name="src">Source indices to extract.</param>
         ///
-        /// Extract
-        ///
-        /// <summary>
-        /// Extracts files and saves to the specified directory.
-        /// </summary>
-        ///
-        /// <param name="directory">Save directory.</param>
-        /// <param name="progress">Progress object.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Extract(string directory, IProgress<Report> progress) =>
-            _controller.Extract(directory, false, progress);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extract
-        ///
-        /// <summary>
-        /// Tests the extract operations.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Extract() => Extract(default(IProgress<Report>));
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extract
-        ///
-        /// <summary>
-        /// Tests the extract operations.
-        /// </summary>
+        /// <param name="filters">
+        /// List of paths to skip decompressing files or folders that match
+        /// the contained values.
+        /// </param>
         ///
         /// <param name="progress">Progress object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Extract(IProgress<Report> progress) =>
-            _controller.Extract(string.Empty, true, progress);
+        public void Extract(string dest, uint[] src, IEnumerable<string> filters, IProgress<Report> progress)
+        {
+            using var cb = src != null ?
+                      new ExtractCallback(this, src.Select(i => (int)i), src.Length, dest) :
+                      new ExtractCallback(this, dest);
+
+            cb.Password = _password;
+            cb.Progress = progress;
+            cb.Filters  = filters;
+
+            var count = (uint?)src?.Length ?? uint.MaxValue;
+            var test  = dest.HasValue() ? 0 : 1;
+            _ = _core.Extract(src, count , test, cb);
+
+            if (cb.Result == OperationResult.OK) return;
+            if (cb.Result == OperationResult.UserCancel) throw new OperationCanceledException();
+            if (cb.Result == OperationResult.WrongPassword ||
+                cb.Result == OperationResult.DataError && IsEncrypted(src))
+            {
+                _password.Reset();
+                throw new EncryptionException();
+            }
+            throw cb.Exception ?? new System.IO.IOException($"{cb.Result}");
+        }
+
+        #endregion
+
+        #region Implementations
 
         /* ----------------------------------------------------------------- */
         ///
@@ -253,12 +217,32 @@ namespace Cube.FileSystem.SevenZip
         /// </param>
         ///
         /* ----------------------------------------------------------------- */
-        protected override void Dispose(bool disposing) => _controller?.Dispose();
+        protected override void Dispose(bool disposing)
+        {
+            _core?.Close();
+            _callback?.Dispose();
+            _7zip?.Dispose();
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// IsEncrypted
+        ///
+        /// <summary>
+        /// Determines if any of the specified items are encrypted.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private bool IsEncrypted(IEnumerable<uint> indices) =>
+            (indices?.Select(i => Items[(int)i]) ?? Items).Any(e => e.Encrypted);
 
         #endregion
 
         #region Fields
-        private readonly ArchiveReaderController _controller;
+        private readonly SevenZipLibrary _7zip = new();
+        private readonly IInArchive _core;
+        private readonly OpenCallback _callback;
+        private readonly PasswordQuery _password;
         #endregion
     }
 }

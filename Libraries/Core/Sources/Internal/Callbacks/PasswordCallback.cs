@@ -15,42 +15,38 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.String;
 using System.Diagnostics;
+using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchivePasswordCallback
+    /// PasswordCallback
     ///
     /// <summary>
-    /// Provides functionality to query the password when extracting
-    /// archive files.
+    /// Provides callback functions to query the password when extracting
+    /// archived files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal abstract class ArchivePasswordCallback : ArchiveCallbackBase, ICryptoGetTextPassword
+    internal abstract class PasswordCallback : CallbackBase, ICryptoGetTextPassword
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchivePasswordCallback
+        /// PasswordCallback
         ///
         /// <summary>
-        /// Initializes a new instance of the ArchivePasswordCallback class
-        /// with the specified arguments.
+        /// Initializes a new instance of the PasswordCallback class with the
+        /// specified arguments.
         /// </summary>
         ///
         /// <param name="src">Path of the archive file.</param>
-        /// <param name="io">I/O handler.</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected ArchivePasswordCallback(string src, IO io) : base(io)
-        {
-            Source = src;
-        }
+        protected PasswordCallback(string src) { Source = src; }
 
         #endregion
 

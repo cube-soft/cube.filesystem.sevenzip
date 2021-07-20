@@ -15,13 +15,13 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.String;
-using Microsoft.VisualBasic.FileIO;
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
+using Cube.Mixin.String;
+using Cube.Tests;
+using Microsoft.VisualBasic.FileIO;
+using NUnit.Framework;
 
 namespace Cube.FileSystem.SevenZip.Tests
 {
@@ -30,12 +30,12 @@ namespace Cube.FileSystem.SevenZip.Tests
     /// ArchiveReaderTest
     ///
     /// <summary>
-    /// ArchiveReader のテスト用クラスです。
+    /// Tests the ArchiveReader class.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ArchiveReaderTest : ArchiveFixture
+    class ArchiveReaderTest : FileFixture
     {
         #region Tests
 
@@ -44,22 +44,22 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// Extract
         ///
         /// <summary>
-        /// Tests to extract the specified archive.
+        /// Tests the Extract method with the specified archive.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
         public void Extract(string filename, string password) => IgnoreCultureError(() =>
         {
-            var src    = GetSource(filename);
-            var dest   = Get(nameof(Extract), filename);
-            var report = CreateReport();
+            var src  = GetSource(filename);
+            var dest = Get(nameof(Extract), filename);
 
-            using (var obj = new ArchiveReader(src, password)) obj.Extract(dest, Create(report));
+            using var archive = new ArchiveReader(src, password);
+            archive.Extract(dest, null, null, null);
 
-            foreach (var cmp in GetExpectedValues(filename))
+            foreach (var cmp in GetAnswer(filename))
             {
-                var fi = IO.Get(IO.Combine(dest, cmp.Key));
+                var fi = Io.Get(Io.Combine(dest, cmp.Key));
 
                 Assert.That(fi.Exists,         Is.True, cmp.Key);
                 Assert.That(fi.Length,         Is.EqualTo(cmp.Value.Length), cmp.Key);
@@ -71,92 +71,15 @@ namespace Cube.FileSystem.SevenZip.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract
-        ///
-        /// <summary>
-        /// Tests to extract the specified archive in test mode.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [TestCaseSource(nameof(TestCases))]
-        public void Extract_Test(string filename, string password) => IgnoreCultureError(() =>
-        {
-            var src = GetSource(filename);
-            using (var obj = new ArchiveReader(src, password)) obj.Extract();
-        }, $"{filename}, {password}");
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extract_EachItem
-        ///
-        /// <summary>
-        /// Tests to extract the specified archive for each item.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [TestCaseSource(nameof(TestCases))]
-        public void Extract_EachItem(string filename, string password) => IgnoreCultureError(() =>
-        {
-            var src  = GetSource(filename);
-            var dest = Get(nameof(Extract_EachItem), filename);
-
-            using (var obj = new ArchiveReader(src, password))
-            {
-                var items = obj.Items.ToList();
-                var cmp   = GetExpectedValues(filename);
-                var keys  = cmp.Keys.ToList();
-
-                Assert.That(items.Count, Is.EqualTo(cmp.Count));
-
-                for (var i = 0; i < keys.Count; ++i)
-                {
-                    var name = keys[i];
-                    Assert.That(items[i].Index,    Is.EqualTo(i), name);
-                    Assert.That(items[i].FullName, Is.EqualTo(name), name);
-                    Assert.That(items[i].Crc,      Is.EqualTo(cmp[name].Crc), name);
-
-                    items[i].Extract(dest);
-                    var fi = IO.Get(IO.Combine(dest, name));
-                    Assert.That(fi.Exists,         Is.True, name);
-                    Assert.That(fi.Length,         Is.EqualTo(cmp[name].Length), name);
-                    Assert.That(fi.CreationTime,   Is.Not.EqualTo(DateTime.MinValue), name);
-                    Assert.That(fi.LastWriteTime,  Is.Not.EqualTo(DateTime.MinValue), name);
-                    Assert.That(fi.LastAccessTime, Is.Not.EqualTo(DateTime.MinValue), name);
-                }
-            }
-        }, $"{filename}, {password}");
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extract_Test_EachItem
-        ///
-        /// <summary>
-        /// Tests to extract the specified archive for each item in test
-        /// mode.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [TestCaseSource(nameof(TestCases))]
-        public void Extract_Test_EachItem(string filename, string password) => IgnoreCultureError(() =>
-        {
-            using (var obj = new ArchiveReader(GetSource(filename), password))
-            {
-                var items = obj.Items.ToList();
-                for (var i = 0; i < items.Count; ++i) items[i].Extract();
-            }
-        }, $"{filename}, {password}");
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// Extract_Lite
         ///
         /// <summary>
-        /// Executes a test to extract the specified archive.
+        /// Tests the Extract method with the specified archive.
         /// </summary>
         ///
         /// <remarks>
-        /// 解凍処理が正常に終了したかどうかを解凍された個数で確認する
-        /// 簡易テストです。
+        /// This is a simple test to check if the decompression process has
+        /// been completed successfully by the number of decompressed files.
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
@@ -171,14 +94,31 @@ namespace Cube.FileSystem.SevenZip.Tests
         [TestCase("SampleSfx.exe",  ExpectedResult =  4)]
         public int Extract_Lite(string filename)
         {
-            var src    = GetSource(filename);
-            var dest   = Get(nameof(Extract_Lite), filename);
-            var report = CreateReport();
+            var src  = GetSource(filename);
+            var dest = Get(nameof(Extract_Lite), filename);
+            var cnt  = new Counter();
 
-            using (var obj = new ArchiveReader(src)) obj.Extract(); // Test
-            using (var obj = new ArchiveReader(src)) obj.Extract(dest, Create(report));
-            return report[ReportStatus.End];
+            using (var obj = new ArchiveReader(src)) obj.Extract(null, null, null, null); // Test
+            using (var obj = new ArchiveReader(src)) obj.Extract(dest, null, null, cnt);
+
+            return cnt.Results[ReportStatus.End];
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Test
+        ///
+        /// <summary>
+        /// Tests the Extract method with the specified archive in test mode.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [TestCaseSource(nameof(TestCases))]
+        public void Test(string filename, string password) => IgnoreCultureError(() => {
+            var src = GetSource(filename);
+            using var archive = new ArchiveReader(src, password);
+            archive.Extract(null, null, null, null);
+        }, $"{filename}, {password}");
 
         #endregion
 
@@ -189,7 +129,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// TestCases
         ///
         /// <summary>
-        /// Gets test cases.
+        /// Gets the test cases.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -267,14 +207,14 @@ namespace Cube.FileSystem.SevenZip.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetExpectedValues
+        /// GetAnswer
         ///
         /// <summary>
-        /// Creates the expected result from the specified file.
+        /// Gets the expected results of the specified archive.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private IDictionary<string, Expected> GetExpectedValues(string filename)
+        private IDictionary<string, Expected> GetAnswer(string filename)
         {
             var src = GetSource("Expected", $"{filename}.txt");
             var csv = new TextFieldParser(src, System.Text.Encoding.UTF8)

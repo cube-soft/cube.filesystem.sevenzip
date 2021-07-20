@@ -15,34 +15,43 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System.Collections.Generic;
+using Cube.Collections;
+
 namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveItemControllable
+    /// ArchiveCollection
     ///
     /// <summary>
-    /// Represents an item in the archive.
+    /// Represents the collection of items in the provided archive.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal class ArchiveItemControllable : Controllable
+    internal class ArchiveCollection : EnumerableBase<ArchiveEntity>, IReadOnlyList<ArchiveEntity>
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveItemControllable
+        /// ArchiveCollection
         ///
         /// <summary>
-        /// Creates a new instance of the ArchiveItemControllable class
-        /// with the specified arguments.
+        /// Initializes a new instance of the ArchiveCollection class with
+        /// the specified controller.
         /// </summary>
         ///
+        /// <param name="core">7-zip core object.</param>
+        /// <param name="count">Number of items in the archive.</param>
+        /// <param name="path">Path of the archive file.</param>
+        ///
         /* ----------------------------------------------------------------- */
-        public ArchiveItemControllable(string src, int index) : base(src)
+        public ArchiveCollection(IInArchive core, int count, string path)
         {
-            Index = index;
+            _core = core;
+            _path = path;
+            Count = count;
         }
 
         #endregion
@@ -51,64 +60,74 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Index
+        /// Count
         ///
         /// <summary>
-        /// Gets the index of the item in the archive.
+        /// Gets the number of items.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public int Index { get; }
+        public int Count { get; }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// RawName
+        /// Item
         ///
         /// <summary>
-        /// Gets or sets the original path described in the archive.
+        /// Gets the element at the specified index
         /// </summary>
         ///
-        /// <remarks>
-        /// RawName の内容に対して、Windows で使用不可能な文字列に対する
-        /// エスケープ処理を実行した結果が FullName となります。
-        /// </remarks>
+        /// <param name="index">Index of the element to get.</param>
+        ///
+        /// <returns>ArchiveItem object.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public string RawName { get; set; }
+        public ArchiveEntity this[int index] => new(new(_core, index, _path));
+
+        #endregion
+
+        #region Methods
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Crc
+        /// GetEnumerator
         ///
         /// <summary>
-        /// Gets or sets the CRC value of the item.
+        /// Returns an enumerator that iterates through a collection.
         /// </summary>
         ///
+        /// <returns>
+        /// Enumerator that can be used to iterate through the collection.
+        /// </returns>
+        ///
         /* ----------------------------------------------------------------- */
-        public uint Crc { get; set; }
+        public override IEnumerator<ArchiveEntity> GetEnumerator()
+        {
+            for (var i = 0; i < Count; ++i) yield return this[i];
+        }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Encrypted
+        /// Dispose
         ///
         /// <summary>
-        /// Gets or sets a value indicating whether the item is encrypted.
+        /// Releases the unmanaged resources used by the object
+        /// and optionally releases the managed resources.
         /// </summary>
         ///
+        /// <param name="disposing">
+        /// true to release both managed and unmanaged resources;
+        /// false to release only unmanaged resources.
+        /// </param>
+        ///
         /* ----------------------------------------------------------------- */
-        public bool Encrypted { get; set; }
+        protected override void Dispose(bool disposing) { }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Filter
-        ///
-        /// <summary>
-        /// Gets or sets the path filter object.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public PathFilter Filter { get; set; }
+        #endregion
 
+        #region Fields
+        private readonly IInArchive _core;
+        private readonly string _path;
         #endregion
     }
 }

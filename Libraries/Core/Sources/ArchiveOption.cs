@@ -17,6 +17,8 @@
 /* ------------------------------------------------------------------------- */
 namespace Cube.FileSystem.SevenZip
 {
+    #region ArchiveOption
+
     /* --------------------------------------------------------------------- */
     ///
     /// ArchiveOption
@@ -67,6 +69,10 @@ namespace Cube.FileSystem.SevenZip
         #endregion
     }
 
+    #endregion
+
+    #region TarOption
+
     /* --------------------------------------------------------------------- */
     ///
     /// TarOption
@@ -97,6 +103,10 @@ namespace Cube.FileSystem.SevenZip
 
         #endregion
     }
+
+    #endregion
+
+    #region ZipOption
 
     /* --------------------------------------------------------------------- */
     ///
@@ -140,6 +150,10 @@ namespace Cube.FileSystem.SevenZip
         #endregion
     }
 
+    #endregion
+
+    #region SevenZipOption
+
     /* --------------------------------------------------------------------- */
     ///
     /// SevenZipOption
@@ -167,6 +181,10 @@ namespace Cube.FileSystem.SevenZip
         #endregion
     }
 
+    #endregion
+
+    #region SfxOption
+
     /* --------------------------------------------------------------------- */
     ///
     /// SfxOption
@@ -193,4 +211,6 @@ namespace Cube.FileSystem.SevenZip
 
         #endregion
     }
+
+    #endregion
 }

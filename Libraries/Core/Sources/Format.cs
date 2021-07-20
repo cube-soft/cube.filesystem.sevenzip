@@ -17,6 +17,8 @@
 /* ------------------------------------------------------------------------- */
 namespace Cube.FileSystem.SevenZip
 {
+    #region Format
+
     /* --------------------------------------------------------------------- */
     ///
     /// Format
@@ -28,7 +30,7 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     public enum Format
     {
-        /// <summary>不明</summary>
+        /// <summary>Unknown</summary>
         Unknown = -1,
         /// <summary>7z with SFX module</summary>
         Sfx = -2,
@@ -140,6 +142,10 @@ namespace Cube.FileSystem.SevenZip
         GZip = 0xef,
     }
 
+    #endregion
+
+    #region CompressionLevel
+
     /* --------------------------------------------------------------------- */
     ///
     /// CompressionLevel
@@ -165,6 +171,10 @@ namespace Cube.FileSystem.SevenZip
         Ultra = 9,
     }
 
+    #endregion
+
+    #region CompressionMethod
+
     /* --------------------------------------------------------------------- */
     ///
     /// CompressionMethod
@@ -176,7 +186,7 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     public enum CompressionMethod
     {
-        /// <summary>コピー</summary>
+        /// <summary>Copy</summary>
         Copy,
         /// <summary>Deflate</summary>
         Deflate,
@@ -197,6 +207,10 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>Default settings</summary>
         Default,
     }
+
+    #endregion
+
+    #region EncryptionMethod
 
     /* --------------------------------------------------------------------- */
     ///
@@ -221,6 +235,10 @@ namespace Cube.FileSystem.SevenZip
         Default,
     }
 
+    #endregion
+
+    #region CodePage
+
     /* --------------------------------------------------------------------- */
     ///
     /// CodePage
@@ -243,4 +261,6 @@ namespace Cube.FileSystem.SevenZip
         /// <summary>UTF-8</summary>
         Utf8 = 65001,
     }
+
+    #endregion
 }

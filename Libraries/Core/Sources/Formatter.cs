@@ -24,14 +24,14 @@ namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// Formats
+    /// Formatter
     ///
     /// <summary>
     /// Provides extended methods of the Format.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public static class Formats
+    public static class Formatter
     {
         #region Properteis
 
@@ -234,7 +234,7 @@ namespace Cube.FileSystem.SevenZip
 
                 return Format.Unknown;
             }
-            finally { src.Seek(origin, SeekOrigin.Begin); }
+            finally { _ = src.Seek(origin, SeekOrigin.Begin); }
         }
 
         /* ----------------------------------------------------------------- */
@@ -250,35 +250,17 @@ namespace Cube.FileSystem.SevenZip
         /// <returns>Archive format.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static Format FromFile(string src) => FromFile(src, new IO());
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// FromFile
-        ///
-        /// <summary>
-        /// Gets the archvie format corresponding to the specified file.
-        /// </summary>
-        ///
-        /// <param name="src">Path of the archive file.</param>
-        /// <param name="io">I/O handler.</param>
-        ///
-        /// <returns>Archive format.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static Format FromFile(string src, IO io)
+        public static Format FromFile(string src)
         {
-            var info = io.Get(src);
+            var fi = Io.Get(src);
 
-            if (info.Exists)
+            if (fi.Exists)
             {
-                using (var stream = io.OpenRead(src))
-                {
-                    var dest = FromStream(stream);
-                    if (dest != Format.Unknown) return Convert(dest, src);
-                }
+                using var stream = Io.Open(src);
+                var dest = FromStream(stream);
+                if (dest != Format.Unknown) return Convert(dest, src);
             }
-            return FromExtension(info.Extension);
+            return FromExtension(fi.Extension);
         }
 
         #endregion
@@ -300,7 +282,7 @@ namespace Cube.FileSystem.SevenZip
         private static bool Match(Stream stream, int offset, int count, string compared)
         {
             var bytes = new byte[count];
-            stream.Seek(offset, SeekOrigin.Begin);
+            _ = stream.Seek(offset, SeekOrigin.Begin);
             if (stream.Read(bytes, 0, count) < count) return false;
             return BitConverter.ToString(bytes).StartsWith(compared, StringComparison.OrdinalIgnoreCase);
         }
@@ -333,7 +315,7 @@ namespace Cube.FileSystem.SevenZip
         {
             if (_extensionToFormat == null)
             {
-                _extensionToFormat = new Dictionary<string, Format>
+                _extensionToFormat = new()
                 {
                     { ".7z",  Format.SevenZip },
                     { ".bz2", Format.BZip2    },
@@ -366,17 +348,15 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         private static IDictionary<Format, string> GetFormatToExtensionMap() =>
-            _formatToExtension ?? (
-                _formatToExtension = new Dictionary<Format, string>
-                {
-                    { Format.SevenZip, ".7z"  },
-                    { Format.BZip2,    ".bz2" },
-                    { Format.GZip,     ".gz"  },
-                    { Format.Lzw,      ".z"   },
-                    { Format.Sfx,      ".exe" },
-                    { Format.Unknown,  ""     },
-                }
-        );
+            _formatToExtension ??= new()
+        {
+            { Format.SevenZip, ".7z"  },
+            { Format.BZip2,    ".bz2" },
+            { Format.GZip,     ".gz"  },
+            { Format.Lzw,      ".z"   },
+            { Format.Sfx,      ".exe" },
+            { Format.Unknown,  ""     },
+        };
 
         /* ----------------------------------------------------------------- */
         ///
@@ -389,14 +369,12 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         private static IDictionary<CompressionMethod, string> GetMethodToExtensionMap() =>
-            _methodToExtension ?? (
-                _methodToExtension = new Dictionary<CompressionMethod, string>
-                {
-                    { CompressionMethod.BZip2, ".bz2" },
-                    { CompressionMethod.GZip,  ".gz"  },
-                    { CompressionMethod.XZ,    ".xz"  },
-                }
-            );
+            _methodToExtension ??= new()
+        {
+            { CompressionMethod.BZip2, ".bz2" },
+            { CompressionMethod.GZip,  ".gz"  },
+            { CompressionMethod.XZ,    ".xz"  },
+        };
 
         /* ----------------------------------------------------------------- */
         ///
@@ -409,14 +387,12 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         private static IDictionary<CompressionMethod, Format> GetMethodToFormatMap() =>
-            _methodToFormat ?? (
-                _methodToFormat = new Dictionary<CompressionMethod, Format>
-                {
-                    { CompressionMethod.BZip2, Format.BZip2 },
-                    { CompressionMethod.GZip,  Format.GZip  },
-                    { CompressionMethod.XZ,    Format.XZ    },
-                }
-            );
+            _methodToFormat ??= new()
+        {
+            { CompressionMethod.BZip2, Format.BZip2 },
+            { CompressionMethod.GZip,  Format.GZip  },
+            { CompressionMethod.XZ,    Format.XZ    },
+        };
 
         /* ----------------------------------------------------------------- */
         ///
@@ -429,14 +405,12 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         private static IDictionary<Format, CompressionMethod> GetFormatToMethodMap() =>
-            _formatToMethod ?? (
-                _formatToMethod = new Dictionary<Format, CompressionMethod>
-                {
-                    { Format.BZip2, CompressionMethod.BZip2 },
-                    { Format.GZip,  CompressionMethod.GZip  },
-                    { Format.XZ,    CompressionMethod.XZ    },
-                }
-            );
+            _formatToMethod ??= new()
+        {
+            { Format.BZip2, CompressionMethod.BZip2 },
+            { Format.GZip,  CompressionMethod.GZip  },
+            { Format.XZ,    CompressionMethod.XZ    },
+        };
 
         /* ----------------------------------------------------------------- */
         ///
@@ -453,43 +427,42 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        private static IDictionary<string, Format> GetSignatureMap() => _signature ?? (
-            _signature = new Dictionary<string, Format>
-            {
-                { "50-4B-03-04",                Format.Zip      },
-                { "42-5A-68",                   Format.BZip2    },
-                { "52-61-72-21-1A-07-00",       Format.Rar      },
-                { "60-EA",                      Format.Arj      },
-                { "1F-9D-90",                   Format.Lzw      },
-                { "37-7A-BC-AF-27-1C",          Format.SevenZip },
-                { "4D-53-43-46",                Format.Cab      },
-                { "5D-00-00-40-00",             Format.Lzma     },
-                { "FD-37-7A-58-5A",             Format.XZ       },
-                { "52-61-72-21-1A-07-01-00",    Format.Rar5     },
-                { "46-4C-56",                   Format.Flv      },
-                { "46-57-53",                   Format.Swf      },
-                { "63-6F-6E-65-63-74-69-78",    Format.Vhd      },
-                { "4D-5A",                      Format.PE       },
-                { "7F-45-4C-46",                Format.Elf      },
-                { "78-61-72-21",                Format.Xar      },
-                { "78",                         Format.Dmg      },
-                { "4D-53-57-49-4D-00-00-00",    Format.Wim      },
-                { "43-44-30-30-31",             Format.Iso      },
-                { "49-54-53-46",                Format.Chm      },
-                { "ED-AB-EE-DB",                Format.Rpm      },
-                { "1F-8B-08",                   Format.GZip     },
-            }
-        );
+        private static IDictionary<string, Format> GetSignatureMap() =>
+            _signature ??= new Dictionary<string, Format>
+        {
+            { "50-4B-03-04",                Format.Zip      },
+            { "42-5A-68",                   Format.BZip2    },
+            { "52-61-72-21-1A-07-00",       Format.Rar      },
+            { "60-EA",                      Format.Arj      },
+            { "1F-9D-90",                   Format.Lzw      },
+            { "37-7A-BC-AF-27-1C",          Format.SevenZip },
+            { "4D-53-43-46",                Format.Cab      },
+            { "5D-00-00-40-00",             Format.Lzma     },
+            { "FD-37-7A-58-5A",             Format.XZ       },
+            { "52-61-72-21-1A-07-01-00",    Format.Rar5     },
+            { "46-4C-56",                   Format.Flv      },
+            { "46-57-53",                   Format.Swf      },
+            { "63-6F-6E-65-63-74-69-78",    Format.Vhd      },
+            { "4D-5A",                      Format.PE       },
+            { "7F-45-4C-46",                Format.Elf      },
+            { "78-61-72-21",                Format.Xar      },
+            { "78",                         Format.Dmg      },
+            { "4D-53-57-49-4D-00-00-00",    Format.Wim      },
+            { "43-44-30-30-31",             Format.Iso      },
+            { "49-54-53-46",                Format.Chm      },
+            { "ED-AB-EE-DB",                Format.Rpm      },
+            { "1F-8B-08",                   Format.GZip     },
+        };
 
         #endregion
 
         #region Fields
-        private static IDictionary<string, Format> _signature;
-        private static IDictionary<string, Format> _extensionToFormat;
-        private static IDictionary<Format, string> _formatToExtension;
-        private static IDictionary<CompressionMethod, string> _methodToExtension;
-        private static IDictionary<CompressionMethod, Format> _methodToFormat;
-        private static IDictionary<Format, CompressionMethod> _formatToMethod;
+        private static Dictionary<string, Format> _signature;
+        private static Dictionary<string, Format> _extensionToFormat;
+        private static Dictionary<Format, string> _formatToExtension;
+        private static Dictionary<CompressionMethod, string> _methodToExtension;
+        private static Dictionary<CompressionMethod, Format> _methodToFormat;
+        private static Dictionary<Format, CompressionMethod> _formatToMethod;
         #endregion
     }
 }

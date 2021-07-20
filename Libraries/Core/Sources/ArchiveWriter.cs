@@ -15,11 +15,12 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Collections;
-using Cube.Mixin.String;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cube.Collections;
+using Cube.Logging;
+using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -42,48 +43,17 @@ namespace Cube.FileSystem.SevenZip
         ///
         /// <summary>
         /// Initializes a new instance of the ArchiveWriter class with the
-        /// specified format.
-        /// </summary>
-        ///
-        /// <param name="format">Archive format.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public ArchiveWriter(Format format) : this(format, new IO()) { }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ArchiveWriter
-        ///
-        /// <summary>
-        /// Initializes a new instance of the ArchiveWriter class with the
         /// specified arguments.
         /// </summary>
         ///
         /// <param name="format">Archive format.</param>
-        /// <param name="io">I/O handler.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveWriter(Format format, IO io)
-        {
-            _core  = new SevenZipLibrary();
-            Format = format;
-            IO     = io;
-        }
+        public ArchiveWriter(Format format) { Format = format; }
 
         #endregion
 
         #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// IO
-        ///
-        /// <summary>
-        /// Gets the I/O handler.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected IO IO { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -94,7 +64,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected IList<FileItem> Items { get; } = new List<FileItem>();
+        protected IList<RawEntity> Items { get; } = new List<RawEntity>();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -145,7 +115,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="src">Path of file or directory.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Add(string src) => Add(src, IO.Get(src).Name);
+        public void Add(string src) => Add(src, Io.Get(src).Name);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -161,9 +131,9 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void Add(string src, string pathInArchive)
         {
-            var info = IO.Get(src);
-            if (info.Exists) AddItem(info, pathInArchive);
-            else throw new System.IO.FileNotFoundException(info.FullName);
+            var fi = IoEx.GetEntitySource(src);
+            if (fi.Exists) AddItem(fi, pathInArchive);
+            else throw new System.IO.FileNotFoundException(fi.FullName);
         }
 
         /* ----------------------------------------------------------------- */
@@ -281,20 +251,18 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Invoke(IList<FileItem> src, Format fmt, string dest,
+        private void Invoke(IList<RawEntity> src, Format fmt, string dest,
             IQuery<string> query, IProgress<Report> progress)
         {
-            var dir = IO.Get(dest).DirectoryName;
-            if (!IO.Exists(dir)) IO.CreateDirectory(dir);
+            var dir = Io.Get(dest).DirectoryName;
+            Io.CreateDirectory(dir);
 
             Create(src, dest, query, progress, cb =>
             {
-                using (var ss = new ArchiveStreamWriter(IO.Create(dest)))
-                {
-                    var archive = _core.GetOutArchive(fmt);
-                    Option.Convert(Format)?.Execute(archive as ISetProperties);
-                    archive.UpdateItems(ss, (uint)src.Count, cb);
-                }
+                using var ss = new ArchiveStreamWriter(Io.Create(dest));
+                var archive = _lib.GetOutArchive(fmt);
+                Option.Convert(Format)?.Execute(archive as ISetProperties);
+                _ = archive.UpdateItems(ss, (uint)src.Count, cb);
             });
         }
 
@@ -307,12 +275,12 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void InvokeTar(IList<FileItem> src, string dest,
+        private void InvokeTar(IList<RawEntity> src, string dest,
             IQuery<string> query, IProgress<Report> progress)
         {
-            var fi  = IO.Get(dest);
-            var dir = IO.Combine(fi.DirectoryName, Guid.NewGuid().ToString("D"));
-            var tmp = IO.Combine(dir, GetTarName(fi));
+            var fi  = Io.Get(dest);
+            var dir = Io.Combine(fi.DirectoryName, Guid.NewGuid().ToString("N"));
+            var tmp = Io.Combine(dir, GetTarName(fi));
 
             try
             {
@@ -321,12 +289,12 @@ namespace Cube.FileSystem.SevenZip
                 var m = (Option as TarOption)?.CompressionMethod ?? CompressionMethod.Copy;
                 if (m == CompressionMethod.BZip2 || m == CompressionMethod.GZip || m == CompressionMethod.XZ)
                 {
-                    var f = new List<FileItem> { IO.Get(tmp).ToFileItem() };
+                    var f = new List<RawEntity> { new(IoEx.GetEntitySource(tmp)) };
                     Invoke(f, m.ToFormat(), dest, query, progress);
                 }
-                else IO.Move(tmp, dest, true);
+                else Io.Move(tmp, dest, true);
             }
-            finally { _ = IO.TryDelete(dir); }
+            finally { GetType().LogWarn(() => Io.Delete(dir)); }
         }
 
         /* ----------------------------------------------------------------- */
@@ -339,24 +307,24 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void InvokeSfx(IList<FileItem> src, string dest,
+        private void InvokeSfx(IList<RawEntity> src, string dest,
             IQuery<string> password, IProgress<Report> progress)
         {
             var sfx = (Option as SfxOption)?.Module;
-            if (!IO.Exists(sfx)) throw new System.IO.FileNotFoundException("SFX");
-            var tmp = IO.Combine(IO.Get(dest).DirectoryName, Guid.NewGuid().ToString("D"));
+            if (!Io.Exists(sfx)) throw new System.IO.FileNotFoundException("SFX");
+            var tmp = Io.Combine(Io.Get(dest).DirectoryName, Guid.NewGuid().ToString("N"));
 
             try
             {
                 Invoke(src, Format.SevenZip, tmp, password, progress);
 
-                using (var ds = IO.Create(dest))
+                using (var ds = Io.Create(dest))
                 {
-                    using (var ss = IO.OpenRead(sfx)) ss.CopyTo(ds);
-                    using (var ss = IO.OpenRead(tmp)) ss.CopyTo(ds);
+                    using (var ss = Io.Open(sfx)) ss.CopyTo(ds);
+                    using (var ss = Io.Open(tmp)) ss.CopyTo(ds);
                 }
             }
-            finally { IO.TryDelete(tmp); }
+            finally { GetType().LogWarn(() => Io.Delete(tmp)); }
         }
 
         #endregion
@@ -376,7 +344,7 @@ namespace Cube.FileSystem.SevenZip
         /// </param>
         ///
         /* ----------------------------------------------------------------- */
-        protected override void Dispose(bool disposing) => _core.Dispose();
+        protected override void Dispose(bool disposing) => _lib.Dispose();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -403,7 +371,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private IList<FileItem> GetItems() => (Filters == null) ?
+        private IList<RawEntity> GetItems() => (Filters == null) ?
             Items :
             Items.Where(x => !new PathFilter(x.FullName).MatchAny(Filters)).ToList();
 
@@ -416,16 +384,16 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void AddItem(Entity src, string name)
+        private void AddItem(EntitySource src, string name)
         {
-            if (CanRead(src)) Items.Add(src.ToFileItem(name));
+            if (CanRead(src)) Items.Add(new(src, name));
             if (!src.IsDirectory) return;
 
-            var files = IO.GetFiles(src.FullName).Select(e => IO.Get(e));
-            foreach (var f in files) Items.Add(f.ToFileItem(IO.Combine(name, f.Name)));
+            var files = Io.GetFiles(src.FullName).Select(e => IoEx.GetEntitySource(e));
+            foreach (var f in files) Items.Add(new(f, Io.Combine(name, f.Name)));
 
-            var dirs = IO.GetDirectories(src.FullName).Select(e => IO.Get(e));
-            foreach (var d in dirs) AddItem(d, IO.Combine(name, d.Name));
+            var dirs = Io.GetDirectories(src.FullName).Select(e => IoEx.GetEntitySource(e));
+            foreach (var d in dirs) AddItem(d, Io.Combine(name, d.Name));
         }
 
         /* ----------------------------------------------------------------- */
@@ -438,10 +406,15 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private bool CanRead(Entity src)
+        private bool CanRead(EntitySource src)
         {
             if (src.IsDirectory) return true;
-            using (var stream = IO.OpenRead(src.FullName)) return stream != null;
+            try
+            {
+                using var stream = Io.Open(src.FullName);
+                return stream != null;
+            }
+            catch { return false; }
         }
 
         /* ----------------------------------------------------------------- */
@@ -454,11 +427,11 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Create(IList<FileItem> src, string dest, IQuery<string> query,
-            IProgress<Report> progress, Action<ArchiveUpdateCallback> callback)
+        private void Create(IList<RawEntity> src, string dest, IQuery<string> query,
+            IProgress<Report> progress, Action<UpdateCallback> callback)
         {
             var error = default(Exception);
-            var cb    = new ArchiveUpdateCallback(src, dest, IO)
+            var cb    = new UpdateCallback(src, dest)
             {
                 Password = query,
                 Progress = progress,
@@ -494,7 +467,7 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Fields
-        private readonly SevenZipLibrary _core;
+        private readonly SevenZipLibrary _lib = new();
         #endregion
     }
 }

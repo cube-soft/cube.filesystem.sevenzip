@@ -15,68 +15,43 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System.Runtime.ConstrainedExecution;
+using Microsoft.Win32.SafeHandles;
+
 namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// FileItem
+    /// SafeLibraryHandle
     ///
     /// <summary>
-    /// Represents an item to be archived.
+    /// DLL のハンドルを保持するためのクラスです。
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class FileItem : Entity
+    internal sealed class SafeLibraryHandle : SafeHandleZeroOrMinusOneIsInvalid
     {
-        #region Constructors
-
         /* ----------------------------------------------------------------- */
         ///
-        /// FileItem
+        /// SafeLibraryHandle
         ///
         /// <summary>
-        /// Creates a new instance of the FileItem class with the specified
-        /// information.
-        /// </summary>
-        ///
-        /// <param name="src">File or directory information.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public FileItem(Entity src) : this(src, src.Name) { }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// FileItem
-        ///
-        /// <summary>
-        /// Creates a new instance of the FileItem class with the specified
-        /// information.
-        /// </summary>
-        ///
-        /// <param name="src">File or directory information.</param>
-        /// <param name="pathInArchive">Relative path in the archive.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public FileItem(Entity src, string pathInArchive) : base(src)
-        {
-            PathInArchive = pathInArchive;
-        }
-
-        #endregion
-
-        #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// PathInArchive
-        ///
-        /// <summary>
-        /// Gets the relative path in the archive.
+        /// オブジェクトを初期化します。
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string PathInArchive { get; }
+        public SafeLibraryHandle() : base(true) { }
 
-        #endregion
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ReleaseHandle
+        ///
+        /// <summary>
+        /// ハンドルを開放します。
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
+        protected override bool ReleaseHandle() => Kernel32.NativeMethods.FreeLibrary(handle);
     }
 }

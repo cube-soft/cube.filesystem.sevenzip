@@ -751,11 +751,11 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /// <param name="indexes">
-        /// indexes of files to be extracted (must be sorted)
+        /// Indexes of files to be extracted (must be sorted).
         /// </param>
-        /// <param name="count">0xFFFFFFFF means all files</param>
-        /// <param name="test">test != 0 means "test files operation"</param>
-        /// <param name="callback">Callback for operations handling</param>
+        /// <param name="count">0xFFFFFFFF means all files.</param>
+        /// <param name="test">test != 0 means test mode.</param>
+        /// <param name="callback">Callback for operations handling.</param>
         ///
         /// <returns>0 if success</returns>
         ///

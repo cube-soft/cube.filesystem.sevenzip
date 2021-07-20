@@ -21,59 +21,23 @@ namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ProgressCallback
+    /// CallbackBase
     ///
     /// <summary>
-    /// 進捗状況を保持するためのクラスです。
+    /// Represents the base class of other callback classes.
     /// </summary>
     ///
-    /// <remarks>
-    /// このクラスは、他のクラスで継承して使用します。
-    /// </remarks>
-    ///
     /* --------------------------------------------------------------------- */
-    internal abstract class ArchiveCallbackBase
+    internal abstract class CallbackBase : DisposableBase
     {
-        #region Constructors
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ArchiveCallbackBase
-        ///
-        /// <summary>
-        /// オブジェクトを初期化します。
-        /// </summary>
-        ///
-        /// <param name="io">入出力用のオブジェクト</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected ArchiveCallbackBase(IO io)
-        {
-            IO = io;
-        }
-
-        #endregion
-
         #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// IO
-        ///
-        /// <summary>
-        /// ファイル入出力用のオブジェクトを取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public IO IO { get; }
 
         /* ----------------------------------------------------------------- */
         ///
         /// Password
         ///
         /// <summary>
-        /// パスワードの問い合わせに使用するオブジェクトを取得
-        /// または設定します。
+        /// Gets or setss the object to query query for a password.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -84,7 +48,7 @@ namespace Cube.FileSystem.SevenZip
         /// Progress
         ///
         /// <summary>
-        /// 進捗報告に使用するオブジェクトを取得または設定します。
+        /// Gets or sets the object to report the progress.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -95,7 +59,7 @@ namespace Cube.FileSystem.SevenZip
         /// Result
         ///
         /// <summary>
-        /// 処理結果を示す値を取得します。
+        /// Gets the operation result.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -106,7 +70,7 @@ namespace Cube.FileSystem.SevenZip
         /// Exception
         ///
         /// <summary>
-        /// 処理中に発生した例外を取得します。
+        /// Get the exceptions that occurred during processing.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -117,11 +81,11 @@ namespace Cube.FileSystem.SevenZip
         /// Report
         ///
         /// <summary>
-        /// 進捗報告の内容を取得または設定します。
+        /// Gets or sets the content of the progress report.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected Report Report { get; set; } = new Report();
+        protected Report Report { get; set; } = new();
 
         #endregion
 
@@ -218,7 +182,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private Report Copy(Report src) => new Report
+        private Report Copy(Report src) => new()
         {
             Status     = src.Status,
             Current    = src.Current,

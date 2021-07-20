@@ -19,50 +19,63 @@ namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// FileItemExtension
+    /// RawEntity
     ///
     /// <summary>
-    /// Provides extended methods of the FileItem class.
+    /// Represents the information of the file or directory to be archived.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public static class FileItemExtension
+    public class RawEntity : Entity
     {
-        #region Methods
+        #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ToFileItem
+        /// RawEntity
         ///
         /// <summary>
-        /// Creates a new instance of the FileItem class with the specified
-        /// file or directory information.
+        /// Initializes a new instance of the RawEntity class with the
+        /// specified arguments.
         /// </summary>
         ///
-        /// <param name="src">File or directory information.</param>
-        ///
-        /// <returns>Converted result.</returns>
+        /// <param name="src">Source object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static FileItem ToFileItem(this Entity src) => new FileItem(src);
+        public RawEntity(EntitySource src) : this(src, src.Name) { }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ToFileItem
+        /// RawEntity
         ///
         /// <summary>
-        /// Creates a new instance of the FileItem class with the specified
-        /// arguments.
+        /// Initializes a new instance of the RawEntity class with the
+        /// specified arguments.
         /// </summary>
         ///
-        /// <param name="src">File or directory information.</param>
-        /// <param name="pathInArchive">Relative path in the archive.</param>
-        ///
-        /// <returns>Converted result.</returns>
+        /// <param name="src">Source object.</param>
+        /// <param name="name">Relative path in the archive.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static FileItem ToFileItem(this Entity src, string pathInArchive) =>
-            new FileItem(src, pathInArchive);
+        public RawEntity(EntitySource src, string name) : base(src)
+        {
+            RelativeName = name;
+        }
+
+        #endregion
+
+        #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// RelativeName
+        ///
+        /// <summary>
+        /// Gets the relative path in the archive.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string RelativeName { get; }
 
         #endregion
     }
