@@ -154,8 +154,9 @@ namespace Cube.FileSystem.SevenZip
         /// Extract
         ///
         /// <summary>
-        /// Extracts the files corresponding to the specified indices and
-        /// saves them in the specified directory.
+        /// Extracts the files corresponding to the specified indices except
+        /// those matching the specified filters, and saves them in the
+        /// specified directory.
         /// </summary>
         ///
         /// <param name="dest">
@@ -181,7 +182,7 @@ namespace Cube.FileSystem.SevenZip
 
             cb.Password = _password;
             cb.Progress = progress;
-            cb.Filters  = filters;
+            cb.Filters  = filters ?? Enumerable.Empty<string>();
 
             var count = (uint?)src?.Length ?? uint.MaxValue;
             var test  = dest.HasValue() ? 0 : 1;

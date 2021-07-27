@@ -55,7 +55,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             var dest = Get(nameof(Extract), filename);
 
             using var archive = new ArchiveReader(src, password);
-            archive.Extract(dest, null, null, null);
+            archive.Extract(dest);
 
             foreach (var cmp in GetAnswer(filename))
             {
@@ -98,8 +98,8 @@ namespace Cube.FileSystem.SevenZip.Tests
             var dest = Get(nameof(Extract_Lite), filename);
             var cnt  = new Counter();
 
-            using (var obj = new ArchiveReader(src)) obj.Extract(null, null, null, null); // Test
-            using (var obj = new ArchiveReader(src)) obj.Extract(dest, null, null, cnt);
+            using (var obj = new ArchiveReader(src)) obj.Test(); // Test
+            using (var obj = new ArchiveReader(src)) obj.Extract(dest, cnt);
 
             return cnt.Results[ReportStatus.End];
         }
@@ -117,7 +117,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         public void Test(string filename, string password) => IgnoreCultureError(() => {
             var src = GetSource(filename);
             using var archive = new ArchiveReader(src, password);
-            archive.Extract(null, null, null, null);
+            archive.Test();
         }, $"{filename}, {password}");
 
         #endregion

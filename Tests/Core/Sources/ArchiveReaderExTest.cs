@@ -53,7 +53,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             using (var archive = new ArchiveReader(src))
             {
                 var filters = new[] { ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini" };
-                archive.Extract(dest, null, filters, null);
+                archive.Extract(dest, filters);
             }
 
             Assert.That(Io.Exists(Io.Combine(dest, @"フィルタリング テスト用")),              Is.True);
@@ -88,7 +88,7 @@ namespace Cube.FileSystem.SevenZip.Tests
 
             using var archive = new ArchiveReader(src, query);
 
-            Assert.That(() => archive.Extract(Results, null, null, cnt),
+            Assert.That(() => archive.Extract(Results, cnt),
                 Throws.TypeOf<OperationCanceledException>());
             Assert.That(cnt.Results[ReportStatus.End], Is.EqualTo(2));
         }
@@ -128,8 +128,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             using var ss = Io.Open(locked);
             using var archive = new ArchiveReader(GetSource("Sample.zip"), "");
 
-            Assert.That(() => archive.Extract(dest, null, null, null),
-                Throws.TypeOf<System.IO.IOException>());
+            Assert.That(() => archive.Extract(dest), Throws.TypeOf<System.IO.IOException>());
         }
 
         /* ----------------------------------------------------------------- */
@@ -155,8 +154,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             var src = Io.Combine(dest, "SampleVolume.rar.001");
             using var archive = new ArchiveReader(src);
 
-            Assert.That(() => archive.Extract(dest, null, null, null),
-                Throws.TypeOf<System.IO.IOException>());
+            Assert.That(() => archive.Extract(dest), Throws.TypeOf<System.IO.IOException>());
         }
 
         /* ----------------------------------------------------------------- */
@@ -175,8 +173,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             var src = GetSource("Password.7z");
             using var archive = new ArchiveReader(src, password);
 
-            Assert.That(() => archive.Extract(Results, null, null, null),
-                Throws.TypeOf<EncryptionException>());
+            Assert.That(() => archive.Extract(Results), Throws.TypeOf<EncryptionException>());
         }
 
         #endregion
