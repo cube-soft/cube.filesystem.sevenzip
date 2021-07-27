@@ -17,7 +17,9 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Linq;
-using System.Reflection;
+using Cube.Logging;
+using Cube.Mixin.Assembly;
+using Cube.Mixin.Collections;
 
 namespace Cube.FileSystem.SevenZip.Ice.Associator
 {
@@ -26,73 +28,65 @@ namespace Cube.FileSystem.SevenZip.Ice.Associator
     /// Program
     ///
     /// <summary>
-    /// メインプログラムを表すクラスです。
+    /// Represents the main program.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     static class Program
     {
+        #region Methods
+
         /* ----------------------------------------------------------------- */
         ///
         /// Main
         ///
         /// <summary>
-        /// アプリケーションのエントリポイントです。
+        /// Executes the main program of the application.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [STAThread]
-        static void Main(string[] args)
+        static void Main(string[] args) => Source.LogError(() =>
         {
-            var type = typeof(Program);
+            Source.LogInfo(Source.Assembly);
+            Source.LogInfo($"[ {args.Join(" ")} ]");
 
-            try
+            var src = new SettingFolder();
+            if (args.Length > 0 && args[0].ToLowerInvariant() == "/uninstall") Clear(src);
+            else src.Load();
+
+            var dir  = Source.Assembly.GetDirectoryName();
+            var exe  = System.IO.Path.Combine(dir, "cubeice.exe");
+            var icon = $"{exe},{src.Value.Associate.IconIndex}";
+
+            Source.LogInfo($"FileName:{exe}");
+            Source.LogInfo($"IconLocation:{icon}");
+
+            var registrar = new AssociateRegistrar(exe)
             {
-                Logger.Info(type, Assembly.GetExecutingAssembly());
-                Logger.Info(type, string.Join(" ", args));
+                IconLocation = icon,
+                ToolTip      = src.Value.ToolTip,
+            };
 
-                var asm      = Assembly.GetExecutingAssembly();
-                var settings = new SettingFolder(asm, new AfsIO());
-                if (args.Length > 0 && args[0].ToLowerInvariant() == "/uninstall") Clear(settings);
-                else settings.Load();
+            registrar.Arguments = PresetMenu.Extract.ToArguments();
+            registrar.Update(src.Value.Associate.Value);
 
-                var dir  = System.IO.Path.GetDirectoryName(asm.Location);
-                var exe  = System.IO.Path.Combine(dir, "cubeice.exe");
-                var icon = $"{exe},{settings.Value.Associate.IconIndex}";
-
-                Logger.Info(type, $"FileName:{exe}");
-                Logger.Info(type, $"IconLocation:{icon}");
-
-                var registrar = new AssociateRegistrar(exe)
-                {
-                    IconLocation = icon,
-                    ToolTip      = settings.Value.ToolTip,
-                };
-
-                registrar.Arguments = PresetMenu.Extract.ToArguments();
-                registrar.Update(settings.Value.Associate.Value);
-
-                Shell32.NativeMethods.SHChangeNotify(
-                    0x08000000, // SHCNE_ASSOCCHANGED
-                    0x00001000, // SHCNF_FLUSH
-                    IntPtr.Zero,
-                    IntPtr.Zero
-                );
-            }
-            catch (Exception err) { Logger.Error(type, err); }
-        }
+            Shell32.NativeMethods.SHChangeNotify(
+                0x08000000, // SHCNE_ASSOCCHANGED
+                0x00001000, // SHCNF_FLUSH
+                IntPtr.Zero,
+                IntPtr.Zero
+            );
+        });
 
         /* ----------------------------------------------------------------- */
         ///
         /// Clear
         ///
         /// <summary>
-        /// 全ての関連付けを設定を無効にします。
+        /// Disables all association settings.
+        /// The method is used when uninstalling.
         /// </summary>
-        ///
-        /// <remarks>
-        /// アンインストール時に使用します。
-        /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
         static void Clear(SettingFolder settings)
@@ -102,5 +96,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Associator
                 settings.Value.Associate.Value[key] = false;
             }
         }
+
+        #endregion
+
+        #region Fields
+        private static readonly Type Source = typeof(Program);
+        #endregion
     }
 }
