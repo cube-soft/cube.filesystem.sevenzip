@@ -31,21 +31,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     [DataContract]
     public sealed class CompressValue : ArchiveValue
     {
-        #region Constructors
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CompressValue
-        ///
-        /// <summary>
-        /// Initializes a new instance of the CompressValue class.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public CompressValue() { Reset(); }
-
-        #endregion
-
         #region Properties
 
         /* ----------------------------------------------------------------- */
@@ -61,8 +46,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "UseUTF8")]
         public bool UseUtf8
         {
-            get => _useUtf8;
-            set => SetProperty(ref _useUtf8, value);
+            get => Get(() => false);
+            set => Set(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -78,48 +63,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember]
         public bool OverwritePrompt
         {
-            get => _overwritePrompt;
-            set => SetProperty(ref _overwritePrompt, value);
+            get => Get(() => true);
+            set => Set(value);
         }
 
-        #endregion
-
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnDeserializing
-        ///
-        /// <summary>
-        /// Occurs before deserializing.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [OnDeserializing]
-        private void OnDeserializing(StreamingContext context) => Reset();
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Reset
-        ///
-        /// <summary>
-        /// Resets the value.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected override void Reset()
-        {
-            _useUtf8         = false;
-            _overwritePrompt = true;
-
-            base.Reset();
-        }
-
-        #endregion
-
-        #region Fields
-        private bool _useUtf8;
-        private bool _overwritePrompt;
         #endregion
     }
 }

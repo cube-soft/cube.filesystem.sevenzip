@@ -256,7 +256,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             if (index < 0 || index >= s.Length - 1) return Format.Zip;
 
             var query = s.Substring(index + 1).ToLowerInvariant();
-            return Formats.FromString(query);
+            return Formatter.FromString(query);
         }
 
         /* ----------------------------------------------------------------- */

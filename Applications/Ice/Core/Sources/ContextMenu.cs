@@ -32,24 +32,6 @@ namespace Cube.FileSystem.SevenZip.Ice
     [DataContract]
     public sealed class ContextMenu : SerializableBase
     {
-        #region Constructors
-
-        /* --------------------------------------------------------------------- */
-        ///
-        /// ContextMenu
-        ///
-        /// <summary>
-        /// オブジェクトを初期化します。
-        /// </summary>
-        ///
-        /* --------------------------------------------------------------------- */
-        public ContextMenu()
-        {
-            Reset();
-        }
-
-        #endregion
-
         #region Properties
 
         /* --------------------------------------------------------------------- */
@@ -64,8 +46,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public string Name
         {
-            get => _name;
-            set => SetProperty(ref _name, value);
+            get => Get(() => string.Empty);
+            set => Set(value);
         }
 
         /* --------------------------------------------------------------------- */
@@ -80,8 +62,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public string Arguments
         {
-            get => _arguments;
-            set => SetProperty(ref _arguments, value);
+            get => Get(() => string.Empty);
+            set => Set(value);
         }
 
         /* --------------------------------------------------------------------- */
@@ -96,8 +78,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         [DataMember]
         public int IconIndex
         {
-            get => _iconIndex;
-            set => SetProperty(ref _iconIndex, value);
+            get => Get(() => 0);
+            set => Set(value);
         }
 
         /* --------------------------------------------------------------------- */
@@ -110,52 +92,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* --------------------------------------------------------------------- */
         [DataMember]
-        public IList<ContextMenu> Children
+        public List<ContextMenu> Children
         {
-            get => _children;
-            set => SetProperty(ref _children, value);
+            get => Get(() => new List<ContextMenu>());
+            set => Set(value);
         }
 
-        #endregion
-
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnDeserializing
-        ///
-        /// <summary>
-        /// デシリアライズ直前に実行されます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [OnDeserializing]
-        private void OnDeserializing(StreamingContext context) => Reset();
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Reset
-        ///
-        /// <summary>
-        /// 設定をリセットします。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Reset()
-        {
-            _name      = string.Empty;
-            _arguments = string.Empty;
-            _iconIndex = 0;
-            _children  = new List<ContextMenu>();
-        }
-
-        #endregion
-
-        #region Fields
-        private string _name;
-        private string _arguments;
-        private int _iconIndex;
-        private IList<ContextMenu> _children;
         #endregion
     }
 }

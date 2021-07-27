@@ -32,21 +32,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     [DataContract]
     public abstract class ArchiveValue : SerializableBase
     {
-        #region Constructors
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ArchiveValue
-        ///
-        /// <summary>
-        /// Initializes a new instance of the ArchiveValue class.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected ArchiveValue() { }
-
-        #endregion
-
         #region Properties
 
         /* ----------------------------------------------------------------- */
@@ -61,8 +46,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember]
         public SaveLocation SaveLocation
         {
-            get => _saveLocation;
-            set => SetProperty(ref _saveLocation, value);
+            get => Get(() => SaveLocation.Preset);
+            set => Set(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -82,8 +67,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "SaveDirectoryName")]
         public string SaveDirectory
         {
-            get => _saveDirectory;
-            set => SetProperty(ref _saveDirectory, value);
+            get => Get(() => string.Empty);
+            set => Set(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -99,8 +84,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember]
         public bool Filtering
         {
-            get => _filtering;
-            set => SetProperty(ref _filtering, value);
+            get => Get(() => true);
+            set => Set(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -116,38 +101,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "OpenDirectory")]
         public OpenMethod OpenMethod
         {
-            get => _openMethod;
-            set => SetProperty(ref _openMethod, value);
+            get => Get(() => OpenMethod.OpenNotDesktop);
+            set => Set(value);
         }
 
-        #endregion
-
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Reset
-        ///
-        /// <summary>
-        /// Resets the settings.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected virtual void Reset()
-        {
-            _saveLocation  = SaveLocation.Preset;
-            _saveDirectory = string.Empty;
-            _filtering     = true;
-            _openMethod    = OpenMethod.OpenNotDesktop;
-        }
-
-        #endregion
-
-        #region Fields
-        private SaveLocation _saveLocation;
-        private string _saveDirectory;
-        private bool _filtering;
-        private OpenMethod _openMethod;
         #endregion
     }
 }

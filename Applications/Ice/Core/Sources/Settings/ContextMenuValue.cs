@@ -33,21 +33,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     [DataContract]
     public sealed class ContextMenuValue : SerializableBase
     {
-        #region Constructors
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ContextMenuValue
-        ///
-        /// <summary>
-        /// Initializes a new instance of the ContextMenuValue class.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public ContextMenuValue() { Reset(); }
-
-        #endregion
-
         #region Properties
 
         /* ----------------------------------------------------------------- */
@@ -62,8 +47,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember]
         public PresetMenu Preset
         {
-            get => _preset;
-            set => SetProperty(ref _preset, value);
+            get => Get(() => PresetMenu.DefaultContext);
+            set => Set(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -76,10 +61,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public IList<ContextMenu> Custom
+        public List<ContextMenu> Custom
         {
-            get => _custom;
-            set => SetProperty(ref _custom, value);
+            get => Get(() => new List<ContextMenu>());
+            set => Set(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -95,8 +80,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "IsCustomized")]
         public bool UseCustom
         {
-            get => _useCustom;
-            set => SetProperty(ref _useCustom, value);
+            get => Get(() => false);
+            set => Set(value);
         }
 
         #endregion
@@ -137,28 +122,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             UseCustom = false;
         }
 
-        #endregion
-
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnDeserializing
-        ///
-        /// <summary>
-        /// Occurs before deserializing.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [OnDeserializing]
-        private void OnDeserializing(StreamingContext context) => Reset();
-
-        #endregion
-
-        #region Fields
-        private PresetMenu _preset;
-        private IList<ContextMenu> _custom;
-        private bool _useCustom;
         #endregion
     }
 }

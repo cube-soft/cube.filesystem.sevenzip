@@ -15,11 +15,11 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.Assembly;
-using Cube.Mixin.String;
 using System;
 using System.Linq;
 using System.Runtime.Serialization;
+using Cube.Mixin.Assembly;
+using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
@@ -35,21 +35,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     [DataContract]
     public sealed class ShortcutValue : SerializableBase
     {
-        #region Constructors
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ShortcutValue
-        ///
-        /// <summary>
-        /// Initializes a new instance of the ShortcutValue class.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public ShortcutValue() { Reset(); }
-
-        #endregion
-
         #region Properties
 
         /* ----------------------------------------------------------------- */
@@ -64,8 +49,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember]
         public PresetMenu Preset
         {
-            get => _preset;
-            set => SetProperty(ref _preset, value);
+            get => Get(() => PresetMenu.DefaultDesktop);
+            set => Set(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -81,7 +66,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public string Directory { get; set; } = string.Empty;
+        public string Directory
+        {
+            get => Get(() => string.Empty);
+            set => Set(value);
+        }
 
         #endregion
 
@@ -131,32 +120,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         #endregion
 
         #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnDeserializing
-        ///
-        /// <summary>
-        /// Occurs before deserializing.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [OnDeserializing]
-        private void OnDeserializing(StreamingContext context) => Reset();
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Reset
-        ///
-        /// <summary>
-        /// Resets the value.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Reset()
-        {
-            _preset = PresetMenu.DefaultDesktop;
-        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -263,10 +226,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             filename
         );
 
-        #endregion
-
-        #region Fields
-        private PresetMenu _preset;
         #endregion
     }
 }

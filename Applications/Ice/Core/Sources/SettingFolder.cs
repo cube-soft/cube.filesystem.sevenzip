@@ -15,10 +15,9 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System.Reflection;
 using Cube.FileSystem.SevenZip.Ice.Settings;
 using Cube.Mixin.Assembly;
-using Cube.Mixin.String;
-using System.Reflection;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -27,7 +26,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// SettingFolder
     ///
     /// <summary>
-    /// 各種設定を保持するためのクラスです。
+    /// Represents the application and/or user settings.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -40,37 +39,59 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// SettingsFolder
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the SettingFolder class.
         /// </summary>
         ///
-        /// <param name="assembly">アセンブリ情報</param>
-        /// <param name="io">I/O オブジェクト</param>
-        ///
         /* ----------------------------------------------------------------- */
-        public SettingFolder(Assembly assembly, IO io) :
-            this(assembly, Cube.DataContract.Format.Registry, @"CubeSoft\CubeICE\v3", io) { }
+        public SettingFolder() : this(
+            typeof(SettingFolder).Assembly,
+            DataContract.Format.Registry,
+            @"CubeSoft\CubeICE\v3"
+        ) { }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SettingsFolder
+        /// SettingFolder
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the SettingFolder with the
+        /// specified parameters.
         /// </summary>
         ///
-        /// <param name="assembly">アセンブリ情報</param>
-        /// <param name="format">設定情報の保存方法</param>
-        /// <param name="location">設定情報の保存パス</param>
-        /// <param name="io">I/O オブジェクト</param>
+        /// <param name="assembly">Assembly information.</param>
+        /// <param name="format">Serialized format.</param>
+        /// <param name="location">Location for the settings.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public SettingFolder(Assembly assembly, Cube.DataContract.Format format, string location, IO io) :
-            base(assembly, format, location, io)
+        public SettingFolder(Assembly assembly, DataContract.Format format, string location) :
+            base(format, location, assembly.GetSoftwareVersion())
         {
             AutoSave       = false;
-            Version.Digit  = 3;
             Version.Suffix = Properties.Resources.VersionSuffix;
+            Startup        = new("cubeice-checker")
+            {
+                Source = Io.Combine(assembly.GetDirectoryName(), "CubeChecker.exe"),
+            };
+
+            Startup.Arguments.Add("cubeice");
+            Startup.Arguments.Add("/subkey");
+            Startup.Arguments.Add("CubeICE");
         }
+
+        #endregion
+
+        #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Startup
+        ///
+        /// <summary>
+        /// Get the startup registration object.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public Startup Startup { get; }
 
         #endregion
 
@@ -78,25 +99,17 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OnSaved
+        /// OnSave
         ///
         /// <summary>
-        /// 保存時に実行されます。
+        /// Saves the user settings.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected override void OnSaved(KeyValueEventArgs<Cube.DataContract.Format, string> e)
+        protected override void OnSave()
         {
-            try
-            {
-                var exe = IO.Combine(Assembly.GetDirectoryName(), "CubeChecker.exe");
-                new Startup("cubeice-checker")
-                {
-                    Command = $"{exe.Quote()} CubeICE",
-                    Enabled = Value?.CheckUpdate ?? false,
-                }.Save();
-            }
-            finally { base.OnSaved(e); }
+            base.OnSave();
+            Startup.Save(true);
         }
 
         #endregion

@@ -16,7 +16,6 @@
 //
 /* ------------------------------------------------------------------------- */
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
@@ -34,21 +33,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     [DataContract]
     public sealed class AssociateValue : SerializableBase
     {
-        #region Constructors
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// AssociateSettings
-        ///
-        /// <summary>
-        /// Initializes a new instance of the AssociateSettings class.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public AssociateValue() { Reset(); }
-
-        #endregion
-
         #region Properties
 
         /* ----------------------------------------------------------------- */
@@ -60,7 +44,38 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IDictionary<string, bool> Value { get; private set; }
+        public IDictionary<string, bool> Value => Get(() => new Dictionary<string, bool>
+        {
+            { "7z",          true  },
+            { nameof(Arj),   false },
+            { nameof(BZ2),   true  },
+            { nameof(Cab),   false },
+            { nameof(Chm),   false },
+            { nameof(Cpio),  false },
+            { nameof(Deb),   false },
+            { nameof(Dmg),   false },
+            { nameof(Flv),   false },
+            { nameof(GZ),    true  },
+            { nameof(Hfs),   false },
+            { nameof(Iso),   false },
+            { nameof(Jar),   false },
+            { nameof(Lzh),   true  },
+            { nameof(Nupkg), false },
+            { nameof(Rar),   true  },
+            { nameof(Rpm),   false },
+            { nameof(Swf),   false },
+            { nameof(Tar),   true  },
+            { nameof(Tbz),   true  },
+            { nameof(Tgz),   true  },
+            { nameof(Txz),   true  },
+            { nameof(Vhd),   false },
+            { nameof(Vmdk),  false },
+            { nameof(Wim),   false },
+            { nameof(Xar),   false },
+            { nameof(XZ),    true  },
+            { nameof(Z),     false },
+            { nameof(Zip),   true  },
+        });
 
         /* ----------------------------------------------------------------- */
         ///
@@ -72,9 +87,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool Changed { get; set; } = false;
-
-        #region DataMember
+        public bool Changed
+        {
+            get => Get(() => false);
+            set => Set(value);
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -88,8 +105,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember]
         public int IconIndex
         {
-            get => _iconIndex;
-            set { if (SetProperty(ref _iconIndex, value)) Changed = true; }
+            get => Get(() => 3);
+            set { if (Set(value)) Changed = true; }
         }
 
         /* ----------------------------------------------------------------- */
@@ -105,8 +122,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "7z")]
         public bool SevenZip
         {
-            get => GetProperty("7z");
-            set => SetProperty(value, "7z");
+            get => GetAssociateValue("7z");
+            set => SetAssociateValue(value, "7z");
         }
 
         /* ----------------------------------------------------------------- */
@@ -122,8 +139,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "arj")]
         public bool Arj
         {
-            get => GetProperty();
-            set => SetProperty(value);
+            get => GetAssociateValue();
+            set => SetAssociateValue(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -139,8 +156,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "bz2")]
         public bool BZ2
         {
-            get => GetProperty();
-            set => SetProperty(value);
+            get => GetAssociateValue();
+            set => SetAssociateValue(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -156,8 +173,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "cab")]
         public bool Cab
         {
-            get => GetProperty();
-            set => SetProperty(value);
+            get => GetAssociateValue();
+            set => SetAssociateValue(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -173,8 +190,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "chm")]
         public bool Chm
         {
-            get => GetProperty();
-            set => SetProperty(value);
+            get => GetAssociateValue();
+            set => SetAssociateValue(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -190,8 +207,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "cpio")]
         public bool Cpio
         {
-            get => GetProperty();
-            set => SetProperty(value);
+            get => GetAssociateValue();
+            set => SetAssociateValue(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -207,8 +224,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "deb")]
         public bool Deb
         {
-            get => GetProperty();
-            set => SetProperty(value);
+            get => GetAssociateValue();
+            set => SetAssociateValue(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -224,8 +241,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "dmg")]
         public bool Dmg
         {
-            get => GetProperty();
-            set => SetProperty(value);
+            get => GetAssociateValue();
+            set => SetAssociateValue(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -241,8 +258,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "flv")]
         public bool Flv
         {
-            get => GetProperty();
-            set => SetProperty(value);
+            get => GetAssociateValue();
+            set => SetAssociateValue(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -258,8 +275,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "gz")]
         public bool GZ
         {
-            get => GetProperty();
-            set => SetProperty(value);
+            get => GetAssociateValue();
+            set => SetAssociateValue(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -275,8 +292,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "hfs")]
         public bool Hfs
         {
-            get => GetProperty();
-            set => SetProperty(value);
+            get => GetAssociateValue();
+            set => SetAssociateValue(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -292,8 +309,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "iso")]
         public bool Iso
         {
-            get => GetProperty();
-            set => SetProperty(value);
+            get => GetAssociateValue();
+            set => SetAssociateValue(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -309,8 +326,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "jar")]
         public bool Jar
         {
-            get => GetProperty();
-            set => SetProperty(value);
+            get => GetAssociateValue();
+            set => SetAssociateValue(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -326,8 +343,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "lzh")]
         public bool Lzh
         {
-            get => GetProperty();
-            set => SetProperty(value);
+            get => GetAssociateValue();
+            set => SetAssociateValue(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -343,8 +360,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "nupkg")]
         public bool Nupkg
         {
-            get => GetProperty();
-            set => SetProperty(value);
+            get => GetAssociateValue();
+            set => SetAssociateValue(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -360,8 +377,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "rar")]
         public bool Rar
         {
-            get => GetProperty();
-            set => SetProperty(value);
+            get => GetAssociateValue();
+            set => SetAssociateValue(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -377,8 +394,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "rpm")]
         public bool Rpm
         {
-            get => GetProperty();
-            set => SetProperty(value);
+            get => GetAssociateValue();
+            set => SetAssociateValue(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -394,8 +411,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "swf")]
         public bool Swf
         {
-            get => GetProperty();
-            set => SetProperty(value);
+            get => GetAssociateValue();
+            set => SetAssociateValue(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -411,8 +428,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "tar")]
         public bool Tar
         {
-            get => GetProperty();
-            set => SetProperty(value);
+            get => GetAssociateValue();
+            set => SetAssociateValue(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -428,8 +445,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "tbz")]
         public bool Tbz
         {
-            get => GetProperty();
-            set => SetProperty(value);
+            get => GetAssociateValue();
+            set => SetAssociateValue(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -445,8 +462,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "tgz")]
         public bool Tgz
         {
-            get => GetProperty();
-            set => SetProperty(value);
+            get => GetAssociateValue();
+            set => SetAssociateValue(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -462,8 +479,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "txz")]
         public bool Txz
         {
-            get => GetProperty();
-            set => SetProperty(value);
+            get => GetAssociateValue();
+            set => SetAssociateValue(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -479,8 +496,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "vhd")]
         public bool Vhd
         {
-            get => GetProperty();
-            set => SetProperty(value);
+            get => GetAssociateValue();
+            set => SetAssociateValue(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -496,8 +513,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "vmdk")]
         public bool Vmdk
         {
-            get => GetProperty();
-            set => SetProperty(value);
+            get => GetAssociateValue();
+            set => SetAssociateValue(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -513,8 +530,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "wim")]
         public bool Wim
         {
-            get => GetProperty();
-            set => SetProperty(value);
+            get => GetAssociateValue();
+            set => SetAssociateValue(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -530,8 +547,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "xar")]
         public bool Xar
         {
-            get => GetProperty();
-            set => SetProperty(value);
+            get => GetAssociateValue();
+            set => SetAssociateValue(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -547,8 +564,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "xz")]
         public bool XZ
         {
-            get => GetProperty();
-            set => SetProperty(value);
+            get => GetAssociateValue();
+            set => SetAssociateValue(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -564,8 +581,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "z")]
         public bool Z
         {
-            get => GetProperty();
-            set => SetProperty(value);
+            get => GetAssociateValue();
+            set => SetAssociateValue(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -581,11 +598,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "zip")]
         public bool Zip
         {
-            get => GetProperty();
-            set => SetProperty(value);
+            get => GetAssociateValue();
+            set => SetAssociateValue(value);
         }
-
-        #endregion
 
         #endregion
 
@@ -593,85 +608,26 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OnDeserializing
+        /// GetAssociateValue
         ///
         /// <summary>
-        /// Occurs before deserializing.
+        /// Gets the value associated with the specified name.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [OnDeserializing]
-        private void OnDeserializing(StreamingContext context) => Reset();
+        private bool GetAssociateValue([CallerMemberName] string name = null) =>
+            Value.TryGetValue(name, out var dest) ? dest : false;
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Reset
+        /// SetAssociateValue
         ///
         /// <summary>
-        /// 設定をリセットします。
+        /// Sets the value associated with the specified name.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Reset()
-        {
-            _iconIndex = 3;
-
-            Value = new Dictionary<string, bool>
-            {
-                { "7z",          true  },
-                { nameof(Arj),   false },
-                { nameof(BZ2),   true  },
-                { nameof(Cab),   false },
-                { nameof(Chm),   false },
-                { nameof(Cpio),  false },
-                { nameof(Deb),   false },
-                { nameof(Dmg),   false },
-                { nameof(Flv),   false },
-                { nameof(GZ),    true  },
-                { nameof(Hfs),   false },
-                { nameof(Iso),   false },
-                { nameof(Jar),   false },
-                { nameof(Lzh),   true  },
-                { nameof(Nupkg), false },
-                { nameof(Rar),   true  },
-                { nameof(Rpm),   false },
-                { nameof(Swf),   false },
-                { nameof(Tar),   true  },
-                { nameof(Tbz),   true  },
-                { nameof(Tgz),   true  },
-                { nameof(Txz),   true  },
-                { nameof(Vhd),   false },
-                { nameof(Vmdk),  false },
-                { nameof(Wim),   false },
-                { nameof(Xar),   false },
-                { nameof(XZ),    true  },
-                { nameof(Z),     false },
-                { nameof(Zip),   true  },
-            };
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetProperty
-        ///
-        /// <summary>
-        /// プロパティの値を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private bool GetProperty([CallerMemberName] string name = null)
-            => Value.TryGetValue(name, out bool dest) ? dest : false;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetProperty
-        ///
-        /// <summary>
-        /// プロパティの値を設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private bool SetProperty(bool value, [CallerMemberName] string name = null)
+        private bool SetAssociateValue(bool value, [CallerMemberName] string name = null)
         {
             if (Value.ContainsKey(name))
             {
@@ -679,15 +635,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
                 Value[name] = value;
             }
             else Value.Add(name, value);
-            OnPropertyChanged(new PropertyChangedEventArgs(name));
+            Refresh(name);
             Changed = true;
             return true;
         }
 
-        #endregion
-
-        #region Fields
-        private int _iconIndex;
         #endregion
     }
 }

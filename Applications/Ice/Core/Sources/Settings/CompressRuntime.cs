@@ -15,8 +15,8 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.Assembly;
 using System;
+using Cube.Mixin.Assembly;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
@@ -42,10 +42,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// the specified arguments.
         /// </summary>
         ///
-        /// <param name="io">I/O handler.</param>
-        ///
         /* ----------------------------------------------------------------- */
-        public CompressRuntime(IO io) : this(Format.Zip, io) { }
+        public CompressRuntime() : this(Format.Zip) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -57,30 +55,17 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /// <param name="format">Archive format.</param>
-        /// <param name="io">I/O handler.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressRuntime(Format format, IO io)
+        public CompressRuntime(Format format)
         {
             Format = format;
-            IO     = io;
-            Sfx    = io.Combine(typeof(CompressRuntime).Assembly.GetDirectoryName(), Formats.SfxName);
+            Sfx    = Io.Combine(GetType().Assembly.GetDirectoryName(), Formatter.SfxName);
         }
 
         #endregion
 
         #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// IO
-        ///
-        /// <summary>
-        /// Gets the I/O handler.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public IO IO { get; }
 
         /* ----------------------------------------------------------------- */
         ///

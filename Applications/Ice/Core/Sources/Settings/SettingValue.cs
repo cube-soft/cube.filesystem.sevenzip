@@ -15,11 +15,11 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.String;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
@@ -35,39 +35,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     [DataContract]
     public sealed class SettingValue : SerializableBase
     {
-        #region Constructors
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SettingValue
-        ///
-        /// <summary>
-        /// Initializes a new instance of the SettingValue class.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public SettingValue() { Reset(); }
-
-        #endregion
-
         #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CheckUpdate
-        ///
-        /// <summary>
-        /// Gets or sets a value indicating whether to check the software
-        /// updates.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [DataMember]
-        public bool CheckUpdate
-        {
-            get => _checkUpdate;
-            set => SetProperty(ref _checkUpdate, value);
-        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -82,8 +50,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember]
         public bool ErrorReport
         {
-            get => _errorReport;
-            set => SetProperty(ref _errorReport, value);
+            get => Get(() => true);
+            set => Set(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -102,8 +70,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember]
         public string Explorer
         {
-            get => _explorer;
-            set => SetProperty(ref _explorer, value);
+            get => Get(() => string.Empty);
+            set => Set(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -118,8 +86,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember]
         public string Filters
         {
-            get => _filtering;
-            set => SetProperty(ref _filtering, value);
+            get => Get(() => ".DS_Store|Thumbs.db|__MACOSX|desktop.ini");
+            set => Set(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -140,8 +108,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember]
         public bool ToolTip
         {
-            get => _toolTip;
-            set { if (SetProperty(ref _toolTip, value)) Associate.Changed = true; }
+            get => Get(() => true);
+            set { if (Set(value)) Associate.Changed = true; }
         }
 
         /* ----------------------------------------------------------------- */
@@ -160,8 +128,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember]
         public int ToolTipCount
         {
-            get => _toolTipCount;
-            set => SetProperty(ref _toolTipCount, value);
+            get => Get(() => 5);
+            set => Set(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -176,8 +144,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "Archive")]
         public CompressValue Compress
         {
-            get => _compress;
-            set => SetProperty(ref _compress, value);
+            get => Get(() => new CompressValue());
+            set => Set(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -192,8 +160,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember]
         public ExtractValue Extract
         {
-            get => _extract;
-            set => SetProperty(ref _extract, value);
+            get => Get(() => new ExtractValue());
+            set => Set(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -208,8 +176,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember]
         public AssociateValue Associate
         {
-            get => _associate;
-            set => SetProperty(ref _associate, value);
+            get => Get(() => new AssociateValue());
+            set => Set(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -224,8 +192,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "Context")]
         public ContextMenuValue ContextMenu
         {
-            get => _context;
-            set => SetProperty(ref _context, value);
+            get => Get(() => new ContextMenuValue());
+            set => Set(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -240,8 +208,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember]
         public ShortcutValue Shortcut
         {
-            get => _shortcut;
-            set => SetProperty(ref _shortcut, value);
+            get => Get(() => new ShortcutValue());
+            set => Set(value);
         }
 
         #endregion
@@ -285,60 +253,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             Filters.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries) :
             Enumerable.Empty<string>();
 
-        #endregion
-
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnDeserializing
-        ///
-        /// <summary>
-        /// Occurs before deserializing.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [OnDeserializing]
-        private void OnDeserializing(StreamingContext context) => Reset();
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Reset
-        ///
-        /// <summary>
-        /// Resets the value.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Reset()
-        {
-            _checkUpdate  = true;
-            _errorReport  = true;
-            _explorer     = string.Empty;
-            _filtering    = ".DS_Store|Thumbs.db|__MACOSX|desktop.ini";
-            _toolTip      = true;
-            _toolTipCount = 5;
-            _compress     = new CompressValue();
-            _extract      = new ExtractValue();
-            _associate    = new AssociateValue();
-            _context      = new ContextMenuValue();
-            _shortcut     = new ShortcutValue();
-        }
-
-        #endregion
-
-        #region Fields
-        private bool _checkUpdate;
-        private bool _errorReport;
-        private string _explorer;
-        private string _filtering;
-        private bool _toolTip;
-        private int _toolTipCount;
-        private CompressValue _compress;
-        private ExtractValue _extract;
-        private AssociateValue _associate;
-        private ContextMenuValue _context;
-        private ShortcutValue _shortcut;
         #endregion
     }
 }

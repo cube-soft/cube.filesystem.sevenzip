@@ -31,21 +31,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     [DataContract]
     public sealed class ExtractValue : ArchiveValue
     {
-        #region Constructors
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ExtractValue
-        ///
-        /// <summary>
-        /// Initializes a new instance of the ExtractValue class.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public ExtractValue() { Reset(); }
-
-        #endregion
-
         #region Properties
 
         /* ----------------------------------------------------------------- */
@@ -60,8 +45,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember(Name = "RootDirectory")]
         public SaveMethod SaveMethod
         {
-            get => _saveMethod;
-            set => SetProperty(ref _saveMethod, value);
+            get => Get(() => SaveMethod.CreateSmart);
+            set => Set(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -77,8 +62,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember]
         public bool DeleteSource
         {
-            get => _deleteSource;
-            set => SetProperty(ref _deleteSource, value);
+            get => Get(() => false);
+            set => Set(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -94,50 +79,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember]
         public bool Bursty
         {
-            get => _bursty;
-            set => SetProperty(ref _bursty, value);
+            get => Get(() => true);
+            set => Set(value);
         }
 
-        #endregion
-
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnDeserializing
-        ///
-        /// <summary>
-        /// Occurs before deserializing.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [OnDeserializing]
-        private void OnDeserializing(StreamingContext context) => Reset();
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Reset
-        ///
-        /// <summary>
-        /// Resets the value.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected override void Reset()
-        {
-            base.Reset();
-
-            _deleteSource = false;
-            _bursty       = true;
-            _saveMethod   = SaveMethod.CreateSmart;
-        }
-
-        #endregion
-
-        #region Fields
-        private bool _deleteSource;
-        private bool _bursty;
-        private SaveMethod _saveMethod;
         #endregion
     }
 }
