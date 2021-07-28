@@ -74,6 +74,10 @@ namespace Cube.FileSystem.SevenZip
         public static void Extract(this ArchiveReader src, string dest, IProgress<Report> progress) =>
             src.Extract(dest, null, null, progress);
 
+        #endregion
+
+        #region Extract with filters
+
         /* ----------------------------------------------------------------- */
         ///
         /// Extract
@@ -129,7 +133,7 @@ namespace Cube.FileSystem.SevenZip
 
         #endregion
 
-        #region Extract (ArchiveEntity)
+        #region Extract an item
 
         /* ----------------------------------------------------------------- */
         ///
@@ -171,57 +175,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public static void Extract(this ArchiveReader src, string dest,
             ArchiveEntity item, IProgress<Report> progress) =>
-            src.Extract(dest, new[] { item }, progress);
-
-        #endregion
-
-        #region Extract (IEnumerable<ArchiveEntity>)
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extract
-        ///
-        /// <summary>
-        /// Extracts the specified items and saves them in the specified
-        /// directory.
-        /// </summary>
-        ///
-        /// <param name="src">Source reader object.</param>
-        /// <param name="dest">
-        /// Path of the directory to save. If the parameter is set to null
-        /// or empty, the method invokes as a test mode.
-        /// </param>
-        /// <param name="items">List of archived items to extract.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static void Extract(this ArchiveReader src, string dest, IEnumerable<ArchiveEntity> items) =>
-            src.Extract(dest, items, null);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extract
-        ///
-        /// <summary>
-        /// Extracts the specified items and saves them in the specified
-        /// directory.
-        /// </summary>
-        ///
-        /// <param name="src">Source reader object.</param>
-        /// <param name="dest">
-        /// Path of the directory to save. If the parameter is set to null
-        /// or empty, the method invokes as a test mode.
-        /// </param>
-        /// <param name="items">List of archived items to extract.</param>
-        /// <param name="progress">Progress object.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static void Extract(this ArchiveReader src, string dest,
-            IEnumerable<ArchiveEntity> items, IProgress<Report> progress)
-        {
-            var indices = items?.Select(e => (uint)e.Index)?.ToArray();
-            if (indices is null) return;
-            src.Extract(dest, indices, null, progress);
-        }
+            src.Extract(dest, new[] { (uint)item.Index }, null, progress);
 
         #endregion
 
