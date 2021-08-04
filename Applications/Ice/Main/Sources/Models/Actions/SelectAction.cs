@@ -15,10 +15,10 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.SevenZip.Ice.Settings;
-using Cube.Mixin.String;
 using System;
 using System.Linq;
+using Cube.FileSystem.SevenZip.Ice.Settings;
+using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -53,15 +53,14 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             if (rts.Path.HasValue()) return rts.Path;
 
-            var io = facade.IO;
             var settings = facade.Settings.Value.Compress;
 
-            var name = new ArchiveName(facade.Request.Sources.First(), facade.Request.Format, io);
+            var name = new ArchiveName(facade.Request.Sources.First(), facade.Request.Format);
             var selector = new PathSelector(facade.Request, settings, name) { Query = facade.Select };
             if (selector.Location == SaveLocation.Query) return selector.Value;
 
-            var dest = io.Combine(selector.Value, name.Value.Name);
-            return io.Exists(dest) && settings.OverwritePrompt ?
+            var dest = Io.Combine(selector.Value, name.Value.Name);
+            return Io.Exists(dest) && settings.OverwritePrompt ?
                    AskDestination(facade, dest, name.Format) :
                    dest;
         }
@@ -81,8 +80,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         public static string Get(ExtractFacade facade) => new PathSelector(
             facade.Request,
-            facade.Settings.Value.Extract,
-            facade.IO
+            facade.Settings.Value.Extract
         ) {
             Source = facade.Source,
             Query  = facade.Select,

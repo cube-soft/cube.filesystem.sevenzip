@@ -15,9 +15,9 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.Logging;
 using System;
 using System.Threading;
+using Cube.Logging;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -44,10 +44,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// specified arguments.
         /// </summary>
         ///
-        /// <param name="invoker">Invoker object.</param>
+        /// <param name="dispatcher">Invoker object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected ProgressFacade(Invoker invoker) : base(invoker)
+        protected ProgressFacade(Dispatcher dispatcher) : base(dispatcher)
         {
             State = TimerState.Stop;
             _timer.Elapsed += (s, e) => Refresh(nameof(Report));
@@ -79,8 +79,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         public TimerState State
         {
-            get => GetProperty<TimerState>();
-            private set => SetProperty(value);
+            get => Get(() => TimerState.Stop);
+            private set => Set(value);
         }
 
         #endregion
@@ -114,7 +114,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         public IProgress<Report> GetProgress(Action<Report> callback) =>
-            new SuspendableProgress<Report>(_cancel.Token, _supend, callback);
+            new SuspendableProgress<Report>(_cts.Token, _supender, callback);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -153,7 +153,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         public void Cancel()
         {
-            _cancel.Cancel();
+            _cts.Cancel();
             Resume();
         }
 
@@ -169,8 +169,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         public void Suspend()
         {
             if (State != TimerState.Run) return;
-            State = TimerState.Suspend;
-            _ = _supend.Reset();
+            if (_supender.Reset()) State = TimerState.Suspend;
+            else GetType().LogWarn($"{nameof(Suspend)} failed");
         }
 
         /* ----------------------------------------------------------------- */
@@ -185,8 +185,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         public void Resume()
         {
             if (State != TimerState.Suspend) return;
-            _ = _supend.Set();
-            State = TimerState.Run;
+            if (_supender.Set()) State = TimerState.Run;
+            else GetType().LogWarn($"{nameof(Resume)} failed");
         }
 
         /* ----------------------------------------------------------------- */
@@ -241,7 +241,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             if (!disposing) return;
 
             _timer.Dispose();
-            _supend.Dispose();
+            _supender.Dispose();
         }
 
         #endregion
@@ -261,7 +261,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             if (Report.Count < Report.TotalCount || Report.Bytes < Report.TotalBytes) // hack
             {
-                this.LogDebug(
+                GetType().LogDebug(
                     $"{nameof(Report.Count)}:{Report.Count:#,0} / {Report.TotalCount:#,0}",
                     $"{nameof(Report.Bytes)}:{Report.Bytes:#,0} / {Report.TotalBytes:#,0}"
                 );
@@ -276,9 +276,9 @@ namespace Cube.FileSystem.SevenZip.Ice
         #endregion
 
         #region Fields
-        private readonly System.Timers.Timer _timer = new System.Timers.Timer(100.0);
-        private readonly ManualResetEvent _supend = new ManualResetEvent(true);
-        private readonly CancellationTokenSource _cancel = new CancellationTokenSource();
+        private readonly System.Timers.Timer _timer = new(100.0);
+        private readonly ManualResetEvent _supender = new(true);
+        private readonly CancellationTokenSource _cts = new();
         #endregion
     }
 }

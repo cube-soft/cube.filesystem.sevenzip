@@ -51,9 +51,9 @@ namespace Cube.FileSystem.SevenZip.Ice
             ExecuteButton.Click += (s, e) => Close();
             ExitButton.Click    += (s, e) => Close();
 
-            var b = new PasswordBehavior(PasswordTextBox, ConfirmTextBox, ShowPasswordCheckBox);
-            b.Updated += (s, e) => ExecuteButton.Enabled = b.IsValid;
-            Behaviors.Add(b);
+            var pb = new PasswordBehavior(PasswordTextBox, ConfirmTextBox, ShowPasswordCheckBox);
+            pb.Updated += (s, e) => ExecuteButton.Enabled = pb.Valid;
+            Behaviors.Add(pb);
         }
 
         #endregion

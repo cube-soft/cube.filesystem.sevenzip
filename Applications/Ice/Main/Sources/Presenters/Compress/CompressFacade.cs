@@ -15,12 +15,12 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.SevenZip.Ice.Settings;
-using Cube.Mixin.Logging;
-using Cube.Mixin.String;
-using Cube.Mixin.Syntax;
 using System;
 using System.Linq;
+using Cube.FileSystem.SevenZip.Ice.Settings;
+using Cube.Logging;
+using Cube.Mixin.String;
+using Cube.Mixin.Syntax;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -48,11 +48,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /// <param name="request">Request for the transaction.</param>
         /// <param name="settings">User settings.</param>
-        /// <param name="invoker">Invoker object.</param>
+        /// <param name="dispatcher">Dispatcher object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressFacade(Request request, SettingFolder settings, Invoker invoker) :
-            base(request, settings, invoker) { }
+        public CompressFacade(Request request, SettingFolder settings, Dispatcher dispatcher) :
+            base(request, settings, dispatcher) { }
 
         #endregion
 
@@ -84,7 +84,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         protected override void OnExecute() => Contract(() =>
         {
-            var src = Runtime.GetValue(Request.Sources.First(), Request.Format, IO);
+            var src = Runtime.GetValue(Request.Sources.First(), Request.Format);
             InvokePreProcess(src);
             Invoke(src);
             InvokePostProcess();
@@ -105,17 +105,17 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void Invoke(CompressRuntime src)
         {
-            this.LogDebug($"{nameof(src.Format)}:{src.Format}", $"Method:{src.CompressionMethod}");
+            GetType().LogDebug($"{nameof(src.Format)}:{src.Format}", $"Method:{src.CompressionMethod}");
 
-            using (var writer = new ArchiveWriter(src.Format, IO))
+            using (var writer = new ArchiveWriter(src.Format))
             {
                 Request.Sources.Each(e => writer.Add(e));
-                writer.Option  = src.ToOption(Settings);
+                writer.Options = src.ToOption(Settings);
                 writer.Filters = Settings.Value.GetFilters(Settings.Value.Compress.Filtering);
                 writer.Save(Temp, GetPassword(src), GetProgress());
             }
 
-            if (IO.Exists(Temp)) IO.Move(Temp, Destination, true);
+            if (Io.Exists(Temp)) Io.Move(Temp, Destination, true);
         }
 
         /* ----------------------------------------------------------------- */
@@ -130,7 +130,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         private void InvokePreProcess(CompressRuntime src)
         {
             SetDestination(SelectAction.Get(this, src));
-            SetTemp(IO.Get(Destination).DirectoryName);
+            SetTemp(Io.Get(Destination).DirectoryName);
         }
 
         /* ----------------------------------------------------------------- */
@@ -144,7 +144,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void InvokePostProcess()
         {
-            OpenAction.Invoke(IO.Get(Destination),
+            OpenAction.Invoke(Io.Get(Destination),
                 Settings.Value.Compress.OpenMethod,
                 Settings.Value.Explorer
             );

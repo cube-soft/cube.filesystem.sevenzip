@@ -15,10 +15,10 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.String;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -54,7 +54,6 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         public PathExplorer(string root, SettingFolder settings)
         {
-            IO      = settings.IO;
             Method  = settings.Value.Extract.SaveMethod;
             Filters = settings.Value.Extract.Filtering ?
                       settings.Value.GetFilters() :
@@ -90,17 +89,6 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         public IEnumerable<string> Filters { get; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// IO
-        ///
-        /// <summary>
-        /// Gets the I/O handler.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public IO IO { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -156,13 +144,13 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Invoke(string basename, IEnumerable<ArchiveItem> items)
+        public void Invoke(string basename, IEnumerable<ArchiveEntity> items)
         {
             var hints = GetHints(items);
 
             SaveDirectory = IsSame(hints) ?
                             RootDirectory :
-                            IO.Combine(RootDirectory, basename);
+                            Io.Combine(RootDirectory, basename);
             OpenDirectory = GetOpenDirectory(hints);
         }
 
@@ -180,7 +168,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private IEnumerable<string> GetHints(IEnumerable<ArchiveItem> src)
+        private IEnumerable<string> GetHints(IEnumerable<ArchiveEntity> src)
         {
             var force = Method.HasFlag(SaveMethod.Create) && (Method & SaveMethod.SkipOptions) == 0;
             if (force) return Enumerable.Empty<string>();
@@ -231,7 +219,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private string GetOpenDirectory(IEnumerable<string> hints) =>
             hints.Take(2).Count() == 1 && hints.First() != WildCard ?
-            IO.Combine(RootDirectory, hints.First()) :
+            Io.Combine(RootDirectory, hints.First()) :
             RootDirectory;
 
         /* ----------------------------------------------------------------- */

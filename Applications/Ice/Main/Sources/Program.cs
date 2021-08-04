@@ -15,12 +15,13 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.String;
 using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
+using Cube.Logging;
+using Cube.Mixin.Collections;
+using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -29,7 +30,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// Program
     ///
     /// <summary>
-    /// メインプログラムを表すクラスです。
+    /// Represents the main program.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -42,75 +43,67 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Main
         ///
         /// <summary>
-        /// アプリケーションのエントリポイントです。
+        /// Executes the main program of the application.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [STAThread]
-        static void Main(string[] args)
+        static void Main(string[] args) => Source.LogError(() =>
         {
-            try
+            if (args.Length <= 0) return;
+
+            _ = Logger.ObserveTaskException();
+            Source.LogInfo(Source.Assembly);
+            Source.LogInfo($"[ {args.Join(" ")} ]");
+
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+
+            var src  = new SettingFolder();
+            var cmd  = new Request(args);
+            var view = new ProgressWindow();
+
+            src.Load();
+
+            switch (cmd.Mode)
             {
-                if (args.Length <= 0) return;
-
-                var asm = typeof(Program).Assembly;
-
-                Logger.ObserveTaskException();
-                Logger.Info(LogType, asm);
-                Logger.Info(LogType, $"[ {string.Join(" ", args)} ]");
-
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-
-                var s = new SettingFolder(asm, new AfsIO());
-                var e = new Aggregator();
-                var v = new ProgressWindow();
-                var m = new Request(args);
-
-                s.Load();
-
-                switch (m.Mode)
-                {
-                    case Mode.Compress:
-                        Application.Run(v);
-                        break;
-                    case Mode.Extract:
-                        if (m.Sources.Count() > 1 && s.Value.Extract.Bursty && !m.SuppressRecursive) Extract(m, asm);
-                        else Application.Run(v);
-                        break;
-                    default:
-                        break;
-                }
+                case Mode.Compress:
+                    Application.Run(view);
+                    break;
+                case Mode.Extract:
+                    if (cmd.Sources.Count() > 1 && src.Value.Extract.Bursty && !cmd.SuppressRecursive) Extract(cmd);
+                    else Application.Run(view);
+                    break;
+                default:
+                    break;
             }
-            catch (Exception err) { Logger.Error(LogType, err); }
-        }
+        });
 
         /* ----------------------------------------------------------------- */
         ///
         /// Extract
         ///
         /// <summary>
-        /// 複数の圧縮ファイルを解凍します。
+        /// Extracts the two or more archives.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        static void Extract(Request request, Assembly assembly)
+        static void Extract(Request request)
         {
-            var exec = assembly.Location;
+            var exec = Source.Assembly.Location;
             var args = new System.Text.StringBuilder();
 
-            foreach (var s in request.Options) args.Append($"{s.Quote()} ");
+            foreach (var s in request.Options) _ = args.Append($"{s.Quote()} ");
             foreach (var path in request.Sources)
             {
-                try { Process.Start(exec, $"/x /sr {args.ToString()} {path.Quote()}"); }
-                catch (Exception err) { Logger.Error(LogType, err); }
+                Source.LogError(() => Process.Start(exec, $"/x /sr {args} {path.Quote()}"));
             }
         }
 
         #endregion
 
         #region Fields
-        private static readonly Type LogType = typeof(Program);
+        private static readonly Type Source = typeof(Program);
         #endregion
     }
 }

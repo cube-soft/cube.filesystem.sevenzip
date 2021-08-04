@@ -15,11 +15,11 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Forms.Behaviors;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
+using Cube.Forms.Behaviors;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -286,7 +286,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             EncryptionMethodComboBox.Enabled = (Format == Format.Zip);
             IsValidEncryption                = !EncryptionGroupBox.Enabled ||
                                                !EncryptionPanel.Enabled ||
-                                               _password.IsValid;
+                                               _password.Valid;
         }
 
         /* ----------------------------------------------------------------- */

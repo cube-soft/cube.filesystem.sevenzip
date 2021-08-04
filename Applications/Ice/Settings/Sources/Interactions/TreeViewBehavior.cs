@@ -15,13 +15,13 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Forms.Images;
-using Cube.Mixin.Generics;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
+using Cube.Mixin.Forms.Controls;
+using Cube.Mixin.Generics;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {

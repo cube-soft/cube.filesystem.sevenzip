@@ -15,8 +15,8 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Images.Icons;
 using System.Windows.Forms;
+using Cube.Images.Icons;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {

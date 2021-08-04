@@ -15,9 +15,8 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Logging;
 using Cube.Mixin.Assembly;
-using Cube.Mixin.Logging;
-using System;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
@@ -83,20 +82,16 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Execute()
+        public void Execute() => GetType().LogWarn(() =>
         {
-            try
+            if (Settings.Changed)
             {
-                if (Settings.Changed)
-                {
-                    var dir = typeof(AssociateCommand).Assembly.GetDirectoryName();
-                    var exe = System.IO.Path.Combine(dir, Properties.Resources.FileAssociate);
-                    System.Diagnostics.Process.Start(exe).WaitForExit();
-                    Settings.Changed = false;
-                }
+                var dir = typeof(AssociateCommand).Assembly.GetDirectoryName();
+                var exe = System.IO.Path.Combine(dir, Properties.Resources.FileAssociate);
+                System.Diagnostics.Process.Start(exe).WaitForExit();
+                Settings.Changed = false;
             }
-            catch (Exception err) { this.LogWarn(err); }
-        }
+        });
 
         #endregion
     }

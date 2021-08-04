@@ -88,10 +88,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// <param name="src">Binding object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected override void OnBind(IPresentable src)
+        protected override void OnBind(IBindable src)
         {
             base.OnBind(src);
-            if (!(src is MainViewModel vm)) return;
+            if (src is not MainViewModel vm) return;
 
             SettingsBindingSource.DataSource          = vm;
             AssociateSettingsBindingSource.DataSource = vm.Associate;
@@ -389,7 +389,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         #endregion
 
         #region Fields
-        private readonly Cube.Forms.VersionControl VersionPanel = new Cube.Forms.VersionControl(typeof(MainWindow).Assembly);
+        private readonly Cube.Forms.Controls.VersionControl VersionPanel = new(typeof(MainWindow).Assembly);
         #endregion
     }
 }

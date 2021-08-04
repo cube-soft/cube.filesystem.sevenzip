@@ -52,11 +52,11 @@ namespace Cube.FileSystem.SevenZip.Ice
             SettingFolder settings,
             SynchronizationContext context
         ) : base(
-            new CompressFacade(request, settings, new ContextInvoker(context, false)),
-            new Aggregator(),
+            new(request, settings, new ContextDispatcher(context, false)),
+            new(),
             context
         ) {
-            Facade.Runtime = new CompressRuntimeQuery(Send, GetInvoker(true));
+            Facade.Runtime = new(Send, GetDispatcher(true));
         }
 
         #endregion

@@ -15,9 +15,9 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.Logging;
-using Cube.Mixin.String;
 using System;
+using Cube.Logging;
+using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -43,14 +43,14 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// specified arguments.
         /// </summary>
         ///
-        /// <param name="request">Request for the transaction.</param>
+        /// <param name="src">Request for the transaction.</param>
         /// <param name="settings">User settings.</param>
-        /// <param name="invoker">Invoker object.</param>
+        /// <param name="dispatcher">Invoker object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected ArchiveFacade(Request request, SettingFolder settings, Invoker invoker) : base(invoker)
+        protected ArchiveFacade(Request src, SettingFolder settings, Dispatcher dispatcher) : base(dispatcher)
         {
-            Request  = request;
+            Request  = src;
             Settings = settings;
         }
 
@@ -82,17 +82,6 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// IO
-        ///
-        /// <summary>
-        /// Gets the I/O handler.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public IO IO => Settings.IO;
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// Destination
         ///
         /// <summary>
@@ -102,8 +91,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         public string Destination
         {
-            get => GetProperty<string>();
-            private set => SetProperty(value);
+            get => Get(() => string.Empty);
+            private set => Set(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -117,8 +106,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         public string Temp
         {
-            get => GetProperty<string>();
-            private set => SetProperty(value);
+            get => Get(() => string.Empty);
+            private set => Set(value);
         }
 
         #region Queries
@@ -166,7 +155,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         protected void SetDestination(string value)
         {
             if (value.FuzzyEquals(Destination)) return;
-            this.LogDebug($"{nameof(Destination)}:{value}");
+            GetType().LogDebug($"{nameof(Destination)}:{value}");
             Destination = value;
         }
 
@@ -186,11 +175,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             if (!Temp.HasValue())
             {
-                var dest = Settings.IO.Combine(directory, Guid.NewGuid().ToString("D"));
-                this.LogDebug($"{nameof(Temp)}:{dest}");
+                var dest = Io.Combine(directory, Guid.NewGuid().ToString("N"));
+                GetType().LogDebug($"{nameof(Temp)}:{dest}");
                 Temp = dest;
             }
-            else this.LogDebug($"Ignore:{directory}");
+            else GetType().LogDebug($"Ignore:{directory}");
         }
 
         /* ----------------------------------------------------------------- */
@@ -229,8 +218,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         protected override void Dispose(bool disposing)
         {
-            try { _ = Settings.IO.TryDelete(Temp); }
-            finally { base.Dispose(disposing); }
+            GetType().LogWarn(() => Io.Delete(Temp));
+            base.Dispose(disposing);
         }
 
         #endregion

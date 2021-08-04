@@ -15,23 +15,22 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.ByteFormat;
-using Cube.Mixin.IO;
 using System.Linq;
 using System.Text;
+using Cube.Mixin.ByteFormat;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// IoExtension
+    /// EntityExtension
     ///
     /// <summary>
     /// Provides extended methods of the IO and Entity classes.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal static class IoExtension
+    internal static class EntityExtension
     {
         #region Methods
 
@@ -44,21 +43,20 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// specified method.
         /// </summary>
         ///
-        /// <param name="io">I/O handler.</param>
-        /// <param name="src">File or directory information.</param>
-        /// <param name="dest">File or directory information.</param>
+        /// <param name="src">Source file or directory information.</param>
+        /// <param name="dest">Destination path to move.</param>
         /// <param name="method">Overwrite method.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void Move(this IO io, Entity src, Entity dest, OverwriteMethod method)
+        public static void Move(this Entity src, Entity dest, OverwriteMethod method)
         {
             switch (method & OverwriteMethod.Operations)
             {
                 case OverwriteMethod.Yes:
-                    io.Move(src, dest);
+                    Io.Move(src.FullName, dest.FullName, true);
                     break;
                 case OverwriteMethod.Rename:
-                    io.Move(src, io.Get(io.GetUniqueName(dest.FullName)));
+                    Io.Move(src.FullName, IoEx.GetUniqueName(dest.FullName), false);
                     break;
                 case OverwriteMethod.No:
                 case OverwriteMethod.Cancel:
@@ -74,25 +72,24 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Moves the specified file or directory.
         /// </summary>
         ///
-        /// <param name="io">I/O handler.</param>
-        /// <param name="src">File or directory information.</param>
-        /// <param name="dest">File or directory information.</param>
+        /// <param name="src">Source file or directory information.</param>
+        /// <param name="dest">Destination path to move.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void Move(this IO io, Entity src, Entity dest)
+        public static void Move(this Entity src, Entity dest)
         {
             if (src.IsDirectory)
             {
                 if (!dest.Exists)
                 {
-                    io.CreateDirectory(dest.FullName);
-                    io.SetAttributes(dest.FullName, src.Attributes);
-                    io.SetCreationTime(dest.FullName, src.CreationTime);
-                    io.SetLastWriteTime(dest.FullName, src.LastWriteTime);
-                    io.SetLastAccessTime(dest.FullName, src.LastAccessTime);
+                    Io.CreateDirectory(dest.FullName);
+                    Io.SetAttributes(dest.FullName, src.Attributes);
+                    Io.SetCreationTime(dest.FullName, src.CreationTime);
+                    Io.SetLastWriteTime(dest.FullName, src.LastWriteTime);
+                    Io.SetLastAccessTime(dest.FullName, src.LastAccessTime);
                 }
             }
-            else io.Move(src.FullName, dest.FullName, true);
+            else Io.Move(src.FullName, dest.FullName, true);
         }
 
         /* ----------------------------------------------------------------- */

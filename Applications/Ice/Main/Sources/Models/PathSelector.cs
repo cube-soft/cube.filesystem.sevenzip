@@ -15,11 +15,11 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.SevenZip.Ice.Settings;
-using Cube.Mixin.Environment;
-using Cube.Mixin.Logging;
-using Cube.Mixin.String;
 using System;
+using Cube.FileSystem.SevenZip.Ice.Settings;
+using Cube.Logging;
+using Cube.Mixin.Environment;
+using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -48,14 +48,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /// <param name="request">Request for the transaction.</param>
         /// <param name="settings">User settings.</param>
-        /// <param name="io">I/O handler.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public PathSelector(Request request, ArchiveValue settings, IO io)
+        public PathSelector(Request request, ArchiveValue settings)
         {
             Request  = request;
             Settings = settings;
-            IO       = io;
         }
 
         /* ----------------------------------------------------------------- */
@@ -73,7 +71,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         public PathSelector(Request request, ArchiveValue settings, ArchiveName name) :
-            this(request, settings, name.IO)
+            this(request, settings)
         {
             Format = name.Format;
             Source = name.Value.FullName;
@@ -104,17 +102,6 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         public ArchiveValue Settings { get; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// IO
-        ///
-        /// <summary>
-        /// Gets the I/O handler.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public IO IO { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -158,7 +145,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Value => _value ?? (_value = Select());
+        public string Value => _value ??= Select();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -177,7 +164,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                            Request.Location :
                            Settings.SaveLocation;
 
-                this.LogDebug(string.Format("SaveLocation:({0},{1})->{2}",
+                GetType().LogDebug(string.Format("SaveLocation:({0},{1})->{2}",
                     Request.Location, Settings.SaveLocation, dest));
                 return dest;
             }
@@ -205,7 +192,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                 case SaveLocation.MyDocuments:
                     return Environment.SpecialFolder.MyDocuments.GetName();
                 case SaveLocation.Source:
-                    return IO.Get(Source).DirectoryName;
+                    return Io.Get(Source).DirectoryName;
                 case SaveLocation.Explicit:
                     return Request.DropDirectory;
                 case SaveLocation.Query:

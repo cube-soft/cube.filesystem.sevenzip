@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.RootPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.SettingsPanel = new Cube.Forms.SettingControl();
+            this.SettingsPanel = new Cube.Forms.Controls.SettingControl();
             this.SettingsTabControl = new System.Windows.Forms.TabControl();
             this.GeneralTabPage = new System.Windows.Forms.TabPage();
             this.GeneralPanel = new System.Windows.Forms.FlowLayoutPanel();
@@ -1177,7 +1177,7 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel RootPanel;
-        private Forms.SettingControl SettingsPanel;
+        private Forms.Controls.SettingControl SettingsPanel;
         private System.Windows.Forms.TabControl SettingsTabControl;
         private System.Windows.Forms.TabPage GeneralTabPage;
         private System.Windows.Forms.TabPage ArchiveTabPage;

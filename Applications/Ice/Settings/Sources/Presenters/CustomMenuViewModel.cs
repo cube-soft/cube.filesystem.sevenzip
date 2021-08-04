@@ -15,10 +15,10 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Images.Icons;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
+using Cube.Images.Icons;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {

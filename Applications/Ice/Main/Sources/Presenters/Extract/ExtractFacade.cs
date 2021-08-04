@@ -15,8 +15,8 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.Logging;
 using System;
+using Cube.Logging;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -44,11 +44,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /// <param name="request">Request for the transaction.</param>
         /// <param name="settings">User settings.</param>
-        /// <param name="invoker">Invoker object.</param>
+        /// <param name="dispatcher">Dispatcher object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ExtractFacade(Request request, SettingFolder settings, Invoker invoker) :
-            base(request, settings, invoker) { }
+        public ExtractFacade(Request request, SettingFolder settings, Dispatcher dispatcher) :
+            base(request, settings, dispatcher) { }
 
         #endregion
 
@@ -116,7 +116,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void Invoke(PathExplorer explorer) => Open(Source, e =>
         {
-            this.LogDebug($"{nameof(e.Format)}:{e.Format}", $"{nameof(e.Source)}:{e.Source}");
+            GetType().LogDebug($"{nameof(e.Format)}:{e.Format}", $"{nameof(e.Source)}:{e.Source}");
             if (e.Items.Count == 1) Extract(e, 0, explorer);
             else Extract(e, explorer);
         });
@@ -146,11 +146,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void InvokePostProcess(PathExplorer explorer)
         {
-            OpenAction.Invoke(IO.Get(explorer.OpenDirectory),
-                Settings.Value.Extract.OpenMethod,
-                Settings.Value.Explorer
-            );
-            if (Settings.Value.Extract.DeleteSource) _ = IO.TryDelete(Source);
+            var es  = Settings.Value.Extract;
+            var app = Settings.Value.Explorer;
+            OpenAction.Invoke(Io.Get(explorer.OpenDirectory), es.OpenMethod, app);
+            if (es.DeleteSource) GetType().LogWarn(() => Io.Delete(Source));
         }
 
         /* ----------------------------------------------------------------- */
@@ -165,12 +164,14 @@ namespace Cube.FileSystem.SevenZip.Ice
         private void Extract(ArchiveReader src, PathExplorer explorer)
         {
             SetDestination(src, explorer);
-            src.Filters = Settings.Value.GetFilters(Settings.Value.Extract.Filtering);
-            src.Invoke(Temp, GetProgress(e =>
-            {
+
+            var filters  = Settings.Value.GetFilters(Settings.Value.Extract.Filtering);
+            var progress = GetProgress(e => {
                 OnReceive(e);
                 if (Report.Status == ReportStatus.End) Move(e.Current);
-            }));
+            });
+
+            Retry(() => src.Extract(Temp, filters, progress));
         }
 
         /* ----------------------------------------------------------------- */
@@ -187,10 +188,10 @@ namespace Cube.FileSystem.SevenZip.Ice
             SetDestination(src, explorer);
 
             var item = src.Items[index];
-            item.Invoke(Temp, GetProgress());
+            Retry(() => src.Extract(Temp, item, GetProgress()));
 
-            var dest = IO.Combine(Temp, item.FullName);
-            if (Formats.FromFile(dest) != Format.Tar) Move(item);
+            var dest = Io.Combine(Temp, item.FullName);
+            if (Formatter.FromFile(dest) != Format.Tar) Move(item);
             else Open(dest, e => Extract(e, explorer)); // *.tar
         }
 
@@ -206,7 +207,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void Open(string src, Action<ArchiveReader> callback)
         {
-            using (var e = new ArchiveReader(src, Password, IO)) callback(e);
+            using (var e = new ArchiveReader(src, Password)) callback(e);
         }
 
         /* ----------------------------------------------------------------- */
@@ -220,12 +221,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void Move(Entity item)
         {
-            var src = IO.Get(IO.Combine(Temp, item.FullName));
+            var src = Io.Get(Io.Combine(Temp, item.FullName));
             if (!src.Exists) return;
 
-            var dest = IO.Get(IO.Combine(Destination, item.FullName));
-            if (dest.Exists) IO.Move(src, dest, Overwrite.GetValue(src, dest));
-            else IO.Move(src, dest);
+            var dest = Io.Get(Io.Combine(Destination, item.FullName));
+            if (dest.Exists) src.Move(dest, Overwrite.GetValue(src, dest));
+            else src.Move(dest);
         }
 
         /* ----------------------------------------------------------------- */
@@ -257,9 +258,36 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void SetDestination(ArchiveReader src, PathExplorer explorer)
         {
-            var basename = IO.Get(src.Source).GetBaseName(src.Format);
+            var basename = Io.Get(src.Source).GetBaseName(src.Format);
             explorer.Invoke(basename, src.Items);
             SetDestination(explorer.SaveDirectory);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Retry
+        ///
+        /// <summary>
+        /// Retry the specified action until it succeeds or the user cancels
+        /// it.
+        /// </summary>
+        ///
+        /// <remarks>
+        /// The Extract method will throw an EncryptionException if the
+        /// entered password is wrong, or a UserCancelException if the user
+        /// cancels the password entry. If EncryptionException is thrown,
+        /// it will be rerun and the user will be prompted to enter the
+        /// password again.
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        private static void Retry(Action action)
+        {
+            while (true)
+            {
+                try { action(); return; }
+                catch (EncryptionException) { /* retry */ }
+            }
         }
 
         #endregion

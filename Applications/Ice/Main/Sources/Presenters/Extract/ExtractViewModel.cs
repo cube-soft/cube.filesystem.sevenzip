@@ -52,11 +52,11 @@ namespace Cube.FileSystem.SevenZip.Ice
             SettingFolder settings,
             SynchronizationContext context
         ) : base(
-            new ExtractFacade(request, settings, new ContextInvoker(context, false)),
-            new Aggregator(),
+            new(request, settings, new ContextDispatcher(context, false)),
+            new(),
             context
         ) {
-            Facade.Overwrite = new OverwriteQuery(Send, GetInvoker(true));
+            Facade.Overwrite = new(Send, GetDispatcher(true));
         }
 
         #endregion

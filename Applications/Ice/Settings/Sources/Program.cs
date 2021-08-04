@@ -15,10 +15,12 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.String;
 using System;
 using System.Threading;
 using System.Windows.Forms;
+using Cube.Logging;
+using Cube.Mixin.Collections;
+using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
@@ -27,50 +29,52 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// Program
     ///
     /// <summary>
-    /// メインプログラムを表すクラスです。
+    /// Represents the main program.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     static class Program
     {
+        #region Methods
+
         /* ----------------------------------------------------------------- */
         ///
         /// Main
         ///
         /// <summary>
-        /// アプリケーションのエントリポイントです。
+        /// Executes the main program of the application.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [STAThread]
-        static void Main(string[] args)
+        static void Main(string[] args) => Source.LogError(() =>
         {
-            try
-            {
-                var asm = typeof(Program).Assembly;
+            _ = Logger.ObserveTaskException();
+            Source.LogInfo(Source.Assembly);
+            Source.LogInfo($"[ {args.Join(" ")} ]");
 
-                Logger.Configure();
-                Logger.ObserveTaskException();
-                Logger.Info(typeof(Program), asm);
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
 
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
+            var src = new SettingFolder();
+            src.Load();
 
-                var settings = new SettingFolder(asm, new AfsIO());
-                settings.Load();
+            var im = args.Length > 0 && args[0].FuzzyEquals("/Install");
+            if (im) Source.LogInfo("Mode:Install");
 
-                var im = args.Length > 0 && args[0].FuzzyEquals("/Install");
-                if (im) Logger.Info(typeof(Program), "InstallMode");
+            var view = new MainWindow(im);
+            var vm   = new MainViewModel(src, SynchronizationContext.Current);
+            vm.Associate.Changed = im;
+            if (!im) vm.Sync();
+            view.Bind(vm);
 
-                var view = new MainWindow(im);
-                var vm   = new MainViewModel(settings, SynchronizationContext.Current);
-                vm.Associate.Changed = im;
-                if (!im) vm.Sync();
-                view.Bind(vm);
+            Application.Run(view);
+        });
 
-                Application.Run(view);
-            }
-            catch (Exception err) { Logger.Error(typeof(Program), err); }
-        }
+        #endregion
+
+        #region Fields
+        private static readonly Type Source = typeof(Program);
+        #endregion
     }
 }

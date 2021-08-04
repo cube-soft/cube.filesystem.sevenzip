@@ -44,13 +44,13 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /// <param name="callback">Callback action for the request.</param>
-        /// <param name="invoker">Invoker object.</param>
+        /// <param name="dispatcher">Dispatcher object.</param>
         ///
         /* ----------------------------------------------------------------- */
         public OverwriteQuery(
             Action<QueryMessage<OverwriteQuerySource, OverwriteMethod>> callback,
-            Invoker invoker
-        ) : base(callback, invoker) { }
+            Dispatcher dispatcher
+        ) : base(callback, dispatcher) { }
 
         #endregion
 

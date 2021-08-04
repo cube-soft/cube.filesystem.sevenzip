@@ -15,10 +15,11 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.Environment;
-using Cube.Mixin.String;
 using System;
 using System.Diagnostics;
+using Cube.Logging;
+using Cube.Mixin.Environment;
+using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -55,7 +56,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             if (IsSkip(dest, method)) return;
 
             var cvt = exec.HasValue() ? exec : "explorer.exe";
-            Logger.Debug(typeof(OpenAction), $"Path:{src.FullName.Quote()}", $"Explorer:{cvt.Quote()}");
+            typeof(OpenAction).LogDebug($"Path:{src.FullName.Quote()}", $"Explorer:{cvt.Quote()}");
             Start(cvt, src.FullName.Quote());
         }
 

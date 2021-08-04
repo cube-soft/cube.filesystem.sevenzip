@@ -91,7 +91,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// <param name="src">Binding object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected override void OnBind(IPresentable src)
+        protected override void OnBind(IBindable src)
         {
             base.OnBind(src);
             if (!(src is CustomMenuViewModel vm)) return;

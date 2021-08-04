@@ -15,9 +15,9 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.Collections;
 using System;
 using System.Threading;
+using Cube.Mixin.Collections;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
@@ -128,7 +128,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Version => $"Version {Facade.Version.ToString(true)}";
+        public string Version => $"Version {Facade.Version.ToString(3, true)}";
 
         /* ----------------------------------------------------------------- */
         ///
@@ -142,8 +142,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool CheckUpdate
         {
-            get => Facade.Value.CheckUpdate;
-            set => Facade.Value.CheckUpdate = value;
+            get => Facade.Startup.Enabled;
+            set => Facade.Startup.Enabled = value;
         }
 
         /* ----------------------------------------------------------------- */

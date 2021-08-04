@@ -15,13 +15,11 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.SevenZip.Ice.Settings;
 using System;
+using Cube.FileSystem.SevenZip.Ice.Settings;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
-    #region CompressRuntimeQuery
-
     /* --------------------------------------------------------------------- */
     ///
     /// CompressRuntimeQuery
@@ -45,13 +43,13 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /// <param name="callback">Callback action for the request.</param>
-        /// <param name="invoker">Invoker object.</param>
+        /// <param name="dispatcher">Dispatcher object.</param>
         ///
         /* ----------------------------------------------------------------- */
         public CompressRuntimeQuery(
             Action<QueryMessage<string, CompressRuntime>> callback,
-            Invoker invoker
-        ) : base(callback, invoker) { }
+            Dispatcher dispatcher
+        ) : base(callback, dispatcher) { }
 
         #endregion
 
@@ -67,11 +65,9 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /// <param name="src">Path of the source file.</param>
         /// <param name="format">Archive format.</param>
-        /// <param name="io">I/O handler.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressRuntime GetValue(string src, Format format, IO io) =>
-            _value ?? (_value = Get(src, format, io));
+        public CompressRuntime GetValue(string src, Format format) => _value ??= Get(src, format);
 
         #endregion
 
@@ -86,23 +82,17 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private CompressRuntime Get(string src, Format format, IO io)
+        private CompressRuntime Get(string src, Format format)=> format switch
         {
-            switch (format)
-            {
-                case Format.Tar:
-                case Format.Zip:
-                case Format.SevenZip:
-                case Format.Sfx:
-                    return new CompressRuntime(format, io);
-                case Format.BZip2:
-                case Format.GZip:
-                case Format.XZ:
-                    return new CompressRuntime(Format.Tar, io) { CompressionMethod = format.ToMethod() };
-                default:
-                    return Request(src, io);
-            }
-        }
+            Format.Tar      or
+            Format.Zip      or
+            Format.SevenZip or
+            Format.Sfx         => new(format),
+            Format.BZip2    or
+            Format.GZip     or
+            Format.XZ          => new(Format.Tar) { CompressionMethod = format.ToMethod() },
+            _                  => Request(src),
+        };
 
         /* ----------------------------------------------------------------- */
         ///
@@ -113,13 +103,13 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private CompressRuntime Request(string src, IO io)
+        private CompressRuntime Request(string src)
         {
-            var fi  = io.Get(src);
+            var fi  = Io.Get(src);
             var msg = new QueryMessage<string, CompressRuntime>
             {
-                Source = io.Combine(fi.DirectoryName, $"{fi.BaseName}.zip"),
-                Value  = new CompressRuntime(io),
+                Source = Io.Combine(fi.DirectoryName, $"{fi.BaseName}.zip"),
+                Value  = new(),
                 Cancel = true,
             };
 
@@ -134,6 +124,4 @@ namespace Cube.FileSystem.SevenZip.Ice
         private CompressRuntime _value;
         #endregion
     }
-
-    #endregion
 }

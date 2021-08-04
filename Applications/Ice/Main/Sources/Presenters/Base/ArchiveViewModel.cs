@@ -53,8 +53,8 @@ namespace Cube.FileSystem.SevenZip.Ice
             SynchronizationContext context
         ) : base(facade, aggregator, context)
         {
-            Facade.Select   = new SelectQuery(Send, GetInvoker(true));
-            Facade.Password = new Query<string>(Request, GetInvoker(true));
+            Facade.Select   = new SelectQuery(Send, GetDispatcher(true));
+            Facade.Password = new Query<string>(Request, GetDispatcher(true));
         }
 
         #endregion

@@ -29,6 +29,7 @@
     <ItemGroup>
         <ProjectReference Include="..\Core\Cube.FileSystem.SevenZip.Ice.csproj" />
         <PackageReference Include="Cube.Forms" Version="4.0.1" />
+        <PackageReference Include="Cube.Images" Version="4.0.1" />
     </ItemGroup>
     <ItemGroup>
         <Compile Update="Properties\Resources.Designer.cs" DependentUpon="Resources.resx" AutoGen="True" DesignTime="True" />

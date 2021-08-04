@@ -15,9 +15,9 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System.Text;
 using Cube.Mixin.Assembly;
 using Cube.Mixin.String;
-using System.Text;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -153,7 +153,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             var percentage = (int)(src.Report.Ratio * 100.0);
             var dest = new StringBuilder();
             _ = dest.Append($"{percentage}%");
-            if (path.HasValue()) _ = dest.Append($" - {src.IO.Get(path).Name}");
+            if (path.HasValue()) _ = dest.Append($" - {Io.Get(path).Name}");
             _ = dest.Append($" - {src.GetType().Assembly.GetProduct()}");
             return dest.ToString();
         }

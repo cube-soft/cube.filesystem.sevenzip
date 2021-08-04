@@ -15,11 +15,11 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.Observing;
 using System;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
+using Cube.Mixin.Observing;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -56,7 +56,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             SynchronizationContext context
         ) : base(facade, aggregator, context)
         {
-            Take(Facade.Subscribe(e => {
+            Assets.Add(Facade.Subscribe(e => {
                 if (e == nameof(Facade.State)) Refresh(nameof(State));
                 else if (e == nameof(Facade.Report)) Refresh(nameof(Title));
             }));
@@ -124,8 +124,8 @@ namespace Cube.FileSystem.SevenZip.Ice
             get
             {
                 var src = Math.Max((int)(Facade.Report.Ratio * Unit), 1);
-                var cmp = GetProperty<int>();
-                if (src > cmp) { _ = SetProperty(src); return src; }
+                var cmp = Get<int>();
+                if (src > cmp) { _ = Set(src); return src; }
                 else return cmp;
             }
         }
