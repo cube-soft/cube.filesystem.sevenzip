@@ -62,7 +62,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
             Assert.That(vm.Version, Does.StartWith("Version"));
 
-            Assert.That(m.Value.CheckUpdate,          Is.True);
             Assert.That(m.Value.ErrorReport,          Is.True);
             Assert.That(m.Value.GetFilters().Count(), Is.EqualTo(2));
             Assert.That(m.Value.ToolTip,              Is.True);
@@ -74,13 +73,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             vm.ToolTip      = false;
             vm.ToolTipCount = 0;
 
-            Assert.That(m.Value.CheckUpdate,          Is.False);
             Assert.That(m.Value.ErrorReport,          Is.False);
             Assert.That(m.Value.GetFilters().Count(), Is.EqualTo(0));
             Assert.That(m.Value.ToolTip,              Is.False);
             Assert.That(m.Value.ToolTipCount,         Is.EqualTo(0));
 
-            m.Value.CheckUpdate  = true;
             m.Value.ErrorReport  = true;
             m.Value.Filters      = "Add|Filter|By|Model";
             m.Value.ToolTip      = true;

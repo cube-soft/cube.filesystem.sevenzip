@@ -15,8 +15,9 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using NUnit.Framework;
 using System.Reflection;
+using Cube.Logging;
+using NUnit.Framework;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
@@ -44,8 +45,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
-            Logger.ObserveTaskException();
-            Logger.Info(typeof(GlobalSetup), Assembly.GetExecutingAssembly());
+            _ = Logger.ObserveTaskException();
+            typeof(GlobalSetup).LogInfo(Assembly.GetExecutingAssembly());
         }
     }
 }

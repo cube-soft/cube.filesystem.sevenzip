@@ -75,7 +75,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         {
             try
             {
-                var settings  = new SettingFolder(GetType().Assembly, IO);
+                var settings  = new SettingFolder();
                 var path      = @"C:\Program Files\CubeICE\cubeice.exe";
                 var registrar = new AssociateRegistrar(path)
                 {

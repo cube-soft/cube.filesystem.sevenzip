@@ -36,21 +36,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
     /* --------------------------------------------------------------------- */
     abstract class ArchiveFixture : FileFixture
     {
-        #region Constructors
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ArchiveFixture
-        ///
-        /// <summary>
-        /// Initializes a new instance of the ArchiveFixture class.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected ArchiveFixture() : base(new AfsIO()) { }
-
-        #endregion
-
         #region Methods
 
         /* ----------------------------------------------------------------- */
@@ -75,7 +60,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         ) {
             var context = new SynchronizationContext();
             var request = new Request(args.Concat(files.Select(e => GetSource(e))));
-            var folder  = Make(new SettingFolder(GetType().Assembly, IO));
+            var folder  = Make(new SettingFolder());
 
             folder.Value.Compress = settings;
             folder.Value.Compress.OpenMethod = OpenMethod.None;
@@ -105,7 +90,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         ) {
             var context = new SynchronizationContext();
             var request = new Request(args.Concat(files.Select(e => GetSource(e))));
-            var folder  = Make(new SettingFolder(GetType().Assembly, IO));
+            var folder  = Make(new SettingFolder());
 
             folder.Value.Extract = settings;
             folder.Value.Extract.OpenMethod = OpenMethod.None;

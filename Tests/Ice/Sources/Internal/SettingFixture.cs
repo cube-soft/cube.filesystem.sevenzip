@@ -33,21 +33,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
     /* --------------------------------------------------------------------- */
     abstract class SettingFixture : FileFixture
     {
-        #region Constructors
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SettingFixture
-        ///
-        /// <summary>
-        /// Initializes a new instance of the SettingFixture class.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected SettingFixture() : base(new AfsIO()) { }
-
-        #endregion
-
         #region Properties
 
         /* ----------------------------------------------------------------- */
@@ -76,8 +61,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /* ----------------------------------------------------------------- */
         protected SettingFolder Create()
         {
-            var format = Cube.DataContract.Format.Registry;
-            var dest   = new SettingFolder(GetType().Assembly, format, SubKeyName, IO) { AutoSave = false };
+            var asm  = typeof(SettingFixture).Assembly;
+            var fmt  = DataContract.Format.Registry;
+            var dest = new SettingFolder(asm, fmt, SubKeyName) { AutoSave = false };
             Assert.That(dest.Location, Does.Not.StartsWith("Software"));
             return dest;
         }
@@ -92,7 +78,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         [TearDown]
-        public virtual void Teardown()
+        protected override void Teardown()
         {
             using (var root = Registry.CurrentUser.OpenSubKey("Software", true))
             {

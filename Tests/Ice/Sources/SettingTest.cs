@@ -47,12 +47,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void Create()
         {
-            var asm  = Assembly.GetExecutingAssembly();
-            var dest = new SettingFolder(asm, IO);
+            var dest = new SettingFolder();
             Assert.That(dest.AutoSave,           Is.False);
             Assert.That(dest.AutoSaveDelay,      Is.EqualTo(TimeSpan.FromSeconds(1)));
             Assert.That(dest.Version.ToString(), Is.EqualTo("0.10.0β"));
-            Assert.That(dest.Format,             Is.EqualTo(Cube.DataContract.Format.Registry));
+            Assert.That(dest.Format,             Is.EqualTo(DataContract.Format.Registry));
             Assert.That(dest.Location,           Is.EqualTo(@"CubeSoft\CubeICE\v3"));
             Assert.That(dest.Value,              Is.Not.Null);
         }
@@ -119,7 +118,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void ToOption()
         {
-            var dest = new CompressRuntime(IO)
+            var dest = new CompressRuntime()
             {
                 CompressionLevel  = CompressionLevel.High,
                 CompressionMethod = CompressionMethod.Ppmd,
@@ -129,7 +128,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 Path              = "dummy",
                 Sfx               = string.Empty,
                 ThreadCount       = 3,
-            }.ToOption(new SettingFolder(GetType().Assembly, IO));
+            }.ToOption(new SettingFolder());
 
             Assert.That(dest.CompressionLevel, Is.EqualTo(CompressionLevel.High));
             Assert.That(dest.ThreadCount,      Is.EqualTo(3));

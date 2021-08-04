@@ -70,7 +70,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 vm.Test();
             }
 
-            Assert.That(IO.Exists(Get(dest)), Is.True, dest);
+            Assert.That(Io.Exists(Get(dest)), Is.True, dest);
         });
 
         #endregion
@@ -260,9 +260,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /* ----------------------------------------------------------------- */
         private string GetFileName(string src, string dest)
         {
-            var fi   = IO.Get(src);
+            var fi   = Io.Get(src);
             var name = fi.IsDirectory ? fi.Name : fi.BaseName;
-            var ext  = IO.Get(dest).Extension;
+            var ext  = Io.Get(dest).Extension;
             return ext == ".bz2" || ext == ".gz" || ext == ".xz" ?
                    $"{name}.tar{ext}" :
                    $"{name}{ext}";

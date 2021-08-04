@@ -185,7 +185,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         public static string GetPath(this Type src, string filename)
         {
             var root = src.Assembly.GetDirectoryName();
-            return new IO().Combine(root, "Results", src.FullName, filename);
+            return Io.Combine(root, "Results", src.FullName, filename);
         }
 
         #endregion

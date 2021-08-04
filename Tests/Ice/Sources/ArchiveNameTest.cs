@@ -15,9 +15,9 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System.Collections.Generic;
 using Cube.Tests;
 using NUnit.Framework;
-using System.Collections.Generic;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
@@ -47,7 +47,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void Convert_Lite()
         {
-            var src = new ArchiveName(@"c:\foo\bar\src.txt", Format.Zip, IO);
+            var src = new ArchiveName(@"c:\foo\bar\src.txt", Format.Zip);
             Assert.That(src.Format, Is.EqualTo(Format.Zip));
             Assert.That(src.Value.FullName, Is.EqualTo(@"c:\foo\bar\src.zip"));
         }
@@ -74,7 +74,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// TestCases
         ///
         /// <summary>
-        /// テスト用データを取得します。
+        /// Gets the test cases.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */

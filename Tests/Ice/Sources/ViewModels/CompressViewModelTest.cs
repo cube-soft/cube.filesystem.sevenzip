@@ -50,7 +50,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         {
             var dir   = Get("Exists");
             var src   = new[] { GetSource("Sample.txt") };
-            var dest  = IO.Combine(dir, "SampleRuntime.zip");
+            var dest  = Io.Combine(dir, "SampleRuntime.zip");
             var args  = PresetMenu.Compress.ToArguments().Concat(src);
             var value = new CompressValue
             {
@@ -59,9 +59,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 OpenMethod    = OpenMethod.None,
             };
 
-            IO.Copy(GetSource("Single.1.0.0.zip"), IO.Combine(dir, "Sample.zip"), true);
+            Io.Copy(GetSource("Single.1.0.0.zip"), Io.Combine(dir, "Sample.zip"), true);
             Create(src, args, value, vm => { using (vm.SetDestination(dest)) vm.Test(); });
-            Assert.That(IO.Exists(dest), Is.True, dest);
+            Assert.That(Io.Exists(dest), Is.True, dest);
         }
 
         /* ----------------------------------------------------------------- */
@@ -78,7 +78,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         {
             var dir  = Get("Overwrite");
             var src  = new[] { GetSource("Sample.txt") };
-            var dest = IO.Combine("Sample.zip");
+            var dest = Io.Combine("Sample.zip");
             var args = PresetMenu.Compress.ToArguments().Concat(src);
             var value = new CompressValue
             {
@@ -86,9 +86,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 OpenMethod   = OpenMethod.None,
            };
 
-            IO.Copy(GetSource("Single.1.0.0.zip"), dest, true);
+            Io.Copy(GetSource("Single.1.0.0.zip"), dest, true);
             Create(src, args, value, vm => { using (vm.SetDestination(dest)) vm.Test(); });
-            Assert.That(IO.Exists(dest), Is.True, dest);
+            Assert.That(Io.Exists(dest), Is.True, dest);
         }
 
         /* ----------------------------------------------------------------- */
@@ -105,7 +105,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         {
             var dir   = Get("CancelPassword");
             var src   = new[] { GetSource("Sample.txt") };
-            var dest  = IO.Combine(dir, "Sample.zip");
+            var dest  = Io.Combine(dir, "Sample.zip");
             var args  = PresetMenu.CompressZipPassword.ToArguments().Concat(src);
             var value = new CompressValue
             {
@@ -118,7 +118,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             {
                 using (vm.SetDestination(dest)) vm.Test();
             });
-            Assert.That(IO.Exists(dest), Is.False, dest);
+            Assert.That(Io.Exists(dest), Is.False, dest);
         }
 
         /* ----------------------------------------------------------------- */
@@ -136,7 +136,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         {
             var dir   = Get("MoveFailed");
             var src   = new[] { GetSource("Sample.txt") };
-            var dest  = IO.Combine(dir, "Sample.zip");
+            var dest  = Io.Combine(dir, "Sample.zip");
             var args  = PresetMenu.CompressZip.ToArguments().Concat(new[] { "/o:runtime" }).Concat(src);
             var value = new CompressValue
             {
@@ -145,9 +145,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 OpenMethod    = OpenMethod.None,
             };
 
-            IO.Copy(GetSource("Single.1.0.0.zip"), dest, true);
+            Io.Copy(GetSource("Single.1.0.0.zip"), dest, true);
             Create(src, args, value, vm => {
-                using (IO.OpenRead(dest))
+                using (Io.Open(dest))
                 using (vm.SetDestination(dest))
                 {
                     vm.Test();

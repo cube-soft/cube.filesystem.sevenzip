@@ -67,7 +67,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 Assert.That(vm.State, Is.EqualTo(TimerState.Run));
             }));
 
-            Assert.That(IO.Exists(IO.Combine(dest, "Complex.1.0.0")), Is.True);
+            Assert.That(Io.Exists(Io.Combine(dest, "Complex.1.0.0")), Is.True);
         }
 
         /* ----------------------------------------------------------------- */
@@ -141,10 +141,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 DeleteSource  = true,
             };
 
-            IO.Copy(GetSource("Complex.1.0.0.zip"), src[0]);
+            Io.Copy(GetSource("Complex.1.0.0.zip"), src[0], true);
             Create(src, args, value, vm => vm.Test());
-            Assert.That(IO.Exists(src[0]), Is.False);
-            Assert.That(IO.Exists(IO.Combine(dest, "Complex")), Is.True);
+            Assert.That(Io.Exists(src[0]), Is.False);
+            Assert.That(Io.Exists(Io.Combine(dest, "Complex")), Is.True);
         }
 
         /* ----------------------------------------------------------------- */
@@ -170,13 +170,13 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 SaveDirectory = dest,
             };
 
-            IO.Copy(dummy, IO.Combine(dest, @"Foo.txt"));
-            IO.Copy(dummy, IO.Combine(dest, @"Directory\Empty.txt"));
+            Io.Copy(dummy, Io.Combine(dest, @"Foo.txt"), true);
+            Io.Copy(dummy, Io.Combine(dest, @"Directory\Empty.txt"), true);
 
             Create(src, args, value, vm => { using (vm.SetOverwrite(OverwriteMethod.Rename)) vm.Test(); });
 
-            Assert.That(IO.Exists(IO.Combine(dest, @"Foo (1).txt")), Is.True);
-            Assert.That(IO.Exists(IO.Combine(dest, @"Directory\Empty (1).txt")), Is.True);
+            Assert.That(Io.Exists(Io.Combine(dest, @"Foo (1).txt")), Is.True);
+            Assert.That(Io.Exists(Io.Combine(dest, @"Directory\Empty (1).txt")), Is.True);
         }
 
         /* ----------------------------------------------------------------- */
@@ -193,7 +193,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         public void CancelOverwrite()
         {
             var dummy = GetSource("Sample.txt");
-            var size  = IO.Get(dummy).Length;
+            var size  = Io.Get(dummy).Length;
             var src   = new[] { GetSource("Complex.1.0.0.zip") };
             var dest  = Get("CancelOverwrite");
             var args  = PresetMenu.Extract.ToArguments().Concat(src);
@@ -203,9 +203,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 SaveDirectory = dest,
             };
 
-            IO.Copy(dummy, IO.Combine(dest, "Foo.txt"));
+            Io.Copy(dummy, Io.Combine(dest, "Foo.txt"), true);
             Create(src, args, value, vm => { using (vm.SetOverwrite(OverwriteMethod.Cancel)) vm.Test(); });
-            Assert.That(IO.Get(IO.Combine(dest, "Foo.txt")).Length, Is.EqualTo(size));
+            Assert.That(Io.Get(Io.Combine(dest, "Foo.txt")).Length, Is.EqualTo(size));
         }
 
         #endregion
