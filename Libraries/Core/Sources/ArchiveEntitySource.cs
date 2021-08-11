@@ -89,7 +89,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public uint Crc { get; set; }
+        public uint Crc { get; protected set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -100,7 +100,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool Encrypted { get; set; }
+        public bool Encrypted { get; protected set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -153,10 +153,27 @@ namespace Cube.FileSystem.SevenZip
             }
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Dispose
+        ///
+        /// <summary>
+        /// Releases the unmanaged resources used by the object and
+        /// optionally releases the managed resources.
+        /// </summary>
+        ///
+        /// <param name="disposing">
+        /// true to release both managed and unmanaged resources;
+        /// false to release only unmanaged resources.
+        /// </param>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected override void Dispose(bool disposing) => _core = null;
+
         #endregion
 
         #region Fields
-        private readonly IInArchive _core;
+        private IInArchive _core;
         #endregion
     }
 }

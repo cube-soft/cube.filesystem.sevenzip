@@ -16,7 +16,6 @@
 //
 /* ------------------------------------------------------------------------- */
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -45,7 +44,13 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="src">Source object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        internal ArchiveEntity(ArchiveEntitySource src) : base(src) { }
+        internal ArchiveEntity(ArchiveEntitySource src) : base(src)
+        {
+            Index     = src.Index;
+            Crc       = src.Crc;
+            Encrypted = src.Encrypted;
+            _filter   = src.Filter;
+        }
 
         #endregion
 
@@ -60,7 +65,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public int Index => GetSource().Index;
+        public int Index { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -71,7 +76,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public uint Crc => GetSource().Crc;
+        public uint Crc { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -82,7 +87,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool Encrypted => GetSource().Encrypted;
+        public bool Encrypted { get; }
 
         #endregion
 
@@ -102,28 +107,12 @@ namespace Cube.FileSystem.SevenZip
         /// <returns>true for match.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public bool Match(IEnumerable<string> names) => names != null && GetSource().Filter.MatchAny(names);
+        public bool Match(IEnumerable<string> names) => names != null && _filter.MatchAny(names);
 
         #endregion
 
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetSource
-        ///
-        /// <summary>
-        /// Gets the source object.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private ArchiveEntitySource GetSource()
-        {
-            var dest = Source as ArchiveEntitySource;
-            Debug.Assert(dest is not null);
-            return dest;
-        }
-
+        #region Fields
+        private readonly PathFilter _filter;
         #endregion
     }
 }

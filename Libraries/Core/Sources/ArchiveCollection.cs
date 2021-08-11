@@ -82,7 +82,14 @@ namespace Cube.FileSystem.SevenZip
         /// <returns>ArchiveItem object.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveEntity this[int index] => new(new(_core, index, _path));
+        public ArchiveEntity this[int index]
+        {
+            get
+            {
+                using var src = new ArchiveEntitySource(_core, index, _path);
+                return new(src);
+            }
+        }
 
         #endregion
 
