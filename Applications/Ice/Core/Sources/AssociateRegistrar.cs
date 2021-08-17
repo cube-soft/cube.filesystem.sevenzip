@@ -123,7 +123,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Command => $"{FileName.Quote()} {Arguments.Select(e => e.Quote()).Join(" ")} \"%1\"";
+        public string Command => $"{FileName.Quote()} {Arguments.Concat("%1").Select(e => e.Quote()).Join(" ")}";
 
         #endregion
 

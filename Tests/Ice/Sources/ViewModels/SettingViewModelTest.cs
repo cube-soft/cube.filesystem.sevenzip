@@ -51,7 +51,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         {
             var m = Create();
 
-            var vm = new MainViewModel(m, new SynchronizationContext())
+            var vm = new MainViewModel(m, new())
             {
                 CheckUpdate  = true,
                 ErrorReport  = true,
@@ -89,7 +89,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             }, StringSplitOptions.RemoveEmptyEntries);
 
             Assert.That(f.Count(),            Is.EqualTo(4));
-            Assert.That(vm.CheckUpdate,       Is.True);
+            Assert.That(vm.CheckUpdate,       Is.False);
             Assert.That(vm.ErrorReport,       Is.True);
             Assert.That(vm.ToolTip,           Is.True);
             Assert.That(vm.ToolTipCount,      Is.EqualTo(9));
