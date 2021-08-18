@@ -1,4 +1,4 @@
-version: 4.0.0.{build}
+version: 4.0.2.{build}
 environment:
     PROJECT_NAME:  'Cube.FileSystem.SevenZip'
     TEST_TOOL:     '..\packages\OpenCover\4.7.1221\tools\OpenCover.Console.exe'
@@ -20,6 +20,7 @@ nuget:
 before_build:
     - nuget sources add -name Cube.Core -source https://ci.appveyor.com/nuget/cube.core
     - nuget sources add -name Cube.Forms -source https://ci.appveyor.com/nuget/cube.forms
+    - nuget sources add -name Cube.Images -source https://ci.appveyor.com/nuget/cube.images
     - nuget restore "%PROJECT_NAME%.sln"
 build:
     project: '%PROJECT_NAME%.sln'

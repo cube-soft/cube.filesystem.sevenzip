@@ -1,9 +1,9 @@
 Cube.FileSystem.SevenZip
 ====
 
-[![NuGet](https://img.shields.io/nuget/v/Cube.FileSystem.SevenZip.svg)](https://www.nuget.org/packages/Cube.FileSystem.SevenZip/)
-[![AppVeyor](https://ci.appveyor.com/api/projects/status/jao7f754rlookxxe?svg=true)](https://ci.appveyor.com/project/clown/cube-filesystem-sevenzip)
-[![Codecov](https://codecov.io/gh/cube-soft/Cube.FileSystem.SevenZip/branch/master/graph/badge.svg)](https://codecov.io/gh/cube-soft/Cube.FileSystem.SevenZip)
+[![Package](https://badgen.net/nuget/v/cube.filesystem.sevenzip)](https://www.nuget.org/packages/cube.filesystem.sevenzip/)
+[![AppVeyor](https://badgen.net/appveyor/ci/clown/cube-filesystem-sevenzip)](https://ci.appveyor.com/project/clown/cube-filesystem-sevenzip)
+[![Codecov](https://badgen.net/codecov/c/github/cube-soft/cube.filesystem.sevenzip)](https://codecov.io/gh/cube-soft/cube.filesystem.sevenzip)
 
 Cube.FileSystem.SevenZip is a wrapper library of the [7-Zip](http://www.7-zip.org/) via COM interface.
 The repository also has an archiving or extracting application, which name is [CubeICE](https://www.cube-soft.jp/cubeice/).
@@ -14,9 +14,7 @@ These libraries and applications are available for .NET Framework 3.5, 4.5 or la
 You can install the library through the NuGet package.
 Add a dependency in your project file using the following syntax:
 
-    <ItemGroup>
-        <PackageReference Include="Cube.FileSystem.SevenZip" Version="4.0.0" />
-    </ItemGroup>
+    <PackageReference Include="Cube.FileSystem.SevenZip" Version="4.0.2" />
 
 Or select it from the NuGet packages UI on Visual Studio.
 
@@ -74,22 +72,9 @@ var password = new Cube.Query<string>(e =>
 
 using (var reader = new ArchiveReader(@"path\to\archive", password))
 {
+    var filter   = new[] { ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini" };    
     var progress = new Progress<Report>(e => DoSomething(e));
-    reader.Filters = new[] { ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini" };    
-    reader.Extract(@"path\to\directory", progress);
-}
-```
-
-ArchvieReader.Items property can access each item of the archive.
-If you want to extract only the specific files, write as follows.
-
-```cs
-using (var reader = new ArchiveReader(@"path\to\archive", "password"))
-{
-    // Save as "path\to\directory\{item.FullName}"
-    var directory = @"path\to\directory";
-    reader.Items[0].Extract(directory);
-    reader.Items[3].Extract(directory);
+    reader.Extract(@"path\to\directory", filter, progress);
 }
 ```
 
@@ -111,9 +96,9 @@ Cube.FileSystem.SevenZip referred to the code of the following projects to imple
 ## Contributing
 
 1. Fork [Cube.FileSystem.SevenZip](https://github.com/cube-soft/Cube.FileSystem.SevenZip/fork) repository.
-2. Create a feature branch from the master or stable branch (e.g. git checkout -b my-new-feature origin/master). Note that the master branch may refer some pre-released NuGet packages. Try the [rake clean](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Rakefile) command when build errors occur.
+2. Create a feature branch from the master (e.g. git checkout -b my-new-feature origin/master). Note that the master branch may refer some pre-released NuGet packages. Try the [rake clean](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Rakefile) command when build errors occur.
 3. Commit your changes.
-4. Rebase your local changes against the master or stable branch.
+4. Rebase your local changes against the master branch.
 5. Run the dotnet test command or the Visual Studio (NUnit 3 test adapter) and confirm that it passes.
 6. Create new Pull Request.
 
