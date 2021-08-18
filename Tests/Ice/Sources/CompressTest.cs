@@ -217,18 +217,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                         Filtering    = true,
                     }
                 );
-
-                yield return new TestCaseData(
-                    @"Mail\Sample.zip",
-                    new[] { "Sample.txt", "Sample 00..01" },
-                    GetPathArgs(PresetMenu.MailZip, "Mail"),
-                    new CompressValue
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        OpenMethod   = OpenMethod.None,
-                        Filtering    = true,
-                    }
-                );
             }
         }
 
