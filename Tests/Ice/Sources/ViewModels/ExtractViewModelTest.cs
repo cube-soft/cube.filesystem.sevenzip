@@ -16,6 +16,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.FileSystem.SevenZip.Ice.Settings;
+using Cube.Mixin.Collections;
 using NUnit.Framework;
 using System.Linq;
 using System.Threading.Tasks;
@@ -46,19 +47,17 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        [Ignore("TODO:Under migration")]
         public void Suspend()
         {
-            var src   = new[] { GetSource("Complex.1.0.0.zip") };
             var dest  = Get("Suspend");
-            var args  = PresetMenu.Extract.ToArguments().Concat(src);
+            var args  = PresetMenu.Extract.ToArguments().Concat(GetSource("Complex.1.0.0.zip"));
             var value = new ExtractValue
             {
                 SaveLocation  = SaveLocation.Preset,
                 SaveDirectory = dest,
             };
 
-            Create(src, args, value, vm => vm.Test(() => {
+            Create(args, value, vm => vm.Test(() => {
                 Assert.That(vm.State, Is.EqualTo(TimerState.Run));
                 vm.SuspendOrResume();
                 Assert.That(vm.State, Is.EqualTo(TimerState.Suspend));
@@ -82,16 +81,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void Cancel()
         {
-            var src   = new[] { GetSource("Complex.1.0.0.zip") };
             var dest  = Get("Cancel");
-            var args  = PresetMenu.Extract.ToArguments().Concat(src);
+            var args  = PresetMenu.Extract.ToArguments().Concat(GetSource("Complex.1.0.0.zip"));
             var value = new ExtractValue
             {
                 SaveLocation = SaveLocation.Preset,
                 SaveDirectory = dest,
             };
 
-            Create(src, args, value, vm => vm.Test(() => vm.Cancel()));
+            Create(args, value, vm => vm.Test(() => vm.Cancel()));
         }
 
         /* ----------------------------------------------------------------- */
@@ -106,16 +104,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void CancelPassword()
         {
-            var src   = new[] { GetSource("Password.7z") };
             var dest  = Get("CancelPassword");
-            var args  = PresetMenu.Extract.ToArguments().Concat(src);
+            var args  = PresetMenu.Extract.ToArguments().Concat(GetSource("Password.7z"));
             var value = new ExtractValue
             {
                 SaveLocation  = SaveLocation.Preset,
                 SaveDirectory = dest,
             };
 
-            Create(src, args, value, vm => vm.Test());
+            Create(args, value, vm => vm.Test());
         }
 
         /* ----------------------------------------------------------------- */
@@ -128,12 +125,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        [Ignore("TODO:Under migration")]
         public void DeleteSource()
         {
-            var src = new[] { Get("Complex.zip") };
-            var dest = Get("DeleteSource");
-            var args = PresetMenu.Extract.ToArguments().Concat(src);
+            var src   = Get("Complex.zip");
+            var dest  = Get("DeleteSource");
+            var args  = PresetMenu.Extract.ToArguments().Concat(src);
             var value = new ExtractValue
             {
                 SaveLocation  = SaveLocation.Preset,
@@ -141,9 +137,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 DeleteSource  = true,
             };
 
-            Io.Copy(GetSource("Complex.1.0.0.zip"), src[0], true);
-            Create(src, args, value, vm => vm.Test());
-            Assert.That(Io.Exists(src[0]), Is.False);
+            Io.Copy(GetSource("Complex.1.0.0.zip"), src, true);
+            Assert.That(Io.Exists(src), Is.True);
+            Create(args, value, vm => vm.Test());
+            Assert.That(Io.Exists(src), Is.False);
             Assert.That(Io.Exists(Io.Combine(dest, "Complex")), Is.True);
         }
 
@@ -157,26 +154,24 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        [Ignore("TODO:Under migration")]
         public void Rename()
         {
             var dummy = GetSource("Sample.txt");
-            var src   = new[] { GetSource("Complex.1.0.0.zip") };
-            var dest  = Get("Rename");
-            var args  = PresetMenu.Extract.ToArguments().Concat(src);
+            var dest  = Get(@"Rename");
+            var args  = PresetMenu.Extract.ToArguments().Concat(GetSource("Complex.1.0.0.zip"));
             var value = new ExtractValue
             {
                 SaveLocation  = SaveLocation.Preset,
                 SaveDirectory = dest,
             };
 
-            Io.Copy(dummy, Io.Combine(dest, @"Foo.txt"), true);
-            Io.Copy(dummy, Io.Combine(dest, @"Directory\Empty.txt"), true);
+            Io.Copy(dummy, Io.Combine(dest, @"Complex.1.0.0\Foo.txt"), true);
+            Io.Copy(dummy, Io.Combine(dest, @"Complex.1.0.0\Directory\Empty.txt"), true);
 
-            Create(src, args, value, vm => { using (vm.SetOverwrite(OverwriteMethod.Rename)) vm.Test(); });
+            Create(args, value, vm => { using (vm.SetOverwrite(OverwriteMethod.Rename)) vm.Test(); });
 
-            Assert.That(Io.Exists(Io.Combine(dest, @"Foo (1).txt")), Is.True);
-            Assert.That(Io.Exists(Io.Combine(dest, @"Directory\Empty (1).txt")), Is.True);
+            Assert.That(Io.Exists(Io.Combine(dest, @"Complex.1.0.0\Foo(1).txt")), Is.True);
+            Assert.That(Io.Exists(Io.Combine(dest, @"Complex.1.0.0\Directory\Empty(1).txt")), Is.True);
         }
 
         /* ----------------------------------------------------------------- */
@@ -194,9 +189,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         {
             var dummy = GetSource("Sample.txt");
             var size  = Io.Get(dummy).Length;
-            var src   = new[] { GetSource("Complex.1.0.0.zip") };
             var dest  = Get("CancelOverwrite");
-            var args  = PresetMenu.Extract.ToArguments().Concat(src);
+            var args  = PresetMenu.Extract.ToArguments().Concat(GetSource("Complex.1.0.0.zip"));
             var value = new ExtractValue
             {
                 SaveLocation  = SaveLocation.Preset,
@@ -204,7 +198,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             };
 
             Io.Copy(dummy, Io.Combine(dest, "Foo.txt"), true);
-            Create(src, args, value, vm => { using (vm.SetOverwrite(OverwriteMethod.Cancel)) vm.Test(); });
+            Create(args, value, vm => { using (vm.SetOverwrite(OverwriteMethod.Cancel)) vm.Test(); });
             Assert.That(Io.Get(Io.Combine(dest, "Foo.txt")).Length, Is.EqualTo(size));
         }
 

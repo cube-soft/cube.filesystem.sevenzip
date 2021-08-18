@@ -77,24 +77,21 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// the specified arguments and invokes the specified callback.
         /// </summary>
         ///
-        /// <param name="files">Source files.</param>
         /// <param name="args">Program arguments.</param>
         /// <param name="settings">User settings for compression.</param>
         /// <param name="callback">Callback action.</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected void Create(IEnumerable<string> files,
-            IEnumerable<string> args,
+        protected void Create(IEnumerable<string> args,
             ExtractValue settings,
             Action<ExtractViewModel> callback
         ) {
             var context = new SynchronizationContext();
-            var request = new Request(args.Concat(files.Select(e => GetSource(e))));
+            var request = new Request(args);
             var folder  = Make(new SettingFolder());
 
             folder.Value.Extract = settings;
             folder.Value.Extract.OpenMethod = OpenMethod.None;
-            folder.Value.Extract.SaveDirectory = Get("Preset");
             using (var vm = new ExtractViewModel(request, folder, context)) callback(vm);
         }
 

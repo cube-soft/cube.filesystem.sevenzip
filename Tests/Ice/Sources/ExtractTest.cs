@@ -51,24 +51,28 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             IEnumerable<string> files,
             IEnumerable<string> args,
             ExtractValue settings
-        ) => Create(files, args, settings, vm =>
+        )
         {
-            using (vm.SetPassword("password")) // if needed
-            using (vm.SetDestination(Get("Runtime")))
+            settings.SaveDirectory = Get("Preset");
+            Create(args.Concat(files.Select(e => GetSource(e))), settings, vm =>
             {
-                Assert.That(vm.State, Is.EqualTo(TimerState.Stop));
-                Assert.That(vm.Logo,  Is.Not.Null);
-                Assert.That(vm.Title, Does.StartWith("0%").And.EndsWith("CubeICE"));
-                Assert.That(vm.Text,  Does.StartWith("ファイルを解凍する準備をしています"));
-                Assert.That(vm.Style, Is.EqualTo(ProgressBarStyle.Marquee));
-                Assert.That(vm.Count, Is.Not.Null.And.Not.Empty);
-                Assert.That(vm.CountVisible, Is.False);
+                using (vm.SetPassword("password")) // if needed
+                using (vm.SetDestination(Get("Runtime")))
+                {
+                    Assert.That(vm.State, Is.EqualTo(TimerState.Stop));
+                    Assert.That(vm.Logo,  Is.Not.Null);
+                    Assert.That(vm.Title, Does.StartWith("0%").And.EndsWith("CubeICE"));
+                    Assert.That(vm.Text,  Does.StartWith("ファイルを解凍する準備をしています"));
+                    Assert.That(vm.Style, Is.EqualTo(ProgressBarStyle.Marquee));
+                    Assert.That(vm.Count, Is.Not.Null.And.Not.Empty);
+                    Assert.That(vm.CountVisible, Is.False);
 
-                vm.Test();
-            }
+                    vm.Test();
+                }
 
-            Assert.That(Io.Exists(Get(dest)), Is.True, dest);
-        });
+                Assert.That(Io.Exists(Get(dest)), Is.True, dest);
+            });
+        }
 
         #endregion
 
