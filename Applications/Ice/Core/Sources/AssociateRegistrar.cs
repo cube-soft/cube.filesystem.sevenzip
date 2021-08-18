@@ -15,12 +15,13 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Generics;
-using Cube.Log;
-using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cube.Logging;
+using Cube.Mixin.Collections;
+using Cube.Mixin.String;
+using Microsoft.Win32;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -122,11 +123,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Command => string.Format(
-            "{0}{1}\"%1\"",
-            $"\"{FileName}\"",
-            Arguments.Aggregate(" ", (s, o) => s + $"\"{o}\" ")
-        );
+        public string Command => $"{FileName.Quote()} {Arguments.Concat("%1").Select(e => e.Quote()).Join(" ")}";
 
         #endregion
 
@@ -231,10 +228,8 @@ namespace Cube.FileSystem.SevenZip.Ice
             using (var k = key.CreateSubKey("shell"))
             {
                 k.SetValue("", "open");
-                using (var cmd = k.CreateSubKey(@"open\command"))
-                {
-                    cmd.SetValue("", Command);
-                }
+                using var cmd = k.CreateSubKey(@"open\command");
+                cmd.SetValue("", Command);
             }
 
             using (var k = key.CreateSubKey("DefaultIcon")) k.SetValue("", IconLocation);
@@ -257,13 +252,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void Create(string extension, string name)
         {
-            using (var key = Registry.ClassesRoot.CreateSubKey(GetExtension(extension)))
-            {
-                var prev = key.GetValue("") as string;
-                if (prev.HasValue() && prev != name) key.SetValue(PreArchiver, prev);
-                key.SetValue("", name);
-                UpdateToolTip(key, ToolTip);
-            }
+            using var key = Registry.ClassesRoot.CreateSubKey(GetExtension(extension));
+            var prev = key.GetValue("") as string;
+            if (prev.HasValue() && prev != name) key.SetValue(PreArchiver, prev);
+            key.SetValue("", name);
+            UpdateToolTip(key, ToolTip);
         }
 
         /* ----------------------------------------------------------------- */
@@ -301,19 +294,17 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void DeleteUserChoise(string extension) => this.LogWarn(() =>
+        private void DeleteUserChoise(string extension) => GetType().LogWarn(() =>
         {
             var src  = "UserChoice";
             var root = @"Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts";
             var name = $@"{root}\{GetExtension(extension)}";
 
-            using(var k = Registry.CurrentUser.OpenSubKey(name, true))
+            using var k = Registry.CurrentUser.OpenSubKey(name, true);
+            if (k != null && k.GetSubKeyNames().Any(e => e.FuzzyEquals(src)))
             {
-                if (k != null && k.GetSubKeyNames().Any(e => e.FuzzyEquals(src)))
-                {
-                    k.DeleteSubKey(src, false);
-                    this.LogDebug($"Reset:{name.Quote()}");
-                }
+                k.DeleteSubKey(src, false);
+                GetType().LogDebug($"Reset:{name.Quote()}");
             }
         });
 
@@ -345,8 +336,8 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         #region Fields
         private static readonly string PreArchiver = "PreArchiver";
-        private static readonly Guid TooTipKey = new Guid("{00021500-0000-0000-c000-000000000046}");
-        private static readonly Guid ToolTipHandler = new Guid("{cb8641a3-ebc7-4758-a302-aa6667b817c8}");
+        private static readonly Guid TooTipKey = new("{00021500-0000-0000-c000-000000000046}");
+        private static readonly Guid ToolTipHandler = new("{cb8641a3-ebc7-4758-a302-aa6667b817c8}");
         #endregion
     }
 }

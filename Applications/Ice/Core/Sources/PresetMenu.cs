@@ -34,7 +34,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <summary>無し</summary>
         None = 0x0000000,
         /// <summary>圧縮</summary>
-        Archive = 0x00000001,
+        Compress = 0x00000001,
         /// <summary>解凍</summary>
         Extract = 0x00000002,
         /// <summary>設定</summary>
@@ -51,26 +51,26 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <summary>マイドキュメントに解凍</summary>
         ExtractMyDocuments = 0x00000080,
         /// <summary>解凍オプション用マスク</summary>
-        ExtractOptions = 0x000000f0,
+        ExtractMask = 0x000000f0,
 
         /// <summary>Zip に圧縮</summary>
-        ArchiveZip = 0x00000100,
+        CompressZip = 0x00000100,
         /// <summary>パスワード付 Zip に圧縮</summary>
-        ArchiveZipPassword = 0x00000200,
+        CompressZipPassword = 0x00000200,
         /// <summary>7z に圧縮</summary>
-        ArchiveSevenZip = 0x00000400,
+        CompressSevenZip = 0x00000400,
         /// <summary>BZip2 に圧縮</summary>
-        ArchiveBZip2 = 0x00000800,
+        CompressBZip2 = 0x00000800,
         /// <summary>GZip に圧縮</summary>
-        ArchiveGZip = 0x00001000,
+        CompressGZip = 0x00001000,
         /// <summary>詳細を設定して圧縮</summary>
-        ArchiveDetails = 0x00002000,
+        CompressOthers = 0x00002000,
         /// <summary>自己解凍形式に圧縮</summary>
-        ArchiveSfx = 0x00004000,
+        CompressSfx = 0x00004000,
         /// <summary>XZ に圧縮</summary>
-        ArchiveXz = 0x00008000,
+        CompressXz = 0x00008000,
         /// <summary>圧縮オプション用マスク</summary>
-        ArchiveOptions = 0x0000ff00,
+        CompressMask = 0x0000ff00,
 
         /// <summary>Zip に圧縮してメール添付</summary>
         MailZip = 0x00010000,
@@ -83,13 +83,13 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <summary>GZip に圧縮してメール添付</summary>
         MailGZip = 0x00100000,
         /// <summary>詳細を設定して圧縮してメール添付</summary>
-        MailDetails = 0x00200000,
+        MailOthers = 0x00200000,
         /// <summary>自己解凍形式に圧縮してメール添付</summary>
         MailSfx = 0x00400000,
         /// <summary>XZ に圧縮してメール添付</summary>
         MailXz = 0x00800000,
         /// <summary>圧縮してメール添付オプション用マスク</summary>
-        MailOptions = 0x00ff0000,
+        MailMask = 0x00ff0000,
 
         /// <summary>コンテキストメニューの初期設定</summary>
         DefaultContext = 0x00007ff3,

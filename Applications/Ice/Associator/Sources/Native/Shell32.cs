@@ -25,12 +25,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Associator.Shell32
     /// Shell32.NativeMethods
     ///
     /// <summary>
-    /// shell32.dll に定義された関数を宣言するためのクラスです。
+    /// Provides native methods defined in the shell32.dll.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     internal static class NativeMethods
     {
+        #region Methods
+
         /* ----------------------------------------------------------------- */
         ///
         /// SHChangeNotify
@@ -42,6 +44,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Associator.Shell32
         /* ----------------------------------------------------------------- */
         [DllImport(LibName)]
         static public extern void SHChangeNotify(uint wEventId, uint uFlags, IntPtr dwItem1, IntPtr dwItem2);
+
+        #endregion
 
         #region Fields
         private const string LibName = "Shell32.dll";

@@ -24,17 +24,17 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// Mode
     ///
     /// <summary>
-    /// 実行モードを表す列挙型です。
+    /// Specifies the operation mode.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     public enum Mode
     {
-        /// <summary>無し</summary>
+        /// <summary>None</summary>
         None,
-        /// <summary>圧縮</summary>
-        Archive,
-        /// <summary>解凍</summary>
+        /// <summary>Compress</summary>
+        Compress,
+        /// <summary>Extract</summary>
         Extract,
     }
 
@@ -43,73 +43,108 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// SaveLocation
     ///
     /// <summary>
-    /// 保存場所を表す列挙型です。
+    /// Specifies the kind of save path.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     public enum SaveLocation
     {
-        /// <summary>その他</summary>
-        Others = 0,
-        /// <summary>元のファイルと同じ場所</summary>
+        /// <summary>Use the preset path setting</summary>
+        Preset = 0,
+        /// <summary>Same as the source file</summary>
         Source = 1,
-        /// <summary>実行時に指定</summary>
-        Runtime = 2,
-        /// <summary>デスクトップ</summary>
+        /// <summary>Ask the user to select</summary>
+        Query = 2,
+        /// <summary>Desktop folder</summary>
         Desktop = 3,
-        /// <summary>マイドキュメント</summary>
+        /// <summary>My documents folder</summary>
         MyDocuments = 4,
-        /// <summary>ドラッグ&amp;ドロップで指定</summary>
-        Drop = 10,
-        /// <summary>不明</summary>
+        /// <summary>Explicitly specified, which is used when Drag-and-Drop</summary>
+        Explicit = 10,
+        /// <summary>Unknown</summary>
         Unknown = -1,
     }
 
     /* --------------------------------------------------------------------- */
     ///
-    /// CreateDirectoryMethod
+    /// SaveMethod
     ///
     /// <summary>
-    /// ディレクトリの生成方法を表す列挙型です。
+    /// Specifies the method to create the save directory.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [Flags]
-    public enum CreateDirectoryMethod
+    public enum SaveMethod
     {
-        /// <summary>作成しない</summary>
+        /// <summary>Not create</summary>
         None = 0x00,
-        /// <summary>単一フォルダの場合スキップ</summary>
+        /// <summary>Skip if all items are contained in a single directory</summary>
         SkipSingleDirectory = 0x02,
-        /// <summary>単一ファイルの場合スキップ</summary>
+        /// <summary>Skip if the archive has a file.</summary>
         SkipSingleFile = 0x04,
-        /// <summary>スキップオプション用マスク</summary>
+        /// <summary>Skip options</summary>
         SkipOptions = SkipSingleDirectory | SkipSingleFile,
-        /// <summary>作成する</summary>
+        /// <summary>Create directory</summary>
         Create = 0x01,
-        /// <summary>必要な場合に作成する</summary>
+        /// <summary>Create directory if needed</summary>
         CreateSmart = Create | SkipSingleDirectory,
     }
 
     /* --------------------------------------------------------------------- */
     ///
-    /// OpenDirectoryMethod
+    /// OverwriteMethod
     ///
     /// <summary>
-    /// 圧縮・展開後にディレクトリを開く処理を表す列挙型です。
+    /// Specifies the method to overwrite a file or directory.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [Flags]
-    public enum OpenDirectoryMethod
+    public enum OverwriteMethod
     {
-        /// <summary>開かない</summary>
+        /// <summary>Ask the user</summary>
+        Query = 0x000,
+        /// <summary>Cancel</summary>
+        Cancel = 0x002,
+        /// <summary>Yes</summary>
+        Yes = 0x006,
+        /// <summary>No</summary>
+        No = 0x007,
+        /// <summary>Rename instead of overwriting</summary>
+        Rename = 0x010,
+        /// <summary>Mask for operations</summary>
+        Operations = 0x01f,
+
+        /// <summary>Same as the previous operation</summary>
+        Always = 0x100,
+        /// <summary>Always yes</summary>
+        AlwaysYes = Always | Yes,
+        /// <summary>Always no</summary>
+        AlwaysNo = Always | No,
+        /// <summary>Always rename</summary>
+        AlwaysRename = Always | Rename,
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// OpenMethod
+    ///
+    /// <summary>
+    /// Specifies the method to open the directory.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    [Flags]
+    public enum OpenMethod
+    {
+        /// <summary>Not open</summary>
         None = 0x0000,
-        /// <summary>デスクトップの場合は開かない</summary>
+        /// <summary>Skip if the specified path represents the Desktop</summary>
         SkipDesktop = 0x0002,
-        /// <summary>開く</summary>
+        /// <summary>Open directory</summary>
         Open = 0x0001,
-        /// <summary>デスクトップ以外の場合に開く</summary>
+        /// <summary>Open directory if needed</summary>
         OpenNotDesktop = Open | SkipDesktop,
     }
 }

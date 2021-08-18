@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Generics;
+using Cube.Mixin.String;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,7 +73,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             switch (mode[1])
             {
                 case 'c':
-                    Mode   = Mode.Archive;
+                    Mode   = Mode.Compress;
                     Format = GetFormat(mode);
                     break;
                 case 'x':
@@ -235,7 +235,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 
             var droppable = Location == SaveLocation.Unknown ||
                             Location == SaveLocation.Source;
-            if (DropDirectory.HasValue() && droppable) Location = SaveLocation.Drop;
+            if (DropDirectory.HasValue() && droppable) Location = SaveLocation.Explicit;
 
             Sources = sources;
             Options = options;
@@ -256,7 +256,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             if (index < 0 || index >= s.Length - 1) return Format.Zip;
 
             var query = s.Substring(index + 1).ToLowerInvariant();
-            return Formats.FromString(query);
+            return Formatter.FromString(query);
         }
 
         /* ----------------------------------------------------------------- */

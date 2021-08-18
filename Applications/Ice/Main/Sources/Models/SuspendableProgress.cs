@@ -16,7 +16,6 @@
 //
 /* ------------------------------------------------------------------------- */
 using System;
-using System.Diagnostics;
 using System.Threading;
 
 namespace Cube.FileSystem.SevenZip.Ice
@@ -26,11 +25,12 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// SuspendableProgress
     ///
     /// <summary>
-    /// 一時停止可能な進捗報告用クラスです。
+    /// Represents the IProgress(T) implementation that can suspend the
+    /// progress.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class SuspendableProgress<T> : IProgress<T>
+    public sealed class SuspendableProgress<T> : IProgress<T>
     {
         #region Constructors
 
@@ -39,22 +39,21 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// SuspendableProgress
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the SuspendableProgress class
+        /// with the specified arguments.
         /// </summary>
         ///
-        /// <param name="cancel">キャンセル用オブジェクト</param>
-        /// <param name="wait">一時停止用オブジェクト</param>
-        /// <param name="action">コールバック</param>
+        /// <param name="token">Cancellation token.</param>
+        /// <param name="suspend">Value to suspend the progress.</param>
+        /// <param name="callback">Callback action.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public SuspendableProgress(CancellationToken cancel, WaitHandle wait, Action<T> action)
+        public SuspendableProgress(CancellationToken token, WaitHandle suspend, Action<T> callback)
         {
-            Debug.Assert(cancel != null);
-            Debug.Assert(wait != null);
+            _token = token;
+            _suspend = suspend;
 
-            _cancel = cancel;
-            _wait   = wait;
-            if (action != null) ProgressChanged += (s, e) => action(e);
+            ProgressChanged += (s, e) => callback?.Invoke(e);
         }
 
         #endregion
@@ -66,7 +65,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// ProgressChanged
         ///
         /// <summary>
-        /// 進行状況が更新された時に発生するイベントです。
+        /// Occurs when the current progress is changed.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -81,44 +80,32 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Report
         ///
         /// <summary>
-        /// 進行状況の更新を報告します。
+        /// Reports the current progress.
         /// </summary>
         ///
-        /// <param name="value">進捗内容</param>
+        /// <param name="value">Current progress.</param>
         ///
         /// <remarks>
-        /// WaitHandle のチェック後に CancellationToken のチェックを実行
-        /// します。したがって、キャンセル処理を発生させるには、
-        /// WaitHnale をシグナル状態にして下さい。
+        /// WaitHandle のチェック後に CancellationToken をチェックします。
+        /// したがって、キャンセル処理を発生させるには WaitHnale をシグナル状態に
+        /// して下さい。
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
         public void Report(T value)
         {
-            _wait.WaitOne();
-            _cancel.ThrowIfCancellationRequested();
+            _ = _suspend?.WaitOne();
+            _token.ThrowIfCancellationRequested();
 
-            OnReport(value);
+            System.Diagnostics.Debug.Assert(ProgressChanged != null);
+            ProgressChanged(this, value);
         }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnReport
-        ///
-        /// <summary>
-        /// 進行状況の更新を報告します。
-        /// </summary>
-        ///
-        /// <param name="value">進捗内容</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected virtual void OnReport(T value) => ProgressChanged?.Invoke(this, value);
 
         #endregion
 
         #region Fields
-        private readonly CancellationToken _cancel;
-        private readonly WaitHandle _wait;
+        private readonly CancellationToken _token;
+        private readonly WaitHandle _suspend;
         #endregion
     }
 }

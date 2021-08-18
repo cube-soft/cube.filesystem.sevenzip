@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.SevenZip.Ice.Configurator;
+using Cube.FileSystem.SevenZip.Ice.Settings;
 using NUnit.Framework;
 using System;
 using System.Threading;
@@ -52,14 +52,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         [Test, RequiresThread(ApartmentState.STA)]
-        public void Create_Throws() => Assert.That(
-            () => new TreeViewBehavior(default(TreeView)),
-            Throws.TypeOf<ArgumentException>()
-        );
+        public void Create_Throws()
+        {
+            Assert.That(() => new TreeViewBehavior(default), Throws.ArgumentException);
+        }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Add_Unregistered
+        /// Add_Throws
         ///
         /// <summary>
         /// Register 前に各種操作を実行した時の挙動を確認します。
@@ -67,10 +67,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         [Test, RequiresThread(ApartmentState.STA)]
-        public void Add_Unregistered() => Assert.That(
-            () => new TreeViewBehavior(new TreeView()).Add(),
-            Throws.TypeOf<InvalidOperationException>()
-        );
+        public void Add_Throws()
+        {
+            Assert.That(() => new TreeViewBehavior(new TreeView()).Add(), Throws.TypeOf<InvalidOperationException>());
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -225,7 +225,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         private TreeViewBehavior Create()
         {
             var m    = PresetMenu.DefaultContext.ToContextMenuGroup();
-            var vm   = new CustomContextViewModel(m);
+            var vm   = new CustomMenuViewModel(m, new Aggregator(), new SynchronizationContext());
             var dest = new TreeViewBehavior(new TreeView());
 
             dest.Register(vm.Current, vm.Images);

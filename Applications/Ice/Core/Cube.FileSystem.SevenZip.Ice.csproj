@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <Version>0.10.0</Version>
+        <Version>0.11.0</Version>
         <Authors>clown;cube-soft</Authors>
         <Company>CubeSoft</Company>
         <Description>Core library for CubeICE.</Description>
@@ -18,7 +18,7 @@
         <DocumentationFile>bin\Any CPU\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="..\..\..\Libraries\Cube.FileSystem.SevenZip.csproj" />
+        <ProjectReference Include="..\..\..\Libraries\Core\Cube.FileSystem.SevenZip.csproj" />
     </ItemGroup>
     <ItemGroup>
         <Compile Update="Properties\Resources.Designer.cs" DependentUpon="Resources.resx" AutoGen="True" DesignTime="True" />

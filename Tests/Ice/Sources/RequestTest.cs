@@ -25,63 +25,65 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
     /// RequestTest
     ///
     /// <summary>
-    /// Request のテスト用クラスです。
+    /// Tests the Request class.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
     class RequestTest
     {
+        #region Tests
+
         /* ----------------------------------------------------------------- */
         ///
         /// Create_Empty
         ///
         /// <summary>
-        /// 空の引数で初期化した時の挙動を確認します。
+        /// Tests the constructor with empty arguments.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Create_Empty()
         {
-            var request = new Request(new string[0]);
-            Assert.That(request.Mode,   Is.EqualTo(Mode.None));
-            Assert.That(request.Format, Is.EqualTo(Format.Unknown));
+            var dest = new Request(Enumerable.Empty<string>());
+            Assert.That(dest.Mode,   Is.EqualTo(Mode.None));
+            Assert.That(dest.Format, Is.EqualTo(Format.Unknown));
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Create_Wrong
+        /// Create_WrongMode
         ///
         /// <summary>
-        /// 無効な引数で初期化した時の挙動を確認します。
+        /// Tests the constructor with wrong mode arguments.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [TestCase("c")]
         [TestCase("/dummy")]
-        public void Create_Wrong(string mode)
+        public void Create_WrongMode(string mode)
         {
-            var request = new Request(new[] { mode });
-            Assert.That(request.Mode,   Is.EqualTo(Mode.None));
-            Assert.That(request.Format, Is.EqualTo(Format.Unknown));
+            var dest = new Request(new[] { mode });
+            Assert.That(dest.Mode,   Is.EqualTo(Mode.None));
+            Assert.That(dest.Format, Is.EqualTo(Format.Unknown));
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Create_ArchiveDefault
+        /// Create_CompressDefault
         ///
         /// <summary>
-        /// "/c" を引数に指定した時の挙動を確認します。
+        /// Tests the constructor with a "/c" argument.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Create_ArchiveDefault()
+        public void Create_CompressDefault()
         {
-            var request = new Request(new[] { "/c" });
-            Assert.That(request.Mode,   Is.EqualTo(Mode.Archive));
-            Assert.That(request.Format, Is.EqualTo(Format.Zip));
+            var dest = new Request(new[] { "/c" });
+            Assert.That(dest.Mode,   Is.EqualTo(Mode.Compress));
+            Assert.That(dest.Format, Is.EqualTo(Format.Zip));
         }
 
         /* ----------------------------------------------------------------- */
@@ -89,7 +91,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// Create_WrongLocation
         ///
         /// <summary>
-        /// 無効な "/o" 引数を指定した時の挙動を確認します。
+        /// Tests the constructor with arguments that contain a wrong
+        /// "/o" option.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -97,9 +100,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [TestCase("/o:wrong")]
         public void Create_WrongLocation(string arg)
         {
-            var request = new Request(new[] { "/x", arg });
-            Assert.That(request.Mode,     Is.EqualTo(Mode.Extract));
-            Assert.That(request.Location, Is.EqualTo(SaveLocation.Unknown));
+            var dest = new Request(new[] { "/x", arg });
+            Assert.That(dest.Mode,     Is.EqualTo(Mode.Extract));
+            Assert.That(dest.Location, Is.EqualTo(SaveLocation.Unknown));
         }
 
         /* ----------------------------------------------------------------- */
@@ -107,19 +110,22 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// Create_WrongDrop
         ///
         /// <summary>
-        /// 無効な "/drop" 引数を指定した時の挙動を確認します。
+        /// Tests the constructor with arguments that contain a wrong
+        /// "/drop" option.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void Create_WrongDrop()
         {
-            var request = new Request(new[] { "/x", "/sr", "/o:source", "/drop", "/dummy" });
-            Assert.That(request.Options.Count(),   Is.EqualTo(4));
-            Assert.That(request.Mode,              Is.EqualTo(Mode.Extract));
-            Assert.That(request.Location,          Is.EqualTo(SaveLocation.Source));
-            Assert.That(request.SuppressRecursive, Is.True);
-            Assert.That(request.DropDirectory,     Is.Empty);
+            var dest = new Request(new[] { "/x", "/sr", "/o:source", "/drop", "/dummy" });
+            Assert.That(dest.Options.Count(),   Is.EqualTo(4));
+            Assert.That(dest.Mode,              Is.EqualTo(Mode.Extract));
+            Assert.That(dest.Location,          Is.EqualTo(SaveLocation.Source));
+            Assert.That(dest.SuppressRecursive, Is.True);
+            Assert.That(dest.DropDirectory,     Is.Empty);
         }
+
+        #endregion
     }
 }

@@ -15,9 +15,9 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.TestService;
-using NUnit.Framework;
 using System;
+using Cube.Tests;
+using NUnit.Framework;
 
 namespace Cube.FileSystem.SevenZip.Tests
 {
@@ -26,7 +26,7 @@ namespace Cube.FileSystem.SevenZip.Tests
     /// FormatTest
     ///
     /// <summary>
-    /// Format に関わる機能のテスト用クラスです。
+    /// Tests the Format and related classes.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -40,7 +40,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// Detect
         ///
         /// <summary>
-        /// 圧縮ファイル形式を判別するテストを実行します。
+        /// Tests to detect the archive format.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -69,10 +69,9 @@ namespace Cube.FileSystem.SevenZip.Tests
         [TestCase("SampleSfx.exe",   ExpectedResult = Format.Sfx)]
         public Format Detect(string filename)
         {
-            var src  = GetExamplesWith(filename);
-            var dest = GetResultsWith(Guid.NewGuid().ToString("D"));
-            IO.Copy(src, dest);
-            return Formats.FromFile(dest);
+            var dest = Get(Guid.NewGuid().ToString("N"));
+            Io.Copy(GetSource(filename), dest, true);
+            return Formatter.FromFile(dest);
         }
 
         /* ----------------------------------------------------------------- */
@@ -80,33 +79,16 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// FromFile_NotFound
         ///
         /// <summary>
-        /// 存在しないファイルを指定した時の挙動を確認します。
+        /// Tests the FromFile method with an inexistent file.
+        /// If the specified file does not exist, it will be determined
+        /// from the file extension.
         /// </summary>
-        ///
-        /// <remarks>
-        /// ファイルが存在しなかった場合、拡張子から判断します。
-        /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void FromFile_NotFound()=> Assert.That(
-            Formats.FromFile(GetExamplesWith("NotFound.rar")),
+            Formatter.FromFile(GetSource("NotFound.rar")),
             Is.EqualTo(Format.Rar)
-        );
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// FromStream_CannotRead
-        ///
-        /// <summary>
-        /// 書き込み専用のストリームを指定した時の挙動を確認します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [Test]
-        public void FromStream_CannotRead() => Assert.That(
-            () => Formats.FromStream(IO.OpenWrite(GetExamplesWith("Sample.zip"))),
-            Throws.TypeOf<NotSupportedException>()
         );
 
         /* ----------------------------------------------------------------- */
@@ -114,7 +96,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// ToExtension
         ///
         /// <summary>
-        /// 拡張子に変換するテストを実行します。
+        /// Tests the ToExtension extended method.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -132,7 +114,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// ToFormat
         ///
         /// <summary>
-        /// CompressionMethod から Format に変換するテストを実行します。
+        /// Tests to convert the CompressionMethod to Format object.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -145,7 +127,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// ToMethod
         ///
         /// <summary>
-        /// Format から CompressionMethod に変換するテストを実行します。
+        /// Tests to convert Format to CompressionMethod object.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
