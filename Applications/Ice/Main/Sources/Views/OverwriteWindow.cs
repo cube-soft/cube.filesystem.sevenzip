@@ -25,27 +25,27 @@ namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// OverwriteDialog
+    /// OverwriteWindow
     ///
     /// <summary>
     /// Represents a dialog to confirm the overwrite method.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class OverwriteDialog : Form
+    public partial class OverwriteWindow : Form
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OverwriteDialog
+        /// OverwriteWindow
         ///
         /// <summary>
-        /// Initializes a new instance of the OverwriteDialog class.
+        /// Initializes a new instance of the OverwriteWindow class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public OverwriteDialog()
+        public OverwriteWindow()
         {
             InitializeComponent();
 

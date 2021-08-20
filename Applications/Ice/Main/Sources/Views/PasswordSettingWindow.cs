@@ -15,44 +15,45 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.Windows.Forms;
+using Cube.Forms.Behaviors;
 using Cube.Images.Icons;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// PasswordDialog
+    /// PasswordSettingWindow
     ///
     /// <summary>
-    /// Represents a dialog to input a password.
+    /// Represents a dialog to set a new password.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class PasswordDialog : Form
+    public partial class PasswordSettingWindow : Cube.Forms.Window
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// PasswordDialog
+        /// PasswordSettingWindow
         ///
         /// <summary>
-        /// Initializes a new instance of the PasswordDialog class.
+        /// Initializes a new instance of the PasswordSettingWindow class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public PasswordDialog()
+        public PasswordSettingWindow()
         {
             InitializeComponent();
 
             IconPictureBox.Image = StockIcons.Warning.GetIcon(IconSize.Large).ToBitmap();
 
-            ExecButton.Click += (s, e) => Close();
-            ExitButton.Click += (s, e) => Close();
+            ExecuteButton.Click += (s, e) => Close();
+            ExitButton.Click    += (s, e) => Close();
 
-            PasswordTextBox.TextChanged += (s, e) => ExecButton.Enabled = PasswordTextBox.TextLength > 0;
-            VisibleCheckBox.CheckedChanged += (s, e) => PasswordTextBox.UseSystemPasswordChar = !VisibleCheckBox.Checked;
+            var pb = new PasswordBehavior(PasswordTextBox, ConfirmTextBox, ShowPasswordCheckBox);
+            pb.Updated += (s, e) => ExecuteButton.Enabled = pb.Valid;
+            Behaviors.Add(pb);
         }
 
         #endregion

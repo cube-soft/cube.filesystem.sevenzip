@@ -1,6 +1,6 @@
 ﻿namespace Cube.FileSystem.SevenZip.Ice
 {
-    partial class PasswordSettingDialog
+    partial class PasswordSettingWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PasswordSettingDialog));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PasswordSettingWindow));
             this.RootPanel = new System.Windows.Forms.TableLayoutPanel();
             this.ButtonsPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.ExitButton = new System.Windows.Forms.Button();
@@ -157,7 +157,7 @@
             this.IconPictureBox.TabIndex = 1;
             this.IconPictureBox.TabStop = false;
             //
-            // PasswordConfirmForm
+            // PasswordSettingWindow
             //
             this.AcceptButton = this.ExecuteButton;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -168,7 +168,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "PasswordConfirmForm";
+            this.Name = "PasswordSettingWindow";
             this.ShowInTaskbar = false;
             this.Text = "パスワードの設定 - CubeICE";
             this.RootPanel.ResumeLayout(false);

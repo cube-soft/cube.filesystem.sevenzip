@@ -15,45 +15,44 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Forms.Behaviors;
+using System.Windows.Forms;
 using Cube.Images.Icons;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// PasswordSettingDialog
+    /// PasswordWindow
     ///
     /// <summary>
-    /// Represents a dialog to set a new password.
+    /// Represents a dialog to input a password.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class PasswordSettingDialog : Cube.Forms.Window
+    public partial class PasswordWindow : Form
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CompressPasswordDialog
+        /// PasswordWindow
         ///
         /// <summary>
-        /// Initializes a new instance of the CompressPasswordDialog class.
+        /// Initializes a new instance of the PasswordWindow class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public PasswordSettingDialog()
+        public PasswordWindow()
         {
             InitializeComponent();
 
             IconPictureBox.Image = StockIcons.Warning.GetIcon(IconSize.Large).ToBitmap();
 
-            ExecuteButton.Click += (s, e) => Close();
-            ExitButton.Click    += (s, e) => Close();
+            ExecButton.Click += (s, e) => Close();
+            ExitButton.Click += (s, e) => Close();
 
-            var pb = new PasswordBehavior(PasswordTextBox, ConfirmTextBox, ShowPasswordCheckBox);
-            pb.Updated += (s, e) => ExecuteButton.Enabled = pb.Valid;
-            Behaviors.Add(pb);
+            PasswordTextBox.TextChanged += (s, e) => ExecButton.Enabled = PasswordTextBox.TextLength > 0;
+            VisibleCheckBox.CheckedChanged += (s, e) => PasswordTextBox.UseSystemPasswordChar = !VisibleCheckBox.Checked;
         }
 
         #endregion

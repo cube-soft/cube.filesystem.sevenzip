@@ -1,6 +1,6 @@
 ﻿namespace Cube.FileSystem.SevenZip.Ice
 {
-    partial class OverwriteDialog
+    partial class OverwriteWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OverwriteDialog));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OverwriteWindow));
             this.RootPanel = new System.Windows.Forms.TableLayoutPanel();
             this.IconPictureBox = new System.Windows.Forms.PictureBox();
             this.DescriptionLabel = new System.Windows.Forms.Label();
@@ -161,7 +161,7 @@
             this.NoButton.Text = "いいえ";
             this.NoButton.UseVisualStyleBackColor = true;
             //
-            // OverwriteForm
+            // OverwriteWindow
             //
             this.AcceptButton = this.YesButton;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -172,7 +172,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "OverwriteForm";
+            this.Name = "OverwriteWindow";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "上書きの確認";
