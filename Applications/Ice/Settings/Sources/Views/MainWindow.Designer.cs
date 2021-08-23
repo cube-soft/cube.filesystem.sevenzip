@@ -963,7 +963,7 @@
             //
             // SettingsBindingSource
             //
-            this.SettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.Settings.MainViewModel);
+            this.SettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.Settings.SettingViewModel);
             //
             // OthersGroupBox
             //

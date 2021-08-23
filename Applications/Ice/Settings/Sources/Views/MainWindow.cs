@@ -91,7 +91,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         protected override void OnBind(IBindable src)
         {
             base.OnBind(src);
-            if (src is not MainViewModel vm) return;
+            if (src is not SettingViewModel vm) return;
 
             SettingsBindingSource.DataSource          = vm;
             AssociateSettingsBindingSource.DataSource = vm.Associate;

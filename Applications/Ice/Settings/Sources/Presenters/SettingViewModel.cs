@@ -23,14 +23,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// MainViewModel
+    /// SettingViewModel
     ///
     /// <summary>
-    /// Settings とメイン画面を関連付ける ViewModel を表すクラスです。
+    /// Represents the VM class that associates a SettingFolder object
+    /// with the main window.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class MainViewModel : Presentable<SettingFolder>
+    public class SettingViewModel : Presentable<SettingFolder>
     {
         #region Constructors
 
@@ -47,7 +48,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public MainViewModel(SettingFolder facade, SynchronizationContext context) :
+        public SettingViewModel(SettingFolder facade, SynchronizationContext context) :
             base(facade, new Aggregator(), context)
         {
             Facade.PropertyChanged += (s, e) => OnPropertyChanged(e);

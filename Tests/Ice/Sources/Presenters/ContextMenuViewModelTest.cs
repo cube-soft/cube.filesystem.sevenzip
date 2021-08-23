@@ -15,9 +15,9 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System.Threading;
 using Cube.FileSystem.SevenZip.Ice.Settings;
 using NUnit.Framework;
-using System.Threading;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
@@ -26,12 +26,12 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
     /// ContextMenuViewModelTest
     ///
     /// <summary>
-    /// Tests the context menu of the SettingViewModel.
+    /// Tests the ContextMenuViewModel class.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ContextMenuViewModelTest : SettingFixture
+    class ContextMenuViewModelTest : VmFixture
     {
         #region Tests
 
@@ -47,7 +47,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void Preset()
         {
-            void Set(ContextMenuViewModel cs, bool enabled)
+            static void Set(ContextMenuViewModel cs, bool enabled)
             {
                 cs.Compress            = enabled;
                 cs.CompressBZip2       = enabled;
@@ -65,8 +65,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 cs.ExtractSource       = enabled;
             }
 
-            var m    = Create();
-            var vm   = new MainViewModel(m, new SynchronizationContext());
+            using var m  = NewSettings();
+            using var vm = NewVM(m);
+
             var src  = vm.ContextMenu;
             var dest = m.Value.ContextMenu;
 
@@ -161,8 +162,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /* ----------------------------------------------------------------- */
         private ContextMenuValue InvokeCustomize()
         {
-            var dest = Create();
-            using (var vm = new MainViewModel(dest, new SynchronizationContext())) vm.Customize();
+            var dest = NewSettings();
+            using (var vm = NewVM(dest)) vm.Customize();
             return dest.Value.ContextMenu;
         }
 

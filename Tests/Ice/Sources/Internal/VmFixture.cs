@@ -84,6 +84,35 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             return new ExtractViewModel(new(args), ss, new());
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// NewVM
+        ///
+        /// <summary>
+        /// Creates a new instance of the SettingViewModel class.
+        /// </summary>
+        ///
+        /// <returns>SettingViewModel object.</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected SettingViewModel NewVM() => NewVM(NewSettings());
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// NewVM
+        ///
+        /// <summary>
+        /// Creates a new instance of the SettingViewModel class with the
+        /// specified settings.
+        /// </summary>
+        ///
+        /// <param name="src">User settings.</param>
+        ///
+        /// <returns>SettingViewModel object.</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected SettingViewModel NewVM(SettingFolder src) => new(src, new());
+
         #endregion
 
         #region Implementations
@@ -97,11 +126,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private SettingFolder NewSettings()
+        public SettingFolder NewSettings()
         {
-            var dest = new SettingFolder();
+            var fmt  = DataContract.Format.Json;
+            var src  = Get("Settings.json");
+            var dest = new SettingFolder(GetType().Assembly, fmt, src);
+
             dest.Value.Filters  = "Filter.txt|FilterDirectory|__MACOSX";
             dest.Value.Explorer = "dummy.exe";
+
             return dest;
         }
 

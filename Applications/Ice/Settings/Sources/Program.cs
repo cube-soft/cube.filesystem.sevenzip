@@ -63,7 +63,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             if (im) Source.LogInfo("Mode:Install");
 
             var view = new MainWindow(im);
-            var vm   = new MainViewModel(src, SynchronizationContext.Current);
+            var vm   = new SettingViewModel(src, SynchronizationContext.Current);
             vm.Associate.Changed = im;
             if (!im) vm.Sync();
             view.Bind(vm);

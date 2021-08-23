@@ -15,11 +15,9 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.SevenZip.Ice.Settings;
-using NUnit.Framework;
 using System;
 using System.Linq;
-using System.Threading;
+using NUnit.Framework;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
@@ -33,7 +31,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class SettingViewModelTest : SettingFixture
+    class SettingViewModelTest : VmFixture
     {
         #region Tests
 
@@ -42,23 +40,21 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// GeneralSettings
         ///
         /// <summary>
-        /// Settings オブジェクトに対応する ViewModel の挙動を確認します。
+        /// Tests the properties and methods of the SettingViewModel class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void GeneralSettings()
         {
-            var m = Create();
+            using var m  = NewSettings();
+            using var vm = NewVM(m);
 
-            var vm = new MainViewModel(m, new())
-            {
-                CheckUpdate  = true,
-                ErrorReport  = true,
-                Filtering    = string.Join(Environment.NewLine, new[] { "Foo", "Bar" }),
-                ToolTip      = true,
-                ToolTipCount = 15
-            };
+            vm.CheckUpdate  = true;
+            vm.ErrorReport  = true;
+            vm.Filtering    = string.Join(Environment.NewLine, new[] { "Foo", "Bar" });
+            vm.ToolTip      = true;
+            vm.ToolTipCount = 15;
 
             Assert.That(vm.Version, Does.StartWith("Version"));
 
@@ -101,16 +97,16 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// ArchiveSettings
         ///
         /// <summary>
-        /// ArchiveSettings オブジェクトに対応する ViewModel の挙動を
-        /// 確認します。
+        /// Tests the properties and methods of the ArchiveViewModel class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void ArchiveSettings()
         {
-            var m    = Create();
-            var vm   = new MainViewModel(m, new SynchronizationContext());
+            using var m  = NewSettings();
+            using var vm = NewVM(m);
+
             var src  = vm.Compress;
             var dest = m.Value.Compress;
 
@@ -194,16 +190,16 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// ExtractSettings
         ///
         /// <summary>
-        /// ExtractSettings オブジェクトに対応する ViewModel の挙動を
-        /// 確認します。
+        /// Tests the properties and methods of the ExtractViewModel class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void ExtractSettings()
         {
-            var m    = Create();
-            var vm   = new MainViewModel(m, new SynchronizationContext());
+            using var m  = NewSettings();
+            using var vm = NewVM(m);
+
             var src  = vm.Extract;
             var dest = m.Value.Extract;
 
@@ -314,16 +310,16 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// AssociateSettings
         ///
         /// <summary>
-        /// AssociateSettings オブジェクトに対応する ViewModel の
-        /// 挙動を確認します。
+        /// Tests the properties and methods of the AssociateViewModel class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void AssociateSettings()
         {
-            var m    = Create();
-            var vm   = new MainViewModel(m, new SynchronizationContext());
+            using var m  = NewSettings();
+            using var vm = NewVM(m);
+
             var src  = vm.Associate;
             var dest = m.Value.Associate;
 
@@ -433,16 +429,16 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// ShortcutSettings
         ///
         /// <summary>
-        /// ShortcutSettings オブジェクトに対応する ViewModel の
-        /// 挙動を確認します。
+        /// Tests the properties and methods of the ShortcutViewModel class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [Test]
         public void ShortcutSettings()
         {
-            var m    = Create();
-            var vm   = new MainViewModel(m, new SynchronizationContext());
+            using var m  = NewSettings();
+            using var vm = NewVM(m);
+
             var src  = vm.Shortcut;
             var dest = m.Value.Shortcut;
 
@@ -472,30 +468,34 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// SyncUpdate
         ///
         /// <summary>
-        /// Sync および Update コマンドのテストを実行します。
+        /// Tests the Sync and Update commands.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [TestCase(true)]
         [TestCase(false)]
-        public void SyncUpdate(bool install) => Assert.DoesNotThrow(() =>
+        public void SyncUpdate(bool install)
         {
-            var m0 = Create();
-            m0.Value.Shortcut.Directory = Results;
+            using (var m0 = NewSettings())
+            {
+                m0.Value.Shortcut.Directory = Results;
+                using var vm0 = NewVM(m0);
+                vm0.CheckUpdate = true;
+                vm0.Associate.Changed = install;
+                vm0.Sync();
+                vm0.Associate.Clear();
+                vm0.Update();
+            }
 
-            var vm0 = new MainViewModel(m0, new SynchronizationContext()) { CheckUpdate = true };
-            vm0.Associate.Changed = install;
-            vm0.Sync();
-            vm0.Associate.Clear();
-            vm0.Update();
-
-            var m1 = Create();
-            m1.Load();
-            m1.Value.Shortcut.Directory = Results;
-
-            var vm1 = new MainViewModel(m1, new SynchronizationContext()) { CheckUpdate = false };
-            vm1.Update();
-        });
+            using (var m1 = NewSettings())
+            {
+                m1.Load();
+                m1.Value.Shortcut.Directory = Results;
+                using var vm1 = NewVM(m1);
+                vm1.CheckUpdate = false;
+                vm1.Update();
+            }
+        }
 
         #endregion
     }
