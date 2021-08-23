@@ -15,12 +15,11 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System.Linq;
 using Cube.FileSystem.SevenZip.Ice.Settings;
 using Cube.Mixin.Collections;
 using Cube.Tests;
 using NUnit.Framework;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
@@ -34,7 +33,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ExtractViewModelTest : ArchiveFixture
+    class ExtractViewModelTest : VmFixture
     {
         #region Tests
 
@@ -59,15 +58,13 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 SaveDirectory = dest,
             };
 
-            Create(args, value, vm => {
-                vm.Start();
-                Assert.That(Wait.For(() => vm.State == TimerState.Run), $"{vm.State} (1)");
-                vm.SuspendOrResume();
-                Assert.That(Wait.For(() => vm.State == TimerState.Suspend), $"{vm.State} (2)");
-                vm.SuspendOrResume();
-                Assert.That(Wait.For(() => vm.State == TimerState.Stop), $"{vm.State} (3)");
-            });
-
+            using var vm = NewVM(args, value);
+            vm.Start();
+            Assert.That(Wait.For(() => vm.State == TimerState.Run), $"{vm.State} (1)");
+            vm.SuspendOrResume();
+            Assert.That(Wait.For(() => vm.State == TimerState.Suspend), $"{vm.State} (2)");
+            vm.SuspendOrResume();
+            Assert.That(Wait.For(() => vm.State == TimerState.Stop), $"{vm.State} (3)");
             Assert.That(Io.Exists(Io.Combine(dest, "Complex.1.0.0")), Is.True);
         }
 
@@ -91,7 +88,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 SaveDirectory = dest,
             };
 
-            Create(args, value, vm => vm.Test(() => vm.Cancel()));
+            using var vm = NewVM(args, value);
+            vm.Test(() => vm.Cancel());
         }
 
         /* ----------------------------------------------------------------- */
@@ -114,7 +112,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 SaveDirectory = dest,
             };
 
-            Create(args, value, vm => vm.Test());
+            using var vm = NewVM(args, value);
+            vm.Test();
         }
 
         /* ----------------------------------------------------------------- */
@@ -141,7 +140,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
             Io.Copy(GetSource("Complex.1.0.0.zip"), src, true);
             Assert.That(Io.Exists(src), Is.True);
-            Create(args, value, vm => vm.Test());
+            using var vm = NewVM(args, value);
+            vm.Test();
             Assert.That(Io.Exists(src), Is.False);
             Assert.That(Io.Exists(Io.Combine(dest, "Complex")), Is.True);
         }
@@ -170,7 +170,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             Io.Copy(dummy, Io.Combine(dest, @"Complex.1.0.0\Foo.txt"), true);
             Io.Copy(dummy, Io.Combine(dest, @"Complex.1.0.0\Directory\Empty.txt"), true);
 
-            Create(args, value, vm => { using (vm.SetOverwrite(OverwriteMethod.Rename)) vm.Test(); });
+            using var vm = NewVM(args, value);
+            using (vm.SetOverwrite(OverwriteMethod.Rename)) vm.Test();
 
             Assert.That(Io.Exists(Io.Combine(dest, @"Complex.1.0.0\Foo(1).txt")), Is.True);
             Assert.That(Io.Exists(Io.Combine(dest, @"Complex.1.0.0\Directory\Empty(1).txt")), Is.True);
@@ -200,7 +201,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             };
 
             Io.Copy(dummy, Io.Combine(dest, "Foo.txt"), true);
-            Create(args, value, vm => { using (vm.SetOverwrite(OverwriteMethod.Cancel)) vm.Test(); });
+            using var vm = NewVM(args, value);
+            using (vm.SetOverwrite(OverwriteMethod.Cancel)) vm.Test();
             Assert.That(Io.Get(Io.Combine(dest, "Foo.txt")).Length, Is.EqualTo(size));
         }
 

@@ -15,18 +15,15 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System.Collections.Generic;
 using Cube.FileSystem.SevenZip.Ice.Settings;
 using Cube.Tests;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveFixture
+    /// VmFixture
     ///
     /// <summary>
     /// Provides functionality to help the tests for ArchiveViewModel
@@ -34,65 +31,57 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    abstract class ArchiveFixture : FileFixture
+    abstract class VmFixture : FileFixture
     {
         #region Methods
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Create
+        /// NewVM
         ///
         /// <summary>
         /// Creates a new instance of the CompressViewModel class with
-        /// the specified arguments and invokes the specified callback.
+        /// the specified arguments.
         /// </summary>
         ///
-        /// <param name="files">Source files.</param>
         /// <param name="args">Program arguments.</param>
         /// <param name="settings">User settings for compression.</param>
-        /// <param name="callback">Callback action.</param>
+        ///
+        /// <returns>CompressViewModel object.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        protected void Create(IEnumerable<string> files,
-            IEnumerable<string> args,
-            CompressValue settings,
-            Action<CompressViewModel> callback
-        ) {
-            var context = new SynchronizationContext();
-            var request = new Request(args.Concat(files.Select(e => GetSource(e))));
-            var folder  = Make(new SettingFolder());
+        protected CompressViewModel NewVM(IEnumerable<string> args, CompressValue settings)
+        {
+            var ss = NewSettings();
+            ss.Value.Compress = settings;
+            ss.Value.Compress.OpenMethod = OpenMethod.None;
+            ss.Value.Compress.SaveDirectory = Get("Preset");
 
-            folder.Value.Compress = settings;
-            folder.Value.Compress.OpenMethod = OpenMethod.None;
-            folder.Value.Compress.SaveDirectory = Get("Preset");
-            using (var vm = new CompressViewModel(request, folder, context)) callback(vm);
+            return new CompressViewModel(new(args), ss, new());
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Create
+        /// NewVM
         ///
         /// <summary>
         /// Creates a new instance of the ExtractViewModel class with
-        /// the specified arguments and invokes the specified callback.
+        /// the specified arguments.
         /// </summary>
         ///
         /// <param name="args">Program arguments.</param>
         /// <param name="settings">User settings for compression.</param>
-        /// <param name="callback">Callback action.</param>
+        ///
+        /// <returns>ExtractViewModel object.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        protected void Create(IEnumerable<string> args,
-            ExtractValue settings,
-            Action<ExtractViewModel> callback
-        ) {
-            var context = new SynchronizationContext();
-            var request = new Request(args);
-            var folder  = Make(new SettingFolder());
+        protected ExtractViewModel NewVM(IEnumerable<string> args, ExtractValue settings)
+        {
+            var ss = NewSettings();
+            ss.Value.Extract = settings;
+            ss.Value.Extract.OpenMethod = OpenMethod.None;
 
-            folder.Value.Extract = settings;
-            folder.Value.Extract.OpenMethod = OpenMethod.None;
-            using (var vm = new ExtractViewModel(request, folder, context)) callback(vm);
+            return new ExtractViewModel(new(args), ss, new());
         }
 
         #endregion
@@ -101,18 +90,19 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Make
+        /// NewSettings
         ///
         /// <summary>
-        /// Sets the common settings to the specified value.
+        /// Creates a new instance of the SettingFolder class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private SettingFolder Make(SettingFolder src)
+        private SettingFolder NewSettings()
         {
-            src.Value.Filters  = "Filter.txt|FilterDirectory|__MACOSX";
-            src.Value.Explorer = "dummy.exe";
-            return src;
+            var dest = new SettingFolder();
+            dest.Value.Filters  = "Filter.txt|FilterDirectory|__MACOSX";
+            dest.Value.Explorer = "dummy.exe";
+            return dest;
         }
 
         #endregion

@@ -15,9 +15,9 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System.Linq;
 using Cube.FileSystem.SevenZip.Ice.Settings;
 using NUnit.Framework;
-using System.Linq;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
@@ -31,7 +31,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class CompressViewModelTest : ArchiveFixture
+    class CompressViewModelTest : VmFixture
     {
         #region Tests
 
@@ -60,7 +60,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             };
 
             Io.Copy(GetSource("Single.1.0.0.zip"), Io.Combine(dir, "Sample.zip"), true);
-            Create(src, args, value, vm => { using (vm.SetDestination(dest)) vm.Test(); });
+            using var vm = NewVM(args, value);
+            using (vm.SetDestination(dest)) vm.Test();
             Assert.That(Io.Exists(dest), Is.True, dest);
         }
 
@@ -78,7 +79,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         {
             var dir  = Get("Overwrite");
             var src  = new[] { GetSource("Sample.txt") };
-            var dest = Io.Combine("Sample.zip");
+            var dest = Io.Combine(dir, "Sample.zip");
             var args = PresetMenu.Compress.ToArguments().Concat(src);
             var value = new CompressValue
             {
@@ -87,7 +88,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
            };
 
             Io.Copy(GetSource("Single.1.0.0.zip"), dest, true);
-            Create(src, args, value, vm => { using (vm.SetDestination(dest)) vm.Test(); });
+            using var vm = NewVM(args, value);
+            using (vm.SetDestination(dest)) vm.Test();
             Assert.That(Io.Exists(dest), Is.True, dest);
         }
 
@@ -114,10 +116,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 OpenMethod    = OpenMethod.None,
             };
 
-            Create(src, args, value, vm =>
-            {
-                using (vm.SetDestination(dest)) vm.Test();
-            });
+            using var vm = NewVM(args, value);
+            using (vm.SetDestination(dest)) vm.Test();
             Assert.That(Io.Exists(dest), Is.False, dest);
         }
 
@@ -146,13 +146,12 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             };
 
             Io.Copy(GetSource("Single.1.0.0.zip"), dest, true);
-            Create(src, args, value, vm => {
-                using (Io.Open(dest))
-                using (vm.SetDestination(dest))
-                {
-                    vm.Test();
-                }
-            });
+            using var vm = NewVM(args, value);
+            using (Io.Open(dest))
+            using (vm.SetDestination(dest))
+            {
+                vm.Test();
+            }
         }
 
         #endregion

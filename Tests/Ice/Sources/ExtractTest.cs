@@ -15,11 +15,11 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.SevenZip.Ice.Settings;
-using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Cube.FileSystem.SevenZip.Ice.Settings;
+using NUnit.Framework;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
@@ -33,7 +33,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ExtractTest : ArchiveFixture
+    class ExtractTest : VmFixture
     {
         #region Tests
 
@@ -47,31 +47,25 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
-        public void Extract(string dest,
-            IEnumerable<string> files,
-            IEnumerable<string> args,
-            ExtractValue settings
-        )
+        public void Extract(string dest, IEnumerable<string> files, IEnumerable<string> args, ExtractValue settings)
         {
             settings.SaveDirectory = Get("Preset");
-            Create(args.Concat(files.Select(e => GetSource(e))), settings, vm =>
+
+            using var vm = NewVM(args.Concat(files.Select(e => GetSource(e))), settings);
+            using (vm.SetPassword("password")) // if needed
+            using (vm.SetDestination(Get("Runtime")))
             {
-                using (vm.SetPassword("password")) // if needed
-                using (vm.SetDestination(Get("Runtime")))
-                {
-                    Assert.That(vm.State, Is.EqualTo(TimerState.Stop));
-                    Assert.That(vm.Logo,  Is.Not.Null);
-                    Assert.That(vm.Title, Does.StartWith("0%").And.EndsWith("CubeICE"));
-                    Assert.That(vm.Text,  Does.StartWith("ファイルを解凍する準備をしています"));
-                    Assert.That(vm.Style, Is.EqualTo(ProgressBarStyle.Marquee));
-                    Assert.That(vm.Count, Is.Not.Null.And.Not.Empty);
-                    Assert.That(vm.CountVisible, Is.False);
+                Assert.That(vm.State, Is.EqualTo(TimerState.Stop));
+                Assert.That(vm.Logo,  Is.Not.Null);
+                Assert.That(vm.Title, Does.StartWith("0%").And.EndsWith("CubeICE"));
+                Assert.That(vm.Text,  Does.StartWith("ファイルを解凍する準備をしています"));
+                Assert.That(vm.Style, Is.EqualTo(ProgressBarStyle.Marquee));
+                Assert.That(vm.Count, Is.Not.Null.And.Not.Empty);
+                Assert.That(vm.CountVisible, Is.False);
+                vm.Test();
+            }
 
-                    vm.Test();
-                }
-
-                Assert.That(Io.Exists(Get(dest)), Is.True, dest);
-            });
+            Assert.That(Io.Exists(Get(dest)), Is.True, dest);
         }
 
         #endregion
@@ -83,23 +77,16 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// TestCases
         ///
         /// <summary>
-        /// Gets the test cases.
+        /// Gets the test cases. Format is: destination, source files,
+        /// other arguments, and user settings.
         /// </summary>
-        ///
-        /// <remarks>
-        /// テストケースには、以下の順で指定します。
-        /// - 展開成功確認用のパス（存在チェック）
-        /// - 展開する圧縮ファイル名
-        /// - コマンドライン引数を表す IEnumerable(string) オブジェクト
-        /// - ユーザ設定用オブジェクト
-        /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
         public static IEnumerable<TestCaseData> TestCases
         {
             get
             {
-                yield return new TestCaseData(
+                yield return new(
                     @"Preset\Complex.1.0.0",
                     new[] { "Complex.1.0.0.zip" },
                     PresetMenu.Extract.ToArguments(),
@@ -111,7 +98,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"Runtime\Complex.1.0.0",
                     new[] { "Complex.1.0.0.zip" },
                     PresetMenu.ExtractRuntime.ToArguments(),
@@ -123,7 +110,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"Preset\Sample\Empty",
                     new[] { "SampleEmpty.zip" },
                     PresetMenu.Extract.ToArguments(),
@@ -135,7 +122,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"Preset\フィルタリング テスト用",
                     new[] { "SampleFilter.zip" },
                     PresetMenu.Extract.ToArguments(),
@@ -147,7 +134,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"Preset\名称未設定フォルダ",
                     new[] { "SampleMac.zip" },
                     PresetMenu.Extract.ToArguments(),
@@ -159,7 +146,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"Preset\Sample 2018.02.13",
                     new[] { "Sample 2018.02.13.zip" },
                     PresetMenu.Extract.ToArguments(),
@@ -171,7 +158,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"Preset\Sample..DoubleDot",
                     new[] { "Sample..DoubleDot.zip" },
                     PresetMenu.Extract.ToArguments(),
@@ -183,7 +170,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"Preset\Password",
                     new[] { "Password.7z" },
                     PresetMenu.Extract.ToArguments(),
@@ -194,7 +181,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"RootDirectory\Single-0x00\Sample 00..01.txt",
                     new[] { "Single.1.0.0.zip" },
                     GetPathArgs(@"RootDirectory\Single-0x00"),
@@ -205,7 +192,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"RootDirectory\Single-0x01\Single.1.0.0\Sample 00..01.txt",
                     new[] { "Single.1.0.0.zip" },
                     GetPathArgs(@"RootDirectory\Single-0x01"),
@@ -216,7 +203,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"RootDirectory\Single-0x03\Single.1.0.0\Sample 00..01.txt",
                     new[] { "Single.1.0.0.zip" },
                     GetPathArgs(@"RootDirectory\Single-0x03"),
@@ -227,7 +214,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"RootDirectory\Single-0x05\Sample 00..01.txt",
                     new[] { "Single.1.0.0.zip" },
                     GetPathArgs(@"RootDirectory\Single-0x05"),
@@ -238,7 +225,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"RootDirectory\Single-0x07\Sample 00..01.txt",
                     new[] { "Single.1.0.0.zip" },
                     GetPathArgs(@"RootDirectory\Single-0x07"),
@@ -251,7 +238,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"RootDirectory\SingleDirectory-0x00\Sample",
                     new[] { "SingleDirectory.1.0.0.zip" },
                     GetPathArgs(@"RootDirectory\SingleDirectory-0x00"),
@@ -262,7 +249,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"RootDirectory\SingleDirectory-0x01\SingleDirectory.1.0.0",
                     new[] { "SingleDirectory.1.0.0.zip" },
                     GetPathArgs(@"RootDirectory\SingleDirectory-0x01"),
@@ -273,7 +260,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"RootDirectory\SingleDirectory-0x03\Sample",
                     new[] { "SingleDirectory.1.0.0.zip" },
                     GetPathArgs(@"RootDirectory\SingleDirectory-0x03"),
@@ -284,7 +271,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"RootDirectory\SingleDirectory-0x05\SingleDirectory.1.0.0",
                     new[] { "SingleDirectory.1.0.0.zip" },
                     GetPathArgs(@"RootDirectory\SingleDirectory-0x05"),
@@ -295,7 +282,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"RootDirectory\SingleDirectory-0x07\Sample",
                     new[] { "SingleDirectory.1.0.0.zip" },
                     GetPathArgs(@"RootDirectory\SingleDirectory-0x07"),
@@ -308,7 +295,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"RootDirectory\MultiDirectory-0x00\Directory",
                     new[] { "MultiDirectory.1.0.0.zip" },
                     GetPathArgs(@"RootDirectory\MultiDirectory-0x00"),
@@ -319,7 +306,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"RootDirectory\MultiDirectory-0x01\MultiDirectory.1.0.0",
                     new[] { "MultiDirectory.1.0.0.zip" },
                     GetPathArgs(@"RootDirectory\MultiDirectory-0x01"),
@@ -330,7 +317,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"RootDirectory\MultiDirectory-0x03\MultiDirectory.1.0.0",
                     new[] { "MultiDirectory.1.0.0.zip" },
                     GetPathArgs(@"RootDirectory\MultiDirectory-0x03"),
@@ -341,7 +328,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"RootDirectory\MultiDirectory-0x05\MultiDirectory.1.0.0",
                     new[] { "MultiDirectory.1.0.0.zip" },
                     GetPathArgs(@"RootDirectory\MultiDirectory-0x05"),
@@ -352,7 +339,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"RootDirectory\MultiDirectory-0x07\MultiDirectory.1.0.0",
                     new[] { "MultiDirectory.1.0.0.zip" },
                     GetPathArgs(@"RootDirectory\MultiDirectory-0x07"),
@@ -365,7 +352,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"RootDirectory\Complex-0x00\Foo.txt",
                     new[] { "Complex.1.0.0.zip" },
                     GetPathArgs(@"RootDirectory\Complex-0x00"),
@@ -376,7 +363,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"RootDirectory\Complex-0x01\Complex.1.0.0",
                     new[] { "Complex.1.0.0.zip" },
                     GetPathArgs(@"RootDirectory\Complex-0x01"),
@@ -387,7 +374,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"RootDirectory\Complex-0x03\Complex.1.0.0",
                     new[] { "Complex.1.0.0.zip" },
                     GetPathArgs(@"RootDirectory\Complex-0x03"),
@@ -398,7 +385,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"RootDirectory\Complex-0x05\Complex.1.0.0",
                     new[] { "Complex.1.0.0.zip" },
                     GetPathArgs(@"RootDirectory\Complex-0x05"),
@@ -409,7 +396,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"RootDirectory\Complex-0x07\Complex.1.0.0",
                     new[] { "Complex.1.0.0.zip" },
                     GetPathArgs(@"RootDirectory\Complex-0x07"),
@@ -422,7 +409,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"Tar\TarSample",
                     new[] { "Sample.tar" },
                     GetPathArgs("Tar"),
@@ -433,7 +420,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"Tar\BZipSample\TarSample",
                     new[] { "Sample.tbz" },
                     GetPathArgs(@"Tar\BZipSample"),
@@ -444,7 +431,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"Tar\GZipSample\TarSample",
                     new[] { "Sample.tgz" },
                     GetPathArgs(@"Tar\GZipSample"),
@@ -477,7 +464,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 //    }
                 //);
 
-                yield return new TestCaseData(
+                yield return new(
                     @"Bz2Sample\Sample\Sample.txt",
                     new[] { "Sample.txt.bz2" },
                     GetPathArgs("Bz2Sample"),
@@ -488,7 +475,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"SfxSample\Sample\Foo.txt",
                     new[] { "SampleSfx.exe" },
                     GetPathArgs("SfxSample"),
@@ -499,7 +486,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     }
                 );
 
-                yield return new TestCaseData(
+                yield return new(
                     @"Multiple\Complex.1.0.0",
                     new[] { "Complex.1.0.0.zip", "Single.1.0.0.zip" },
                     GetPathArgs("Multiple"),

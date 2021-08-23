@@ -33,7 +33,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class CompressTest : ArchiveFixture
+    class CompressTest : VmFixture
     {
         #region Tests
 
@@ -47,11 +47,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
-        public void Compress(string dest,
-            IEnumerable<string> files,
-            IEnumerable<string> args,
-            CompressValue settings
-        ) => Create(files, args, settings, vm => {
+        public void Compress(string dest, IEnumerable<string> files, IEnumerable<string> args, CompressValue settings)
+        {
+            using var vm = NewVM(args.Concat(files.Select(e => GetSource(e))), settings);
             var filename = GetFileName(GetSource(files.First()), dest);
             var cvt      = Get("Runtime", filename);
 
@@ -71,7 +69,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             }
 
             Assert.That(Io.Exists(Get(dest)), Is.True, dest);
-        });
+        }
 
         #endregion
 
