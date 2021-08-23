@@ -53,11 +53,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         {
             Facade.PropertyChanged += (s, e) => OnPropertyChanged(e);
 
-            Compress    = new CompressViewModel(facade.Value.Compress, Aggregator, Context);
-            Extract     = new ExtractViewModel(facade.Value.Extract, Aggregator, Context);
-            Associate   = new AssociateViewModel(facade.Value.Associate, Aggregator, Context);
-            ContextMenu = new ContextMenuViewModel(facade.Value.ContextMenu, Aggregator, Context);
-            Shortcut    = new ShortcutViewModel(facade.Value.Shortcut, Aggregator, Context);
+            Compress  = new CompressViewModel(facade.Value.Compress, Aggregator, Context);
+            Extract   = new ExtractViewModel(facade.Value.Extract, Aggregator, Context);
+            Associate = new AssociateViewModel(facade.Value.Associate, Aggregator, Context);
+            Menu      = new ContextViewModel(facade.Value.Context, Aggregator, Context);
+            Shortcut  = new ShortcutViewModel(facade.Value.Shortcut, Aggregator, Context);
         }
 
         #endregion
@@ -106,7 +106,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ContextMenuViewModel ContextMenu { get; }
+        public ContextViewModel Menu { get; }
 
         /* ----------------------------------------------------------------- */
         ///

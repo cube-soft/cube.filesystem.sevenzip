@@ -50,7 +50,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// <returns>CompressViewModel object.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        protected CompressViewModel NewVM(IEnumerable<string> args, CompressValue settings)
+        protected CompressViewModel NewVM(IEnumerable<string> args, CompressSetting settings)
         {
             var ss = NewSettings();
             ss.Value.Compress = settings;
@@ -75,7 +75,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// <returns>ExtractViewModel object.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        protected ExtractViewModel NewVM(IEnumerable<string> args, ExtractValue settings)
+        protected ExtractViewModel NewVM(IEnumerable<string> args, ExtractSetting settings)
         {
             var ss = NewSettings();
             ss.Value.Extract = settings;
@@ -112,10 +112,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         protected SettingViewModel NewVM(SettingFolder src) => new(src, new());
-
-        #endregion
-
-        #region Implementations
 
         /* ----------------------------------------------------------------- */
         ///

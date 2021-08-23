@@ -21,15 +21,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ContextMenuViewModel
+    /// ContextViewModel
     ///
     /// <summary>
-    /// Provides functionality to associate the ContextMenuValue object
+    /// Provides functionality to associate the ContextSetting object
     /// and a view.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ContextMenuViewModel : Presentable<ContextMenuValue>
+    public class ContextViewModel : Presentable<ContextSetting>
     {
         #region Constructors
 
@@ -47,14 +47,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ContextMenuViewModel(ContextMenuValue facade,
+        public ContextViewModel(ContextSetting facade,
             Aggregator aggregator,
             SynchronizationContext context
         ) : base(facade, aggregator, context)
         {
             Facade.PropertyChanged += (s, e) => {
                 OnPropertyChanged(e);
-                if (e.PropertyName == nameof(ContextMenuValue.UseCustom)) Refresh(nameof(PresetEnabled));
+                if (e.PropertyName == nameof(ContextSetting.UseCustom)) Refresh(nameof(PresetEnabled));
             };
         }
 

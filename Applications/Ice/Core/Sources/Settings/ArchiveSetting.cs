@@ -21,65 +21,87 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ExtractValue
+    /// ArchiveSetting
     ///
     /// <summary>
-    /// Represents the settings when extracting archives.
+    /// Represents the common settings of compressing or extracting
+    /// archives.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public sealed class ExtractValue : ArchiveValue
+    public abstract class ArchiveSetting : SerializableBase
     {
         #region Properties
 
         /* ----------------------------------------------------------------- */
         ///
-        /// RootDirectory
+        /// SaveLocation
         ///
         /// <summary>
-        /// Gets or sets the method to determine the root directory.
+        /// Gets or sets the value that represents the save location.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [DataMember(Name = "RootDirectory")]
-        public SaveMethod SaveMethod
+        [DataMember]
+        public SaveLocation SaveLocation
         {
-            get => Get(() => SaveMethod.CreateSmart);
+            get => Get(() => SaveLocation.Preset);
             set => Set(value);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// DeleteSource
+        /// SaveDirectory
         ///
         /// <summary>
-        /// Gets or sets a value indicating whether to delete the source
-        /// archive after extracting.
+        /// Gets or sets the directory name to save.
         /// </summary>
         ///
+        /// <remarks>
+        /// The property is used when the SaveLocation property is set
+        /// to Others.
+        /// </remarks>
+        ///
         /* ----------------------------------------------------------------- */
-        [DataMember]
-        public bool DeleteSource
+        [DataMember(Name = "SaveDirectoryName")]
+        public string SaveDirectory
         {
-            get => Get(() => false);
+            get => Get(() => string.Empty);
             set => Set(value);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Bursty
+        /// Filtering
         ///
         /// <summary>
-        /// Gets or sets a value indicating whether to extract archives
-        /// burstly.
+        /// Gets or sets a value indicating whether to filter some files
+        /// and directories.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public bool Bursty
+        public bool Filtering
         {
             get => Get(() => true);
+            set => Set(value);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OpenDirectory
+        ///
+        /// <summary>
+        /// Gets or sets the value that represents the method to open
+        /// directory.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [DataMember(Name = "OpenDirectory")]
+        public OpenMethod OpenMethod
+        {
+            get => Get(() => OpenMethod.OpenNotDesktop);
             set => Set(value);
         }
 

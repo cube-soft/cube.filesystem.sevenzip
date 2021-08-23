@@ -50,7 +50,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         public AssociateViewModel(
-            AssociateValue src,
+            AssociateSetting src,
             Aggregator aggregator,
             SynchronizationContext context
         ) : base(new AssociateCommand(src), aggregator, context)

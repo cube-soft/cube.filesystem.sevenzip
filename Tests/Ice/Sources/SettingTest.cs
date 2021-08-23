@@ -72,7 +72,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var extract  = new Shortcut { FullName = Get("CubeICE 解凍") };
             var settings = new Shortcut { FullName = Get("CubeICE 設定") };
 
-            var src  = new ShortcutValue { Directory = Results };
+            var src  = new ShortcutSetting { Directory = Results };
             var menu = PresetMenu.Compress |
                        PresetMenu.CompressOthers |
                        PresetMenu.Extract |
@@ -108,7 +108,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Convert_ToOption
+        /// ToOption
         ///
         /// <summary>
         /// Tests the ToOption method.
@@ -118,7 +118,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void ToOption()
         {
-            var dest = new CompressRuntime()
+            var dest = new CompressRuntimeSetting()
             {
                 CompressionLevel  = CompressionLevel.High,
                 CompressionMethod = CompressionMethod.Ppmd,

@@ -49,7 +49,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <returns>Path to save.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static string Get(CompressFacade facade, CompressRuntime rts)
+        public static string Get(CompressFacade facade, CompressRuntimeSetting rts)
         {
             if (rts.Path.HasValue()) return rts.Path;
 

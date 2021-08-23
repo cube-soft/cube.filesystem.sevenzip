@@ -50,7 +50,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="settings">User settings.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public PathSelector(Request request, ArchiveValue settings)
+        public PathSelector(Request request, ArchiveSetting settings)
         {
             Request  = request;
             Settings = settings;
@@ -70,7 +70,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="name">Normalized archive name.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public PathSelector(Request request, ArchiveValue settings, ArchiveName name) :
+        public PathSelector(Request request, ArchiveSetting settings, ArchiveName name) :
             this(request, settings)
         {
             Format = name.Format;
@@ -101,7 +101,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveValue Settings { get; }
+        public ArchiveSetting Settings { get; }
 
         /* ----------------------------------------------------------------- */
         ///

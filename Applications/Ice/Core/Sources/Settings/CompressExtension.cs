@@ -45,7 +45,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// <remarks>ArchiveOption object.</remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public static ArchiveOption ToOption(this CompressRuntime src, SettingFolder common) =>
+        public static ArchiveOption ToOption(this CompressRuntimeSetting src, SettingFolder common) =>
             ToOption(src, common.Value.Compress);
 
         /* ----------------------------------------------------------------- */
@@ -63,7 +63,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// <remarks>ArchiveOption object.</remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public static ArchiveOption ToOption(this CompressRuntime src, CompressValue common)
+        public static ArchiveOption ToOption(this CompressRuntimeSetting src, CompressSetting common)
         {
             switch (src.Format)
             {
@@ -88,7 +88,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static ZipOption MakeZip(CompressRuntime src, CompressValue common) => new ZipOption
+        private static ZipOption MakeZip(CompressRuntimeSetting src, CompressSetting common) => new ZipOption
         {
             CompressionLevel  = src.CompressionLevel,
             CompressionMethod = src.CompressionMethod,
@@ -106,7 +106,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static SevenZipOption MakeSevenZip(CompressRuntime src) => new SevenZipOption
+        private static SevenZipOption MakeSevenZip(CompressRuntimeSetting src) => new SevenZipOption
         {
             CompressionLevel  = src.CompressionLevel,
             CompressionMethod = src.CompressionMethod,
@@ -122,7 +122,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static SfxOption MakeSfx(CompressRuntime src) => new SfxOption
+        private static SfxOption MakeSfx(CompressRuntimeSetting src) => new SfxOption
         {
             CompressionLevel  = src.CompressionLevel,
             CompressionMethod = src.CompressionMethod,
@@ -139,7 +139,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static TarOption MakeTar(CompressRuntime src) => new TarOption
+        private static TarOption MakeTar(CompressRuntimeSetting src) => new TarOption
         {
             CompressionLevel  = src.CompressionLevel,
             CompressionMethod = src.CompressionMethod,
@@ -155,7 +155,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static ArchiveOption MakeCommon(CompressRuntime src) => new ArchiveOption
+        private static ArchiveOption MakeCommon(CompressRuntimeSetting src) => new ArchiveOption
         {
             CompressionLevel = src.CompressionLevel,
             ThreadCount      = src.ThreadCount,

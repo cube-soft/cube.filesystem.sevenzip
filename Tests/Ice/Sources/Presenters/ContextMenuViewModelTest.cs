@@ -47,7 +47,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void Preset()
         {
-            static void Set(ContextMenuViewModel cs, bool enabled)
+            static void Set(ContextViewModel cs, bool enabled)
             {
                 cs.Compress            = enabled;
                 cs.CompressBZip2       = enabled;
@@ -68,8 +68,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             using var m  = NewSettings();
             using var vm = NewVM(m);
 
-            var src  = vm.ContextMenu;
-            var dest = m.Value.ContextMenu;
+            var src  = vm.Menu;
+            var dest = m.Value.Context;
 
             Set(src, true);
             Assert.That(src.PresetEnabled, Is.True);
@@ -160,11 +160,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private ContextMenuValue InvokeCustomize()
+        private ContextSetting InvokeCustomize()
         {
             var dest = NewSettings();
             using (var vm = NewVM(dest)) vm.Customize();
-            return dest.Value.ContextMenu;
+            return dest.Value.Context;
         }
 
         #endregion

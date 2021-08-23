@@ -29,7 +29,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public sealed class CompressRuntimeQuery : Query<string, CompressRuntime>
+    public sealed class CompressRuntimeQuery : Query<string, CompressRuntimeSetting>
     {
         #region Constructors
 
@@ -47,7 +47,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         public CompressRuntimeQuery(
-            Action<QueryMessage<string, CompressRuntime>> callback,
+            Action<QueryMessage<string, CompressRuntimeSetting>> callback,
             Dispatcher dispatcher
         ) : base(callback, dispatcher) { }
 
@@ -67,7 +67,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="format">Archive format.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressRuntime GetValue(string src, Format format) => _value ??= Get(src, format);
+        public CompressRuntimeSetting GetValue(string src, Format format) => _value ??= Get(src, format);
 
         #endregion
 
@@ -82,7 +82,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private CompressRuntime Get(string src, Format format)=> format switch
+        private CompressRuntimeSetting Get(string src, Format format)=> format switch
         {
             Format.Tar      or
             Format.Zip      or
@@ -103,10 +103,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private CompressRuntime Request(string src)
+        private CompressRuntimeSetting Request(string src)
         {
             var fi  = Io.Get(src);
-            var msg = new QueryMessage<string, CompressRuntime>
+            var msg = new QueryMessage<string, CompressRuntimeSetting>
             {
                 Source = Io.Combine(fi.DirectoryName, $"{fi.BaseName}.zip"),
                 Value  = new(),
@@ -121,7 +121,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         #endregion
 
         #region Fields
-        private CompressRuntime _value;
+        private CompressRuntimeSetting _value;
         #endregion
     }
 }

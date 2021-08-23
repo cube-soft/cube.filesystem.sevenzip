@@ -94,7 +94,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         protected override void OnBind(IBindable src)
         {
             base.OnBind(src);
-            if (!(src is CustomMenuViewModel vm)) return;
+            if (!(src is CustomViewModel vm)) return;
             _menu.Register(vm.Source, vm.Current, vm.Images);
         }
 

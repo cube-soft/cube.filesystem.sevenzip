@@ -52,7 +52,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var src   = new[] { GetSource("Sample.txt") };
             var dest  = Io.Combine(dir, "SampleRuntime.zip");
             var args  = PresetMenu.Compress.ToArguments().Concat(src);
-            var value = new CompressValue
+            var value = new CompressSetting
             {
                 SaveLocation  = SaveLocation.Preset,
                 SaveDirectory = dir,
@@ -81,7 +81,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var src  = new[] { GetSource("Sample.txt") };
             var dest = Io.Combine(dir, "Sample.zip");
             var args = PresetMenu.Compress.ToArguments().Concat(src);
-            var value = new CompressValue
+            var value = new CompressSetting
             {
                 SaveLocation = SaveLocation.Query,
                 OpenMethod   = OpenMethod.None,
@@ -109,7 +109,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var src   = new[] { GetSource("Sample.txt") };
             var dest  = Io.Combine(dir, "Sample.zip");
             var args  = PresetMenu.CompressZipPassword.ToArguments().Concat(src);
-            var value = new CompressValue
+            var value = new CompressSetting
             {
                 SaveLocation  = SaveLocation.Preset,
                 SaveDirectory = dir,
@@ -138,7 +138,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var src   = new[] { GetSource("Sample.txt") };
             var dest  = Io.Combine(dir, "Sample.zip");
             var args  = PresetMenu.CompressZip.ToArguments().Concat(new[] { "/o:runtime" }).Concat(src);
-            var value = new CompressValue
+            var value = new CompressSetting
             {
                 SaveLocation  = SaveLocation.Preset,
                 SaveDirectory = dir,

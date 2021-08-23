@@ -25,7 +25,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ShortcutValue
+    /// ShortcutSetting
     ///
     /// <summary>
     /// Represents the settings for creating shortcut links on the desktop.
@@ -33,7 +33,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public sealed class ShortcutValue : SerializableBase
+    public sealed class ShortcutSetting : SerializableBase
     {
         #region Properties
 
@@ -222,7 +222,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         private string GetLink(string filename) => System.IO.Path.Combine(
-            typeof(ShortcutValue).Assembly.GetDirectoryName(),
+            typeof(ShortcutSetting).Assembly.GetDirectoryName(),
             filename
         );
 

@@ -21,7 +21,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// CompressValue
+    /// CompressSetting
     ///
     /// <summary>
     /// Represents the settings when compressing archives.
@@ -29,7 +29,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public sealed class CompressValue : ArchiveValue
+    public sealed class CompressSetting : ArchiveSetting
     {
         #region Properties
 

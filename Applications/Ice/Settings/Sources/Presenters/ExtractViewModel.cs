@@ -29,7 +29,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ExtractViewModel : ArchiveViewModel<ExtractValue>
+    public class ExtractViewModel : ArchiveViewModel<ExtractSetting>
     {
         #region Constructors
 
@@ -47,7 +47,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ExtractViewModel(ExtractValue facade,
+        public ExtractViewModel(ExtractSetting facade,
             Aggregator aggregator,
             SynchronizationContext context
         ) : base(facade, aggregator, context) { }

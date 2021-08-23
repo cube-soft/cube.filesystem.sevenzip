@@ -22,14 +22,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// CompressRuntime
+    /// CompressRuntimeSetting
     ///
     /// <summary>
     /// Represents the run-time settings when compressing files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public sealed class CompressRuntime
+    public sealed class CompressRuntimeSetting
     {
         #region Constructors
 
@@ -43,7 +43,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressRuntime() : this(Format.Zip) { }
+        public CompressRuntimeSetting() : this(Format.Zip) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -57,7 +57,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// <param name="format">Archive format.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressRuntime(Format format)
+        public CompressRuntimeSetting(Format format)
         {
             Format = format;
             Sfx    = Io.Combine(GetType().Assembly.GetDirectoryName(), Formatter.SfxName);

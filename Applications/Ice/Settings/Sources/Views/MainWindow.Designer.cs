@@ -379,7 +379,7 @@
             //
             // ContextSettingsBindingSource
             //
-            this.ContextSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.Settings.ContextMenuViewModel);
+            this.ContextSettingsBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.Settings.ContextViewModel);
             //
             // ContextExtractCheckBox
             //

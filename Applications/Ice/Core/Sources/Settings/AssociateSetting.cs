@@ -23,7 +23,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// AssociateValue
+    /// AssociateSetting
     ///
     /// <summary>
     /// Represents the settings about the associated files.
@@ -31,7 +31,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public sealed class AssociateValue : SerializableBase
+    public sealed class AssociateSetting : SerializableBase
     {
         #region Properties
 

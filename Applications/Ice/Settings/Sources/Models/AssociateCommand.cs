@@ -49,7 +49,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// <param name="settings">設定用オブジェクト</param>
         ///
         /* ----------------------------------------------------------------- */
-        public AssociateCommand(AssociateValue settings)
+        public AssociateCommand(AssociateSetting settings)
         {
             Settings = settings;
         }
@@ -67,7 +67,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public AssociateValue Settings { get; }
+        public AssociateSetting Settings { get; }
 
         #endregion
 

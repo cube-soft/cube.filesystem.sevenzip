@@ -22,7 +22,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ContextMenuValue
+    /// ContextSetting
     ///
     /// <summary>
     /// Represents the settings of the context menu that is displayed
@@ -31,7 +31,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public sealed class ContextMenuValue : SerializableBase
+    public sealed class ContextSetting : SerializableBase
     {
         #region Properties
 

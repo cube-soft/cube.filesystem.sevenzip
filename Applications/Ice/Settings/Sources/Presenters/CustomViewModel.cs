@@ -24,14 +24,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// CustomMenuViewModel
+    /// CustomViewModel
     ///
     /// <summary>
-    /// Represents the ViewModel of the customized context menu.
+    /// Represents the ViewModel class of the customized context menu.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class CustomMenuViewModel : Presentable<IEnumerable<ContextMenu>>
+    public class CustomViewModel : Presentable<IEnumerable<ContextMenu>>
     {
         #region Constructors
 
@@ -49,7 +49,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public CustomMenuViewModel(IEnumerable<ContextMenu> menu,
+        public CustomViewModel(IEnumerable<ContextMenu> menu,
             Aggregator aggregator,
             SynchronizationContext context
         ) : base(menu, aggregator, context) { }

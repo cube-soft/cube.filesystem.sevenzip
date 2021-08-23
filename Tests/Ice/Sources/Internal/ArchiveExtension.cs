@@ -135,7 +135,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         public static IDisposable SetRuntime(this CompressViewModel src, string value) =>
-            src.Subscribe<QueryMessage<string, Settings.CompressRuntime>>(e =>
+            src.Subscribe<QueryMessage<string, Settings.CompressRuntimeSetting>>(e =>
         {
             e.Cancel     = false;
             e.Value.Path = value;

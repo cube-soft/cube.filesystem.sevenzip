@@ -99,9 +99,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /// <remarks>
-        /// ToolTip の有効・無効設定はファイルの関連付け設定にも関わるため、
-        /// このプロパティが更新された場合、Associate.Changed を true に
-        /// 設定します。
+        /// Since the Enable/Disable setting of ToolTip is also related to
+        /// the file association setting, set Associate.Changed to true
+        /// when this property is updated.
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
@@ -118,11 +118,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /// <summary>
         /// Gets or sets the number of items to show in the tooltip.
+        /// The value is only applicable when ToolTip is enabled.
         /// </summary>
-        ///
-        /// <remarks>
-        /// この値は ToolTip が有効な場合にのみ適用されます。
-        /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
@@ -142,9 +139,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         [DataMember(Name = "Archive")]
-        public CompressValue Compress
+        public CompressSetting Compress
         {
-            get => Get(() => new CompressValue());
+            get => Get(() => new CompressSetting());
             set => Set(value);
         }
 
@@ -158,9 +155,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public ExtractValue Extract
+        public ExtractSetting Extract
         {
-            get => Get(() => new ExtractValue());
+            get => Get(() => new ExtractSetting());
             set => Set(value);
         }
 
@@ -174,9 +171,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public AssociateValue Associate
+        public AssociateSetting Associate
         {
-            get => Get(() => new AssociateValue());
+            get => Get(() => new AssociateSetting());
             set => Set(value);
         }
 
@@ -189,10 +186,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [DataMember(Name = "Context")]
-        public ContextMenuValue ContextMenu
+        [DataMember]
+        public ContextSetting Context
         {
-            get => Get(() => new ContextMenuValue());
+            get => Get(() => new ContextSetting());
             set => Set(value);
         }
 
@@ -206,9 +203,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public ShortcutValue Shortcut
+        public ShortcutSetting Shortcut
         {
-            get => Get(() => new ShortcutValue());
+            get => Get(() => new ShortcutSetting());
             set => Set(value);
         }
 

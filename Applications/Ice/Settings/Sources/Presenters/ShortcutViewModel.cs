@@ -29,7 +29,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ShortcutViewModel : Presentable<ShortcutValue>
+    public class ShortcutViewModel : Presentable<ShortcutSetting>
     {
         #region Constructors
 
@@ -47,7 +47,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ShortcutViewModel(ShortcutValue facade,
+        public ShortcutViewModel(ShortcutSetting facade,
             Aggregator aggregator,
             SynchronizationContext context
         ) : base(facade, aggregator, context)

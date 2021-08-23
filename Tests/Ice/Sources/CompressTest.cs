@@ -47,7 +47,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
-        public void Compress(string dest, IEnumerable<string> files, IEnumerable<string> args, CompressValue settings)
+        public void Compress(string dest, IEnumerable<string> files, IEnumerable<string> args, CompressSetting settings)
         {
             using var vm = NewVM(args.Concat(files.Select(e => GetSource(e))), settings);
             var filename = GetFileName(GetSource(files.First()), dest);
@@ -100,7 +100,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     @"Preset\Sample.zip",
                     new[] { "Sample.txt" },
                     PresetMenu.Compress.ToArguments(),
-                    new CompressValue
+                    new CompressSetting
                     {
                         SaveLocation = SaveLocation.Preset,
                         OpenMethod   = OpenMethod.None,
@@ -112,7 +112,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     @"Preset\Sample 00..01.zip",
                     new[] { "Sample 00..01" },
                     PresetMenu.Compress.ToArguments(),
-                    new CompressValue
+                    new CompressSetting
                     {
                         SaveLocation  = SaveLocation.Preset,
                         OpenMethod    = OpenMethod.None,
@@ -124,7 +124,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     @"Preset\Sample.7z",
                     new[] { "Sample.txt", "Sample 00..01" },
                     PresetMenu.CompressSevenZip.ToArguments(),
-                    new CompressValue
+                    new CompressSetting
                     {
                         SaveLocation = SaveLocation.Preset,
                         OpenMethod   = OpenMethod.None,
@@ -136,7 +136,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     @"Preset\Sample.tar.bz2",
                     new[] { "Sample.txt", "Sample 00..01" },
                     PresetMenu.CompressBZip2.ToArguments(),
-                    new CompressValue
+                    new CompressSetting
                     {
                         SaveLocation = SaveLocation.Preset,
                         OpenMethod   = OpenMethod.None,
@@ -148,7 +148,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     @"Preset\Sample.exe",
                     new[] { "Sample.txt", "Sample 00..01" },
                     PresetMenu.CompressSfx.ToArguments(),
-                    new CompressValue
+                    new CompressSetting
                     {
                         SaveLocation = SaveLocation.Preset,
                         OpenMethod   = OpenMethod.None,
@@ -160,7 +160,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     @"Runtime\Sample.zip",
                     new[] { "Sample.txt", "Sample 00..01" },
                     PresetMenu.CompressOthers.ToArguments(),
-                    new CompressValue
+                    new CompressSetting
                     {
                         SaveLocation = SaveLocation.Preset,
                         OpenMethod   = OpenMethod.None,
@@ -172,7 +172,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     @"Runtime\Sample.7z",
                     new[] { "Sample.txt", "Sample 00..01" },
                     PresetMenu.CompressSevenZip.ToArguments().Concat(new[] { "/p" }),
-                    new CompressValue
+                    new CompressSetting
                     {
                         SaveLocation = SaveLocation.Query,
                         OpenMethod   = OpenMethod.None,
@@ -184,7 +184,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     @"Runtime\Sample.tar.bz2",
                     new[] { "Sample.txt", "Sample 00..01" },
                     PresetMenu.CompressBZip2.ToArguments().Concat(new[] { "/o:runtime" }),
-                    new CompressValue
+                    new CompressSetting
                     {
                         SaveLocation = SaveLocation.Preset,
                         OpenMethod   = OpenMethod.None,
@@ -196,7 +196,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     @"Drop\Sample.tar.gz",
                     new[] { "Sample.txt", "Sample 00..01" },
                     GetPathArgs(PresetMenu.CompressGZip, "Drop"),
-                    new CompressValue
+                    new CompressSetting
                     {
                         SaveLocation = SaveLocation.Preset,
                         OpenMethod   = OpenMethod.None,
@@ -208,7 +208,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                     @"Drop\Sample.tar.xz",
                     new[] { "Sample.txt", "Sample 00..01" },
                     GetPathArgs(PresetMenu.CompressXz, "Drop"),
-                    new CompressValue
+                    new CompressSetting
                     {
                         SaveLocation = SaveLocation.Preset,
                         OpenMethod   = OpenMethod.None,

@@ -103,7 +103,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Invoke(CompressRuntime src)
+        private void Invoke(CompressRuntimeSetting src)
         {
             GetType().LogDebug($"{nameof(src.Format)}:{src.Format}", $"Method:{src.CompressionMethod}");
 
@@ -127,7 +127,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void InvokePreProcess(CompressRuntime src)
+        private void InvokePreProcess(CompressRuntimeSetting src)
         {
             SetDestination(SelectAction.Get(this, src));
             SetTemp(Io.Get(Destination).DirectoryName);
@@ -160,7 +160,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private IQuery<string> GetPassword(CompressRuntime src) =>
+        private IQuery<string> GetPassword(CompressRuntimeSetting src) =>
             src.Password.HasValue() || Request.Password ?
             new Query<string>(e =>
             {
