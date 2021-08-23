@@ -268,22 +268,22 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
             ContextArchivePanel.Controls.AddRange(new[]
             {
-                Create(PresetMenu.CompressZip,         Properties.Resources.MenuZip,         index++),
-                Create(PresetMenu.CompressZipPassword, Properties.Resources.MenuZipPassword, index++),
-                Create(PresetMenu.CompressSevenZip,    Properties.Resources.MenuSevenZip,    index++),
-                Create(PresetMenu.CompressBZip2,       Properties.Resources.MenuBZip2,       index++),
-                Create(PresetMenu.CompressGZip,        Properties.Resources.MenuGZip,        index++),
-                Create(PresetMenu.CompressXz,          Properties.Resources.MenuXZ,          index++),
-                Create(PresetMenu.CompressSfx,         Properties.Resources.MenuSfx,         index++),
-                Create(PresetMenu.CompressOthers,     Properties.Resources.MenuDetails,      index++),
+                Create(Preset.CompressZip,         Properties.Resources.MenuZip,         index++),
+                Create(Preset.CompressZipPassword, Properties.Resources.MenuZipPassword, index++),
+                Create(Preset.CompressSevenZip,    Properties.Resources.MenuSevenZip,    index++),
+                Create(Preset.CompressBZip2,       Properties.Resources.MenuBZip2,       index++),
+                Create(Preset.CompressGZip,        Properties.Resources.MenuGZip,        index++),
+                Create(Preset.CompressXz,          Properties.Resources.MenuXZ,          index++),
+                Create(Preset.CompressSfx,         Properties.Resources.MenuSfx,         index++),
+                Create(Preset.CompressOthers,     Properties.Resources.MenuDetails,      index++),
             });
 
             ContextExtractPanel.Controls.AddRange(new[]
             {
-                Create(PresetMenu.ExtractSource,      Properties.Resources.MenuHere,        index++),
-                Create(PresetMenu.ExtractDesktop,     Properties.Resources.MenuDesktop,     index++),
-                Create(PresetMenu.ExtractMyDocuments, Properties.Resources.MenuMyDocuments, index++),
-                Create(PresetMenu.ExtractRuntime,     Properties.Resources.MenuRuntime,     index++),
+                Create(Preset.ExtractSource,      Properties.Resources.MenuHere,        index++),
+                Create(Preset.ExtractDesktop,     Properties.Resources.MenuDesktop,     index++),
+                Create(Preset.ExtractMyDocuments, Properties.Resources.MenuMyDocuments, index++),
+                Create(Preset.ExtractRuntime,     Properties.Resources.MenuRuntime,     index++),
             });
 
             ContextCustomizeButton.Click += (s, e) => ApplyButton.Enabled = true;
@@ -303,15 +303,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         {
             ShortcutArchiveComboBox.DisplayMember = "Key";
             ShortcutArchiveComboBox.ValueMember   = "Value";
-            ShortcutArchiveComboBox.DataSource    = new List<KeyValuePair<string, PresetMenu>>
+            ShortcutArchiveComboBox.DataSource    = new List<KeyValuePair<string, Preset>>
             {
-                Create(Properties.Resources.MenuZip,         PresetMenu.CompressZip),
-                Create(Properties.Resources.MenuZipPassword, PresetMenu.CompressZipPassword),
-                Create(Properties.Resources.MenuSevenZip,    PresetMenu.CompressSevenZip),
-                Create(Properties.Resources.MenuBZip2,       PresetMenu.CompressBZip2),
-                Create(Properties.Resources.MenuGZip,        PresetMenu.CompressGZip),
-                Create(Properties.Resources.MenuSfx,         PresetMenu.CompressSfx),
-                Create(Properties.Resources.MenuDetails,     PresetMenu.CompressOthers),
+                Create(Properties.Resources.MenuZip,         Preset.CompressZip),
+                Create(Properties.Resources.MenuZipPassword, Preset.CompressZipPassword),
+                Create(Properties.Resources.MenuSevenZip,    Preset.CompressSevenZip),
+                Create(Properties.Resources.MenuBZip2,       Preset.CompressBZip2),
+                Create(Properties.Resources.MenuGZip,        Preset.CompressGZip),
+                Create(Properties.Resources.MenuSfx,         Preset.CompressSfx),
+                Create(Properties.Resources.MenuDetails,     Preset.CompressOthers),
             };
         }
 
@@ -353,7 +353,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private CheckBox Create(PresetMenu menu, string text, int index)
+        private CheckBox Create(Preset menu, string text, int index)
         {
             var dest = new CheckBox
             {
@@ -381,8 +381,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private KeyValuePair<string, PresetMenu> Create(string key, PresetMenu value) =>
-            new KeyValuePair<string, PresetMenu>(key, value);
+        private KeyValuePair<string, Preset> Create(string key, Preset value) =>
+            new KeyValuePair<string, Preset>(key, value);
 
         #endregion
 

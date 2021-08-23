@@ -45,9 +45,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public PresetMenu Preset
+        public Preset Preset
         {
-            get => Get(() => PresetMenu.DefaultContext);
+            get => Get(() => Preset.DefaultContext);
             set => Set(value);
         }
 
@@ -61,9 +61,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public List<ContextMenu> Custom
+        public List<Context> Custom
         {
-            get => Get(() => new List<ContextMenu>());
+            get => Get(() => new List<Context>());
             set => Set(value);
         }
 
@@ -99,7 +99,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// <param name="src">Customized context menu.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Customize(IEnumerable<ContextMenu> src)
+        public void Customize(IEnumerable<Context> src)
         {
             Custom.Clear();
             foreach (var m in src) Custom.Add(m);
@@ -117,8 +117,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public void Reset()
         {
-            Preset    = PresetMenu.DefaultContext;
-            Custom    = new List<ContextMenu>();
+            Preset    = Preset.DefaultContext;
+            Custom    = new List<Context>();
             UseCustom = false;
         }
 

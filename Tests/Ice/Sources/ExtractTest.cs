@@ -89,7 +89,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 yield return new(
                     @"Preset\Complex.1.0.0",
                     new[] { "Complex.1.0.0.zip" },
-                    PresetMenu.Extract.ToArguments(),
+                    Preset.Extract.ToArguments(),
                     new ExtractSetting
                     {
                         SaveLocation = SaveLocation.Preset,
@@ -101,7 +101,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 yield return new(
                     @"Runtime\Complex.1.0.0",
                     new[] { "Complex.1.0.0.zip" },
-                    PresetMenu.ExtractRuntime.ToArguments(),
+                    Preset.ExtractRuntime.ToArguments(),
                     new ExtractSetting
                     {
                         SaveLocation = SaveLocation.Query,
@@ -113,7 +113,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 yield return new(
                     @"Preset\Sample\Empty",
                     new[] { "SampleEmpty.zip" },
-                    PresetMenu.Extract.ToArguments(),
+                    Preset.Extract.ToArguments(),
                     new ExtractSetting
                     {
                         SaveLocation = SaveLocation.Preset,
@@ -125,7 +125,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 yield return new(
                     @"Preset\フィルタリング テスト用",
                     new[] { "SampleFilter.zip" },
-                    PresetMenu.Extract.ToArguments(),
+                    Preset.Extract.ToArguments(),
                     new ExtractSetting
                     {
                         SaveLocation = SaveLocation.Preset,
@@ -137,7 +137,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 yield return new(
                     @"Preset\名称未設定フォルダ",
                     new[] { "SampleMac.zip" },
-                    PresetMenu.Extract.ToArguments(),
+                    Preset.Extract.ToArguments(),
                     new ExtractSetting
                     {
                         SaveLocation = SaveLocation.Preset,
@@ -149,7 +149,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 yield return new(
                     @"Preset\Sample 2018.02.13",
                     new[] { "Sample 2018.02.13.zip" },
-                    PresetMenu.Extract.ToArguments(),
+                    Preset.Extract.ToArguments(),
                     new ExtractSetting
                     {
                         SaveLocation = SaveLocation.Preset,
@@ -161,7 +161,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 yield return new(
                     @"Preset\Sample..DoubleDot",
                     new[] { "Sample..DoubleDot.zip" },
-                    PresetMenu.Extract.ToArguments(),
+                    Preset.Extract.ToArguments(),
                     new ExtractSetting
                     {
                         SaveLocation = SaveLocation.Preset,
@@ -173,7 +173,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 yield return new(
                     @"Preset\Password",
                     new[] { "Password.7z" },
-                    PresetMenu.Extract.ToArguments(),
+                    Preset.Extract.ToArguments(),
                     new ExtractSetting
                     {
                         SaveLocation = SaveLocation.Preset,
@@ -513,7 +513,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         private static IEnumerable<string> GetPathArgs(string filename) =>
-            PresetMenu.Extract
+            Preset.Extract
                       .ToArguments()
                       .Concat(new[] { "/o:source", $"/drop:{typeof(ExtractTest).GetPath(filename)}" });
 

@@ -70,8 +70,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Compress
         {
-            get => Facade.Preset.HasFlag(PresetMenu.Compress);
-            set => Set(PresetMenu.Compress, value);
+            get => Facade.Preset.HasFlag(Preset.Compress);
+            set => Set(Preset.Compress, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -85,8 +85,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Extract
         {
-            get => Facade.Preset.HasFlag(PresetMenu.Extract);
-            set => Set(PresetMenu.Extract, value);
+            get => Facade.Preset.HasFlag(Preset.Extract);
+            set => Set(Preset.Extract, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -100,8 +100,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Settings
         {
-            get => Facade.Preset.HasFlag(PresetMenu.Settings);
-            set => Set(PresetMenu.Settings, value);
+            get => Facade.Preset.HasFlag(Preset.Settings);
+            set => Set(Preset.Settings, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -113,12 +113,12 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public PresetMenu CompressOption
+        public Preset CompressOption
         {
-            get => Facade.Preset & PresetMenu.CompressMask;
+            get => Facade.Preset & Preset.CompressMask;
             set
             {
-                var strip = Facade.Preset & ~PresetMenu.CompressMask;
+                var strip = Facade.Preset & ~Preset.CompressMask;
                 Facade.Preset = strip | value;
             }
         }
@@ -180,7 +180,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Set(PresetMenu value, bool check)
+        private void Set(Preset value, bool check)
         {
             if (check) Facade.Preset |= value;
             else Facade.Preset &= ~value;

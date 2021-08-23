@@ -73,19 +73,19 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var settings = new Shortcut { FullName = Get("CubeICE 設定") };
 
             var src  = new ShortcutSetting { Directory = Results };
-            var menu = PresetMenu.Compress |
-                       PresetMenu.CompressOthers |
-                       PresetMenu.Extract |
-                       PresetMenu.Settings;
+            var menu = Preset.Compress |
+                       Preset.CompressOthers |
+                       Preset.Extract |
+                       Preset.Settings;
 
             src.Preset = menu;
             Assert.That(src.Preset, Is.EqualTo(menu));
 
             src.Sync();
-            Assert.That(src.Preset.HasFlag(PresetMenu.Compress),       Is.False);
-            Assert.That(src.Preset.HasFlag(PresetMenu.CompressOthers), Is.True);
-            Assert.That(src.Preset.HasFlag(PresetMenu.Extract),        Is.False);
-            Assert.That(src.Preset.HasFlag(PresetMenu.Settings),       Is.False);
+            Assert.That(src.Preset.HasFlag(Preset.Compress),       Is.False);
+            Assert.That(src.Preset.HasFlag(Preset.CompressOthers), Is.True);
+            Assert.That(src.Preset.HasFlag(Preset.Extract),        Is.False);
+            Assert.That(src.Preset.HasFlag(Preset.Settings),       Is.False);
 
             src.Preset = menu;
             src.Update();
@@ -93,13 +93,13 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             Assert.That(extract.Exists,  Is.True);
             Assert.That(settings.Exists, Is.True);
 
-            src.Preset = PresetMenu.None;
+            src.Preset = Preset.None;
             src.Sync();
-            Assert.That(src.Preset.HasFlag(PresetMenu.Compress), Is.True);
-            Assert.That(src.Preset.HasFlag(PresetMenu.Extract),  Is.True);
-            Assert.That(src.Preset.HasFlag(PresetMenu.Settings), Is.True);
+            Assert.That(src.Preset.HasFlag(Preset.Compress), Is.True);
+            Assert.That(src.Preset.HasFlag(Preset.Extract),  Is.True);
+            Assert.That(src.Preset.HasFlag(Preset.Settings), Is.True);
 
-            src.Preset = PresetMenu.None;
+            src.Preset = Preset.None;
             src.Update();
             Assert.That(archive.Exists,  Is.False);
             Assert.That(extract.Exists,  Is.False);

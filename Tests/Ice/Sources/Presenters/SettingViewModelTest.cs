@@ -447,20 +447,20 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             src.Compress       = true;
             src.Extract        = true;
             src.Settings       = true;
-            src.CompressOption = PresetMenu.CompressZip;
+            src.CompressOption = Preset.CompressZip;
             Assert.That((uint)dest.Preset, Is.EqualTo(0x107));
 
             src.Sync();
             Assert.That(src.Compress,       Is.False);
             Assert.That(src.Extract,        Is.False);
             Assert.That(src.Settings,       Is.False);
-            Assert.That(src.CompressOption, Is.EqualTo(PresetMenu.CompressZip));
-            Assert.That(dest.Preset,        Is.EqualTo(PresetMenu.CompressZip));
+            Assert.That(src.CompressOption, Is.EqualTo(Preset.CompressZip));
+            Assert.That(dest.Preset,        Is.EqualTo(Preset.CompressZip));
 
             src.Compress  = false;
             src.Extract   = false;
             src.Settings  = false;
-            Assert.That(dest.Preset, Is.EqualTo(PresetMenu.CompressZip));
+            Assert.That(dest.Preset, Is.EqualTo(Preset.CompressZip));
         }
 
         /* ----------------------------------------------------------------- */

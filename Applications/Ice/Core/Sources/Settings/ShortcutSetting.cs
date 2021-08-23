@@ -47,9 +47,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public PresetMenu Preset
+        public Preset Preset
         {
-            get => Get(() => PresetMenu.DefaultDesktop);
+            get => Get(() => Preset.DefaultDesktop);
             set => Set(value);
         }
 
@@ -89,16 +89,16 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         public void Sync()
         {
             var b0 = new Shortcut { FullName = GetFileName(Properties.Resources.ScArcive) }.Exists;
-            if (b0) Preset |= PresetMenu.Compress;
-            else Preset &= ~PresetMenu.Compress;
+            if (b0) Preset |= Preset.Compress;
+            else Preset &= ~Preset.Compress;
 
             var b1 = new Shortcut { FullName = GetFileName(Properties.Resources.ScExtract) }.Exists;
-            if (b1) Preset |= PresetMenu.Extract;
-            else Preset &= ~PresetMenu.Extract;
+            if (b1) Preset |= Preset.Extract;
+            else Preset &= ~Preset.Extract;
 
             var b2 = new Shortcut { FullName = GetFileName(Properties.Resources.ScSettings) }.Exists;
-            if (b2) Preset |= PresetMenu.Settings;
-            else Preset &= ~PresetMenu.Settings;
+            if (b2) Preset |= Preset.Settings;
+            else Preset &= ~Preset.Settings;
         }
 
         /* ----------------------------------------------------------------- */
@@ -142,7 +142,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
                 IconLocation = $"{dest},1",
             };
 
-            if ((Preset & PresetMenu.Compress) != 0) sc.Create();
+            if ((Preset & Preset.Compress) != 0) sc.Create();
             else sc.Delete();
         }
 
@@ -163,11 +163,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             {
                 FullName     = src,
                 Target       = dest,
-                Arguments    = string.Join(" ", PresetMenu.Extract.ToArguments().Select(e => e.Quote())),
+                Arguments    = string.Join(" ", Preset.Extract.ToArguments().Select(e => e.Quote())),
                 IconLocation = $"{dest},2",
             };
 
-            if ((Preset & PresetMenu.Extract) != 0) sc.Create();
+            if ((Preset & Preset.Extract) != 0) sc.Create();
             else sc.Delete();
         }
 
@@ -191,7 +191,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
                 IconLocation = dest,
             };
 
-            if ((Preset & PresetMenu.Settings) != 0) sc.Create();
+            if ((Preset & Preset.Settings) != 0) sc.Create();
             else sc.Delete();
         }
 

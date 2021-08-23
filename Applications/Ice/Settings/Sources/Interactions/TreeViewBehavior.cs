@@ -84,7 +84,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IEnumerable<ContextMenu> Result => CreateResult();
+        public IEnumerable<Context> Result => CreateResult();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -147,7 +147,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// <param name="images">表示アイコン一覧</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Register(IEnumerable<ContextMenu> src, IEnumerable<Image> images)
+        public void Register(IEnumerable<Context> src, IEnumerable<Image> images)
         {
             Source.ImageList = images.ToImageList();
             Source.Nodes.Clear();
@@ -195,7 +195,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
                 ToolTipText        = Properties.Resources.MenuNewCategory,
                 ImageIndex         = 0,
                 SelectedImageIndex = 0,
-                Tag                = new ContextMenu(),
+                Tag                = new Context(),
             };
 
             Debug.Assert(dest != null);
@@ -291,9 +291,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private IEnumerable<ContextMenu> CreateResult()
+        private IEnumerable<Context> CreateResult()
         {
-            var dest = new List<ContextMenu>();
+            var dest = new List<Context>();
             var root = RootNode;
             Debug.Assert(root != null);
             foreach (TreeNode n in root.Nodes) dest.Add(CreateMenu(n));
@@ -309,7 +309,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private ContextMenu CreateMenu(TreeNode src)
+        private Context CreateMenu(TreeNode src)
         {
             var dest = GetContextMenu(src);
             dest.Name      = src.Text;
@@ -327,7 +327,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private TreeNode CreateRootNode(IEnumerable<ContextMenu> src)
+        private TreeNode CreateRootNode(IEnumerable<Context> src)
         {
             var dest = new TreeNode
             {
@@ -354,7 +354,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             var dest = Source.SelectedNode ?? RootNode;
             Debug.Assert(dest != null);
 
-            return string.IsNullOrEmpty(dest.Tag.TryCast<ContextMenu>()?.Arguments) ?
+            return string.IsNullOrEmpty(dest.Tag.TryCast<Context>()?.Arguments) ?
                    dest :
                    dest.Parent;
         }
@@ -380,9 +380,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private ContextMenu GetContextMenu(TreeNode src)
+        private Context GetContextMenu(TreeNode src)
         {
-            var dest = src.Tag as ContextMenu;
+            var dest = src.Tag as Context;
             Debug.Assert(dest != null);
             return dest;
         }
@@ -405,7 +405,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
                 ToolTipText        = src.ToolTipText,
                 ImageIndex         = src.ImageIndex,
                 SelectedImageIndex = src.SelectedImageIndex,
-                Tag                = new ContextMenu
+                Tag                = new Context
                 {
                     Name      = menu.Name,
                     Arguments = menu.Arguments,

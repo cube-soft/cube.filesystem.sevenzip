@@ -74,7 +74,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IEnumerable<ContextMenu> Result => _menu.Result;
+        public IEnumerable<Context> Result => _menu.Result;
 
         #endregion
 

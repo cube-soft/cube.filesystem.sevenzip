@@ -46,7 +46,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void ToContextMenuGroup()
         {
-            var dest = PresetMenu.DefaultContext.ToContextMenuGroup().ToList();
+            var dest = Preset.DefaultContext.ToContextMenuGroup().ToList();
             Assert.That(dest.Count,   Is.EqualTo(2));
             Assert.That(dest[0].Name, Is.EqualTo("圧縮"));
             Assert.That(dest[1].Name, Is.EqualTo("解凍"));
@@ -81,24 +81,24 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// </summary>
         ///
         /* --------------------------------------------------------------------- */
-        [TestCase(PresetMenu.Compress,            ExpectedResult = 1)]
-        [TestCase(PresetMenu.CompressZipPassword, ExpectedResult = 2)]
-        [TestCase(PresetMenu.Extract,             ExpectedResult = 1)]
-        [TestCase(PresetMenu.ExtractDesktop,      ExpectedResult = 2)]
-        [TestCase(PresetMenu.ExtractMyDocuments,  ExpectedResult = 2)]
-        [TestCase(PresetMenu.ExtractRuntime,      ExpectedResult = 2)]
-        [TestCase(PresetMenu.ExtractSource,       ExpectedResult = 2)]
-        [TestCase(PresetMenu.Settings,            ExpectedResult = 0)]
-        [TestCase(PresetMenu.Mail,                ExpectedResult = 2)]
-        [TestCase(PresetMenu.MailZip,             ExpectedResult = 2)]
-        [TestCase(PresetMenu.MailZipPassword,     ExpectedResult = 3)]
-        [TestCase(PresetMenu.MailSevenZip,        ExpectedResult = 2)]
-        [TestCase(PresetMenu.MailBZip2,           ExpectedResult = 2)]
-        [TestCase(PresetMenu.MailGZip,            ExpectedResult = 2)]
-        [TestCase(PresetMenu.MailXz,              ExpectedResult = 2)]
-        [TestCase(PresetMenu.MailSfx,             ExpectedResult = 2)]
-        [TestCase(PresetMenu.MailOthers,          ExpectedResult = 2)]
-        public int ToArguments(PresetMenu menu) => menu.ToArguments().Count();
+        [TestCase(Preset.Compress,            ExpectedResult = 1)]
+        [TestCase(Preset.CompressZipPassword, ExpectedResult = 2)]
+        [TestCase(Preset.Extract,             ExpectedResult = 1)]
+        [TestCase(Preset.ExtractDesktop,      ExpectedResult = 2)]
+        [TestCase(Preset.ExtractMyDocuments,  ExpectedResult = 2)]
+        [TestCase(Preset.ExtractRuntime,      ExpectedResult = 2)]
+        [TestCase(Preset.ExtractSource,       ExpectedResult = 2)]
+        [TestCase(Preset.Settings,            ExpectedResult = 0)]
+        [TestCase(Preset.Mail,                ExpectedResult = 2)]
+        [TestCase(Preset.MailZip,             ExpectedResult = 2)]
+        [TestCase(Preset.MailZipPassword,     ExpectedResult = 3)]
+        [TestCase(Preset.MailSevenZip,        ExpectedResult = 2)]
+        [TestCase(Preset.MailBZip2,           ExpectedResult = 2)]
+        [TestCase(Preset.MailGZip,            ExpectedResult = 2)]
+        [TestCase(Preset.MailXz,              ExpectedResult = 2)]
+        [TestCase(Preset.MailSfx,             ExpectedResult = 2)]
+        [TestCase(Preset.MailOthers,          ExpectedResult = 2)]
+        public int ToArguments(Preset menu) => menu.ToArguments().Count();
 
         #endregion
     }

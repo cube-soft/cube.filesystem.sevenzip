@@ -51,7 +51,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var dir   = Get("Exists");
             var src   = new[] { GetSource("Sample.txt") };
             var dest  = Io.Combine(dir, "SampleRuntime.zip");
-            var args  = PresetMenu.Compress.ToArguments().Concat(src);
+            var args  = Preset.Compress.ToArguments().Concat(src);
             var value = new CompressSetting
             {
                 SaveLocation  = SaveLocation.Preset,
@@ -80,7 +80,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var dir  = Get("Overwrite");
             var src  = new[] { GetSource("Sample.txt") };
             var dest = Io.Combine(dir, "Sample.zip");
-            var args = PresetMenu.Compress.ToArguments().Concat(src);
+            var args = Preset.Compress.ToArguments().Concat(src);
             var value = new CompressSetting
             {
                 SaveLocation = SaveLocation.Query,
@@ -108,7 +108,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var dir   = Get("CancelPassword");
             var src   = new[] { GetSource("Sample.txt") };
             var dest  = Io.Combine(dir, "Sample.zip");
-            var args  = PresetMenu.CompressZipPassword.ToArguments().Concat(src);
+            var args  = Preset.CompressZipPassword.ToArguments().Concat(src);
             var value = new CompressSetting
             {
                 SaveLocation  = SaveLocation.Preset,
@@ -137,7 +137,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var dir   = Get("MoveFailed");
             var src   = new[] { GetSource("Sample.txt") };
             var dest  = Io.Combine(dir, "Sample.zip");
-            var args  = PresetMenu.CompressZip.ToArguments().Concat(new[] { "/o:runtime" }).Concat(src);
+            var args  = Preset.CompressZip.ToArguments().Concat(new[] { "/o:runtime" }).Concat(src);
             var value = new CompressSetting
             {
                 SaveLocation  = SaveLocation.Preset,

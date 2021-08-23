@@ -86,8 +86,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Compress
         {
-            get => Facade.Preset.HasFlag(PresetMenu.Compress);
-            set => Set(PresetMenu.Compress, value);
+            get => Facade.Preset.HasFlag(Preset.Compress);
+            set => Set(Preset.Compress, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -101,8 +101,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool CompressZip
         {
-            get => Facade.Preset.HasFlag(PresetMenu.CompressZip);
-            set => Set(PresetMenu.CompressZip, value);
+            get => Facade.Preset.HasFlag(Preset.CompressZip);
+            set => Set(Preset.CompressZip, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -117,8 +117,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool CompressZipPassword
         {
-            get => Facade.Preset.HasFlag(PresetMenu.CompressZipPassword);
-            set => Set(PresetMenu.CompressZipPassword, value);
+            get => Facade.Preset.HasFlag(Preset.CompressZipPassword);
+            set => Set(Preset.CompressZipPassword, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -132,8 +132,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool CompressSevenZip
         {
-            get => Facade.Preset.HasFlag(PresetMenu.CompressSevenZip);
-            set => Set(PresetMenu.CompressSevenZip, value);
+            get => Facade.Preset.HasFlag(Preset.CompressSevenZip);
+            set => Set(Preset.CompressSevenZip, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -147,8 +147,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool CompressGZip
         {
-            get => Facade.Preset.HasFlag(PresetMenu.CompressGZip);
-            set => Set(PresetMenu.CompressGZip, value);
+            get => Facade.Preset.HasFlag(Preset.CompressGZip);
+            set => Set(Preset.CompressGZip, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -162,8 +162,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool CompressBZip2
         {
-            get => Facade.Preset.HasFlag(PresetMenu.CompressBZip2);
-            set => Set(PresetMenu.CompressBZip2, value);
+            get => Facade.Preset.HasFlag(Preset.CompressBZip2);
+            set => Set(Preset.CompressBZip2, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -177,8 +177,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool CompressXZ
         {
-            get => Facade.Preset.HasFlag(PresetMenu.CompressXz);
-            set => Set(PresetMenu.CompressXz, value);
+            get => Facade.Preset.HasFlag(Preset.CompressXz);
+            set => Set(Preset.CompressXz, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -193,8 +193,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool CompressSfx
         {
-            get => Facade.Preset.HasFlag(PresetMenu.CompressSfx);
-            set => Set(PresetMenu.CompressSfx, value);
+            get => Facade.Preset.HasFlag(Preset.CompressSfx);
+            set => Set(Preset.CompressSfx, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -209,8 +209,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool CompressOthers
         {
-            get => Facade.Preset.HasFlag(PresetMenu.CompressOthers);
-            set => Set(PresetMenu.CompressOthers, value);
+            get => Facade.Preset.HasFlag(Preset.CompressOthers);
+            set => Set(Preset.CompressOthers, value);
         }
 
         #endregion
@@ -228,8 +228,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Extract
         {
-            get => Facade.Preset.HasFlag(PresetMenu.Extract);
-            set => Set(PresetMenu.Extract, value);
+            get => Facade.Preset.HasFlag(Preset.Extract);
+            set => Set(Preset.Extract, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -243,8 +243,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool ExtractSource
         {
-            get => Facade.Preset.HasFlag(PresetMenu.ExtractSource);
-            set => Set(PresetMenu.ExtractSource, value);
+            get => Facade.Preset.HasFlag(Preset.ExtractSource);
+            set => Set(Preset.ExtractSource, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -259,8 +259,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool ExtractDesktop
         {
-            get => Facade.Preset.HasFlag(PresetMenu.ExtractDesktop);
-            set => Set(PresetMenu.ExtractDesktop, value);
+            get => Facade.Preset.HasFlag(Preset.ExtractDesktop);
+            set => Set(Preset.ExtractDesktop, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -275,8 +275,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool ExtractMyDocuments
         {
-            get => Facade.Preset.HasFlag(PresetMenu.ExtractMyDocuments);
-            set => Set(PresetMenu.ExtractMyDocuments, value);
+            get => Facade.Preset.HasFlag(Preset.ExtractMyDocuments);
+            set => Set(Preset.ExtractMyDocuments, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -291,8 +291,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool ExtractRuntime
         {
-            get => Facade.Preset.HasFlag(PresetMenu.ExtractRuntime);
-            set => Set(PresetMenu.ExtractRuntime, value);
+            get => Facade.Preset.HasFlag(Preset.ExtractRuntime);
+            set => Set(Preset.ExtractRuntime, value);
         }
 
         #endregion
@@ -362,7 +362,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Set(PresetMenu value, bool check)
+        private void Set(Preset value, bool check)
         {
             if (check) Facade.Preset |= value;
             else Facade.Preset &= ~value;

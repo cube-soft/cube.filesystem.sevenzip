@@ -21,7 +21,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// PresetMenu
+    /// Preset
     ///
     /// <summary>
     /// 予め定義されているメニュー項目を表した列挙型です。
@@ -29,7 +29,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     ///
     /* --------------------------------------------------------------------- */
     [Flags]
-    public enum PresetMenu
+    public enum Preset
     {
         /// <summary>無し</summary>
         None = 0x0000000,

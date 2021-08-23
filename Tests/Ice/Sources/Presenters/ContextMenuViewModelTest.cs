@@ -77,7 +77,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
             Set(src, false);
             Assert.That(src.PresetEnabled, Is.True);
-            Assert.That(dest.Preset,       Is.EqualTo(PresetMenu.None));
+            Assert.That(dest.Preset, Is.EqualTo(Ice.Preset.None));
 
             src.Reset();
             Assert.That(src.Compress,            Is.True);
@@ -94,7 +94,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             Assert.That(src.ExtractMyDocuments,  Is.True);
             Assert.That(src.ExtractRuntime,      Is.True);
             Assert.That(src.ExtractSource,       Is.True);
-            Assert.That(dest.Preset,             Is.EqualTo(PresetMenu.DefaultContext));
+            Assert.That(dest.Preset, Is.EqualTo(Ice.Preset.DefaultContext));
         }
 
         /* ----------------------------------------------------------------- */

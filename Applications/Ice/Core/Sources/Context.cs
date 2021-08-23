@@ -22,7 +22,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ContextMenu
+    /// Context
     ///
     /// <summary>
     /// コンテキストメニューを表すクラスです。
@@ -30,7 +30,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public sealed class ContextMenu : SerializableBase
+    public sealed class Context : SerializableBase
     {
         #region Properties
 
@@ -92,9 +92,9 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* --------------------------------------------------------------------- */
         [DataMember]
-        public List<ContextMenu> Children
+        public List<Context> Children
         {
-            get => Get(() => new List<ContextMenu>());
+            get => Get(() => new List<Context>());
             set => Set(value);
         }
 

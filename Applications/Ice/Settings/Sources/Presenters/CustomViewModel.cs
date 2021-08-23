@@ -31,7 +31,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class CustomViewModel : Presentable<IEnumerable<ContextMenu>>
+    public class CustomViewModel : Presentable<IEnumerable<Context>>
     {
         #region Constructors
 
@@ -49,7 +49,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public CustomViewModel(IEnumerable<ContextMenu> menu,
+        public CustomViewModel(IEnumerable<Context> menu,
             Aggregator aggregator,
             SynchronizationContext context
         ) : base(menu, aggregator, context) { }
@@ -67,11 +67,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IEnumerable<ContextMenu> Source { get; } =
-            PresetMenuExtension.ToContextMenuGroup(
-                PresetMenu.Compress | PresetMenu.CompressMask |
-                PresetMenu.Extract | PresetMenu.ExtractMask |
-                PresetMenu.Mail    | PresetMenu.MailMask
+        public IEnumerable<Context> Source { get; } =
+            PresetExtension.ToContextMenuGroup(
+                Preset.Compress | Preset.CompressMask |
+                Preset.Extract | Preset.ExtractMask |
+                Preset.Mail    | Preset.MailMask
             );
 
         /* ----------------------------------------------------------------- */
@@ -83,7 +83,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IEnumerable<ContextMenu> Current => Facade;
+        public IEnumerable<Context> Current => Facade;
 
         /* ----------------------------------------------------------------- */
         ///

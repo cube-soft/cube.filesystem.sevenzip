@@ -99,7 +99,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 yield return new TestCaseData(
                     @"Preset\Sample.zip",
                     new[] { "Sample.txt" },
-                    PresetMenu.Compress.ToArguments(),
+                    Preset.Compress.ToArguments(),
                     new CompressSetting
                     {
                         SaveLocation = SaveLocation.Preset,
@@ -111,7 +111,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 yield return new TestCaseData(
                     @"Preset\Sample 00..01.zip",
                     new[] { "Sample 00..01" },
-                    PresetMenu.Compress.ToArguments(),
+                    Preset.Compress.ToArguments(),
                     new CompressSetting
                     {
                         SaveLocation  = SaveLocation.Preset,
@@ -123,7 +123,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 yield return new TestCaseData(
                     @"Preset\Sample.7z",
                     new[] { "Sample.txt", "Sample 00..01" },
-                    PresetMenu.CompressSevenZip.ToArguments(),
+                    Preset.CompressSevenZip.ToArguments(),
                     new CompressSetting
                     {
                         SaveLocation = SaveLocation.Preset,
@@ -135,7 +135,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 yield return new TestCaseData(
                     @"Preset\Sample.tar.bz2",
                     new[] { "Sample.txt", "Sample 00..01" },
-                    PresetMenu.CompressBZip2.ToArguments(),
+                    Preset.CompressBZip2.ToArguments(),
                     new CompressSetting
                     {
                         SaveLocation = SaveLocation.Preset,
@@ -147,7 +147,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 yield return new TestCaseData(
                     @"Preset\Sample.exe",
                     new[] { "Sample.txt", "Sample 00..01" },
-                    PresetMenu.CompressSfx.ToArguments(),
+                    Preset.CompressSfx.ToArguments(),
                     new CompressSetting
                     {
                         SaveLocation = SaveLocation.Preset,
@@ -159,7 +159,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 yield return new TestCaseData(
                     @"Runtime\Sample.zip",
                     new[] { "Sample.txt", "Sample 00..01" },
-                    PresetMenu.CompressOthers.ToArguments(),
+                    Preset.CompressOthers.ToArguments(),
                     new CompressSetting
                     {
                         SaveLocation = SaveLocation.Preset,
@@ -171,7 +171,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 yield return new TestCaseData(
                     @"Runtime\Sample.7z",
                     new[] { "Sample.txt", "Sample 00..01" },
-                    PresetMenu.CompressSevenZip.ToArguments().Concat(new[] { "/p" }),
+                    Preset.CompressSevenZip.ToArguments().Concat(new[] { "/p" }),
                     new CompressSetting
                     {
                         SaveLocation = SaveLocation.Query,
@@ -183,7 +183,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 yield return new TestCaseData(
                     @"Runtime\Sample.tar.bz2",
                     new[] { "Sample.txt", "Sample 00..01" },
-                    PresetMenu.CompressBZip2.ToArguments().Concat(new[] { "/o:runtime" }),
+                    Preset.CompressBZip2.ToArguments().Concat(new[] { "/o:runtime" }),
                     new CompressSetting
                     {
                         SaveLocation = SaveLocation.Preset,
@@ -195,7 +195,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 yield return new TestCaseData(
                     @"Drop\Sample.tar.gz",
                     new[] { "Sample.txt", "Sample 00..01" },
-                    GetPathArgs(PresetMenu.CompressGZip, "Drop"),
+                    GetPathArgs(Preset.CompressGZip, "Drop"),
                     new CompressSetting
                     {
                         SaveLocation = SaveLocation.Preset,
@@ -207,7 +207,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 yield return new TestCaseData(
                     @"Drop\Sample.tar.xz",
                     new[] { "Sample.txt", "Sample 00..01" },
-                    GetPathArgs(PresetMenu.CompressXz, "Drop"),
+                    GetPathArgs(Preset.CompressXz, "Drop"),
                     new CompressSetting
                     {
                         SaveLocation = SaveLocation.Preset,
@@ -231,7 +231,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static IEnumerable<string> GetPathArgs(PresetMenu menu, string filename) =>
+        private static IEnumerable<string> GetPathArgs(Preset menu, string filename) =>
             menu.ToArguments()
                 .Concat(new[] { $"/drop:{typeof(CompressTest).GetPath(filename)}" });
 

@@ -51,7 +51,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         public void Suspend()
         {
             var dest  = Get("Suspend");
-            var args  = PresetMenu.Extract.ToArguments().Concat(GetSource("Complex.1.0.0.zip"));
+            var args  = Preset.Extract.ToArguments().Concat(GetSource("Complex.1.0.0.zip"));
             var value = new ExtractSetting
             {
                 SaveLocation  = SaveLocation.Preset,
@@ -81,7 +81,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         public void Cancel()
         {
             var dest  = Get("Cancel");
-            var args  = PresetMenu.Extract.ToArguments().Concat(GetSource("Complex.1.0.0.zip"));
+            var args  = Preset.Extract.ToArguments().Concat(GetSource("Complex.1.0.0.zip"));
             var value = new ExtractSetting
             {
                 SaveLocation = SaveLocation.Preset,
@@ -105,7 +105,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         public void CancelPassword()
         {
             var dest  = Get("CancelPassword");
-            var args  = PresetMenu.Extract.ToArguments().Concat(GetSource("Password.7z"));
+            var args  = Preset.Extract.ToArguments().Concat(GetSource("Password.7z"));
             var value = new ExtractSetting
             {
                 SaveLocation  = SaveLocation.Preset,
@@ -130,7 +130,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         {
             var src   = Get("Complex.zip");
             var dest  = Get("DeleteSource");
-            var args  = PresetMenu.Extract.ToArguments().Concat(src);
+            var args  = Preset.Extract.ToArguments().Concat(src);
             var value = new ExtractSetting
             {
                 SaveLocation  = SaveLocation.Preset,
@@ -160,7 +160,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         {
             var dummy = GetSource("Sample.txt");
             var dest  = Get(@"Rename");
-            var args  = PresetMenu.Extract.ToArguments().Concat(GetSource("Complex.1.0.0.zip"));
+            var args  = Preset.Extract.ToArguments().Concat(GetSource("Complex.1.0.0.zip"));
             var value = new ExtractSetting
             {
                 SaveLocation  = SaveLocation.Preset,
@@ -193,7 +193,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var dummy = GetSource("Sample.txt");
             var size  = Io.Get(dummy).Length;
             var dest  = Get("CancelOverwrite");
-            var args  = PresetMenu.Extract.ToArguments().Concat(GetSource("Complex.1.0.0.zip"));
+            var args  = Preset.Extract.ToArguments().Concat(GetSource("Complex.1.0.0.zip"));
             var value = new ExtractSetting
             {
                 SaveLocation  = SaveLocation.Preset,

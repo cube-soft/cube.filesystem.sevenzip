@@ -50,11 +50,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public static void Register(this TreeNodeCollection src, IEnumerable<ContextMenu> menu)
+        public static void Register(this TreeNodeCollection src, IEnumerable<Context> menu)
         {
             foreach (var item in menu)
             {
-                var tag = new ContextMenu
+                var tag = new Context
                 {
                     Name      = item.Name,
                     Arguments = string.Empty,
@@ -90,7 +90,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         public static bool IsLeaf(this TreeNode src) =>
-            !string.IsNullOrEmpty(src.Tag.TryCast<ContextMenu>()?.Arguments);
+            !string.IsNullOrEmpty(src.Tag.TryCast<Context>()?.Arguments);
 
         #endregion
     }

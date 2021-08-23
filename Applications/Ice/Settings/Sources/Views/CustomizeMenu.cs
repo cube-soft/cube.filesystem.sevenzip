@@ -163,7 +163,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IEnumerable<ContextMenu> Result => _core.Result;
+        public IEnumerable<Context> Result => _core.Result;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -276,8 +276,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Register(IEnumerable<ContextMenu> src,
-            IEnumerable<ContextMenu> dest, IEnumerable<Image> images)
+        public void Register(IEnumerable<Context> src,
+            IEnumerable<Context> dest, IEnumerable<Image> images)
         {
             Source.ImageList = images.ToImageList();
             Source.Nodes.Register(src);
