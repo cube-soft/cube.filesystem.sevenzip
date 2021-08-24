@@ -68,7 +68,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         public IEnumerable<Context> Source { get; } =
-            PresetExtension.ToContextMenuGroup(
+            PresetExtension.ToContextCollection(
                 Preset.Compress | Preset.CompressMask |
                 Preset.Extract | Preset.ExtractMask |
                 Preset.Mail    | Preset.MailMask

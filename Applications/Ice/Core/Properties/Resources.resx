@@ -117,10 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Ctx7z" xml:space="preserve">
+    <value>7-Zip</value>
+  </data>
   <data name="CtxArchive" xml:space="preserve">
     <value>圧縮</value>
   </data>
-  <data name="CtxBZip2" xml:space="preserve">
+  <data name="CtxBz2" xml:space="preserve">
     <value>BZip2</value>
   </data>
   <data name="CtxDesktop" xml:space="preserve">
@@ -132,7 +135,7 @@
   <data name="CtxExtract" xml:space="preserve">
     <value>解凍</value>
   </data>
-  <data name="CtxGZip" xml:space="preserve">
+  <data name="CtxGz" xml:space="preserve">
     <value>GZip</value>
   </data>
   <data name="CtxMail" xml:space="preserve">
@@ -141,11 +144,8 @@
   <data name="CtxMyDocuments" xml:space="preserve">
     <value>マイドキュメントに解凍</value>
   </data>
-  <data name="CtxRuntime" xml:space="preserve">
+  <data name="CtxQuery" xml:space="preserve">
     <value>場所を指定して解凍</value>
-  </data>
-  <data name="CtxSevenZip" xml:space="preserve">
-    <value>7-Zip</value>
   </data>
   <data name="CtxSfx" xml:space="preserve">
     <value>自己解凍形式</value>

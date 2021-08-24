@@ -25,7 +25,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// Context
     ///
     /// <summary>
-    /// コンテキストメニューを表すクラスです。
+    /// Represents the information of a context menu.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -39,7 +39,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Name
         ///
         /// <summary>
-        /// メニューの表示名を取得または設定します。
+        /// Get or set the display name of the context menu.
         /// </summary>
         ///
         /* --------------------------------------------------------------------- */
@@ -55,7 +55,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Arguments
         ///
         /// <summary>
-        /// メニュー実行時の引数を取得または設定します。
+        /// Get or set the argument for executing the context menu.
         /// </summary>
         ///
         /* --------------------------------------------------------------------- */
@@ -71,7 +71,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// IconIndex
         ///
         /// <summary>
-        /// メニューのアイコンを示すインデックスを取得または設定します。
+        /// Gets or sets the index indicating the icon of the context menu.
         /// </summary>
         ///
         /* --------------------------------------------------------------------- */
@@ -87,7 +87,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Children
         ///
         /// <summary>
-        /// 子要素を取得または設定します。
+        /// Gets or sets the child elements.
         /// </summary>
         ///
         /* --------------------------------------------------------------------- */

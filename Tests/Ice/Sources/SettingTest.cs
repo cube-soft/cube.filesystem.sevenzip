@@ -74,7 +74,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
             var src  = new ShortcutSetting { Directory = Results };
             var menu = Preset.Compress |
-                       Preset.CompressOthers |
+                       Preset.CompressDetails |
                        Preset.Extract |
                        Preset.Settings;
 
@@ -83,7 +83,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
             src.Sync();
             Assert.That(src.Preset.HasFlag(Preset.Compress),       Is.False);
-            Assert.That(src.Preset.HasFlag(Preset.CompressOthers), Is.True);
+            Assert.That(src.Preset.HasFlag(Preset.CompressDetails), Is.True);
             Assert.That(src.Preset.HasFlag(Preset.Extract),        Is.False);
             Assert.That(src.Preset.HasFlag(Preset.Settings),       Is.False);
 

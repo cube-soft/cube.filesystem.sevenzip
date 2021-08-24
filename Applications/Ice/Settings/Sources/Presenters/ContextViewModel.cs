@@ -132,8 +132,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool CompressSevenZip
         {
-            get => Facade.Preset.HasFlag(Preset.CompressSevenZip);
-            set => Set(Preset.CompressSevenZip, value);
+            get => Facade.Preset.HasFlag(Preset.Compress7z);
+            set => Set(Preset.Compress7z, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -147,8 +147,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool CompressGZip
         {
-            get => Facade.Preset.HasFlag(Preset.CompressGZip);
-            set => Set(Preset.CompressGZip, value);
+            get => Facade.Preset.HasFlag(Preset.CompressGz);
+            set => Set(Preset.CompressGz, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -162,8 +162,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool CompressBZip2
         {
-            get => Facade.Preset.HasFlag(Preset.CompressBZip2);
-            set => Set(Preset.CompressBZip2, value);
+            get => Facade.Preset.HasFlag(Preset.CompressBz2);
+            set => Set(Preset.CompressBz2, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -209,8 +209,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool CompressOthers
         {
-            get => Facade.Preset.HasFlag(Preset.CompressOthers);
-            set => Set(Preset.CompressOthers, value);
+            get => Facade.Preset.HasFlag(Preset.CompressDetails);
+            set => Set(Preset.CompressDetails, value);
         }
 
         #endregion
@@ -291,8 +291,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool ExtractRuntime
         {
-            get => Facade.Preset.HasFlag(Preset.ExtractRuntime);
-            set => Set(Preset.ExtractRuntime, value);
+            get => Facade.Preset.HasFlag(Preset.ExtractQuery);
+            set => Set(Preset.ExtractQuery, value);
         }
 
         #endregion
@@ -325,7 +325,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         {
             var e = Query.NewMessage(Facade.UseCustom ?
                 Facade.Custom :
-                Facade.Preset.ToContextMenuGroup()
+                Facade.Preset.ToContextCollection()
             );
 
             // Views.ShowCustomizeView(e);

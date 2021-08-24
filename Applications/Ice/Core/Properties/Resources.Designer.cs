@@ -19,7 +19,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Properties {
     // または Visual Studio のようなツールを使用して自動生成されました。
     // メンバーを追加または削除するには、.ResX ファイルを編集して、/str オプションと共に
     // ResGen を実行し直すか、または VS プロジェクトをビルドし直します。
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -47,7 +47,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Properties {
         }
         
         /// <summary>
-        ///   厳密に型指定されたこのリソース クラスを使用して、すべての検索リソースに対し、
+        ///   すべてについて、現在のスレッドの CurrentUICulture プロパティをオーバーライドします
         ///   現在のスレッドの CurrentUICulture プロパティをオーバーライドします。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -57,6 +57,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   7-Zip に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string Ctx7z {
+            get {
+                return ResourceManager.GetString("Ctx7z", resourceCulture);
             }
         }
         
@@ -72,9 +81,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Properties {
         /// <summary>
         ///   BZip2 に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        internal static string CtxBZip2 {
+        internal static string CtxBz2 {
             get {
-                return ResourceManager.GetString("CtxBZip2", resourceCulture);
+                return ResourceManager.GetString("CtxBz2", resourceCulture);
             }
         }
         
@@ -108,9 +117,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Properties {
         /// <summary>
         ///   GZip に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        internal static string CtxGZip {
+        internal static string CtxGz {
             get {
-                return ResourceManager.GetString("CtxGZip", resourceCulture);
+                return ResourceManager.GetString("CtxGz", resourceCulture);
             }
         }
         
@@ -135,18 +144,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Properties {
         /// <summary>
         ///   場所を指定して解凍 に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        internal static string CtxRuntime {
+        internal static string CtxQuery {
             get {
-                return ResourceManager.GetString("CtxRuntime", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   7-Zip に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        internal static string CtxSevenZip {
-            get {
-                return ResourceManager.GetString("CtxSevenZip", resourceCulture);
+                return ResourceManager.GetString("CtxQuery", resourceCulture);
             }
         }
         

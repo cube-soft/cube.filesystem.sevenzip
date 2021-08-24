@@ -24,7 +24,8 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// ArchiveName
     ///
     /// <summary>
-    /// Provides functionality to convert the archive filename.
+    /// Provides functionality to detect the archive name from the provided
+    /// path, format, and compression method.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */

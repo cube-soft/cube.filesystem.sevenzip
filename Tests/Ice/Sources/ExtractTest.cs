@@ -101,7 +101,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 yield return new(
                     @"Runtime\Complex.1.0.0",
                     new[] { "Complex.1.0.0.zip" },
-                    Preset.ExtractRuntime.ToArguments(),
+                    Preset.ExtractQuery.ToArguments(),
                     new ExtractSetting
                     {
                         SaveLocation = SaveLocation.Query,

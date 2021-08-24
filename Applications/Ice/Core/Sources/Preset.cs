@@ -24,76 +24,76 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// Preset
     ///
     /// <summary>
-    /// 予め定義されているメニュー項目を表した列挙型です。
+    /// Specifies the preset menu items.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [Flags]
     public enum Preset
     {
-        /// <summary>無し</summary>
+        /// <summary>None.</summary>
         None = 0x0000000,
-        /// <summary>圧縮</summary>
+        /// <summary>Compress files and dictionaries.</summary>
         Compress = 0x00000001,
-        /// <summary>解凍</summary>
+        /// <summary>Extract archive files.</summary>
         Extract = 0x00000002,
-        /// <summary>設定</summary>
+        /// <summary>Settings.</summary>
         Settings = 0x00000004,
-        /// <summary>圧縮してメール添付</summary>
+        /// <summary>Create an archive and attach it (deprecated).</summary>
         Mail = 0x00000008,
 
-        /// <summary>圧縮ファイルと同じ場所に解凍</summary>
+        /// <summary>Extract to the same location as the archive.</summary>
         ExtractSource = 0x00000010,
-        /// <summary>デスクトップに解凍</summary>
+        /// <summary>Extract to the desktop.</summary>
         ExtractDesktop = 0x00000020,
-        /// <summary>実行時に場所を指定して解凍</summary>
-        ExtractRuntime = 0x00000040,
-        /// <summary>マイドキュメントに解凍</summary>
+        /// <summary>Query the save location when extracting.</summary>
+        ExtractQuery = 0x00000040,
+        /// <summary>Extract to the my documents.</summary>
         ExtractMyDocuments = 0x00000080,
-        /// <summary>解凍オプション用マスク</summary>
+        /// <summary>Extraction mask.</summary>
         ExtractMask = 0x000000f0,
 
-        /// <summary>Zip に圧縮</summary>
+        /// <summary>Compress to Zip.</summary>
         CompressZip = 0x00000100,
-        /// <summary>パスワード付 Zip に圧縮</summary>
+        /// <summary>Compress to Zip with password.</summary>
         CompressZipPassword = 0x00000200,
-        /// <summary>7z に圧縮</summary>
-        CompressSevenZip = 0x00000400,
-        /// <summary>BZip2 に圧縮</summary>
-        CompressBZip2 = 0x00000800,
-        /// <summary>GZip に圧縮</summary>
-        CompressGZip = 0x00001000,
-        /// <summary>詳細を設定して圧縮</summary>
-        CompressOthers = 0x00002000,
-        /// <summary>自己解凍形式に圧縮</summary>
+        /// <summary>Compress to 7-zip.</summary>
+        Compress7z = 0x00000400,
+        /// <summary>Compress to BZip2.</summary>
+        CompressBz2 = 0x00000800,
+        /// <summary>Compress to GZip.</summary>
+        CompressGz = 0x00001000,
+        /// <summary>Set details and compress.</summary>
+        CompressDetails = 0x00002000,
+        /// <summary>Compress to self extractable archive.</summary>
         CompressSfx = 0x00004000,
-        /// <summary>XZ に圧縮</summary>
+        /// <summary>Compress to XZ.</summary>
         CompressXz = 0x00008000,
-        /// <summary>圧縮オプション用マスク</summary>
+        /// <summary>Compression mask.</summary>
         CompressMask = 0x0000ff00,
 
-        /// <summary>Zip に圧縮してメール添付</summary>
+        /// <summary>Compress to Zip and mail (deprecated).</summary>
         MailZip = 0x00010000,
-        /// <summary>パスワード付 Zip に圧縮してメール添付</summary>
+        /// <summary>Compress to Zip with password and mail (deprecated).</summary>
         MailZipPassword = 0x00020000,
-        /// <summary>7z に圧縮してメール添付</summary>
-        MailSevenZip = 0x00040000,
-        /// <summary>BZip2 に圧縮してメール添付</summary>
-        MailBZip2 = 0x00080000,
-        /// <summary>GZip に圧縮してメール添付</summary>
-        MailGZip = 0x00100000,
-        /// <summary>詳細を設定して圧縮してメール添付</summary>
-        MailOthers = 0x00200000,
-        /// <summary>自己解凍形式に圧縮してメール添付</summary>
+        /// <summary>Compress to 7-zip and mail (deprecated).</summary>
+        Mail7z = 0x00040000,
+        /// <summary>Compress to BZip2 and mail (deprecated).</summary>
+        MailBz2 = 0x00080000,
+        /// <summary>Compress to GZip and mail (deprecated).</summary>
+        MailGz = 0x00100000,
+        /// <summary>Set details, compress, and mail (deprecated).</summary>
+        MailDetails = 0x00200000,
+        /// <summary>Compress to self extractable archive and mail (deprecated).</summary>
         MailSfx = 0x00400000,
-        /// <summary>XZ に圧縮してメール添付</summary>
+        /// <summary>Compress to XZ and mail (deprecated).</summary>
         MailXz = 0x00800000,
-        /// <summary>圧縮してメール添付オプション用マスク</summary>
+        /// <summary>Mailing mask (deprecated).</summary>
         MailMask = 0x00ff0000,
 
-        /// <summary>コンテキストメニューの初期設定</summary>
+        /// <summary>Default settings for context menu.</summary>
         DefaultContext = 0x00007ff3,
-        /// <summary>ショートカットメニューの初期設定</summary>
+        /// <summary>Default settings for desktop shortcuts.</summary>
         DefaultDesktop = 0x00000107,
     }
 }

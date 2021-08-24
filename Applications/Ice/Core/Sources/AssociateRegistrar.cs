@@ -30,12 +30,12 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// AssociateRegistrar
     ///
     /// <summary>
-    /// ファイルの関連付けに関するレジストリの更新を行うクラスです。
+    /// Provides functionality to update the registry for file associations.
     /// </summary>
     ///
     /// <remarks>
-    /// このクラスはレジストリの KEY_CLASSES_ROOT を編集します。
-    /// したがって、実行するためには管理者権限が必要となります。
+    /// The class edits KEY_CLASSES_ROOT in the registry.
+    /// Therefore, it requires the administrator privilege to invoke.
     /// </remarks>
     ///
     /* --------------------------------------------------------------------- */
@@ -48,16 +48,14 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// AssociateRegistrar
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the AssociateRegistrar class
+        /// with the specified path.
         /// </summary>
         ///
-        /// <param name="file">ダブルクリック時に実行するファイル</param>
+        /// <param name="file">Path to invoke when double clicked.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public AssociateRegistrar(string file)
-        {
-            FileName = file;
-        }
+        public AssociateRegistrar(string file) => FileName = file;
 
         #endregion
 
@@ -68,7 +66,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// FileName
         ///
         /// <summary>
-        /// ダブルクリック時に実行されるファイルを取得または設定します。
+        /// Gets or sets the path that will be executed when double clicked.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -79,13 +77,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Arguments
         ///
         /// <summary>
-        /// ダブルクリック時に実行されるファイルの引数一覧を取得または
-        /// 設定します。
+        /// Gets or sets the list of file arguments to be executed when
+        /// double clicked.
         /// </summary>
         ///
         /// <remarks>
-        /// Arguments で設定されたものに "%1" を加えたものが実際の
-        /// 引数となります。
+        /// The actual arguments are the ones set in the property plus "%1".
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
@@ -96,7 +93,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// IconLocation
         ///
         /// <summary>
-        /// 表示されるアイコンのパスを取得または設定します。
+        /// Gets or sets the path of the icon to be displayed.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -107,8 +104,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// ToolTip
         ///
         /// <summary>
-        /// マウスオーバ時のツールチップ表示をカスタマイズするかどうかを
-        /// 示す値を取得または設定します。
+        /// Gets or sets a value indicating whether or not to customize the
+        /// tooltip display on mouse over.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -119,7 +116,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Command
         ///
         /// <summary>
-        /// レジストリに登録されるコマンドラインを取得します。
+        /// Get the command line to be registered in the registry.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -134,11 +131,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Update
         ///
         /// <summary>
-        /// ファイルの関連付けを更新します。
+        /// Updates file associations.
         /// </summary>
         ///
         /// <param name="extensions">
-        /// ファイルの関連付けを定義したオブジェクト
+        /// Object that defines file associations.
         /// </param>
         ///
         /* ----------------------------------------------------------------- */
@@ -156,14 +153,14 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Update
         ///
         /// <summary>
-        /// ファイルの関連付けを更新します。
+        /// Updates file associations.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         private void Update(string extension, bool enabled)
         {
             if (!extension.HasValue()) return;
-            if (enabled) Create(extension);
+            if (enabled) Register(extension);
             else Delete(extension);
         }
 
@@ -172,12 +169,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// UpdateToolTip
         ///
         /// <summary>
-        /// マウスオーバ時に表示されるツールチップ表示に関する設定を
-        /// 更新します。
+        /// Updates the settings related to the tooltip that is displayed
+        /// on mouse over.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void UpdateToolTip(RegistryKey key, bool enabled)
+        private void UpdateToolTip(RegistryKey src, bool enabled)
         {
             var guid = TooTipKey.ToString("B").ToUpperInvariant();
             var name = $@"shellex\{guid}";
@@ -185,54 +182,55 @@ namespace Cube.FileSystem.SevenZip.Ice
             if (enabled)
             {
                 var s = ToolTipHandler.ToString("B");
-                using (var k = key.CreateSubKey(name)) k.SetValue("", s);
+                using var sk = src.CreateSubKey(name);
+                sk.SetValue("", s);
             }
-            else key.DeleteSubKeyTree(name, false);
+            else src.DeleteSubKeyTree(name, false);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Create
+        /// Register
         ///
         /// <summary>
-        /// ファイルの関連付け用のレジストリ項目を作成して登録します。
+        /// Creates and registers a registry entry for file associations.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Create(string extension)
+        private void Register(string extension)
         {
             if (!FileName.HasValue()) return;
 
             var id   = extension.TrimStart('.');
             var root = Registry.ClassesRoot;
             var name = GetSubKeyName(id);
-            using (var key = root.CreateSubKey(name)) Create(key, id);
+            using (var key = root.CreateSubKey(name)) Register(key, id);
 
-            Create(extension, name);
+            Register(extension, name);
             DeleteUserChoise(extension);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Create
+        /// Register
         ///
         /// <summary>
-        /// ファイルの関連付け用のレジストリ項目を作成して登録します。
+        /// Creates and registers a registry entry for file associations.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Create(RegistryKey key, string id)
+        private void Register(RegistryKey src, string id)
         {
-            key.SetValue("", $"{id} {Properties.Resources.FileSuffix}".ToUpperInvariant());
+            src.SetValue("", $"{id} {Properties.Resources.FileSuffix}".ToUpperInvariant());
 
-            using (var k = key.CreateSubKey("shell"))
+            using (var sk = src.CreateSubKey("shell"))
             {
-                k.SetValue("", "open");
-                using var cmd = k.CreateSubKey(@"open\command");
+                sk.SetValue("", "open");
+                using var cmd = sk.CreateSubKey(@"open\command");
                 cmd.SetValue("", Command);
             }
 
-            using (var k = key.CreateSubKey("DefaultIcon")) k.SetValue("", IconLocation);
+            using (var sk = src.CreateSubKey("DefaultIcon")) sk.SetValue("", IconLocation);
         }
 
         /* ----------------------------------------------------------------- */
@@ -240,8 +238,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Create
         ///
         /// <summary>
-        /// 拡張子を表すレジストリ項目と CubeICE を関連付けるための設定を
-        /// 作成します。
+        /// Creates and registers settings to associate CubeICE with the
+        /// registry entry representing the extension.
         /// </summary>
         ///
         /// <remarks>
@@ -250,13 +248,15 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        private void Create(string extension, string name)
+        private void Register(string extension, string name)
         {
-            using var key = Registry.ClassesRoot.CreateSubKey(GetExtension(extension));
-            var prev = key.GetValue("") as string;
-            if (prev.HasValue() && prev != name) key.SetValue(PreArchiver, prev);
-            key.SetValue("", name);
-            UpdateToolTip(key, ToolTip);
+            using var sk = Registry.ClassesRoot.CreateSubKey(GetExtension(extension));
+
+            var prev = sk.GetValue("") as string;
+            if (prev.HasValue() && prev != name) sk.SetValue(PreArchiver, prev);
+
+            sk.SetValue("", name);
+            UpdateToolTip(sk, ToolTip);
         }
 
         /* ----------------------------------------------------------------- */
@@ -264,23 +264,23 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Delete
         ///
         /// <summary>
-        /// ファイルの関連付け用のレジストリ項目を削除します。
+        /// Removes the registry entry for file associations.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         private void Delete(string extension)
         {
-            using (var key = Registry.ClassesRoot.CreateSubKey(GetExtension(extension)))
+            using (var sk = Registry.ClassesRoot.CreateSubKey(GetExtension(extension)))
             {
-                var prev = key.GetValue(PreArchiver, "") as string;
+                var prev = sk.GetValue(PreArchiver, "") as string;
                 if (prev.HasValue())
                 {
-                    key.SetValue("", prev);
-                    key.DeleteValue(PreArchiver, false);
+                    sk.SetValue("", prev);
+                    sk.DeleteValue(PreArchiver, false);
                 }
-                else key.DeleteValue("", false);
+                else sk.DeleteValue("", false);
 
-                UpdateToolTip(key, false);
+                UpdateToolTip(sk, false);
             }
             Registry.ClassesRoot.DeleteSubKeyTree(GetSubKeyName(extension), false);
         }
@@ -300,10 +300,10 @@ namespace Cube.FileSystem.SevenZip.Ice
             var root = @"Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts";
             var name = $@"{root}\{GetExtension(extension)}";
 
-            using var k = Registry.CurrentUser.OpenSubKey(name, true);
-            if (k != null && k.GetSubKeyNames().Any(e => e.FuzzyEquals(src)))
+            using var sk = Registry.CurrentUser.OpenSubKey(name, true);
+            if (sk != null && sk.GetSubKeyNames().Any(e => e.FuzzyEquals(src)))
             {
-                k.DeleteSubKey(src, false);
+                sk.DeleteSubKey(src, false);
                 GetType().LogDebug($"Reset:{name.Quote()}");
             }
         });
@@ -313,7 +313,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// GetSubKeyName
         ///
         /// <summary>
-        /// サブキー名を取得します。
+        /// Gets the subkey name.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */

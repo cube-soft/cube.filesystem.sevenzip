@@ -66,13 +66,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         public SettingFolder(Assembly assembly, DataContract.Format format, string location) :
             base(format, location, assembly.GetSoftwareVersion())
         {
-            AutoSave       = false;
+            AutoSave = false;
             Version.Suffix = Properties.Resources.VersionSuffix;
-            Startup        = new("cubeice-checker")
-            {
-                Source = Io.Combine(assembly.GetDirectoryName(), "CubeChecker.exe"),
-            };
 
+            var exe = Io.Combine(assembly.GetDirectoryName(), "CubeChecker.exe");
+            Startup = new("cubeice-checker") { Source = exe };
             Startup.Arguments.Add("cubeice");
             Startup.Arguments.Add("/subkey");
             Startup.Arguments.Add("CubeICE");

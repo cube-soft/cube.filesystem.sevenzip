@@ -270,12 +270,12 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             {
                 Create(Preset.CompressZip,         Properties.Resources.MenuZip,         index++),
                 Create(Preset.CompressZipPassword, Properties.Resources.MenuZipPassword, index++),
-                Create(Preset.CompressSevenZip,    Properties.Resources.MenuSevenZip,    index++),
-                Create(Preset.CompressBZip2,       Properties.Resources.MenuBZip2,       index++),
-                Create(Preset.CompressGZip,        Properties.Resources.MenuGZip,        index++),
+                Create(Preset.Compress7z,    Properties.Resources.MenuSevenZip,    index++),
+                Create(Preset.CompressBz2,       Properties.Resources.MenuBZip2,       index++),
+                Create(Preset.CompressGz,        Properties.Resources.MenuGZip,        index++),
                 Create(Preset.CompressXz,          Properties.Resources.MenuXZ,          index++),
                 Create(Preset.CompressSfx,         Properties.Resources.MenuSfx,         index++),
-                Create(Preset.CompressOthers,     Properties.Resources.MenuDetails,      index++),
+                Create(Preset.CompressDetails,     Properties.Resources.MenuDetails,      index++),
             });
 
             ContextExtractPanel.Controls.AddRange(new[]
@@ -283,7 +283,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
                 Create(Preset.ExtractSource,      Properties.Resources.MenuHere,        index++),
                 Create(Preset.ExtractDesktop,     Properties.Resources.MenuDesktop,     index++),
                 Create(Preset.ExtractMyDocuments, Properties.Resources.MenuMyDocuments, index++),
-                Create(Preset.ExtractRuntime,     Properties.Resources.MenuRuntime,     index++),
+                Create(Preset.ExtractQuery,     Properties.Resources.MenuRuntime,     index++),
             });
 
             ContextCustomizeButton.Click += (s, e) => ApplyButton.Enabled = true;
@@ -307,11 +307,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             {
                 Create(Properties.Resources.MenuZip,         Preset.CompressZip),
                 Create(Properties.Resources.MenuZipPassword, Preset.CompressZipPassword),
-                Create(Properties.Resources.MenuSevenZip,    Preset.CompressSevenZip),
-                Create(Properties.Resources.MenuBZip2,       Preset.CompressBZip2),
-                Create(Properties.Resources.MenuGZip,        Preset.CompressGZip),
+                Create(Properties.Resources.MenuSevenZip,    Preset.Compress7z),
+                Create(Properties.Resources.MenuBZip2,       Preset.CompressBz2),
+                Create(Properties.Resources.MenuGZip,        Preset.CompressGz),
                 Create(Properties.Resources.MenuSfx,         Preset.CompressSfx),
-                Create(Properties.Resources.MenuDetails,     Preset.CompressOthers),
+                Create(Properties.Resources.MenuDetails,     Preset.CompressDetails),
             };
         }
 
