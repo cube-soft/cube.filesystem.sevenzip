@@ -127,9 +127,9 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* --------------------------------------------------------------------- */
         public static Context ToContext(this Preset src) => new()
         {
-            Name      = ToName(src),
-            Arguments = string.Join(" ", ToArguments(src)),
-            IconIndex = ToIconIndex(src),
+            Name      = src.ToName(),
+            Arguments = string.Join(" ", src.ToArguments()),
+            IconIndex = src.ToIconIndex(),
         };
 
         /* --------------------------------------------------------------------- */
@@ -190,10 +190,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             if (!src.HasFlag(root)) return;
 
-            var ctx   = ToContext(root);
+            var ctx   = root.ToContext();
             var items = GetMenu(root).Where(e => src.HasFlag(e));
 
-            foreach (var e in items) ctx.Children.Add(ToContext(e));
+            foreach (var e in items) ctx.Children.Add(e.ToContext());
             if (ctx.Children.Count > 0) dest.Add(ctx);
         }
 
