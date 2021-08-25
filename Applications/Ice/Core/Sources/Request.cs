@@ -15,10 +15,10 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.String;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -27,12 +27,8 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// Request
     ///
     /// <summary>
-    /// CubeICE へのリクエスト内容を表すオブジェクトです。
+    /// Represents the request to the CubeICE.
     /// </summary>
-    ///
-    /// <remarks>
-    /// リクエストはコマンドライン経由で指定されます。
-    /// </remarks>
     ///
     /* --------------------------------------------------------------------- */
     public class Request
@@ -44,10 +40,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Request
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the Request class with the
+        /// specified program arguments.
         /// </summary>
         ///
-        /// <param name="args">プログラムオプション</param>
+        /// <param name="args">Program arguments.</param>
         ///
         /* ----------------------------------------------------------------- */
         public Request(IEnumerable<string> args) : this(args.ToArray()) { }
@@ -57,10 +54,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Request
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the Request class with the
+        /// specified program arguments.
         /// </summary>
         ///
-        /// <param name="args">プログラムオプション</param>
+        /// <param name="args">Program arguments.</param>
         ///
         /* ----------------------------------------------------------------- */
         public Request(string[] args)
@@ -96,7 +94,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Mode
         ///
         /// <summary>
-        /// 実行モードを取得します。
+        /// Gets the processing mode.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -107,12 +105,9 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Format
         ///
         /// <summary>
-        /// フォーマットを取得します。
+        /// Gets the archive format. This property is valid when Mode is set
+        /// to Mode.Archive.
         /// </summary>
-        ///
-        /// <remarks>
-        /// このプロパティは Mode が Archive の時に有効です。
-        /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
         public Format Format { get; private set; } = Format.Unknown;
@@ -122,7 +117,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Location
         ///
         /// <summary>
-        /// 圧縮または展開したファイルの保存位置を取得します。
+        /// Gets a value indicating the location where the compressed or
+        /// decompressed file is saved.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -130,10 +126,21 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// DropDirectory
+        ///
+        /// <summary>
+        /// Gets or sets the path of the directory to drop to.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string DropDirectory { get; set; }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Password
         ///
         /// <summary>
-        /// パスワードを設定するかどうかを示す値を取得します。
+        /// Gets a value indicating whether or not a password should be set.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -144,7 +151,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Mail
         ///
         /// <summary>
-        /// 圧縮後にメール送信するかどうかを示す値を取得します。
+        /// Gets a value indicating whether or not to send e-mail after
+        /// compression.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -155,14 +163,16 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// SuppressRecursive
         ///
         /// <summary>
-        /// 再帰的な実行を抑制するかどうかを示す値を取得します。
+        /// Gets a value indicating whether recursive execution should be
+        /// suppressed or not.
         /// </summary>
         ///
         /// <remarks>
-        /// 複数の圧縮ファイルを指定して解凍時、現在、再帰的にプロセスを
-        /// 実行する実装となっていますが、予期せぬ引数が指定する事により
-        /// 無限にプロセスが実行される懸念があります。
-        /// そのため、このプロパティでそのような事態を防止します。
+        /// When multiple compressed files are specified and decompressed,
+        /// the current implementation runs the process recursively,
+        /// but there is a concern that an unexpected argument may cause
+        /// the process to run indefinitely.
+        /// This property prevents such a situation.
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
@@ -170,21 +180,10 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// DropDirectory
-        ///
-        /// <summary>
-        /// ドロップ先のディレクトリのパスを取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string DropDirectory { get; set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// Sources
         ///
         /// <summary>
-        /// 圧縮または解凍ファイル一覧を取得します。
+        /// Gets the list of compressed or decompressed files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -195,7 +194,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Options
         ///
         /// <summary>
-        /// オプション部分の元の文字列一覧を取得します。
+        /// Gets the original string list of the option part.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -210,7 +209,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// ParseOptions
         ///
         /// <summary>
-        /// オプション引数を解析します。
+        /// Parses the optional arguments.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -246,7 +245,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// GetFormat
         ///
         /// <summary>
-        /// 文字列に対応する Format オブジェクトを取得します。
+        /// Gets the Format object corresponding to the string.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -264,7 +263,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// GetLocation
         ///
         /// <summary>
-        /// 文字列に対応する SaveLocation オブジェクトを取得します。
+        /// Gets the SaveLocation object corresponding to the string.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -285,7 +284,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// GetTail
         ///
         /// <summary>
-        /// ':' 以降の文字列を取得します。
+        /// Get the string after ':' character.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */

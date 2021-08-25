@@ -38,7 +38,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// ToName
         ///
         /// <summary>
-        /// Get the name corresponding to the specified Preset object.
+        /// Gets the name corresponding to the specified Preset object.
         /// </summary>
         ///
         /// <param name="src">Source Preset object.</param>
@@ -61,7 +61,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// ToArguments
         ///
         /// <summary>
-        /// Get the program arguments corresponding to the specified Preset
+        /// Gets the program arguments corresponding to the specified Preset
         /// object.
         /// </summary>
         ///
