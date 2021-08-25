@@ -82,422 +82,419 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public static IEnumerable<TestCaseData> TestCases
+        public static IEnumerable<TestCaseData> TestCases { get
         {
-            get
-            {
-                yield return new(
-                    @"Preset\Complex.1.0.0",
-                    new[] { "Complex.1.0.0.zip" },
-                    Preset.Extract.ToArguments(),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.CreateSmart,
-                        Filtering    = false,
-                    }
-                );
+            yield return new(
+                @"Preset\Complex.1.0.0",
+                new[] { "Complex.1.0.0.zip" },
+                Preset.Extract.ToArguments(),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.CreateSmart,
+                    Filtering    = false,
+                }
+            );
 
-                yield return new(
-                    @"Runtime\Complex.1.0.0",
-                    new[] { "Complex.1.0.0.zip" },
-                    Preset.ExtractQuery.ToArguments(),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Query,
-                        SaveMethod   = SaveMethod.CreateSmart,
-                        Filtering    = false,
-                    }
-                );
+            yield return new(
+                @"Runtime\Complex.1.0.0",
+                new[] { "Complex.1.0.0.zip" },
+                Preset.ExtractQuery.ToArguments(),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Query,
+                    SaveMethod   = SaveMethod.CreateSmart,
+                    Filtering    = false,
+                }
+            );
 
-                yield return new(
-                    @"Preset\Sample\Empty",
-                    new[] { "SampleEmpty.zip" },
-                    Preset.Extract.ToArguments(),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.CreateSmart,
-                        Filtering    = false,
-                    }
-                );
+            yield return new(
+                @"Preset\Sample\Empty",
+                new[] { "SampleEmpty.zip" },
+                Preset.Extract.ToArguments(),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.CreateSmart,
+                    Filtering    = false,
+                }
+            );
 
-                yield return new(
-                    @"Preset\フィルタリング テスト用",
-                    new[] { "SampleFilter.zip" },
-                    Preset.Extract.ToArguments(),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.CreateSmart,
-                        Filtering    = true,
-                    }
-                );
+            yield return new(
+                @"Preset\フィルタリング テスト用",
+                new[] { "SampleFilter.zip" },
+                Preset.Extract.ToArguments(),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.CreateSmart,
+                    Filtering    = true,
+                }
+            );
 
-                yield return new(
-                    @"Preset\名称未設定フォルダ",
-                    new[] { "SampleMac.zip" },
-                    Preset.Extract.ToArguments(),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.CreateSmart,
-                        Filtering    = true,
-                    }
-                );
+            yield return new(
+                @"Preset\名称未設定フォルダ",
+                new[] { "SampleMac.zip" },
+                Preset.Extract.ToArguments(),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.CreateSmart,
+                    Filtering    = true,
+                }
+            );
 
-                yield return new(
-                    @"Preset\Sample 2018.02.13",
-                    new[] { "Sample 2018.02.13.zip" },
-                    Preset.Extract.ToArguments(),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.CreateSmart,
-                        Filtering    = true,
-                    }
-                );
+            yield return new(
+                @"Preset\Sample 2018.02.13",
+                new[] { "Sample 2018.02.13.zip" },
+                Preset.Extract.ToArguments(),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.CreateSmart,
+                    Filtering    = true,
+                }
+            );
 
-                yield return new(
-                    @"Preset\Sample..DoubleDot",
-                    new[] { "Sample..DoubleDot.zip" },
-                    Preset.Extract.ToArguments(),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.CreateSmart,
-                        Filtering    = true,
-                    }
-                );
+            yield return new(
+                @"Preset\Sample..DoubleDot",
+                new[] { "Sample..DoubleDot.zip" },
+                Preset.Extract.ToArguments(),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.CreateSmart,
+                    Filtering    = true,
+                }
+            );
 
-                yield return new(
-                    @"Preset\Password",
-                    new[] { "Password.7z" },
-                    Preset.Extract.ToArguments(),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.CreateSmart,
-                    }
-                );
+            yield return new(
+                @"Preset\Password",
+                new[] { "Password.7z" },
+                Preset.Extract.ToArguments(),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.CreateSmart,
+                }
+            );
 
-                yield return new(
-                    @"RootDirectory\Single-0x00\Sample 00..01.txt",
-                    new[] { "Single.1.0.0.zip" },
-                    GetPathArgs(@"RootDirectory\Single-0x00"),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.None,
-                    }
-                );
+            yield return new(
+                @"RootDirectory\Single-0x00\Sample 00..01.txt",
+                new[] { "Single.1.0.0.zip" },
+                GetPathArgs(@"RootDirectory\Single-0x00"),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.None,
+                }
+            );
 
-                yield return new(
-                    @"RootDirectory\Single-0x01\Single.1.0.0\Sample 00..01.txt",
-                    new[] { "Single.1.0.0.zip" },
-                    GetPathArgs(@"RootDirectory\Single-0x01"),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.Create,
-                    }
-                );
+            yield return new(
+                @"RootDirectory\Single-0x01\Single.1.0.0\Sample 00..01.txt",
+                new[] { "Single.1.0.0.zip" },
+                GetPathArgs(@"RootDirectory\Single-0x01"),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.Create,
+                }
+            );
 
-                yield return new(
-                    @"RootDirectory\Single-0x03\Single.1.0.0\Sample 00..01.txt",
-                    new[] { "Single.1.0.0.zip" },
-                    GetPathArgs(@"RootDirectory\Single-0x03"),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.CreateSmart,
-                    }
-                );
+            yield return new(
+                @"RootDirectory\Single-0x03\Single.1.0.0\Sample 00..01.txt",
+                new[] { "Single.1.0.0.zip" },
+                GetPathArgs(@"RootDirectory\Single-0x03"),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.CreateSmart,
+                }
+            );
 
-                yield return new(
-                    @"RootDirectory\Single-0x05\Sample 00..01.txt",
-                    new[] { "Single.1.0.0.zip" },
-                    GetPathArgs(@"RootDirectory\Single-0x05"),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.Create | SaveMethod.SkipSingleFile,
-                    }
-                );
+            yield return new(
+                @"RootDirectory\Single-0x05\Sample 00..01.txt",
+                new[] { "Single.1.0.0.zip" },
+                GetPathArgs(@"RootDirectory\Single-0x05"),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.Create | SaveMethod.SkipSingleFile,
+                }
+            );
 
-                yield return new(
-                    @"RootDirectory\Single-0x07\Sample 00..01.txt",
-                    new[] { "Single.1.0.0.zip" },
-                    GetPathArgs(@"RootDirectory\Single-0x07"),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.Create |
-                                       SaveMethod.SkipSingleFile |
-                                       SaveMethod.SkipSingleDirectory,
-                    }
-                );
+            yield return new(
+                @"RootDirectory\Single-0x07\Sample 00..01.txt",
+                new[] { "Single.1.0.0.zip" },
+                GetPathArgs(@"RootDirectory\Single-0x07"),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.Create |
+                                    SaveMethod.SkipSingleFile |
+                                    SaveMethod.SkipSingleDirectory,
+                }
+            );
 
-                yield return new(
-                    @"RootDirectory\SingleDirectory-0x00\Sample",
-                    new[] { "SingleDirectory.1.0.0.zip" },
-                    GetPathArgs(@"RootDirectory\SingleDirectory-0x00"),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.None,
-                    }
-                );
+            yield return new(
+                @"RootDirectory\SingleDirectory-0x00\Sample",
+                new[] { "SingleDirectory.1.0.0.zip" },
+                GetPathArgs(@"RootDirectory\SingleDirectory-0x00"),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.None,
+                }
+            );
 
-                yield return new(
-                    @"RootDirectory\SingleDirectory-0x01\SingleDirectory.1.0.0",
-                    new[] { "SingleDirectory.1.0.0.zip" },
-                    GetPathArgs(@"RootDirectory\SingleDirectory-0x01"),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.Create,
-                    }
-                );
+            yield return new(
+                @"RootDirectory\SingleDirectory-0x01\SingleDirectory.1.0.0",
+                new[] { "SingleDirectory.1.0.0.zip" },
+                GetPathArgs(@"RootDirectory\SingleDirectory-0x01"),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.Create,
+                }
+            );
 
-                yield return new(
-                    @"RootDirectory\SingleDirectory-0x03\Sample",
-                    new[] { "SingleDirectory.1.0.0.zip" },
-                    GetPathArgs(@"RootDirectory\SingleDirectory-0x03"),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.CreateSmart,
-                    }
-                );
+            yield return new(
+                @"RootDirectory\SingleDirectory-0x03\Sample",
+                new[] { "SingleDirectory.1.0.0.zip" },
+                GetPathArgs(@"RootDirectory\SingleDirectory-0x03"),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.CreateSmart,
+                }
+            );
 
-                yield return new(
-                    @"RootDirectory\SingleDirectory-0x05\SingleDirectory.1.0.0",
-                    new[] { "SingleDirectory.1.0.0.zip" },
-                    GetPathArgs(@"RootDirectory\SingleDirectory-0x05"),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.Create | SaveMethod.SkipSingleFile,
-                    }
-                );
+            yield return new(
+                @"RootDirectory\SingleDirectory-0x05\SingleDirectory.1.0.0",
+                new[] { "SingleDirectory.1.0.0.zip" },
+                GetPathArgs(@"RootDirectory\SingleDirectory-0x05"),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.Create | SaveMethod.SkipSingleFile,
+                }
+            );
 
-                yield return new(
-                    @"RootDirectory\SingleDirectory-0x07\Sample",
-                    new[] { "SingleDirectory.1.0.0.zip" },
-                    GetPathArgs(@"RootDirectory\SingleDirectory-0x07"),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.Create |
-                                       SaveMethod.SkipSingleFile |
-                                       SaveMethod.SkipSingleDirectory,
-                    }
-                );
+            yield return new(
+                @"RootDirectory\SingleDirectory-0x07\Sample",
+                new[] { "SingleDirectory.1.0.0.zip" },
+                GetPathArgs(@"RootDirectory\SingleDirectory-0x07"),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.Create |
+                                    SaveMethod.SkipSingleFile |
+                                    SaveMethod.SkipSingleDirectory,
+                }
+            );
 
-                yield return new(
-                    @"RootDirectory\MultiDirectory-0x00\Directory",
-                    new[] { "MultiDirectory.1.0.0.zip" },
-                    GetPathArgs(@"RootDirectory\MultiDirectory-0x00"),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.None,
-                    }
-                );
+            yield return new(
+                @"RootDirectory\MultiDirectory-0x00\Directory",
+                new[] { "MultiDirectory.1.0.0.zip" },
+                GetPathArgs(@"RootDirectory\MultiDirectory-0x00"),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.None,
+                }
+            );
 
-                yield return new(
-                    @"RootDirectory\MultiDirectory-0x01\MultiDirectory.1.0.0",
-                    new[] { "MultiDirectory.1.0.0.zip" },
-                    GetPathArgs(@"RootDirectory\MultiDirectory-0x01"),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.Create,
-                    }
-                );
+            yield return new(
+                @"RootDirectory\MultiDirectory-0x01\MultiDirectory.1.0.0",
+                new[] { "MultiDirectory.1.0.0.zip" },
+                GetPathArgs(@"RootDirectory\MultiDirectory-0x01"),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.Create,
+                }
+            );
 
-                yield return new(
-                    @"RootDirectory\MultiDirectory-0x03\MultiDirectory.1.0.0",
-                    new[] { "MultiDirectory.1.0.0.zip" },
-                    GetPathArgs(@"RootDirectory\MultiDirectory-0x03"),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.CreateSmart,
-                    }
-                );
+            yield return new(
+                @"RootDirectory\MultiDirectory-0x03\MultiDirectory.1.0.0",
+                new[] { "MultiDirectory.1.0.0.zip" },
+                GetPathArgs(@"RootDirectory\MultiDirectory-0x03"),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.CreateSmart,
+                }
+            );
 
-                yield return new(
-                    @"RootDirectory\MultiDirectory-0x05\MultiDirectory.1.0.0",
-                    new[] { "MultiDirectory.1.0.0.zip" },
-                    GetPathArgs(@"RootDirectory\MultiDirectory-0x05"),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.Create | SaveMethod.SkipSingleFile,
-                    }
-                );
+            yield return new(
+                @"RootDirectory\MultiDirectory-0x05\MultiDirectory.1.0.0",
+                new[] { "MultiDirectory.1.0.0.zip" },
+                GetPathArgs(@"RootDirectory\MultiDirectory-0x05"),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.Create | SaveMethod.SkipSingleFile,
+                }
+            );
 
-                yield return new(
-                    @"RootDirectory\MultiDirectory-0x07\MultiDirectory.1.0.0",
-                    new[] { "MultiDirectory.1.0.0.zip" },
-                    GetPathArgs(@"RootDirectory\MultiDirectory-0x07"),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.Create |
-                                       SaveMethod.SkipSingleFile |
-                                       SaveMethod.SkipSingleDirectory,
-                    }
-                );
+            yield return new(
+                @"RootDirectory\MultiDirectory-0x07\MultiDirectory.1.0.0",
+                new[] { "MultiDirectory.1.0.0.zip" },
+                GetPathArgs(@"RootDirectory\MultiDirectory-0x07"),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.Create |
+                                    SaveMethod.SkipSingleFile |
+                                    SaveMethod.SkipSingleDirectory,
+                }
+            );
 
-                yield return new(
-                    @"RootDirectory\Complex-0x00\Foo.txt",
-                    new[] { "Complex.1.0.0.zip" },
-                    GetPathArgs(@"RootDirectory\Complex-0x00"),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.None,
-                    }
-                );
+            yield return new(
+                @"RootDirectory\Complex-0x00\Foo.txt",
+                new[] { "Complex.1.0.0.zip" },
+                GetPathArgs(@"RootDirectory\Complex-0x00"),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.None,
+                }
+            );
 
-                yield return new(
-                    @"RootDirectory\Complex-0x01\Complex.1.0.0",
-                    new[] { "Complex.1.0.0.zip" },
-                    GetPathArgs(@"RootDirectory\Complex-0x01"),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.Create,
-                    }
-                );
+            yield return new(
+                @"RootDirectory\Complex-0x01\Complex.1.0.0",
+                new[] { "Complex.1.0.0.zip" },
+                GetPathArgs(@"RootDirectory\Complex-0x01"),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.Create,
+                }
+            );
 
-                yield return new(
-                    @"RootDirectory\Complex-0x03\Complex.1.0.0",
-                    new[] { "Complex.1.0.0.zip" },
-                    GetPathArgs(@"RootDirectory\Complex-0x03"),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.CreateSmart,
-                    }
-                );
+            yield return new(
+                @"RootDirectory\Complex-0x03\Complex.1.0.0",
+                new[] { "Complex.1.0.0.zip" },
+                GetPathArgs(@"RootDirectory\Complex-0x03"),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.CreateSmart,
+                }
+            );
 
-                yield return new(
-                    @"RootDirectory\Complex-0x05\Complex.1.0.0",
-                    new[] { "Complex.1.0.0.zip" },
-                    GetPathArgs(@"RootDirectory\Complex-0x05"),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.Create | SaveMethod.SkipSingleFile,
-                    }
-                );
+            yield return new(
+                @"RootDirectory\Complex-0x05\Complex.1.0.0",
+                new[] { "Complex.1.0.0.zip" },
+                GetPathArgs(@"RootDirectory\Complex-0x05"),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.Create | SaveMethod.SkipSingleFile,
+                }
+            );
 
-                yield return new(
-                    @"RootDirectory\Complex-0x07\Complex.1.0.0",
-                    new[] { "Complex.1.0.0.zip" },
-                    GetPathArgs(@"RootDirectory\Complex-0x07"),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.Create |
-                                       SaveMethod.SkipSingleFile |
-                                       SaveMethod.SkipSingleDirectory,
-                    }
-                );
+            yield return new(
+                @"RootDirectory\Complex-0x07\Complex.1.0.0",
+                new[] { "Complex.1.0.0.zip" },
+                GetPathArgs(@"RootDirectory\Complex-0x07"),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.Create |
+                                    SaveMethod.SkipSingleFile |
+                                    SaveMethod.SkipSingleDirectory,
+                }
+            );
 
-                yield return new(
-                    @"Tar\TarSample",
-                    new[] { "Sample.tar" },
-                    GetPathArgs("Tar"),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.CreateSmart,
-                    }
-                );
+            yield return new(
+                @"Tar\TarSample",
+                new[] { "Sample.tar" },
+                GetPathArgs("Tar"),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.CreateSmart,
+                }
+            );
 
-                yield return new(
-                    @"Tar\BZipSample\TarSample",
-                    new[] { "Sample.tbz" },
-                    GetPathArgs(@"Tar\BZipSample"),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.CreateSmart,
-                    }
-                );
+            yield return new(
+                @"Tar\BZipSample\TarSample",
+                new[] { "Sample.tbz" },
+                GetPathArgs(@"Tar\BZipSample"),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.CreateSmart,
+                }
+            );
 
-                yield return new(
-                    @"Tar\GZipSample\TarSample",
-                    new[] { "Sample.tgz" },
-                    GetPathArgs(@"Tar\GZipSample"),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.CreateSmart,
-                    }
-                );
+            yield return new(
+                @"Tar\GZipSample\TarSample",
+                new[] { "Sample.tgz" },
+                GetPathArgs(@"Tar\GZipSample"),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.CreateSmart,
+                }
+            );
 
-                //yield return new TestCaseData(
-                //    @"Tar\LzmaSample\Sample",
-                //    new[] { "Sample.tar.lzma" },
-                //    GetPathArgs(@"Tar\LzmaSample"),
-                //    new ExtractValue
-                //    {
-                //        SaveLocation = SaveLocation.Preset,
-                //        SaveMethod   = SaveMethod.CreateSmart,
-                //    }
-                //);
+            //yield return new TestCaseData(
+            //    @"Tar\LzmaSample\Sample",
+            //    new[] { "Sample.tar.lzma" },
+            //    GetPathArgs(@"Tar\LzmaSample"),
+            //    new ExtractValue
+            //    {
+            //        SaveLocation = SaveLocation.Preset,
+            //        SaveMethod   = SaveMethod.CreateSmart,
+            //    }
+            //);
 
-                //yield return new TestCaseData(
-                //    @"Tar\LzwSample\Sample",
-                //    new[] { "Sample.tar.z" },
-                //    GetPathArgs(@"Tar\LzwSample"),
-                //    new ExtractValue
-                //    {
-                //        SaveLocation = SaveLocation.Preset,
-                //        SaveMethod  = SaveMethod.CreateSmart,
-                //    }
-                //);
+            //yield return new TestCaseData(
+            //    @"Tar\LzwSample\Sample",
+            //    new[] { "Sample.tar.z" },
+            //    GetPathArgs(@"Tar\LzwSample"),
+            //    new ExtractValue
+            //    {
+            //        SaveLocation = SaveLocation.Preset,
+            //        SaveMethod  = SaveMethod.CreateSmart,
+            //    }
+            //);
 
-                yield return new(
-                    @"Bz2Sample\Sample\Sample.txt",
-                    new[] { "Sample.txt.bz2" },
-                    GetPathArgs("Bz2Sample"),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.CreateSmart,
-                    }
-                );
+            yield return new(
+                @"Bz2Sample\Sample\Sample.txt",
+                new[] { "Sample.txt.bz2" },
+                GetPathArgs("Bz2Sample"),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.CreateSmart,
+                }
+            );
 
-                yield return new(
-                    @"SfxSample\Sample\Foo.txt",
-                    new[] { "SampleSfx.exe" },
-                    GetPathArgs("SfxSample"),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.CreateSmart,
-                    }
-                );
+            yield return new(
+                @"SfxSample\Sample\Foo.txt",
+                new[] { "SampleSfx.exe" },
+                GetPathArgs("SfxSample"),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.CreateSmart,
+                }
+            );
 
-                yield return new(
-                    @"Multiple\Complex.1.0.0",
-                    new[] { "Complex.1.0.0.zip", "Single.1.0.0.zip" },
-                    GetPathArgs("Multiple"),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod = SaveMethod.CreateSmart,
-                    }
-                );
-            }
-        }
+            yield return new(
+                @"Multiple\Complex.1.0.0",
+                new[] { "Complex.1.0.0.zip", "Single.1.0.0.zip" },
+                GetPathArgs("Multiple"),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod = SaveMethod.CreateSmart,
+                }
+            );
+        }}
 
         #endregion
 

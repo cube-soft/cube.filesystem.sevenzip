@@ -15,12 +15,12 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System;
+using System.Threading;
 using Cube.Mixin.Assembly;
 using Cube.Mixin.Observing;
 using Cube.Tests;
 using NUnit.Framework;
-using System;
-using System.Threading;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
 {

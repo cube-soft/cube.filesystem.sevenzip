@@ -15,11 +15,10 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System;
 using Cube.FileSystem.SevenZip.Ice.Settings;
 using Cube.Tests;
 using NUnit.Framework;
-using System;
-using System.Reflection;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
@@ -35,6 +34,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
     [TestFixture]
     class SettingTest : FileFixture
     {
+        #region Tests
+
         /* ----------------------------------------------------------------- */
         ///
         /// Create
@@ -133,5 +134,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             Assert.That(dest.CompressionLevel, Is.EqualTo(CompressionLevel.High));
             Assert.That(dest.ThreadCount,      Is.EqualTo(3));
         }
+
+        #endregion
     }
 }

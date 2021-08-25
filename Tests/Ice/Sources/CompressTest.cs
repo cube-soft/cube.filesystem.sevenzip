@@ -80,143 +80,133 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// TestCases
         ///
         /// <summary>
-        /// Gets the test cases.
+        /// Gets the test cases. Format is: destination, source files,
+        /// other arguments, and user settings.
         /// </summary>
         ///
-        /// <remarks>
-        /// テストケースには、以下の順で指定します。
-        /// - 保存パス
-        /// - 圧縮ファイル名一覧
-        /// - コマンドライン引数一覧
-        /// - ユーザ設定用オブジェクト
-        /// </remarks>
-        ///
         /* ----------------------------------------------------------------- */
-        private static IEnumerable<TestCaseData> TestCases
+        private static IEnumerable<TestCaseData> TestCases { get
         {
-            get
-            {
-                yield return new TestCaseData(
-                    @"Preset\Sample.zip",
-                    new[] { "Sample.txt" },
-                    Preset.Compress.ToArguments(),
-                    new CompressSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        OpenMethod   = OpenMethod.None,
-                        Filtering    = true,
-                    }
-                );
+            yield return new(
+                @"Preset\Sample.zip",
+                new[] { "Sample.txt" },
+                Preset.Compress.ToArguments(),
+                new CompressSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    OpenMethod   = OpenMethod.None,
+                    Filtering    = true,
+                }
+            );
 
-                yield return new TestCaseData(
-                    @"Preset\Sample 00..01.zip",
-                    new[] { "Sample 00..01" },
-                    Preset.Compress.ToArguments(),
-                    new CompressSetting
-                    {
-                        SaveLocation  = SaveLocation.Preset,
-                        OpenMethod    = OpenMethod.None,
-                        Filtering     = true,
-                    }
-                );
+            yield return new(
+                @"Preset\Sample 00..01.zip",
+                new[] { "Sample 00..01" },
+                Preset.Compress.ToArguments(),
+                new CompressSetting
+                {
+                    SaveLocation  = SaveLocation.Preset,
+                    OpenMethod    = OpenMethod.None,
+                    Filtering     = true,
+                }
+            );
 
-                yield return new TestCaseData(
-                    @"Preset\Sample.7z",
-                    new[] { "Sample.txt", "Sample 00..01" },
-                    Preset.Compress7z.ToArguments(),
-                    new CompressSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        OpenMethod   = OpenMethod.None,
-                        Filtering    = false,
-                    }
-                );
+            yield return new(
+                @"Preset\Sample.7z",
+                new[] { "Sample.txt", "Sample 00..01" },
+                Preset.Compress7z.ToArguments(),
+                new CompressSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    OpenMethod   = OpenMethod.None,
+                    Filtering    = false,
+                }
+            );
 
-                yield return new TestCaseData(
-                    @"Preset\Sample.tar.bz2",
-                    new[] { "Sample.txt", "Sample 00..01" },
-                    Preset.CompressBz2.ToArguments(),
-                    new CompressSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        OpenMethod   = OpenMethod.None,
-                        Filtering    = true,
-                    }
-                );
+            yield return new(
+                @"Preset\Sample.tar.bz2",
+                new[] { "Sample.txt", "Sample 00..01" },
+                Preset.CompressBz2.ToArguments(),
+                new CompressSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    OpenMethod   = OpenMethod.None,
+                    Filtering    = true,
+                }
+            );
 
-                yield return new TestCaseData(
-                    @"Preset\Sample.exe",
-                    new[] { "Sample.txt", "Sample 00..01" },
-                    Preset.CompressSfx.ToArguments(),
-                    new CompressSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        OpenMethod   = OpenMethod.None,
-                        Filtering    = true,
-                    }
-                );
+            yield return new(
+                @"Preset\Sample.exe",
+                new[] { "Sample.txt", "Sample 00..01" },
+                Preset.CompressSfx.ToArguments(),
+                new CompressSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    OpenMethod   = OpenMethod.None,
+                    Filtering    = true,
+                }
+            );
 
-                yield return new TestCaseData(
-                    @"Runtime\Sample.zip",
-                    new[] { "Sample.txt", "Sample 00..01" },
-                    Preset.CompressDetails.ToArguments(),
-                    new CompressSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        OpenMethod   = OpenMethod.None,
-                        Filtering    = true,
-                    }
-                );
+            yield return new(
+                @"Runtime\Sample.zip",
+                new[] { "Sample.txt", "Sample 00..01" },
+                Preset.CompressDetails.ToArguments(),
+                new CompressSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    OpenMethod   = OpenMethod.None,
+                    Filtering    = true,
+                }
+            );
 
-                yield return new TestCaseData(
-                    @"Runtime\Sample.7z",
-                    new[] { "Sample.txt", "Sample 00..01" },
-                    Preset.Compress7z.ToArguments().Concat(new[] { "/p" }),
-                    new CompressSetting
-                    {
-                        SaveLocation = SaveLocation.Query,
-                        OpenMethod   = OpenMethod.None,
-                        Filtering    = true,
-                    }
-                );
+            yield return new(
+                @"Runtime\Sample.7z",
+                new[] { "Sample.txt", "Sample 00..01" },
+                Preset.Compress7z.ToArguments().Concat(new[] { "/p" }),
+                new CompressSetting
+                {
+                    SaveLocation = SaveLocation.Query,
+                    OpenMethod   = OpenMethod.None,
+                    Filtering    = true,
+                }
+            );
 
-                yield return new TestCaseData(
-                    @"Runtime\Sample.tar.bz2",
-                    new[] { "Sample.txt", "Sample 00..01" },
-                    Preset.CompressBz2.ToArguments().Concat(new[] { "/o:runtime" }),
-                    new CompressSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        OpenMethod   = OpenMethod.None,
-                        Filtering    = true,
-                    }
-                );
+            yield return new(
+                @"Runtime\Sample.tar.bz2",
+                new[] { "Sample.txt", "Sample 00..01" },
+                Preset.CompressBz2.ToArguments().Concat(new[] { "/o:runtime" }),
+                new CompressSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    OpenMethod   = OpenMethod.None,
+                    Filtering    = true,
+                }
+            );
 
-                yield return new TestCaseData(
-                    @"Drop\Sample.tar.gz",
-                    new[] { "Sample.txt", "Sample 00..01" },
-                    GetPathArgs(Preset.CompressGz, "Drop"),
-                    new CompressSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        OpenMethod   = OpenMethod.None,
-                        Filtering    = true,
-                    }
-                );
+            yield return new(
+                @"Drop\Sample.tar.gz",
+                new[] { "Sample.txt", "Sample 00..01" },
+                GetPathArgs(Preset.CompressGz, "Drop"),
+                new CompressSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    OpenMethod   = OpenMethod.None,
+                    Filtering    = true,
+                }
+            );
 
-                yield return new TestCaseData(
-                    @"Drop\Sample.tar.xz",
-                    new[] { "Sample.txt", "Sample 00..01" },
-                    GetPathArgs(Preset.CompressXz, "Drop"),
-                    new CompressSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        OpenMethod   = OpenMethod.None,
-                        Filtering    = true,
-                    }
-                );
-            }
-        }
+            yield return new(
+                @"Drop\Sample.tar.xz",
+                new[] { "Sample.txt", "Sample 00..01" },
+                GetPathArgs(Preset.CompressXz, "Drop"),
+                new CompressSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    OpenMethod   = OpenMethod.None,
+                    Filtering    = true,
+                }
+            );
+        }}
 
         #endregion
 

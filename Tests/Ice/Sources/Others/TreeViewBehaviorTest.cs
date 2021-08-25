@@ -15,11 +15,11 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.SevenZip.Ice.Settings;
-using NUnit.Framework;
 using System;
 using System.Threading;
 using System.Windows.Forms;
+using Cube.FileSystem.SevenZip.Ice.Settings;
+using NUnit.Framework;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
 {

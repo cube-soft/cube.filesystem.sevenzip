@@ -37,33 +37,33 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Convert_Lite
+        /// Create
         ///
         /// <summary>
-        /// Tests the constructor and the conversion.
+        /// Tests the constructor.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [TestCaseSource(nameof(TestCases))]
+        public string Create(string src, Format format, CompressionMethod method) =>
+            new ArchiveName(src, format, method).Value.FullName;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create_Lite
+        ///
+        /// <summary>
+        /// Tests the constructor.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Convert_Lite()
+        public void Create_Lite()
         {
             var src = new ArchiveName(@"c:\foo\bar\src.txt", Format.Zip);
             Assert.That(src.Format, Is.EqualTo(Format.Zip));
             Assert.That(src.Value.FullName, Is.EqualTo(@"c:\foo\bar\src.zip"));
         }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Convert
-        ///
-        /// <summary>
-        /// Tests the constructor and the conversion.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [TestCaseSource(nameof(TestCases))]
-        public string Convert(string src, Format format, CompressionMethod method) =>
-            new ArchiveName(src, format, method).Value.FullName;
 
         #endregion
 

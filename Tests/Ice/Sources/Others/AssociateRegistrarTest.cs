@@ -15,11 +15,11 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Tests;
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cube.Tests;
+using NUnit.Framework;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
@@ -28,7 +28,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
     /// AssociateRegistrarTest
     ///
     /// <summary>
-    /// AssociateSettings のテスト用クラスです。
+    /// Tests the AssociateRegistrar class.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -63,10 +63,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// </summary>
         ///
         /// <remarks>
-        /// Update では HKEY_CLASSES_ROOT 下のサブキーを修正をしようとする
-        /// ため、通常のアクセス権限では操作に失敗します。管理者権限で
-        /// 実行された場合は、CubeICE が対応する全ての拡張子に対して、
-        /// 関連付けを解除します。
+        /// The Update method will try to modify the subkeys under
+        /// HKEY_CLASSES_ROOT, and the operation will fail with normal access
+        /// privileges. If run with administrator privileges, the CubeICE will
+        /// unassociate all corresponding extensions.
         /// </remarks>
         ///
         /* --------------------------------------------------------------------- */
@@ -110,21 +110,18 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// </summary>
         ///
         /* --------------------------------------------------------------------- */
-        private static IEnumerable<TestCaseData> TestCases
+        private static IEnumerable<TestCaseData> TestCases { get
         {
-            get
-            {
-                yield return new TestCaseData(
-                    "C:\\Program Files\\CubeICE\\cubeice.exe",
-                    new List<string> { "/x" }
-                ).Returns("\"C:\\Program Files\\CubeICE\\cubeice.exe\" \"/x\" \"%1\"");
+            yield return new TestCaseData(
+                "C:\\Program Files\\CubeICE\\cubeice.exe",
+                new List<string> { "/x" }
+            ).Returns("\"C:\\Program Files\\CubeICE\\cubeice.exe\" \"/x\" \"%1\"");
 
-                yield return new TestCaseData(
-                    "C:\\Program Files (x86)\\CubeICE\\cubeice.exe",
-                    new List<string>()
-                ).Returns("\"C:\\Program Files (x86)\\CubeICE\\cubeice.exe\" \"%1\"");
-            }
-        }
+            yield return new TestCaseData(
+                "C:\\Program Files (x86)\\CubeICE\\cubeice.exe",
+                new List<string>()
+            ).Returns("\"C:\\Program Files (x86)\\CubeICE\\cubeice.exe\" \"%1\"");
+        }}
 
         #endregion
     }

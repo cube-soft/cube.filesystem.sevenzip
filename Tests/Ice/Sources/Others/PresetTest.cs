@@ -15,36 +15,36 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using NUnit.Framework;
 using System.Linq;
+using NUnit.Framework;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// PresetMenuTest
+    /// PresetTest
     ///
     /// <summary>
-    /// Tests the PresetMenu enum.
+    /// Tests the Preset enum.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class PresetMenuTest
+    class PresetTest
     {
         #region Tests
 
         /* --------------------------------------------------------------------- */
         ///
-        /// ToContextMenuGroup
+        /// ToContextCollection
         ///
         /// <summary>
-        /// Tests the ToContextMenuGroup method.
+        /// Tests the ToContextCollection method.
         /// </summary>
         ///
         /* --------------------------------------------------------------------- */
         [Test]
-        public void ToContextMenuGroup()
+        public void ToContextCollection()
         {
             var dest = Preset.DefaultContext.ToContextCollection().ToList();
             Assert.That(dest.Count,   Is.EqualTo(2));
@@ -86,18 +86,18 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [TestCase(Preset.Extract,             ExpectedResult = 1)]
         [TestCase(Preset.ExtractDesktop,      ExpectedResult = 2)]
         [TestCase(Preset.ExtractMyDocuments,  ExpectedResult = 2)]
-        [TestCase(Preset.ExtractQuery,      ExpectedResult = 2)]
+        [TestCase(Preset.ExtractQuery,        ExpectedResult = 2)]
         [TestCase(Preset.ExtractSource,       ExpectedResult = 2)]
         [TestCase(Preset.Settings,            ExpectedResult = 0)]
         [TestCase(Preset.Mail,                ExpectedResult = 2)]
         [TestCase(Preset.MailZip,             ExpectedResult = 2)]
         [TestCase(Preset.MailZipPassword,     ExpectedResult = 3)]
-        [TestCase(Preset.Mail7z,        ExpectedResult = 2)]
-        [TestCase(Preset.MailBz2,           ExpectedResult = 2)]
-        [TestCase(Preset.MailGz,            ExpectedResult = 2)]
+        [TestCase(Preset.Mail7z,              ExpectedResult = 2)]
+        [TestCase(Preset.MailBz2,             ExpectedResult = 2)]
+        [TestCase(Preset.MailGz,              ExpectedResult = 2)]
         [TestCase(Preset.MailXz,              ExpectedResult = 2)]
         [TestCase(Preset.MailSfx,             ExpectedResult = 2)]
-        [TestCase(Preset.MailDetails,          ExpectedResult = 2)]
+        [TestCase(Preset.MailDetails,         ExpectedResult = 2)]
         public int ToArguments(Preset menu) => menu.ToArguments().Count();
 
         #endregion
