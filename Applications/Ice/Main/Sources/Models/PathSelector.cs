@@ -194,7 +194,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                 case SaveLocation.Source:
                     return Io.Get(Source).DirectoryName;
                 case SaveLocation.Explicit:
-                    return Request.DropDirectory;
+                    return Request.Directory;
                 case SaveLocation.Query:
                     var msg = SelectQuery.NewMessage(Source, Format);
                     Query?.Request(msg);

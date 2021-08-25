@@ -126,14 +126,14 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// DropDirectory
+        /// Directory
         ///
         /// <summary>
-        /// Gets or sets the path of the directory to drop to.
+        /// Gets or sets the path of the directory to save.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string DropDirectory { get; set; }
+        public string Directory { get; private set; } = string.Empty;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -227,14 +227,16 @@ namespace Cube.FileSystem.SevenZip.Ice
                     if (args[i] == "/m") Mail = true;
                     else if (args[i] == "/p") Password = true;
                     else if (args[i] == "/sr") SuppressRecursive = true;
-                    else if (args[i].StartsWith("/o")) Location = GetLocation(args[i]);
-                    else if (args[i].StartsWith("/drop")) DropDirectory = GetTail(args[i]);
+                    else if (args[i].StartsWith("/o:")) Location = GetLocation(args[i]);
+                    else if (args[i].StartsWith("/save:")) Directory = GetTail(args[i]);
+                    else if (args[i].StartsWith("/drop:")) Directory = GetTail(args[i]);
                 }
             }
 
-            var droppable = Location == SaveLocation.Unknown ||
-                            Location == SaveLocation.Source;
-            if (DropDirectory.HasValue() && droppable) Location = SaveLocation.Explicit;
+            var ignore = Location == SaveLocation.Unknown ||
+                         Location == SaveLocation.Preset  ||
+                         Location == SaveLocation.Source;
+            if (Directory.HasValue() && ignore) Location = SaveLocation.Explicit;
 
             Sources = sources;
             Options = options;
@@ -249,12 +251,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private Format GetFormat(string s)
+        private Format GetFormat(string src)
         {
-            var index = s.IndexOf(':');
-            if (index < 0 || index >= s.Length - 1) return Format.Zip;
+            var index = src.IndexOf(':');
+            if (index < 0 || index >= src.Length - 1) return Format.Zip;
 
-            var query = s.Substring(index + 1).ToLowerInvariant();
+            var query = src.Substring(index + 1).ToLowerInvariant();
             return Formatter.FromString(query);
         }
 
@@ -267,9 +269,9 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private SaveLocation GetLocation(string s)
+        private SaveLocation GetLocation(string src)
         {
-            var query = GetTail(s).ToLowerInvariant();
+            var query = GetTail(src).ToLowerInvariant();
             if (!query.HasValue()) return SaveLocation.Unknown;
 
             foreach (SaveLocation item in Enum.GetValues(typeof(SaveLocation)))
@@ -288,11 +290,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetTail(string s)
+        private string GetTail(string src)
         {
-            var index = s.IndexOf(':');
-            return index >= 0 && index < s.Length - 1 ?
-                   s.Substring(index + 1) :
+            var index = src.IndexOf(':');
+            return index >= 0 && index < src.Length - 1 ?
+                   src.Substring(index + 1) :
                    string.Empty;
         }
 

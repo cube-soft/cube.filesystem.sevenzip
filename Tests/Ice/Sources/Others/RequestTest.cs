@@ -107,23 +107,24 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Create_WrongDrop
+        /// Create_WrongDirectory
         ///
         /// <summary>
         /// Tests the constructor with arguments that contain a wrong
-        /// "/drop" option.
+        /// "/save" or "/drop" option.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [Test]
-        public void Create_WrongDrop()
+        [TestCase("/drop")]
+        [TestCase("/save")]
+        public void Create_WrongDirectory(string arg)
         {
-            var dest = new Request(new[] { "/x", "/sr", "/o:source", "/drop", "/dummy" });
+            var dest = new Request(new[] { "/x", "/sr", "/o:source", arg, "/dummy" });
             Assert.That(dest.Options.Count(),   Is.EqualTo(4));
             Assert.That(dest.Mode,              Is.EqualTo(Mode.Extract));
             Assert.That(dest.Location,          Is.EqualTo(SaveLocation.Source));
+            Assert.That(dest.Directory,         Is.Empty);
             Assert.That(dest.SuppressRecursive, Is.True);
-            Assert.That(dest.DropDirectory,     Is.Empty);
         }
 
         #endregion
