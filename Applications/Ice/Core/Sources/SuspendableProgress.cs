@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Threading;
+using Cube.Logging;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -43,33 +44,17 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// with the specified arguments.
         /// </summary>
         ///
-        /// <param name="token">Cancellation token.</param>
-        /// <param name="suspend">Value to suspend the progress.</param>
+        /// <param name="cancel">Cancellation token.</param>
+        /// <param name="suspend">Object to suspend the progress.</param>
         /// <param name="callback">Callback action.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public SuspendableProgress(CancellationToken token, WaitHandle suspend, Action<T> callback)
+        public SuspendableProgress(CancellationToken cancel, WaitHandle suspend, Action<T> callback)
         {
-            _token = token;
-            _suspend = suspend;
-
-            ProgressChanged += (s, e) => callback?.Invoke(e);
+            _cancel   = cancel;
+            _suspend  = suspend  ?? throw new ArgumentNullException(nameof(suspend));
+            _callback = callback ?? throw new ArgumentNullException(nameof(callback));
         }
-
-        #endregion
-
-        #region Events
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ProgressChanged
-        ///
-        /// <summary>
-        /// Occurs when the current progress is changed.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public event EventHandler<T> ProgressChanged;
 
         #endregion
 
@@ -86,25 +71,24 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="value">Current progress.</param>
         ///
         /// <remarks>
-        /// WaitHandle のチェック後に CancellationToken をチェックします。
-        /// したがって、キャンセル処理を発生させるには WaitHnale をシグナル状態に
-        /// して下さい。
+        /// Check CancellationToken after checking WaitHandle.
+        /// Therefore, WaitHnale must be in the signal state in order for
+        /// the cancellation process to invoke.
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
         public void Report(T value)
         {
-            _ = _suspend?.WaitOne();
-            _token.ThrowIfCancellationRequested();
-
-            System.Diagnostics.Debug.Assert(ProgressChanged != null);
-            ProgressChanged(this, value);
+            if (!_suspend.WaitOne()) GetType().LogWarn($"WaitOne:False");
+            _cancel.ThrowIfCancellationRequested();
+            _callback(value);
         }
 
         #endregion
 
         #region Fields
-        private readonly CancellationToken _token;
+        private readonly Action<T> _callback;
+        private readonly CancellationToken _cancel;
         private readonly WaitHandle _suspend;
         #endregion
     }
