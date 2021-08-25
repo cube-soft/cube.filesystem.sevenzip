@@ -15,23 +15,22 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.SevenZip.Ice;
-using NUnit.Framework;
 using System;
+using NUnit.Framework;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ViewResourceTest
+    /// ResourceTest
     ///
     /// <summary>
-    /// ViewResource のテスト用クラスです。
+    /// Tests the Resource class.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class ViewResourceTest
+    class ResourceTest
     {
         #region Tests
 
@@ -40,31 +39,29 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// Formats
         ///
         /// <summary>
-        /// Format で指定可能な種類を確認します。
+        /// Tests the Formats property.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [TestCase(4)]
-        public void Formats(int expected)
+        [Test]
+        public void Formats()
         {
-            Assert.That(ViewResource.Formats.Count, Is.EqualTo(expected));
-            Assert.That(ViewResource.Formats.Count, Is.EqualTo(expected));
+            Assert.That(Resource.Formats.Count, Is.EqualTo(4));
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CompressionLevel
+        /// CompressionLevels
         ///
         /// <summary>
-        /// CompressionLevel で指定可能な種類を確認します。
+        /// Tests the CompressionLevels property.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [TestCase(6)]
-        public void CompressionLevel(int expected)
+        [Test]
+        public void CompressionLevels()
         {
-            Assert.That(ViewResource.CompressionLevels.Count, Is.EqualTo(expected));
-            Assert.That(ViewResource.CompressionLevels.Count, Is.EqualTo(expected));
+            Assert.That(Resource.CompressionLevels.Count, Is.EqualTo(6));
         }
 
         /* ----------------------------------------------------------------- */
@@ -72,55 +69,37 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// CompressionMethods
         ///
         /// <summary>
-        /// CompressionMethod で指定可能な種類を確認します。
+        /// Tests the CompressionMethods property.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [TestCase(4)]
-        public void CompressionMethods(int expected)
+        [Test]
+        public void CompressionMethods()
         {
-            Assert.That(ViewResource.CompressionMethods.Count, Is.EqualTo(expected));
-            Assert.That(ViewResource.CompressionMethods.Count, Is.EqualTo(expected));
+            Assert.That(Resource.CompressionMethods.Count, Is.EqualTo(4));
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// EncryptionMethod
+        /// EncryptionMethods
         ///
         /// <summary>
-        /// EncryptionMethod で指定可能な種類を確認します。
+        /// Tests the EncryptionMethods property.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [TestCase(4)]
-        public void EncryptionMethod(int expected)
+        [Test]
+        public void EncryptionMethods()
         {
-            Assert.That(ViewResource.EncryptionMethods.Count, Is.EqualTo(expected));
-            Assert.That(ViewResource.EncryptionMethods.Count, Is.EqualTo(expected));
+            Assert.That(Resource.EncryptionMethods.Count, Is.EqualTo(4));
         }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// IsEncryptionSupported
-        ///
-        /// <summary>
-        /// 暗号化に対応しているかどうかを判別するテストを実行します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [TestCase(Format.Zip,      ExpectedResult =  true)]
-        [TestCase(Format.SevenZip, ExpectedResult =  true)]
-        [TestCase(Format.Sfx,      ExpectedResult =  true)]
-        [TestCase(Format.Tar,      ExpectedResult = false)]
-        public bool IsEncryptionSupported(Format format) =>
-            ViewResource.IsEncryptionSupported(format);
 
         /* ----------------------------------------------------------------- */
         ///
         /// GetTimeString
         ///
         /// <summary>
-        /// TimeSpan オブジェクトの書式化のテストを実行します。
+        /// Tests the GetTimeString method.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -130,14 +109,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [TestCase(0, 23, 59, 59, ExpectedResult = "23:59:59")]
         [TestCase(1, 23, 59, 59, ExpectedResult = "47:59:59")]
         public string GetTimeString(int day, int hour, int min, int sec) =>
-            ViewResource.GetTimeString(new TimeSpan(day, hour, min, sec));
+            Resource.GetTimeString(new TimeSpan(day, hour, min, sec));
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetCompressionMethod
+        /// GetCompressionMethods
         ///
         /// <summary>
-        /// 各 Format に対応する CompressionMethod の種類を確認します。
+        /// Tests the GetCompressionMethods method.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -146,18 +125,17 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [TestCase(Format.Tar,      4)]
         [TestCase(Format.Sfx,      6)]
         [TestCase(Format.BZip2,    0)]
-        public void GetCompressionMethod(Format format, int expected)
+        public void GetCompressionMethod(Format format, int n)
         {
-            Assert.That(ViewResource.GetCompressionMethod(format)?.Count ?? 0, Is.EqualTo(expected));
-            Assert.That(ViewResource.GetCompressionMethod(format)?.Count ?? 0, Is.EqualTo(expected));
+            Assert.That(Resource.GetCompressionMethods(format)?.Count ?? 0, Is.EqualTo(n));
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetFilter
+        /// GetExtensionFilter
         ///
         /// <summary>
-        /// Format に対応する 拡張子フィルタを取得するテストを実行します。
+        /// Tests the GetExtensionFilter method.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -168,9 +146,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [TestCase(Format.BZip2,    "*.tar.bz2;*.tb2;*.tar.bz;*.tbz")]
         [TestCase(Format.XZ,       "*.tar.xz;*.txz")]
         [TestCase(Format.Sfx,      "*.exe")]
-        public void GetFilter(Format format, string piece)
+        public void GetExtensionFilter(Format format, string piece)
         {
-            var dest = ViewResource.GetFilter(format);
+            var dest = Resource.GetExtensionFilter(format);
             Assert.That(dest.Contains("*.*"),                    Is.True);
             Assert.That(dest.Contains(piece),                    Is.True);
             Assert.That(dest.Contains(piece.ToUpperInvariant()), Is.True);
@@ -181,14 +159,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// GetFilter_7z
         ///
         /// <summary>
-        /// 7z に対応する 拡張子フィルタを取得するテストを実行します。
+        /// Tests the GetExtensionFilter method.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void GetFilter_7z()
+        public void GetExtensionFilter_7z()
         {
-            var dest = ViewResource.GetFilter("7z");
+            var dest = Resource.GetExtensionFilter("7z");
             Assert.That(dest.Contains("*.*"),  Is.True);
             Assert.That(dest.Contains("*.7z"), Is.True);
             Assert.That(dest.Contains("*.7Z"), Is.True);
@@ -196,18 +174,19 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetFilter_NotSupported
+        /// GetExtensionFilter_NotSupported()
         ///
         /// <summary>
-        /// 圧縮処理に非対応の形式が指定された時の挙動を確認します。
+        /// Tests the GetExtensionFilter method.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void GetFilter_NotSupported() => Assert.That(
-            ViewResource.GetFilter(Format.Rar),
-            Is.EqualTo("すべてのファイル (*.*)|*.*")
-        );
+        public void GetExtensionFilter_NotSupported()
+        {
+            var dest = Resource.GetExtensionFilter(Format.Rar);
+            Assert.That(dest, Is.EqualTo("すべてのファイル (*.*)|*.*"));
+        }
 
         #endregion
     }

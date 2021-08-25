@@ -76,6 +76,21 @@ namespace Cube.FileSystem.SevenZip.Tests
 
         /* ----------------------------------------------------------------- */
         ///
+        /// IsEncryptionSupported
+        ///
+        /// <summary>
+        /// Tests the IsEncryptionSupported extended method.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [TestCase(Format.Zip,      ExpectedResult = true)]
+        [TestCase(Format.SevenZip, ExpectedResult = true)]
+        [TestCase(Format.Sfx,      ExpectedResult = true)]
+        [TestCase(Format.Tar,      ExpectedResult = false)]
+        public bool IsEncryptionSupported(Format src) => src.IsEncryptionSupported();
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// FromFile_NotFound
         ///
         /// <summary>

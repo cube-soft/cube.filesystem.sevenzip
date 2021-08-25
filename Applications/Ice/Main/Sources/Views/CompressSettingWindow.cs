@@ -232,7 +232,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         private void UpdateFormat() =>
-            Update(FormatComboBox, ViewResource.Formats, 0);
+            Update(FormatComboBox, Resource.Formats, 0);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -244,7 +244,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         private void UpdateCompressionLevel() =>
-            Update(CompressionLevelComboBox, ViewResource.CompressionLevels, 5);
+            Update(CompressionLevelComboBox, Resource.CompressionLevels, 5);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -256,7 +256,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         private void UpdateCompressionMethod() =>
-            Update(CompressionMethodComboBox, ViewResource.GetCompressionMethod(Format), 0);
+            Update(CompressionMethodComboBox, Resource.GetCompressionMethods(Format), 0);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -268,7 +268,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         private void UpdateEncryptionMethod() =>
-            Update(EncryptionMethodComboBox, ViewResource.EncryptionMethods, 0);
+            Update(EncryptionMethodComboBox, Resource.EncryptionMethods, 0);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -281,7 +281,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void UpdateEncryptionCondition()
         {
-            EncryptionGroupBox.Enabled       = ViewResource.IsEncryptionSupported(Format);
+            EncryptionGroupBox.Enabled       = Format.IsEncryptionSupported();
             EncryptionPanel.Enabled          = EncryptionCheckBox.Checked;
             EncryptionMethodComboBox.Enabled = (Format == Format.Zip);
             IsValidEncryption                = !EncryptionGroupBox.Enabled ||

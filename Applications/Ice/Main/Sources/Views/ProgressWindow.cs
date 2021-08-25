@@ -244,7 +244,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                 RemainLabel.Visible = value > TimeSpan.Zero;
                 RemainLabel.Text = string.Format("{0} : {1}",
                     Properties.Resources.MessageRemainTime,
-                    ViewResource.GetTimeString(value)
+                    Resource.GetTimeString(value)
                 );
             }
         }
@@ -373,7 +373,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         private void UpdateElapseLabel() => ElapseLabel.Text = string.Format(
             "{0} : {1}",
             Properties.Resources.MessageElapsedTime,
-            ViewResource.GetTimeString(Elapsed)
+            Resource.GetTimeString(Elapsed)
         );
 
         /* ----------------------------------------------------------------- */

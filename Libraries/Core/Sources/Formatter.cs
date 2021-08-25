@@ -265,6 +265,25 @@ namespace Cube.FileSystem.SevenZip
 
         #endregion
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// IsEncryptionSupported
+        ///
+        /// <summary>
+        /// Determines whether or not the specified format supports
+        /// encryption.
+        /// </summary>
+        ///
+        /// <param name="src">Archive format.</param>
+        ///
+        /// <returns>true for supported.</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static bool IsEncryptionSupported(this Format src) =>
+            src == Format.Zip ||
+            src == Format.SevenZip ||
+            src == Format.Sfx;
+
         #endregion
 
         #region Implementations
