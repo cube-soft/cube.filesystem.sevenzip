@@ -24,49 +24,78 @@ namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// PathExplorer
+    /// ExtractDirectory
     ///
     /// <summary>
-    /// Provides functionality to determine the paths of directories.
+    /// Provides functionality to determine the paths of directories when
+    /// extracting the archive.
     /// </summary>
     ///
-    /// <remarks>
-    /// The class is used in the ExtractFacade class.
-    /// </remarks>
-    ///
     /* --------------------------------------------------------------------- */
-    internal sealed class PathExplorer
+    public sealed class ExtractDirectory
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// PathExplorer
+        /// ExtractDirectory
         ///
         /// <summary>
-        /// Initializes a new instance of the PathExplorer class with the
-        /// specified arguments.
+        /// Initializes a new instance of the ExtractDirectory class with
+        /// the specified arguments.
         /// </summary>
         ///
-        /// <param name="root">Path of the root directory.</param>
+        /// <param name="src">Path of the root directory.</param>
         /// <param name="settings">User settings.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public PathExplorer(string root, SettingFolder settings)
-        {
-            Method  = settings.Value.Extract.SaveMethod;
-            Filters = settings.Value.Extract.Filtering ?
-                      settings.Value.GetFilters() :
-                      Enumerable.Empty<string>();
+        public ExtractDirectory(string src, SettingFolder settings) : this(
+            src,
+            settings.Value.Extract.SaveMethod,
+            settings.Value.Extract.Filtering ?
+            settings.Value.GetFilters() :
+            Enumerable.Empty<string>()
+        ) { }
 
-            RootDirectory = root;
-            SaveDirectory = root;
-            OpenDirectory = root;
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ExtractDirectory
+        ///
+        /// <summary>
+        /// Initializes a new instance of the ExtractDirectory class with
+        /// the specified arguments.
+        /// </summary>
+        ///
+        /// <param name="src">Path of the root directory.</param>
+        /// <param name="method">Save method.</param>
+        /// <param name="filters">
+        /// Collection of file or directory names to filter.
+        /// </param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ExtractDirectory(string src, SaveMethod method, IEnumerable<string> filters)
+        {
+            Source      = src;
+            Value       = src;
+            ValueToOpen = src;
+            Method      = method;
+            Filters     = filters;
         }
 
         #endregion
 
         #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Source
+        ///
+        /// <summary>
+        /// Gets the path of the provided directory.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Source { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -92,36 +121,26 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// RootDirectory
+        /// Value
         ///
         /// <summary>
-        /// Gets the path of the root directory.
+        /// Gets the directory path to save the extracted files and
+        /// directories.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string RootDirectory { get; }
+        public string Value { get; private set; }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SaveDirectory
+        /// ValueToOpen
         ///
         /// <summary>
-        /// Gets the directory path to save.
+        /// Gets the directory path to open after extracted.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string SaveDirectory { get; private set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OpenDirectory
-        ///
-        /// <summary>
-        /// Gets the directory path to open.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string OpenDirectory { get; private set; }
+        public string ValueToOpen { get; private set; }
 
         #endregion
 
@@ -129,29 +148,26 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Invoke
+        /// Resolve
         ///
         /// <summary>
-        /// Invokes the search action.
+        /// Invokes the path determination.
         /// </summary>
         ///
         /// <param name="basename">
-        /// Name that may be used in the SaveDirectory.
+        /// Name that may be used in the Value property.
         /// </param>
         ///
         /// <param name="items">
-        /// Collection of files or directories in the archive.
+        /// Files or directories in the archive.
         /// </param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Invoke(string basename, IEnumerable<ArchiveEntity> items)
+        public void Resolve(string basename, IEnumerable<ArchiveEntity> items)
         {
             var hints = GetHints(items);
-
-            SaveDirectory = IsSame(hints) ?
-                            RootDirectory :
-                            Io.Combine(RootDirectory, basename);
-            OpenDirectory = GetOpenDirectory(hints);
+            Value = IsSame(hints) ? Source : Io.Combine(Source, basename);
+            ValueToOpen = GetOpenDirectory(hints);
         }
 
         #endregion
@@ -178,10 +194,10 @@ namespace Cube.FileSystem.SevenZip.Ice
                        src.Where(e => !new PathFilter(e.FullName).MatchAny(Filters)) :
                        src;
 
-            foreach (var item in cvt)
+            foreach (var e in cvt)
             {
-                if (!item.FullName.HasValue()) continue;
-                _ = dest.Add(GetHint(item));
+                if (!e.FullName.HasValue()) continue;
+                _ = dest.Add(GetHint(e));
                 if (dest.Count >= 2) break;
             }
 
@@ -219,8 +235,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private string GetOpenDirectory(IEnumerable<string> hints) =>
             hints.Take(2).Count() == 1 && hints.First() != WildCard ?
-            Io.Combine(RootDirectory, hints.First()) :
-            RootDirectory;
+            Io.Combine(Source, hints.First()) :
+            Source;
 
         /* ----------------------------------------------------------------- */
         ///

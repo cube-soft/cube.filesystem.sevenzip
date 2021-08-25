@@ -94,7 +94,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             foreach (var src in Request.Sources)
             {
                 Source = src;
-                var explorer = new PathExplorer(SelectAction.Get(this), Settings);
+                var explorer = new ExtractDirectory(SelectAction.Get(this), Settings);
                 InvokePreProcess(explorer);
                 Invoke(explorer);
                 InvokePostProcess(explorer);
@@ -114,7 +114,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Invoke(PathExplorer explorer) => Open(Source, e =>
+        private void Invoke(ExtractDirectory explorer) => Open(Source, e =>
         {
             GetType().LogDebug($"{nameof(e.Format)}:{e.Format}", $"{nameof(e.Source)}:{e.Source}");
             if (e.Items.Count == 1) Extract(e, 0, explorer);
@@ -130,9 +130,9 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void InvokePreProcess(PathExplorer explorer)
+        private void InvokePreProcess(ExtractDirectory explorer)
         {
-            SetTemp(explorer.RootDirectory);
+            SetTemp(explorer.Source);
         }
 
         /* ----------------------------------------------------------------- */
@@ -144,11 +144,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void InvokePostProcess(PathExplorer explorer)
+        private void InvokePostProcess(ExtractDirectory explorer)
         {
             var es  = Settings.Value.Extract;
             var app = Settings.Value.Explorer;
-            OpenAction.Invoke(Io.Get(explorer.OpenDirectory), es.OpenMethod, app);
+            OpenAction.Invoke(Io.Get(explorer.ValueToOpen), es.OpenMethod, app);
             if (es.DeleteSource) GetType().LogWarn(() => Io.Delete(Source));
         }
 
@@ -161,7 +161,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Extract(ArchiveReader src, PathExplorer explorer)
+        private void Extract(ArchiveReader src, ExtractDirectory explorer)
         {
             SetDestination(src, explorer);
 
@@ -183,7 +183,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Extract(ArchiveReader src, int index, PathExplorer explorer)
+        private void Extract(ArchiveReader src, int index, ExtractDirectory explorer)
         {
             SetDestination(src, explorer);
 
@@ -256,11 +256,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void SetDestination(ArchiveReader src, PathExplorer explorer)
+        private void SetDestination(ArchiveReader src, ExtractDirectory explorer)
         {
             var basename = Io.Get(src.Source).GetBaseName(src.Format);
-            explorer.Invoke(basename, src.Items);
-            SetDestination(explorer.SaveDirectory);
+            explorer.Resolve(basename, src.Items);
+            SetDestination(explorer.Value);
         }
 
         /* ----------------------------------------------------------------- */

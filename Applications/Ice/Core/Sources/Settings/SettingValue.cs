@@ -218,11 +218,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// GetFilters
         ///
         /// <summary>
-        /// Gets the collection of filter strings.
+        /// Gets the collection of file or directory names to filter.
         /// </summary>
         ///
         /// <returns>
-        /// Collection of values to filter files and directories.
+        /// Collection of file or directory names to filter.
         /// </returns>
         ///
         /* ----------------------------------------------------------------- */
@@ -233,7 +233,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// GetFilters
         ///
         /// <summary>
-        /// Gets the collection of filter strings.
+        /// Gets the collection of file or directory names to filter.
         /// </summary>
         ///
         /// <param name="enabled">
@@ -241,7 +241,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </param>
         ///
         /// <returns>
-        /// Collection of values to filter files and directories.
+        /// Collection of file or directory names to filter.
         /// </returns>
         ///
         /* ----------------------------------------------------------------- */

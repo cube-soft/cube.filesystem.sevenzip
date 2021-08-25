@@ -28,7 +28,7 @@ using (var writer = new ArchiveWriter(Format.Zip))
 {
     writer.Add(@"path\to\file");
     writer.Add(@"path\to\directory_including_files");
-    writer.Option  = new ZipOption { CompressionLevel = CompressionLevel.Ultra };
+    writer.Options = new ZipOption { CompressionLevel = CompressionLevel.Ultra };
     writer.Filters = new[] { ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini" };
     
     var progress = new Progress<Report>(e => DoSomething(e));
