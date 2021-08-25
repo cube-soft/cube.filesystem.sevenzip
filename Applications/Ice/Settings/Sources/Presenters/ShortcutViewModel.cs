@@ -137,7 +137,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Sync() => Facade.Sync();
+        public void Sync() => Facade.Load();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -148,7 +148,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Update() => Facade.Update();
+        public void Update() => Facade.Save();
 
         /* ----------------------------------------------------------------- */
         ///

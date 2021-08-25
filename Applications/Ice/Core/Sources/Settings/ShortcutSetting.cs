@@ -19,6 +19,8 @@ using System;
 using System.Linq;
 using System.Runtime.Serialization;
 using Cube.Mixin.Assembly;
+using Cube.Mixin.Collections;
+using Cube.Mixin.Environment;
 using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
@@ -59,11 +61,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /// <summary>
         /// Gets or sets the path to create shortcut links.
+        /// If not set, the shortcut will be created on the desktop.
         /// </summary>
-        ///
-        /// <remarks>
-        /// 未設定の場合はデスクトップに作成されます。
-        /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
         public string Directory
@@ -78,7 +77,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Sync
+        /// Load
         ///
         /// <summary>
         /// Applies the current shortcut link existence to properties of
@@ -86,7 +85,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Sync()
+        public void Load()
         {
             var b0 = new Shortcut { FullName = GetFileName(Properties.Resources.ScArcive) }.Exists;
             if (b0) Preset |= Preset.Compress;
@@ -103,18 +102,18 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Update
+        /// Save
         ///
         /// <summary>
         /// Creates or removes shortcut links.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Update()
+        public void Save()
         {
-            UpdateArchive();
-            UpdateExtract();
-            UpdateSettings();
+            SaveCompressShortcut();
+            SaveExtractShortcut();
+            SaveSettingShortcut();
         }
 
         #endregion
@@ -123,14 +122,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// UpdateArchive
+        /// SaveCompressShortcut
         ///
         /// <summary>
         /// Creates or removes the shortcut link for compressing.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void UpdateArchive()
+        private void SaveCompressShortcut()
         {
             var src  = GetFileName(Properties.Resources.ScArcive);
             var dest = GetLink("cubeice.exe");
@@ -138,7 +137,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             {
                 FullName     = src,
                 Target       = dest,
-                Arguments    = string.Join(" ", Preset.ToArguments().Select(e => e.Quote())),
+                Arguments    = Preset.ToArguments().Select(e => e.Quote()).Join(" "),
                 IconLocation = $"{dest},1",
             };
 
@@ -148,14 +147,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// UpdateExtract
+        /// SaveExtractShortcut
         ///
         /// <summary>
         /// Creates or removes the shortcut link for extracting.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void UpdateExtract()
+        private void SaveExtractShortcut()
         {
             var src  = GetFileName(Properties.Resources.ScExtract);
             var dest = GetLink("cubeice.exe");
@@ -163,7 +162,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             {
                 FullName     = src,
                 Target       = dest,
-                Arguments    = string.Join(" ", Preset.Extract.ToArguments().Select(e => e.Quote())),
+                Arguments    = Preset.Extract.ToArguments().Select(e => e.Quote()).Join(" "),
                 IconLocation = $"{dest},2",
             };
 
@@ -173,14 +172,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// UpdateSettings
+        /// SaveSettingShortcut
         ///
         /// <summary>
         /// Creates or removes the shortcut link for settings.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void UpdateSettings()
+        private void SaveSettingShortcut()
         {
             var src  = GetFileName(Properties.Resources.ScSettings);
             var dest = GetLink("cubeice-setting.exe");
@@ -208,8 +207,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         {
             var dir = Directory.HasValue() ?
                       Directory :
-                      Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            return System.IO.Path.Combine(dir, name);
+                      Environment.SpecialFolder.Desktop.GetName();
+            return Io.Combine(dir, name);
         }
 
         /* ----------------------------------------------------------------- */
@@ -221,7 +220,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetLink(string filename) => System.IO.Path.Combine(
+        private string GetLink(string filename) => Io.Combine(
             typeof(ShortcutSetting).Assembly.GetDirectoryName(),
             filename
         );

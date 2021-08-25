@@ -53,6 +53,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         protected CompressViewModel NewVM(IEnumerable<string> args, CompressSetting settings)
         {
             var ss = NewSettings();
+
             ss.Value.Compress = settings;
             ss.Value.Compress.OpenMethod = OpenMethod.None;
             ss.Value.Compress.SaveDirectory = Get("Preset");
@@ -78,6 +79,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         protected ExtractViewModel NewVM(IEnumerable<string> args, ExtractSetting settings)
         {
             var ss = NewSettings();
+
             ss.Value.Extract = settings;
             ss.Value.Extract.OpenMethod = OpenMethod.None;
 
@@ -124,9 +126,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /* ----------------------------------------------------------------- */
         public SettingFolder NewSettings()
         {
-            var fmt  = DataContract.Format.Json;
-            var src  = Get("Settings.json");
-            var dest = new SettingFolder(GetType().Assembly, fmt, src);
+            var dest = new SettingFolder(DataContract.Format.Json, Get("Settings.json"));
 
             dest.Value.Filters  = "Filter.txt|FilterDirectory|__MACOSX";
             dest.Value.Explorer = "dummy.exe";

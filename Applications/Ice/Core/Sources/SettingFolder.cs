@@ -16,7 +16,6 @@
 //
 /* ------------------------------------------------------------------------- */
 using System.Reflection;
-using Cube.FileSystem.SevenZip.Ice.Settings;
 using Cube.Mixin.Assembly;
 
 namespace Cube.FileSystem.SevenZip.Ice
@@ -30,7 +29,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class SettingFolder : SettingFolder<SettingValue>
+    public class SettingFolder : SettingFolder<Settings.SettingValue>
     {
         #region Constructors
 
@@ -43,11 +42,23 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public SettingFolder() : this(
-            typeof(SettingFolder).Assembly,
-            DataContract.Format.Registry,
-            @"CubeSoft\CubeICE\v3"
-        ) { }
+        public SettingFolder() : this(DataContract.Format.Registry, @"CubeSoft\CubeICE\v3") { }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SettingFolder
+        ///
+        /// <summary>
+        /// Initializes a new instance of the SettingFolder with the
+        /// specified parameters.
+        /// </summary>
+        ///
+        /// <param name="format">Serialized format.</param>
+        /// <param name="location">Location for the settings.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public SettingFolder(DataContract.Format format, string location) :
+            this(typeof(SettingFolder).Assembly, format, location) { }
 
         /* ----------------------------------------------------------------- */
         ///

@@ -81,26 +81,26 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             src.Preset = menu;
             Assert.That(src.Preset, Is.EqualTo(menu));
 
-            src.Sync();
+            src.Load();
             Assert.That(src.Preset.HasFlag(Preset.Compress),       Is.False);
             Assert.That(src.Preset.HasFlag(Preset.CompressDetails), Is.True);
             Assert.That(src.Preset.HasFlag(Preset.Extract),        Is.False);
             Assert.That(src.Preset.HasFlag(Preset.Settings),       Is.False);
 
             src.Preset = menu;
-            src.Update();
+            src.Save();
             Assert.That(archive.Exists,  Is.True);
             Assert.That(extract.Exists,  Is.True);
             Assert.That(settings.Exists, Is.True);
 
             src.Preset = Preset.None;
-            src.Sync();
+            src.Load();
             Assert.That(src.Preset.HasFlag(Preset.Compress), Is.True);
             Assert.That(src.Preset.HasFlag(Preset.Extract),  Is.True);
             Assert.That(src.Preset.HasFlag(Preset.Settings), Is.True);
 
             src.Preset = Preset.None;
-            src.Update();
+            src.Save();
             Assert.That(archive.Exists,  Is.False);
             Assert.That(extract.Exists,  Is.False);
             Assert.That(settings.Exists, Is.False);
