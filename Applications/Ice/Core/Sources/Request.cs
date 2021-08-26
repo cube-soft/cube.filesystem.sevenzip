@@ -148,18 +148,6 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Mail
-        ///
-        /// <summary>
-        /// Gets a value indicating whether or not to send e-mail after
-        /// compression.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public bool Mail { get; private set; } = false;
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// SuppressRecursive
         ///
         /// <summary>
@@ -224,8 +212,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                 else
                 {
                     options.Add(args[i]);
-                    if (args[i] == "/m") Mail = true;
-                    else if (args[i] == "/p") Password = true;
+                    if (args[i] == "/p") Password = true;
                     else if (args[i] == "/sr") SuppressRecursive = true;
                     else if (args[i].StartsWith("/o:")) Location = GetLocation(args[i]);
                     else if (args[i].StartsWith("/save:")) Directory = GetTail(args[i]);

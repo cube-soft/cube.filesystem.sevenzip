@@ -67,7 +67,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressRuntimeQuery Runtime { get; set; }
+        public CompressQuery Runtime { get; set; }
 
         #endregion
 
@@ -84,7 +84,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         protected override void OnExecute() => Contract(() =>
         {
-            var src = Runtime.GetValue(Request.Sources.First(), Request.Format);
+            var src = Runtime.Get(Request.Sources.First(), Request.Format);
             InvokePreProcess(src);
             Invoke(src);
             InvokePostProcess();
@@ -148,7 +148,6 @@ namespace Cube.FileSystem.SevenZip.Ice
                 Settings.Value.Compress.OpenMethod,
                 Settings.Value.Explorer
             );
-            if (Request.Mail) MailAction.Invoke(Destination);
         }
 
         /* ----------------------------------------------------------------- */
