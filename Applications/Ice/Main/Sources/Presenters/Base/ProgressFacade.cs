@@ -98,7 +98,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <returns>Progress object.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public IProgress<Report> GetProgress() => GetProgress(OnReceive);
+        public IProgress<Report> GetProgress() => GetProgress(e => e.CopyTo(Report));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -131,7 +131,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             {
                 _timer.Start();
                 State = TimerState.Run;
-                OnExecute();
+                Invoke();
                 Terminate();
             }
             catch (OperationCanceledException) { /* user cancel */ }
@@ -191,35 +191,14 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OnExecute
+        /// Invoke
         ///
         /// <summary>
-        /// Executes the main operation.
+        /// Invokes the main process.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected abstract void OnExecute();
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnReceive
-        ///
-        /// <summary>
-        /// Occurs when the current progress report is received.
-        /// </summary>
-        ///
-        /// <param name="src">Current progress report.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected virtual void OnReceive(Report src)
-        {
-            Report.Current    = src.Current;
-            Report.Status     = src.Status;
-            Report.Count      = src.Count;
-            Report.TotalCount = src.TotalCount;
-            Report.Bytes      = src.Bytes;
-            Report.TotalBytes = src.TotalBytes;
-        }
+        protected abstract void Invoke();
 
         /* ----------------------------------------------------------------- */
         ///

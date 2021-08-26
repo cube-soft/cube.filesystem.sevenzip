@@ -82,44 +82,32 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OnExecute
+        /// Invoke
         ///
         /// <summary>
-        /// Executes the main operation.
+        /// Invokes the main process.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected override void OnExecute() => Contract(() =>
+        protected override void Invoke()
         {
+            Require(Select,    nameof(Select));
+            Require(Password,  nameof(Password));
+            Require(Overwrite, nameof(Overwrite));
+
             foreach (var src in Request.Sources)
             {
                 Source = src;
-                var explorer = new ExtractDirectory(this.Select(), Settings);
-                InvokePreProcess(explorer);
-                Invoke(explorer);
-                InvokePostProcess(explorer);
+                var dir = new ExtractDirectory(this.Select(), Settings);
+                InvokePreProcess(dir);
+                Invoke(dir);
+                InvokePostProcess(dir);
             }
-        });
+        }
 
         #endregion
 
         #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Invoke
-        ///
-        /// <summary>
-        /// Invokes the main operation.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Invoke(ExtractDirectory explorer) => Open(Source, e =>
-        {
-            GetType().LogDebug($"{nameof(e.Format)}:{e.Format}", $"{nameof(e.Source)}:{e.Source}");
-            if (e.Items.Count == 1) Extract(e, 0, explorer);
-            else Extract(e, explorer);
-        });
 
         /* ----------------------------------------------------------------- */
         ///
@@ -151,6 +139,21 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Invoke
+        ///
+        /// <summary>
+        /// Invokes the main operation.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Invoke(ExtractDirectory explorer) => Open(Source, e => {
+            GetType().LogDebug($"{nameof(e.Format)}:{e.Format}", $"{nameof(e.Source)}:{e.Source}");
+            if (e.Items.Count == 1) Extract(e, 0, explorer);
+            else Extract(e, explorer);
+        });
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Extract
         ///
         /// <summary>
@@ -164,7 +167,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 
             var filters  = Settings.Value.GetFilters(Settings.Value.Extract.Filtering);
             var progress = GetProgress(e => {
-                OnReceive(e);
+                e.CopyTo(Report);
                 if (Report.Status == ReportStatus.End) Move(e.Current);
             });
 
@@ -224,24 +227,6 @@ namespace Cube.FileSystem.SevenZip.Ice
             var dest = Io.Get(Io.Combine(Destination, item.FullName));
             if (dest.Exists) src.Move(dest, Overwrite.Get(src, dest));
             else src.Move(dest);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Contract
-        ///
-        /// <summary>
-        /// Checks the conditions before executing the main operation.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Contract(Action callback)
-        {
-            Require(Select,    nameof(Select));
-            Require(Password,  nameof(Password));
-            Require(Overwrite, nameof(Overwrite));
-
-            callback();
         }
 
         /* ----------------------------------------------------------------- */

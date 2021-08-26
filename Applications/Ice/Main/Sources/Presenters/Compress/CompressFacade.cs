@@ -15,7 +15,6 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System;
 using System.Linq;
 using Cube.FileSystem.SevenZip.Ice.Settings;
 using Cube.Logging;
@@ -75,20 +74,24 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OnExecute
+        /// Invoke
         ///
         /// <summary>
-        /// Executes the main operation.
+        /// Invokes the main process.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected override void OnExecute() => Contract(() =>
+        protected override void Invoke()
         {
+            Require(Select,   nameof(Select));
+            Require(Password, nameof(Password));
+            Require(Runtime,  nameof(Runtime));
+
             var src = Runtime.Get(Request.Sources.First(), Request.Format);
             InvokePreProcess(src);
             Invoke(src);
             InvokePostProcess();
-        });
+        }
 
         #endregion
 
@@ -167,24 +170,6 @@ namespace Cube.FileSystem.SevenZip.Ice
                 }
                 else Password.Request(e);
             }) : null;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Contract
-        ///
-        /// <summary>
-        /// Checks the conditions before executing the main operation.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Contract(Action callback)
-        {
-            Require(Select,   nameof(Select));
-            Require(Password, nameof(Password));
-            Require(Runtime,  nameof(Runtime));
-
-            callback();
-        }
 
         #endregion
     }
