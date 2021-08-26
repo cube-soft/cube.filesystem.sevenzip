@@ -33,7 +33,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal sealed class PathSelector
+    public sealed class PathSelector
     {
         #region Constructors
 

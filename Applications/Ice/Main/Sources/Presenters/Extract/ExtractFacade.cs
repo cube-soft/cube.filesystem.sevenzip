@@ -94,7 +94,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             foreach (var src in Request.Sources)
             {
                 Source = src;
-                var explorer = new ExtractDirectory(SaveAction.Get(this), Settings);
+                var explorer = new ExtractDirectory(this.Select(), Settings);
                 InvokePreProcess(explorer);
                 Invoke(explorer);
                 InvokePostProcess(explorer);

@@ -24,67 +24,79 @@ namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// SaveAction
+    /// CompressExtension
     ///
     /// <summary>
-    /// Provides functionality to select the save directory.
+    /// Provides extended methods of the CompressFacade class.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal static class SaveAction
+    internal static class CompressExtension
     {
         #region Methods
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Get
+        /// Select
         ///
         /// <summary>
-        /// Gets the directory to save the compressed archive.
+        /// Gets the directory to save the compressed archive file.
+        /// The method may query the user as needed.
         /// </summary>
         ///
-        /// <param name="facade">Facade for compressing.</param>
-        /// <param name="rts">Runtime settings.</param>
+        /// <param name="src">Source object.</param>
+        /// <param name="settings">Runtime compress settings.</param>
         ///
         /// <returns>Path to save.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static string Get(CompressFacade facade, CompressRuntimeSetting rts)
+        public static string Select(this CompressFacade src, CompressRuntimeSetting settings)
         {
-            if (rts.Path.HasValue()) return rts.Path;
+            if (settings.Path.HasValue()) return settings.Path;
 
-            var settings = facade.Settings.Value.Compress;
+            var ss   = src.Settings.Value.Compress;
+            var name = new ArchiveName(src.Request.Sources.First(), src.Request.Format);
+            var ps   = new PathSelector(src.Request, ss, name) { Query = src.Select };
+            if (ps.Location == SaveLocation.Query) return ps.Value;
 
-            var name = new ArchiveName(facade.Request.Sources.First(), facade.Request.Format);
-            var selector = new PathSelector(facade.Request, settings, name) { Query = facade.Select };
-            if (selector.Location == SaveLocation.Query) return selector.Value;
-
-            var dest = Io.Combine(selector.Value, name.Value.Name);
-            return Io.Exists(dest) && settings.OverwritePrompt ?
-                   AskDestination(facade, dest, name.Format) :
+            var dest = Io.Combine(ps.Value, name.Value.Name);
+            return Io.Exists(dest) && ss.OverwritePrompt ?
+                   AskDestination(src, dest, name.Format) :
                    dest;
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Get
+        /// GetTitle
         ///
         /// <summary>
-        /// Gets the directory to save the extracted files or directories.
+        /// Gets the title displayed in the main window.
         /// </summary>
         ///
-        /// <param name="facade">Facade for extracting.</param>
+        /// <param name="src">Source object.</param>
         ///
-        /// <returns>Path to save.</returns>
+        /// <returns>Title displayed in the main window.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static string Get(ExtractFacade facade) => new PathSelector(
-            facade.Request,
-            facade.Settings.Value.Extract
-        ) {
-            Source = facade.Source,
-            Query  = facade.Select,
-        }.Value;
+        public static string GetTitle(this CompressFacade src) => src.GetTitle(src.Destination);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetText
+        ///
+        /// <summary>
+        /// Gets the text displayed in the main window.
+        /// </summary>
+        ///
+        /// <param name="src">Source object.</param>
+        ///
+        /// <returns>Text that represents the current status.</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static string GetText(this CompressFacade src) =>
+            src.Destination.HasValue() ?
+            string.Format(Properties.Resources.MessageArchive, src.Destination) :
+            Properties.Resources.MessagePreArchive;
 
         #endregion
 

@@ -23,84 +23,16 @@ namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// FacadeExtension
+    /// ProgressExtension
     ///
     /// <summary>
-    /// Represents the extended methods of facade classes.
+    /// Provides extended methods of the ProgressFacade class.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal static class FacadeExtension
+    internal static class ProgressExtension
     {
         #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetTitle
-        ///
-        /// <summary>
-        /// Gets the title of application.
-        /// </summary>
-        ///
-        /// <param name="src">Facade to create an archive.</param>
-        ///
-        /// <returns>Title of application.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static string GetTitle(this CompressFacade src) =>
-            GetTitle(src, src.Destination);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetTitle
-        ///
-        /// <summary>
-        /// Gets the title of application.
-        /// </summary>
-        ///
-        /// <param name="src">Facade to extract an archive.</param>
-        ///
-        /// <returns>Title of application.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static string GetTitle(this ExtractFacade src) =>
-            GetTitle(src, src.Source);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetText
-        ///
-        /// <summary>
-        /// Gets the text displayed in the main window.
-        /// </summary>
-        ///
-        /// <param name="src">Facade to create an archive.</param>
-        ///
-        /// <returns>Text that represents the current status.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static string GetText(this CompressFacade src) =>
-            src.Destination.HasValue() ?
-            string.Format(Properties.Resources.MessageArchive, src.Destination) :
-            Properties.Resources.MessagePreArchive;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetText
-        ///
-        /// <summary>
-        /// Gets the text displayed in the main window.
-        /// </summary>
-        ///
-        /// <param name="src">Facade to extract an archive.</param>
-        ///
-        /// <returns>Text that represents the current status.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static string GetText(this ExtractFacade src) =>
-            src.Report.Current != null ?
-            src.Report.Current.FullName :
-            Properties.Resources.MessagePreExtract;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -130,10 +62,6 @@ namespace Cube.FileSystem.SevenZip.Ice
             }
         }
 
-        #endregion
-
-        #region Implementations
-
         /* ----------------------------------------------------------------- */
         ///
         /// GetTitle
@@ -148,7 +76,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <returns>Title of application.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        private static string GetTitle(ArchiveFacade src, string path)
+        public static string GetTitle(this ProgressFacade src, string path)
         {
             var percentage = (int)(src.Report.Ratio * 100.0);
             var dest = new StringBuilder();

@@ -129,7 +129,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void InvokePreProcess(CompressRuntimeSetting src)
         {
-            SetDestination(SaveAction.Get(this, src));
+            SetDestination(this.Select(src));
             SetTemp(Io.Get(Destination).DirectoryName);
         }
 
