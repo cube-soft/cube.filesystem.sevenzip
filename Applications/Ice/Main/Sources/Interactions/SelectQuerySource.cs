@@ -15,68 +15,8 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System;
-
 namespace Cube.FileSystem.SevenZip.Ice
 {
-    #region SelectQuery
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// SelectQuery
-    ///
-    /// <summary>
-    /// Provides functionality to query a save path.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    public sealed class SelectQuery : Query<SelectQuerySource, string>
-    {
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SelectPathQuery
-        ///
-        /// <summary>
-        /// Initializes a new instance of the SelectPathQuery class with
-        /// the specified action.
-        /// </summary>
-        ///
-        /// <param name="callback">User action.</param>
-        /// <param name="dispatcher">Dispatcher object.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public SelectQuery(
-            Action<QueryMessage<SelectQuerySource, string>> callback,
-            Dispatcher dispatcher
-        ) : base(callback, dispatcher) { }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// NewMessage
-        ///
-        /// <summary>
-        /// Creates a new instance of the QueryMessage class with the
-        /// specified arguments.
-        /// </summary>
-        ///
-        /// <param name="src">Path of the source file.</param>
-        /// <param name="format">Compression format.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static QueryMessage<SelectQuerySource, string> NewMessage(
-            string src, Format format) =>
-            new QueryMessage<SelectQuerySource, string>
-        {
-            Source = new SelectQuerySource(src, format),
-            Value  = string.Empty,
-            Cancel = true,
-        };
-    }
-
-    #endregion
-
-    #region SelectQuerySource
-
     /* --------------------------------------------------------------------- */
     ///
     /// SelectQuerySource
@@ -129,6 +69,4 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         public Format Format { get; }
     }
-
-    #endregion
 }

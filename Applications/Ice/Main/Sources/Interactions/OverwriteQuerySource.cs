@@ -15,91 +15,65 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System;
-using System.Diagnostics;
-using Cube.Logging;
-using Cube.Mixin.Environment;
-using Cube.Mixin.String;
-
 namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// OpenAction
+    /// OverwriteQuerySource
     ///
     /// <summary>
-    /// Provides functionality to open the directory.
+    /// Represents the request information to query an overwrite method.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal static class OpenAction
+    public sealed class OverwriteQuerySource
     {
-        #region Methods
+        #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Invoke
+        /// OverwriteQuerySource
         ///
         /// <summary>
-        /// Invokes the action.
+        /// Initializes a new instance of the OverwriteQuerySource class
+        /// with the specified arguments.
         /// </summary>
         ///
-        /// <param name="src">Path to open.</param>
-        /// <param name="method">Method to open.</param>
-        /// <param name="exec">Path of the application.</param>
+        /// <param name="src">File information to overwrite.</param>
+        /// <param name="dest">File information to be overwritten.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void Invoke(Entity src, OpenMethod method, string exec)
+        public OverwriteQuerySource(Entity src, Entity dest)
         {
-            if (!method.HasFlag(OpenMethod.Open)) return;
-            var dest = src.IsDirectory ? src.FullName : src.DirectoryName;
-            if (IsSkip(dest, method)) return;
-
-            var cvt = exec.HasValue() ? exec : "explorer.exe";
-            typeof(OpenAction).LogDebug($"Path:{src.FullName.Quote()}", $"Explorer:{cvt.Quote()}");
-            Start(cvt, src.FullName.Quote());
+            Source      = src;
+            Destination = dest;
         }
 
         #endregion
 
-        #region Implementations
+        #region Properties
 
         /* ----------------------------------------------------------------- */
         ///
-        /// IsSkip
+        /// Source
         ///
         /// <summary>
-        /// Determines whether to skip the action.
+        /// Gets the file information to overwrite.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static bool IsSkip(string src, OpenMethod method) =>
-            method.HasFlag(OpenMethod.SkipDesktop) ?
-            src.FuzzyEquals(Environment.SpecialFolder.Desktop.GetName()) :
-            false;
+        public Entity Source { get; }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Create
+        /// Destination
         ///
         /// <summary>
-        /// Creates a new instance of the ProcessStartInfo class with the
-        /// specified arguments.
+        /// Gets the file information to be overwritten.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static void Start(string exec, string args) => new Process
-        {
-            StartInfo = new ProcessStartInfo
-            {
-                FileName        = exec,
-                Arguments       = args,
-                CreateNoWindow  = false,
-                UseShellExecute = true,
-                LoadUserProfile = false,
-                WindowStyle     = ProcessWindowStyle.Normal,
-            }
-        }.Start();
+        public Entity Destination { get; }
 
         #endregion
     }

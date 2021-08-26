@@ -15,81 +15,91 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.Drawing;
-using System.Threading;
+using System;
+using System.Diagnostics;
+using Cube.Logging;
+using Cube.Mixin.Environment;
+using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// CompressViewModel
+    /// OpenAction
     ///
     /// <summary>
-    /// Represents the ViewModel to create an archive with the
-    /// ProgressWindow.
+    /// Provides functionality to open the directory.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public sealed class CompressViewModel : ArchiveViewModel<CompressFacade>
+    internal static class OpenAction
     {
-        #region Constructors
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CompressViewModel
-        ///
-        /// <summary>
-        /// Initializes a new instance of the CompressViewModel class
-        /// with the specified arguments.
-        /// </summary>
-        ///
-        /// <param name="src">Request of the transaction.</param>
-        /// <param name="settings">User settings.</param>
-        /// <param name="context">Synchronization context.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public CompressViewModel(Request src, SettingFolder settings, SynchronizationContext context) :
-            base(new(src, settings, new ContextDispatcher(context, false)), new(), context)
-        {
-            Facade.Runtime = new(Send, GetDispatcher(true));
-        }
-
-        #endregion
-
         #region Methods
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetLogo
+        /// Invoke
         ///
         /// <summary>
-        /// Gets the logo image of the window.
+        /// Invokes the action.
         /// </summary>
         ///
+        /// <param name="src">Path to open.</param>
+        /// <param name="method">Method to open.</param>
+        /// <param name="exec">Path of the application.</param>
+        ///
         /* ----------------------------------------------------------------- */
-        protected override Image GetLogo() => Properties.Resources.HeaderArchive;
+        public static void Invoke(Entity src, OpenMethod method, string exec)
+        {
+            if (!method.HasFlag(OpenMethod.Open)) return;
+            var dest = src.IsDirectory ? src.FullName : src.DirectoryName;
+            if (IsSkip(dest, method)) return;
+
+            var cvt = exec.HasValue() ? exec : "explorer.exe";
+            typeof(OpenAction).LogDebug($"Path:{src.FullName.Quote()}", $"Explorer:{cvt.Quote()}");
+            Start(cvt, src.FullName.Quote());
+        }
+
+        #endregion
+
+        #region Implementations
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetTitle
+        /// IsSkip
         ///
         /// <summary>
-        /// Gets the title of the window.
+        /// Determines whether to skip the action.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected override string GetTitle() => Facade.GetTitle();
+        private static bool IsSkip(string src, OpenMethod method) =>
+            method.HasFlag(OpenMethod.SkipDesktop) ?
+            src.FuzzyEquals(Environment.SpecialFolder.Desktop.GetName()) :
+            false;
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetText
+        /// Create
         ///
         /// <summary>
-        /// Gets the text displayed in the main window.
+        /// Creates a new instance of the ProcessStartInfo class with the
+        /// specified arguments.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected override string GetText() => Facade.GetText();
+        private static void Start(string src, string args) => new Process
+        {
+            StartInfo = new()
+            {
+                FileName        = src,
+                Arguments       = args,
+                CreateNoWindow  = false,
+                UseShellExecute = true,
+                LoadUserProfile = false,
+                WindowStyle     = ProcessWindowStyle.Normal,
+            }
+        }.Start();
 
         #endregion
     }

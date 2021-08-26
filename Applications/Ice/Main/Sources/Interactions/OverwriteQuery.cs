@@ -19,8 +19,6 @@ using System;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
-    #region OverwriteQuery
-
     /* --------------------------------------------------------------------- */
     ///
     /// OverwriteQuery
@@ -58,19 +56,20 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetValue
+        /// Get
         ///
         /// <summary>
         /// Gets the overwrite method.
+        /// The method may invoke the Query.Request method as needed.
         /// </summary>
         ///
-        /// <param name="src">File information to overwrite.</param>
-        /// <param name="dest">File information to be overwritten.</param>
+        /// <param name="src">File to overwrite.</param>
+        /// <param name="dest">File to be overwritten.</param>
         ///
         /// <returns>Overwrite method.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public OverwriteMethod GetValue(Entity src, Entity dest)
+        public OverwriteMethod Get(Entity src, Entity dest)
         {
             if (!_value.HasFlag(OverwriteMethod.Always)) _value = Request(src, dest);
             return _value;
@@ -109,71 +108,4 @@ namespace Cube.FileSystem.SevenZip.Ice
         private OverwriteMethod _value = OverwriteMethod.Query;
         #endregion
     }
-
-    #endregion
-
-    #region OverwriteQuerySource
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// OverwriteQuerySource
-    ///
-    /// <summary>
-    /// Represents the request information to query an overwrite method.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    public sealed class OverwriteQuerySource
-    {
-        #region Constructors
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OverwriteQuerySource
-        ///
-        /// <summary>
-        /// Initializes a new instance of the OverwriteQuerySource class
-        /// with the specified arguments.
-        /// </summary>
-        ///
-        /// <param name="src">File information to overwrite.</param>
-        /// <param name="dest">File information to be overwritten.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public OverwriteQuerySource(Entity src, Entity dest)
-        {
-            Source      = src;
-            Destination = dest;
-        }
-
-        #endregion
-
-        #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Source
-        ///
-        /// <summary>
-        /// Gets the file information to overwrite.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public Entity Source { get; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Destination
-        ///
-        /// <summary>
-        /// Gets the file information to be overwritten.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public Entity Destination { get; }
-
-        #endregion
-    }
-
-    #endregion
 }

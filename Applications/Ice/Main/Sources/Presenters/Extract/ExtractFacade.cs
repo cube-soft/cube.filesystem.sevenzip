@@ -225,7 +225,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             if (!src.Exists) return;
 
             var dest = Io.Get(Io.Combine(Destination, item.FullName));
-            if (dest.Exists) src.Move(dest, Overwrite.GetValue(src, dest));
+            if (dest.Exists) src.Move(dest, Overwrite.Get(src, dest));
             else src.Move(dest);
         }
 

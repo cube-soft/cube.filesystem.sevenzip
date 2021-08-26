@@ -22,31 +22,32 @@ namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// CompressRuntimeQuery
+    /// CompressQuery
     ///
     /// <summary>
-    /// Provides functionality to get the runtime settings.
+    /// Provides functionality to get the runtime settings for compression.
+    /// The class may query the user as needed.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public sealed class CompressRuntimeQuery : Query<string, CompressRuntimeSetting>
+    public sealed class CompressQuery : Query<string, CompressRuntimeSetting>
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CompressRuntimeQuery
+        /// CompressQuery
         ///
         /// <summary>
-        /// Initializes a new instance of the CompressRuntimeQuery class
-        /// with the specified arguments.
+        /// Initializes a new instance of the CompressQuery class with
+        /// the specified arguments.
         /// </summary>
         ///
         /// <param name="callback">Callback action for the request.</param>
         /// <param name="dispatcher">Dispatcher object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressRuntimeQuery(
+        public CompressQuery(
             Action<QueryMessage<string, CompressRuntimeSetting>> callback,
             Dispatcher dispatcher
         ) : base(callback, dispatcher) { }
@@ -57,17 +58,21 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetValue
+        /// Get
         ///
         /// <summary>
-        /// Gets the runtime settings.
+        /// Gets the runtime settings for compression.
+        /// The method may invoke the Query.Request method as needed.
         /// </summary>
         ///
         /// <param name="src">Path of the source file.</param>
         /// <param name="format">Archive format.</param>
         ///
+        /// <returns>Compression settings.</returns>
+        ///
         /* ----------------------------------------------------------------- */
-        public CompressRuntimeSetting GetValue(string src, Format format) => _value ??= Get(src, format);
+        public CompressRuntimeSetting Get(string src, Format format) =>
+            _value ??= CreateOrRequest(src, format);
 
         #endregion
 
@@ -75,14 +80,16 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Get
+        /// CreateOrRequest
         ///
         /// <summary>
-        /// Gets the runtime settings.
+        /// Creates a new instance of the CompressRuntimeSetting class
+        /// with the specified arguments. The method may invoke the
+        /// Query.Request method as needed.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private CompressRuntimeSetting Get(string src, Format format)=> format switch
+        private CompressRuntimeSetting CreateOrRequest(string src, Format format) => format switch
         {
             Format.Tar      or
             Format.Zip      or
