@@ -15,9 +15,12 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using Cube.Mixin.ByteFormat;
+using Cube.Logging;
+using Cube.Mixin.Environment;
+using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -26,13 +29,58 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// EntityExtension
     ///
     /// <summary>
-    /// Provides extended methods of the IO and Entity classes.
+    /// Provides extended methods of the Entity class.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     internal static class EntityExtension
     {
-        #region Methods
+        #region Open
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Open
+        ///
+        /// <summary>
+        /// Opens the specified source directory with the specified
+        /// application.
+        /// </summary>
+        ///
+        /// <param name="src">Path to open.</param>
+        /// <param name="method">Method to open.</param>
+        /// <param name="app">Path of the application.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static void Open(this Entity src, OpenMethod method, string app)
+        {
+            if (!method.HasFlag(OpenMethod.Open)) return;
+
+            var dest = src.IsDirectory ? src.FullName : src.DirectoryName;
+            var skip = method.HasFlag(OpenMethod.SkipDesktop) &&
+                       dest.FuzzyEquals(Environment.SpecialFolder.Desktop.GetName());
+            if (skip) return;
+
+            var cvt   = app.HasValue() ? app : "explorer.exe";
+            var klass = typeof(EntityExtension);
+
+            klass.LogDebug($"Path:{src.FullName.Quote()}", $"App:{cvt.Quote()}");
+            klass.LogWarn(() => new Process
+            {
+                StartInfo = new()
+                {
+                    FileName        = cvt,
+                    Arguments       = src.FullName.Quote(),
+                    CreateNoWindow  = false,
+                    UseShellExecute = true,
+                    LoadUserProfile = false,
+                    WindowStyle     = ProcessWindowStyle.Normal,
+                }
+            }.Start());
+        }
+
+        #endregion
+
+        #region Move
 
         /* ----------------------------------------------------------------- */
         ///
@@ -92,6 +140,10 @@ namespace Cube.FileSystem.SevenZip.Ice
             else Io.Move(src.FullName, dest.FullName, true);
         }
 
+        #endregion
+
+        #region GetBaseName
+
         /* ----------------------------------------------------------------- */
         ///
         /// GetBaseName
@@ -108,27 +160,6 @@ namespace Cube.FileSystem.SevenZip.Ice
             new[] { Format.BZip2, Format.GZip, Format.XZ }.Contains(format) ?
             TrimExtension(src.BaseName) :
             src.BaseName;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// AppendLine
-        ///
-        /// <summary>
-        /// Appends the string of the specified file information.
-        /// </summary>
-        ///
-        /// <param name="src">String builder.</param>
-        /// <param name="entity">File information.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static StringBuilder AppendLine(this StringBuilder src, Entity entity) =>
-            entity == null ?
-            src.AppendLine(Properties.Resources.MessageUnknownFile) :
-            src.AppendLine(entity.FullName)
-               .AppendBytes(entity)
-               .AppendLine()
-               .AppendTime(entity)
-               .AppendLine();
 
         #endregion
 
@@ -148,38 +179,6 @@ namespace Cube.FileSystem.SevenZip.Ice
             var index = src.LastIndexOf('.');
             return index < 0 ? src : src.Substring(0, index);
         }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// AppendBytes
-        ///
-        /// <summary>
-        /// Appends the string that represents the bytes of the specified
-        /// file.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private static StringBuilder AppendBytes(this StringBuilder src, Entity entity) =>
-            src.AppendFormat("{0} : {1}",
-                Properties.Resources.MessageBytes,
-                entity.Length.ToPrettyBytes()
-            );
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// AppendTime
-        ///
-        /// <summary>
-        /// Appends the string that represents the last updated time of
-        /// the specified file.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private static StringBuilder AppendTime(this StringBuilder src, Entity entity) =>
-            src.AppendFormat("{0} : {1}",
-                Properties.Resources.MessageLastWriteTime,
-                entity.LastWriteTime.ToString("yyyy/MM/dd HH:mm:ss")
-            );
 
         #endregion
     }

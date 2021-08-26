@@ -94,7 +94,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             foreach (var src in Request.Sources)
             {
                 Source = src;
-                var explorer = new ExtractDirectory(SelectAction.Get(this), Settings);
+                var explorer = new ExtractDirectory(SaveAction.Get(this), Settings);
                 InvokePreProcess(explorer);
                 Invoke(explorer);
                 InvokePostProcess(explorer);
@@ -130,10 +130,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void InvokePreProcess(ExtractDirectory explorer)
-        {
-            SetTemp(explorer.Source);
-        }
+        private void InvokePreProcess(ExtractDirectory explorer) => SetTemp(explorer.Source);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -144,12 +141,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void InvokePostProcess(ExtractDirectory explorer)
+        private void InvokePostProcess(ExtractDirectory src)
         {
-            var es  = Settings.Value.Extract;
+            var ss  = Settings.Value.Extract;
             var app = Settings.Value.Explorer;
-            OpenAction.Invoke(Io.Get(explorer.ValueToOpen), es.OpenMethod, app);
-            if (es.DeleteSource) GetType().LogWarn(() => Io.Delete(Source));
+            Io.Get(src.ValueToOpen).Open(ss.OpenMethod, app);
+            if (ss.DeleteSource) GetType().LogWarn(() => Io.Delete(Source));
         }
 
         /* ----------------------------------------------------------------- */

@@ -15,50 +15,45 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System;
-using System.Diagnostics;
-using Cube.Logging;
-using Cube.Mixin.Environment;
-using Cube.Mixin.String;
+using System.Text;
+using Cube.Mixin.ByteFormat;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// OpenAction
+    /// StringExtension
     ///
     /// <summary>
-    /// Provides functionality to open the directory.
+    /// Provides extended methods of the string and related classes.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal static class OpenAction
+    internal static class StringExtension
     {
         #region Methods
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Invoke
+        /// AppendLine
         ///
         /// <summary>
-        /// Invokes the action.
+        /// Appends the display string according to the specified file
+        /// information.
         /// </summary>
         ///
-        /// <param name="src">Path to open.</param>
-        /// <param name="method">Method to open.</param>
-        /// <param name="exec">Path of the application.</param>
+        /// <param name="src">Source builder object.</param>
+        /// <param name="entity">File information.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void Invoke(Entity src, OpenMethod method, string exec)
-        {
-            if (!method.HasFlag(OpenMethod.Open)) return;
-            var dest = src.IsDirectory ? src.FullName : src.DirectoryName;
-            if (IsSkip(dest, method)) return;
-
-            var cvt = exec.HasValue() ? exec : "explorer.exe";
-            typeof(OpenAction).LogDebug($"Path:{src.FullName.Quote()}", $"Explorer:{cvt.Quote()}");
-            Start(cvt, src.FullName.Quote());
-        }
+        public static StringBuilder AppendLine(this StringBuilder src, Entity entity) =>
+            entity == null ?
+            src.AppendLine(Properties.Resources.MessageUnknownFile) :
+            src.AppendLine(entity.FullName)
+               .AppendBytes(entity)
+               .AppendLine()
+               .AppendTime(entity)
+               .AppendLine();
 
         #endregion
 
@@ -66,40 +61,35 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// IsSkip
+        /// AppendBytes
         ///
         /// <summary>
-        /// Determines whether to skip the action.
+        /// Appends the string that represents the bytes of the specified
+        /// file.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static bool IsSkip(string src, OpenMethod method) =>
-            method.HasFlag(OpenMethod.SkipDesktop) ?
-            src.FuzzyEquals(Environment.SpecialFolder.Desktop.GetName()) :
-            false;
+        private static StringBuilder AppendBytes(this StringBuilder src, Entity entity) =>
+            src.AppendFormat("{0} : {1}",
+                Properties.Resources.MessageBytes,
+                entity.Length.ToPrettyBytes()
+            );
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Create
+        /// AppendTime
         ///
         /// <summary>
-        /// Creates a new instance of the ProcessStartInfo class with the
-        /// specified arguments.
+        /// Appends the string that represents the last updated time of
+        /// the specified file.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static void Start(string src, string args) => new Process
-        {
-            StartInfo = new()
-            {
-                FileName        = src,
-                Arguments       = args,
-                CreateNoWindow  = false,
-                UseShellExecute = true,
-                LoadUserProfile = false,
-                WindowStyle     = ProcessWindowStyle.Normal,
-            }
-        }.Start();
+        private static StringBuilder AppendTime(this StringBuilder src, Entity entity) =>
+            src.AppendFormat("{0} : {1}",
+                Properties.Resources.MessageLastWriteTime,
+                entity.LastWriteTime.ToString("yyyy/MM/dd HH:mm:ss")
+            );
 
         #endregion
     }

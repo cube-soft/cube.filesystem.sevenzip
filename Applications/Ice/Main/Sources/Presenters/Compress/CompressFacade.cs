@@ -129,7 +129,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void InvokePreProcess(CompressRuntimeSetting src)
         {
-            SetDestination(SelectAction.Get(this, src));
+            SetDestination(SaveAction.Get(this, src));
             SetTemp(Io.Get(Destination).DirectoryName);
         }
 
@@ -142,13 +142,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void InvokePostProcess()
-        {
-            OpenAction.Invoke(Io.Get(Destination),
-                Settings.Value.Compress.OpenMethod,
-                Settings.Value.Explorer
-            );
-        }
+        private void InvokePostProcess() => Io.Get(Destination).Open(
+            Settings.Value.Compress.OpenMethod,
+            Settings.Value.Explorer
+        );
 
         /* ----------------------------------------------------------------- */
         ///

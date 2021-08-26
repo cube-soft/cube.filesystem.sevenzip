@@ -24,14 +24,14 @@ namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// SelectAction
+    /// SaveAction
     ///
     /// <summary>
     /// Provides functionality to select the save directory.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal static class SelectAction
+    internal static class SaveAction
     {
         #region Methods
 
