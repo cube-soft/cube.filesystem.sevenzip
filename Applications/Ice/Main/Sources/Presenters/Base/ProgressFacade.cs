@@ -16,6 +16,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Diagnostics;
 using System.Threading;
 using Cube.Logging;
 
@@ -50,7 +51,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         protected ProgressFacade(Dispatcher dispatcher) : base(dispatcher)
         {
             State = TimerState.Stop;
-            _timer.Elapsed += (s, e) => Refresh(nameof(Report));
+            _timer.Elapsed += (s, e) => {
+                Remaining = Report.Estimate(Elapsed, Remaining);
+                Refresh(nameof(Report), nameof(Elapsed));
+            };
         }
 
         #endregion
@@ -67,6 +71,32 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         public Report Report { get; } = new Report();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Elapsed
+        ///
+        /// <summary>
+        /// Gets the elapsed time of the process.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public TimeSpan Elapsed => _watch.Elapsed;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Remaining
+        ///
+        /// <summary>
+        /// Gets the remaining time of the process.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public TimeSpan Remaining
+        {
+            get => Get(() => TimeSpan.Zero);
+            private set => Set(value);
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -130,6 +160,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             try
             {
                 _timer.Start();
+                _watch.Start();
                 State = TimerState.Run;
                 Invoke();
                 Terminate();
@@ -138,6 +169,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             finally
             {
                 State = TimerState.Stop;
+                _watch.Stop();
                 _timer.Stop();
             }
         }
@@ -153,6 +185,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         public void Cancel()
         {
+            _watch.Stop();
             _cts.Cancel();
             Resume();
         }
@@ -169,7 +202,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         public void Suspend()
         {
             if (State != TimerState.Run) return;
-            if (_supender.Reset()) State = TimerState.Suspend;
+            if (_supender.Reset())
+            {
+                _watch.Stop();
+                State = TimerState.Suspend;
+            }
             else GetType().LogWarn($"{nameof(Suspend)} failed");
         }
 
@@ -185,7 +222,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         public void Resume()
         {
             if (State != TimerState.Suspend) return;
-            if (_supender.Set()) State = TimerState.Run;
+            if (_supender.Set())
+            {
+                State = TimerState.Run;
+                _watch.Start();
+            }
             else GetType().LogWarn($"{nameof(Resume)} failed");
         }
 
@@ -219,6 +260,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             if (!disposing) return;
 
+            _watch.Stop();
             _timer.Dispose();
             _supender.Dispose();
         }
@@ -232,13 +274,16 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Terminate
         ///
         /// <summary>
-        /// Executes the termination.
+        /// Invokes the termination process.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         private void Terminate()
         {
-            if (Report.Count < Report.TotalCount || Report.Bytes < Report.TotalBytes) // hack
+            var hack = Report.Count < Report.TotalCount ||
+                       Report.Bytes < Report.TotalBytes;
+
+            if (hack)
             {
                 GetType().LogDebug(
                     $"{nameof(Report.Count)}:{Report.Count:#,0} / {Report.TotalCount:#,0}",
@@ -256,6 +301,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         #region Fields
         private readonly System.Timers.Timer _timer = new(100.0);
+        private readonly Stopwatch _watch = new();
         private readonly ManualResetEvent _supender = new(true);
         private readonly CancellationTokenSource _cts = new();
         #endregion

@@ -15,6 +15,8 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System;
+
 namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
@@ -29,6 +31,40 @@ namespace Cube.FileSystem.SevenZip.Ice
     internal static class ReportExtension
     {
         #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Estimate
+        ///
+        /// <summary>
+        /// Estimates the remaining time for processing.
+        /// </summary>
+        ///
+        /// <param name="src">Source object.</param>
+        /// <param name="elapsed">Elepsed time for processing.</param>
+        /// <param name="prev">Previous result.</param>
+        ///
+        /// <returns>TimeSpan object.</returns>
+        ///
+        /// <remarks>
+        /// In order to reduce flutter in the display, increases in remaining
+        /// time of 10 seconds or less are not reflected. The remaining time
+        /// is updated in 5-second increments.
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static TimeSpan Estimate(this Report src, TimeSpan elapsed, TimeSpan prev)
+        {
+            if (src.Ratio < 0.01 || elapsed <= TimeSpan.Zero) return TimeSpan.Zero;
+
+            var unit  = 5L;
+            var ratio = Math.Max(src.Ratio - 1.0, 0.0);
+            var value = elapsed.TotalSeconds * ratio;
+            var delta = value - prev.TotalSeconds;
+
+            if (delta >= 0.0 && delta < unit * 2) return prev; // hack (see remarks)
+            else return TimeSpan.FromSeconds(((long)value / unit + 1) * unit);
+        }
 
         /* ----------------------------------------------------------------- */
         ///

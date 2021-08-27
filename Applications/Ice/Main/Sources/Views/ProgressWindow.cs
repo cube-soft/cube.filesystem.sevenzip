@@ -15,12 +15,12 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.String;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
+using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -55,9 +55,6 @@ namespace Cube.FileSystem.SevenZip.Ice
 
             SuspendButton.Tag = false;
             SuspendButton.Click += WhenSuspendOrResume;
-
-            _timer.Tick += (s, e) => UpdateElapseLabel();
-            _timer.Interval = 500;
 
             _taskbar = new Cube.Forms.TaskbarProgress(this);
             _taskbar.Maximum = MainProgressBar.Maximum;
@@ -119,11 +116,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         public int Unit
         {
             get => MainProgressBar.Maximum;
-            set
-            {
-                if (MainProgressBar.Maximum == value) return;
-                MainProgressBar.Maximum = value;
-            }
+            set => MainProgressBar.Maximum = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -159,11 +152,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         public string Status
         {
             get => StatusLabel.Text;
-            set
-            {
-                if (StatusLabel.Text == value) return;
-                StatusLabel.Text = value;
-            }
+            set => StatusLabel.Text = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -320,7 +309,6 @@ namespace Cube.FileSystem.SevenZip.Ice
             base.OnShown(e);
 
             UpdateCountLabel();
-            UpdateElapseLabel();
             Start();
 
             // TODO: Implementations
@@ -360,21 +348,6 @@ namespace Cube.FileSystem.SevenZip.Ice
             CountLabel.Visible = TotalCount > 0;
             CountLabel.Text = $"{Properties.Resources.MessageCount} : {Count:#,0} / {TotalCount:#,0}";
         }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// UpdateElapseLabel
-        ///
-        /// <summary>
-        /// ElapseLabel の表示内容を更新します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void UpdateElapseLabel() => ElapseLabel.Text = string.Format(
-            "{0} : {1}",
-            Properties.Resources.MessageElapsedTime,
-            Resource.GetTimeString(Elapsed)
-        );
 
         /* ----------------------------------------------------------------- */
         ///
@@ -431,8 +404,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         #endregion
 
         #region Fields
-        private readonly Stopwatch _watch = new Stopwatch();
-        private readonly Timer _timer = new Timer();
+        private readonly System.Timers.Timer _timer = new();
+        private readonly Stopwatch _watch = new();
         private readonly Cube.Forms.TaskbarProgress _taskbar;
         private string _fileName = string.Empty;
         private long _count = 0;

@@ -132,6 +132,34 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Elapsed
+        ///
+        /// <summary>
+        /// Gets the display string of the elapsed time.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Elapsed => string.Format("{0} : {1}",
+            Properties.Resources.MessageElapseTime,
+            Resource.GetTimeString(Facade.Elapsed)
+        );
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Remaining
+        ///
+        /// <summary>
+        /// Gets the display string of the remaining time.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Remaining => string.Format("{0} : {1}",
+            Properties.Resources.MessageRemainTime,
+            Resource.GetTimeString(Facade.Remaining)
+        );
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Count
         ///
         /// <summary>

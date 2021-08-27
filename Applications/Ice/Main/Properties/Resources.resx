@@ -211,7 +211,7 @@
   <data name="MessageCurrent" xml:space="preserve">
     <value>現在のファイル</value>
   </data>
-  <data name="MessageElapsedTime" xml:space="preserve">
+  <data name="MessageElapseTime" xml:space="preserve">
     <value>経過時間</value>
   </data>
   <data name="MessageExtractDestination" xml:space="preserve">

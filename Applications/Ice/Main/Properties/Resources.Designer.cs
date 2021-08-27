@@ -351,9 +351,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Properties {
         /// <summary>
         ///   経過時間 に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        internal static string MessageElapsedTime {
+        internal static string MessageElapseTime {
             get {
-                return ResourceManager.GetString("MessageElapsedTime", resourceCulture);
+                return ResourceManager.GetString("MessageElapseTime", resourceCulture);
             }
         }
         
