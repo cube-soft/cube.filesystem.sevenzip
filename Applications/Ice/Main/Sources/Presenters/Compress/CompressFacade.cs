@@ -59,14 +59,14 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Runtime
+        /// Configure
         ///
         /// <summary>
-        /// Gets the runtime settings for creating an archive.
+        /// Gets or sets the query object for compress runtime settings.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressQuery Runtime { get; set; }
+        public CompressQuery Configure { get; set; }
 
         #endregion
 
@@ -83,11 +83,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         protected override void Invoke()
         {
-            Require(Select,   nameof(Select));
-            Require(Password, nameof(Password));
-            Require(Runtime,  nameof(Runtime));
-
-            var src = Runtime.Get(Request.Sources.First(), Request.Format);
+            var src = Configure.Get(Request.Sources.First(), Request.Format);
             InvokePreProcess(src);
             Invoke(src);
             InvokePostProcess();
@@ -108,14 +104,14 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void Invoke(CompressRuntimeSetting src)
         {
-            GetType().LogDebug($"{nameof(src.Format)}:{src.Format}", $"Method:{src.CompressionMethod}");
+            GetType().LogDebug($"Format:{src.Format}", $"Method:{src.CompressionMethod}");
 
             using (var writer = new ArchiveWriter(src.Format))
             {
                 Request.Sources.Each(e => writer.Add(e));
                 writer.Options = src.ToOption(Settings);
                 writer.Filters = Settings.Value.GetFilters(Settings.Value.Compress.Filtering);
-                writer.Save(Temp, GetPassword(src), GetProgress());
+                writer.Save(Temp, GetPasswordQuery(src), GetProgress());
             }
 
             if (Io.Exists(Temp)) Io.Move(Temp, Destination, true);
@@ -132,8 +128,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void InvokePreProcess(CompressRuntimeSetting src)
         {
-            SetDestination(this.Select(src));
-            SetTemp(Io.Get(Destination).DirectoryName);
+            Destination = this.Select(src);
+            MakeTemp(Io.Get(Destination).DirectoryName);
         }
 
         /* ----------------------------------------------------------------- */
@@ -152,14 +148,14 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetPassword
+        /// GetPasswordQuery
         ///
         /// <summary>
         /// Gets the query object to get the password.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private IQuery<string> GetPassword(CompressRuntimeSetting src) =>
+        private IQuery<string> GetPasswordQuery(CompressRuntimeSetting src) =>
             src.Password.HasValue() || Request.Password ?
             new Query<string>(e =>
             {

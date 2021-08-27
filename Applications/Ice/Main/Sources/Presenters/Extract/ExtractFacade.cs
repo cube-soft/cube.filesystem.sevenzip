@@ -92,16 +92,16 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         protected override void Invoke()
         {
-            Require(Select,    nameof(Select));
-            Require(Password,  nameof(Password));
-            Require(Overwrite, nameof(Overwrite));
-
             foreach (var src in Request.Sources)
             {
                 Source = src;
                 var dir = new ExtractDirectory(this.Select(), Settings);
                 InvokePreProcess(dir);
-                Invoke(dir);
+                using (var e = new ArchiveReader(src, Password))
+                {
+                    if (e.Items.Count == 1) Invoke(e, 0, dir);
+                    else Invoke(e, dir);
+                }
                 InvokePostProcess(dir);
             }
         }
@@ -112,58 +112,16 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// InvokePreProcess
-        ///
-        /// <summary>
-        /// Invokes the pre-process.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void InvokePreProcess(ExtractDirectory dir) => SetTemp(dir.Source);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// InvokePostProcess
-        ///
-        /// <summary>
-        /// Invokes the post-process.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void InvokePostProcess(ExtractDirectory dir)
-        {
-            var ss  = Settings.Value.Extract;
-            var app = Settings.Value.Explorer;
-            Io.Get(dir.ValueToOpen).Open(ss.OpenMethod, app);
-            if (ss.DeleteSource) GetType().LogWarn(() => Io.Delete(Source));
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// Invoke
-        ///
-        /// <summary>
-        /// Invokes the main operation.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Invoke(ExtractDirectory dir) => Open(Source, e => {
-            if (e.Items.Count == 1) Extract(e, 0, dir);
-            else Extract(e, dir);
-        });
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extract
         ///
         /// <summary>
         /// Extracts the specified archive.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Extract(ArchiveReader src, ExtractDirectory dir)
+        private void Invoke(ArchiveReader src, ExtractDirectory dir)
         {
-            GetType().LogDebug($"{nameof(src.Format)}:{src.Format}", $"{nameof(src.Source)}:{src.Source}");
+            GetType().LogDebug($"Format:{src.Format}", $"Source:{src.Source}");
             SetDestination(src, dir);
 
             var filters  = Settings.Value.GetFilters(Settings.Value.Extract.Filtering);
@@ -177,16 +135,16 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract
+        /// Invoke
         ///
         /// <summary>
         /// Extracts an archive item of the specified index.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Extract(ArchiveReader src, int index, ExtractDirectory dir)
+        private void Invoke(ArchiveReader src, int index, ExtractDirectory dir)
         {
-            GetType().LogDebug($"{nameof(src.Format)}:{src.Format}", $"{nameof(src.Source)}:{src.Source}");
+            GetType().LogDebug($"Format:{src.Format}", $"Source:{src.Source}");
             SetDestination(src, dir);
 
             var item = src.Items[index];
@@ -194,22 +152,39 @@ namespace Cube.FileSystem.SevenZip.Ice
 
             var dest = Io.Combine(Temp, item.FullName);
             if (Formatter.FromFile(dest) != Format.Tar) Move(item);
-            else Open(dest, e => Extract(e, dir)); // *.tar
+            else
+            {
+                using var e = new ArchiveReader(dest, Password);
+                Invoke(e, dir);
+            }
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Open
+        /// InvokePreProcess
         ///
         /// <summary>
-        /// Open the specified archive file with the ArchiveReader class
-        /// and invokes the specified action.
+        /// Invokes the pre-process.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Open(string src, Action<ArchiveReader> callback)
+        private void InvokePreProcess(ExtractDirectory dir) => MakeTemp(dir.Source);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// InvokePostProcess
+        ///
+        /// <summary>
+        /// Invokes the post-process.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void InvokePostProcess(ExtractDirectory dir)
         {
-            using (var e = new ArchiveReader(src, Password)) callback(e);
+            var ss = Settings.Value.Extract;
+            var app = Settings.Value.Explorer;
+            Io.Get(dir.ValueToOpen).Open(ss.OpenMethod, app);
+            if (ss.DeleteSource) GetType().LogWarn(() => Io.Delete(Source));
         }
 
         /* ----------------------------------------------------------------- */
@@ -241,11 +216,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void SetDestination(ArchiveReader src, ExtractDirectory explorer)
+        private void SetDestination(ArchiveReader src, ExtractDirectory dir)
         {
             var basename = Io.Get(src.Source).GetBaseName(src.Format);
-            explorer.Resolve(basename, src.Items);
-            SetDestination(explorer.Value);
+            dir.Resolve(basename, src.Items);
+            Destination = dir.Value;
         }
 
         /* ----------------------------------------------------------------- */

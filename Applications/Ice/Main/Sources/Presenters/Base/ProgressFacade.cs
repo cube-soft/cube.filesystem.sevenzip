@@ -50,7 +50,6 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         protected ProgressFacade(Dispatcher dispatcher) : base(dispatcher)
         {
-            State = TimerState.Stop;
             _timer.Elapsed += (s, e) => {
                 Remaining = Report.Estimate(Elapsed, Remaining);
                 Refresh(nameof(Report), nameof(Elapsed));

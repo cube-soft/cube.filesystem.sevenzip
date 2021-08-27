@@ -46,19 +46,17 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// with the specified arguments.
         /// </summary>
         ///
-        /// <param name="facade">Facade of other models.</param>
+        /// <param name="src">Model object.</param>
         /// <param name="aggregator">Message aggregator.</param>
         /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ProgressViewModel(TModel facade,
-            Aggregator aggregator,
-            SynchronizationContext context
-        ) : base(facade, aggregator, context)
+        public ProgressViewModel(TModel src, Aggregator aggregator, SynchronizationContext context) :
+            base(src, aggregator, context)
         {
             Assets.Add(Facade.Subscribe(e => {
-                if (e == nameof(Facade.State)) Refresh(nameof(State));
-                else if (e == nameof(Facade.Report)) Refresh(nameof(Title));
+                if (e == nameof(Facade.Report)) Refresh(nameof(Title));
+                else Refresh(e);
             }));
         }
 
@@ -196,8 +194,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         public ProgressBarStyle Style => Facade.Report.TotalCount > 0 ?
-            ProgressBarStyle.Continuous :
-            ProgressBarStyle.Marquee;
+            ProgressBarStyle.Continuous : ProgressBarStyle.Marquee;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -238,7 +235,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Cancel() => Facade.Cancel();
+        public void Cancel() => Track(Facade.Cancel, true);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -250,7 +247,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void SuspendOrResume() => Facade.SuspendOrResume();
+        public void SuspendOrResume() => Track(Facade.SuspendOrResume, true);
 
         /* ----------------------------------------------------------------- */
         ///

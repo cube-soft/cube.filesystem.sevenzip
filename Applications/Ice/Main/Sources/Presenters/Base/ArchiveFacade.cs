@@ -63,7 +63,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Request
         ///
         /// <summary>
-        /// Gets the request for the transaction.
+        /// Gets the request for the process.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -92,7 +92,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         public string Destination
         {
             get => Get(() => string.Empty);
-            private set => Set(value);
+            protected set
+            {
+                if (value.FuzzyEquals(Destination)) return;
+                GetType().LogDebug($"{nameof(Destination)}:{value}");
+                _ = Set(value);
+            }
         }
 
         /* ----------------------------------------------------------------- */
@@ -109,8 +114,6 @@ namespace Cube.FileSystem.SevenZip.Ice
             get => Get(() => string.Empty);
             private set => Set(value);
         }
-
-        #region Queries
 
         /* ----------------------------------------------------------------- */
         ///
@@ -136,32 +139,11 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         #endregion
 
-        #endregion
-
         #region Methods
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SetDestination
-        ///
-        /// <summary>
-        /// Sets the value to the Destination property with the specified
-        /// value.
-        /// </summary>
-        ///
-        /// <param name="value">Path value.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected void SetDestination(string value)
-        {
-            if (value.FuzzyEquals(Destination)) return;
-            GetType().LogDebug($"{nameof(Destination)}:{value}");
-            Destination = value;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SetTemp
+        /// MakeTemp
         ///
         /// <summary>
         /// Sets the value to the Temp property with the specified
@@ -171,7 +153,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="directory">Path of the root directory.</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected void SetTemp(string directory)
+        protected void MakeTemp(string directory)
         {
             if (!Temp.HasValue())
             {
@@ -180,25 +162,6 @@ namespace Cube.FileSystem.SevenZip.Ice
                 Temp = dest;
             }
             else GetType().LogDebug($"Ignore:{directory}");
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Require
-        ///
-        /// <summary>
-        /// Requires the specified object is not null.
-        /// A NullReferenceException exception is thrown when the object
-        /// is null.
-        /// </summary>
-        ///
-        /// <param name="src">Source object.</param>
-        /// <param name="name">Object name.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected void Require(object src, string name)
-        {
-            if (src == null) throw new ArgumentNullException(name);
         }
 
         /* ----------------------------------------------------------------- */

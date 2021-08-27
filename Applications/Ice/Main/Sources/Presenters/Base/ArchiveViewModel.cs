@@ -43,37 +43,19 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// with the specified arguments.
         /// </summary>
         ///
-        /// <param name="facade">Facade of other models.</param>
+        /// <param name="src">Model object.</param>
         /// <param name="aggregator">Message aggregator.</param>
         /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveViewModel(TModel facade,
-            Aggregator aggregator,
-            SynchronizationContext context
-        ) : base(facade, aggregator, context)
+        public ArchiveViewModel(TModel src, Aggregator aggregator, SynchronizationContext context) :
+            base(src, aggregator, context)
         {
-            Facade.Select   = new SelectQuery(Send, GetDispatcher(true));
-            Facade.Password = new Query<string>(Request, GetDispatcher(true));
-        }
-
-        #endregion
-
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Request
-        ///
-        /// <summary>
-        /// Sends the message to ask a user to input the password.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Request(QueryMessage<string, string> e)
-        {
-            e.Cancel = true;
-            Send(e);
+            Facade.Select   = new(Send, GetDispatcher(true));
+            Facade.Password = new Query<string>(e => {
+                e.Cancel = true;
+                Send(e);
+            }, GetDispatcher(true));
         }
 
         #endregion

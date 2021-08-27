@@ -43,19 +43,14 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// with the specified arguments.
         /// </summary>
         ///
-        /// <param name="request">Request of the transaction.</param>
+        /// <param name="src">Request of the process.</param>
         /// <param name="settings">User settings.</param>
         /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ExtractViewModel(Request request,
-            SettingFolder settings,
-            SynchronizationContext context
-        ) : base(
-            new(request, settings, new ContextDispatcher(context, false)),
-            new(),
-            context
-        ) {
+        public ExtractViewModel(Request src, SettingFolder settings, SynchronizationContext context) :
+            base(new(src, settings, new ContextDispatcher(context, false)), new(), context)
+        {
             Facade.Overwrite = new(Send, GetDispatcher(true));
         }
 

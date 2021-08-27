@@ -51,7 +51,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         public CompressViewModel(Request src, SettingFolder settings, SynchronizationContext context) :
             base(new(src, settings, new ContextDispatcher(context, false)), new(), context)
         {
-            Facade.Runtime = new(Send, GetDispatcher(true));
+            Facade.Configure = new(Send, GetDispatcher(true));
         }
 
         #endregion
