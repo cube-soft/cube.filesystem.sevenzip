@@ -146,11 +146,7 @@ namespace Cube.FileSystem.SevenZip
             Extension     = fi?.Extension ?? string.Empty;
             DirectoryName = fi?.DirectoryName ?? string.Empty;
 
-            if (FullName != RawName)
-            {
-                GetType().LogDebug($"Raw:{RawName}");
-                GetType().LogDebug($"Cvt:{FullName}");
-            }
+            if (FullName != RawName) GetType().LogDebug($"Raw:{RawName.Quote()}", $"Cvt:{FullName.Quote()}");
         }
 
         /* ----------------------------------------------------------------- */

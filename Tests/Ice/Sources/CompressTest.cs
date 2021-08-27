@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Cube.FileSystem.SevenZip.Ice.Settings;
+using Cube.Logging;
 using NUnit.Framework;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
@@ -64,8 +65,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 Assert.That(vm.Style, Is.EqualTo(ProgressBarStyle.Marquee));
                 Assert.That(vm.Count, Is.Not.Null.And.Not.Empty);
                 Assert.That(vm.CountVisible, Is.False);
-
                 vm.Test();
+                GetType().LogDebug(vm.Elapsed, vm.Remaining, vm.Title);
             }
 
             Assert.That(Io.Exists(Get(dest)), Is.True, dest);

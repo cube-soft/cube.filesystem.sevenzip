@@ -124,7 +124,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public SettingFolder NewSettings()
+        protected SettingFolder NewSettings()
         {
             var dest = new SettingFolder(DataContract.Format.Json, Get("Settings.json"));
 

@@ -286,8 +286,8 @@ namespace Cube.FileSystem.SevenZip.Ice
             if (hack)
             {
                 GetType().LogDebug(
-                    $"{nameof(Report.Count)}:{Report.Count:#,0} / {Report.TotalCount:#,0}",
-                    $"{nameof(Report.Bytes)}:{Report.Bytes:#,0} / {Report.TotalBytes:#,0}"
+                    $"{nameof(Report.Count)}:{Report.Count:#,0}/{Report.TotalCount:#,0}",
+                    $"{nameof(Report.Bytes)}:{Report.Bytes:#,0}/{Report.TotalBytes:#,0}"
                 );
 
                 Report.Count = Report.TotalCount;

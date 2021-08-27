@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Cube.FileSystem.SevenZip.Ice.Settings;
+using Cube.Logging;
 using NUnit.Framework;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
@@ -63,6 +64,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 Assert.That(vm.Count, Is.Not.Null.And.Not.Empty);
                 Assert.That(vm.CountVisible, Is.False);
                 vm.Test();
+                GetType().LogDebug(vm.Elapsed, vm.Remaining, vm.Title);
             }
 
             Assert.That(Io.Exists(Get(dest)), Is.True, dest);
@@ -440,29 +442,29 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 }
             );
 
-            //yield return new TestCaseData(
-            //    @"Tar\LzmaSample\Sample",
-            //    new[] { "Sample.tar.lzma" },
-            //    GetPathArgs(@"Tar\LzmaSample"),
-            //    new ExtractValue
-            //    {
-            //        SaveLocation = SaveLocation.Preset,
-            //        SaveMethod   = SaveMethod.CreateSmart,
-            //    }
-            //);
+                yield return new(
+                    @"Tar\LzmaSample\Sample",
+                    new[] { "Sample.tar.lzma" },
+                    GetPathArgs(@"Tar\LzmaSample"),
+                    new ExtractSetting
+                    {
+                        SaveLocation = SaveLocation.Preset,
+                        SaveMethod   = SaveMethod.CreateSmart,
+                    }
+                );
 
-            //yield return new TestCaseData(
-            //    @"Tar\LzwSample\Sample",
-            //    new[] { "Sample.tar.z" },
-            //    GetPathArgs(@"Tar\LzwSample"),
-            //    new ExtractValue
-            //    {
-            //        SaveLocation = SaveLocation.Preset,
-            //        SaveMethod  = SaveMethod.CreateSmart,
-            //    }
-            //);
+                yield return new(
+                    @"Tar\LzwSample\Sample",
+                    new[] { "Sample.tar.z" },
+                    GetPathArgs(@"Tar\LzwSample"),
+                    new ExtractSetting
+                    {
+                        SaveLocation = SaveLocation.Preset,
+                        SaveMethod   = SaveMethod.CreateSmart,
+                    }
+                );
 
-            yield return new(
+                yield return new(
                 @"Bz2Sample\Sample\Sample.txt",
                 new[] { "Sample.txt.bz2" },
                 GetPathArgs("Bz2Sample"),

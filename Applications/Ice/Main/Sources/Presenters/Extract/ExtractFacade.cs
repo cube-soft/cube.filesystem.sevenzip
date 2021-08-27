@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using Cube.Logging;
+using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -118,7 +119,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void InvokePreProcess(ExtractDirectory explorer) => SetTemp(explorer.Source);
+        private void InvokePreProcess(ExtractDirectory dir) => SetTemp(dir.Source);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -129,11 +130,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void InvokePostProcess(ExtractDirectory src)
+        private void InvokePostProcess(ExtractDirectory dir)
         {
             var ss  = Settings.Value.Extract;
             var app = Settings.Value.Explorer;
-            Io.Get(src.ValueToOpen).Open(ss.OpenMethod, app);
+            Io.Get(dir.ValueToOpen).Open(ss.OpenMethod, app);
             if (ss.DeleteSource) GetType().LogWarn(() => Io.Delete(Source));
         }
 
@@ -146,10 +147,9 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Invoke(ExtractDirectory explorer) => Open(Source, e => {
-            GetType().LogDebug($"{nameof(e.Format)}:{e.Format}", $"{nameof(e.Source)}:{e.Source}");
-            if (e.Items.Count == 1) Extract(e, 0, explorer);
-            else Extract(e, explorer);
+        private void Invoke(ExtractDirectory dir) => Open(Source, e => {
+            if (e.Items.Count == 1) Extract(e, 0, dir);
+            else Extract(e, dir);
         });
 
         /* ----------------------------------------------------------------- */
@@ -161,9 +161,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Extract(ArchiveReader src, ExtractDirectory explorer)
+        private void Extract(ArchiveReader src, ExtractDirectory dir)
         {
-            SetDestination(src, explorer);
+            GetType().LogDebug($"{nameof(src.Format)}:{src.Format}", $"{nameof(src.Source)}:{src.Source}");
+            SetDestination(src, dir);
 
             var filters  = Settings.Value.GetFilters(Settings.Value.Extract.Filtering);
             var progress = GetProgress(e => {
@@ -183,16 +184,17 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Extract(ArchiveReader src, int index, ExtractDirectory explorer)
+        private void Extract(ArchiveReader src, int index, ExtractDirectory dir)
         {
-            SetDestination(src, explorer);
+            GetType().LogDebug($"{nameof(src.Format)}:{src.Format}", $"{nameof(src.Source)}:{src.Source}");
+            SetDestination(src, dir);
 
             var item = src.Items[index];
             Retry(() => src.Extract(Temp, item, GetProgress()));
 
             var dest = Io.Combine(Temp, item.FullName);
             if (Formatter.FromFile(dest) != Format.Tar) Move(item);
-            else Open(dest, e => Extract(e, explorer)); // *.tar
+            else Open(dest, e => Extract(e, dir)); // *.tar
         }
 
         /* ----------------------------------------------------------------- */
@@ -221,6 +223,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void Move(Entity item)
         {
+            if (!item.FullName.HasValue()) return;
             var src = Io.Get(Io.Combine(Temp, item.FullName));
             if (!src.Exists) return;
 
