@@ -17,7 +17,6 @@
 /* ------------------------------------------------------------------------- */
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using Cube.FileSystem.SevenZip.Ice.Settings;
 using Cube.Logging;
 using NUnit.Framework;
@@ -58,13 +57,13 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             using (vm.SetDestination(cvt))
             using (vm.SetRuntime(cvt))
             {
-                Assert.That(vm.State, Is.EqualTo(TimerState.Stop));
-                Assert.That(vm.Logo,  Is.Not.Null);
-                Assert.That(vm.Title, Does.StartWith("0%").And.EndsWith("CubeICE"));
-                Assert.That(vm.Text,  Does.StartWith("ファイルを圧縮する準備をしています"));
-                Assert.That(vm.Style, Is.EqualTo(ProgressBarStyle.Marquee));
-                Assert.That(vm.Count, Is.Not.Null.And.Not.Empty);
-                Assert.That(vm.CountVisible, Is.False);
+                Assert.That(vm.State,      Is.EqualTo(TimerState.Stop));
+                Assert.That(vm.Cancelable, Is.False);
+                Assert.That(vm.Suspended,  Is.False);
+                Assert.That(vm.Logo,       Is.Not.Null);
+                Assert.That(vm.Count,      Is.Not.Null.And.Not.Empty);
+                Assert.That(vm.Title,      Does.StartWith("0%").And.EndsWith("CubeICE"));
+                Assert.That(vm.Text,       Does.StartWith("ファイルを圧縮する準備をしています"));
                 vm.Test();
                 GetType().LogDebug(vm.Elapsed, vm.Remaining, vm.Title);
             }

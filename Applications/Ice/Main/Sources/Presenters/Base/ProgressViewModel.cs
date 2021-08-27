@@ -18,7 +18,6 @@
 using System;
 using System.Drawing;
 using System.Threading;
-using System.Windows.Forms;
 using Cube.Mixin.Observing;
 
 namespace Cube.FileSystem.SevenZip.Ice
@@ -130,6 +129,40 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Cancelable
+        ///
+        /// <summary>
+        /// Gets a value indicating whether the current process can be
+        /// canceled.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public bool Cancelable => Facade.Report.TotalCount > 0;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Suspended
+        ///
+        /// <summary>
+        /// Gets a value indicating whether the current process is suspended.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public bool Suspended => State == TimerState.Suspend;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// State
+        ///
+        /// <summary>
+        /// Gets the current state;
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public TimerState State => Facade.State;
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Elapsed
         ///
         /// <summary>
@@ -174,38 +207,15 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CountVisible
+        /// SuspendOrResumeAction
         ///
         /// <summary>
-        /// Gets a value indicating whether to display the count
-        /// description.
+        /// Gets the display text that represents suspend or resume action.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool CountVisible => Facade.Report.TotalCount > 0;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Style
-        ///
-        /// <summary>
-        /// Gets the current progress bar style.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public ProgressBarStyle Style => Facade.Report.TotalCount > 0 ?
-            ProgressBarStyle.Continuous : ProgressBarStyle.Marquee;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// State
-        ///
-        /// <summary>
-        /// Gets the current state;
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public TimerState State => Facade.State;
+        public string SuspendOrResumeAction => Facade.State == TimerState.Suspend ?
+            Properties.Resources.MenuResume : Properties.Resources.MenuSuspend;
 
         #endregion
 
