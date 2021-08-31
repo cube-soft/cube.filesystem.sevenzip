@@ -18,6 +18,7 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using Cube.Logging;
 using Cube.Mixin.Collections;
@@ -55,6 +56,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             _ = Logger.ObserveTaskException();
             Source.LogInfo(Source.Assembly);
             Source.LogInfo($"[ {args.Join(" ")} ]");
+            Io.Configure(new AlphaFS.IoController());
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -68,16 +70,11 @@ namespace Cube.FileSystem.SevenZip.Ice
             switch (src.Mode)
             {
                 case Mode.Compress:
-                    view.Bind(new CompressViewModel(src, settings));
-                    Application.Run(view);
+                    Show(view, new CompressViewModel(src, settings));
                     break;
                 case Mode.Extract:
-                    if (src.Sources.Count() > 1 && settings.Value.Extract.Bursty && !src.SuppressRecursive) Extract(src);
-                    else
-                    {
-                        view.Bind(new ExtractViewModel(src, settings));
-                        Application.Run(view);
-                    }
+                    if (src.Sources.Count() > 1 && settings.Value.Extract.Bursty && !src.SuppressRecursive) Execute(src);
+                    else Show(view, new ExtractViewModel(src, settings));
                     break;
                 default:
                     break;
@@ -86,19 +83,34 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract
+        /// Show
         ///
         /// <summary>
-        /// Extracts the two or more archives.
+        /// Shows the main window.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        static void Extract(Request request)
+        static void Show(ProgressWindow view, ProgressViewModel vm)
+        {
+            view.Bind(vm);
+            Application.Run(view);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Execute
+        ///
+        /// <summary>
+        /// Executes new processes to Extract the two or more archives.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        static void Execute(Request request)
         {
             var exec = Source.Assembly.Location;
-            var args = new System.Text.StringBuilder();
+            var args = new StringBuilder();
 
-            foreach (var s in request.Options) _ = args.Append($"{s.Quote()} ");
+            foreach (var e in request.Options) _ = args.Append($"{e.Quote()} ");
             foreach (var path in request.Sources)
             {
                 Source.LogError(() => Process.Start(exec, $"/x /sr {args} {path.Quote()}"));
