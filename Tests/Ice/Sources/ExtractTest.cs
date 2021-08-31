@@ -440,29 +440,29 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 }
             );
 
-                yield return new(
-                    @"Tar\LzmaSample\Sample",
-                    new[] { "Sample.tar.lzma" },
-                    GetPathArgs(@"Tar\LzmaSample"),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.CreateSmart,
-                    }
-                );
+            yield return new(
+                @"Tar\LzmaSample\Sample",
+                new[] { "Sample.tar.lzma" },
+                GetPathArgs(@"Tar\LzmaSample"),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.CreateSmart,
+                }
+            );
 
-                yield return new(
-                    @"Tar\LzwSample\Sample",
-                    new[] { "Sample.tar.z" },
-                    GetPathArgs(@"Tar\LzwSample"),
-                    new ExtractSetting
-                    {
-                        SaveLocation = SaveLocation.Preset,
-                        SaveMethod   = SaveMethod.CreateSmart,
-                    }
-                );
+            yield return new(
+                @"Tar\LzwSample\Sample",
+                new[] { "Sample.tar.z" },
+                GetPathArgs(@"Tar\LzwSample"),
+                new ExtractSetting
+                {
+                    SaveLocation = SaveLocation.Preset,
+                    SaveMethod   = SaveMethod.CreateSmart,
+                }
+            );
 
-                yield return new(
+            yield return new(
                 @"Bz2Sample\Sample\Sample.txt",
                 new[] { "Sample.txt.bz2" },
                 GetPathArgs("Bz2Sample"),

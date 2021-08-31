@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProgressWindow));
             this.RootPanel = new System.Windows.Forms.TableLayoutPanel();
             this.ExitButton = new System.Windows.Forms.Button();
@@ -38,8 +39,10 @@
             this.StatusLabel = new System.Windows.Forms.Label();
             this.SuspendButton = new System.Windows.Forms.Button();
             this.HeaderPictureBox = new System.Windows.Forms.PictureBox();
+            this.MainBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.RootPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.HeaderPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MainBindingSource)).BeginInit();
             this.SuspendLayout();
             //
             // RootPanel
@@ -82,6 +85,7 @@
             // RemainLabel
             //
             this.RemainLabel.AutoSize = true;
+            this.RemainLabel.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.MainBindingSource, "Remaining", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.RemainLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RemainLabel.Location = new System.Drawing.Point(229, 91);
             this.RemainLabel.Margin = new System.Windows.Forms.Padding(12, 3, 12, 3);
@@ -96,6 +100,7 @@
             //
             this.CountLabel.AutoSize = true;
             this.RootPanel.SetColumnSpan(this.CountLabel, 2);
+            this.CountLabel.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.MainBindingSource, "Count", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.CountLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CountLabel.Location = new System.Drawing.Point(12, 43);
             this.CountLabel.Margin = new System.Windows.Forms.Padding(12, 3, 12, 3);
@@ -108,6 +113,7 @@
             // MainProgressBar
             //
             this.RootPanel.SetColumnSpan(this.MainProgressBar, 2);
+            this.MainProgressBar.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.MainBindingSource, "Value", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.MainProgressBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MainProgressBar.Location = new System.Drawing.Point(14, 67);
             this.MainProgressBar.Margin = new System.Windows.Forms.Padding(14, 3, 14, 3);
@@ -122,6 +128,7 @@
             // ElapseLabel
             //
             this.ElapseLabel.AutoSize = true;
+            this.ElapseLabel.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.MainBindingSource, "Elapsed", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ElapseLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ElapseLabel.Location = new System.Drawing.Point(12, 91);
             this.ElapseLabel.Margin = new System.Windows.Forms.Padding(12, 3, 12, 3);
@@ -135,6 +142,7 @@
             this.StatusLabel.AutoEllipsis = true;
             this.StatusLabel.AutoSize = true;
             this.RootPanel.SetColumnSpan(this.StatusLabel, 2);
+            this.StatusLabel.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.MainBindingSource, "Text", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.StatusLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.StatusLabel.Location = new System.Drawing.Point(12, 115);
             this.StatusLabel.Margin = new System.Windows.Forms.Padding(12, 3, 12, 3);
@@ -167,6 +175,10 @@
             this.HeaderPictureBox.TabIndex = 5;
             this.HeaderPictureBox.TabStop = false;
             //
+            // MainBindingSource
+            //
+            this.MainBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.ProgressViewModel);
+            //
             // ProgressWindow
             //
             this.AcceptButton = this.ExitButton;
@@ -182,6 +194,7 @@
             this.RootPanel.ResumeLayout(false);
             this.RootPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.HeaderPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MainBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -197,6 +210,7 @@
         private System.Windows.Forms.Button SuspendButton;
         private System.Windows.Forms.Button ExitButton;
         private System.Windows.Forms.PictureBox HeaderPictureBox;
+        private System.Windows.Forms.BindingSource MainBindingSource;
     }
 }
 

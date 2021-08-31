@@ -44,6 +44,22 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /// <param name="src">Request of the process.</param>
         /// <param name="settings">User settings.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ExtractViewModel(Request src, SettingFolder settings) :
+            this(src, settings, SynchronizationContext.Current) { }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ExtractViewModel
+        ///
+        /// <summary>
+        /// Initializes a new instance of the ExtractViewModel class
+        /// with the specified arguments.
+        /// </summary>
+        ///
+        /// <param name="src">Request of the process.</param>
+        /// <param name="settings">User settings.</param>
         /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */

@@ -16,6 +16,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using System.Windows.Forms;
+using Cube.Forms.Behaviors;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -29,7 +30,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class ProgressWindow : Cube.Forms.Window
+    public partial class ProgressWindow : Forms.Window
     {
         #region Constructors
 
@@ -46,6 +47,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             InitializeComponent();
             _taskbar = new(this);
+
+            // Manual bindings.
+            Bind(nameof(Unit));
+            Bind(nameof(Cancelable));
+            Bind(nameof(Suspended));
         }
 
         #endregion
@@ -115,8 +121,52 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         #endregion
 
+        #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OnBind
+        ///
+        /// <summary>
+        /// Binds the specified object.
+        /// </summary>
+        ///
+        /// <param name="src">Bindable object.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected override void OnBind(IBindable src)
+        {
+            if (src is not ProgressViewModel vm) return;
+
+            MainBindingSource.DataSource = vm;
+
+            Behaviors.Add(new DialogBehavior(vm));
+            Behaviors.Add(new CloseBehavior(this, vm));
+            Behaviors.Add(new ClickBehavior(ExitButton, vm.Cancel));
+            Behaviors.Add(new ClickBehavior(SuspendButton, vm.SuspendOrResume));
+            Behaviors.Add(new ShownBehavior(this, vm.Start));
+        }
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Bind
+        ///
+        /// <summary>
+        /// Adds the binding settings with the specified name.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Bind(string name) =>
+            DataBindings.Add(name, MainBindingSource, name, false, DataSourceUpdateMode.OnPropertyChanged);
+
+        #endregion
+
         #region Fields
-        private readonly Cube.Forms.TaskbarProgress _taskbar;
+        private readonly Forms.TaskbarProgress _taskbar;
         #endregion
     }
 }

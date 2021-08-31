@@ -39,6 +39,7 @@
         <Compile Update="Sources\Views\*Dialog.cs" SubType="Form" />
         <EmbeddedResource Update="Properties\Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
         <EmbeddedResource Update="Sources\Views\*.resx" DependentUpon="%(Filename).cs" />
+        <None Include="Properties\DataSources\*" />
         <None Include="Assets\**\*" />
         <None Include="App.*" />
     </ItemGroup>

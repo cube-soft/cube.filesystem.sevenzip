@@ -59,20 +59,25 @@ namespace Cube.FileSystem.SevenZip.Ice
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            var src  = new SettingFolder();
-            var cmd  = new Request(args);
-            var view = new ProgressWindow();
+            var src      = new Request(args);
+            var settings = new SettingFolder();
+            var view     = new ProgressWindow();
 
-            src.Load();
+            settings.Load();
 
-            switch (cmd.Mode)
+            switch (src.Mode)
             {
                 case Mode.Compress:
+                    view.Bind(new CompressViewModel(src, settings));
                     Application.Run(view);
                     break;
                 case Mode.Extract:
-                    if (cmd.Sources.Count() > 1 && src.Value.Extract.Bursty && !cmd.SuppressRecursive) Extract(cmd);
-                    else Application.Run(view);
+                    if (src.Sources.Count() > 1 && settings.Value.Extract.Bursty && !src.SuppressRecursive) Extract(src);
+                    else
+                    {
+                        view.Bind(new ExtractViewModel(src, settings));
+                        Application.Run(view);
+                    }
                     break;
                 default:
                     break;

@@ -44,6 +44,22 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /// <param name="src">Request of the transaction.</param>
         /// <param name="settings">User settings.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public CompressViewModel(Request src, SettingFolder settings) :
+            this (src, settings, SynchronizationContext.Current) { }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CompressViewModel
+        ///
+        /// <summary>
+        /// Initializes a new instance of the CompressViewModel class
+        /// with the specified arguments.
+        /// </summary>
+        ///
+        /// <param name="src">Request of the transaction.</param>
+        /// <param name="settings">User settings.</param>
         /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
