@@ -65,17 +65,6 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Logo
-        ///
-        /// <summary>
-        /// Gets the log image of the window.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public Image Logo => GetLogo();
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// Title
         ///
         /// <summary>
@@ -261,18 +250,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetLogo
-        ///
-        /// <summary>
-        /// Gets the log image of the window.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected abstract Image GetLogo();
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Title
+        /// GetTitle
         ///
         /// <summary>
         /// Gets the title of the window.

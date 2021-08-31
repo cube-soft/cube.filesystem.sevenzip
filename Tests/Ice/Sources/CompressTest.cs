@@ -60,7 +60,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 Assert.That(vm.State,      Is.EqualTo(TimerState.Stop));
                 Assert.That(vm.Cancelable, Is.False);
                 Assert.That(vm.Suspended,  Is.False);
-                Assert.That(vm.Logo,       Is.Not.Null);
                 Assert.That(vm.Count,      Is.Not.Null.And.Not.Empty);
                 Assert.That(vm.Title,      Does.StartWith("0%").And.EndsWith("CubeICE"));
                 Assert.That(vm.Text,       Does.StartWith("ファイルを圧縮する準備をしています"));

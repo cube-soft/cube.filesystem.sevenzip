@@ -60,17 +60,6 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetLogo
-        ///
-        /// <summary>
-        /// Gets the logo image of the window.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected override Image GetLogo() => Properties.Resources.HeaderExtract;
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// GetTitle
         ///
         /// <summary>

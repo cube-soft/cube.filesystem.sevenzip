@@ -214,19 +214,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Properties {
         /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
-        internal static System.Drawing.Bitmap HeaderArchive {
+        internal static System.Drawing.Bitmap Hero {
             get {
-                object obj = ResourceManager.GetObject("HeaderArchive", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
-        /// </summary>
-        internal static System.Drawing.Bitmap HeaderExtract {
-            get {
-                object obj = ResourceManager.GetObject("HeaderExtract", resourceCulture);
+                object obj = ResourceManager.GetObject("Hero", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
