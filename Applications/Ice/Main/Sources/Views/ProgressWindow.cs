@@ -48,7 +48,10 @@ namespace Cube.FileSystem.SevenZip.Ice
             InitializeComponent();
             _taskbar = new(this);
 
+            Behaviors.Add(new ClickBehavior(ExitButton, Close));
+
             // Manual bindings.
+            Bind(nameof(Value));
             Bind(nameof(Unit));
             Bind(nameof(Cancelable));
             Bind(nameof(Suspended));
@@ -57,6 +60,25 @@ namespace Cube.FileSystem.SevenZip.Ice
         #endregion
 
         #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Value
+        ///
+        /// <summary>
+        /// Gets or sets the current value of the progress bar.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public int Value
+        {
+            get => MainProgressBar.Value;
+            set
+            {
+                MainProgressBar.Value = value;
+                _taskbar.Value        = value;
+            }
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -73,7 +95,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             set
             {
                 MainProgressBar.Maximum = value;
-                _taskbar.Maximum = value;
+                _taskbar.Maximum        = value;
             }
         }
 
@@ -89,11 +111,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         public bool Cancelable
         {
-            get => ExitButton.Enabled;
+            get => SuspendButton.Enabled;
             set
             {
-                ExitButton.Enabled    = value;
                 SuspendButton.Enabled = value;
+                CountLabel.Visible    = value;
                 RemainLabel.Visible   = value;
                 MainProgressBar.Style = value ?
                                         ProgressBarStyle.Continuous :
@@ -142,9 +164,9 @@ namespace Cube.FileSystem.SevenZip.Ice
 
             Behaviors.Add(new DialogBehavior(vm));
             Behaviors.Add(new CloseBehavior(this, vm));
-            Behaviors.Add(new ClickBehavior(ExitButton, vm.Cancel));
-            Behaviors.Add(new ClickBehavior(SuspendButton, vm.SuspendOrResume));
+            Behaviors.Add(new ClosingBehavior(this, _ => vm.Cancel()));
             Behaviors.Add(new ShownBehavior(this, vm.Start));
+            Behaviors.Add(new ClickBehavior(SuspendButton, vm.SuspendOrResume));
         }
 
         #endregion
