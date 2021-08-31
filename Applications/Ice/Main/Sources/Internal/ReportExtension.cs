@@ -57,8 +57,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             if (src.Ratio < 0.01 || elapsed <= TimeSpan.Zero) return TimeSpan.Zero;
 
-            var unit  = 5L;
-            var ratio = Math.Max(src.Ratio - 1.0, 0.0);
+            var unit  = 10L;
+            var ratio = Math.Max(1 / src.Ratio - 1.0, 0.0);
             var value = elapsed.TotalSeconds * ratio;
             var delta = value - prev.TotalSeconds;
 
