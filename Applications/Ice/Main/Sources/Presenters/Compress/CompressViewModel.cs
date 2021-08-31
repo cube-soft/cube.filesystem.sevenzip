@@ -15,7 +15,6 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.Drawing;
 using System.Threading;
 
 namespace Cube.FileSystem.SevenZip.Ice
@@ -30,7 +29,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public sealed class CompressViewModel : ArchiveViewModel<CompressFacade>
+    public sealed class CompressViewModel : ArchiveViewModel
     {
         #region Constructors
 
@@ -49,10 +48,41 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         public CompressViewModel(Request src, SettingFolder settings, SynchronizationContext context) :
-            base(new(src, settings, new ContextDispatcher(context, false)), new(), context)
+            this(new CompressFacade(src, settings, new ContextDispatcher(context, false)), context) { }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CompressViewModel
+        ///
+        /// <summary>
+        /// Initializes a new instance of the CompressViewModel class
+        /// with the specified arguments.
+        /// </summary>
+        ///
+        /// <param name="src">Model object.</param>
+        /// <param name="context">Synchronization context.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        private CompressViewModel(CompressFacade src, SynchronizationContext context) :
+            base(src, new(), context)
         {
-            Facade.Configure = new(Send, GetDispatcher(true));
+            src.Configure = new(Send, GetDispatcher(true));
         }
+
+        #endregion
+
+        #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Source
+        ///
+        /// <summary>
+        /// Gets the source object.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private CompressFacade Source => (CompressFacade)Facade;
 
         #endregion
 
@@ -67,7 +97,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected override string GetTitle() => Facade.GetTitle();
+        protected override string GetTitle() => Source.GetTitle();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -78,7 +108,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected override string GetText() => Facade.GetText();
+        protected override string GetText() => Source.GetText();
 
         #endregion
     }

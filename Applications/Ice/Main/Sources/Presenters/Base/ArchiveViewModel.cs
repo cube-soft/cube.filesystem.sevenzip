@@ -29,8 +29,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public abstract class ArchiveViewModel<TModel> : ProgressViewModel<TModel>
-        where TModel : ArchiveFacade
+    public abstract class ArchiveViewModel : ProgressViewModel
     {
         #region Constructors
 
@@ -48,11 +47,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveViewModel(TModel src, Aggregator aggregator, SynchronizationContext context) :
+        public ArchiveViewModel(ArchiveFacade src, Aggregator aggregator, SynchronizationContext context) :
             base(src, aggregator, context)
         {
-            Facade.Select   = new(Send, GetDispatcher(true));
-            Facade.Password = new Query<string>(e => {
+            src.Select   = new(Send, GetDispatcher(true));
+            src.Password = new Query<string>(e => {
                 e.Cancel = true;
                 Send(e);
             }, GetDispatcher(true));

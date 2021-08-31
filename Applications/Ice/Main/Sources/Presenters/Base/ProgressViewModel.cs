@@ -16,7 +16,6 @@
 //
 /* ------------------------------------------------------------------------- */
 using System;
-using System.Drawing;
 using System.Threading;
 using Cube.Mixin.Observing;
 
@@ -31,8 +30,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public abstract class ProgressViewModel<TModel> : Presentable<TModel>
-        where TModel : ProgressFacade
+    public abstract class ProgressViewModel : Presentable<ProgressFacade>
     {
         #region Constructors
 
@@ -50,7 +48,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ProgressViewModel(TModel src, Aggregator aggregator, SynchronizationContext context) :
+        public ProgressViewModel(ProgressFacade src, Aggregator aggregator, SynchronizationContext context) :
             base(src, aggregator, context)
         {
             Assets.Add(Facade.Subscribe(e => {

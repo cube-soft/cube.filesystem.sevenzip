@@ -49,8 +49,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// <param name="src">Source ViewModel.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void Test<T>(this ArchiveViewModel<T> src)
-            where T : ArchiveFacade => src.Test(() => { });
+        public static void Test(this ArchiveViewModel src) => src.Test(() => { });
 
         /* ----------------------------------------------------------------- */
         ///
@@ -64,8 +63,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// <param name="callback">Action after starting.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void Test<T>(this ArchiveViewModel<T> src, Action callback)
-            where T : ArchiveFacade
+        public static void Test(this ArchiveViewModel src, Action callback)
         {
             var cts = new CancellationTokenSource();
             using (src.Subscribe(e => {
@@ -91,8 +89,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// <returns>Object to clear the subscription.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static IDisposable SetPassword<T>(this ArchiveViewModel<T> src, string value)
-            where T : ArchiveFacade => src.Subscribe<QueryMessage<string, string>>(e =>
+        public static IDisposable SetPassword(this ArchiveViewModel src, string value) =>
+            src.Subscribe<QueryMessage<string, string>>(e =>
         {
             e.Value  = value;
             e.Cancel = false;
@@ -112,8 +110,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// <returns>Object to clear the subscription.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static IDisposable SetDestination<T>(this ArchiveViewModel<T> src, string value)
-            where T : ArchiveFacade => src.Subscribe<QueryMessage<SelectQuerySource, string>>(e =>
+        public static IDisposable SetDestination(this ArchiveViewModel src, string value) =>
+            src.Subscribe<QueryMessage<SelectQuerySource, string>>(e =>
         {
             e.Value  = value;
             e.Cancel = false;
