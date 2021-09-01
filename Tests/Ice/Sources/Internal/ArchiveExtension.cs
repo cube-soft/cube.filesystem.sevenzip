@@ -111,7 +111,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         public static IDisposable SetDestination(this ProgressViewModel src, string value) =>
-            src.Subscribe<QueryMessage<SelectQuerySource, string>>(e =>
+            src.Subscribe<QueryMessage<SaveQuerySource, string>>(e =>
         {
             e.Value  = value;
             e.Cancel = false;

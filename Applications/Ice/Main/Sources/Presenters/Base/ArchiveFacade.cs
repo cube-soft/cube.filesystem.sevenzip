@@ -124,7 +124,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public SelectQuery Select { get; set; }
+        public Query<SaveQuerySource, string> Select { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -135,7 +135,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IQuery<string> Password { get; set; }
+        public Query<string> Password { get; set; }
 
         #endregion
 

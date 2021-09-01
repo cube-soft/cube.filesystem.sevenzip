@@ -32,6 +32,28 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// ForSave
+        ///
+        /// <summary>
+        /// Creates a new instance of the QueryMessage class with the
+        /// specified arguments.
+        /// </summary>
+        ///
+        /// <param name="src">Path of the source file.</param>
+        /// <param name="format">Compression format.</param>
+        ///
+        /// <returns>Message object.</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static QueryMessage<SaveQuerySource, string> ForSave(string src, Format format) => new()
+        {
+            Source = new SaveQuerySource(src, format),
+            Value  = string.Empty,
+            Cancel = true,
+        };
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// ForExtractLocation
         ///
         /// <summary>
@@ -44,7 +66,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <returns>OpenDirectoryMessage object.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static OpenDirectoryMessage ForExtractLocation(SelectQuerySource src) => new()
+        public static OpenDirectoryMessage ForExtractLocation(SaveQuerySource src) => new()
         {
             NewButton = true,
             Text      = Properties.Resources.MessageExtractDestination,

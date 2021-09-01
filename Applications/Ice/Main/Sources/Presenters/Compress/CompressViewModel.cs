@@ -82,7 +82,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         private CompressViewModel(CompressFacade src, SynchronizationContext context) :
             base(src, new(), context)
         {
-            src.Configure = new(Send, GetDispatcher(true));
+            src.Configure = new(Send);
         }
 
         #endregion

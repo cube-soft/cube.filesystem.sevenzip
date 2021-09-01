@@ -19,21 +19,21 @@ namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// SelectQuerySource
+    /// SaveQuerySource
     ///
     /// <summary>
     /// Represents the request information to query a save path.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public sealed class SelectQuerySource
+    public sealed class SaveQuerySource
     {
         /* ----------------------------------------------------------------- */
         ///
-        /// SelectQuerySource
+        /// SaveQuerySource
         ///
         /// <summary>
-        /// Initializes a new instance of the SelectQuerySource class
+        /// Initializes a new instance of the SaveQuerySource class
         /// with the specified arguments.
         /// </summary>
         ///
@@ -41,7 +41,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="format">Compression format.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public SelectQuerySource(string src, Format format)
+        public SaveQuerySource(string src, Format format)
         {
             Source = src;
             Format = format;

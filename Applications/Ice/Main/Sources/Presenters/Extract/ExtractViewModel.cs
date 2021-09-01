@@ -83,12 +83,12 @@ namespace Cube.FileSystem.SevenZip.Ice
             base(src, new(), context)
         {
             src.Overwrite = new(Send);
-            src.Select = new(e => {
+            src.Select    = new(e => {
                 var m = Message.ForExtractLocation(e.Source);
                 Send(m);
                 e.Value  = m.Value;
                 e.Cancel = m.Cancel;
-            });
+            }, Dispatcher.Vanilla);
         }
 
         #endregion

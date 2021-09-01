@@ -113,10 +113,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private static string AskDestination(CompressFacade facade, string src, Format format)
         {
-            var msg = SelectQuery.NewMessage(src, format);
-            facade.Select?.Request(msg);
-            if (msg.Cancel) throw new OperationCanceledException();
-            return msg.Value;
+            var m = Message.ForSave(src, format);
+            facade.Select?.Request(m);
+            if (m.Cancel) throw new OperationCanceledException();
+            return m.Value;
         }
 
         #endregion

@@ -112,7 +112,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public SelectQuery Query { get; set; }
+        public Query<SaveQuerySource, string> Query { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -196,7 +196,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                 case SaveLocation.Explicit:
                     return Request.Directory;
                 case SaveLocation.Query:
-                    var msg = SelectQuery.NewMessage(Source, Format);
+                    var msg = Message.ForSave(Source, Format);
                     Query?.Request(msg);
                     if (msg.Cancel) throw new OperationCanceledException();
                     return msg.Value;

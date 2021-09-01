@@ -44,13 +44,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /// <param name="callback">Callback action for the request.</param>
-        /// <param name="dispatcher">Dispatcher object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressQuery(
-            Action<QueryMessage<string, CompressRuntimeSetting>> callback,
-            Dispatcher dispatcher
-        ) : base(callback, dispatcher) { }
+        public CompressQuery(Action<QueryMessage<string, CompressRuntimeSetting>> callback) :
+            base(callback, Dispatcher.Vanilla) { }
 
         #endregion
 
