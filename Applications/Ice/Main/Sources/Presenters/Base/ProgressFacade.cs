@@ -257,11 +257,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         protected override void Dispose(bool disposing)
         {
-            if (!disposing) return;
-
-            _watch.Stop();
-            _timer.Dispose();
-            _supender.Dispose();
+            try { Cancel(); }
+            finally
+            {
+                _timer.Dispose();
+                _supender.Dispose();
+            }
         }
 
         #endregion
