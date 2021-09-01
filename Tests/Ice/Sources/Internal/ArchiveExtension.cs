@@ -49,7 +49,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// <param name="src">Source ViewModel.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void Test(this ArchiveViewModel src) => src.Test(() => { });
+        public static void Test(this ProgressViewModel src) => src.Test(() => { });
 
         /* ----------------------------------------------------------------- */
         ///
@@ -63,7 +63,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// <param name="callback">Action after starting.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void Test(this ArchiveViewModel src, Action callback)
+        public static void Test(this ProgressViewModel src, Action callback)
         {
             var cts = new CancellationTokenSource();
             using (src.Subscribe(e => {
@@ -89,7 +89,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// <returns>Object to clear the subscription.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static IDisposable SetPassword(this ArchiveViewModel src, string value) =>
+        public static IDisposable SetPassword(this ProgressViewModel src, string value) =>
             src.Subscribe<QueryMessage<string, string>>(e =>
         {
             e.Value  = value;
@@ -110,7 +110,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// <returns>Object to clear the subscription.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static IDisposable SetDestination(this ArchiveViewModel src, string value) =>
+        public static IDisposable SetDestination(this ProgressViewModel src, string value) =>
             src.Subscribe<QueryMessage<SelectQuerySource, string>>(e =>
         {
             e.Value  = value;
@@ -174,10 +174,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// <param name="filename">Filename or relative path.</param>
         ///
         /// <returns>Absolute path.</returns>
-        ///
-        /// <remarks>
-        /// FileFixture.Get と同じ内容を返す静的メソッドです。
-        /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
         public static string GetPath(this Type src, string filename)

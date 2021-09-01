@@ -29,7 +29,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public sealed class ExtractViewModel : ArchiveViewModel
+    public sealed class ExtractViewModel : ProgressViewModel
     {
         #region Constructors
 
