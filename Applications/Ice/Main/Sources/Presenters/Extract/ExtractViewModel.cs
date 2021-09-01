@@ -82,7 +82,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         private ExtractViewModel(ExtractFacade src, SynchronizationContext context) :
             base(src, new(), context)
         {
-            src.Overwrite = new(Send, GetDispatcher(true));
+            src.Overwrite = new(Send);
         }
 
         #endregion

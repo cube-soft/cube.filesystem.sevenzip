@@ -42,13 +42,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /// <param name="callback">Callback action for the request.</param>
-        /// <param name="dispatcher">Dispatcher object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public OverwriteQuery(
-            Action<QueryMessage<OverwriteQuerySource, OverwriteMethod>> callback,
-            Dispatcher dispatcher
-        ) : base(callback, dispatcher) { }
+        public OverwriteQuery(Action<QueryMessage<OverwriteQuerySource, OverwriteMethod>> callback) :
+            base(callback, Dispatcher.Vanilla) { }
 
         #endregion
 

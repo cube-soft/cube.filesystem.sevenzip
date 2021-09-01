@@ -40,13 +40,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /// <param name="callback">User action.</param>
-        /// <param name="dispatcher">Dispatcher object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public SelectQuery(
-            Action<QueryMessage<SelectQuerySource, string>> callback,
-            Dispatcher dispatcher
-        ) : base(callback, dispatcher) { }
+        public SelectQuery(Action<QueryMessage<SelectQuerySource, string>> callback) :
+            base(callback, Dispatcher.Vanilla) { }
 
         /* ----------------------------------------------------------------- */
         ///

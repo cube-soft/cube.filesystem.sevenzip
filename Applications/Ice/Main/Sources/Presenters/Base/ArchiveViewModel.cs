@@ -50,7 +50,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         public ArchiveViewModel(ArchiveFacade src, Aggregator aggregator, SynchronizationContext context) :
             base(src, aggregator, context)
         {
-            src.Select   = new(Send, GetDispatcher(true));
+            src.Select   = new(Send);
             src.Password = new Query<string>(e => {
                 e.Cancel = true;
                 Send(e);
