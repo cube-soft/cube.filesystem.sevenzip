@@ -163,8 +163,8 @@ namespace Cube.FileSystem.SevenZip.Ice
             MainBindingSource.DataSource = vm;
 
             Behaviors.Add(new DialogBehavior(vm));
+            Behaviors.Add(new OverwriteBehavior(vm));
             Behaviors.Add(new CloseBehavior(this, vm));
-            Behaviors.Add(new ClosingBehavior(this, _ => vm.Cancel()));
             Behaviors.Add(new ShownBehavior(this, vm.Start));
             Behaviors.Add(new ClickBehavior(SuspendButton, vm.SuspendOrResume));
         }
