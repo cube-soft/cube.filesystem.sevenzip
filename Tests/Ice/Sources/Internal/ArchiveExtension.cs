@@ -110,12 +110,23 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// <returns>Object to clear the subscription.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static IDisposable SetDestination(this ProgressViewModel src, string value) =>
-            src.Subscribe<QueryMessage<SaveQuerySource, string>>(e =>
+        public static IDisposable SetDestination(this ProgressViewModel src, string value)
         {
-            e.Value  = value;
-            e.Cancel = false;
-        });
+            var dest = new DisposableContainer();
+
+            dest.Add(src.Subscribe<OpenDirectoryMessage>(e =>
+            {
+                e.Value  = value;
+                e.Cancel = false;
+            }));
+
+            dest.Add(src.Subscribe<SaveFileMessage>(e => {
+                e.Value  = value;
+                e.Cancel = false;
+            }));
+
+            return dest;
+        }
 
         /* ----------------------------------------------------------------- */
         ///

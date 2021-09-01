@@ -214,9 +214,8 @@ namespace Cube.FileSystem.SevenZip.Ice
                     options.Add(args[i]);
                     if (args[i] == "/p") Password = true;
                     else if (args[i] == "/sr") SuppressRecursive = true;
-                    else if (args[i].StartsWith("/o:")) Location = GetLocation(args[i]);
-                    else if (args[i].StartsWith("/save:")) Directory = GetTail(args[i]);
-                    else if (args[i].StartsWith("/drop:")) Directory = GetTail(args[i]);
+                    else if (Any(args[i], "/o:", "/out:")) Location = GetLocation(args[i]);
+                    else if (Any(args[i], "/save:", "/drop:")) Directory = Tail(args[i]);
                 }
             }
 
@@ -258,7 +257,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private SaveLocation GetLocation(string src)
         {
-            var query = GetTail(src).ToLowerInvariant();
+            var query = Tail(src).ToLowerInvariant();
             if (!query.HasValue()) return SaveLocation.Unknown;
 
             foreach (SaveLocation item in Enum.GetValues(typeof(SaveLocation)))
@@ -270,20 +269,32 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetTail
+        /// Tail
         ///
         /// <summary>
         /// Get the string after ':' character.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetTail(string src)
+        private string Tail(string src)
         {
             var index = src.IndexOf(':');
             return index >= 0 && index < src.Length - 1 ?
                    src.Substring(index + 1) :
                    string.Empty;
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Any
+        ///
+        /// <summary>
+        /// Determines whether the specified source argument starts with
+        /// any of the specified latter arguments.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private bool Any(string src, params string[] cmp) => cmp.Any(e => src.StartsWith(e));
 
         #endregion
     }

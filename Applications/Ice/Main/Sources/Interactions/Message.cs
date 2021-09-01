@@ -54,6 +54,25 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
+        /// ForCompressLocation
+        ///
+        /// <summary>
+        /// Creates a new instance of the SaveFileDialog class with
+        /// the specified source.
+        /// </summary>
+        ///
+        /// <param name="src">Query source object.</param>
+        ///
+        /// <returns>SaveFileDialog object.</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static SaveFileMessage ForCompressLocation(SaveQuerySource src) => new()
+        {
+            OverwritePrompt = true,
+        };
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// ForExtractLocation
         ///
         /// <summary>

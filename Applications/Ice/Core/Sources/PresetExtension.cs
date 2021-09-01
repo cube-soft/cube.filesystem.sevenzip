@@ -334,7 +334,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             { Preset.ExtractSource,       new[] { "/x", "/out:source" }      },
             { Preset.ExtractDesktop,      new[] { "/x", "/out:desktop" }     },
             { Preset.ExtractMyDocuments,  new[] { "/x", "/out:mydocuments" } },
-            { Preset.ExtractQuery,        new[] { "/x", "/out:runtime" }     },
+            { Preset.ExtractQuery,        new[] { "/x", "/out:query" }     },
             // Compress
             { Preset.CompressZip,         new[] { "/c:zip" }                 },
             { Preset.CompressZipPassword, new[] { "/c:zip", "/p" }           },
