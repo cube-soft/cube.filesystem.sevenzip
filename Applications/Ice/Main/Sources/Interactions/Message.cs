@@ -15,46 +15,41 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.Threading;
-
 namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveViewModel
+    /// Message
     ///
     /// <summary>
-    /// Represents the ViewModel to create or extract archives with the
-    /// ProgressWindow.
+    /// Provides functionality to create a message object.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public abstract class ArchiveViewModel : ProgressViewModel
+    public static class Message
     {
-        #region Constructors
+        #region Methods
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveViewModel
+        /// ForExtractLocation
         ///
         /// <summary>
-        /// Initializes a new instance of the CompressViewModel class
-        /// with the specified arguments.
+        /// Creates a new instance of the OpenDirectoryMessage class with
+        /// the specified source.
         /// </summary>
         ///
-        /// <param name="src">Model object.</param>
-        /// <param name="aggregator">Message aggregator.</param>
-        /// <param name="context">Synchronization context.</param>
+        /// <param name="src">Query source object.</param>
+        ///
+        /// <returns>OpenDirectoryMessage object.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveViewModel(ArchiveFacade src, Aggregator aggregator, SynchronizationContext context) :
-            base(src, aggregator, context)
+        public static OpenDirectoryMessage ForExtractLocation(SelectQuerySource src) => new()
         {
-            src.Password = new Query<string>(e => {
-                e.Cancel = true;
-                Send(e);
-            }, Dispatcher.Vanilla);
-        }
+            NewButton = true,
+            Text      = Properties.Resources.MessageExtractDestination,
+            Value     = Io.Get(src.Source).DirectoryName,
+        };
 
         #endregion
     }
