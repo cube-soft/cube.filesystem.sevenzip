@@ -82,6 +82,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         private CompressViewModel(CompressFacade src, SynchronizationContext context) :
             base(src, new(), context)
         {
+            src.Password  = new(Send, Dispatcher.Vanilla);
             src.Configure = new(Send);
             src.Select    = new(e => {
                 var m = Message.ForCompressLocation(e.Source);

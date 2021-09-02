@@ -82,6 +82,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         private ExtractViewModel(ExtractFacade src, SynchronizationContext context) :
             base(src, new(), context)
         {
+            src.Password  = new(Send, Dispatcher.Vanilla);
             src.Overwrite = new(Send);
             src.Select    = new(e => {
                 var m = Message.ForExtractLocation(e.Source);
