@@ -48,7 +48,7 @@
             this.RootPanel.ColumnCount = 2;
             this.RootPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
             this.RootPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.RootPanel.Controls.Add(this.ButtonsPanel, 0, 4);
+            this.RootPanel.Controls.Add(this.ButtonsPanel, 0, 5);
             this.RootPanel.Controls.Add(this.ShowPasswordCheckBox, 1, 3);
             this.RootPanel.Controls.Add(this.ConfirmTextBox, 1, 2);
             this.RootPanel.Controls.Add(this.PasswordTextBox, 1, 1);
@@ -58,13 +58,14 @@
             this.RootPanel.Location = new System.Drawing.Point(0, 0);
             this.RootPanel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.RootPanel.Name = "RootPanel";
-            this.RootPanel.RowCount = 5;
+            this.RootPanel.RowCount = 6;
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.RootPanel.Size = new System.Drawing.Size(384, 181);
+            this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 56F));
+            this.RootPanel.Size = new System.Drawing.Size(384, 201);
             this.RootPanel.TabIndex = 0;
             //
             // ButtonsPanel
@@ -74,12 +75,12 @@
             this.ButtonsPanel.Controls.Add(this.ExitButton);
             this.ButtonsPanel.Controls.Add(this.ExecuteButton);
             this.ButtonsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ButtonsPanel.Location = new System.Drawing.Point(0, 124);
+            this.ButtonsPanel.Location = new System.Drawing.Point(0, 145);
             this.ButtonsPanel.Margin = new System.Windows.Forms.Padding(0);
             this.ButtonsPanel.Name = "ButtonsPanel";
             this.ButtonsPanel.Padding = new System.Windows.Forms.Padding(0, 9, 9, 0);
             this.ButtonsPanel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.ButtonsPanel.Size = new System.Drawing.Size(384, 57);
+            this.ButtonsPanel.Size = new System.Drawing.Size(384, 56);
             this.ButtonsPanel.TabIndex = 6;
             //
             // ExitButton
@@ -163,7 +164,7 @@
             this.AcceptButton = this.ExecuteButton;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(384, 181);
+            this.ClientSize = new System.Drawing.Size(384, 201);
             this.Controls.Add(this.RootPanel);
             this.Font = new System.Drawing.Font("Meiryo UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(128)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

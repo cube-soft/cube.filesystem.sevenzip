@@ -51,16 +51,17 @@
             this.RootPanel.Controls.Add(this.DescriptionLabel, 1, 0);
             this.RootPanel.Controls.Add(this.PasswordTextBox, 1, 1);
             this.RootPanel.Controls.Add(this.VisibleCheckBox, 1, 2);
-            this.RootPanel.Controls.Add(this.ButtonsPanel, 0, 3);
+            this.RootPanel.Controls.Add(this.ButtonsPanel, 0, 4);
             this.RootPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RootPanel.Location = new System.Drawing.Point(0, 0);
             this.RootPanel.Name = "RootPanel";
-            this.RootPanel.RowCount = 4;
+            this.RootPanel.RowCount = 5;
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.RootPanel.Size = new System.Drawing.Size(384, 151);
+            this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 56F));
+            this.RootPanel.Size = new System.Drawing.Size(384, 171);
             this.RootPanel.TabIndex = 0;
             //
             // IconPictureBox
@@ -114,7 +115,7 @@
             this.ButtonsPanel.Controls.Add(this.ExitButton);
             this.ButtonsPanel.Controls.Add(this.ExecButton);
             this.ButtonsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ButtonsPanel.Location = new System.Drawing.Point(0, 95);
+            this.ButtonsPanel.Location = new System.Drawing.Point(0, 115);
             this.ButtonsPanel.Margin = new System.Windows.Forms.Padding(0);
             this.ButtonsPanel.Name = "ButtonsPanel";
             this.ButtonsPanel.Padding = new System.Windows.Forms.Padding(0, 9, 9, 0);
@@ -148,7 +149,7 @@
             this.AcceptButton = this.ExecButton;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(384, 151);
+            this.ClientSize = new System.Drawing.Size(384, 171);
             this.Controls.Add(this.RootPanel);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Meiryo UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(128)));
