@@ -54,12 +54,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             if (settings.Path.HasValue()) return settings.Path;
 
-            var ss   = src.Settings.Value.Compress;
-            var name = new ArchiveName(src.Request.Sources.First(), src.Request.Format);
-            var ps   = new PathSelector(src.Request, ss, name) { Query = src.Select };
-            if (ps.Location == SaveLocation.Query) return ps.Value;
+            var ss     = src.Settings.Value.Compress;
+            var name   = new ArchiveName(src.Request.Sources.First(), src.Request.Format);
+            var select = new Selector(src.Request, ss, name) { Query = src.Select };
+            if (select.Location == SaveLocation.Query) return select.Value;
 
-            var dest = Io.Combine(ps.Value, name.Value.Name);
+            var dest = Io.Combine(select.Value, name.Value.Name);
             return Io.Exists(dest) && ss.OverwritePrompt ?
                    AskDestination(src, dest, name.Format) :
                    dest;

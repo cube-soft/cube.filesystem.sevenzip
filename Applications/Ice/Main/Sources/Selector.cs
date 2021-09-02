@@ -25,7 +25,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// PathSelector
+    /// Selector
     ///
     /// <summary>
     /// Provides functionality to select the path of file or directory
@@ -33,24 +33,24 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public sealed class PathSelector
+    public sealed class Selector
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// PathSelector
+        /// Selector
         ///
         /// <summary>
-        /// Initializes a new instance of the PathSelector class with
-        /// the specified arguments.
+        /// Initializes a new instance of the Selector class with the
+        /// specified arguments.
         /// </summary>
         ///
         /// <param name="request">Request for the transaction.</param>
         /// <param name="settings">User settings.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public PathSelector(Request request, ArchiveSetting settings)
+        public Selector(Request request, ArchiveSetting settings)
         {
             Request  = request;
             Settings = settings;
@@ -58,11 +58,11 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// PathSelector
+        /// Selector
         ///
         /// <summary>
-        /// Initializes a new instance of the PathSelector class with
-        /// the specified arguments.
+        /// Initializes a new instance of the Selector class with the
+        /// specified arguments.
         /// </summary>
         ///
         /// <param name="request">Request for the transaction.</param>
@@ -70,7 +70,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="name">Normalized archive name.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public PathSelector(Request request, ArchiveSetting settings, ArchiveName name) :
+        public Selector(Request request, ArchiveSetting settings, ArchiveName name) :
             this(request, settings)
         {
             Format = name.Format;
@@ -145,7 +145,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Value => _value ??= Select();
+        public string Value => _value ??= Get();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -176,14 +176,14 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Select
+        /// Get
         ///
         /// <summary>
-        /// Invoke the select action.
+        /// Gets the result. The method may invoke the query.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string Select()
+        private string Get()
         {
             switch (Location)
             {

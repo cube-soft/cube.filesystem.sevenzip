@@ -46,7 +46,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         public static string Select(this ExtractFacade src)
         {
-            var dest = new PathSelector(src.Request, src.Settings.Value.Extract)
+            var dest = new Selector(src.Request, src.Settings.Value.Extract)
             {
                 Source = src.Source,
                 Query  = src.Select,
