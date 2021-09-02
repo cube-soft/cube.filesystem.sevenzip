@@ -153,9 +153,9 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private IQuery<string> GetPasswordQuery(CompressRuntimeSetting src) =>
+        private Query<string> GetPasswordQuery(CompressRuntimeSetting src) =>
             src.Password.HasValue() || Request.Password ?
-            new Query<string>(e =>
+            new(e =>
             {
                 if (src.Password.HasValue())
                 {

@@ -70,30 +70,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Cancel
-        ///
-        /// <summary>
-        /// Tests the Cancel operation.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [Test]
-        public void Cancel()
-        {
-            var dest  = Get("Cancel");
-            var args  = Preset.Extract.ToArguments().Concat(GetSource("Complex.1.0.0.zip"));
-            var value = new ExtractSetting
-            {
-                SaveLocation = SaveLocation.Preset,
-                SaveDirectory = dest,
-            };
-
-            using var vm = NewVM(args, value);
-            vm.Test(() => vm.Cancel());
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// CancelPassword
         ///
         /// <summary>

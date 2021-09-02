@@ -175,7 +175,6 @@
             // SuspendButton
             //
             this.SuspendButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.SuspendButton.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.MainBindingSource, "SuspendOrResumeAction", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.SuspendButton.Enabled = false;
             this.SuspendButton.Location = new System.Drawing.Point(60, 12);
             this.SuspendButton.Margin = new System.Windows.Forms.Padding(60, 3, 3, 3);

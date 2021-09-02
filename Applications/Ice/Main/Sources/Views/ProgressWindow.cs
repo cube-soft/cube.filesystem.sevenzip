@@ -136,9 +136,15 @@ namespace Cube.FileSystem.SevenZip.Ice
         public bool Suspended
         {
             get => _taskbar.State == Forms.TaskbarProgressState.Paused;
-            set => _taskbar.State  = value ?
-                                     Forms.TaskbarProgressState.Paused :
-                                     Forms.TaskbarProgressState.Normal;
+            set
+            {
+                _taskbar.State = value ?
+                    Forms.TaskbarProgressState.Paused :
+                    Forms.TaskbarProgressState.Normal;
+                SuspendButton.Text = value ?
+                    Properties.Resources.MenuResume :
+                    Properties.Resources.MenuSuspend;
+            }
         }
 
         #endregion

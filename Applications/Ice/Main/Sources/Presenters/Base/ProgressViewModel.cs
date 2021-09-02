@@ -85,17 +85,6 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Unit
-        ///
-        /// <summary>
-        /// Gets the maximum value of the progress bar.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public int Unit => 1000;
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// Value
         ///
         /// <summary>
@@ -113,6 +102,28 @@ namespace Cube.FileSystem.SevenZip.Ice
                 else return cmp;
             }
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Unit
+        ///
+        /// <summary>
+        /// Gets the maximum value of the progress bar.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public int Unit => 1000;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// State
+        ///
+        /// <summary>
+        /// Gets the current state;
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public TimerState State => Facade.State;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -136,17 +147,6 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         public bool Suspended => State == TimerState.Suspend;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// State
-        ///
-        /// <summary>
-        /// Gets the current state;
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public TimerState State => Facade.State;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -192,18 +192,6 @@ namespace Cube.FileSystem.SevenZip.Ice
             Facade.Report.TotalCount
         );
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SuspendOrResumeAction
-        ///
-        /// <summary>
-        /// Gets the display text that represents suspend or resume action.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string SuspendOrResumeAction => Facade.State == TimerState.Suspend ?
-            Properties.Resources.MenuResume : Properties.Resources.MenuSuspend;
-
         #endregion
 
         #region Methods
@@ -222,17 +210,6 @@ namespace Cube.FileSystem.SevenZip.Ice
             try { Facade.Start(); }
             finally { Send<CloseMessage>(); }
         });
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Cancel
-        ///
-        /// <summary>
-        /// Cancels the current operation.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Cancel() => Track(Facade.Cancel, true);
 
         /* ----------------------------------------------------------------- */
         ///

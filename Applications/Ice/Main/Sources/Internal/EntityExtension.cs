@@ -69,7 +69,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                 StartInfo = new()
                 {
                     FileName        = cvt,
-                    Arguments       = src.FullName.Quote(),
+                    Arguments       = dest.Quote(),
                     CreateNoWindow  = false,
                     UseShellExecute = true,
                     LoadUserProfile = false,
