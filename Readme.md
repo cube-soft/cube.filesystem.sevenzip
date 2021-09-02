@@ -5,9 +5,7 @@ Cube.FileSystem.SevenZip
 [![AppVeyor](https://badgen.net/appveyor/ci/clown/cube-filesystem-sevenzip)](https://ci.appveyor.com/project/clown/cube-filesystem-sevenzip)
 [![Codecov](https://badgen.net/codecov/c/github/cube-soft/cube.filesystem.sevenzip)](https://codecov.io/gh/cube-soft/cube.filesystem.sevenzip)
 
-Cube.FileSystem.SevenZip is a wrapper library of the [7-Zip](http://www.7-zip.org/) via COM interface.
-The repository also has an archiving or extracting application, which name is [CubeICE](https://www.cube-soft.jp/cubeice/).
-These libraries and applications are available for .NET Framework 3.5, 4.5 or later.
+Cube.FileSystem.SevenZip is a wrapper library of the [7-Zip](http://www.7-zip.org/) via COM interface. The project also has an application for compressing or extracting archives, which name is [CubeICE](https://www.cube-soft.jp/cubeice/). Libraries and applications are available for .NET Framework 3.5, 4.5 or later. Note that some projects are licensed under the GNU LGPLv3 and the others under the Apache 2.0. See [License.md](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/License.md) for more information.
 
 ## Usage
 
@@ -87,12 +85,6 @@ Use Task.Run() in the whole transaction if you need to archive or extract files 
 * [AlphaFS](https://alphafs.alphaleonis.com/)
 * [NLog](https://nlog-project.org/)
 
-## References
-
-Cube.FileSystem.SevenZip referred to the code of the following projects to implement some functions.
-
-* [SevenZipSharp](https://www.nuget.org/packages/SevenZipSharp/)
-
 ## Contributing
 
 1. Fork [Cube.FileSystem.SevenZip](https://github.com/cube-soft/Cube.FileSystem.SevenZip/fork) repository.
@@ -105,5 +97,4 @@ Cube.FileSystem.SevenZip referred to the code of the following projects to imple
 ## License
  
 Copyright © 2010 [CubeSoft, Inc.](http://www.cube-soft.jp/)
-The project is licensed under the [Apache 2.0](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/License.txt).
-Note that trade names, trademarks, service marks, or logo images distributed in CubeSoft applications are not allowed to reuse or modify all or parts of them.
+See [License.md](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/License.md) for more information.
