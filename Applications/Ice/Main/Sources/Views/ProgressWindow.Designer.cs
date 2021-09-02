@@ -168,6 +168,7 @@
             this.ButtonsPanel.Location = new System.Drawing.Point(0, 160);
             this.ButtonsPanel.Margin = new System.Windows.Forms.Padding(0);
             this.ButtonsPanel.Name = "ButtonsPanel";
+            this.ButtonsPanel.Padding = new System.Windows.Forms.Padding(0, 9, 0, 0);
             this.ButtonsPanel.Size = new System.Drawing.Size(434, 54);
             this.ButtonsPanel.TabIndex = 0;
             //
@@ -177,7 +178,7 @@
             this.SuspendButton.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.MainBindingSource, "SuspendOrResumeAction", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.SuspendButton.Enabled = false;
             this.SuspendButton.Location = new System.Drawing.Point(60, 12);
-            this.SuspendButton.Margin = new System.Windows.Forms.Padding(60, 12, 30, 3);
+            this.SuspendButton.Margin = new System.Windows.Forms.Padding(60, 3, 3, 3);
             this.SuspendButton.Name = "SuspendButton";
             this.SuspendButton.Size = new System.Drawing.Size(125, 30);
             this.SuspendButton.TabIndex = 1;
@@ -187,8 +188,8 @@
             // ExitButton
             //
             this.ExitButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.ExitButton.Location = new System.Drawing.Point(245, 12);
-            this.ExitButton.Margin = new System.Windows.Forms.Padding(30, 12, 60, 3);
+            this.ExitButton.Location = new System.Drawing.Point(248, 12);
+            this.ExitButton.Margin = new System.Windows.Forms.Padding(60, 3, 3, 3);
             this.ExitButton.Name = "ExitButton";
             this.ExitButton.Size = new System.Drawing.Size(125, 30);
             this.ExitButton.TabIndex = 0;

@@ -85,7 +85,7 @@
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 150F));
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 180F));
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.RootPanel.Size = new System.Drawing.Size(364, 441);
+            this.RootPanel.Size = new System.Drawing.Size(364, 436);
             this.RootPanel.TabIndex = 0;
             //
             // OutputPanel
@@ -106,7 +106,7 @@
             this.OutputLabel.Name = "OutputLabel";
             this.OutputLabel.Size = new System.Drawing.Size(55, 38);
             this.OutputLabel.TabIndex = 100;
-            this.OutputLabel.Text = "保存先：";
+            this.OutputLabel.Text = "保存先";
             this.OutputLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             //
             // OutputTextBox
@@ -173,7 +173,7 @@
             this.ThreadLabel.Name = "ThreadLabel";
             this.ThreadLabel.Size = new System.Drawing.Size(94, 24);
             this.ThreadLabel.TabIndex = 104;
-            this.ThreadLabel.Text = "スレッド数：";
+            this.ThreadLabel.Text = "スレッド数";
             this.ThreadLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             //
             // CompressionMethodComboBox
@@ -195,7 +195,7 @@
             this.MethodLabel.Name = "MethodLabel";
             this.MethodLabel.Size = new System.Drawing.Size(94, 23);
             this.MethodLabel.TabIndex = 103;
-            this.MethodLabel.Text = "圧縮方法：";
+            this.MethodLabel.Text = "圧縮方法";
             this.MethodLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             //
             // CompressionLevelComboBox
@@ -217,7 +217,7 @@
             this.LevelLabel.Name = "LevelLabel";
             this.LevelLabel.Size = new System.Drawing.Size(94, 23);
             this.LevelLabel.TabIndex = 102;
-            this.LevelLabel.Text = "圧縮レベル：";
+            this.LevelLabel.Text = "圧縮レベル";
             this.LevelLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             //
             // FormatLabel
@@ -229,7 +229,7 @@
             this.FormatLabel.Name = "FormatLabel";
             this.FormatLabel.Size = new System.Drawing.Size(94, 23);
             this.FormatLabel.TabIndex = 101;
-            this.FormatLabel.Text = "ファイル形式：";
+            this.FormatLabel.Text = "ファイル形式";
             this.FormatLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             //
             // FormatComboBox
@@ -344,7 +344,7 @@
             this.EncryptionLabel.Name = "EncryptionLabel";
             this.EncryptionLabel.Size = new System.Drawing.Size(94, 25);
             this.EncryptionLabel.TabIndex = 107;
-            this.EncryptionLabel.Text = "暗号化方法：";
+            this.EncryptionLabel.Text = "暗号化方法";
             this.EncryptionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             //
             // ConfirmTextBox
@@ -377,7 +377,7 @@
             this.PasswordLabel.Name = "PasswordLabel";
             this.PasswordLabel.Size = new System.Drawing.Size(94, 23);
             this.PasswordLabel.TabIndex = 105;
-            this.PasswordLabel.Text = "パスワード：";
+            this.PasswordLabel.Text = "パスワード";
             this.PasswordLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             //
             // PasswordTextBox
@@ -401,22 +401,24 @@
             //
             // ButtonsPanel
             //
+            this.ButtonsPanel.BackColor = System.Drawing.SystemColors.Control;
             this.ButtonsPanel.Controls.Add(this.ExitButton);
             this.ButtonsPanel.Controls.Add(this.ExecuteButton);
             this.ButtonsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ButtonsPanel.Location = new System.Drawing.Point(3, 383);
+            this.ButtonsPanel.Location = new System.Drawing.Point(0, 380);
+            this.ButtonsPanel.Margin = new System.Windows.Forms.Padding(0);
             this.ButtonsPanel.Name = "ButtonsPanel";
+            this.ButtonsPanel.Padding = new System.Windows.Forms.Padding(0, 9, 9, 0);
             this.ButtonsPanel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.ButtonsPanel.Size = new System.Drawing.Size(358, 55);
+            this.ButtonsPanel.Size = new System.Drawing.Size(364, 56);
             this.ButtonsPanel.TabIndex = 3;
             //
             // ExitButton
             //
             this.ExitButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.ExitButton.Location = new System.Drawing.Point(250, 8);
-            this.ExitButton.Margin = new System.Windows.Forms.Padding(8, 8, 8, 4);
+            this.ExitButton.Location = new System.Drawing.Point(227, 12);
             this.ExitButton.Name = "ExitButton";
-            this.ExitButton.Size = new System.Drawing.Size(100, 30);
+            this.ExitButton.Size = new System.Drawing.Size(125, 30);
             this.ExitButton.TabIndex = 1;
             this.ExitButton.Text = "キャンセル";
             this.ExitButton.UseVisualStyleBackColor = true;
@@ -424,25 +426,25 @@
             // ExecuteButton
             //
             this.ExecuteButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.ExecuteButton.Location = new System.Drawing.Point(134, 8);
-            this.ExecuteButton.Margin = new System.Windows.Forms.Padding(8, 8, 8, 4);
+            this.ExecuteButton.Location = new System.Drawing.Point(96, 12);
             this.ExecuteButton.Name = "ExecuteButton";
-            this.ExecuteButton.Size = new System.Drawing.Size(100, 30);
+            this.ExecuteButton.Size = new System.Drawing.Size(125, 30);
             this.ExecuteButton.TabIndex = 0;
             this.ExecuteButton.Text = "OK";
             this.ExecuteButton.UseVisualStyleBackColor = true;
             //
-            // ArchiveForm
+            // CompressSettingWindow
             //
             this.AcceptButton = this.ExecuteButton;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(364, 441);
+            this.BackColor = System.Drawing.SystemColors.Window;
+            this.ClientSize = new System.Drawing.Size(364, 436);
             this.Controls.Add(this.RootPanel);
             this.Font = new System.Drawing.Font("Meiryo UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(128)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "ArchiveForm";
+            this.Name = "CompressSettingWindow";
             this.ShowInTaskbar = false;
-            this.Text = "CubeICE 圧縮詳細設定";
+            this.Text = "CubeICE 圧縮設定";
             this.RootPanel.ResumeLayout(false);
             this.OutputPanel.ResumeLayout(false);
             this.OutputPanel.PerformLayout();

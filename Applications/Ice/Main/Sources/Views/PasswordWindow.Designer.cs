@@ -109,23 +109,25 @@
             //
             // ButtonsPanel
             //
+            this.ButtonsPanel.BackColor = System.Drawing.SystemColors.Control;
             this.RootPanel.SetColumnSpan(this.ButtonsPanel, 2);
             this.ButtonsPanel.Controls.Add(this.ExitButton);
             this.ButtonsPanel.Controls.Add(this.ExecButton);
             this.ButtonsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ButtonsPanel.Location = new System.Drawing.Point(3, 98);
+            this.ButtonsPanel.Location = new System.Drawing.Point(0, 95);
+            this.ButtonsPanel.Margin = new System.Windows.Forms.Padding(0);
             this.ButtonsPanel.Name = "ButtonsPanel";
+            this.ButtonsPanel.Padding = new System.Windows.Forms.Padding(0, 9, 9, 0);
             this.ButtonsPanel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.ButtonsPanel.Size = new System.Drawing.Size(378, 50);
+            this.ButtonsPanel.Size = new System.Drawing.Size(384, 56);
             this.ButtonsPanel.TabIndex = 4;
             //
             // ExitButton
             //
             this.ExitButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.ExitButton.Location = new System.Drawing.Point(258, 12);
-            this.ExitButton.Margin = new System.Windows.Forms.Padding(20, 12, 6, 0);
+            this.ExitButton.Location = new System.Drawing.Point(247, 12);
             this.ExitButton.Name = "ExitButton";
-            this.ExitButton.Size = new System.Drawing.Size(100, 25);
+            this.ExitButton.Size = new System.Drawing.Size(125, 30);
             this.ExitButton.TabIndex = 0;
             this.ExitButton.Text = "キャンセル";
             this.ExitButton.UseVisualStyleBackColor = true;
@@ -134,10 +136,9 @@
             //
             this.ExecButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.ExecButton.Enabled = false;
-            this.ExecButton.Location = new System.Drawing.Point(146, 12);
-            this.ExecButton.Margin = new System.Windows.Forms.Padding(6, 12, 3, 0);
+            this.ExecButton.Location = new System.Drawing.Point(116, 12);
             this.ExecButton.Name = "ExecButton";
-            this.ExecButton.Size = new System.Drawing.Size(100, 25);
+            this.ExecButton.Size = new System.Drawing.Size(125, 30);
             this.ExecButton.TabIndex = 1;
             this.ExecButton.Text = "OK";
             this.ExecButton.UseVisualStyleBackColor = true;
@@ -146,6 +147,7 @@
             //
             this.AcceptButton = this.ExecButton;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(384, 151);
             this.Controls.Add(this.RootPanel);
             this.DoubleBuffered = true;

@@ -32,7 +32,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class CompressSettingWindow : Form
+    public partial class CompressSettingWindow : Forms.WindowBase
     {
         #region Constructors
 
@@ -49,7 +49,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             InitializeComponent();
 
-            _password = new PasswordBehavior(PasswordTextBox, ConfirmTextBox, ShowPasswordCheckBox);
+            _password = new(PasswordTextBox, ConfirmTextBox, ShowPasswordCheckBox);
             _password.Updated += (s, e) => UpdateEncryptionCondition();
 
             UpdateThreadCount();
@@ -385,7 +385,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         #region Fields
         private bool _path = false;
         private bool _encryption = true;
-        private readonly PasswordBehavior _password;
+        private readonly PasswordLintBehavior _password;
         #endregion
     }
 }

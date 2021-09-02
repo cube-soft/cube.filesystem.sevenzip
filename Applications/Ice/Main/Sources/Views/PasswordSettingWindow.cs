@@ -51,7 +51,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             ExecuteButton.Click += (s, e) => Close();
             ExitButton.Click    += (s, e) => Close();
 
-            var pb = new PasswordBehavior(PasswordTextBox, ConfirmTextBox, ShowPasswordCheckBox);
+            var pb = new PasswordLintBehavior(PasswordTextBox, ConfirmTextBox, ShowPasswordCheckBox);
             pb.Updated += (s, e) => ExecuteButton.Enabled = pb.Valid;
             Behaviors.Add(pb);
         }

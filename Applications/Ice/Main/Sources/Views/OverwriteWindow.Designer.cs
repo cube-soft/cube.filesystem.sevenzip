@@ -57,8 +57,8 @@
             this.RootPanel.Name = "RootPanel";
             this.RootPanel.RowCount = 2;
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
-            this.RootPanel.Size = new System.Drawing.Size(484, 311);
+            this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 90F));
+            this.RootPanel.Size = new System.Drawing.Size(484, 321);
             this.RootPanel.TabIndex = 0;
             //
             // IconPictureBox
@@ -86,6 +86,7 @@
             //
             // ButtonsPanel
             //
+            this.ButtonsPanel.BackColor = System.Drawing.SystemColors.Control;
             this.RootPanel.SetColumnSpan(this.ButtonsPanel, 2);
             this.ButtonsPanel.Controls.Add(this.AlwaysRenameButton);
             this.ButtonsPanel.Controls.Add(this.AlwaysYesButton);
@@ -94,28 +95,28 @@
             this.ButtonsPanel.Controls.Add(this.AlwaysNoButton);
             this.ButtonsPanel.Controls.Add(this.NoButton);
             this.ButtonsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ButtonsPanel.Location = new System.Drawing.Point(3, 234);
+            this.ButtonsPanel.Location = new System.Drawing.Point(0, 231);
+            this.ButtonsPanel.Margin = new System.Windows.Forms.Padding(0);
             this.ButtonsPanel.Name = "ButtonsPanel";
+            this.ButtonsPanel.Padding = new System.Windows.Forms.Padding(0, 9, 9, 0);
             this.ButtonsPanel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.ButtonsPanel.Size = new System.Drawing.Size(478, 74);
+            this.ButtonsPanel.Size = new System.Drawing.Size(484, 90);
             this.ButtonsPanel.TabIndex = 2;
             //
             // AlwaysRenameButton
             //
-            this.AlwaysRenameButton.Location = new System.Drawing.Point(362, 4);
-            this.AlwaysRenameButton.Margin = new System.Windows.Forms.Padding(16, 4, 4, 4);
+            this.AlwaysRenameButton.Location = new System.Drawing.Point(347, 12);
             this.AlwaysRenameButton.Name = "AlwaysRenameButton";
-            this.AlwaysRenameButton.Size = new System.Drawing.Size(100, 25);
+            this.AlwaysRenameButton.Size = new System.Drawing.Size(125, 30);
             this.AlwaysRenameButton.TabIndex = 4;
             this.AlwaysRenameButton.Text = "すべてリネーム";
             this.AlwaysRenameButton.UseVisualStyleBackColor = true;
             //
             // AlwaysYesButton
             //
-            this.AlwaysYesButton.Location = new System.Drawing.Point(254, 4);
-            this.AlwaysYesButton.Margin = new System.Windows.Forms.Padding(4);
+            this.AlwaysYesButton.Location = new System.Drawing.Point(216, 12);
             this.AlwaysYesButton.Name = "AlwaysYesButton";
-            this.AlwaysYesButton.Size = new System.Drawing.Size(100, 25);
+            this.AlwaysYesButton.Size = new System.Drawing.Size(125, 30);
             this.AlwaysYesButton.TabIndex = 2;
             this.AlwaysYesButton.Text = "すべてはい";
             this.AlwaysYesButton.UseVisualStyleBackColor = true;
@@ -123,40 +124,36 @@
             // YesButton
             //
             this.ButtonsPanel.SetFlowBreak(this.YesButton, true);
-            this.YesButton.Location = new System.Drawing.Point(146, 4);
-            this.YesButton.Margin = new System.Windows.Forms.Padding(4);
+            this.YesButton.Location = new System.Drawing.Point(85, 12);
             this.YesButton.Name = "YesButton";
-            this.YesButton.Size = new System.Drawing.Size(100, 25);
+            this.YesButton.Size = new System.Drawing.Size(125, 30);
             this.YesButton.TabIndex = 0;
             this.YesButton.Text = "はい";
             this.YesButton.UseVisualStyleBackColor = true;
             //
             // ExitButton
             //
-            this.ExitButton.Location = new System.Drawing.Point(362, 37);
-            this.ExitButton.Margin = new System.Windows.Forms.Padding(16, 4, 4, 4);
+            this.ExitButton.Location = new System.Drawing.Point(347, 48);
             this.ExitButton.Name = "ExitButton";
-            this.ExitButton.Size = new System.Drawing.Size(100, 25);
+            this.ExitButton.Size = new System.Drawing.Size(125, 30);
             this.ExitButton.TabIndex = 5;
             this.ExitButton.Text = "キャンセル";
             this.ExitButton.UseVisualStyleBackColor = true;
             //
             // AlwaysNoButton
             //
-            this.AlwaysNoButton.Location = new System.Drawing.Point(254, 37);
-            this.AlwaysNoButton.Margin = new System.Windows.Forms.Padding(4);
+            this.AlwaysNoButton.Location = new System.Drawing.Point(216, 48);
             this.AlwaysNoButton.Name = "AlwaysNoButton";
-            this.AlwaysNoButton.Size = new System.Drawing.Size(100, 25);
+            this.AlwaysNoButton.Size = new System.Drawing.Size(125, 30);
             this.AlwaysNoButton.TabIndex = 3;
             this.AlwaysNoButton.Text = "すべていいえ";
             this.AlwaysNoButton.UseVisualStyleBackColor = true;
             //
             // NoButton
             //
-            this.NoButton.Location = new System.Drawing.Point(146, 37);
-            this.NoButton.Margin = new System.Windows.Forms.Padding(4);
+            this.NoButton.Location = new System.Drawing.Point(85, 48);
             this.NoButton.Name = "NoButton";
-            this.NoButton.Size = new System.Drawing.Size(100, 25);
+            this.NoButton.Size = new System.Drawing.Size(125, 30);
             this.NoButton.TabIndex = 1;
             this.NoButton.Text = "いいえ";
             this.NoButton.UseVisualStyleBackColor = true;
@@ -165,7 +162,8 @@
             //
             this.AcceptButton = this.YesButton;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(484, 311);
+            this.BackColor = System.Drawing.SystemColors.Window;
+            this.ClientSize = new System.Drawing.Size(484, 321);
             this.Controls.Add(this.RootPanel);
             this.Font = new System.Drawing.Font("Meiryo UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(128)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -186,14 +184,14 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel RootPanel;
+        private System.Windows.Forms.FlowLayoutPanel ButtonsPanel;
+        private System.Windows.Forms.Button YesButton;
+        private System.Windows.Forms.Button NoButton;
+        private System.Windows.Forms.Button ExitButton;
+        private System.Windows.Forms.Button AlwaysYesButton;
+        private System.Windows.Forms.Button AlwaysNoButton;
+        private System.Windows.Forms.Button AlwaysRenameButton;
         private System.Windows.Forms.PictureBox IconPictureBox;
         private System.Windows.Forms.Label DescriptionLabel;
-        private System.Windows.Forms.FlowLayoutPanel ButtonsPanel;
-        private System.Windows.Forms.Button AlwaysRenameButton;
-        private System.Windows.Forms.Button AlwaysYesButton;
-        private System.Windows.Forms.Button YesButton;
-        private System.Windows.Forms.Button ExitButton;
-        private System.Windows.Forms.Button AlwaysNoButton;
-        private System.Windows.Forms.Button NoButton;
     }
 }
