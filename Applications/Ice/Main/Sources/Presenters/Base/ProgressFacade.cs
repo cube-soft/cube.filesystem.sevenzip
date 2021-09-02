@@ -45,10 +45,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// specified arguments.
         /// </summary>
         ///
-        /// <param name="dispatcher">Invoker object.</param>
-        ///
         /* ----------------------------------------------------------------- */
-        protected ProgressFacade(Dispatcher dispatcher) : base(dispatcher)
+        protected ProgressFacade()
         {
             _timer.Elapsed += (s, e) => {
                 Remaining = Report.Estimate(Elapsed, Remaining);

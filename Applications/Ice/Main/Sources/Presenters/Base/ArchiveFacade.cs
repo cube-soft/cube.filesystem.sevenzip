@@ -43,12 +43,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// specified arguments.
         /// </summary>
         ///
-        /// <param name="src">Request for the transaction.</param>
+        /// <param name="src">Request of the process.</param>
         /// <param name="settings">User settings.</param>
-        /// <param name="dispatcher">Invoker object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected ArchiveFacade(Request src, SettingFolder settings, Dispatcher dispatcher) : base(dispatcher)
+        protected ArchiveFacade(Request src, SettingFolder settings)
         {
             Request  = src;
             Settings = settings;

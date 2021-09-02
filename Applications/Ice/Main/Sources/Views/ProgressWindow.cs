@@ -170,6 +170,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             Behaviors.Add(new CloseBehavior(this, vm));
             Behaviors.Add(new ShownBehavior(this, vm.Start));
             Behaviors.Add(new ClickBehavior(SuspendButton, vm.SuspendOrResume));
+            Behaviors.Add(new ShowDialogBehavior<CompressSettingWindow, CompressSettingViewModel>(vm));
         }
 
         #endregion

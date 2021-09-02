@@ -42,7 +42,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// with the specified arguments.
         /// </summary>
         ///
-        /// <param name="src">Request of the transaction.</param>
+        /// <param name="src">Request of the process.</param>
         /// <param name="settings">User settings.</param>
         ///
         /* ----------------------------------------------------------------- */
@@ -58,13 +58,13 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// with the specified arguments.
         /// </summary>
         ///
-        /// <param name="src">Request of the transaction.</param>
+        /// <param name="src">Request of the process.</param>
         /// <param name="settings">User settings.</param>
         /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
         public CompressViewModel(Request src, SettingFolder settings, SynchronizationContext context) :
-            this(new CompressFacade(src, settings, new ContextDispatcher(context, false)), context) { }
+            this(new(src, settings), context) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -83,7 +83,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             base(src, new(), context)
         {
             src.Password  = new(Send, Dispatcher.Vanilla);
-            src.Configure = new(Send);
+            src.Configure = new(e => Send(new CompressSettingViewModel(e, context)));
             src.Select    = new(e => {
                 var m = Message.ForCompressLocation(e.Source);
                 Send(m);

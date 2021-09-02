@@ -45,13 +45,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// specified arguments.
         /// </summary>
         ///
-        /// <param name="request">Request for the transaction.</param>
+        /// <param name="src">Request of the process.</param>
         /// <param name="settings">User settings.</param>
-        /// <param name="dispatcher">Dispatcher object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressFacade(Request request, SettingFolder settings, Dispatcher dispatcher) :
-            base(request, settings, dispatcher) { }
+        public CompressFacade(Request src, SettingFolder settings) : base(src, settings) { }
 
         #endregion
 

@@ -64,7 +64,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         public ExtractViewModel(Request src, SettingFolder settings, SynchronizationContext context) :
-            this(new(src, settings, new ContextDispatcher(context, false)), context) { }
+            this(new(src, settings), context) { }
 
         /* ----------------------------------------------------------------- */
         ///
