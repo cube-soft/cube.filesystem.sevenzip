@@ -58,7 +58,7 @@
             this.RootPanel.RowCount = 2;
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 90F));
-            this.RootPanel.Size = new System.Drawing.Size(484, 321);
+            this.RootPanel.Size = new System.Drawing.Size(484, 331);
             this.RootPanel.TabIndex = 0;
             //
             // IconPictureBox
@@ -67,7 +67,7 @@
             this.IconPictureBox.Location = new System.Drawing.Point(3, 3);
             this.IconPictureBox.Margin = new System.Windows.Forms.Padding(3, 3, 3, 120);
             this.IconPictureBox.Name = "IconPictureBox";
-            this.IconPictureBox.Size = new System.Drawing.Size(74, 108);
+            this.IconPictureBox.Size = new System.Drawing.Size(74, 118);
             this.IconPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.IconPictureBox.TabIndex = 0;
             this.IconPictureBox.TabStop = false;
@@ -78,7 +78,7 @@
             this.DescriptionLabel.Location = new System.Drawing.Point(84, 20);
             this.DescriptionLabel.Margin = new System.Windows.Forms.Padding(4, 20, 4, 0);
             this.DescriptionLabel.Name = "DescriptionLabel";
-            this.DescriptionLabel.Size = new System.Drawing.Size(396, 211);
+            this.DescriptionLabel.Size = new System.Drawing.Size(396, 221);
             this.DescriptionLabel.TabIndex = 1;
             this.DescriptionLabel.Text = "この場所には同じ名前のファイルが既に存在します。上書きしますか？\r\n\r\n現在のファイル\r\nD:\\Foo\\Bar\\Bas.txt\r\nサイズ : 12.3KB\r\n更新" +
     "日時 : 2017/07/10 23:55:55\r\n\r\n新しいファイル\r\nBas.txt\r\nサイズ : 34.5KB\r\n更新日時 : 2017/07/10 12" +
@@ -95,7 +95,7 @@
             this.ButtonsPanel.Controls.Add(this.AlwaysNoButton);
             this.ButtonsPanel.Controls.Add(this.NoButton);
             this.ButtonsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ButtonsPanel.Location = new System.Drawing.Point(0, 231);
+            this.ButtonsPanel.Location = new System.Drawing.Point(0, 241);
             this.ButtonsPanel.Margin = new System.Windows.Forms.Padding(0);
             this.ButtonsPanel.Name = "ButtonsPanel";
             this.ButtonsPanel.Padding = new System.Windows.Forms.Padding(0, 9, 9, 0);
@@ -163,7 +163,7 @@
             this.AcceptButton = this.YesButton;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(484, 321);
+            this.ClientSize = new System.Drawing.Size(484, 331);
             this.Controls.Add(this.RootPanel);
             this.Font = new System.Drawing.Font("Meiryo UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(128)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
