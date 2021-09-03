@@ -128,7 +128,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                 if (Report.Status == ReportStatus.End) Move(e.Current);
             });
 
-            Retry(() => src.Extract(Temp, filters, progress));
+            Retry(() => src.Extract(Temp, new Filter(filters).Match, progress));
         }
 
         /* ----------------------------------------------------------------- */

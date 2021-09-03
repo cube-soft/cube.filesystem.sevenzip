@@ -191,7 +191,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 
             var dest = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
             var cvt  = Filters.Any() ?
-                       src.Where(e => !new PathFilter(e.FullName).MatchAny(Filters)) :
+                       src.Where(e => !new Filter(Filters).Match(e)) :
                        src;
 
             foreach (var e in cvt)

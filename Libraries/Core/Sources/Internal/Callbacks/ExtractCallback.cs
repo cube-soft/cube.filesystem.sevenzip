@@ -89,15 +89,15 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Filters
+        /// Filter
         ///
         /// <summary>
-        /// Gets or sets the collection of file or directory names to
-        /// filter.
+        /// Gets or sets the function to determine if the specified
+        /// file or directory is filtered.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IEnumerable<string> Filters { get; set; }
+        public Predicate<Entity> Filter { get; set; }
 
         #endregion
 
@@ -275,7 +275,7 @@ namespace Cube.FileSystem.SevenZip
                 var vi = value.Source;
                 if (mode == AskMode.Extract && vi.FullName.HasValue())
                 {
-                    if (vi.Match(Filters)) GetType().LogDebug($"Skip:{vi.FullName}");
+                    if (Filter?.Invoke(vi) ?? false) GetType().LogDebug($"Skip:{vi.FullName}");
                     else if (vi.IsDirectory) vi.CreateDirectory(_dest);
                     else value.Stream = CreateStream(vi);
                 }

@@ -106,10 +106,10 @@ namespace Cube.FileSystem.SevenZip.Ice
 
             using (var writer = new ArchiveWriter(src.Format))
             {
-                Request.Sources.Each(e => writer.Add(e));
+                foreach (var e in Request.Sources) writer.Add(e);
+                var filters = Settings.Value.GetFilters(Settings.Value.Compress.Filtering);
                 writer.Options = src.ToOption(Settings);
-                writer.Filters = Settings.Value.GetFilters(Settings.Value.Compress.Filtering);
-                writer.Save(Temp, GetPasswordQuery(src), GetProgress());
+                writer.Save(Temp, GetPasswordQuery(src), new Filter(filters).Match, GetProgress());
             }
 
             if (Io.Exists(Temp)) Io.Move(Temp, Destination, true);

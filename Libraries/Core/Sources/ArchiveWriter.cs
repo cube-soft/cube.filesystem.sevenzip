@@ -89,18 +89,6 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public ArchiveOption Options { get; set; }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Filters
-        ///
-        /// <summary>
-        /// Gets or sets the collection of file or directory names to
-        /// filter.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public IEnumerable<string> Filters { get; set; }
-
         #endregion
 
         #region Methods
@@ -173,7 +161,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="password">Password.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Save(string dest, string password) => Save(dest, password, null);
+        public void Save(string dest, string password) => Save(dest, password, null, null);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -187,7 +175,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="password">Password query.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Save(string dest, IQuery<string> password) => Save(dest, password, null);
+        public void Save(string dest, IQuery<string> password) => Save(dest, password, null, null);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -199,11 +187,18 @@ namespace Cube.FileSystem.SevenZip
         ///
         /// <param name="dest">Path to save the archive.</param>
         /// <param name="password">Password.</param>
+        /// <param name="filter">
+        /// Function to determine if a file or directory should be filtered.
+        /// </param>
         /// <param name="progress">Progress report.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Save(string dest, string password, IProgress<Report> progress) =>
-            Invoke(dest, password.HasValue() ? new PasswordQuery(password) : null, progress);
+        public void Save(string dest, string password,
+            Predicate<Entity> filter, IProgress<Report> progress)
+        {
+            var query = password.HasValue() ? new PasswordQuery(password) : null;
+            Invoke(dest, query, filter, progress);
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -215,11 +210,18 @@ namespace Cube.FileSystem.SevenZip
         ///
         /// <param name="dest">Path to save the archive.</param>
         /// <param name="password">Password query.</param>
+        /// <param name="filter">
+        /// Function to determine if a file or directory should be filtered.
+        /// </param>
         /// <param name="progress">Progress report.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Save(string dest, IQuery<string> password, IProgress<Report> progress) =>
-            Invoke(dest, password != null ? new PasswordQuery(password) : null, progress);
+        public void Save(string dest, IQuery<string> password,
+            Predicate<Entity> filter, IProgress<Report> progress)
+        {
+            var query = password != null ? new PasswordQuery(password) : null;
+            Invoke(dest, query, filter, progress);
+        }
 
         #endregion
 
@@ -236,11 +238,12 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Invoke(string dest, PasswordQuery query, IProgress<Report> progress)
+        private void Invoke(string dest, PasswordQuery query,
+            Predicate<Entity> filter, IProgress<Report> progress)
         {
-            if (Format == Format.Sfx) InvokeSfx(GetItems(), dest, query, progress);
-            else if (Format == Format.Tar) InvokeTar(GetItems(), dest, query, progress);
-            else Invoke(GetItems(), Format, dest, query, progress);
+            if (Format == Format.Sfx) InvokeSfx(GetItems(filter), dest, query, progress);
+            else if (Format == Format.Tar) InvokeTar(GetItems(filter), dest, query, progress);
+            else Invoke(GetItems(filter), Format, dest, query, progress);
         }
 
         /* ----------------------------------------------------------------- */
@@ -319,11 +322,9 @@ namespace Cube.FileSystem.SevenZip
             {
                 Invoke(src, Format.SevenZip, tmp, password, progress);
 
-                using (var ds = Io.Create(dest))
-                {
-                    using (var ss = Io.Open(sfx)) ss.CopyTo(ds);
-                    using (var ss = Io.Open(tmp)) ss.CopyTo(ds);
-                }
+                using var ds = Io.Create(dest);
+                using (var ss = Io.Open(sfx)) ss.CopyTo(ds);
+                using (var ss = Io.Open(tmp)) ss.CopyTo(ds);
             }
             finally { GetType().LogWarn(() => Io.Delete(tmp)); }
         }
@@ -372,9 +373,8 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private IList<RawEntity> GetItems() => (Filters == null) ?
-            Items :
-            Items.Where(x => !new PathFilter(x.FullName).MatchAny(Filters)).ToList();
+        private IList<RawEntity> GetItems(Predicate<Entity> src) =>
+            (src == null) ? Items : Items.Where(e => !src(e)).ToList();
 
         /* ----------------------------------------------------------------- */
         ///

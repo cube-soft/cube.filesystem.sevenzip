@@ -52,9 +52,9 @@ namespace Cube.FileSystem.SevenZip
         public ArchiveEntitySource(IInArchive core, int index, string path) :
             base(core.GetPath(index, path), false)
         {
-            _core  = core;
-            Index  = index;
-            Filter = new(RawName)
+            Index = index;
+            _core = core;
+            _cvt  = new(RawName)
             {
                 AllowParentDirectory  = false,
                 AllowDriveLetter      = false,
@@ -103,17 +103,6 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public bool Encrypted { get; protected set; }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Filter
-        ///
-        /// <summary>
-        /// Gets the path filter object.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public PathFilter Filter { get; }
-
         #endregion
 
         #region Methods
@@ -139,9 +128,9 @@ namespace Cube.FileSystem.SevenZip
             LastWriteTime  = _core.Get<DateTime>(Index, ItemPropId.LastWriteTime);
             LastAccessTime = _core.Get<DateTime>(Index, ItemPropId.LastAccessTime);
 
-            var fi = Filter.Value.HasValue() ? Io.Get(Filter.Value) : default;
+            var fi = _cvt.Value.HasValue() ? Io.Get(_cvt.Value) : default;
 
-            FullName      = Filter.Value;
+            FullName      = _cvt.Value;
             Name          = fi?.Name ?? string.Empty;
             BaseName      = fi?.BaseName ?? string.Empty;
             Extension     = fi?.Extension ?? string.Empty;
@@ -171,6 +160,7 @@ namespace Cube.FileSystem.SevenZip
 
         #region Fields
         private IInArchive _core;
+        private readonly PathConverter _cvt;
         #endregion
     }
 }

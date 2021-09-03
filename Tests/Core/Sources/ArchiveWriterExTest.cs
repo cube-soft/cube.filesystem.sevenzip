@@ -81,13 +81,14 @@ namespace Cube.FileSystem.SevenZip.Tests
         public int Filter(bool enabled)
         {
             var dest = Get($"Filter{enabled}.zip");
+            var filters = new[] { "Filter.txt", "FilterDirectory" };
 
             using (var archive = new ArchiveWriter(Format.Zip))
             {
-                if (enabled) archive.Filters = new[] { "Filter.txt", "FilterDirectory" };
                 archive.Add(GetSource("Sample.txt"));
                 archive.Add(GetSource("Sample 00..01"));
-                archive.Save(dest);
+                if (enabled) archive.Save(dest, "", new Filter(filters).Match, null);
+                else archive.Save(dest);
             }
 
             using (var obj = new ArchiveReader(dest)) return obj.Items.Count;
@@ -111,7 +112,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             var dest  = Get("PasswordCancel.zip");
             var query = new Query<string>(e => e.Cancel = true);
 
-            Assert.That(() => archive.Save(dest, query, null),
+            Assert.That(() => archive.Save(dest, query, null, null),
                 Throws.TypeOf<OperationCanceledException>());
         }
 

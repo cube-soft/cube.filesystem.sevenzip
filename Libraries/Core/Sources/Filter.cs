@@ -17,40 +17,39 @@
 //
 /* ------------------------------------------------------------------------- */
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveEntity
+    /// Filter
     ///
     /// <summary>
-    /// Represents an item in the archive.
+    /// Provides functionality to determine if the provided file or
+    /// directory is filtered.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public sealed class ArchiveEntity : Entity
+    public class Filter
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveEntity
+        /// Filter
         ///
         /// <summary>
-        /// Initializes a new instance of the ArchiveEntity class with the
-        /// specified arguments.
+        /// Initializes a new instance of the Filter class with the
+        /// specified file or directory names.
         /// </summary>
         ///
-        /// <param name="src">Source object.</param>
+        /// <param name="src">
+        /// Collection of file or directory  names to be filtered.
+        /// </param>
         ///
         /* ----------------------------------------------------------------- */
-        internal ArchiveEntity(ArchiveEntitySource src) : base(src)
-        {
-            Index     = src.Index;
-            Crc       = src.Crc;
-            Encrypted = src.Encrypted;
-        }
+        public Filter(IEnumerable<string> src) => Names = src;
 
         #endregion
 
@@ -58,36 +57,66 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Index
+        /// Names
         ///
         /// <summary>
-        /// Gets the index in the archive.
+        /// Gets the collection of file or directory names to be filtered.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public int Index { get; }
+        public IEnumerable<string> Names { get; }
+
+        #endregion
+
+        #region Methods
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Crc
+        /// Match
         ///
         /// <summary>
-        /// Gets the CRC value of the item.
+        /// Determines if the specified file or directory is filtered.
         /// </summary>
         ///
+        /// <param name="src">File or directory information.</param>
+        ///
+        /// <returns>true for filtered.</returns>
+        ///
         /* ----------------------------------------------------------------- */
-        public uint Crc { get; }
+        public bool Match(Entity src)
+        {
+            if (!Names.Any()) return false;
+            var parts = Split(src.FullName);
+            if (!parts.Any()) return false;
+
+            foreach (var name in Names)
+            {
+                if (parts.Any(e => string.Compare(e, name, true) == 0)) return true;
+            }
+            return false;
+        }
+
+        #endregion
+
+        #region Implementations
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Encrypted
+        /// Split
         ///
         /// <summary>
-        /// Gets the value indicating whether the archive is encrypted.
+        /// Splits the specified path with the path separator.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool Encrypted { get; }
+        private IEnumerable<string> Split(string src) => new PathConverter(src)
+        {
+            AllowDriveLetter      = true,
+            AllowCurrentDirectory = false,
+            AllowParentDirectory  = false,
+            AllowUnc              = true,
+            AllowInactivation     = false,
+        }.Parts;
 
         #endregion
     }

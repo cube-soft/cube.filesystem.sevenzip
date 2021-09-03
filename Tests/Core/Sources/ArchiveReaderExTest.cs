@@ -53,7 +53,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             using (var archive = new ArchiveReader(src))
             {
                 var filters = new[] { ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini" };
-                archive.Extract(dest, filters);
+                archive.Extract(dest, new Filter(filters).Match);
             }
 
             Assert.That(Io.Exists(Io.Combine(dest, @"フィルタリング テスト用")),              Is.True);

@@ -17,7 +17,6 @@
 //
 /* ------------------------------------------------------------------------- */
 using System;
-using System.Collections.Generic;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -94,42 +93,13 @@ namespace Cube.FileSystem.SevenZip
         /// or empty, the method invokes as a test mode.
         /// </param>
         ///
-        /// <param name="filters">
-        /// List of paths to skip decompressing files or folders that match
-        /// the contained values.
+        /// <param name="filter">
+        /// Function to determine if a file or directory should be filtered.
         /// </param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void Extract(this ArchiveReader src, string dest, IEnumerable<string> filters) =>
-            src.Extract(dest, null, filters, null);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extract
-        ///
-        /// <summary>
-        /// Extracts all files except those matching the specified filters
-        /// and saves them in the specified directory.
-        /// </summary>
-        ///
-        /// <param name="src">Source reader object.</param>
-        ///
-        /// <param name="dest">
-        /// Path of the directory to save. If the parameter is set to null
-        /// or empty, the method invokes as a test mode.
-        /// </param>
-        ///
-        /// <param name="filters">
-        /// List of paths to skip decompressing files or folders that match
-        /// the contained values.
-        /// </param>
-        ///
-        /// <param name="progress">Progress object.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static void Extract(this ArchiveReader src, string dest,
-            IEnumerable<string> filters, IProgress<Report> progress) =>
-            src.Extract(dest, null, filters, progress);
+        public static void Extract(this ArchiveReader src, string dest, Predicate<Entity> filter) =>
+            src.Extract(dest, null, filter, null);
 
         #endregion
 
@@ -205,14 +175,13 @@ namespace Cube.FileSystem.SevenZip
         ///
         /// <param name="src">Source reader object.</param>
         ///
-        /// <param name="filters">
-        /// List of paths to skip decompressing files or folders that match
-        /// the contained values.
+        /// <param name="filter">
+        /// Function to determine if a file or directory should be filtered.
         /// </param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void Test(this ArchiveReader src, IEnumerable<string> filters) =>
-            src.Test(filters, null);
+        public static void Test(this ArchiveReader src, Predicate<Entity> filter) =>
+            src.Test(filter, null);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -225,17 +194,15 @@ namespace Cube.FileSystem.SevenZip
         ///
         /// <param name="src">Source reader object.</param>
         ///
-        /// <param name="filters">
-        /// List of paths to skip decompressing files or folders that match
-        /// the contained values.
+        /// <param name="filter">
+        /// Function to determine if a file or directory should be filtered.
         /// </param>
         ///
         /// <param name="progress">Progress object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void Test(this ArchiveReader src,
-            IEnumerable<string> filters, IProgress<Report> progress) =>
-            src.Extract(null, null, filters, progress);
+        public static void Test(this ArchiveReader src, Predicate<Entity> filter, IProgress<Report> progress) =>
+            src.Extract(null, null, filter, progress);
 
         #endregion
     }

@@ -155,9 +155,33 @@ namespace Cube.FileSystem.SevenZip
         /// Extract
         ///
         /// <summary>
+        /// Extracts all files except those matching the specified filter
+        /// function and saves them in the specified directory.
+        /// </summary>
+        ///
+        /// <param name="dest">
+        /// Path of the directory to save. If the parameter is set to null
+        /// or empty, the method invokes as a test mode.
+        /// </param>
+        ///
+        /// <param name="filter">
+        /// Function to determine if a file or directory should be filtered.
+        /// </param>
+        ///
+        /// <param name="progress">Progress object.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Extract(string dest, Predicate<Entity> filter, IProgress<Report> progress) =>
+            Extract(dest, null, filter, progress);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Extract
+        ///
+        /// <summary>
         /// Extracts the files corresponding to the specified indices except
-        /// those matching the specified filters, and saves them in the
-        /// specified directory.
+        /// those matching the specified filter function, and saves them
+        /// in the specified directory.
         /// </summary>
         ///
         /// <param name="dest">
@@ -167,15 +191,14 @@ namespace Cube.FileSystem.SevenZip
         ///
         /// <param name="src">Source indices to extract.</param>
         ///
-        /// <param name="filters">
-        /// List of paths to skip decompressing files or folders that match
-        /// the contained values.
+        /// <param name="filter">
+        /// Function to determine if a file or directory should be filtered.
         /// </param>
         ///
         /// <param name="progress">Progress object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Extract(string dest, uint[] src, IEnumerable<string> filters, IProgress<Report> progress)
+        public void Extract(string dest, uint[] src, Predicate<Entity> filter, IProgress<Report> progress)
         {
             using var cb = src != null ?
                       new ExtractCallback(this, src.Select(i => (int)i), src.Length, dest) :
@@ -183,7 +206,7 @@ namespace Cube.FileSystem.SevenZip
 
             cb.Password = _password;
             cb.Progress = progress;
-            cb.Filters  = filters ?? Enumerable.Empty<string>();
+            cb.Filter   = filter;
 
             var count = (uint?)src?.Length ?? uint.MaxValue;
             var test  = dest.HasValue() ? 0 : 1;
