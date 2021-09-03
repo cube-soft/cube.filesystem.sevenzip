@@ -12,7 +12,7 @@ Cube.FileSystem.SevenZip is a wrapper library of the [7-Zip](http://www.7-zip.or
 You can install the library through the NuGet package.
 Add a dependency in your project file using the following syntax:
 
-    <PackageReference Include="Cube.FileSystem.SevenZip" Version="4.0.2" />
+    <PackageReference Include="Cube.FileSystem.SevenZip" Version="5.0.0" />
 
 Or select it from the NuGet packages UI on Visual Studio.
 

@@ -21,8 +21,8 @@
     <ItemGroup>
         <ProjectReference Include="..\..\Applications\Ice\Main\Cube.FileSystem.SevenZip.Ice.Main.csproj" />
         <ProjectReference Include="..\..\Applications\Ice\Settings\Cube.FileSystem.SevenZip.Ice.Settings.csproj" />
-        <PackageReference Include="Cube.Tests" Version="4.0.2" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.*" />
+        <PackageReference Include="Cube.Tests" Version="5.0.*" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.*" />
         <PackageReference Include="NUnit3TestAdapter" Version="4.0.*" />
         <PackageReference Include="Appveyor.TestLogger" Version="2.0.*" />
     </ItemGroup>
