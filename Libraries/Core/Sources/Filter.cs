@@ -18,6 +18,7 @@
 /* ------------------------------------------------------------------------- */
 using System.Collections.Generic;
 using System.Linq;
+using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -109,14 +110,9 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private IEnumerable<string> Split(string src) => new PathConverter(src)
-        {
-            AllowDriveLetter      = true,
-            AllowCurrentDirectory = false,
-            AllowParentDirectory  = false,
-            AllowUnc              = true,
-            AllowInactivation     = false,
-        }.Parts;
+        private IEnumerable<string> Split(string src) =>
+            src.Split(SafePath.SeparatorChars.ToArray())
+               .SkipWhile(s => !s.HasValue());
 
         #endregion
     }
