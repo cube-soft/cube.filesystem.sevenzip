@@ -16,6 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Cube.FileSystem.SevenZip
@@ -29,7 +30,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal class SevenZipOptionSetter : ArchiveOptionSetter
+    internal class SevenZipOptionSetter : CompressionOptionSetter
     {
         #region Constructors
 
@@ -45,7 +46,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="options">Archive options.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public SevenZipOptionSetter(ArchiveOption options) : base(options) { }
+        public SevenZipOptionSetter(CompressionOption options) : base(options) { }
 
         #endregion
 
@@ -76,22 +77,19 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Execute
+        /// Invoke
         ///
         /// <summary>
-        /// Sets the current options to the specified archive.
+        /// Sets the current options to the specified collection.
         /// </summary>
         ///
-        /// <param name="dest">Archive object.</param>
+        /// <param name="dest">Collection of options.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public override void Execute(ISetProperties dest)
+        protected override void Invoke(IDictionary<string, PropVariant> dest)
         {
-            if (Options is SevenZipOption so)
-            {
-                AddCompressionMethod(so);
-            }
-            base.Execute(dest);
+            AddCompressionMethod(dest);
+            base.Invoke(dest);
         }
 
         #endregion
@@ -107,11 +105,11 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void AddCompressionMethod(SevenZipOption so)
+        private void AddCompressionMethod(IDictionary<string, PropVariant> dest)
         {
-            var value = so.CompressionMethod;
-            if (!SupportedMethods.Contains(value)) return;
-            Add("0", PropVariant.Create(value.ToString()));
+            var m = Options.CompressionMethod;
+            if (!SupportedMethods.Contains(m)) return;
+            dest.Add("m", PropVariant.Create(m.ToString()));
         }
 
         #endregion

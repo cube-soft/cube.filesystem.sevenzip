@@ -48,13 +48,13 @@ namespace Cube.FileSystem.SevenZip.Tests
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
         public Format Invoke(Format format, string filename, string password,
-            string[] items, ArchiveOption option)
+            string[] items, CompressionOption options)
         {
             var dest = Get(filename);
 
             using (var archive = new ArchiveWriter(format))
             {
-                archive.Options = option;
+                archive.Options = options;
                 foreach (var e in items) archive.Add(GetSource(e));
                 archive.Save(dest, password);
                 archive.Clear();
@@ -110,7 +110,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     "ZipFast.zip",
                     "",
                     new[] { "Sample.txt", "Sample 00..01" },
-                    new ZipOption { CompressionLevel = CompressionLevel.Fast }
+                    new CompressionOption { CompressionLevel = CompressionLevel.Fast }
                 ).Returns(Format.Zip);
 
                 yield return new TestCaseData(
@@ -118,7 +118,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     "ZipUltra.zip",
                     "",
                     new[] { "Sample.txt", "Sample 00..01" },
-                    new ZipOption
+                    new CompressionOption
                     {
                         CompressionLevel = CompressionLevel.Ultra,
                         ThreadCount      = Environment.ProcessorCount,
@@ -130,7 +130,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     "ZipLzma.zip",
                     "",
                     new[] { "Sample.txt", "Sample 00..01" },
-                    new ZipOption { CompressionMethod = CompressionMethod.Lzma }
+                    new CompressionOption { CompressionMethod = CompressionMethod.Lzma }
                 ).Returns(Format.Zip);
 
                 yield return new TestCaseData(
@@ -170,7 +170,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     "ZipPasswordAes256.zip",
                     "password",
                     new[] { "Sample.txt" },
-                    new ZipOption { EncryptionMethod = EncryptionMethod.Aes256 }
+                    new CompressionOption { EncryptionMethod = EncryptionMethod.Aes256 }
                 ).Returns(Format.Zip);
 
                 yield return new TestCaseData(
@@ -178,7 +178,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     "7zLzma2.7z",
                     "",
                     new[] { "Sample.txt", "Sample 00..01" },
-                    new SevenZipOption
+                    new CompressionOption
                     {
                         CompressionLevel  = CompressionLevel.High,
                         CompressionMethod = CompressionMethod.Lzma2,
@@ -222,7 +222,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     "TarTest.tar.gz",
                     "",
                     new[] { "Sample.txt", "Sample 00..01" },
-                    new TarOption
+                    new CompressionOption
                     {
                         CompressionMethod = CompressionMethod.GZip,
                         CompressionLevel  = CompressionLevel.Ultra,
@@ -234,7 +234,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     "TarTest.tar.bz",
                     "",
                     new[] { "Sample.txt", "Sample 00..01" },
-                    new TarOption
+                    new CompressionOption
                     {
                         CompressionMethod = CompressionMethod.BZip2,
                         CompressionLevel  = CompressionLevel.Ultra,
@@ -246,7 +246,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                     "TarTest.tar.xz",
                     "",
                     new[] { "Sample.txt", "Sample 00..01" },
-                    new TarOption
+                    new CompressionOption
                     {
                         CompressionMethod = CompressionMethod.XZ,
                         CompressionLevel  = CompressionLevel.Ultra,

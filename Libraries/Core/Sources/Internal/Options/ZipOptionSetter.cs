@@ -16,6 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Cube.FileSystem.SevenZip
@@ -29,7 +30,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal class ZipOptionSetter : ArchiveOptionSetter
+    internal class ZipOptionSetter : CompressionOptionSetter
     {
         #region Constructors
 
@@ -45,7 +46,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="options">Archive options.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ZipOptionSetter(ArchiveOption options) : base(options) { }
+        public ZipOptionSetter(CompressionOption options) : base(options) { }
 
         #endregion
 
@@ -76,23 +77,20 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Execute
+        /// Invoke
         ///
         /// <summary>
-        /// Sets the current options to the specified archive.
+        /// Sets the current options to the specified collection.
         /// </summary>
         ///
-        /// <param name="dest">Archive object.</param>
+        /// <param name="dest">Collection of options.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public override void Execute(ISetProperties dest)
+        protected override void Invoke(IDictionary<string, PropVariant> dest)
         {
-            if (Options is ZipOption zo)
-            {
-                AddCompressionMethod(zo);
-                AddEncryptionMethod(zo);
-            }
-            base.Execute(dest);
+            AddCompressionMethod(dest);
+            AddEncryptionMethod(dest);
+            base.Invoke(dest);
         }
 
         #endregion
@@ -104,15 +102,15 @@ namespace Cube.FileSystem.SevenZip
         /// AddCompressionMethod
         ///
         /// <summary>
-        /// Adds the specified compression method.
+        /// Adds the compression method.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void AddCompressionMethod(ZipOption zo)
+        private void AddCompressionMethod(IDictionary<string, PropVariant> dest)
         {
-            var value = zo.CompressionMethod;
-            if (!SupportedMethods.Contains(value)) return;
-            Add("m", PropVariant.Create(value.ToString()));
+            var m = Options.CompressionMethod;
+            if (!SupportedMethods.Contains(m)) return;
+            dest.Add("m", PropVariant.Create(m.ToString()));
         }
 
         /* ----------------------------------------------------------------- */
@@ -120,15 +118,15 @@ namespace Cube.FileSystem.SevenZip
         /// AddEncryptionMethod
         ///
         /// <summary>
-        /// Adds the specified encryption method.
+        /// Adds the encryption method.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void AddEncryptionMethod(ZipOption zo)
+        private void AddEncryptionMethod(IDictionary<string, PropVariant> dest)
         {
-            var value = zo.EncryptionMethod;
-            if (value == EncryptionMethod.Default) return;
-            Add("em", PropVariant.Create(value.ToString()));
+            var em = Options.EncryptionMethod;
+            if (em == EncryptionMethod.Default) return;
+            dest.Add("em", PropVariant.Create(em.ToString()));
         }
 
         #endregion

@@ -35,17 +35,17 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// ToOption
         ///
         /// <summary>
-        /// Creates a new instance of the ArchiveOption class with the
+        /// Creates a new instance of the CompressionOption class with the
         /// specified arguments.
         /// </summary>
         ///
         /// <param name="src">Runtime settings.</param>
         /// <param name="settings">User settings.</param>
         ///
-        /// <remarks>ArchiveOption object.</remarks>
+        /// <remarks>CompressionOption object.</remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public static ArchiveOption ToOption(this CompressRuntimeSetting src,
+        public static CompressionOption ToOption(this CompressRuntimeSetting src,
             SettingFolder settings) => src.ToOption(settings.Value.Compress);
 
         /* ----------------------------------------------------------------- */
@@ -53,17 +53,17 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// ToOption
         ///
         /// <summary>
-        /// Creates a new instance of the ArchiveOption class with the
+        /// Creates a new instance of the CompressionOption class with the
         /// specified arguments.
         /// </summary>
         ///
         /// <param name="src">Runtime settings.</param>
         /// <param name="settings">User settings for compression.</param>
         ///
-        /// <remarks>ArchiveOption object.</remarks>
+        /// <remarks>CompressionOption object.</remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public static ArchiveOption ToOption(this CompressRuntimeSetting src,
+        public static CompressionOption ToOption(this CompressRuntimeSetting src,
             CompressSetting settings) => src.Format switch
         {
             Format.Zip      => MakeZip(src, settings),
@@ -82,11 +82,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// MakeZip
         ///
         /// <summary>
-        /// Creates a new instance of the ZipOption class.
+        /// Creates a new instance of the CompressionOption class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static ZipOption MakeZip(CompressRuntimeSetting src, CompressSetting common) => new()
+        private static CompressionOption MakeZip(CompressRuntimeSetting src, CompressSetting common) => new()
         {
             CompressionLevel  = src.CompressionLevel,
             CompressionMethod = src.CompressionMethod,
@@ -104,7 +104,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static SevenZipOption MakeSevenZip(CompressRuntimeSetting src) => new()
+        private static CompressionOption MakeSevenZip(CompressRuntimeSetting src) => new()
         {
             CompressionLevel  = src.CompressionLevel,
             CompressionMethod = src.CompressionMethod,
@@ -133,11 +133,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// CreateTarOption
         ///
         /// <summary>
-        /// Creates a new instance of the TarOption class.
+        /// Creates a new instance of the CompressionOption class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static TarOption MakeTar(CompressRuntimeSetting src) => new()
+        private static CompressionOption MakeTar(CompressRuntimeSetting src) => new()
         {
             CompressionLevel  = src.CompressionLevel,
             CompressionMethod = src.CompressionMethod,
@@ -153,7 +153,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static ArchiveOption MakeCommon(CompressRuntimeSetting src) => new()
+        private static CompressionOption MakeCommon(CompressRuntimeSetting src) => new()
         {
             CompressionLevel = src.CompressionLevel,
             ThreadCount      = src.ThreadCount,

@@ -87,7 +87,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveOption Options { get; set; }
+        public CompressionOption Options { get; set; }
 
         #endregion
 
@@ -265,7 +265,9 @@ namespace Cube.FileSystem.SevenZip
             {
                 using var ss = new ArchiveStreamWriter(Io.Create(dest));
                 var archive = _lib.GetOutArchive(fmt);
-                Options.Convert(Format)?.Execute(archive as ISetProperties);
+                var setter  = CompressionOptionSetter.From(Format, Options);
+
+                setter?.Invoke(archive as ISetProperties);
                 _ = archive.UpdateItems(ss, (uint)src.Count, cb);
             });
         }
@@ -290,7 +292,7 @@ namespace Cube.FileSystem.SevenZip
             {
                 Invoke(src, Format.Tar, tmp, query, progress);
 
-                var m = (Options as TarOption)?.CompressionMethod ?? CompressionMethod.Copy;
+                var m = Options.CompressionMethod;
                 if (m == CompressionMethod.BZip2 || m == CompressionMethod.GZip || m == CompressionMethod.XZ)
                 {
                     var f = new List<RawEntity> { new(IoEx.GetEntitySource(tmp)) };

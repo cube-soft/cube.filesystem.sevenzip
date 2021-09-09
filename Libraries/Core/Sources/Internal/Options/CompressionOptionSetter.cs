@@ -16,39 +16,42 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Cube.Mixin.Collections;
 
 namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveOptionSetter
+    /// CompressionOptionSetter
     ///
     /// <summary>
     /// Provides the functionality to set optional settings for archives.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal class ArchiveOptionSetter
+    internal class CompressionOptionSetter
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveOptionSetter
+        /// CompressionOptionSetter
         ///
         /// <summary>
-        /// Initializes a new instance of the ArchiveOptionSetter class
+        /// Initializes a new instance of the CompressionOptionSetter class
         /// with the specified options.
         /// </summary>
         ///
         /// <param name="options">Archive options.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveOptionSetter(ArchiveOption options) { Options = options; }
+        public CompressionOptionSetter(CompressionOption options) =>
+            Options = options ?? throw new ArgumentNullException();
 
         #endregion
 
@@ -63,7 +66,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveOption Options { get; }
+        public CompressionOption Options { get; }
 
         #endregion
 
@@ -71,7 +74,31 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Execute
+        /// From
+        ///
+        /// <summary>
+        /// Creates a new instance of the CompressionOptionSetter class
+        /// with the specified arguments.
+        /// </summary>
+        ///
+        /// <param name="format">Archive format.</param>
+        /// <param name="options">Archive options.</param>
+        ///
+        /// <returns>CompressionOptionSetter object.</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static CompressionOptionSetter From(Format format, CompressionOption options) => format switch
+        {
+            Format.Zip      => new ZipOptionSetter(options),
+            Format.SevenZip => new SevenZipOptionSetter(options),
+            Format.Sfx      => new SevenZipOptionSetter(options),
+            Format.Tar      => null,
+            _               => new CompressionOptionSetter(options),
+        };
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Invoke
         ///
         /// <summary>
         /// Sets the current options to the specified archive.
@@ -80,41 +107,42 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="dest">Archive object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public virtual void Execute(ISetProperties dest)
+        public void Invoke(ISetProperties dest)
         {
-            Debug.Assert(Options != null && dest != null);
+            if (dest == null) return;
 
-            var src = new Dictionary<string, PropVariant>(_dic);
-            if (Options.CodePage != CodePage.Oem)
-            {
-                src.Add("cp", PropVariant.Create((uint)Options.CodePage));
-            }
-
-            var values = CreateValues(src.Values);
+            var src = new Dictionary<string, PropVariant>();
+            Invoke(src);
+            var obj = GetValues(src.Values);
 
             try
             {
-                var k = CreateNames(src.Keys);
-                var v = values.AddrOfPinnedObject();
-                var result = dest.SetProperties(k, v, (uint)k.Length);
-                Debug.Assert(result == 0);
+                var k = src.Keys.Concat("x", "mt").ToArray();
+                var v = obj.AddrOfPinnedObject();
+                var status = dest.SetProperties(k, v, (uint)k.Length);
+                Debug.Assert(status == 0);
             }
-            finally { values.Free(); }
+            finally { obj.Free(); }
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Add
+        /// Invoke
         ///
         /// <summary>
-        /// Adds the options.
+        /// Sets the current options to the specified collection.
         /// </summary>
         ///
-        /// <param name="name">Option name.</param>
-        /// <param name="value">Option value.</param>
+        /// <param name="dest">Collection of options.</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected void Add(string name, PropVariant value) => _dic.Add(name, value);
+        protected virtual void Invoke(IDictionary<string, PropVariant> dest)
+        {
+            if (Options.CodePage != CodePage.Oem)
+            {
+                dest.Add("cp", PropVariant.Create((uint)Options.CodePage));
+            }
+        }
 
         #endregion
 
@@ -122,29 +150,14 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CreateNames
-        ///
-        /// <summary>
-        /// Creates a list of names to be set in the ISetProperties object.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private string[] CreateNames(IEnumerable<string> src) => new[]
-        {
-            "x",
-            "mt",
-        }.Concat(src).ToArray();
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CreateValues
+        /// GetValues
         ///
         /// <summary>
         /// Creates a list of values to be set in the ISetProperties object.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private GCHandle CreateValues(IEnumerable<PropVariant> src) => GCHandle.Alloc(
+        private GCHandle GetValues(IEnumerable<PropVariant> src) => GCHandle.Alloc(
             new[] {
                 PropVariant.Create((uint)Options.CompressionLevel),
                 PropVariant.Create((uint)Options.ThreadCount),
@@ -152,10 +165,6 @@ namespace Cube.FileSystem.SevenZip
             GCHandleType.Pinned
         );
 
-        #endregion
-
-        #region Fields
-        private readonly Dictionary<string, PropVariant> _dic = new();
         #endregion
     }
 }

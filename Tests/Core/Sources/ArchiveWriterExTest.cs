@@ -58,7 +58,7 @@ namespace Cube.FileSystem.SevenZip.Tests
 
             using (var archive = new ArchiveWriter(zip))
             {
-                archive.Options = new ZipOption { CodePage = utf8 ? CodePage.Utf8 : CodePage.Japanese };
+                archive.Options = new CompressionOption { CodePage = utf8 ? CodePage.Utf8 : CodePage.Japanese };
                 archive.Add(src);
                 archive.Save(dest);
             }

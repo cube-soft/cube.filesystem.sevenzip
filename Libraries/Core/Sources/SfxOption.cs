@@ -20,37 +20,24 @@ namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveOptionSetterExtension
+    /// SfxOption
     ///
     /// <summary>
-    /// Provides extended methods for the ArchiveOptionSetter class.
+    /// Represents options when creating a new self-executable archive.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal static class ArchiveOptionExtension
+    public record SfxOption : CompressionOption
     {
-        #region Methods
-
         /* ----------------------------------------------------------------- */
         ///
-        /// Convert
+        /// Module
         ///
         /// <summary>
-        /// Converts from the specified object to the new instance of
-        /// the ArchiveOptionSetter class.
+        /// Gets or sets the path of SFX module.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public static ArchiveOptionSetter Convert(this ArchiveOption src, Format format) =>
-            src != null ? format switch
-        {
-            Format.Zip      => new ZipOptionSetter(src),
-            Format.SevenZip => new SevenZipOptionSetter(src),
-            Format.Sfx      => new SevenZipOptionSetter(src),
-            Format.Tar      => null,
-            _               => new ArchiveOptionSetter(src),
-        } : default;
-
-        #endregion
+        public string Module { get; init; }
     }
 }

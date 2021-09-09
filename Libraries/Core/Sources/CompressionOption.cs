@@ -20,36 +20,58 @@ namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveOption
+    /// CompressionOption
     ///
     /// <summary>
     /// Represents options when creating a new archive.
+    /// Some formats may support only some of these options.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public record ArchiveOption
+    public record CompressionOption : ArchiveOption
     {
         /* ----------------------------------------------------------------- */
         ///
-        /// ThreadCount
+        /// CompressionLevel
         ///
         /// <summary>
-        /// Gets or sets the number of threads that the archiver is
-        /// available.
+        /// Gets or sets the compression level.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public int ThreadCount { get; init; } = 1;
+        public CompressionLevel CompressionLevel { get; init; } = CompressionLevel.Normal;
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CodePage
+        /// CompressionMethod
         ///
         /// <summary>
-        /// Gets or sets the value of code page.
+        /// Gets or sets the compression method.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CodePage CodePage { get; init; } = CodePage.Oem;
+        public CompressionMethod CompressionMethod { get; init; } = CompressionMethod.Default;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// EncryptionMethod
+        ///
+        /// <summary>
+        /// Gets or sets the encryption method.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public EncryptionMethod EncryptionMethod { get; init; } = EncryptionMethod.Default;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Password
+        ///
+        /// <summary>
+        /// Gets or sets a password to encrypt the archive being created.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Password { get; init; } = string.Empty;
     }
 }
