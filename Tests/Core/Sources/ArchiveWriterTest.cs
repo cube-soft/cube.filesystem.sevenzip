@@ -133,6 +133,13 @@ namespace Cube.FileSystem.SevenZip.Tests
                 ).Returns(Format.Zip);
 
                 yield return new TestCaseData(
+                    "ZipPasswordSymbol.zip",
+                    Format.Zip,
+                    new[] { "Sample.txt" },
+                    new CompressionOption { Password = "[{<#$%@?!&|+-*/=^~,._>}]" }
+                ).Returns(Format.Zip);
+
+                yield return new TestCaseData(
                     "ZipPasswordJapanese01.zip",
                     Format.Zip,
                     new[] { "Sample.txt" },

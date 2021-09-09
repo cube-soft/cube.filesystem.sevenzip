@@ -18,7 +18,6 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Cube.Mixin.Collections;
@@ -113,15 +112,15 @@ namespace Cube.FileSystem.SevenZip
 
             var src = new Dictionary<string, PropVariant>();
             Invoke(src);
-            var obj = GetValues(src.Values);
 
-            try
-            {
-                var k = src.Keys.Concat("x", "mt").ToArray();
-                var v = obj.AddrOfPinnedObject();
-                var status = dest.SetProperties(k, v, (uint)k.Length);
-                Debug.Assert(status == 0);
-            }
+            var k = src.Keys.Concat("x", "mt").ToArray();
+            var v = src.Values.Concat(
+                PropVariant.Create((uint)Options.CompressionLevel),
+                PropVariant.Create((uint)Options.ThreadCount)
+            ).ToArray();
+
+            var obj = GCHandle.Alloc(v, GCHandleType.Pinned);
+            try { _ = dest.SetProperties(k, obj.AddrOfPinnedObject(), (uint)k.Length); }
             finally { obj.Free(); }
         }
 
@@ -143,27 +142,6 @@ namespace Cube.FileSystem.SevenZip
                 dest.Add("cp", PropVariant.Create((uint)Options.CodePage));
             }
         }
-
-        #endregion
-
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetValues
-        ///
-        /// <summary>
-        /// Creates a list of values to be set in the ISetProperties object.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private GCHandle GetValues(IEnumerable<PropVariant> src) => GCHandle.Alloc(
-            new[] {
-                PropVariant.Create((uint)Options.CompressionLevel),
-                PropVariant.Create((uint)Options.ThreadCount),
-            }.Concat(src).ToArray(),
-            GCHandleType.Pinned
-        );
 
         #endregion
     }
