@@ -29,7 +29,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveOption
+    public record ArchiveOption
     {
         #region Properties
 
@@ -42,7 +42,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressionLevel CompressionLevel { get; set; } = CompressionLevel.Normal;
+        public CompressionLevel CompressionLevel { get; init; } = CompressionLevel.Normal;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -54,7 +54,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public int ThreadCount { get; set; } = 1;
+        public int ThreadCount { get; init; } = 1;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -65,7 +65,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CodePage CodePage { get; set; } = CodePage.Oem;
+        public CodePage CodePage { get; init; } = CodePage.Oem;
 
         #endregion
     }
@@ -83,7 +83,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class TarOption : ArchiveOption
+    public record TarOption : ArchiveOption
     {
         #region Properties
 
@@ -100,7 +100,7 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressionMethod CompressionMethod { get; set; } = CompressionMethod.Copy;
+        public CompressionMethod CompressionMethod { get; init; } = CompressionMethod.Copy;
 
         #endregion
     }
@@ -118,7 +118,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ZipOption : ArchiveOption
+    public record ZipOption : ArchiveOption
     {
         #region Properties
 
@@ -131,7 +131,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressionMethod CompressionMethod { get; set; } = CompressionMethod.Default;
+        public CompressionMethod CompressionMethod { get; init; } = CompressionMethod.Default;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -146,7 +146,7 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public EncryptionMethod EncryptionMethod { get; set; } = EncryptionMethod.Default;
+        public EncryptionMethod EncryptionMethod { get; init; } = EncryptionMethod.Default;
 
         #endregion
     }
@@ -164,7 +164,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class SevenZipOption : ArchiveOption
+    public record SevenZipOption : ArchiveOption
     {
         #region Properties
 
@@ -177,7 +177,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressionMethod CompressionMethod { get; set; } = CompressionMethod.Default;
+        public CompressionMethod CompressionMethod { get; init; } = CompressionMethod.Default;
 
         #endregion
     }
@@ -195,7 +195,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class SfxOption : SevenZipOption
+    public record SfxOption : SevenZipOption
     {
         #region Properties
 
@@ -208,7 +208,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Module { get; set; }
+        public string Module { get; init; }
 
         #endregion
     }
