@@ -129,7 +129,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 Path              = "dummy",
                 Sfx               = string.Empty,
                 ThreadCount       = 3,
-            }.ToOption(new SettingFolder());
+            }.ToOption(new SettingFolder(), "password");
 
             Assert.That(dest.CompressionLevel, Is.EqualTo(CompressionLevel.High));
             Assert.That(dest.ThreadCount,      Is.EqualTo(3));

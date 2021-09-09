@@ -41,37 +41,25 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /// <param name="src">Runtime settings.</param>
         /// <param name="settings">User settings.</param>
+        /// <param name="password">Password to be set.</param>
         ///
         /// <remarks>CompressionOption object.</remarks>
         ///
         /* ----------------------------------------------------------------- */
         public static CompressionOption ToOption(this CompressRuntimeSetting src,
-            SettingFolder settings) => src.ToOption(settings.Value.Compress);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ToOption
-        ///
-        /// <summary>
-        /// Creates a new instance of the CompressionOption class with the
-        /// specified arguments.
-        /// </summary>
-        ///
-        /// <param name="src">Runtime settings.</param>
-        /// <param name="settings">User settings for compression.</param>
-        ///
-        /// <remarks>CompressionOption object.</remarks>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static CompressionOption ToOption(this CompressRuntimeSetting src,
-            CompressSetting settings) => src.Format switch
+            SettingFolder settings, string password)
         {
-            Format.Zip      => MakeZip(src, settings),
-            Format.SevenZip => MakeSevenZip(src),
-            Format.Sfx      => MakeSfx(src),
-            Format.Tar      => MakeTar(src),
-            _               => MakeCommon(src),
-        };
+            var filter = new Filter(settings.Value.GetFilters(settings.Value.Compress.Filtering));
+
+            return src.Format switch
+            {
+                Format.Zip      => MakeZip(src, password, filter, settings.Value.Compress),
+                Format.SevenZip => MakeSevenZip(src, password, filter),
+                Format.Sfx      => MakeSfx(src, password, filter),
+                Format.Tar      => MakeTar(src, password, filter),
+                _               => MakeCommon(src, password, filter),
+            };
+        }
 
         #endregion
 
@@ -86,13 +74,16 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static CompressionOption MakeZip(CompressRuntimeSetting src, CompressSetting common) => new()
+        private static CompressionOption MakeZip(CompressRuntimeSetting src,
+            string password, Filter filter, CompressSetting others) => new()
         {
             CompressionLevel  = src.CompressionLevel,
             CompressionMethod = src.CompressionMethod,
             EncryptionMethod  = src.EncryptionMethod,
+            Password          = password,
             ThreadCount       = src.ThreadCount,
-            CodePage          = common.UseUtf8 ? CodePage.Utf8 : CodePage.Oem,
+            CodePage          = others.UseUtf8 ? CodePage.Utf8 : CodePage.Oem,
+            Filter            = filter.Match,
         };
 
         /* ----------------------------------------------------------------- */
@@ -104,11 +95,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static CompressionOption MakeSevenZip(CompressRuntimeSetting src) => new()
+        private static CompressionOption MakeSevenZip(CompressRuntimeSetting src,
+            string password, Filter filter) => new()
         {
             CompressionLevel  = src.CompressionLevel,
             CompressionMethod = src.CompressionMethod,
             ThreadCount       = src.ThreadCount,
+            Password          = password,
+            Filter            = filter.Match,
         };
 
         /* ----------------------------------------------------------------- */
@@ -120,12 +114,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static SfxOption MakeSfx(CompressRuntimeSetting src) => new()
+        private static SfxOption MakeSfx(CompressRuntimeSetting src, string password, Filter filter) => new()
         {
             CompressionLevel  = src.CompressionLevel,
             CompressionMethod = src.CompressionMethod,
             ThreadCount       = src.ThreadCount,
             Module            = src.Sfx,
+            Password          = password,
+            Filter            = filter.Match,
         };
 
         /* ----------------------------------------------------------------- */
@@ -137,11 +133,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static CompressionOption MakeTar(CompressRuntimeSetting src) => new()
+        private static CompressionOption MakeTar(CompressRuntimeSetting src,
+            string password, Filter filter) => new()
         {
             CompressionLevel  = src.CompressionLevel,
             CompressionMethod = src.CompressionMethod,
             ThreadCount       = src.ThreadCount,
+            Password          = password,
+            Filter            = filter.Match,
         };
 
         /* ----------------------------------------------------------------- */
@@ -153,10 +152,13 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static CompressionOption MakeCommon(CompressRuntimeSetting src) => new()
+        private static CompressionOption MakeCommon(CompressRuntimeSetting src,
+            string password, Filter filter) => new()
         {
-            CompressionLevel = src.CompressionLevel,
-            ThreadCount      = src.ThreadCount,
+            CompressionLevel  = src.CompressionLevel,
+            ThreadCount       = src.ThreadCount,
+            Password          = password,
+            Filter            = filter.Match,
         };
 
         #endregion

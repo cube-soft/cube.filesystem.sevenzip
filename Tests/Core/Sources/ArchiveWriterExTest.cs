@@ -52,13 +52,13 @@ namespace Cube.FileSystem.SevenZip.Tests
             var src  = Get("日本語のファイル名.txt");
             var s    = utf8 ? "UTF8" : "SJis";
             var dest = Get($"ZipJapanese{s}.zip");
+            var opts = new CompressionOption { CodePage = utf8 ? CodePage.Utf8 : CodePage.Japanese };
 
             Io.Copy(GetSource("Sample.txt"), src, true);
             Assert.That(Io.Exists(src), Is.True);
 
-            using (var archive = new ArchiveWriter(zip))
+            using (var archive = new ArchiveWriter(zip, opts))
             {
-                archive.Options = new CompressionOption { CodePage = utf8 ? CodePage.Utf8 : CodePage.Japanese };
                 archive.Add(src);
                 archive.Save(dest);
             }
@@ -81,39 +81,21 @@ namespace Cube.FileSystem.SevenZip.Tests
         public int Filter(bool enabled)
         {
             var dest = Get($"Filter{enabled}.zip");
-            var filters = new[] { "Filter.txt", "FilterDirectory" };
+            var opts = new CompressionOption
+            {
+                Filter = enabled ?
+                         new Filter(new[] { "Filter.txt", "FilterDirectory" }).Match :
+                         default,
+            };
 
-            using (var archive = new ArchiveWriter(Format.Zip))
+            using (var archive = new ArchiveWriter(Format.Zip, opts))
             {
                 archive.Add(GetSource("Sample.txt"));
                 archive.Add(GetSource("Sample 00..01"));
-                if (enabled) archive.Save(dest, "", new Filter(filters).Match, null);
-                else archive.Save(dest);
+                archive.Save(dest);
             }
 
             using (var obj = new ArchiveReader(dest)) return obj.Items.Count;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Cancel
-        ///
-        /// <summary>
-        /// Tests to cancel on password request.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [Test]
-        public void Cancel()
-        {
-            using var archive = new ArchiveWriter(Format.Zip);
-            archive.Add(GetSource("Sample.txt"));
-
-            var dest  = Get("PasswordCancel.zip");
-            var query = new Query<string>(e => e.Cancel = true);
-
-            Assert.That(() => archive.Save(dest, query, null, null),
-                Throws.TypeOf<OperationCanceledException>());
         }
 
         /* ----------------------------------------------------------------- */
@@ -146,9 +128,9 @@ namespace Cube.FileSystem.SevenZip.Tests
         public void Error_SfxNotFound()
         {
             var dest = Get("SfxNotFound.exe");
-            using var archive = new ArchiveWriter(Format.Sfx);
+            var opts = new SfxOption { Module = "dummy.sfx" };
+            using var archive = new ArchiveWriter(Format.Sfx, opts);
 
-            archive.Options = new SfxOption { Module = "dummy.sfx" };
             archive.Add(GetSource("Sample.txt"));
 
             Assert.That(() => archive.Save(dest),

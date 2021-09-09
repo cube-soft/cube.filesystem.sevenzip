@@ -50,7 +50,26 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="format">Archive format.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveWriter(Format format) { Format = format; }
+        public ArchiveWriter(Format format) : this(format, new()) { }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ArchiveWriter
+        ///
+        /// <summary>
+        /// Initializes a new instance of the ArchiveWriter class with the
+        /// specified arguments.
+        /// </summary>
+        ///
+        /// <param name="format">Archive format.</param>
+        /// <param name="options">Archive options.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ArchiveWriter(Format format, CompressionOption options)
+        {
+            Format  = format;
+            Options = options;
+        }
 
         #endregion
 
@@ -80,14 +99,14 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Option
+        /// Options
         ///
         /// <summary>
-        /// Gets or sets creating options of the archive.
+        /// Gets or sets the options when creating a new archive.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressionOption Options { get; set; }
+        public CompressionOption Options { get; }
 
         #endregion
 
@@ -115,14 +134,14 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /// <param name="src">Path of file or directory.</param>
-        /// <param name="pathInArchive">Relative path in the archive.</param>
+        /// <param name="name">Relative path in the archive.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Add(string src, string pathInArchive)
+        public void Add(string src, string name)
         {
-            var fi = IoEx.GetEntitySource(src);
-            if (fi.Exists) AddItem(fi, pathInArchive);
-            else throw new System.IO.FileNotFoundException(fi.FullName);
+            var e = new RawEntity(IoEx.GetEntitySource(src), name);
+            if (e.Exists) AddItem(e);
+            else throw new System.IO.FileNotFoundException(e.FullName);
         }
 
         /* ----------------------------------------------------------------- */
@@ -147,80 +166,22 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="dest">Path to save the archive.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Save(string dest) => Save(dest, string.Empty);
+        public void Save(string dest) => Save(dest, null);
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Save
+        /// Invoke
         ///
         /// <summary>
         /// Creates a new archive and saves to the specified path.
         /// </summary>
         ///
-        /// <param name="dest">Path to save the archive.</param>
-        /// <param name="password">Password.</param>
-        ///
         /* ----------------------------------------------------------------- */
-        public void Save(string dest, string password) => Save(dest, password, null, null);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Save
-        ///
-        /// <summary>
-        /// Creates a new archive and saves to the specified path.
-        /// </summary>
-        ///
-        /// <param name="dest">Path to save the archive.</param>
-        /// <param name="password">Password query.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Save(string dest, IQuery<string> password) => Save(dest, password, null, null);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Save
-        ///
-        /// <summary>
-        /// Creates a new archive and saves to the specified path.
-        /// </summary>
-        ///
-        /// <param name="dest">Path to save the archive.</param>
-        /// <param name="password">Password.</param>
-        /// <param name="filter">
-        /// Function to determine if a file or directory should be filtered.
-        /// </param>
-        /// <param name="progress">Progress report.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Save(string dest, string password,
-            Predicate<Entity> filter, IProgress<Report> progress)
+        public void Save(string dest, IProgress<Report> progress)
         {
-            var query = password.HasValue() ? new PasswordQuery(password) : null;
-            Invoke(dest, query, filter, progress);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Save
-        ///
-        /// <summary>
-        /// Creates a new archive and saves to the specified path.
-        /// </summary>
-        ///
-        /// <param name="dest">Path to save the archive.</param>
-        /// <param name="password">Password query.</param>
-        /// <param name="filter">
-        /// Function to determine if a file or directory should be filtered.
-        /// </param>
-        /// <param name="progress">Progress report.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Save(string dest, IQuery<string> password,
-            Predicate<Entity> filter, IProgress<Report> progress)
-        {
-            var query = password != null ? new PasswordQuery(password) : null;
-            Invoke(dest, query, filter, progress);
+            if (Format == Format.Sfx) SaveAsSfx(dest, Items, progress);
+            else if (Format == Format.Tar) SaveAsTar(dest, Items, progress);
+            else SaveAs(dest, Items, Format, progress);
         }
 
         #endregion
@@ -238,30 +199,12 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Invoke(string dest, PasswordQuery query,
-            Predicate<Entity> filter, IProgress<Report> progress)
-        {
-            if (Format == Format.Sfx) InvokeSfx(GetItems(filter), dest, query, progress);
-            else if (Format == Format.Tar) InvokeTar(GetItems(filter), dest, query, progress);
-            else Invoke(GetItems(filter), Format, dest, query, progress);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Invoke
-        ///
-        /// <summary>
-        /// Creates a new archive and saves to the specified path.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Invoke(IList<RawEntity> src, Format fmt, string dest,
-            IQuery<string> query, IProgress<Report> progress)
+        private void SaveAs(string dest, IList<RawEntity> src, Format fmt, IProgress<Report> progress)
         {
             var dir = Io.Get(dest).DirectoryName;
             Io.CreateDirectory(dir);
 
-            Create(src, dest, query, progress, cb =>
+            Create(src, dest, progress, cb =>
             {
                 using var ss = new ArchiveStreamWriter(Io.Create(dest));
                 var archive = _lib.GetOutArchive(fmt);
@@ -274,15 +217,14 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// InvokeTar
+        /// SaveAsTar
         ///
         /// <summary>
         /// Creates a new TAR archive and saves to the specified path.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void InvokeTar(IList<RawEntity> src, string dest,
-            IQuery<string> query, IProgress<Report> progress)
+        private void SaveAsTar(string dest, IList<RawEntity> src, IProgress<Report> progress)
         {
             var fi  = Io.Get(dest);
             var dir = Io.Combine(fi.DirectoryName, Guid.NewGuid().ToString("N"));
@@ -290,13 +232,13 @@ namespace Cube.FileSystem.SevenZip
 
             try
             {
-                Invoke(src, Format.Tar, tmp, query, progress);
+                SaveAs(tmp, src, Format.Tar, progress);
 
                 var m = Options.CompressionMethod;
                 if (m == CompressionMethod.BZip2 || m == CompressionMethod.GZip || m == CompressionMethod.XZ)
                 {
                     var f = new List<RawEntity> { new(IoEx.GetEntitySource(tmp)) };
-                    Invoke(f, m.ToFormat(), dest, query, progress);
+                    SaveAs(dest, f, m.ToFormat(), progress);
                 }
                 else Io.Move(tmp, dest, true);
             }
@@ -313,8 +255,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void InvokeSfx(IList<RawEntity> src, string dest,
-            IQuery<string> password, IProgress<Report> progress)
+        private void SaveAsSfx(string dest, IList<RawEntity> src, IProgress<Report> progress)
         {
             var sfx = (Options as SfxOption)?.Module;
             if (!Io.Exists(sfx)) throw new System.IO.FileNotFoundException("SFX");
@@ -322,7 +263,7 @@ namespace Cube.FileSystem.SevenZip
 
             try
             {
-                Invoke(src, Format.SevenZip, tmp, password, progress);
+                SaveAs(tmp, src, Format.SevenZip, progress);
 
                 using var ds = Io.Create(dest);
                 using (var ss = Io.Open(sfx)) ss.CopyTo(ds);
@@ -368,39 +309,6 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetItems
-        ///
-        /// <summary>
-        /// Gets the collection of files or directories to be archived.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private IList<RawEntity> GetItems(Predicate<Entity> src) =>
-            (src == null) ? Items : Items.Where(e => !src(e)).ToList();
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// AddItem
-        ///
-        /// <summary>
-        /// Add the specified file or directory to the archive.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void AddItem(EntitySource src, string name)
-        {
-            if (CanRead(src)) Items.Add(new(src, name));
-            if (!src.IsDirectory) return;
-
-            var files = Io.GetFiles(src.FullName).Select(e => IoEx.GetEntitySource(e));
-            foreach (var f in files) Items.Add(new(f, Io.Combine(name, f.Name)));
-
-            var dirs = Io.GetDirectories(src.FullName).Select(e => IoEx.GetEntitySource(e));
-            foreach (var d in dirs) AddItem(d, Io.Combine(name, d.Name));
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// CanRead
         ///
         /// <summary>
@@ -409,7 +317,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private bool CanRead(EntitySource src)
+        private bool CanRead(RawEntity src)
         {
             if (src.IsDirectory) return true;
             try
@@ -422,6 +330,33 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
+        /// AddItem
+        ///
+        /// <summary>
+        /// Add the specified file or directory to the archive.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void AddItem(RawEntity src)
+        {
+            if (Options.Filter?.Invoke(src) ?? false) return;
+            if (CanRead(src)) Items.Add(src);
+            if (!src.IsDirectory) return;
+
+            var files = Io.GetFiles(src.FullName).Select(e => IoEx.GetEntitySource(e));
+            foreach (var f in files)
+            {
+                var e = new RawEntity(f, Io.Combine(src.RelativeName, f.Name));
+                if (Options.Filter?.Invoke(e) ?? false) continue;
+                Items.Add(new(f, Io.Combine(src.RelativeName, f.Name)));
+            }
+
+            var dirs = Io.GetDirectories(src.FullName).Select(e => IoEx.GetEntitySource(e));
+            foreach (var e in dirs) AddItem(new(e, Io.Combine(src.RelativeName, e.Name)));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Create
         ///
         /// <summary>
@@ -430,18 +365,18 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Create(IList<RawEntity> src, string dest, IQuery<string> query,
+        private void Create(IList<RawEntity> src, string dest,
             IProgress<Report> progress, Action<UpdateCallback> callback)
         {
             var error = default(Exception);
             var cb    = new UpdateCallback(src, dest)
             {
-                Password = query,
+                Password = Options.Password.HasValue() ? new PasswordQuery(Options.Password) : null,
                 Progress = progress,
             };
 
             try { callback(cb); }
-            catch (Exception err) { error = err; }
+            catch (Exception e) { error = e; }
             finally
             {
                 var kv = KeyValuePair.Create(cb.Result, error ?? cb.Exception);

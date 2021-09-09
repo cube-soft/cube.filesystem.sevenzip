@@ -16,6 +16,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+using System;
+
 namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
@@ -51,5 +53,17 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public CodePage CodePage { get; init; } = CodePage.Oem;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Filter
+        ///
+        /// <summary>
+        /// Gets or sets the predicate function to filter some of files or
+        /// directories.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public Predicate<Entity> Filter { get; init; }
     }
 }

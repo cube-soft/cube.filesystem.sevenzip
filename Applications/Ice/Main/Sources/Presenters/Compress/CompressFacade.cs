@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System;
 using System.Linq;
 using Cube.FileSystem.SevenZip.Ice.Settings;
 using Cube.Logging;
@@ -104,12 +105,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             GetType().LogDebug($"Format:{src.Format}", $"Method:{src.CompressionMethod}");
 
-            using (var writer = new ArchiveWriter(src.Format))
+            var password = GetPassword(src);
+            using (var writer = new ArchiveWriter(src.Format, src.ToOption(Settings, password)))
             {
                 foreach (var e in Request.Sources) writer.Add(e);
-                var filters = Settings.Value.GetFilters(Settings.Value.Compress.Filtering);
-                writer.Options = src.ToOption(Settings);
-                writer.Save(Temp, GetPasswordQuery(src), new Filter(filters).Match, GetProgress());
+                writer.Save(Temp, GetProgress());
             }
 
             if (Io.Exists(Temp)) Io.Move(Temp, Destination, true);
@@ -146,24 +146,23 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetPasswordQuery
+        /// GetPassword
         ///
         /// <summary>
-        /// Gets the query object to get the password.
+        /// Gets the password.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private Query<string> GetPasswordQuery(CompressRuntimeSetting src) =>
-            src.Password.HasValue() || Request.Password ?
-            new(e =>
-            {
-                if (src.Password.HasValue())
-                {
-                    e.Value  = src.Password;
-                    e.Cancel = false;
-                }
-                else Password.Request(e);
-            }) : null;
+        private string GetPassword(CompressRuntimeSetting src)
+        {
+            if (src.Password.HasValue()) return src.Password;
+            if (!Request.Password) return null;
+
+            var e = Query.NewMessage(Destination);
+            Password.Request(e);
+            if (e.Cancel) throw new OperationCanceledException();
+            return e.Value;
+        }
 
         #endregion
     }

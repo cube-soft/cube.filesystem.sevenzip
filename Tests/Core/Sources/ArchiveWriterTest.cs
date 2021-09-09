@@ -47,16 +47,14 @@ namespace Cube.FileSystem.SevenZip.Tests
         ///
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
-        public Format Invoke(Format format, string filename, string password,
-            string[] items, CompressionOption options)
+        public Format Invoke(string filename, Format format, string[] src, CompressionOption options)
         {
             var dest = Get(filename);
 
-            using (var archive = new ArchiveWriter(format))
+            using (var archive = new ArchiveWriter(format, options ?? new()))
             {
-                archive.Options = options;
-                foreach (var e in items) archive.Add(GetSource(e));
-                archive.Save(dest, password);
+                foreach (var e in src) archive.Add(GetSource(e));
+                archive.Save(dest);
                 archive.Clear();
             }
 
@@ -77,9 +75,8 @@ namespace Cube.FileSystem.SevenZip.Tests
         ///
         /// <remarks>
         /// The test cases should be specified in the following order:
-        /// - Archive format
         /// - Path to save
-        /// - Password
+        /// - Archive format
         /// - Source files
         /// - Archive options
         /// </remarks>
@@ -90,33 +87,29 @@ namespace Cube.FileSystem.SevenZip.Tests
             get
             {
                 yield return new TestCaseData(
-                    Format.Zip,
                     "ZipSingle.zip",
-                    "",
+                    Format.Zip,
                     new[] { "Sample.txt" },
                     null
                 ).Returns(Format.Zip);
 
                 yield return new TestCaseData(
-                    Format.Zip,
                     "ZipDirectory.zip",
-                    "",
+                    Format.Zip,
                     new[] { "Sample 00..01" },
                     null
                 ).Returns(Format.Zip);
 
                 yield return new TestCaseData(
-                    Format.Zip,
                     "ZipFast.zip",
-                    "",
+                    Format.Zip,
                     new[] { "Sample.txt", "Sample 00..01" },
                     new CompressionOption { CompressionLevel = CompressionLevel.Fast }
                 ).Returns(Format.Zip);
 
                 yield return new TestCaseData(
-                    Format.Zip,
                     "ZipUltra.zip",
-                    "",
+                    Format.Zip,
                     new[] { "Sample.txt", "Sample 00..01" },
                     new CompressionOption
                     {
@@ -126,57 +119,43 @@ namespace Cube.FileSystem.SevenZip.Tests
                 ).Returns(Format.Zip);
 
                 yield return new TestCaseData(
-                    Format.Zip,
                     "ZipLzma.zip",
-                    "",
+                    Format.Zip,
                     new[] { "Sample.txt", "Sample 00..01" },
                     new CompressionOption { CompressionMethod = CompressionMethod.Lzma }
                 ).Returns(Format.Zip);
 
                 yield return new TestCaseData(
-                    Format.Zip,
                     "ZipPassword.zip",
-                    "password",
+                    Format.Zip,
                     new[] { "Sample.txt" },
-                    null
+                    new CompressionOption { Password = "password" }
                 ).Returns(Format.Zip);
 
                 yield return new TestCaseData(
-                    Format.Zip,
-                    "ZipPasswordSymbol.zip",
-                    "()[]{}<>\\#$%@?!&|+-*/=\"'^~`,._",
-                    new[] { "Sample.txt" },
-                    null
-                ).Returns(Format.Zip);
-
-                yield return new TestCaseData(
-                    Format.Zip,
                     "ZipPasswordJapanese01.zip",
-                    "日本語パスワード",
+                    Format.Zip,
                     new[] { "Sample.txt" },
-                    null
+                    new CompressionOption { Password = "日本語パスワード" }
                 ).Returns(Format.Zip);
 
                 yield return new TestCaseData(
-                    Format.Zip,
                     "ZipPasswordJapanese02.zip",
-                    "ｶﾞｷﾞｸﾞｹﾞｺﾞﾊﾟﾋﾟﾌﾟﾍﾟﾎﾟ",
-                    new[] { "Sample.txt" },
-                    null
-                ).Returns(Format.Zip);
-
-                yield return new TestCaseData(
                     Format.Zip,
-                    "ZipPasswordAes256.zip",
-                    "password",
                     new[] { "Sample.txt" },
-                    new CompressionOption { EncryptionMethod = EncryptionMethod.Aes256 }
+                    new CompressionOption { Password = "ｶﾞｷﾞｸﾞｹﾞｺﾞﾊﾟﾋﾟﾌﾟﾍﾟﾎﾟ" }
                 ).Returns(Format.Zip);
 
                 yield return new TestCaseData(
-                    Format.SevenZip,
+                    "ZipPasswordAes256.zip",
+                    Format.Zip,
+                    new[] { "Sample.txt" },
+                    new CompressionOption { Password = "password" }
+                ).Returns(Format.Zip);
+
+                yield return new TestCaseData(
                     "7zLzma2.7z",
-                    "",
+                    Format.SevenZip,
                     new[] { "Sample.txt", "Sample 00..01" },
                     new CompressionOption
                     {
@@ -186,41 +165,36 @@ namespace Cube.FileSystem.SevenZip.Tests
                 ).Returns(Format.SevenZip);
 
                 yield return new TestCaseData(
-                    Format.BZip2,
                     "BZip2Test.bz",
-                    "",
+                    Format.BZip2,
                     new[] { "Sample.txt" },
-                    new ArchiveOption()
+                    new CompressionOption()
                 ).Returns(Format.BZip2);
 
                 yield return new TestCaseData(
-                    Format.GZip,
                     "GZipTest.gz",
-                    "",
+                    Format.GZip,
                     new[] { "Sample.txt" },
-                    new ArchiveOption()
+                    new CompressionOption()
                 ).Returns(Format.GZip);
 
                 yield return new TestCaseData(
-                    Format.XZ,
                     "XzTest.xz",
-                    "",
+                    Format.XZ,
                     new[] { "Sample.txt" },
-                    new ArchiveOption()
+                    new CompressionOption()
                 ).Returns(Format.XZ);
 
                 yield return new TestCaseData(
-                    Format.Tar,
                     "TarTest.tar",
-                    "",
+                    Format.Tar,
                     new[] { "Sample.txt", "Sample 00..01" },
                     null
                 ).Returns(Format.Tar);
 
                 yield return new TestCaseData(
-                    Format.Tar,
                     "TarTest.tar.gz",
-                    "",
+                    Format.Tar,
                     new[] { "Sample.txt", "Sample 00..01" },
                     new CompressionOption
                     {
@@ -230,9 +204,8 @@ namespace Cube.FileSystem.SevenZip.Tests
                 ).Returns(Format.GZip);
 
                 yield return new TestCaseData(
-                    Format.Tar,
                     "TarTest.tar.bz",
-                    "",
+                    Format.Tar,
                     new[] { "Sample.txt", "Sample 00..01" },
                     new CompressionOption
                     {
@@ -242,9 +215,8 @@ namespace Cube.FileSystem.SevenZip.Tests
                 ).Returns(Format.BZip2);
 
                 yield return new TestCaseData(
-                    Format.Tar,
                     "TarTest.tar.xz",
-                    "",
+                    Format.Tar,
                     new[] { "Sample.txt", "Sample 00..01" },
                     new CompressionOption
                     {
@@ -254,9 +226,8 @@ namespace Cube.FileSystem.SevenZip.Tests
                 ).Returns(Format.XZ);
 
                 yield return new TestCaseData(
-                    Format.Sfx,
                     "ExecutableTest.exe",
-                    "",
+                    Format.Sfx,
                     new[] { "Sample.txt", "Sample 00..01" },
                     new SfxOption
                     {
