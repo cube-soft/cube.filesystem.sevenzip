@@ -38,24 +38,6 @@ namespace Cube.FileSystem.SevenZip
         /// Save
         ///
         /// <summary>
-        /// Extracts all files and saves them in the specified directory.
-        /// </summary>
-        ///
-        /// <param name="src">Source reader object.</param>
-        ///
-        /// <param name="dest">
-        /// Path of the directory to save. If the parameter is set to null
-        /// or empty, the method invokes as a test mode.
-        /// </param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static void Save(this ArchiveReader src, string dest) => src.Save(dest, null);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Save
-        ///
-        /// <summary>
         /// Extracts the specified item and saves them in the specified
         /// directory.
         /// </summary>

@@ -35,17 +35,6 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Password
-        ///
-        /// <summary>
-        /// Gets or sets the object to query for a password.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public IQuery<string> Password { get; set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// Progress
         ///
         /// <summary>
@@ -53,7 +42,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IProgress<Report> Progress { get; set; }
+        public IProgress<Report> Progress { get; init; }
 
         /* ----------------------------------------------------------------- */
         ///

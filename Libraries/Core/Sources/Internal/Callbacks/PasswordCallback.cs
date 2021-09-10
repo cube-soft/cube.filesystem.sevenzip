@@ -33,24 +33,6 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     internal abstract class PasswordCallback : CallbackBase, ICryptoGetTextPassword
     {
-        #region Constructors
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// PasswordCallback
-        ///
-        /// <summary>
-        /// Initializes a new instance of the PasswordCallback class with the
-        /// specified arguments.
-        /// </summary>
-        ///
-        /// <param name="src">Path of the archive file.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected PasswordCallback(string src) { Source = src; }
-
-        #endregion
-
         #region Properties
 
         /* ----------------------------------------------------------------- */
@@ -62,7 +44,18 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Source { get; }
+        public string Source { get; init; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Password
+        ///
+        /// <summary>
+        /// Gets the object to query for a password.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public IQuery<string> Password { get; init; }
 
         #endregion
 

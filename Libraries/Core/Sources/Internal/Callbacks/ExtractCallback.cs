@@ -18,7 +18,6 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Cube.Logging;
 using Cube.Mixin.String;
 
@@ -48,39 +47,21 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /// <param name="src">Archive controller.</param>
-        /// <param name="dest">Path to save extracted items.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public ExtractCallback(ArchiveReader src, string dest) :
-            this(src, Enumerable.Range(0, src.Items.Count), src.Items.Count, dest) { }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ExtractCallback
-        ///
-        /// <summary>
-        /// Initializes a new instance of the ExtractCallback with the
-        /// specified arguments.
-        /// </summary>
-        ///
-        /// <param name="src">Archive controller.</param>
         /// <param name="indices">Indices of extracting items.</param>
         /// <param name="count">Number of indices.</param>
-        /// <param name="dest">Path to save extracted items.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ExtractCallback(ArchiveReader src,
-            IEnumerable<int> indices, int count, string dest) : base(src.Source)
+        public ExtractCallback(ArchiveReader src, IEnumerable<int> indices, int count)
         {
-            _reader  = src;
-            _dest    = dest;
-            _indices = indices.GetEnumerator();
-            _        = _indices.MoveNext();
+            _reader   = src;
+            _iterator = indices.GetEnumerator();
 
             Report.TotalCount = count;
             Report.TotalBytes = -1;
             Report.Count      = 0;
             Report.Bytes      = 0;
+
+            _ = _iterator.MoveNext();
         }
 
         #endregion
@@ -92,12 +73,23 @@ namespace Cube.FileSystem.SevenZip
         /// Filter
         ///
         /// <summary>
+        /// Gets or sets the path to save extracted items.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Destination { get; init; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Filter
+        ///
+        /// <summary>
         /// Gets or sets the function to determine if the specified
         /// file or directory is filtered.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Predicate<Entity> Filter { get; set; }
+        public Predicate<Entity> Filter { get; init; }
 
         #endregion
 
@@ -181,7 +173,7 @@ namespace Cube.FileSystem.SevenZip
         {
             _mode = mode;
             if (mode == AskMode.Skip) return;
-            if (_dic.TryGetValue(_indices.Current, out var src))
+            if (_dic.TryGetValue(_iterator.Current, out var src))
             {
                 Report.Current = src.Source;
                 Report.Status  = ReportStatus.Begin;
@@ -203,13 +195,13 @@ namespace Cube.FileSystem.SevenZip
         {
             Result = result;
             if (_mode == AskMode.Skip) return;
-            if (_dic.TryGetValue(_indices.Current, out var src))
+            if (_dic.TryGetValue(_iterator.Current, out var src))
             {
                 if (_mode == AskMode.Extract)
                 {
                     src.Stream?.Dispose();
-                    _ = _dic.Remove(_indices.Current);
-                    if (result == OperationResult.OK) src.Source.SetAttributes(_dest);
+                    _ = _dic.Remove(_iterator.Current);
+                    if (result == OperationResult.OK) src.Source.SetAttributes(Destination);
                 }
 
                 Report.Current = src.Source;
@@ -246,7 +238,7 @@ namespace Cube.FileSystem.SevenZip
                 {
                     kv.Value.Stream?.Dispose();
                     if (Result != OperationResult.OK) continue;
-                    if (_dest.HasValue()) Invoke(() => kv.Value.Source.SetAttributes(_dest));
+                    if (Destination.HasValue()) Invoke(() => kv.Value.Source.SetAttributes(Destination));
                 }
                 _dic.Clear();
             }
@@ -267,7 +259,7 @@ namespace Cube.FileSystem.SevenZip
 
             do
             {
-                var key = _indices.Current;
+                var key = _iterator.Current;
                 if (key != index) continue;
                 var value = new Core(_reader.Items[key]);
                 _dic.Add(key, value);
@@ -276,11 +268,11 @@ namespace Cube.FileSystem.SevenZip
                 if (mode == AskMode.Extract && vi.FullName.HasValue())
                 {
                     if (Filter?.Invoke(vi) ?? false) GetType().LogDebug($"Skip:{vi.FullName}");
-                    else if (vi.IsDirectory) vi.CreateDirectory(_dest);
+                    else if (vi.IsDirectory) vi.CreateDirectory(Destination);
                     else value.Stream = CreateStream(vi);
                 }
                 return value.Stream;
-            } while (_indices.MoveNext());
+            } while (_iterator.MoveNext());
 
             return null;
         }
@@ -295,7 +287,7 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         private ArchiveStreamWriter CreateStream(ArchiveEntity src) =>
-            new(Io.Create(Io.Combine(_dest, src.FullName)));
+            new(Io.Create(Io.Combine(Destination, src.FullName)));
 
         /* ----------------------------------------------------------------- */
         ///
@@ -317,9 +309,8 @@ namespace Cube.FileSystem.SevenZip
 
         #region Fields
         private readonly ArchiveReader _reader;
-        private readonly IEnumerator<int> _indices;
+        private readonly IEnumerator<int> _iterator;
         private readonly Dictionary<int, Core> _dic = new();
-        private readonly string _dest;
         private AskMode _mode = AskMode.Extract;
         private long _hack = 0;
         #endregion

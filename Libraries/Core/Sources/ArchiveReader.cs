@@ -148,10 +148,16 @@ namespace Cube.FileSystem.SevenZip
             Options = options;
             _query  = query;
 
-            var ss = new ArchiveStreamReader(Io.Open(src));
-            _callback = new(src, ss) { Password = query };
-            _core = _7zip.GetInArchive(format);
-            _ = _core.Open(ss, IntPtr.Zero, _callback);
+            var lib = Attach(new SevenZipLibrary());
+            var ss  = new ArchiveStreamReader(Io.Open(src));
+            var cb  = Attach(new OpenCallback(ss)
+            {
+                Source   = src,
+                Password = _query,
+            });
+
+            _core = lib.GetInArchive(format);
+            _ = _core.Open(ss, IntPtr.Zero, cb);
 
             var n = (int)Math.Max(_core.GetNumberOfItems(), 1);
             Items = new ArchiveCollection(_core, n, src);
@@ -214,6 +220,22 @@ namespace Cube.FileSystem.SevenZip
         /// Save
         ///
         /// <summary>
+        /// Extracts all files and saves them in the specified directory.
+        /// </summary>
+        ///
+        /// <param name="dest">
+        /// Path of the directory to save. If the parameter is set to null
+        /// or empty, the method invokes as a test mode.
+        /// </param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Save(string dest) => Save(dest, null);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Save
+        ///
+        /// <summary>
         /// Extracts all files except those matching the specified filter
         /// function and saves them in the specified directory.
         /// </summary>
@@ -248,17 +270,11 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void Save(string dest, uint[] src, IProgress<Report> progress)
         {
-            using var cb = src != null ?
-                      new ExtractCallback(this, src.Select(i => (int)i), src.Length, dest) :
-                      new ExtractCallback(this, dest);
+            using var cb = Create(dest, src, progress);
 
-            cb.Password = _query;
-            cb.Progress = progress;
-            cb.Filter   = Options.Filter;
-
-            var count = (uint?)src?.Length ?? uint.MaxValue;
-            var test  = dest.HasValue() ? 0 : 1;
-            _ = _core.Extract(src, count , test, cb);
+            var n    = (uint?)src?.Length ?? uint.MaxValue;
+            var test = dest.HasValue() ? 0 : 1;
+            _ = _core.Extract(src, n , test, cb);
 
             if (cb.Result == OperationResult.OK) return;
             if (cb.Result == OperationResult.UserCancel) throw new OperationCanceledException();
@@ -270,10 +286,6 @@ namespace Cube.FileSystem.SevenZip
             }
             throw cb.Exception ?? new System.IO.IOException($"{cb.Result}");
         }
-
-        #endregion
-
-        #region Implementations
 
         /* ----------------------------------------------------------------- */
         ///
@@ -293,8 +305,52 @@ namespace Cube.FileSystem.SevenZip
         protected override void Dispose(bool disposing)
         {
             _core?.Close();
-            _callback?.Dispose();
-            _7zip?.Dispose();
+            _disposable.Dispose();
+        }
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Attach
+        ///
+        /// <summary>
+        /// Attaches the specified object as disposable.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private T Attach<T>(T src) where T : IDisposable
+        {
+            _disposable.Add(src);
+            return src;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Create
+        ///
+        /// <summary>
+        /// Creates a new instance of the ExtractCallback class with the
+        /// specified arguments.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private ExtractCallback Create(string dest, uint[] src, IProgress<Report> progress)
+        {
+            var v = src != null ?
+                    src.Select(i => (int)i) :
+                    Enumerable.Range(0, Items.Count);
+            var n = src?.Length ?? Items.Count;
+
+            return new(this, v, n)
+            {
+                Destination = dest,
+                Password    = _query,
+                Progress    = progress,
+                Filter      = Options.Filter,
+            };
         }
 
         /* ----------------------------------------------------------------- */
@@ -312,10 +368,9 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Fields
-        private readonly SevenZipLibrary _7zip = new();
         private readonly IInArchive _core;
-        private readonly OpenCallback _callback;
         private readonly PasswordQuery _query;
+        private readonly DisposableContainer _disposable = new();
         #endregion
     }
 }

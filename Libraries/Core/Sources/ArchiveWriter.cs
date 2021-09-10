@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Cube.Collections;
 using Cube.Logging;
-using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -34,7 +33,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveWriter : DisposableBase
+    public sealed class ArchiveWriter : DisposableBase
     {
         #region Constructors
 
@@ -74,17 +73,6 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Items
-        ///
-        /// <summary>
-        /// Gets the collection of files or directories to be archived.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected IList<RawEntity> Items { get; } = new List<RawEntity>();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -153,7 +141,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Clear() => Items.Clear();
+        public void Clear() => _items.Clear();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -179,9 +167,9 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public void Save(string dest, IProgress<Report> progress)
         {
-            if (Format == Format.Sfx) SaveAsSfx(dest, Items, progress);
-            else if (Format == Format.Tar) SaveAsTar(dest, Items, progress);
-            else SaveAs(dest, Items, Format, progress);
+            if (Format == Format.Sfx) SaveAsSfx(dest, _items, progress);
+            else if (Format == Format.Tar) SaveAsTar(dest, _items, progress);
+            else SaveAs(dest, _items, Format, progress);
         }
 
         #endregion
@@ -204,7 +192,7 @@ namespace Cube.FileSystem.SevenZip
             var dir = Io.Get(dest).DirectoryName;
             Io.CreateDirectory(dir);
 
-            Create(src, dest, progress, cb =>
+            Invoke(cb =>
             {
                 using var ss = new ArchiveStreamWriter(Io.Create(dest));
                 var archive = _lib.GetOutArchive(fmt);
@@ -212,7 +200,7 @@ namespace Cube.FileSystem.SevenZip
 
                 setter?.Invoke(archive as ISetProperties);
                 _ = archive.UpdateItems(ss, (uint)src.Count, cb);
-            });
+            }, src, dest, progress);
         }
 
         /* ----------------------------------------------------------------- */
@@ -340,7 +328,7 @@ namespace Cube.FileSystem.SevenZip
         private void AddItem(RawEntity src)
         {
             if (Options.Filter?.Invoke(src) ?? false) return;
-            if (CanRead(src)) Items.Add(src);
+            if (CanRead(src)) _items.Add(src);
             if (!src.IsDirectory) return;
 
             var files = Io.GetFiles(src.FullName).Select(e => IoEx.GetEntitySource(e));
@@ -348,7 +336,7 @@ namespace Cube.FileSystem.SevenZip
             {
                 var e = new RawEntity(f, Io.Combine(src.RelativeName, f.Name));
                 if (Options.Filter?.Invoke(e) ?? false) continue;
-                Items.Add(new(f, Io.Combine(src.RelativeName, f.Name)));
+                _items.Add(new(f, Io.Combine(src.RelativeName, f.Name)));
             }
 
             var dirs = Io.GetDirectories(src.FullName).Select(e => IoEx.GetEntitySource(e));
@@ -357,7 +345,7 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Create
+        /// Invoke
         ///
         /// <summary>
         /// Creates a new instance of the ArchiveUpdateCallback class
@@ -365,14 +353,15 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Create(IList<RawEntity> src, string dest,
-            IProgress<Report> progress, Action<UpdateCallback> callback)
+        private void Invoke(Action<UpdateCallback> callback,
+            IList<RawEntity> src, string dest, IProgress<Report> progress)
         {
             var error = default(Exception);
-            var cb    = new UpdateCallback(src, dest)
+            var cb    = new UpdateCallback(src)
             {
-                Password = Options.Password.HasValue() ? new PasswordQuery(Options.Password) : null,
-                Progress = progress,
+                Destination = dest,
+                Password    = Options.Password,
+                Progress    = progress,
             };
 
             try { callback(cb); }
@@ -406,6 +395,7 @@ namespace Cube.FileSystem.SevenZip
 
         #region Fields
         private readonly SevenZipLibrary _lib = new();
+        private readonly List<RawEntity> _items = new();
         #endregion
     }
 }

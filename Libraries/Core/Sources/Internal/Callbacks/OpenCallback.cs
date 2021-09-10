@@ -44,14 +44,10 @@ namespace Cube.FileSystem.SevenZip
         /// specified arguments.
         /// </summary>
         ///
-        /// <param name="src">Path of the archived file.</param>
-        /// <param name="stream">Input stream of the archived file.</param>
+        /// <param name="src">Input stream of the archived file.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public OpenCallback(string src, ArchiveStreamReader stream) : base(src)
-        {
-            _streams.Add(stream);
-        }
+        public OpenCallback(ArchiveStreamReader src) => _streams.Add(src);
 
         #endregion
 

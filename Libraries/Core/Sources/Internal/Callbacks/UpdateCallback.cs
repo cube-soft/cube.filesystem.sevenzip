@@ -47,13 +47,11 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /// <param name="items">List of files to be compressed.</param>
-        /// <param name="dest">Path to save.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public UpdateCallback(IList<RawEntity> items, string dest)
+        public UpdateCallback(IList<RawEntity> items)
         {
             Items = items;
-            Destination = dest;
             Report.TotalCount = items.Count;
         }
 
@@ -81,7 +79,18 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Destination { get; }
+        public string Destination { get; init; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Password
+        ///
+        /// <summary>
+        /// Gets the password to be set to the archive.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Password { get; init; }
 
         #endregion
 
@@ -105,23 +114,9 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int CryptoGetTextPassword2(ref int enabled, out string password)
         {
-            if (Password != null)
-            {
-                var e = Query.NewMessage(Destination);
-                Password.Request(e);
-
-                var ok = !e.Cancel && e.Value.HasValue();
-
-                Result   = ok ? OperationResult.OK : OperationResult.UserCancel;
-                enabled  = ok ? 1 : 0;
-                password = ok ? e.Value : string.Empty;
-            }
-            else
-            {
-                Result   = OperationResult.OK;
-                enabled  = 0;
-                password = string.Empty;
-            }
+            enabled  = Password.HasValue() ? 1 : 0;
+            password = Password;
+            Result   = OperationResult.OK;
 
             return (int)Result;
         }
