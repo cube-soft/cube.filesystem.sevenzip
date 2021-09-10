@@ -95,11 +95,15 @@ namespace Cube.FileSystem.SevenZip.Ice
                 Source = src;
                 var dir = new ExtractDirectory(this.Select(), Settings);
                 InvokePreProcess(dir);
-                using (var e = new ArchiveReader(src, Password))
+
+                var list = Settings.Value.GetFilters(Settings.Value.Extract.Filtering);
+                var opts = new ArchiveOption { Filter = new Filter(list).Match };
+                using (var e = new ArchiveReader(src, Password, opts))
                 {
                     if (e.Items.Count == 1) Invoke(e, 0, dir);
                     else Invoke(e, dir);
                 }
+
                 InvokePostProcess(dir);
             }
         }
@@ -122,13 +126,12 @@ namespace Cube.FileSystem.SevenZip.Ice
             GetType().LogDebug($"Format:{src.Format}", $"Source:{src.Source}");
             SetDestination(src, dir);
 
-            var filters  = Settings.Value.GetFilters(Settings.Value.Extract.Filtering);
             var progress = GetProgress(e => {
                 e.CopyTo(Report);
                 if (Report.Status == ReportStatus.End) Move(e.Current);
             });
 
-            Retry(() => src.Extract(Temp, new Filter(filters).Match, progress));
+            Retry(() => src.Save(Temp, progress));
         }
 
         /* ----------------------------------------------------------------- */
@@ -146,13 +149,13 @@ namespace Cube.FileSystem.SevenZip.Ice
             SetDestination(src, dir);
 
             var item = src.Items[index];
-            Retry(() => src.Extract(Temp, item, GetProgress()));
+            Retry(() => src.Save(Temp, item, GetProgress()));
 
             var dest = Io.Combine(Temp, item.FullName);
             if (Formatter.FromFile(dest) != Format.Tar) Move(item);
             else
             {
-                using var e = new ArchiveReader(dest, Password);
+                using var e = new ArchiveReader(dest, Password, src.Options);
                 Invoke(e, dir);
             }
         }

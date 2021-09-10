@@ -31,11 +31,11 @@ namespace Cube.FileSystem.SevenZip
     /* --------------------------------------------------------------------- */
     public static class ArchiveReaderExtension
     {
-        #region Extract
+        #region Save
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract
+        /// Save
         ///
         /// <summary>
         /// Extracts all files and saves them in the specified directory.
@@ -49,65 +49,11 @@ namespace Cube.FileSystem.SevenZip
         /// </param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void Extract(this ArchiveReader src, string dest) =>
-            src.Extract(dest, null, null, null);
+        public static void Save(this ArchiveReader src, string dest) => src.Save(dest, null);
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract
-        ///
-        /// <summary>
-        /// Extracts all files and saves them in the specified directory.
-        /// </summary>
-        ///
-        /// <param name="src">Source reader object.</param>
-        ///
-        /// <param name="dest">
-        /// Path of the directory to save. If the parameter is set to null
-        /// or empty, the method invokes as a test mode.
-        /// </param>
-        ///
-        /// <param name="progress">Progress object.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static void Extract(this ArchiveReader src, string dest, IProgress<Report> progress) =>
-            src.Extract(dest, null, null, progress);
-
-        #endregion
-
-        #region Extract with filters
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extract
-        ///
-        /// <summary>
-        /// Extracts all files except those matching the specified filters
-        /// and saves them in the specified directory.
-        /// </summary>
-        ///
-        /// <param name="src">Source reader object.</param>
-        ///
-        /// <param name="dest">
-        /// Path of the directory to save. If the parameter is set to null
-        /// or empty, the method invokes as a test mode.
-        /// </param>
-        ///
-        /// <param name="filter">
-        /// Function to determine if a file or directory should be filtered.
-        /// </param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static void Extract(this ArchiveReader src, string dest, Predicate<Entity> filter) =>
-            src.Extract(dest, null, filter, null);
-
-        #endregion
-
-        #region Extract an item
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Extract
+        /// Save
         ///
         /// <summary>
         /// Extracts the specified item and saves them in the specified
@@ -122,12 +68,12 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="item">Archived item to extract.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void Extract(this ArchiveReader src, string dest, ArchiveEntity item) =>
-            src.Extract(dest, item, null);
+        public static void Save(this ArchiveReader src, string dest, ArchiveEntity item) =>
+            src.Save(dest, item, null);
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract
+        /// Save
         ///
         /// <summary>
         /// Extracts the specified item and saves them in the specified
@@ -143,9 +89,9 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="progress">Progress object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void Extract(this ArchiveReader src, string dest,
-            ArchiveEntity item, IProgress<Report> progress) =>
-            src.Extract(dest, new[] { (uint)item.Index }, null, progress);
+        public static void Save(this ArchiveReader src,
+            string dest, ArchiveEntity item, IProgress<Report> progress) =>
+            src.Save(dest, new[] { (uint)item.Index }, progress);
 
         #endregion
 
@@ -174,35 +120,11 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /// <param name="src">Source reader object.</param>
-        ///
-        /// <param name="filter">
-        /// Function to determine if a file or directory should be filtered.
-        /// </param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static void Test(this ArchiveReader src, Predicate<Entity> filter) =>
-            src.Test(filter, null);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Test
-        ///
-        /// <summary>
-        /// Tests to extract all files except those matching the specified
-        /// filters. The extracted data will be discarded.
-        /// </summary>
-        ///
-        /// <param name="src">Source reader object.</param>
-        ///
-        /// <param name="filter">
-        /// Function to determine if a file or directory should be filtered.
-        /// </param>
-        ///
         /// <param name="progress">Progress object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void Test(this ArchiveReader src, Predicate<Entity> filter, IProgress<Report> progress) =>
-            src.Extract(null, null, filter, progress);
+        public static void Test(this ArchiveReader src, IProgress<Report> progress) =>
+            src.Save(null, null, progress);
 
         #endregion
     }

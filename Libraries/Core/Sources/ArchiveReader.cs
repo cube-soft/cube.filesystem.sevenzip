@@ -63,8 +63,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="password">Password of the archive.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveReader(string src, string password) :
-            this(Formatter.FromFile(src), src, new PasswordQuery(password)) { }
+        public ArchiveReader(string src, string password) : this(src, password, new()) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -79,8 +78,56 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="password">Query object to get password.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveReader(string src, IQuery<string> password) :
-            this(Formatter.FromFile(src), src, new PasswordQuery(password)) { }
+        public ArchiveReader(string src, IQuery<string> password) : this(src, password, new()) { }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ArchiveReader
+        ///
+        /// <summary>
+        /// Initializes a new instance of the ArchiveReader class with
+        /// the specified arguments.
+        /// </summary>
+        ///
+        /// <param name="src">Path of the archive.</param>
+        /// <param name="options">Options to extract the archive.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ArchiveReader(string src, ArchiveOption options) : this(src, string.Empty, options) { }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ArchiveReader
+        ///
+        /// <summary>
+        /// Initializes a new instance of the ArchiveReader class with
+        /// the specified arguments.
+        /// </summary>
+        ///
+        /// <param name="src">Path of the archive.</param>
+        /// <param name="password">Password of the archive.</param>
+        /// <param name="options">Options to extract the archive.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ArchiveReader(string src, string password, ArchiveOption options) :
+            this(Formatter.FromFile(src), src, new PasswordQuery(password), options) { }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ArchiveReader
+        ///
+        /// <summary>
+        /// Initializes a new instance of the ArchiveReader class with
+        /// the specified arguments.
+        /// </summary>
+        ///
+        /// <param name="src">Path of the archive.</param>
+        /// <param name="password">Query object to get password.</param>
+        /// <param name="options">Options to extract the archive.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ArchiveReader(string src, IQuery<string> password, ArchiveOption options) :
+            this(Formatter.FromFile(src), src, new PasswordQuery(password), options) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -92,16 +139,17 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private ArchiveReader(Format format, string src, PasswordQuery password)
+        private ArchiveReader(Format format, string src, PasswordQuery query, ArchiveOption options)
         {
             if (format == Format.Unknown) throw new UnknownFormatException();
 
-            Source = src;
-            Format = format;
-            _password = password;
+            Source  = src;
+            Format  = format;
+            Options = options;
+            _query  = query;
 
             var ss = new ArchiveStreamReader(Io.Open(src));
-            _callback = new OpenCallback(src, ss) { Password = password };
+            _callback = new(src, ss) { Password = query };
             _core = _7zip.GetInArchive(format);
             _ = _core.Open(ss, IntPtr.Zero, _callback);
 
@@ -146,13 +194,24 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public IReadOnlyList<ArchiveEntity> Items { get; }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Options
+        ///
+        /// <summary>
+        /// Gets the options to extract the provided archive.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public ArchiveOption Options { get; }
+
         #endregion
 
         #region Methods
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract
+        /// Save
         ///
         /// <summary>
         /// Extracts all files except those matching the specified filter
@@ -164,19 +223,14 @@ namespace Cube.FileSystem.SevenZip
         /// or empty, the method invokes as a test mode.
         /// </param>
         ///
-        /// <param name="filter">
-        /// Function to determine if a file or directory should be filtered.
-        /// </param>
-        ///
         /// <param name="progress">Progress object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Extract(string dest, Predicate<Entity> filter, IProgress<Report> progress) =>
-            Extract(dest, null, filter, progress);
+        public void Save(string dest, IProgress<Report> progress) => Save(dest, null, progress);
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Extract
+        /// Save
         ///
         /// <summary>
         /// Extracts the files corresponding to the specified indices except
@@ -188,25 +242,19 @@ namespace Cube.FileSystem.SevenZip
         /// Path of the directory to save. If the parameter is set to null
         /// or empty, the method invokes as a test mode.
         /// </param>
-        ///
         /// <param name="src">Source indices to extract.</param>
-        ///
-        /// <param name="filter">
-        /// Function to determine if a file or directory should be filtered.
-        /// </param>
-        ///
         /// <param name="progress">Progress object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void Extract(string dest, uint[] src, Predicate<Entity> filter, IProgress<Report> progress)
+        public void Save(string dest, uint[] src, IProgress<Report> progress)
         {
             using var cb = src != null ?
                       new ExtractCallback(this, src.Select(i => (int)i), src.Length, dest) :
                       new ExtractCallback(this, dest);
 
-            cb.Password = _password;
+            cb.Password = _query;
             cb.Progress = progress;
-            cb.Filter   = filter;
+            cb.Filter   = Options.Filter;
 
             var count = (uint?)src?.Length ?? uint.MaxValue;
             var test  = dest.HasValue() ? 0 : 1;
@@ -217,7 +265,7 @@ namespace Cube.FileSystem.SevenZip
             if (cb.Result == OperationResult.WrongPassword ||
                 cb.Result == OperationResult.DataError && IsEncrypted(src))
             {
-                _password.Reset();
+                _query.Reset();
                 throw new EncryptionException();
             }
             throw cb.Exception ?? new System.IO.IOException($"{cb.Result}");
@@ -267,7 +315,7 @@ namespace Cube.FileSystem.SevenZip
         private readonly SevenZipLibrary _7zip = new();
         private readonly IInArchive _core;
         private readonly OpenCallback _callback;
-        private readonly PasswordQuery _password;
+        private readonly PasswordQuery _query;
         #endregion
     }
 }

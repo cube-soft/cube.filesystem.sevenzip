@@ -44,7 +44,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// Extract
         ///
         /// <summary>
-        /// Tests the Extract method with the specified archive.
+        /// Tests the Save method with the specified archive.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -55,7 +55,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             var dest = Get(nameof(Extract), filename);
 
             using var archive = new ArchiveReader(src, password);
-            archive.Extract(dest);
+            archive.Save(dest);
 
             foreach (var cmp in GetAnswer(filename))
             {
@@ -74,7 +74,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// Extract_Lite
         ///
         /// <summary>
-        /// Tests the Extract method with the specified archive.
+        /// Tests the Save method with the specified archive.
         /// </summary>
         ///
         /// <remarks>
@@ -99,7 +99,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             var cnt  = new Counter();
 
             using (var obj = new ArchiveReader(src)) obj.Test(); // Test
-            using (var obj = new ArchiveReader(src)) obj.Extract(dest, cnt);
+            using (var obj = new ArchiveReader(src)) obj.Save(dest, cnt);
 
             return cnt.Results[ReportStatus.End];
         }
@@ -109,7 +109,7 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// Test
         ///
         /// <summary>
-        /// Tests the Extract method with the specified archive in test mode.
+        /// Tests the Test method with the specified archive in test mode.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */

@@ -38,7 +38,7 @@ namespace Cube.FileSystem.SevenZip
         /// Password
         ///
         /// <summary>
-        /// Gets or setss the object to query query for a password.
+        /// Gets or sets the object to query for a password.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */

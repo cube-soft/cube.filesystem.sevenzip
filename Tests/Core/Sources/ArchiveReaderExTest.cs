@@ -47,14 +47,12 @@ namespace Cube.FileSystem.SevenZip.Tests
         [Test]
         public void Filter()
         {
-            var src  = GetSource("SampleFilter.zip");
-            var dest = Get(nameof(Filter));
+            var src   = GetSource("SampleFilter.zip");
+            var dest  = Get(nameof(Filter));
+            var files = new[] { ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini" };
+            var opts  = new ArchiveOption { Filter = new Filter(files).Match };
 
-            using (var archive = new ArchiveReader(src))
-            {
-                var filters = new[] { ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini" };
-                archive.Extract(dest, new Filter(filters).Match);
-            }
+            using (var archive = new ArchiveReader(src, opts)) archive.Save(dest);
 
             Assert.That(Io.Exists(Io.Combine(dest, @"フィルタリング テスト用")),              Is.True);
             Assert.That(Io.Exists(Io.Combine(dest, @"フィルタリング テスト用\.DS_Store")),    Is.False);
@@ -88,7 +86,7 @@ namespace Cube.FileSystem.SevenZip.Tests
 
             using var archive = new ArchiveReader(src, query);
 
-            Assert.That(() => archive.Extract(Results, cnt),
+            Assert.That(() => archive.Save(Results, cnt),
                 Throws.TypeOf<OperationCanceledException>());
             Assert.That(cnt.Results[ReportStatus.End], Is.EqualTo(2));
         }
@@ -128,7 +126,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             using var ss = Io.Open(locked);
             using var archive = new ArchiveReader(GetSource("Sample.zip"), "");
 
-            Assert.That(() => archive.Extract(dest), Throws.TypeOf<System.IO.IOException>());
+            Assert.That(() => archive.Save(dest), Throws.TypeOf<System.IO.IOException>());
         }
 
         /* ----------------------------------------------------------------- */
@@ -154,7 +152,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             var src = Io.Combine(dest, "SampleVolume.rar.001");
             using var archive = new ArchiveReader(src);
 
-            Assert.That(() => archive.Extract(dest), Throws.TypeOf<System.IO.IOException>());
+            Assert.That(() => archive.Save(dest), Throws.TypeOf<System.IO.IOException>());
         }
 
         /* ----------------------------------------------------------------- */
@@ -173,7 +171,7 @@ namespace Cube.FileSystem.SevenZip.Tests
             var src = GetSource("Password.7z");
             using var archive = new ArchiveReader(src, password);
 
-            Assert.That(() => archive.Extract(Results), Throws.TypeOf<EncryptionException>());
+            Assert.That(() => archive.Save(Results), Throws.TypeOf<EncryptionException>());
         }
 
         #endregion
