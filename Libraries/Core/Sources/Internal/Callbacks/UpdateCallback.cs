@@ -136,7 +136,7 @@ namespace Cube.FileSystem.SevenZip
         /// <param name="bytes">Total bytes of target files.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public void SetTotal(ulong bytes) => Invoke(() => Report.TotalBytes = (long)bytes);
+        public void SetTotal(ulong bytes) => Invoke(() => Report.TotalBytes = (long)bytes, true);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -152,7 +152,7 @@ namespace Cube.FileSystem.SevenZip
         public void SetCompleted(ref ulong bytes)
         {
             var cvt = (long)bytes;
-            _ = Invoke(() => Report.Bytes = cvt);
+            _ = Invoke(() => Report.Bytes = cvt, true);
         }
 
         /* ----------------------------------------------------------------- */
@@ -180,7 +180,7 @@ namespace Cube.FileSystem.SevenZip
             newdata = 1;
             newprop = 1;
             indexInArchive = uint.MaxValue;
-            return Invoke(() => (int)Result);
+            return Invoke(() => (int)Result, true);
         }
 
         /* ----------------------------------------------------------------- */
@@ -235,7 +235,7 @@ namespace Cube.FileSystem.SevenZip
                     break;
             }
 
-            return Invoke(() => (int)Result);
+            return Invoke(() => (int)Result, true);
         }
 
         /* ----------------------------------------------------------------- */
@@ -260,7 +260,7 @@ namespace Cube.FileSystem.SevenZip
                 Report.Current = GetItem(index);
                 Report.Status  = ReportStatus.Begin;
                 return GetStream(Report.Current);
-            });
+            }, true);
             return (int)Result;
         }
 
@@ -279,7 +279,7 @@ namespace Cube.FileSystem.SevenZip
         {
             Result        = result;
             Report.Status = ReportStatus.End;
-        });
+        }, true);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -287,20 +287,13 @@ namespace Cube.FileSystem.SevenZip
         ///
         /// <summary>
         /// EnumProperties 7-zip internal function.
+        /// The method is not implemented.
         /// </summary>
-        ///
-        /// <remarks>
-        /// このメソッドは未実装です。
-        /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
         public long EnumProperties(IntPtr enumerator) => 0x80004001L; // Not implemented
 
         #endregion
-
-        #endregion
-
-        #region Implementations
 
         /* ----------------------------------------------------------------- */
         ///
@@ -326,6 +319,10 @@ namespace Cube.FileSystem.SevenZip
                 _streams.Clear();
             }
         }
+
+        #endregion
+
+        #region Implementations
 
         /* ----------------------------------------------------------------- */
         ///

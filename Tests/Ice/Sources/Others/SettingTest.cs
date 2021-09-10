@@ -62,7 +62,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// Sync_Shortcut
         ///
         /// <summary>
-        /// Tests the Sync method that loads the shorcut settings.
+        /// Tests the Sync method that loads the shortcut settings.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */

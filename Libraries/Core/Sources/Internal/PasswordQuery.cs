@@ -75,7 +75,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Password { get; private set; }
+        public string Password { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -86,7 +86,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IQuery<string> Query { get; private set; }
+        public IQuery<string> Query { get; }
 
         #endregion
 

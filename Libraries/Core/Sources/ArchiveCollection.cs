@@ -30,7 +30,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal class ArchiveCollection : EnumerableBase<ArchiveEntity>, IReadOnlyList<ArchiveEntity>
+    internal sealed class ArchiveCollection : EnumerableBase<ArchiveEntity>, IReadOnlyList<ArchiveEntity>
     {
         #region Constructors
 
@@ -129,12 +129,12 @@ namespace Cube.FileSystem.SevenZip
         /// </param>
         ///
         /* ----------------------------------------------------------------- */
-        protected override void Dispose(bool disposing) { }
+        protected override void Dispose(bool disposing) => _core = null;
 
         #endregion
 
         #region Fields
-        private readonly IInArchive _core;
+        private IInArchive _core;
         private readonly string _path;
         #endregion
     }

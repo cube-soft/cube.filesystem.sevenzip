@@ -367,8 +367,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static IDictionary<Format, string> GetFormatToExtensionMap() =>
-            _formatToExtension ??= new()
+        private static IDictionary<Format, string> GetFormatToExtensionMap() => _formatToExtension ??= new()
         {
             { Format.SevenZip, ".7z"  },
             { Format.BZip2,    ".bz2" },
@@ -388,8 +387,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static IDictionary<CompressionMethod, string> GetMethodToExtensionMap() =>
-            _methodToExtension ??= new()
+        private static IDictionary<CompressionMethod, string> GetMethodToExtensionMap() => _methodToExtension ??= new()
         {
             { CompressionMethod.BZip2, ".bz2" },
             { CompressionMethod.GZip,  ".gz"  },
@@ -406,8 +404,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static IDictionary<CompressionMethod, Format> GetMethodToFormatMap() =>
-            _methodToFormat ??= new()
+        private static IDictionary<CompressionMethod, Format> GetMethodToFormatMap() => _methodToFormat ??= new()
         {
             { CompressionMethod.BZip2, Format.BZip2 },
             { CompressionMethod.GZip,  Format.GZip  },
@@ -424,8 +421,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static IDictionary<Format, CompressionMethod> GetFormatToMethodMap() =>
-            _formatToMethod ??= new()
+        private static IDictionary<Format, CompressionMethod> GetFormatToMethodMap() => _formatToMethod ??= new()
         {
             { Format.BZip2, CompressionMethod.BZip2 },
             { Format.GZip,  CompressionMethod.GZip  },
@@ -447,8 +443,7 @@ namespace Cube.FileSystem.SevenZip
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        private static IDictionary<string, Format> GetSignatureMap() =>
-            _signature ??= new Dictionary<string, Format>
+        private static IDictionary<string, Format> GetSignatureMap() => _signature ??= new()
         {
             { "50-4B-03-04",                Format.Zip      },
             { "42-5A-68",                   Format.BZip2    },

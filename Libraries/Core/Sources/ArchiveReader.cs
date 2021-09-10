@@ -110,7 +110,7 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public ArchiveReader(string src, string password, ArchiveOption options) :
-            this(Formatter.FromFile(src), src, new PasswordQuery(password), options) { }
+            this(Formatter.FromFile(src), src, new(password), options) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -127,7 +127,7 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public ArchiveReader(string src, IQuery<string> password, ArchiveOption options) :
-            this(Formatter.FromFile(src), src, new PasswordQuery(password), options) { }
+            this(Formatter.FromFile(src), src, new(password), options) { }
 
         /* ----------------------------------------------------------------- */
         ///

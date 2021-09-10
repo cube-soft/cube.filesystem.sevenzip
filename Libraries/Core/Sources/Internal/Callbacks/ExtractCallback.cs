@@ -70,7 +70,7 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Filter
+        /// Destination
         ///
         /// <summary>
         /// Gets or sets the path to save extracted items.
@@ -111,7 +111,7 @@ namespace Cube.FileSystem.SevenZip
         {
             if (Report.TotalBytes < 0) Report.TotalBytes = (long)bytes;
             _hack = Math.Max((long)bytes - Report.TotalBytes, 0);
-        });
+        }, true);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -134,7 +134,7 @@ namespace Cube.FileSystem.SevenZip
         public void SetCompleted(ref ulong bytes)
         {
             var cvt = Math.Min(Math.Max((long)bytes - _hack, 0), Report.TotalBytes);
-            _ = Invoke(() => Report.Bytes = cvt);
+            _ = Invoke(() => Report.Bytes = cvt, true);
         }
 
         /* ----------------------------------------------------------------- */
@@ -178,7 +178,7 @@ namespace Cube.FileSystem.SevenZip
                 Report.Current = src.Source;
                 Report.Status  = ReportStatus.Begin;
             }
-        });
+        }, true);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -208,11 +208,7 @@ namespace Cube.FileSystem.SevenZip
                 Report.Status = ReportStatus.End;
                 Report.Count++;
             }
-        });
-
-        #endregion
-
-        #region Implementations
+        }, true);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -238,11 +234,15 @@ namespace Cube.FileSystem.SevenZip
                 {
                     kv.Value.Stream?.Dispose();
                     if (Result != OperationResult.OK) continue;
-                    if (Destination.HasValue()) Invoke(() => kv.Value.Source.SetAttributes(Destination));
+                    if (Destination.HasValue()) Invoke(() => kv.Value.Source.SetAttributes(Destination), true);
                 }
                 _dic.Clear();
             }
         }
+
+        #endregion
+
+        #region Implementations
 
         /* ----------------------------------------------------------------- */
         ///

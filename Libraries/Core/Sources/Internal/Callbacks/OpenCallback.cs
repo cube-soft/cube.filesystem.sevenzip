@@ -71,7 +71,7 @@ namespace Cube.FileSystem.SevenZip
         {
             if (count != IntPtr.Zero) Report.TotalCount = Marshal.ReadInt64(count);
             if (bytes != IntPtr.Zero) Report.TotalBytes = Marshal.ReadInt64(bytes);
-        });
+        }, true);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -90,7 +90,7 @@ namespace Cube.FileSystem.SevenZip
             if (count != IntPtr.Zero) Report.Count = Marshal.ReadInt64(count);
             if (bytes != IntPtr.Zero) Report.Bytes = Marshal.ReadInt64(bytes);
             Result = OperationResult.OK;
-        });
+        }, true);
 
         #endregion
 
@@ -116,7 +116,7 @@ namespace Cube.FileSystem.SevenZip
         {
             if (pid == ItemPropId.Name) value.Set(Io.Get(Source).FullName);
             else value.Clear();
-            return Invoke(() => (int)Result);
+            return Invoke(() => (int)Result, true);
         }
 
         /* ----------------------------------------------------------------- */
@@ -143,7 +143,7 @@ namespace Cube.FileSystem.SevenZip
                 var dest = new ArchiveStreamReader(Io.Open(src));
                 _streams.Add(dest);
                 return dest;
-            });
+            }, true);
 
             Result = (stream != null) ? OperationResult.OK : OperationResult.DataError;
             return (int)Result;

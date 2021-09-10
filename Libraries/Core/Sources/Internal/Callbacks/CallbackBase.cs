@@ -64,7 +64,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Exception Exception { get; protected set; }
+        public Exception Exception { get; private set; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -75,24 +75,11 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected Report Report { get; set; } = new();
+        protected Report Report { get; } = new();
 
         #endregion
 
         #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Invoke
-        ///
-        /// <summary>
-        /// Invokes the specified callback and reports the progress.
-        /// </summary>
-        ///
-        /// <param name="callback">Callback action.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected void Invoke(Action callback) => Invoke(callback, true);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -109,21 +96,6 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         protected void Invoke(Action callback, bool report) =>
             Invoke(() => { callback(); return true; }, report);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Invoke
-        ///
-        /// <summary>
-        /// Invokes the specified callback and reports the progress.
-        /// </summary>
-        ///
-        /// <param name="callback">Callback function.</param>
-        ///
-        /// <returns>Result of the callback function.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected T Invoke<T>(Func<T> callback) => Invoke(callback, true);
 
         /* ----------------------------------------------------------------- */
         ///

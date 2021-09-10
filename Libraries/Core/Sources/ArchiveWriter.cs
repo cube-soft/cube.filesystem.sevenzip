@@ -172,15 +172,30 @@ namespace Cube.FileSystem.SevenZip
             else SaveAs(dest, _items, Format, progress);
         }
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Dispose
+        ///
+        /// <summary>
+        /// Releases the unmanaged resources used by the ArchiveWriter
+        /// and optionally releases the managed resources.
+        /// </summary>
+        ///
+        /// <param name="disposing">
+        /// true to release both managed and unmanaged resources;
+        /// false to release only unmanaged resources.
+        /// </param>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected override void Dispose(bool disposing) => _lib.Dispose();
+
         #endregion
 
         #region Implementations
 
-        #region Invoke
-
         /* ----------------------------------------------------------------- */
         ///
-        /// Invoke
+        /// SaveAs
         ///
         /// <summary>
         /// Creates a new archive and saves to the specified path.
@@ -235,7 +250,7 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// InvokeSfx
+        /// SaveAsSfx
         ///
         /// <summary>
         /// Creates the self-executable archive and saves to the specified
@@ -259,25 +274,6 @@ namespace Cube.FileSystem.SevenZip
             }
             finally { GetType().LogWarn(() => Io.Delete(tmp)); }
         }
-
-        #endregion
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Dispose
-        ///
-        /// <summary>
-        /// Releases the unmanaged resources used by the ArchiveWriter
-        /// and optionally releases the managed resources.
-        /// </summary>
-        ///
-        /// <param name="disposing">
-        /// true to release both managed and unmanaged resources;
-        /// false to release only unmanaged resources.
-        /// </param>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected override void Dispose(bool disposing) => _lib.Dispose();
 
         /* ----------------------------------------------------------------- */
         ///

@@ -84,7 +84,7 @@ namespace Cube.FileSystem.SevenZip
         ///
         /// <summary>
         /// Sets the position of the stream.
-        /// The metod implements IInStream.Seek(long, SeekOrigin, IntPtr).
+        /// The method implements IInStream.Seek(long, SeekOrigin, IntPtr).
         /// </summary>
         ///
         /// <param name="offset">Offset value from the origin.</param>
