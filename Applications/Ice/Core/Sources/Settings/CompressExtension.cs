@@ -41,23 +41,19 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /// <param name="src">Runtime settings.</param>
         /// <param name="settings">User settings.</param>
-        /// <param name="password">Password to be set.</param>
         ///
         /// <remarks>CompressionOption object.</remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public static CompressionOption ToOption(this CompressRuntimeSetting src,
-            SettingFolder settings, string password)
+        public static CompressionOption ToOption(this CompressRuntimeSetting src, SettingFolder settings)
         {
             var filter = new Filter(settings.Value.GetFilters(settings.Value.Compress.Filtering));
 
             return src.Format switch
             {
-                Format.Zip      => MakeZip(src, password, filter, settings.Value.Compress),
-                Format.SevenZip => MakeSevenZip(src, password, filter),
-                Format.Sfx      => MakeSfx(src, password, filter),
-                Format.Tar      => MakeTar(src, password, filter),
-                _               => MakeCommon(src, password, filter),
+                Format.Zip      => MakeZip(src, filter, settings.Value.Compress),
+                Format.Sfx      => MakeSfx(src, filter),
+                _               => MakeCommon(src, filter),
             };
         }
 
@@ -75,33 +71,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         private static CompressionOption MakeZip(CompressRuntimeSetting src,
-            string password, Filter filter, CompressSetting others) => new()
+            Filter filter, CompressSetting others) => new()
         {
             CompressionLevel  = src.CompressionLevel,
             CompressionMethod = src.CompressionMethod,
             EncryptionMethod  = src.EncryptionMethod,
-            Password          = password,
+            Password          = src.Password,
             ThreadCount       = src.ThreadCount,
             CodePage          = others.UseUtf8 ? CodePage.Utf8 : CodePage.Oem,
-            Filter            = filter.Match,
-        };
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// MakeSevenZip
-        ///
-        /// <summary>
-        /// Creates a new instance of the SevenZipOption class.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private static CompressionOption MakeSevenZip(CompressRuntimeSetting src,
-            string password, Filter filter) => new()
-        {
-            CompressionLevel  = src.CompressionLevel,
-            CompressionMethod = src.CompressionMethod,
-            ThreadCount       = src.ThreadCount,
-            Password          = password,
             Filter            = filter.Match,
         };
 
@@ -114,32 +91,13 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static SfxOption MakeSfx(CompressRuntimeSetting src, string password, Filter filter) => new()
+        private static SfxOption MakeSfx(CompressRuntimeSetting src, Filter filter) => new()
         {
             CompressionLevel  = src.CompressionLevel,
             CompressionMethod = src.CompressionMethod,
             ThreadCount       = src.ThreadCount,
             Module            = src.Sfx,
-            Password          = password,
-            Filter            = filter.Match,
-        };
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CreateTarOption
-        ///
-        /// <summary>
-        /// Creates a new instance of the CompressionOption class.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private static CompressionOption MakeTar(CompressRuntimeSetting src,
-            string password, Filter filter) => new()
-        {
-            CompressionLevel  = src.CompressionLevel,
-            CompressionMethod = src.CompressionMethod,
-            ThreadCount       = src.ThreadCount,
-            Password          = password,
+            Password          = src.Password,
             Filter            = filter.Match,
         };
 
@@ -152,12 +110,13 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static CompressionOption MakeCommon(CompressRuntimeSetting src,
-            string password, Filter filter) => new()
+        private static CompressionOption MakeCommon(CompressRuntimeSetting src, Filter filter) => new()
         {
+            CompressionMethod = src.CompressionMethod,
             CompressionLevel  = src.CompressionLevel,
+            EncryptionMethod  = src.EncryptionMethod,
+            Password          = src.Password,
             ThreadCount       = src.ThreadCount,
-            Password          = password,
             Filter            = filter.Match,
         };
 

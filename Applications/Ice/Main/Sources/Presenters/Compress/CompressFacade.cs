@@ -105,8 +105,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             GetType().LogDebug($"Format:{src.Format}", $"Method:{src.CompressionMethod}");
 
-            var password = GetPassword(src);
-            using (var writer = new ArchiveWriter(src.Format, src.ToOption(Settings, password)))
+            using (var writer = new ArchiveWriter(src.Format, src.ToOption(Settings)))
             {
                 foreach (var e in Request.Sources) writer.Add(e);
                 writer.Save(Temp, GetProgress());
@@ -127,7 +126,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         private void InvokePreProcess(CompressRuntimeSetting src)
         {
             Destination = this.Select(src);
-            MakeTemp(Io.Get(Destination).DirectoryName);
+            SetTemp(Io.Get(Destination).DirectoryName);
+            SetPassword(src);
         }
 
         /* ----------------------------------------------------------------- */
@@ -146,22 +146,21 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetPassword
+        /// SetPassword
         ///
         /// <summary>
-        /// Gets the password.
+        /// Sets the password.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetPassword(CompressRuntimeSetting src)
+        private void SetPassword(CompressRuntimeSetting src)
         {
-            if (src.Password.HasValue()) return src.Password;
-            if (!Request.Password) return null;
+            if (src.Password.HasValue() || !Request.Password) return;
 
             var e = Query.NewMessage(Destination);
             Password.Request(e);
             if (e.Cancel) throw new OperationCanceledException();
-            return e.Value;
+            src.Password = e.Value;
         }
 
         #endregion

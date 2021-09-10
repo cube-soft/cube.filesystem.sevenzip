@@ -142,7 +142,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// MakeTemp
+        /// SetTemp
         ///
         /// <summary>
         /// Sets the value to the Temp property with the specified
@@ -152,7 +152,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="directory">Path of the root directory.</param>
         ///
         /* ----------------------------------------------------------------- */
-        protected void MakeTemp(string directory)
+        protected void SetTemp(string directory)
         {
             if (!Temp.HasValue())
             {

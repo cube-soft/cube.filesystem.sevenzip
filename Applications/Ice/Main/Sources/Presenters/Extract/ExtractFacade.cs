@@ -169,7 +169,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void InvokePreProcess(ExtractDirectory dir) => MakeTemp(dir.Source);
+        private void InvokePreProcess(ExtractDirectory dir) => SetTemp(dir.Source);
 
         /* ----------------------------------------------------------------- */
         ///
