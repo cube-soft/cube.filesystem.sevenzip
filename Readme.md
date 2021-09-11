@@ -22,15 +22,25 @@ A simple example for archiving files is as follows.
 Note that the statement "using Cube.FileSystem.SevenZip;" has been omitted in all samples.
 
 ```cs
-using (var writer = new ArchiveWriter(Format.Zip))
+// Set up only what you need.
+var files   = new[] { ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini" };
+var options = new CompressionOption
+{
+    CompressionLevel  = CompressionLevel.Ultra,
+    CompressionMethod = CompressionMethod.Lzma,
+    EncryptionMethod  = EncryptionMethod.Aes256,
+    Password          = "password",
+    Filter            = new Filter(files).Match,
+    CodePage          = CodePage.Utf8,
+};
+
+using (var writer = new ArchiveWriter(Format.Zip, options))
 {
     writer.Add(@"path\to\file");
     writer.Add(@"path\to\directory_including_files");
-    writer.Options = new ZipOption { CompressionLevel = CompressionLevel.Ultra };
-    writer.Filters = new[] { ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini" };
     
     var progress = new Progress<Report>(e => DoSomething(e));
-    writer.Save(@"path\to\save.zip", "password", progress);
+    writer.Save(@"path\to\save.zip", progress);
 }
 ```
 
@@ -39,14 +49,14 @@ add files and/or directories you want to archive, set some additional options, a
 When you create Tar based archives, you can use a TarOption object for selecting a compression method.
 
 ```cs
-using (var writer = new ArchiveWriter(Format.Tar))
+var options = new CompressionOption
 {
-    writer.Option = new TarOption
-    {
-        CompressionMethod = CompressionMethod.BZip2, // GZip, BZip2, XZ or Copy
-        CompressionLevel  = CompressionLevel.Ultra,
-    };
+    CompressionLevel  = CompressionLevel.Ultra,
+    CompressionMethod = CompressionMethod.BZip2, // GZip, BZip2, XZ or Copy
+};
 
+using (var writer = new ArchiveWriter(Format.Tar, options))
+{
     writer.Add(@"path\to\file");
     writer.Add(@"path\to\directory_including_files");
     writer.Save(@"path\to\save.tar.gz");
@@ -68,11 +78,16 @@ var password = new Cube.Query<string>(e =>
     e.Cancel = false;
 });
 
-using (var reader = new ArchiveReader(@"path\to\archive", password))
+var files   = new[] { ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini" };
+var options = new ArchiveOption
 {
-    var filter   = new[] { ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini" };    
+    Filter = new Filter(files).Match
+};
+
+using (var reader = new ArchiveReader(@"path\to\archive", password, options))
+{
     var progress = new Progress<Report>(e => DoSomething(e));
-    reader.Extract(@"path\to\directory", filter, progress);
+    reader.Save(@"path\to\directory", progress);
 }
 ```
 
