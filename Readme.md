@@ -22,7 +22,7 @@ A simple example for archiving files is as follows.
 Note that the statement "using Cube.FileSystem.SevenZip;" has been omitted in all samples.
 
 ```cs
-// Set up only what you need.
+// Set only what you need.
 var files   = new[] { ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini" };
 var options = new CompressionOption
 {
@@ -78,6 +78,7 @@ var password = new Cube.Query<string>(e =>
     e.Cancel = false;
 });
 
+// Supports only the Filter property
 var files   = new[] { ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini" };
 var options = new ArchiveOption
 {
