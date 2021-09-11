@@ -60,8 +60,6 @@ namespace Cube.FileSystem.SevenZip
             Report.TotalBytes = -1;
             Report.Count      = 0;
             Report.Bytes      = 0;
-
-            _ = _iterator.MoveNext();
         }
 
         #endregion
@@ -228,16 +226,13 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
+            foreach (var kv in _dic)
             {
-                foreach (var kv in _dic)
-                {
-                    kv.Value.Stream?.Dispose();
-                    if (Result != OperationResult.OK) continue;
-                    if (Destination.HasValue()) Invoke(() => kv.Value.Source.SetAttributes(Destination), true);
-                }
-                _dic.Clear();
+                kv.Value.Stream?.Dispose();
+                if (Result != OperationResult.OK) continue;
+                if (Destination.HasValue()) Invoke(() => kv.Value.Source.SetAttributes(Destination), true);
             }
+            _dic.Clear();
         }
 
         #endregion
@@ -257,7 +252,7 @@ namespace Cube.FileSystem.SevenZip
         {
             if (Result != OperationResult.OK || mode == AskMode.Skip) return null;
 
-            do
+            while (_iterator.MoveNext())
             {
                 var key = _iterator.Current;
                 if (key != index) continue;
@@ -272,7 +267,7 @@ namespace Cube.FileSystem.SevenZip
                     else value.Stream = CreateStream(vi);
                 }
                 return value.Stream;
-            } while (_iterator.MoveNext());
+            }
 
             return null;
         }

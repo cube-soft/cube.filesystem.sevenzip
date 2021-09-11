@@ -18,7 +18,6 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Cube.Logging;
 using Cube.Mixin.String;
 
@@ -51,24 +50,13 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public UpdateCallback(IList<RawEntity> items)
         {
-            Items = items;
+            _items = items;
             Report.TotalCount = items.Count;
         }
 
         #endregion
 
         #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Items
-        ///
-        /// <summary>
-        /// Gets the list of files to be compressed.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public IList<RawEntity> Items { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -95,33 +83,6 @@ namespace Cube.FileSystem.SevenZip
         #endregion
 
         #region Methods
-
-        #region ICryptoGetTextPassword2
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CryptoGetTextPassword2
-        ///
-        /// <summary>
-        /// Get the password to be set for the compressed file.
-        /// </summary>
-        ///
-        /// <param name="enabled">Password is enabled or not.</param>
-        /// <param name="password">Password value.</param>
-        ///
-        /// <returns>OperationResult</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public int CryptoGetTextPassword2(ref int enabled, out string password)
-        {
-            enabled  = Password.HasValue() ? 1 : 0;
-            password = Password;
-            Result   = OperationResult.OK;
-
-            return (int)Result;
-        }
-
-        #endregion
 
         #region IArchiveUpdateCallback
 
@@ -201,7 +162,7 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public int GetProperty(uint index, ItemPropId pid, ref PropVariant value)
         {
-            var src = GetItem(index);
+            var src = _items[(int)index];
 
             switch (pid)
             {
@@ -257,7 +218,7 @@ namespace Cube.FileSystem.SevenZip
             stream = Invoke(() =>
             {
                 Report.Count   = index + 1;
-                Report.Current = GetItem(index);
+                Report.Current = _items[(int)index];
                 Report.Status  = ReportStatus.Begin;
                 return GetStream(Report.Current);
             }, true);
@@ -295,6 +256,33 @@ namespace Cube.FileSystem.SevenZip
 
         #endregion
 
+        #region ICryptoGetTextPassword2
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CryptoGetTextPassword2
+        ///
+        /// <summary>
+        /// Get the password to be set for the compressed file.
+        /// </summary>
+        ///
+        /// <param name="enabled">Password is enabled or not.</param>
+        /// <param name="password">Password value.</param>
+        ///
+        /// <returns>OperationResult</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public int CryptoGetTextPassword2(ref int enabled, out string password)
+        {
+            enabled = Password.HasValue() ? 1 : 0;
+            password = Password;
+            Result = OperationResult.OK;
+
+            return (int)Result;
+        }
+
+        #endregion
+
         /* ----------------------------------------------------------------- */
         ///
         /// Dispose
@@ -326,21 +314,6 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetItem
-        ///
-        /// <summary>
-        /// Gets the item of the specified index.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private RawEntity GetItem(uint index)
-        {
-            Debug.Assert(index >= 0 && index < Items.Count);
-            return Items[(int)index];
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// GetStream
         ///
         /// <summary>
@@ -360,6 +333,7 @@ namespace Cube.FileSystem.SevenZip
 
         #region Fields
         private readonly List<ArchiveStreamReader> _streams = new();
+        private readonly IList<RawEntity> _items;
         #endregion
     }
 }

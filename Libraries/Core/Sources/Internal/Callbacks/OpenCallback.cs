@@ -168,11 +168,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                foreach (var item in _streams) item.Dispose();
-                _streams.Clear();
-            }
+            foreach (var item in _streams) item.Dispose();
+            _streams.Clear();
         }
 
         #endregion
