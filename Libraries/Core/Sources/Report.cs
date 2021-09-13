@@ -16,6 +16,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+using System;
+
 namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
@@ -106,7 +108,10 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public double Ratio => TotalBytes > 0 ? Bytes / (double)TotalBytes : 0.0;
+        public double Ratio => Math.Min(
+            TotalBytes > 0 ? Bytes / (double)TotalBytes : 0.0,
+            TotalCount > 0 ? Count / (double)TotalCount : 0.0
+        );
 
         #endregion
     }
