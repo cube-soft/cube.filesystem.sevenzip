@@ -15,7 +15,6 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System;
 using Cube.Tests;
 using NUnit.Framework;
 
@@ -44,23 +43,21 @@ namespace Cube.FileSystem.SevenZip.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [TestCase(true)]
-        [TestCase(false)]
-        public void Cjk(bool utf8)
+        [TestCase(CodePage.Utf8)]
+        [TestCase(CodePage.Japanese)]
+        public void Cjk(CodePage cp)
         {
             var zip  = Format.Zip;
             var src  = Get("日本語のファイル名.txt");
-            var s    = utf8 ? "UTF8" : "SJis";
-            var dest = Get($"ZipJapanese{s}.zip");
-            var opts = new CompressionOption { CodePage = utf8 ? CodePage.Utf8 : CodePage.Japanese };
+            var dest = Get($"{nameof(Cjk)}{zip}{cp}.zip");
 
             Io.Copy(GetSource("Sample.txt"), src, true);
             Assert.That(Io.Exists(src), Is.True);
 
-            using (var archive = new ArchiveWriter(zip, opts))
+            using (var obj = new ArchiveWriter(zip, new() { CodePage = cp }))
             {
-                archive.Add(src);
-                archive.Save(dest);
+                obj.Add(src);
+                obj.Save(dest);
             }
 
             using var ss = Io.Open(dest);
@@ -88,11 +85,11 @@ namespace Cube.FileSystem.SevenZip.Tests
                          default,
             };
 
-            using (var archive = new ArchiveWriter(Format.Zip, opts))
+            using (var obj = new ArchiveWriter(Format.Zip, opts))
             {
-                archive.Add(GetSource("Sample.txt"));
-                archive.Add(GetSource("Sample 00..01"));
-                archive.Save(dest);
+                obj.Add(GetSource("Sample.txt"));
+                obj.Add(GetSource("Sample 00..01"));
+                obj.Save(dest);
             }
 
             using (var obj = new ArchiveReader(dest)) return obj.Items.Count;
@@ -100,7 +97,7 @@ namespace Cube.FileSystem.SevenZip.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Error_NotFound
+        /// Add_NotFound
         ///
         /// <summary>
         /// Tests the Add method with an inexistent file.
@@ -108,33 +105,32 @@ namespace Cube.FileSystem.SevenZip.Tests
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Error_NotFound()
+        public void Add_NotFound() => Assert.That(() =>
         {
-            using var archive = new ArchiveWriter(Format.Zip);
-            Assert.That(() => archive.Add(GetSource("NotFound.txt")),
-                Throws.TypeOf<System.IO.FileNotFoundException>());
-        }
+            using var obj = new ArchiveWriter(Format.Zip);
+            obj.Add(GetSource("NotFound.txt"));
+        }, Throws.TypeOf<System.IO.FileNotFoundException>());
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Error_SfxNotFound
+        /// Save_SfxNotFound
         ///
         /// <summary>
-        /// Tests to create an archive with an inexistent SFX file.
+        /// Tests the Save method with an inexistent SFX file.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Error_SfxNotFound()
+        public void Save_SfxNotFound()
         {
             var dest = Get("SfxNotFound.exe");
             var opts = new SfxOption { Module = "dummy.sfx" };
-            using var archive = new ArchiveWriter(Format.Sfx, opts);
 
-            archive.Add(GetSource("Sample.txt"));
-
-            Assert.That(() => archive.Save(dest),
-                Throws.TypeOf<System.IO.FileNotFoundException>());
+            Assert.That(() => {
+                using var obj = new ArchiveWriter(Format.Sfx, opts);
+                obj.Add(GetSource("Sample.txt"));
+                obj.Save(dest);
+            }, Throws.TypeOf<System.IO.FileNotFoundException>());
         }
 
         #endregion

@@ -39,26 +39,26 @@ namespace Cube.FileSystem.SevenZip.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Invoke
+        /// Save
         ///
         /// <summary>
-        /// Tests the methods to create an archive file.
+        /// Tests the Save and related methods to create an archive file.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
-        public Format Invoke(string filename, Format format, string[] src, CompressionOption options)
+        public Format Save(string filename, Format format, string[] src, CompressionOption options)
         {
             var dest = Get(filename);
 
-            using (var archive = new ArchiveWriter(format, options ?? new()))
+            using (var obj = new ArchiveWriter(format, options ?? new()))
             {
-                foreach (var e in src) archive.Add(GetSource(e));
-                archive.Save(dest);
-                archive.Clear();
+                foreach (var e in src) obj.Add(GetSource(e));
+                obj.Save(dest);
+                obj.Clear();
             }
 
-            using (var ss = Io.Open(dest)) return Formatter.FromStream(ss);
+            using (var obj = Io.Open(dest)) return Formatter.FromStream(obj);
         }
 
         #endregion
@@ -86,29 +86,31 @@ namespace Cube.FileSystem.SevenZip.Tests
         {
             get
             {
+                var n = 0;
+
                 yield return new TestCaseData(
-                    "ZipSingle.zip",
+                    $"{n++:000}-ZipSingle.zip",
                     Format.Zip,
                     new[] { "Sample.txt" },
                     null
                 ).Returns(Format.Zip);
 
                 yield return new TestCaseData(
-                    "ZipDirectory.zip",
+                    $"{n++:000}-ZipDirectory.zip",
                     Format.Zip,
                     new[] { "Sample 00..01" },
                     null
                 ).Returns(Format.Zip);
 
                 yield return new TestCaseData(
-                    "ZipFast.zip",
+                    $"{n++:000}-ZipFast.zip",
                     Format.Zip,
                     new[] { "Sample.txt", "Sample 00..01" },
                     new CompressionOption { CompressionLevel = CompressionLevel.Fast }
                 ).Returns(Format.Zip);
 
                 yield return new TestCaseData(
-                    "ZipUltra.zip",
+                    $"{n++:000}-ZipUltra.zip",
                     Format.Zip,
                     new[] { "Sample.txt", "Sample 00..01" },
                     new CompressionOption
@@ -119,49 +121,49 @@ namespace Cube.FileSystem.SevenZip.Tests
                 ).Returns(Format.Zip);
 
                 yield return new TestCaseData(
-                    "ZipLzma.zip",
+                    $"{n++:000}-ZipLzma.zip",
                     Format.Zip,
                     new[] { "Sample.txt", "Sample 00..01" },
                     new CompressionOption { CompressionMethod = CompressionMethod.Lzma }
                 ).Returns(Format.Zip);
 
                 yield return new TestCaseData(
-                    "ZipPassword.zip",
+                    $"{n++:000}-ZipPassword.zip",
                     Format.Zip,
                     new[] { "Sample.txt" },
                     new CompressionOption { Password = "password" }
                 ).Returns(Format.Zip);
 
                 yield return new TestCaseData(
-                    "ZipPasswordSymbol.zip",
+                    $"{n++:000}-ZipPasswordSymbol.zip",
                     Format.Zip,
                     new[] { "Sample.txt" },
                     new CompressionOption { Password = "[{<#$%@?!&|+-*/=^~,._>}]" }
                 ).Returns(Format.Zip);
 
                 yield return new TestCaseData(
-                    "ZipPasswordJapanese01.zip",
+                    $"{n++:000}-ZipPasswordCjk.zip",
                     Format.Zip,
                     new[] { "Sample.txt" },
                     new CompressionOption { Password = "日本語パスワード" }
                 ).Returns(Format.Zip);
 
                 yield return new TestCaseData(
-                    "ZipPasswordJapanese02.zip",
+                    $"{n++:000}-ZipPasswordCjk.zip",
                     Format.Zip,
                     new[] { "Sample.txt" },
                     new CompressionOption { Password = "ｶﾞｷﾞｸﾞｹﾞｺﾞﾊﾟﾋﾟﾌﾟﾍﾟﾎﾟ" }
                 ).Returns(Format.Zip);
 
                 yield return new TestCaseData(
-                    "ZipPasswordAes256.zip",
+                    $"{n++:000}-ZipPasswordAes256.zip",
                     Format.Zip,
                     new[] { "Sample.txt" },
                     new CompressionOption { Password = "password" }
                 ).Returns(Format.Zip);
 
                 yield return new TestCaseData(
-                    "7zLzma2.7z",
+                    $"{n++:000}-7zLzma2.7z",
                     Format.SevenZip,
                     new[] { "Sample.txt", "Sample 00..01" },
                     new CompressionOption
@@ -172,35 +174,35 @@ namespace Cube.FileSystem.SevenZip.Tests
                 ).Returns(Format.SevenZip);
 
                 yield return new TestCaseData(
-                    "BZip2Test.bz",
+                    $"{n++:000}-BZip2.bz",
                     Format.BZip2,
                     new[] { "Sample.txt" },
                     new CompressionOption()
                 ).Returns(Format.BZip2);
 
                 yield return new TestCaseData(
-                    "GZipTest.gz",
+                    $"{n++:000}-GZip.gz",
                     Format.GZip,
                     new[] { "Sample.txt" },
                     new CompressionOption()
                 ).Returns(Format.GZip);
 
                 yield return new TestCaseData(
-                    "XzTest.xz",
+                    $"{n++:000}-Xz.xz",
                     Format.XZ,
                     new[] { "Sample.txt" },
                     new CompressionOption()
                 ).Returns(Format.XZ);
 
                 yield return new TestCaseData(
-                    "TarTest.tar",
+                    $"{n++:000}-Tar.tar",
                     Format.Tar,
                     new[] { "Sample.txt", "Sample 00..01" },
                     null
                 ).Returns(Format.Tar);
 
                 yield return new TestCaseData(
-                    "TarTest.tar.gz",
+                    $"{n++:000}-Tar.tar.gz",
                     Format.Tar,
                     new[] { "Sample.txt", "Sample 00..01" },
                     new CompressionOption
@@ -211,7 +213,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                 ).Returns(Format.GZip);
 
                 yield return new TestCaseData(
-                    "TarTest.tar.bz",
+                    $"{n++:000}-Tar.tar.bz",
                     Format.Tar,
                     new[] { "Sample.txt", "Sample 00..01" },
                     new CompressionOption
@@ -222,7 +224,7 @@ namespace Cube.FileSystem.SevenZip.Tests
                 ).Returns(Format.BZip2);
 
                 yield return new TestCaseData(
-                    "TarTest.tar.xz",
+                    $"{n++:000}-Tar.tar.xz",
                     Format.Tar,
                     new[] { "Sample.txt", "Sample 00..01" },
                     new CompressionOption
@@ -233,35 +235,18 @@ namespace Cube.FileSystem.SevenZip.Tests
                 ).Returns(Format.XZ);
 
                 yield return new TestCaseData(
-                    "ExecutableTest.exe",
+                    $"{n++:000}-Sfx.exe",
                     Format.Sfx,
                     new[] { "Sample.txt", "Sample 00..01" },
                     new SfxOption
                     {
                         CompressionMethod = CompressionMethod.Lzma,
                         CompressionLevel  = CompressionLevel.Ultra,
-                        Module            = Pwd(Formatter.SfxName),
+                        Module = Io.Combine(typeof(ArchiveWriterTest).Assembly.GetDirectoryName(), Formatter.SfxName),
                     }
                 ).Returns(Format.PE);
             }
         }
-
-        #endregion
-
-        #region Others
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Pwd
-        ///
-        /// <summary>
-        /// Get the path combining the current directory and the specified
-        /// filename.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private static string Pwd(string filename) =>
-            Io.Combine(typeof(ArchiveWriterTest).Assembly.GetDirectoryName(), filename);
 
         #endregion
     }
