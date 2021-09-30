@@ -147,7 +147,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             src.Subscribe<CompressSettingViewModel>(e =>
         {
             e.Source.Cancel     = false;
-            e.Source.Value.Path = value;
+            e.Source.Value.Destination = value;
         });
 
         /* ----------------------------------------------------------------- */

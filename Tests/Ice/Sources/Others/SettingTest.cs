@@ -126,7 +126,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 EncryptionMethod  = EncryptionMethod.Aes192,
                 Format            = Format.GZip,
                 Password          = "password",
-                Path              = "dummy",
+                Destination       = "dummy",
                 Sfx               = string.Empty,
                 ThreadCount       = 3,
             }.ToOption(new SettingFolder());

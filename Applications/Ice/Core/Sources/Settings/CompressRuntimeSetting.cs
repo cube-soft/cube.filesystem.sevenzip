@@ -29,7 +29,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public sealed class CompressRuntimeSetting
+    public sealed class CompressRuntimeSetting : ObservableBase
     {
         #region Constructors
 
@@ -76,18 +76,26 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Format Format { get; set; }
+        public Format Format
+        {
+            get => Get(() => Format.Zip);
+            set => Set(value);
+        }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Path
+        /// Destination
         ///
         /// <summary>
         /// Gets or sets the path to save.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Path { get; set; }
+        public string Destination
+        {
+            get => Get(() => string.Empty);
+            set => Set(value);
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -98,7 +106,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Password { get; set; }
+        public string Password
+        {
+            get => Get(() => string.Empty);
+            set => Set(value);
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -109,7 +121,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Sfx { get; set; }
+        public string Sfx
+        {
+            get => Get(() => string.Empty);
+            set => Set(value);
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -120,7 +136,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressionLevel CompressionLevel { get; set; } = CompressionLevel.Ultra;
+        public CompressionLevel CompressionLevel
+        {
+            get => Get(() => CompressionLevel.Ultra);
+            set => Set(value);
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -131,7 +151,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressionMethod CompressionMethod { get; set; } = CompressionMethod.Default;
+        public CompressionMethod CompressionMethod
+        {
+            get => Get(() => CompressionMethod.Default);
+            set => Set(value);
+        }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -142,18 +166,63 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public EncryptionMethod EncryptionMethod { get; set; } = EncryptionMethod.Default;
+        public EncryptionMethod EncryptionMethod
+        {
+            get => Get(() => EncryptionMethod.ZipCrypto);
+            set => Set(value);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// EncryptionEnabled
+        ///
+        /// <summary>
+        /// Gets or sets the value indicating whether or not the encryption
+        /// is enabled.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public bool EncryptionEnabled
+        {
+            get => Get(() => false);
+            set => Set(value);
+        }
 
         /* ----------------------------------------------------------------- */
         ///
         /// ThreadCount
         ///
         /// <summary>
-        /// Gets or sets the maximum number of threads to use.
+        /// Gets or sets the number of threads to use.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public int ThreadCount { get; set; } = Environment.ProcessorCount;
+        public int ThreadCount
+        {
+            get => Get(() => Environment.ProcessorCount);
+            set => Set(value);
+        }
+
+        #endregion
+
+        #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Dispose
+        ///
+        /// <summary>
+        /// Releases the unmanaged resources used by the object and
+        /// optionally releases the managed resources.
+        /// </summary>
+        ///
+        /// <param name="disposing">
+        /// true to release both managed and unmanaged resources;
+        /// false to release only unmanaged resources.
+        /// </param>
+        ///
+        /* ----------------------------------------------------------------- */
+        protected override void Dispose(bool disposing) { }
 
         #endregion
     }

@@ -15,11 +15,8 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Windows.Forms;
 using Cube.Forms.Behaviors;
+using Cube.Mixin.Forms.Controls;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -38,10 +35,10 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ArchiveRtSettingsForm
+        /// CompressSettingWindow
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the CompressSettingWindow class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -49,343 +46,65 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             InitializeComponent();
 
-            _password = new(PasswordTextBox, ConfirmTextBox, ShowPasswordCheckBox);
-            _password.Updated += (s, e) => UpdateEncryptionCondition();
+            CompressionLevelComboBox.Bind(Resource.CompressionLevels);
+            EncryptionMethodComboBox.Bind(Resource.EncryptionMethods);
+            FormatComboBox.Bind(Resource.Formats);
+            FormatComboBox.SelectedValueChanged += (s, e) => Update((Format)FormatComboBox.SelectedValue);
 
-            UpdateThreadCount();
-            UpdateFormat();
-            UpdateCompressionLevel();
-            UpdateCompressionMethod();
-            UpdateEncryptionMethod();
-            UpdateEncryptionCondition();
-
-            ExecuteButton.Enabled = false;
-
-            ExecuteButton.Click += (s, e) => Close();
-            ExitButton.Click += (s, e) => Close();
-            EncryptionCheckBox.CheckedChanged += (s, e) => UpdateEncryptionCondition();
-
-            OutputButton.Click                             += WhenPathRequested;
-            OutputTextBox.TextChanged                      += WhenPathChanged;
-            FormatComboBox.SelectedValueChanged            += WhenFormatChanged;
-            CompressionMethodComboBox.SelectedValueChanged += WhenCompressionMethodChanged;
+            Behaviors.Add(new PasswordLintBehavior(PasswordTextBox, ConfirmTextBox, ShowPasswordCheckBox));
+            Behaviors.Add(new PathLintBehavior(OutputTextBox, PathToolTip));
+            Behaviors.Add(new ClickBehavior(ExitButton, Close));
         }
 
         #endregion
 
-        #region Properties
+        #region Methods
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Format
+        /// OnBind
         ///
         /// <summary>
-        /// 圧縮ファイル形式を取得します。
+        /// Binds the specified object.
         /// </summary>
         ///
-        /* ----------------------------------------------------------------- */
-        public Format Format => (Format)FormatComboBox.SelectedValue;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CompressionLevel
-        ///
-        /// <summary>
-        /// 圧縮レベルを取得します。
-        /// </summary>
+        /// <param name="src">Bindable object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressionLevel CompressionLevel =>
-            (CompressionLevel)CompressionLevelComboBox.SelectedValue;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CompressionMethod
-        ///
-        /// <summary>
-        /// 圧縮方法を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public CompressionMethod CompressionMethod =>
-            CompressionMethodComboBox.Enabled ?
-            (CompressionMethod)CompressionMethodComboBox.SelectedValue :
-            CompressionMethod.Default;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// EncryptionMethod
-        ///
-        /// <summary>
-        /// 暗号化方法を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public EncryptionMethod EncryptionMethod =>
-            EncryptionMethodComboBox.Enabled ?
-            (EncryptionMethod)EncryptionMethodComboBox.SelectedValue :
-            EncryptionMethod.Default;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ThreadCount
-        ///
-        /// <summary>
-        /// 圧縮方法を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public int ThreadCount => (int)ThreadNumericUpDown.Value;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Path
-        ///
-        /// <summary>
-        /// 保存先パスを取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Path
+        protected override void OnBind(IBindable src)
         {
-            get => OutputTextBox.Text;
-            set
-            {
-                if (OutputTextBox.Text == value) return;
-                OutputTextBox.Text = value;
-                OutputTextBox.SelectionStart = Math.Max(value.Length - 1, 0);
-                OutputTextBox.SelectionLength = 0;
-            }
-        }
+            if (src is not CompressSettingViewModel vm) return;
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Password
-        ///
-        /// <summary>
-        /// パスワードを取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Password =>
-            EncryptionGroupBox.Enabled && EncryptionPanel.Enabled ?
-            PasswordTextBox.Text :
-            null;
+            Update(vm.Format);
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// IsValidPath
-        ///
-        /// <summary>
-        /// パス設定が正しいかどうかを取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        private bool IsValidPath
-        {
-            get => _path;
-            set
-            {
-                if (_path == value) return;
-                _path = value;
-                ExecuteButton.Enabled = value & IsValidEncryption;
-            }
-        }
+            MainBindingSource.DataSource = vm;
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// IsValidEncryption
-        ///
-        /// <summary>
-        /// 暗号化設定が正しいかどうかを取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        private bool IsValidEncryption
-        {
-            get => _encryption;
-            set
-            {
-                if (_encryption == value) return;
-                _encryption = value;
-                ExecuteButton.Enabled = value & IsValidPath;
-            }
+            Behaviors.Add(new DialogBehavior(vm));
+            Behaviors.Add(new SaveFileBehavior(vm));
+            Behaviors.Add(new CloseBehavior(this, vm));
+            Behaviors.Add(new ClickBehavior(OutputButton, vm.Select));
+            Behaviors.Add(new ClickBehavior(ExecuteButton, vm.Execute));
         }
 
         #endregion
 
         #region Implementations
 
-        #region Update
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// UpdateFormat
-        ///
-        /// <summary>
-        /// Format を更新します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void UpdateFormat() =>
-            Update(FormatComboBox, Resource.Formats, 0);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// UpdateCompressionLevel
-        ///
-        /// <summary>
-        /// CompressionLevel を更新します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void UpdateCompressionLevel() =>
-            Update(CompressionLevelComboBox, Resource.CompressionLevels, 5);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// UpdateCompressionMethod
-        ///
-        /// <summary>
-        /// CompressionMethod を更新します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void UpdateCompressionMethod() =>
-            Update(CompressionMethodComboBox, Resource.GetCompressionMethods(Format), 0);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// UpdateEncryptionMethod
-        ///
-        /// <summary>
-        /// EncryptionMethod を更新します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void UpdateEncryptionMethod() =>
-            Update(EncryptionMethodComboBox, Resource.EncryptionMethods, 0);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// UpdateEncryptionCondition
-        ///
-        /// <summary>
-        /// 暗号化設定に関する状態を更新します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void UpdateEncryptionCondition()
-        {
-            EncryptionGroupBox.Enabled       = Format.IsEncryptionSupported();
-            EncryptionPanel.Enabled          = EncryptionCheckBox.Checked;
-            EncryptionMethodComboBox.Enabled = (Format == Format.Zip);
-            IsValidEncryption                = !EncryptionGroupBox.Enabled ||
-                                               !EncryptionPanel.Enabled ||
-                                               _password.Valid;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// UpdateThreadCount
-        ///
-        /// <summary>
-        /// スレッド数に関する設定を更新します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void UpdateThreadCount()
-        {
-            var count = Environment.ProcessorCount;
-            ThreadNumericUpDown.Maximum = count;
-            ThreadNumericUpDown.Value   = count;
-            ThreadNumericUpDown.Enabled = count > 1;
-        }
-
         /* ----------------------------------------------------------------- */
         ///
         /// Update
         ///
         /// <summary>
-        /// ComboBox.DataSource オブジェクトを更新します。
+        /// Updates the ComboBox bindings with the specified format.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Update<T>(ComboBox src, IList<KeyValuePair<string, T>> data, int index)
+        private void Update(Format src)
         {
-            src.Enabled       = (data != null);
-            src.DataSource    = data;
-            src.DisplayMember = "Key";
-            src.ValueMember   = "Value";
-            if (src.Enabled) src.SelectedIndex = index;
+            CompressionMethodComboBox.Bind(Resource.GetCompressionMethods(src));
+            CompressionMethodComboBox.SelectedIndex = 0;
         }
 
-        #endregion
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenFormatChanged
-        ///
-        /// <summary>
-        /// Format 変更時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenFormatChanged(object s, EventArgs e)
-        {
-            UpdateCompressionMethod();
-            UpdateEncryptionCondition();
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenPathRequested
-        ///
-        /// <summary>
-        /// 保存パスの要求時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenPathRequested(object s, EventArgs e)
-        {
-            var cvt  = new ArchiveName(Path, Format, CompressionMethod);
-            var args = Message.ForSave(cvt.Value.FullName, cvt.Format);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenPathChanged
-        ///
-        /// <summary>
-        /// 保存パスの変更時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenPathChanged(object s, EventArgs e) =>
-            IsValidPath = OutputTextBox.TextLength > 0;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// WhenCompressionMethodChanged
-        ///
-        /// <summary>
-        /// CompressionMethod 変更時に実行されるハンドラです。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void WhenCompressionMethodChanged(object s, EventArgs e) =>
-            Path = new ArchiveName(Path, Format, CompressionMethod).Value.FullName;
-
-        #endregion
-
-        #region Fields
-        private bool _path = false;
-        private bool _encryption = true;
-        private readonly PasswordLintBehavior _password;
         #endregion
     }
 }

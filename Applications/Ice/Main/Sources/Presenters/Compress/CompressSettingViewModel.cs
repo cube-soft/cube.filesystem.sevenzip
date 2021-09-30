@@ -15,8 +15,10 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System;
 using System.Threading;
 using Cube.FileSystem.SevenZip.Ice.Settings;
+using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -49,7 +51,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         public CompressSettingViewModel(
             QueryMessage<string, CompressRuntimeSetting> src,
             SynchronizationContext context
-        ) : base(src, new(), context) { }
+        ) : base(src, new(), context)
+        {
+            Assets.Add(new ObservableProxy(Facade.Value, this));
+        }
 
         #endregion
 
@@ -66,6 +71,244 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         public QueryMessage<string, CompressRuntimeSetting> Source => Facade;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Destination
+        ///
+        /// <summary>
+        /// Gets or sets the path to save.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Destination
+        {
+            get => Facade.Value.Destination;
+            set => Facade.Value.Destination = value;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Format
+        ///
+        /// <summary>
+        /// Gets or sets the archive format.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public Format Format
+        {
+            get => Facade.Value.Format;
+            set => Facade.Value.Format = value;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CompressionLevel
+        ///
+        /// <summary>
+        /// Gets or sets the compression level.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public CompressionLevel CompressionLevel
+        {
+            get => Facade.Value.CompressionLevel;
+            set => Facade.Value.CompressionLevel = value;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// CompressionMethod
+        ///
+        /// <summary>
+        /// Gets or sets the compression method.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public CompressionMethod CompressionMethod
+        {
+            get => Facade.Value.CompressionMethod;
+            set => Facade.Value.CompressionMethod = value;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// EncryptionMethod
+        ///
+        /// <summary>
+        /// Gets or sets the encryption method.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public EncryptionMethod EncryptionMethod
+        {
+            get => Facade.Value.EncryptionMethod;
+            set => Facade.Value.EncryptionMethod = value;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// EncryptionSupported
+        ///
+        /// <summary>
+        /// Gets a value indicating whether or not the specified format
+        /// supports encryption.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public bool EncryptionSupported => Format.IsEncryptionSupported();
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// EncryptionSelectable
+        ///
+        /// <summary>
+        /// Gets a value indicating whether the current format supports
+        /// multiple encryption methods.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public bool EncryptionSelectable => Format == Format.Zip;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// EncryptionEnabled
+        ///
+        /// <summary>
+        /// Gets or sets the value indicating whether or not the encryption
+        /// is enabled.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public bool EncryptionEnabled
+        {
+            get => Facade.Value.EncryptionEnabled;
+            set => Facade.Value.EncryptionEnabled = value;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Password
+        ///
+        /// <summary>
+        /// Gets or sets the password to be set the archive.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Password
+        {
+            get => Facade.Value.Password;
+            set => Facade.Value.Password = value;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// PasswordConfirmation
+        ///
+        /// <summary>
+        /// Gets or sets the password to confirm.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string PasswordConfirmation
+        {
+            get => Get(() => string.Empty);
+            set => Set(value);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// PasswordVisible
+        ///
+        /// <summary>
+        /// Gets or sets a value indicating whether the password is visible.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public bool PasswordVisible
+        {
+            get => Get(() => false);
+            set { if (Set(value) && value) PasswordConfirmation = string.Empty; }
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// PasswordAcceptable
+        ///
+        /// <summary>
+        /// Gets or sets a value indicating whether the current password is
+        /// acceptable.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public bool PasswordAcceptable =>
+            Password.HasValue() && (PasswordVisible || Password.Equals(PasswordConfirmation));
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ThreadCount
+        ///
+        /// <summary>
+        /// Gets or sets the number of threads to use.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public int ThreadCount
+        {
+            get => Facade.Value.ThreadCount;
+            set => Facade.Value.ThreadCount = value;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// MaximumThreadCount
+        ///
+        /// <summary>
+        /// Gets or sets the maximum number of threads to use.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public int MaximumThreadCount => Environment.ProcessorCount;
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Executable
+        ///
+        /// <summary>
+        /// Gets or sets a value indicating whether to be ready.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public bool Executable => Destination.HasValue() && (
+            !EncryptionSupported || !EncryptionEnabled || PasswordAcceptable
+        );
+
+        #endregion
+
+        #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Select
+        ///
+        /// <summary>
+        /// Selects the destination.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Select() => Track(new SaveFileMessage(), e => Destination = e);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Execute
+        ///
+        /// <summary>
+        /// Executes with the current settings.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Execute() => Track(() => Facade.Cancel = false, Send<CloseMessage>);
 
         #endregion
     }

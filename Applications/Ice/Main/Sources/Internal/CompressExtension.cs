@@ -52,7 +52,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         public static string Select(this CompressFacade src, CompressRuntimeSetting settings)
         {
-            if (settings.Path.HasValue()) return settings.Path;
+            if (settings.Destination.HasValue()) return settings.Destination;
 
             var ss     = src.Settings.Value.Compress;
             var name   = new ArchiveName(src.Request.Sources.First(), src.Request.Format);
