@@ -161,18 +161,6 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// EncryptionSelectable
-        ///
-        /// <summary>
-        /// Gets a value indicating whether the current format supports
-        /// multiple encryption methods.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public bool EncryptionSelectable => Format == Format.Zip;
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// EncryptionEnabled
         ///
         /// <summary>
@@ -186,6 +174,18 @@ namespace Cube.FileSystem.SevenZip.Ice
             get => Facade.Value.EncryptionEnabled;
             set => Facade.Value.EncryptionEnabled = value;
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// EncryptionMethodEnabled
+        ///
+        /// <summary>
+        /// Gets a value indicating whether the current format supports
+        /// multiple encryption methods.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public bool EncryptionMethodEnabled => Format == Format.Zip;
 
         /* ----------------------------------------------------------------- */
         ///

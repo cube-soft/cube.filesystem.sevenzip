@@ -35,6 +35,7 @@
             this.GeneralPanel = new System.Windows.Forms.TableLayoutPanel();
             this.ThreadLabel = new System.Windows.Forms.Label();
             this.CompressionMethodComboBox = new System.Windows.Forms.ComboBox();
+            this.MainBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.MethodLabel = new System.Windows.Forms.Label();
             this.CompressionLevelComboBox = new System.Windows.Forms.ComboBox();
             this.LevelLabel = new System.Windows.Forms.Label();
@@ -55,23 +56,22 @@
             this.ButtonsPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.ExitButton = new System.Windows.Forms.Button();
             this.ExecuteButton = new System.Windows.Forms.Button();
-            this.OutputGroupBox = new System.Windows.Forms.GroupBox();
-            this.OutputPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.OutputTextBox = new System.Windows.Forms.TextBox();
-            this.OutputButton = new System.Windows.Forms.Button();
+            this.DestinationGroupBox = new System.Windows.Forms.GroupBox();
+            this.DestinationPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.DestinationTextBox = new System.Windows.Forms.TextBox();
+            this.DestinationButton = new System.Windows.Forms.Button();
             this.PathToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.MainBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.RootPanel.SuspendLayout();
             this.GeneralGroupBox.SuspendLayout();
             this.GeneralPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MainBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ThreadNumericUpDown)).BeginInit();
             this.EncryptionGroupBox.SuspendLayout();
             this.EncryptionWrapperPanel.SuspendLayout();
             this.EncryptionPanel.SuspendLayout();
             this.ButtonsPanel.SuspendLayout();
-            this.OutputGroupBox.SuspendLayout();
-            this.OutputPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.MainBindingSource)).BeginInit();
+            this.DestinationGroupBox.SuspendLayout();
+            this.DestinationPanel.SuspendLayout();
             this.SuspendLayout();
             //
             // RootPanel
@@ -81,7 +81,7 @@
             this.RootPanel.Controls.Add(this.GeneralGroupBox, 0, 1);
             this.RootPanel.Controls.Add(this.EncryptionGroupBox, 0, 2);
             this.RootPanel.Controls.Add(this.ButtonsPanel, 0, 4);
-            this.RootPanel.Controls.Add(this.OutputGroupBox, 0, 0);
+            this.RootPanel.Controls.Add(this.DestinationGroupBox, 0, 0);
             this.RootPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RootPanel.Location = new System.Drawing.Point(0, 0);
             this.RootPanel.Name = "RootPanel";
@@ -153,6 +153,10 @@
             this.CompressionMethodComboBox.Name = "CompressionMethodComboBox";
             this.CompressionMethodComboBox.Size = new System.Drawing.Size(238, 23);
             this.CompressionMethodComboBox.TabIndex = 2;
+            //
+            // MainBindingSource
+            //
+            this.MainBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.CompressSettingViewModel);
             //
             // MethodLabel
             //
@@ -303,7 +307,7 @@
             // EncryptionMethodComboBox
             //
             this.EncryptionMethodComboBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.MainBindingSource, "EncryptionMethod", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.EncryptionMethodComboBox.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", this.MainBindingSource, "EncryptionMethodSelectable", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.EncryptionMethodComboBox.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", this.MainBindingSource, "EncryptionMethodEnabled", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.EncryptionMethodComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.EncryptionMethodComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.EncryptionMethodComboBox.FormattingEnabled = true;
@@ -414,57 +418,53 @@
             this.ExecuteButton.Text = "OK";
             this.ExecuteButton.UseVisualStyleBackColor = true;
             //
-            // OutputGroupBox
+            // DestinationGroupBox
             //
-            this.OutputGroupBox.Controls.Add(this.OutputPanel);
-            this.OutputGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.OutputGroupBox.Location = new System.Drawing.Point(12, 3);
-            this.OutputGroupBox.Margin = new System.Windows.Forms.Padding(12, 3, 12, 3);
-            this.OutputGroupBox.Name = "OutputGroupBox";
-            this.OutputGroupBox.Padding = new System.Windows.Forms.Padding(8, 3, 8, 8);
-            this.OutputGroupBox.Size = new System.Drawing.Size(360, 58);
-            this.OutputGroupBox.TabIndex = 6;
-            this.OutputGroupBox.TabStop = false;
-            this.OutputGroupBox.Text = "保存先";
+            this.DestinationGroupBox.Controls.Add(this.DestinationPanel);
+            this.DestinationGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DestinationGroupBox.Location = new System.Drawing.Point(12, 3);
+            this.DestinationGroupBox.Margin = new System.Windows.Forms.Padding(12, 3, 12, 3);
+            this.DestinationGroupBox.Name = "DestinationGroupBox";
+            this.DestinationGroupBox.Padding = new System.Windows.Forms.Padding(8, 3, 8, 8);
+            this.DestinationGroupBox.Size = new System.Drawing.Size(360, 58);
+            this.DestinationGroupBox.TabIndex = 6;
+            this.DestinationGroupBox.TabStop = false;
+            this.DestinationGroupBox.Text = "保存先";
             //
-            // OutputPanel
+            // DestinationPanel
             //
-            this.OutputPanel.ColumnCount = 2;
-            this.OutputPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.OutputPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.OutputPanel.Controls.Add(this.OutputTextBox, 0, 0);
-            this.OutputPanel.Controls.Add(this.OutputButton, 1, 0);
-            this.OutputPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.OutputPanel.Location = new System.Drawing.Point(8, 19);
-            this.OutputPanel.Name = "OutputPanel";
-            this.OutputPanel.RowCount = 1;
-            this.OutputPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.OutputPanel.Size = new System.Drawing.Size(344, 31);
-            this.OutputPanel.TabIndex = 0;
+            this.DestinationPanel.ColumnCount = 2;
+            this.DestinationPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.DestinationPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.DestinationPanel.Controls.Add(this.DestinationTextBox, 0, 0);
+            this.DestinationPanel.Controls.Add(this.DestinationButton, 1, 0);
+            this.DestinationPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DestinationPanel.Location = new System.Drawing.Point(8, 19);
+            this.DestinationPanel.Name = "DestinationPanel";
+            this.DestinationPanel.RowCount = 1;
+            this.DestinationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.DestinationPanel.Size = new System.Drawing.Size(344, 31);
+            this.DestinationPanel.TabIndex = 0;
             //
-            // OutputTextBox
+            // DestinationTextBox
             //
-            this.OutputTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.MainBindingSource, "Destination", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.OutputTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.OutputTextBox.Location = new System.Drawing.Point(3, 4);
-            this.OutputTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 3);
-            this.OutputTextBox.Name = "OutputTextBox";
-            this.OutputTextBox.Size = new System.Drawing.Size(278, 23);
-            this.OutputTextBox.TabIndex = 103;
+            this.DestinationTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.MainBindingSource, "Destination", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.DestinationTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DestinationTextBox.Location = new System.Drawing.Point(3, 4);
+            this.DestinationTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 3);
+            this.DestinationTextBox.Name = "DestinationTextBox";
+            this.DestinationTextBox.Size = new System.Drawing.Size(278, 23);
+            this.DestinationTextBox.TabIndex = 103;
             //
-            // OutputButton
+            // DestinationButton
             //
-            this.OutputButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.OutputButton.Location = new System.Drawing.Point(287, 3);
-            this.OutputButton.Name = "OutputButton";
-            this.OutputButton.Size = new System.Drawing.Size(54, 25);
-            this.OutputButton.TabIndex = 104;
-            this.OutputButton.Text = "...";
-            this.OutputButton.UseVisualStyleBackColor = true;
-            //
-            // MainBindingSource
-            //
-            this.MainBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.CompressSettingViewModel);
+            this.DestinationButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DestinationButton.Location = new System.Drawing.Point(287, 3);
+            this.DestinationButton.Name = "DestinationButton";
+            this.DestinationButton.Size = new System.Drawing.Size(54, 25);
+            this.DestinationButton.TabIndex = 104;
+            this.DestinationButton.Text = "...";
+            this.DestinationButton.UseVisualStyleBackColor = true;
             //
             // CompressSettingWindow
             //
@@ -483,6 +483,7 @@
             this.GeneralGroupBox.ResumeLayout(false);
             this.GeneralPanel.ResumeLayout(false);
             this.GeneralPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MainBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ThreadNumericUpDown)).EndInit();
             this.EncryptionGroupBox.ResumeLayout(false);
             this.EncryptionWrapperPanel.ResumeLayout(false);
@@ -490,10 +491,9 @@
             this.EncryptionPanel.ResumeLayout(false);
             this.EncryptionPanel.PerformLayout();
             this.ButtonsPanel.ResumeLayout(false);
-            this.OutputGroupBox.ResumeLayout(false);
-            this.OutputPanel.ResumeLayout(false);
-            this.OutputPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.MainBindingSource)).EndInit();
+            this.DestinationGroupBox.ResumeLayout(false);
+            this.DestinationPanel.ResumeLayout(false);
+            this.DestinationPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -501,35 +501,35 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel RootPanel;
+        private System.Windows.Forms.TableLayoutPanel DestinationPanel;
+        private System.Windows.Forms.TableLayoutPanel GeneralPanel;
+        private System.Windows.Forms.TableLayoutPanel EncryptionWrapperPanel;
+        private System.Windows.Forms.TableLayoutPanel EncryptionPanel;
+        private System.Windows.Forms.FlowLayoutPanel ButtonsPanel;
+        private System.Windows.Forms.GroupBox DestinationGroupBox;
         private System.Windows.Forms.GroupBox GeneralGroupBox;
         private System.Windows.Forms.GroupBox EncryptionGroupBox;
-        private System.Windows.Forms.FlowLayoutPanel ButtonsPanel;
-        private System.Windows.Forms.Button ExitButton;
-        private System.Windows.Forms.Button ExecuteButton;
-        private System.Windows.Forms.TableLayoutPanel GeneralPanel;
-        private System.Windows.Forms.Label FormatLabel;
+        private System.Windows.Forms.TextBox DestinationTextBox;
         private System.Windows.Forms.ComboBox FormatComboBox;
-        private System.Windows.Forms.Label LevelLabel;
         private System.Windows.Forms.ComboBox CompressionLevelComboBox;
         private System.Windows.Forms.ComboBox CompressionMethodComboBox;
+        private System.Windows.Forms.ComboBox EncryptionMethodComboBox;
+        private System.Windows.Forms.CheckBox EncryptionCheckBox;
+        private System.Windows.Forms.CheckBox ShowPasswordCheckBox;
+        private System.Windows.Forms.TextBox PasswordTextBox;
+        private System.Windows.Forms.TextBox ConfirmTextBox;
+        private System.Windows.Forms.NumericUpDown ThreadNumericUpDown;
+        private System.Windows.Forms.Label FormatLabel;
+        private System.Windows.Forms.Label LevelLabel;
         private System.Windows.Forms.Label MethodLabel;
         private System.Windows.Forms.Label ThreadLabel;
-        private System.Windows.Forms.NumericUpDown ThreadNumericUpDown;
-        private System.Windows.Forms.TableLayoutPanel EncryptionWrapperPanel;
-        private System.Windows.Forms.CheckBox EncryptionCheckBox;
-        private System.Windows.Forms.TableLayoutPanel EncryptionPanel;
-        private System.Windows.Forms.ComboBox EncryptionMethodComboBox;
         private System.Windows.Forms.Label EncryptionLabel;
-        private System.Windows.Forms.TextBox ConfirmTextBox;
-        private System.Windows.Forms.Label ConfirmLabel;
         private System.Windows.Forms.Label PasswordLabel;
-        private System.Windows.Forms.TextBox PasswordTextBox;
-        private System.Windows.Forms.CheckBox ShowPasswordCheckBox;
-        private System.Windows.Forms.GroupBox OutputGroupBox;
-        private System.Windows.Forms.TableLayoutPanel OutputPanel;
-        private System.Windows.Forms.TextBox OutputTextBox;
-        private System.Windows.Forms.Button OutputButton;
-        private System.Windows.Forms.BindingSource MainBindingSource;
+        private System.Windows.Forms.Label ConfirmLabel;
+        private System.Windows.Forms.Button ExitButton;
+        private System.Windows.Forms.Button ExecuteButton;
+        private System.Windows.Forms.Button DestinationButton;
         private System.Windows.Forms.ToolTip PathToolTip;
+        private System.Windows.Forms.BindingSource MainBindingSource;
     }
 }

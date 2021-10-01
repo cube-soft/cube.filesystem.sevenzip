@@ -52,7 +52,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             FormatComboBox.SelectedValueChanged += (s, e) => Update((Format)FormatComboBox.SelectedValue);
 
             Behaviors.Add(new PasswordLintBehavior(PasswordTextBox, ConfirmTextBox, ShowPasswordCheckBox));
-            Behaviors.Add(new PathLintBehavior(OutputTextBox, PathToolTip));
+            Behaviors.Add(new PathLintBehavior(DestinationTextBox, PathToolTip));
             Behaviors.Add(new ClickBehavior(ExitButton, Close));
         }
 
@@ -82,7 +82,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             Behaviors.Add(new DialogBehavior(vm));
             Behaviors.Add(new SaveFileBehavior(vm));
             Behaviors.Add(new CloseBehavior(this, vm));
-            Behaviors.Add(new ClickBehavior(OutputButton, vm.Select));
+            Behaviors.Add(new ClickBehavior(DestinationButton, vm.Select));
             Behaviors.Add(new ClickBehavior(ExecuteButton, vm.Execute));
         }
 
