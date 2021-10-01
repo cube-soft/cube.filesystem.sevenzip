@@ -625,6 +625,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         {
             var items = Facade.Value;
             foreach (var key in items.Keys.ToArray()) items[key] = enabled;
+            Refresh(nameof(Changed));
         }
 
         #endregion
