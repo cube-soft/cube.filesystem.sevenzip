@@ -179,6 +179,21 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         #endregion
 
+        #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Browse
+        ///
+        /// <summary>
+        /// Shows the dialog to select the save directory.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Browse() => Track(new OpenDirectoryMessage(), e => SaveDirectory = e);
+
+        #endregion
+
         #region Implementations
 
         /* ----------------------------------------------------------------- */

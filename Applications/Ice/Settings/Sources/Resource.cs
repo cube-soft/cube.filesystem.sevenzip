@@ -15,66 +15,44 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System;
-using System.Threading;
-using System.Windows.Forms;
-using Cube.Logging;
-using Cube.Mixin.Collections;
-using Cube.Mixin.String;
+using System.Collections.Generic;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// Program
+    /// Resource
     ///
     /// <summary>
-    /// Represents the main program.
+    /// Provides resources for display.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    static class Program
+    public static class Resource
     {
-        #region Methods
+        #region Properties
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Main
+        /// Shortcuts
         ///
         /// <summary>
-        /// Executes the main program of the application.
+        /// Gets the collection in which each item consists of a display
+        /// string and a Preset pair.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [STAThread]
-        static void Main(string[] args) => Source.LogError(() =>
+        public static List<KeyValuePair<string, Preset>> Shortcuts { get; } = new()
         {
-            _ = Logger.ObserveTaskException();
-            Source.LogInfo(Source.Assembly);
-            Source.LogInfo($"[ {args.Join(" ")} ]");
+            new(Properties.Resources.MenuZip,         Preset.CompressZip),
+            new(Properties.Resources.MenuZipPassword, Preset.CompressZipPassword),
+            new(Properties.Resources.MenuSevenZip,    Preset.Compress7z),
+            new(Properties.Resources.MenuBZip2,       Preset.CompressBz2),
+            new(Properties.Resources.MenuGZip,        Preset.CompressGz),
+            new(Properties.Resources.MenuSfx,         Preset.CompressSfx),
+            new(Properties.Resources.MenuDetails,     Preset.CompressDetails),
+        };
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-
-            var src = new SettingFolder();
-            src.Load();
-
-            var im = args.Length > 0 && args[0].FuzzyEquals("/Install");
-            if (im) Source.LogInfo("Mode:Install");
-
-            var view = new MainWindow();
-            var vm   = new SettingViewModel(src, SynchronizationContext.Current);
-            vm.Associate.Changed = im;
-            if (!im) vm.Load();
-            view.Bind(vm);
-
-            Application.Run(view);
-        });
-
-        #endregion
-
-        #region Fields
-        private static readonly Type Source = typeof(Program);
         #endregion
     }
 }

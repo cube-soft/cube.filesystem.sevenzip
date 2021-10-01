@@ -15,10 +15,10 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using Cube.Forms.Behaviors;
+using Cube.Mixin.Forms.Controls;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
@@ -27,50 +27,41 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// MainWindow
     ///
     /// <summary>
-    /// 設定画面を表示するクラスです。
+    /// Represetns the settings window.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class MainWindow : Cube.Forms.Window
+    public partial class MainWindow : Forms.Window
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// MainForm
+        /// MainWindow
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the MainWindow class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public MainWindow()
         {
             InitializeComponent();
-            InitializeAssociate();
-            InitializeContext();
-            InitializeShortcut();
 
-            VersionTabPage.Controls.Add(VersionPanel);
-        }
+            _version.Description = string.Empty;
+            _version.Image       = Properties.Resources.Logo;
+            _version.Uri         = new(Properties.Resources.WebPage);
+            _version.Location    = new(40, 40);
+            _version.Size        = new(400, 300);
+            VersionTabPage.Controls.Add(_version);
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// MainForm
-        ///
-        /// <summary>
-        /// オブジェクトを初期化します。
-        /// </summary>
-        ///
-        /// <param name="install">インストールモードかどうか</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public MainWindow(bool install) : this()
-        {
-            if (!install) return;
+            SettingsPanel.OKButton     = ExecuteButton;
+            SettingsPanel.CancelButton = ExitButton;
+            SettingsPanel.ApplyButton  = ApplyButton;
 
-            ExitButton.Enabled  = false;
-            ApplyButton.Enabled = true;
+            BindAssociate(0);
+            BindContext(0);
+            ShortcutArchiveComboBox.Bind(Resource.Shortcuts);
         }
 
         #endregion
@@ -90,25 +81,25 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         protected override void OnBind(IBindable src)
         {
-            base.OnBind(src);
             if (src is not SettingViewModel vm) return;
 
-            SettingsBindingSource.DataSource          = vm;
-            AssociateSettingsBindingSource.DataSource = vm.Associate;
-            ContextSettingsBindingSource.DataSource   = vm.Menu;
-            ShortcutSettingsBindingSource.DataSource  = vm.Shortcut;
-            ArchiveSettingsBindingSource.DataSource   = vm.Compress;
-            ExtractSettingsBindingSource.DataSource   = vm.Extract;
-            VersionPanel.Version                      = vm.Version;
+            MainBindingSource.DataSource      = vm;
+            AssociateBindingSource.DataSource = vm.Associate;
+            ContextBindingSource.DataSource   = vm.Menu;
+            ShortcutBindingSource.DataSource  = vm.Shortcut;
+            CompressBindingSource.DataSource  = vm.Compress;
+            ExtractBindingSource.DataSource   = vm.Extract;
+            _version.Version                  = vm.Version;
 
-            Enable(ArchiveSaveOthersRadioButton, ArchiveSaveTextBox, ArchiveSaveButton);
-            Enable(ExtractSaveOthersRadioButton, ExtractSaveTextBox, ExtractSaveButton);
-
-            SettingsPanel.Apply          += (s, e) => vm.Save();
-            ContextResetButton.Click     += (s, e) => vm.Menu.Reset();
-            ContextCustomizeButton.Click += (s, e) => vm.Menu.Customize();
-            AssociateAllButton.Click     += (s, e) => vm.Associate.SelectAll();
-            AssociateClearButton.Click   += (s, e) => vm.Associate.Clear();
+            Behaviors.Add(new DialogBehavior(vm));
+            Behaviors.Add(new OpenDirectoryBehavior(vm));
+            Behaviors.Add(new EventBehavior(SettingsPanel, "Apply", vm.Save));
+            Behaviors.Add(new ClickBehavior(ContextResetButton, vm.Menu.Reset));
+            Behaviors.Add(new ClickBehavior(ContextCustomizeButton, vm.Menu.Customize));
+            Behaviors.Add(new ClickBehavior(AssociateAllButton, vm.Associate.SelectAll));
+            Behaviors.Add(new ClickBehavior(AssociateClearButton, vm.Associate.Clear));
+            Behaviors.Add(new ClickBehavior(ArchiveSaveButton, vm.Compress.Browse));
+            Behaviors.Add(new ClickBehavior(ExtractSaveButton, vm.Extract.Browse));
         }
 
         #endregion
@@ -117,215 +108,94 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OnLoad
+        /// BindAssociate
         ///
         /// <summary>
-        /// ロード時に実行されます。
+        /// Creates view components for file associations and invokes the
+        /// binding settings.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected override void OnLoad(EventArgs ev)
+        private void BindAssociate(int index) => AssociateMenuPanel.Controls.AddRange(new[]
         {
-            // Archive
-            ArchiveSaveButton.Click += (s, e) => Browse(ArchiveSaveTextBox);
-            ArchiveSaveOthersRadioButton.CheckedChanged += (s, e)
-                => Enable(s, ArchiveSaveTextBox, ArchiveSaveButton);
+            // well-known
+            Bind(nameof(AssociateSetting.Zip),      "*.zip",   index++),
+            Bind(nameof(AssociateSetting.Lzh),      "*.lzh",   index++),
+            Bind(nameof(AssociateSetting.Rar),      "*.rar",   index++),
+            Bind(nameof(AssociateSetting.SevenZip), "*.7z",    index++),
+            Bind(nameof(AssociateSetting.Iso),      "*.iso",   index++),
+            Bind(nameof(AssociateSetting.Tar),      "*.tar",   index++),
+            Bind(nameof(AssociateSetting.Gz),       "*.gz",    index++),
+            Bind(nameof(AssociateSetting.Tgz),      "*.tgz",   index++),
+            Bind(nameof(AssociateSetting.Bz2),      "*.bz2",   index++),
+            Bind(nameof(AssociateSetting.Tbz),      "*.tbz",   index++),
+            Bind(nameof(AssociateSetting.Xz),       "*.xz",    index++),
+            Bind(nameof(AssociateSetting.Txz),      "*.txz",   index++),
 
-            // Extract
-            ExtractSaveButton.Click += (s, e) => Browse(ExtractSaveTextBox);
-            ExtractSaveOthersRadioButton.CheckedChanged += (s, e)
-                => Enable(s, ExtractSaveTextBox, ExtractSaveButton);
-
-            // Version
-            VersionPanel.Description = string.Empty;
-            VersionPanel.Image       = Properties.Resources.Logo;
-            VersionPanel.Uri         = new Uri(Properties.Resources.WebPage);
-            VersionPanel.Location    = new Point(40, 40);
-            VersionPanel.Size        = new Size(400, 300);
-
-            // Buttons
-            SettingsPanel.OKButton     = ExecuteButton;
-            SettingsPanel.CancelButton = ExitButton;
-            SettingsPanel.ApplyButton  = ApplyButton;
-
-            base.OnLoad(ev);
-        }
+            // others
+            Bind(nameof(AssociateSetting.Arj),      "*.arj",   index++),
+            Bind(nameof(AssociateSetting.Cab),      "*.cab",   index++),
+            Bind(nameof(AssociateSetting.Chm),      "*.chm",   index++),
+            Bind(nameof(AssociateSetting.Cpio),     "*.cpio",  index++),
+            Bind(nameof(AssociateSetting.Deb),      "*.deb",   index++),
+            Bind(nameof(AssociateSetting.Dmg),      "*.dmg",   index++),
+            Bind(nameof(AssociateSetting.Hfs),      "*.hfs",   index++),
+            Bind(nameof(AssociateSetting.Jar),      "*.jar",   index++),
+            Bind(nameof(AssociateSetting.Nupkg),    "*.nupkg", index++),
+            Bind(nameof(AssociateSetting.Rpm),      "*.rpm",   index++),
+            Bind(nameof(AssociateSetting.Vhd),      "*.vhd",   index++),
+            Bind(nameof(AssociateSetting.Vmdk),     "*.vmdk",  index++),
+            Bind(nameof(AssociateSetting.Wim),      "*.wim",   index++),
+            Bind(nameof(AssociateSetting.Xar),      "*.xar",   index++),
+            Bind(nameof(AssociateSetting.Z),        "*.z",     index++),
+        });
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OnShown
+        /// BindContext
         ///
         /// <summary>
-        /// 表示時に実行されます。
+        /// Creates view components for file associations and invokes the
+        /// binding settings.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected override void OnShown(EventArgs e)
+        private void BindContext(int index)
         {
-            var area = Screen.FromControl(this).WorkingArea;
-            if (Height > area.Height) Size = new Size(MaximumSize.Width, area.Height);
-            base.OnShown(e);
-        }
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Enable
-        ///
-        /// <summary>
-        /// 指定されたコントロールの Enabled を更新します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Enable(object s, params Control[] controls)
-        {
-            if (!(s is RadioButton src)) return;
-            foreach (var c in controls) c.Enabled = src.Checked;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Browse
-        ///
-        /// <summary>
-        /// 保存ディレクトリを選択するためのダイアログを表示します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Browse(TextBox dest)
-        {
-            var dialog = new FolderBrowserDialog
-            {
-                Description         = Properties.Resources.MessageSave,
-                SelectedPath        = dest.Text,
-                ShowNewFolderButton = true,
-            };
-
-            if (dialog.ShowDialog() == DialogResult.Cancel) return;
-            dest.Text = dialog.SelectedPath;
-        }
-
-        #region Initialize
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// InitializeAssociate
-        ///
-        /// <summary>
-        /// 関連付けの項目を初期化します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void InitializeAssociate()
-        {
-            var index = 0;
-
-            AssociateMenuPanel.Controls.AddRange(new[]
-            {
-                // well-known
-                Create(nameof(AssociateSetting.Zip),      "*.zip",   index++),
-                Create(nameof(AssociateSetting.Lzh),      "*.lzh",   index++),
-                Create(nameof(AssociateSetting.Rar),      "*.rar",   index++),
-                Create(nameof(AssociateSetting.SevenZip), "*.7z",    index++),
-                Create(nameof(AssociateSetting.Iso),      "*.iso",   index++),
-                Create(nameof(AssociateSetting.Tar),      "*.tar",   index++),
-                Create(nameof(AssociateSetting.Gz),       "*.gz",    index++),
-                Create(nameof(AssociateSetting.Tgz),      "*.tgz",   index++),
-                Create(nameof(AssociateSetting.Bz2),      "*.bz2",   index++),
-                Create(nameof(AssociateSetting.Tbz),      "*.tbz",   index++),
-                Create(nameof(AssociateSetting.Xz),       "*.xz",    index++),
-                Create(nameof(AssociateSetting.Txz),      "*.txz",   index++),
-
-                // others
-                Create(nameof(AssociateSetting.Arj),      "*.arj",   index++),
-                Create(nameof(AssociateSetting.Cab),      "*.cab",   index++),
-                Create(nameof(AssociateSetting.Chm),      "*.chm",   index++),
-                Create(nameof(AssociateSetting.Cpio),     "*.cpio",  index++),
-                Create(nameof(AssociateSetting.Deb),      "*.deb",   index++),
-                Create(nameof(AssociateSetting.Dmg),      "*.dmg",   index++),
-                Create(nameof(AssociateSetting.Hfs),      "*.hfs",   index++),
-                Create(nameof(AssociateSetting.Jar),      "*.jar",   index++),
-                Create(nameof(AssociateSetting.Nupkg),    "*.nupkg", index++),
-                Create(nameof(AssociateSetting.Rpm),      "*.rpm",   index++),
-                Create(nameof(AssociateSetting.Vhd),      "*.vhd",   index++),
-                Create(nameof(AssociateSetting.Vmdk),     "*.vmdk",  index++),
-                Create(nameof(AssociateSetting.Wim),      "*.wim",   index++),
-                Create(nameof(AssociateSetting.Xar),      "*.xar",   index++),
-                Create(nameof(AssociateSetting.Z),        "*.z",     index++),
-            });
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// InitializeContext
-        ///
-        /// <summary>
-        /// コンテキストメニューの項目を初期化します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void InitializeContext()
-        {
-            var index = 0;
-
             ContextArchivePanel.Controls.AddRange(new[]
             {
-                Create(Preset.CompressZip,         Properties.Resources.MenuZip,         index++),
-                Create(Preset.CompressZipPassword, Properties.Resources.MenuZipPassword, index++),
-                Create(Preset.Compress7z,    Properties.Resources.MenuSevenZip,    index++),
-                Create(Preset.CompressBz2,       Properties.Resources.MenuBZip2,       index++),
-                Create(Preset.CompressGz,        Properties.Resources.MenuGZip,        index++),
-                Create(Preset.CompressXz,          Properties.Resources.MenuXZ,          index++),
-                Create(Preset.CompressSfx,         Properties.Resources.MenuSfx,         index++),
-                Create(Preset.CompressDetails,     Properties.Resources.MenuDetails,      index++),
+                Bind(Preset.CompressZip,         Properties.Resources.MenuZip,         index++),
+                Bind(Preset.CompressZipPassword, Properties.Resources.MenuZipPassword, index++),
+                Bind(Preset.Compress7z,          Properties.Resources.MenuSevenZip,    index++),
+                Bind(Preset.CompressBz2,         Properties.Resources.MenuBZip2,       index++),
+                Bind(Preset.CompressGz,          Properties.Resources.MenuGZip,        index++),
+                Bind(Preset.CompressXz,          Properties.Resources.MenuXZ,          index++),
+                Bind(Preset.CompressSfx,         Properties.Resources.MenuSfx,         index++),
+                Bind(Preset.CompressDetails,     Properties.Resources.MenuDetails,     index++),
             });
 
             ContextExtractPanel.Controls.AddRange(new[]
             {
-                Create(Preset.ExtractSource,      Properties.Resources.MenuHere,        index++),
-                Create(Preset.ExtractDesktop,     Properties.Resources.MenuDesktop,     index++),
-                Create(Preset.ExtractMyDocuments, Properties.Resources.MenuMyDocuments, index++),
-                Create(Preset.ExtractQuery,     Properties.Resources.MenuRuntime,     index++),
+                Bind(Preset.ExtractSource,      Properties.Resources.MenuHere,         index++),
+                Bind(Preset.ExtractDesktop,     Properties.Resources.MenuDesktop,      index++),
+                Bind(Preset.ExtractMyDocuments, Properties.Resources.MenuMyDocuments,  index++),
+                Bind(Preset.ExtractQuery,       Properties.Resources.MenuRuntime,      index++),
             });
-
-            ContextCustomizeButton.Click += (s, e) => ApplyButton.Enabled = true;
-            ContextResetButton.Click     += (s, e) => ApplyButton.Enabled = true;
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// InitializeShortcut
+        /// Bind
         ///
         /// <summary>
-        /// ショートカットメニューを初期化します。
+        /// Creates a CheckBox object for the file association and invokes
+        /// the binding settings.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void InitializeShortcut()
+        private CheckBox Bind(string name, string text, int index)
         {
-            ShortcutArchiveComboBox.DisplayMember = "Key";
-            ShortcutArchiveComboBox.ValueMember   = "Value";
-            ShortcutArchiveComboBox.DataSource    = new List<KeyValuePair<string, Preset>>
-            {
-                Create(Properties.Resources.MenuZip,         Preset.CompressZip),
-                Create(Properties.Resources.MenuZipPassword, Preset.CompressZipPassword),
-                Create(Properties.Resources.MenuSevenZip,    Preset.Compress7z),
-                Create(Properties.Resources.MenuBZip2,       Preset.CompressBz2),
-                Create(Properties.Resources.MenuGZip,        Preset.CompressGz),
-                Create(Properties.Resources.MenuSfx,         Preset.CompressSfx),
-                Create(Properties.Resources.MenuDetails,     Preset.CompressDetails),
-            };
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Create
-        ///
-        /// <summary>
-        /// 関連付け用のチェックボックスを生成します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private CheckBox Create(string name, string text, int index)
-        {
+            var src = AssociateBindingSource;
             var dest = new CheckBox
             {
                 AutoSize = false,
@@ -336,8 +206,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
                 TabIndex = index,
             };
 
-            dest.DataBindings.Add(new Binding(nameof(dest.Checked),
-                AssociateSettingsBindingSource, name, true,
+            dest.DataBindings.Add(new(nameof(dest.Checked),
+                src,
+                name,
+                true,
                 DataSourceUpdateMode.OnPropertyChanged
             ));
 
@@ -346,15 +218,17 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Create
+        /// Bind
         ///
         /// <summary>
-        /// コンテキストメニュー用のチェックボックスを生成します。
+        /// Creates a CheckBox object for the context menu and invokes the
+        /// binding settings.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private CheckBox Create(Preset menu, string text, int index)
+        private CheckBox Bind(Preset menu, string text, int index)
         {
+            var src = ContextBindingSource;
             var dest = new CheckBox
             {
                 AutoSize  = true,
@@ -364,32 +238,20 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
                 TextAlign = ContentAlignment.MiddleLeft,
             };
 
-            dest.DataBindings.Add(new Binding(nameof(dest.Checked),
-                ContextSettingsBindingSource, menu.ToString(), true,
+            dest.DataBindings.Add(new(nameof(dest.Checked),
+                src,
+                menu.ToString(),
+                true,
                 DataSourceUpdateMode.OnPropertyChanged
             ));
 
             return dest;
         }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Create
-        ///
-        /// <summary>
-        /// KeyValuePaier オブジェクトを生成します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private KeyValuePair<string, Preset> Create(string key, Preset value) =>
-            new KeyValuePair<string, Preset>(key, value);
-
-        #endregion
-
         #endregion
 
         #region Fields
-        private readonly Cube.Forms.Controls.VersionControl VersionPanel = new(typeof(MainWindow).Assembly);
+        private readonly Forms.Controls.VersionControl _version = new(typeof(MainWindow).Assembly);
         #endregion
     }
 }
