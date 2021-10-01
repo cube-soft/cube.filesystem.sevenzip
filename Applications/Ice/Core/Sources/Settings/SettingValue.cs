@@ -39,23 +39,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ErrorReport
-        ///
-        /// <summary>
-        /// Gets or sets a value indicating whether to show the error
-        /// report.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [DataMember]
-        public bool ErrorReport
-        {
-            get => Get(() => true);
-            set => Set(value);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// Explorer
         ///
         /// <summary>

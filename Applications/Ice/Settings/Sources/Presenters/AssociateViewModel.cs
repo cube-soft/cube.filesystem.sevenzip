@@ -15,7 +15,6 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 
@@ -26,12 +25,12 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// AssociateViewModel
     ///
     /// <summary>
-    /// Provides functionality to associate the AssociateValue object
-    /// and a view.
+    /// Provides functionality to bind values to view components for the
+    /// associate settings.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class AssociateViewModel : Presentable<AssociateCommand>
+    public class AssociateViewModel : Presentable<AssociateSetting>
     {
         #region Constructors
 
@@ -44,18 +43,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// with the specified arguments.
         /// </summary>
         ///
-        /// <param name="src">Settings for file association.</param>
+        /// <param name="src">Settings for the file association.</param>
         /// <param name="aggregator">Message aggregator.</param>
         /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public AssociateViewModel(
-            AssociateSetting src,
-            Aggregator aggregator,
-            SynchronizationContext context
-        ) : base(new AssociateCommand(src), aggregator, context)
+        public AssociateViewModel(AssociateSetting src, Aggregator aggregator, SynchronizationContext context) :
+            base(src, aggregator, context)
         {
-            Facade.Settings.PropertyChanged += (s, e) => OnPropertyChanged(e);
+            Assets.Add(new ObservableProxy(Facade, this));
         }
 
         #endregion
@@ -74,8 +70,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public bool Changed
         {
-            get => Facade.Settings.Changed;
-            set => Facade.Settings.Changed = value;
+            get => Facade.Changed;
+            set => Facade.Changed = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -83,15 +79,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// IconIndex
         ///
         /// <summary>
-        /// 関連付けされたファイルに表示するアイコンのインデックスを
-        /// 取得または設定します。
+        /// Gets or sets the index of the icon to be displayed for the
+        /// associated file.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public int IconIndex
         {
-            get => Facade.Settings.IconIndex;
-            set => Facade.Settings.IconIndex = value;
+            get => Facade.IconIndex;
+            set => Facade.IconIndex = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -99,14 +95,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// SevenZip
         ///
         /// <summary>
-        /// *.7z の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.7z files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public bool SevenZip
         {
-            get => Facade.Settings.SevenZip;
-            set => Facade.Settings.SevenZip = value;
+            get => Facade.SevenZip;
+            set => Facade.SevenZip = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -114,29 +111,31 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Arj
         ///
         /// <summary>
-        /// *.arj の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.arj files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public bool Arj
         {
-            get => Facade.Settings.Arj;
-            set => Facade.Settings.Arj = value;
+            get => Facade.Arj;
+            set => Facade.Arj = value;
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// BZ2
+        /// Bz2
         ///
         /// <summary>
-        /// *.bz2 の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.bz2 files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool BZ2
+        public bool Bz2
         {
-            get => Facade.Settings.BZ2;
-            set => Facade.Settings.BZ2 = value;
+            get => Facade.Bz2;
+            set => Facade.Bz2 = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -144,14 +143,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Cab
         ///
         /// <summary>
-        /// *.cab の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.cab files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public bool Cab
         {
-            get => Facade.Settings.Cab;
-            set => Facade.Settings.Cab = value;
+            get => Facade.Cab;
+            set => Facade.Cab = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -159,14 +159,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Chm
         ///
         /// <summary>
-        /// *.chm の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.chm files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public bool Chm
         {
-            get => Facade.Settings.Chm;
-            set => Facade.Settings.Chm = value;
+            get => Facade.Chm;
+            set => Facade.Chm = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -174,14 +175,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Cpio
         ///
         /// <summary>
-        /// *.cpio の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.cpio files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public bool Cpio
         {
-            get => Facade.Settings.Cpio;
-            set => Facade.Settings.Cpio = value;
+            get => Facade.Cpio;
+            set => Facade.Cpio = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -189,14 +191,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Deb
         ///
         /// <summary>
-        /// *.deb の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.deb files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public bool Deb
         {
-            get => Facade.Settings.Deb;
-            set => Facade.Settings.Deb = value;
+            get => Facade.Deb;
+            set => Facade.Deb = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -204,14 +207,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Dmg
         ///
         /// <summary>
-        /// *.dmg の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.dmg files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public bool Dmg
         {
-            get => Facade.Settings.Dmg;
-            set => Facade.Settings.Dmg = value;
+            get => Facade.Dmg;
+            set => Facade.Dmg = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -219,29 +223,31 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Flv
         ///
         /// <summary>
-        /// *.flv の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.flv files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public bool Flv
         {
-            get => Facade.Settings.Flv;
-            set => Facade.Settings.Flv = value;
+            get => Facade.Flv;
+            set => Facade.Flv = value;
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GZ
+        /// Gz
         ///
         /// <summary>
-        /// *.gz の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.gz files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool GZ
+        public bool Gz
         {
-            get => Facade.Settings.GZ;
-            set => Facade.Settings.GZ = value;
+            get => Facade.Gz;
+            set => Facade.Gz = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -249,14 +255,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Hfs
         ///
         /// <summary>
-        /// *.hfs の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.hfs files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public bool Hfs
         {
-            get => Facade.Settings.Hfs;
-            set => Facade.Settings.Hfs = value;
+            get => Facade.Hfs;
+            set => Facade.Hfs = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -264,14 +271,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Jar
         ///
         /// <summary>
-        /// *.jar の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.jar files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public bool Jar
         {
-            get => Facade.Settings.Jar;
-            set => Facade.Settings.Jar = value;
+            get => Facade.Jar;
+            set => Facade.Jar = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -279,14 +287,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Iso
         ///
         /// <summary>
-        /// *.iso の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.iso files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public bool Iso
         {
-            get => Facade.Settings.Iso;
-            set => Facade.Settings.Iso = value;
+            get => Facade.Iso;
+            set => Facade.Iso = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -294,14 +303,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Lzh
         ///
         /// <summary>
-        /// *.lzh の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.lzh files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public bool Lzh
         {
-            get => Facade.Settings.Lzh;
-            set => Facade.Settings.Lzh = value;
+            get => Facade.Lzh;
+            set => Facade.Lzh = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -309,14 +319,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Nupkg
         ///
         /// <summary>
-        /// *.nupkg の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.nupkg files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public bool Nupkg
         {
-            get => Facade.Settings.Nupkg;
-            set => Facade.Settings.Nupkg = value;
+            get => Facade.Nupkg;
+            set => Facade.Nupkg = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -324,14 +335,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Rar
         ///
         /// <summary>
-        /// *.rar の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.rar files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public bool Rar
         {
-            get => Facade.Settings.Rar;
-            set => Facade.Settings.Rar = value;
+            get => Facade.Rar;
+            set => Facade.Rar = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -339,14 +351,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Rpm
         ///
         /// <summary>
-        /// *.rpm の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.rpm files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public bool Rpm
         {
-            get => Facade.Settings.Rpm;
-            set => Facade.Settings.Rpm = value;
+            get => Facade.Rpm;
+            set => Facade.Rpm = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -354,14 +367,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Swf
         ///
         /// <summary>
-        /// *.swf の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.swf files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public bool Swf
         {
-            get => Facade.Settings.Swf;
-            set => Facade.Settings.Swf = value;
+            get => Facade.Swf;
+            set => Facade.Swf = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -369,14 +383,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Tar
         ///
         /// <summary>
-        /// *.tar の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.tar files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public bool Tar
         {
-            get => Facade.Settings.Tar;
-            set => Facade.Settings.Tar = value;
+            get => Facade.Tar;
+            set => Facade.Tar = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -384,14 +399,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Tbz
         ///
         /// <summary>
-        /// *.tbz の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.tbz files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public bool Tbz
         {
-            get => Facade.Settings.Tbz;
-            set => Facade.Settings.Tbz = value;
+            get => Facade.Tbz;
+            set => Facade.Tbz = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -399,14 +415,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Tgz
         ///
         /// <summary>
-        /// *.tgz の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.tgz files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public bool Tgz
         {
-            get => Facade.Settings.Tgz;
-            set => Facade.Settings.Tgz = value;
+            get => Facade.Tgz;
+            set => Facade.Tgz = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -414,14 +431,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Txz
         ///
         /// <summary>
-        /// *.txz の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.txz files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public bool Txz
         {
-            get => Facade.Settings.Txz;
-            set => Facade.Settings.Txz = value;
+            get => Facade.Txz;
+            set => Facade.Txz = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -429,14 +447,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Vhd
         ///
         /// <summary>
-        /// *.vhd の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.vhd files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public bool Vhd
         {
-            get => Facade.Settings.Vhd;
-            set => Facade.Settings.Vhd = value;
+            get => Facade.Vhd;
+            set => Facade.Vhd = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -444,14 +463,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Vmdk
         ///
         /// <summary>
-        /// *.vmdk の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.vmdk files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public bool Vmdk
         {
-            get => Facade.Settings.Vmdk;
-            set => Facade.Settings.Vmdk = value;
+            get => Facade.Vmdk;
+            set => Facade.Vmdk = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -459,14 +479,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Wim
         ///
         /// <summary>
-        /// *.wim の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.wim files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public bool Wim
         {
-            get => Facade.Settings.Wim;
-            set => Facade.Settings.Wim = value;
+            get => Facade.Wim;
+            set => Facade.Wim = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -474,29 +495,31 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Xar
         ///
         /// <summary>
-        /// *.xar の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.xar files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public bool Xar
         {
-            get => Facade.Settings.Xar;
-            set => Facade.Settings.Xar = value;
+            get => Facade.Xar;
+            set => Facade.Xar = value;
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// XZ
+        /// Xz
         ///
         /// <summary>
-        /// *.xz の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.xz files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool XZ
+        public bool Xz
         {
-            get => Facade.Settings.XZ;
-            set => Facade.Settings.XZ = value;
+            get => Facade.Xz;
+            set => Facade.Xz = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -504,14 +527,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Z
         ///
         /// <summary>
-        /// *.z の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.z files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public bool Z
         {
-            get => Facade.Settings.Z;
-            set => Facade.Settings.Z = value;
+            get => Facade.Z;
+            set => Facade.Z = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -519,14 +543,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Zip
         ///
         /// <summary>
-        /// *.zip の関連付け状態を取得または設定します。
+        /// Gets or sets a value indicating whether or not to associate
+        /// with the *.zip files.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public bool Zip
         {
-            get => Facade.Settings.Zip;
-            set => Facade.Settings.Zip = value;
+            get => Facade.Zip;
+            set => Facade.Zip = value;
         }
 
         #endregion
@@ -538,33 +563,33 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// SelectAll
         ///
         /// <summary>
-        /// 全ての項目を選択します。
+        /// Selects all items.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void SelectAll() => ApplyAll(true);
+        public void SelectAll() => SetAll(true);
 
         /* ----------------------------------------------------------------- */
         ///
         /// Clear
         ///
         /// <summary>
-        /// 全ての項目の選択状態を解除します。
+        /// Cancels the selection of all items.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Clear() => ApplyAll(false);
+        public void Clear() => SetAll(false);
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Update
+        /// Save
         ///
         /// <summary>
-        /// ファイルの関連付けを更新します。
+        /// Saves the settings for the file association.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Update() => Facade.Execute();
+        public void Save() => AssociateAction.Invoke(Facade);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -589,20 +614,17 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ApplyAll
+        /// SetAll
         ///
         /// <summary>
-        /// 全ての項目を有効または無効に設定します。
+        /// Set all items to enabled or disabled.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void ApplyAll(bool enabled)
+        private void SetAll(bool enabled)
         {
-            var items = Facade.Settings.Value;
+            var items = Facade.Value;
             foreach (var key in items.Keys.ToArray()) items[key] = enabled;
-
-            var e = new PropertyChangedEventArgs(nameof(Facade.Settings.Value));
-            OnPropertyChanged(e);
         }
 
         #endregion

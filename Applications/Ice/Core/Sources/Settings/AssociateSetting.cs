@@ -48,14 +48,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         {
             { "7z",          true  },
             { nameof(Arj),   false },
-            { nameof(BZ2),   true  },
+            { nameof(Bz2),   true  },
             { nameof(Cab),   false },
             { nameof(Chm),   false },
             { nameof(Cpio),  false },
             { nameof(Deb),   false },
             { nameof(Dmg),   false },
             { nameof(Flv),   false },
-            { nameof(GZ),    true  },
+            { nameof(Gz),    true  },
             { nameof(Hfs),   false },
             { nameof(Iso),   false },
             { nameof(Jar),   false },
@@ -72,7 +72,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             { nameof(Vmdk),  false },
             { nameof(Wim),   false },
             { nameof(Xar),   false },
-            { nameof(XZ),    true  },
+            { nameof(Xz),    true  },
             { nameof(Z),     false },
             { nameof(Zip),   true  },
         });
@@ -145,7 +145,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// BZ2
+        /// Bz2
         ///
         /// <summary>
         /// Gets or sets a value indicating whether to associate with
@@ -154,7 +154,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         [DataMember(Name = "bz2")]
-        public bool BZ2
+        public bool Bz2
         {
             get => GetAssociateValue();
             set => SetAssociateValue(value);
@@ -264,7 +264,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GZ
+        /// Gz
         ///
         /// <summary>
         /// Gets or sets a value indicating whether to associate with
@@ -273,7 +273,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         [DataMember(Name = "gz")]
-        public bool GZ
+        public bool Gz
         {
             get => GetAssociateValue();
             set => SetAssociateValue(value);
@@ -553,7 +553,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// XZ
+        /// Xz
         ///
         /// <summary>
         /// Gets or sets a value indicating whether to associate with
@@ -562,7 +562,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         [DataMember(Name = "xz")]
-        public bool XZ
+        public bool Xz
         {
             get => GetAssociateValue();
             set => SetAssociateValue(value);

@@ -15,66 +15,42 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System;
-using System.Threading;
-using System.Windows.Forms;
 using Cube.Logging;
-using Cube.Mixin.Collections;
-using Cube.Mixin.String;
+using Cube.Mixin.Assembly;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// Program
+    /// AssociateAction
     ///
     /// <summary>
-    /// Represents the main program.
+    /// Provides functionality to invoke the file association.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    static class Program
+    public static class AssociateAction
     {
-        #region Methods
-
         /* ----------------------------------------------------------------- */
         ///
-        /// Main
+        /// Invoke
         ///
         /// <summary>
-        /// Executes the main program of the application.
+        /// Invokes the file association.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [STAThread]
-        static void Main(string[] args) => Source.LogError(() =>
+        public static void Invoke(AssociateSetting src) => typeof(AssociateAction).LogWarn(() =>
         {
-            _ = Logger.ObserveTaskException();
-            Source.LogInfo(Source.Assembly);
-            Source.LogInfo($"[ {args.Join(" ")} ]");
+            if (!src.Changed) return;
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
+            var dir = typeof(AssociateAction).Assembly.GetDirectoryName();
+            var exe = Io.Combine(dir, Properties.Resources.FileAssociate);
 
-            var src = new SettingFolder();
-            src.Load();
+            if (Io.Exists(exe)) System.Diagnostics.Process.Start(exe).WaitForExit();
+            else typeof(AssociateAction).LogWarn($"{exe} not found");
 
-            var im = args.Length > 0 && args[0].FuzzyEquals("/Install");
-            if (im) Source.LogInfo("Mode:Install");
-
-            var view = new MainWindow(im);
-            var vm   = new SettingViewModel(src, SynchronizationContext.Current);
-            vm.Associate.Changed = im;
-            if (!im) vm.Load();
-            view.Bind(vm);
-
-            Application.Run(view);
+            src.Changed = false;
         });
-
-        #endregion
-
-        #region Fields
-        private static readonly Type Source = typeof(Program);
-        #endregion
     }
 }

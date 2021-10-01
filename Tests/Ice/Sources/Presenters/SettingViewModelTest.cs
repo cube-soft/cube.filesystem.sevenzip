@@ -51,42 +51,36 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             using var vm = NewVM(m);
 
             vm.CheckUpdate  = true;
-            vm.ErrorReport  = true;
-            vm.Filtering    = string.Join(Environment.NewLine, new[] { "Foo", "Bar" });
+            vm.Filters      = string.Join(Environment.NewLine, new[] { "Foo", "Bar" });
             vm.ToolTip      = true;
             vm.ToolTipCount = 15;
 
             Assert.That(vm.Version, Does.StartWith("Version"));
 
-            Assert.That(m.Value.ErrorReport,          Is.True);
             Assert.That(m.Value.GetFilters().Count(), Is.EqualTo(2));
             Assert.That(m.Value.ToolTip,              Is.True);
             Assert.That(m.Value.ToolTipCount,         Is.EqualTo(15));
 
             vm.CheckUpdate  = false;
-            vm.ErrorReport  = false;
-            vm.Filtering    = string.Empty;
+            vm.Filters      = string.Empty;
             vm.ToolTip      = false;
             vm.ToolTipCount = 0;
 
-            Assert.That(m.Value.ErrorReport,          Is.False);
             Assert.That(m.Value.GetFilters().Count(), Is.EqualTo(0));
             Assert.That(m.Value.ToolTip,              Is.False);
             Assert.That(m.Value.ToolTipCount,         Is.EqualTo(0));
 
-            m.Value.ErrorReport  = true;
             m.Value.Filters      = "Add|Filter|By|Model";
             m.Value.ToolTip      = true;
             m.Value.ToolTipCount = 9;
 
-            var f = vm.Filtering.Split(new[]
+            var f = vm.Filters.Split(new[]
             {
                 Environment.NewLine
             }, StringSplitOptions.RemoveEmptyEntries);
 
             Assert.That(f.Count(),            Is.EqualTo(4));
             Assert.That(vm.CheckUpdate,       Is.False);
-            Assert.That(vm.ErrorReport,       Is.True);
             Assert.That(vm.ToolTip,           Is.True);
             Assert.That(vm.ToolTipCount,      Is.EqualTo(9));
             Assert.That(vm.Associate.Changed, Is.True);
@@ -112,38 +106,38 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
             src.SaveSource = true;
             Assert.That(src.SaveSource,    Is.True);
-            Assert.That(src.SaveRuntime,   Is.False);
+            Assert.That(src.SaveQuery,   Is.False);
             Assert.That(src.SaveOthers,    Is.False);
             Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Source));
 
-            src.SaveRuntime = true;
+            src.SaveQuery = true;
             Assert.That(src.SaveSource,    Is.False);
-            Assert.That(src.SaveRuntime,   Is.True);
+            Assert.That(src.SaveQuery,   Is.True);
             Assert.That(src.SaveOthers,    Is.False);
             Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Query));
 
             src.SaveOthers = true;
             Assert.That(src.SaveSource,    Is.False);
-            Assert.That(src.SaveRuntime,   Is.False);
+            Assert.That(src.SaveQuery,   Is.False);
             Assert.That(src.SaveOthers,    Is.True);
             Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Preset));
 
             // update only when set to true
             src.SaveOthers = false;
             Assert.That(src.SaveSource,    Is.False);
-            Assert.That(src.SaveRuntime,   Is.False);
+            Assert.That(src.SaveQuery,   Is.False);
             Assert.That(src.SaveOthers,    Is.True);
             Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Preset));
 
             src.SaveSource = false;
             Assert.That(src.SaveSource,    Is.False);
-            Assert.That(src.SaveRuntime,   Is.False);
+            Assert.That(src.SaveQuery,   Is.False);
             Assert.That(src.SaveOthers,    Is.True);
             Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Preset));
 
-            src.SaveRuntime = false;
+            src.SaveQuery = false;
             Assert.That(src.SaveSource,    Is.False);
-            Assert.That(src.SaveRuntime,   Is.False);
+            Assert.That(src.SaveQuery,   Is.False);
             Assert.That(src.SaveOthers,    Is.True);
             Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Preset));
 
@@ -205,38 +199,38 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
             src.SaveSource = true;
             Assert.That(src.SaveSource,    Is.True);
-            Assert.That(src.SaveRuntime,   Is.False);
+            Assert.That(src.SaveQuery,     Is.False);
             Assert.That(src.SaveOthers,    Is.False);
             Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Source));
 
-            src.SaveRuntime = true;
+            src.SaveQuery = true;
             Assert.That(src.SaveSource,    Is.False);
-            Assert.That(src.SaveRuntime,   Is.True);
+            Assert.That(src.SaveQuery,     Is.True);
             Assert.That(src.SaveOthers,    Is.False);
             Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Query));
 
             src.SaveOthers = true;
             Assert.That(src.SaveSource,    Is.False);
-            Assert.That(src.SaveRuntime,   Is.False);
+            Assert.That(src.SaveQuery,     Is.False);
             Assert.That(src.SaveOthers,    Is.True);
             Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Preset));
 
             // update only when set to true
             src.SaveOthers = false;
             Assert.That(src.SaveSource,    Is.False);
-            Assert.That(src.SaveRuntime,   Is.False);
+            Assert.That(src.SaveQuery,     Is.False);
             Assert.That(src.SaveOthers,    Is.True);
             Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Preset));
 
             src.SaveSource = false;
             Assert.That(src.SaveSource,    Is.False);
-            Assert.That(src.SaveRuntime,   Is.False);
+            Assert.That(src.SaveQuery,     Is.False);
             Assert.That(src.SaveOthers,    Is.True);
             Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Preset));
 
-            src.SaveRuntime = false;
+            src.SaveQuery = false;
             Assert.That(src.SaveSource,    Is.False);
-            Assert.That(src.SaveRuntime,   Is.False);
+            Assert.That(src.SaveQuery,     Is.False);
             Assert.That(src.SaveOthers,    Is.True);
             Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Preset));
 
@@ -333,14 +327,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
             src.SelectAll();
             Assert.That(dest.Arj,      Is.EqualTo(src.Arj).And.True);
-            Assert.That(dest.BZ2,      Is.EqualTo(src.BZ2).And.True);
+            Assert.That(dest.Bz2,      Is.EqualTo(src.Bz2).And.True);
             Assert.That(dest.Cab,      Is.EqualTo(src.Cab).And.True);
             Assert.That(dest.Chm,      Is.EqualTo(src.Chm).And.True);
             Assert.That(dest.Cpio,     Is.EqualTo(src.Cpio).And.True);
             Assert.That(dest.Deb,      Is.EqualTo(src.Deb).And.True);
             Assert.That(dest.Dmg,      Is.EqualTo(src.Dmg).And.True);
             Assert.That(dest.Flv,      Is.EqualTo(src.Flv).And.True);
-            Assert.That(dest.GZ,       Is.EqualTo(src.GZ).And.True);
+            Assert.That(dest.Gz,       Is.EqualTo(src.Gz).And.True);
             Assert.That(dest.Hfs,      Is.EqualTo(src.Hfs).And.True);
             Assert.That(dest.Iso,      Is.EqualTo(src.Iso).And.True);
             Assert.That(dest.Jar,      Is.EqualTo(src.Jar).And.True);
@@ -358,20 +352,20 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             Assert.That(dest.Vmdk,     Is.EqualTo(src.Vmdk).And.True);
             Assert.That(dest.Wim,      Is.EqualTo(src.Wim).And.True);
             Assert.That(dest.Xar,      Is.EqualTo(src.Xar).And.True);
-            Assert.That(dest.XZ,       Is.EqualTo(src.XZ).And.True);
+            Assert.That(dest.Xz,       Is.EqualTo(src.Xz).And.True);
             Assert.That(dest.Z,        Is.EqualTo(src.Z).And.True);
             Assert.That(dest.Zip,      Is.EqualTo(src.Zip).And.True);
 
             src.Clear();
             Assert.That(dest.Arj,      Is.EqualTo(src.Arj).And.False);
-            Assert.That(dest.BZ2,      Is.EqualTo(src.BZ2).And.False);
+            Assert.That(dest.Bz2,      Is.EqualTo(src.Bz2).And.False);
             Assert.That(dest.Cab,      Is.EqualTo(src.Cab).And.False);
             Assert.That(dest.Chm,      Is.EqualTo(src.Chm).And.False);
             Assert.That(dest.Cpio,     Is.EqualTo(src.Cpio).And.False);
             Assert.That(dest.Deb,      Is.EqualTo(src.Deb).And.False);
             Assert.That(dest.Dmg,      Is.EqualTo(src.Dmg).And.False);
             Assert.That(dest.Flv,      Is.EqualTo(src.Flv).And.False);
-            Assert.That(dest.GZ,       Is.EqualTo(src.GZ).And.False);
+            Assert.That(dest.Gz,       Is.EqualTo(src.Gz).And.False);
             Assert.That(dest.Hfs,      Is.EqualTo(src.Hfs).And.False);
             Assert.That(dest.Iso,      Is.EqualTo(src.Iso).And.False);
             Assert.That(dest.Jar,      Is.EqualTo(src.Jar).And.False);
@@ -389,19 +383,19 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             Assert.That(dest.Vmdk,     Is.EqualTo(src.Vmdk).And.False);
             Assert.That(dest.Wim,      Is.EqualTo(src.Wim).And.False);
             Assert.That(dest.Xar,      Is.EqualTo(src.Xar).And.False);
-            Assert.That(dest.XZ,       Is.EqualTo(src.XZ).And.False);
+            Assert.That(dest.Xz,       Is.EqualTo(src.Xz).And.False);
             Assert.That(dest.Z,        Is.EqualTo(src.Z).And.False);
             Assert.That(dest.Zip,      Is.EqualTo(src.Zip).And.False);
 
             src.Arj      = true; Assert.That(dest.Arj,      Is.True);
-            src.BZ2      = true; Assert.That(dest.BZ2,      Is.True);
+            src.Bz2      = true; Assert.That(dest.Bz2,      Is.True);
             src.Cab      = true; Assert.That(dest.Cab,      Is.True);
             src.Chm      = true; Assert.That(dest.Chm,      Is.True);
             src.Cpio     = true; Assert.That(dest.Cpio,     Is.True);
             src.Deb      = true; Assert.That(dest.Deb,      Is.True);
             src.Dmg      = true; Assert.That(dest.Dmg,      Is.True);
             src.Flv      = true; Assert.That(dest.Flv,      Is.True);
-            src.GZ       = true; Assert.That(dest.GZ,       Is.True);
+            src.Gz       = true; Assert.That(dest.Gz,       Is.True);
             src.Hfs      = true; Assert.That(dest.Hfs,      Is.True);
             src.Iso      = true; Assert.That(dest.Iso,      Is.True);
             src.Jar      = true; Assert.That(dest.Jar,      Is.True);
@@ -419,7 +413,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             src.Vmdk     = true; Assert.That(dest.Vmdk,     Is.True);
             src.Wim      = true; Assert.That(dest.Wim,      Is.True);
             src.Xar      = true; Assert.That(dest.Xar,      Is.True);
-            src.XZ       = true; Assert.That(dest.XZ,       Is.True);
+            src.Xz       = true; Assert.That(dest.Xz,       Is.True);
             src.Z        = true; Assert.That(dest.Z,        Is.True);
             src.Zip      = true; Assert.That(dest.Zip,      Is.True);
         }
@@ -450,7 +444,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             src.CompressOption = Preset.CompressZip;
             Assert.That((uint)dest.Preset, Is.EqualTo(0x107));
 
-            src.Sync();
+            src.Load();
             Assert.That(src.Compress,       Is.False);
             Assert.That(src.Extract,        Is.False);
             Assert.That(src.Settings,       Is.False);
@@ -465,7 +459,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SyncUpdate
+        /// LoadAndSave
         ///
         /// <summary>
         /// Tests the Sync and Update commands.
@@ -474,7 +468,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /* ----------------------------------------------------------------- */
         [TestCase(true)]
         [TestCase(false)]
-        public void SyncUpdate(bool install)
+        public void LoadAndSave(bool install)
         {
             using (var m0 = NewSettings())
             {
@@ -482,9 +476,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 using var vm0 = NewVM(m0);
                 vm0.CheckUpdate = true;
                 vm0.Associate.Changed = install;
-                vm0.Sync();
+                vm0.Load();
                 vm0.Associate.Clear();
-                vm0.Update();
+                vm0.Save();
             }
 
             using (var m1 = NewSettings())
@@ -493,7 +487,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 m1.Value.Shortcut.Directory = Results;
                 using var vm1 = NewVM(m1);
                 vm1.CheckUpdate = false;
-                vm1.Update();
+                vm1.Save();
             }
         }
 

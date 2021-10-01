@@ -27,7 +27,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// CustomViewModel
     ///
     /// <summary>
-    /// Represents the ViewModel class of the customized context menu.
+    /// Provides functionality to bind values to the CustomizeWindow class.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -44,15 +44,13 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// with the specified arguments.
         /// </summary>
         ///
-        /// <param name="menu">Current context menu.</param>
+        /// <param name="src">Current context menu.</param>
         /// <param name="aggregator">Message aggregator.</param>
         /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public CustomViewModel(IEnumerable<Context> menu,
-            Aggregator aggregator,
-            SynchronizationContext context
-        ) : base(menu, aggregator, context) { }
+        public CustomViewModel(IEnumerable<Context> src, Aggregator aggregator, SynchronizationContext context) :
+            base(src, aggregator, context) { }
 
         #endregion
 
@@ -63,23 +61,21 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Source
         ///
         /// <summary>
-        /// 追加可能なメニュー一覧を取得します。
+        /// Get the list of menus that can be added.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IEnumerable<Context> Source { get; } =
-            PresetExtension.ToContextCollection(
-                Preset.Compress | Preset.CompressMask |
-                Preset.Extract | Preset.ExtractMask |
-                Preset.Mail    | Preset.MailMask
-            );
+        public IEnumerable<Context> Source { get; } = PresetExtension.ToContextCollection(
+            Preset.Compress | Preset.CompressMask |
+            Preset.Extract  | Preset.ExtractMask
+        );
 
         /* ----------------------------------------------------------------- */
         ///
         /// Current
         ///
         /// <summary>
-        /// 現在のメニュー一覧を取得します。
+        /// Get the current menu list.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -90,11 +86,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Images
         ///
         /// <summary>
-        /// 表示イメージ一覧を取得します。
+        /// Get the list of displayed images.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public IList<Image> Images { get; } = new List<Image>
+        public List<Image> Images { get; } = new()
         {
             IconFactory.Create(StockIcons.Folder, IconSize.Small).ToBitmap(),
             Properties.Resources.Archive,

@@ -24,8 +24,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// ExtractViewModel
     ///
     /// <summary>
-    /// Provides functionality to associate the ExtractValue object
-    /// and a view.
+    /// Provides functionality to bind values to the ExtractWindow class.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -42,15 +41,13 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// with the specified arguments.
         /// </summary>
         ///
-        /// <param name="facade">Facade of models.</param>
+        /// <param name="src">Settings for extracting.</param>
         /// <param name="aggregator">Message aggregator.</param>
         /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ExtractViewModel(ExtractSetting facade,
-            Aggregator aggregator,
-            SynchronizationContext context
-        ) : base(facade, aggregator, context) { }
+        public ExtractViewModel(ExtractSetting src, Aggregator aggregator, SynchronizationContext context) :
+            base(src, aggregator, context) { }
 
         #endregion
 
@@ -61,14 +58,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// CreateDirectory
         ///
         /// <summary>
-        /// フォルダを作成するかどうかを示す値を取得または設定します。
+        /// Gets or sets a value indicating whether or not to create the
+        /// folder.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public bool CreateDirectory
         {
-            get => HasFlag(SaveMethod.Create);
-            set => SetRootDirectory(SaveMethod.Create, value);
+            get => Facade.SaveMethod.HasFlag(SaveMethod.Create);
+            set => SetSaveMethod(SaveMethod.Create, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -76,15 +74,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// SkipSingleDirectory
         ///
         /// <summary>
-        /// 単一フォルダの場合にはフォルダを作成しないかどうかを示す値を取
-        /// 得または設定します。
+        /// Gets or sets a value indicating whether or not to skip creating
+        /// a folder if the extracted result is a single folder.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         public bool SkipSingleDirectory
         {
-            get => HasFlag(SaveMethod.SkipSingleDirectory);
-            set => SetRootDirectory(SaveMethod.SkipSingleDirectory, value);
+            get => Facade.SaveMethod.HasFlag(SaveMethod.SkipSingleDirectory);
+            set => SetSaveMethod(SaveMethod.SkipSingleDirectory, value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -92,8 +90,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// DeleteSource
         ///
         /// <summary>
-        /// 解凍処理後に元のファイルを削除するかどうかを示す値を
-        /// 取得または設定します。
+        /// Gets or sets a value indicating whether or not to delete the
+        /// original file after extracting.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -108,8 +106,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Bursty
         ///
         /// <summary>
-        /// 複数の圧縮ファイルを同時に展開するかどうかを示す値を取得または
-        /// 設定します。
+        /// Gets or sets a value indicating whether or not multiple
+        /// compressed files should be extracted at the same time.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -125,26 +123,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// HasFlag
+        /// SetSaveMethod
         ///
         /// <summary>
-        /// RootDirectory が指定されたフラグを保持しているかどうかを
-        /// 示す値を取得します。
+        /// Updates the SaveMethod property with the specified arguments.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool HasFlag(SaveMethod value) => Facade.SaveMethod.HasFlag(value);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SetRootDirectory
-        ///
-        /// <summary>
-        /// RootDirectory の値を設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void SetRootDirectory(SaveMethod value, bool check)
+        public void SetSaveMethod(SaveMethod value, bool check)
         {
             if (check) Facade.SaveMethod |= value;
             else Facade.SaveMethod &= ~value;

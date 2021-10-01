@@ -50,18 +50,18 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             static void Set(ContextViewModel cs, bool enabled)
             {
                 cs.Compress            = enabled;
-                cs.CompressBZip2       = enabled;
-                cs.CompressOthers      = enabled;
-                cs.CompressGZip        = enabled;
-                cs.CompressXZ          = enabled;
-                cs.CompressSevenZip    = enabled;
+                cs.CompressBz2       = enabled;
+                cs.CompressDetails      = enabled;
+                cs.CompressGz        = enabled;
+                cs.CompressXz          = enabled;
+                cs.Compress7z    = enabled;
                 cs.CompressSfx         = enabled;
                 cs.CompressZip         = enabled;
                 cs.CompressZipPassword = enabled;
                 cs.Extract             = enabled;
                 cs.ExtractDesktop      = enabled;
                 cs.ExtractMyDocuments  = enabled;
-                cs.ExtractRuntime      = enabled;
+                cs.ExtractQuery      = enabled;
                 cs.ExtractSource       = enabled;
             }
 
@@ -81,18 +81,18 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
             src.Reset();
             Assert.That(src.Compress,            Is.True);
-            Assert.That(src.CompressBZip2,       Is.True);
-            Assert.That(src.CompressOthers,      Is.True);
-            Assert.That(src.CompressGZip,        Is.True);
-            Assert.That(src.CompressXZ,          Is.False);
-            Assert.That(src.CompressSevenZip,    Is.True);
+            Assert.That(src.CompressBz2,       Is.True);
+            Assert.That(src.CompressDetails,      Is.True);
+            Assert.That(src.CompressGz,        Is.True);
+            Assert.That(src.CompressXz,          Is.False);
+            Assert.That(src.Compress7z,    Is.True);
             Assert.That(src.CompressSfx,         Is.True);
             Assert.That(src.CompressZip,         Is.True);
             Assert.That(src.CompressZipPassword, Is.True);
             Assert.That(src.Extract,             Is.True);
             Assert.That(src.ExtractDesktop,      Is.True);
             Assert.That(src.ExtractMyDocuments,  Is.True);
-            Assert.That(src.ExtractRuntime,      Is.True);
+            Assert.That(src.ExtractQuery,      Is.True);
             Assert.That(src.ExtractSource,       Is.True);
             Assert.That(dest.Preset, Is.EqualTo(Ice.Preset.DefaultContext));
         }

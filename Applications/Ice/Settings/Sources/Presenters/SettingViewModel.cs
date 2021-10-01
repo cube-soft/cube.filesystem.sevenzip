@@ -26,8 +26,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// SettingViewModel
     ///
     /// <summary>
-    /// Represents the VM class that associates a SettingFolder object
-    /// with the main window.
+    /// Provides functionality to bind values to the MainWindow class.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -44,20 +43,20 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// specified arguments.
         /// </summary>
         ///
-        /// <param name="facade">Facade of other models.</param>
+        /// <param name="src">User settings.</param>
         /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public SettingViewModel(SettingFolder facade, SynchronizationContext context) :
-            base(facade, new Aggregator(), context)
+        public SettingViewModel(SettingFolder src, SynchronizationContext context) :
+            base(src, new(), context)
         {
-            Facade.PropertyChanged += (s, e) => OnPropertyChanged(e);
+            Compress  = new(src.Value.Compress,  Aggregator, Context);
+            Extract   = new(src.Value.Extract,   Aggregator, Context);
+            Associate = new(src.Value.Associate, Aggregator, Context);
+            Menu      = new(src.Value.Context,   Aggregator, Context);
+            Shortcut  = new(src.Value.Shortcut,  Aggregator, Context);
 
-            Compress  = new CompressViewModel(facade.Value.Compress, Aggregator, Context);
-            Extract   = new ExtractViewModel(facade.Value.Extract, Aggregator, Context);
-            Associate = new AssociateViewModel(facade.Value.Associate, Aggregator, Context);
-            Menu      = new ContextViewModel(facade.Value.Context, Aggregator, Context);
-            Shortcut  = new ShortcutViewModel(facade.Value.Shortcut, Aggregator, Context);
+            Assets.Add(new ObservableProxy(Facade, this));
         }
 
         #endregion
@@ -69,7 +68,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Compress
         ///
         /// <summary>
-        /// 圧縮の設定を扱う ViewModel を取得します。
+        /// Gets the ViewModel object for compression settings.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -80,7 +79,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Extract
         ///
         /// <summary>
-        /// 解凍の設定を扱う ViewModel を取得します。
+        /// Gets the ViewModel object for extracting settings.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -91,7 +90,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Associate
         ///
         /// <summary>
-        /// ファイルの関連付けを扱う ViewModel を取得します。
+        /// Gets the ViewModel object for settings of the file association.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -102,7 +101,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// ContextMenu
         ///
         /// <summary>
-        /// コンテキストメニューの設定を扱う ViewModel を取得します。
+        /// Gets the ViewModel object for context menu settings.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -113,8 +112,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Shortcut
         ///
         /// <summary>
-        /// デスクトップのショートカットに関する設定を扱う ViewModel を
-        /// 取得します。
+        /// Gets the ViewModel object for shortcut settings.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -125,7 +123,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Version
         ///
         /// <summary>
-        /// バージョンを表す文字列を取得します。
+        /// Gets the version text.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -136,8 +134,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// CheckUpdate
         ///
         /// <summary>
-        /// 起動時にアップデートの確認を実行するかどうかを示す値を取得
-        /// または設定します。
+        /// Gets or sets a value indicating whether or not to check for
+        /// updates at startup.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -149,30 +147,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ErrorReport
+        /// Filters
         ///
         /// <summary>
-        /// エラーレポートを表示するかどうかを示す値を取得または設定します。
+        /// Gets or sets the value to filter files and directories.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool ErrorReport
-        {
-            get => Facade.Value.ErrorReport;
-            set => Facade.Value.ErrorReport = value;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Filtering
-        ///
-        /// <summary>
-        /// 圧縮・展開時に除外するファイルまたはディレクトリ名の一覧を
-        /// 取得または設定します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Filtering
+        public string Filters
         {
             get => Transform(Facade.Value.Filters, "|", Environment.NewLine);
             set => Facade.Value.Filters = Transform(value, Environment.NewLine, "|");
@@ -183,8 +165,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// ToolTip
         ///
         /// <summary>
-        /// マウスポインタを圧縮ファイルに指定した時にファイル一覧を表示
-        /// するかどうかを示す値を取得または設定します。
+        /// Gets or sets a value to show the tooltip.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -199,8 +180,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// ToolTipCount
         ///
         /// <summary>
-        /// マウスポインタを圧縮ファイルに指定した時に一覧を表示する
-        /// ファイル数を取得または設定します。
+        /// Gets or sets the number of items to show in the tooltip.
+        /// The value is only applicable when ToolTip is enabled.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -216,29 +197,29 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Sync
+        /// Load
         ///
         /// <summary>
-        /// 実際の状況に応じて設定値を更新します。
+        /// Updates the setting values according to the actual situation.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Sync() => Shortcut.Sync();
+        public void Load() => Shortcut.Load();
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Update
+        /// Save
         ///
         /// <summary>
-        /// 現在の内容で更新します。
+        /// Saves the current settings.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Update()
+        public void Save()
         {
             Facade.Save();
-            Associate.Update();
-            Shortcut.Update();
+            Associate.Save();
+            Shortcut.Save();
         }
 
         /* ----------------------------------------------------------------- */
@@ -278,7 +259,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Transform
         ///
         /// <summary>
-        /// 文字列の書式を変換します。
+        /// Converts the format of a string.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */

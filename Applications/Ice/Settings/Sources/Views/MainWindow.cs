@@ -104,7 +104,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             Enable(ArchiveSaveOthersRadioButton, ArchiveSaveTextBox, ArchiveSaveButton);
             Enable(ExtractSaveOthersRadioButton, ExtractSaveTextBox, ExtractSaveButton);
 
-            SettingsPanel.Apply          += (s, e) => vm.Update();
+            SettingsPanel.Apply          += (s, e) => vm.Save();
             ContextResetButton.Click     += (s, e) => vm.Menu.Reset();
             ContextCustomizeButton.Click += (s, e) => vm.Menu.Customize();
             AssociateAllButton.Click     += (s, e) => vm.Associate.SelectAll();
@@ -227,11 +227,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
                 Create(nameof(AssociateSetting.SevenZip), "*.7z",    index++),
                 Create(nameof(AssociateSetting.Iso),      "*.iso",   index++),
                 Create(nameof(AssociateSetting.Tar),      "*.tar",   index++),
-                Create(nameof(AssociateSetting.GZ),       "*.gz",    index++),
+                Create(nameof(AssociateSetting.Gz),       "*.gz",    index++),
                 Create(nameof(AssociateSetting.Tgz),      "*.tgz",   index++),
-                Create(nameof(AssociateSetting.BZ2),      "*.bz2",   index++),
+                Create(nameof(AssociateSetting.Bz2),      "*.bz2",   index++),
                 Create(nameof(AssociateSetting.Tbz),      "*.tbz",   index++),
-                Create(nameof(AssociateSetting.XZ),       "*.xz",    index++),
+                Create(nameof(AssociateSetting.Xz),       "*.xz",    index++),
                 Create(nameof(AssociateSetting.Txz),      "*.txz",   index++),
 
                 // others

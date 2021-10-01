@@ -24,8 +24,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// CompressViewModel
     ///
     /// <summary>
-    /// Provides functionality to associate the CompressValue object
-    /// and a view.
+    /// Provides functionality to bind values to the CompressWindow class.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -42,15 +41,13 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// with the specified arguments.
         /// </summary>
         ///
-        /// <param name="facade">Facade of models.</param>
+        /// <param name="src">Settings for compression.</param>
         /// <param name="aggregator">Message aggregator.</param>
         /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressViewModel(CompressSetting facade,
-            Aggregator aggregator,
-            SynchronizationContext context
-        ) : base(facade, aggregator, context) { }
+        public CompressViewModel(CompressSetting src, Aggregator aggregator, SynchronizationContext context) :
+            base(src, aggregator, context) { }
 
         #endregion
 
@@ -61,8 +58,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// UseUtf8
         ///
         /// <summary>
-        /// ファイル名を UTF-8 に変換するかどうかを示す値を取得または
-        /// 設定します。
+        /// Gets or sets a value indicating whether to convert the file name
+        /// to UTF-8 or not.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -77,9 +74,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// OverwritePrompt
         ///
         /// <summary>
-        /// 保存先に指定されたパスに同名のファイルが存在している時、
-        /// 名前を付けて保存ダイアログを表示するかどうかを示す値を取得
-        /// または設定します。
+        /// Gets or sets a value indicating whether or not to show the
+        /// Save As dialog when a file with the same name exists in the
+        /// path specified as the destination.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */

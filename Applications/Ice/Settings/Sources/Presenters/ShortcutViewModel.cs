@@ -24,8 +24,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// ShortcutViewModel
     ///
     /// <summary>
-    /// Provides functionality to associate the ShortcutValue object
-    /// and a view.
+    /// Provides functionality to bind values to view components for the
+    /// shortcut settings.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -42,17 +42,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// with the specified arguments.
         /// </summary>
         ///
-        /// <param name="facade">Facade of models.</param>
+        /// <param name="src">Shortcut settings.</param>
         /// <param name="aggregator">Message aggregator.</param>
         /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ShortcutViewModel(ShortcutSetting facade,
-            Aggregator aggregator,
-            SynchronizationContext context
-        ) : base(facade, aggregator, context)
+        public ShortcutViewModel(ShortcutSetting src, Aggregator aggregator, SynchronizationContext context) :
+            base(src, aggregator, context)
         {
-            Facade.PropertyChanged += (s, e) => OnPropertyChanged(e);
+            Assets.Add(new ObservableProxy(Facade, this));
         }
 
         #endregion
@@ -129,26 +127,26 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Sync
+        /// Load
         ///
         /// <summary>
-        /// ショートカットが実際に存在するかどうかの結果を設定値に反映
-        /// させます。
+        /// Applies the current shortcut link existence to properties of
+        /// the object.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Sync() => Facade.Load();
+        public void Load() => Facade.Load();
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Update
+        /// Save
         ///
         /// <summary>
-        /// ユーザ設定に関わる処理を実行します。
+        /// Creates or removes shortcut links.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Update() => Facade.Save();
+        public void Save() => Facade.Save();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -176,7 +174,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Set
         ///
         /// <summary>
-        /// PresetMenu に値を設定します。
+        /// Updates the Preset property with the specified arguments.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */

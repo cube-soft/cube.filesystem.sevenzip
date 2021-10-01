@@ -24,8 +24,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// ArchiveViewModel
     ///
     /// <summary>
-    /// Represents the base class of the compressing and extracting
-    /// view-models.
+    /// Represents the base class for the compressing or extracting
+    /// ViewModels.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -43,17 +43,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// the specified arguments.
         /// </summary>
         ///
-        /// <param name="facade">Facade of models.</param>
+        /// <param name="src">Facade object of other models.</param>
         /// <param name="aggregator">Message aggregator.</param>
         /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveViewModel(TModel facade,
-            Aggregator aggregator,
-            SynchronizationContext context
-        ) : base(facade, aggregator, context)
+        public ArchiveViewModel(TModel src, Aggregator aggregator, SynchronizationContext context) :
+            base(src, aggregator, context)
         {
-            Facade.PropertyChanged += (s, e) => OnPropertyChanged(e);
+            Assets.Add(new ObservableProxy(Facade, this));
         }
 
         #endregion
@@ -65,7 +63,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// SaveOthers
         ///
         /// <summary>
-        /// SaveLocation.Others かどうかを示す値を取得または設定します。
+        /// Gets or sets a value indicating whether or not the value of
+        /// SaveLocation property is equal to Others.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -80,7 +79,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// SaveSource
         ///
         /// <summary>
-        /// SaveLocation.Source かどうかを示す値を取得または設定します。
+        /// Gets or sets a value indicating whether or not the value of
+        /// SaveLocation property is equal to Source.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -92,14 +92,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SaveRuntime
+        /// SaveQuery
         ///
         /// <summary>
-        /// SaveLocation.Runtime かどうかを示す値を取得または設定します。
+        /// Gets or sets a value indicating whether or not the value of
+        /// SaveLocation property is equal to Query.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool SaveRuntime
+        public bool SaveQuery
         {
             get => Facade.SaveLocation == SaveLocation.Query;
             set => SetSaveLocation(SaveLocation.Query, value);
@@ -110,7 +111,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// SaveDirectory
         ///
         /// <summary>
-        /// 保存ディレクトリのパスを取得または設定します。
+        /// Gets or sets the path of the save directory.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -125,8 +126,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Filtering
         ///
         /// <summary>
-        /// 特定のファイルまたはディレクトリをフィルタリングするかどうかを
-        /// 示す値を取得または設定します。
+        /// Gets or sets a value indicating whether provided files or
+        /// directories should be filtered.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -141,8 +142,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// OpenDirectory
         ///
         /// <summary>
-        /// 圧縮処理終了後にフォルダを開くかどうかを示す値を取得
-        /// または設定します。
+        /// Gets or sets a value indicating whether or not to open the
+        /// folder after the process is finished.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -161,8 +162,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// SkipDesktop
         ///
         /// <summary>
-        /// 後処理時に対象がデスクトップの場合にスキップするかどうかを
-        /// 示す値を取得または設定します。
+        /// Gets or sets a value indicating whether or not to skip opening
+        /// the directory if it is a desktop after the process is finished.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -202,13 +203,13 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// SetSaveLocation
         ///
         /// <summary>
-        /// SaveLocation の値を設定します。
+        /// Sets the specified value to the SaveLocation property.
         /// </summary>
         ///
         /// <remarks>
-        /// SaveLocation は GUI 上は RadioButton で表現されています。
-        /// そこで、SetSaveLocation() では Checked = true のタイミングで
-        /// 値の内容を更新する事とします。
+        /// SaveLocation is represented by a RadioButton in the GUI.
+        /// Therefore, in the method, we update the content of the value
+        /// when Checked = true.
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */

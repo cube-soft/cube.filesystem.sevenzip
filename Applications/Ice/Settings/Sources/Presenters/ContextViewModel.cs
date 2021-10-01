@@ -24,8 +24,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// ContextViewModel
     ///
     /// <summary>
-    /// Provides functionality to associate the ContextSetting object
-    /// and a view.
+    /// Provides functionality to bind values to view components for the
+    /// context menu settings.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -42,20 +42,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// with the specified arguments.
         /// </summary>
         ///
-        /// <param name="facade">Facade of models.</param>
+        /// <param name="src">Context menu settings.</param>
         /// <param name="aggregator">Message aggregator.</param>
         /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ContextViewModel(ContextSetting facade,
-            Aggregator aggregator,
-            SynchronizationContext context
-        ) : base(facade, aggregator, context)
+        public ContextViewModel(ContextSetting src, Aggregator aggregator, SynchronizationContext context) :
+            base(src, aggregator, context)
         {
-            Facade.PropertyChanged += (s, e) => {
-                OnPropertyChanged(e);
-                if (e.PropertyName == nameof(ContextSetting.UseCustom)) Refresh(nameof(PresetEnabled));
-            };
+            Assets.Add(new ObservableProxy(Facade, this));
         }
 
         #endregion
@@ -67,7 +62,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// PresetEnabled
         ///
         /// <summary>
-        /// プリセット項目が有効化されているかどうかを示す値を取得します。
+        /// Gets a value indicating whether or not the default setting is
+        /// enabled.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -80,7 +76,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Compress
         ///
         /// <summary>
-        /// 圧縮の項目が有効かどうかを示す値を取得または設定します。
+        /// Gets or sets a value indicating whether or not the Compress
+        /// flag is enabled.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -95,7 +92,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// CompressZip
         ///
         /// <summary>
-        /// Zip で圧縮の項目が有効かどうかを示す値を取得または設定します。
+        /// Gets or sets a value indicating whether or not the CompressZip
+        /// flag is enabled.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -110,8 +108,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// CompressZipPassword
         ///
         /// <summary>
-        /// パスワード付 Zip で圧縮の項目が有効かどうかを示す値を取得
-        /// または設定します。
+        /// Gets or sets a value indicating whether or not the
+        /// CompressZipPassword flag is enabled.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -123,14 +121,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CompressSevenZip
+        /// Compress7z
         ///
         /// <summary>
-        /// 7z で圧縮の項目が有効かどうかを示す値を取得または設定します。
+        /// Gets or sets a value indicating whether or not the Compress7z
+        /// flag is enabled.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool CompressSevenZip
+        public bool Compress7z
         {
             get => Facade.Preset.HasFlag(Preset.Compress7z);
             set => Set(Preset.Compress7z, value);
@@ -138,14 +137,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CompressGZip
+        /// CompressGz
         ///
         /// <summary>
-        /// GZip で圧縮の項目が有効かどうかを示す値を取得または設定します。
+        /// Gets or sets a value indicating whether or not the CompressGz
+        /// flag is enabled.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool CompressGZip
+        public bool CompressGz
         {
             get => Facade.Preset.HasFlag(Preset.CompressGz);
             set => Set(Preset.CompressGz, value);
@@ -153,14 +153,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CompressBZip2
+        /// CompressBz2
         ///
         /// <summary>
-        /// BZip2 で圧縮の項目が有効かどうかを示す値を取得または設定します。
+        /// Gets or sets a value indicating whether or not the CompressBz2
+        /// flag is enabled.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool CompressBZip2
+        public bool CompressBz2
         {
             get => Facade.Preset.HasFlag(Preset.CompressBz2);
             set => Set(Preset.CompressBz2, value);
@@ -168,14 +169,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CompressXZ
+        /// CompressXz
         ///
         /// <summary>
-        /// XZ で圧縮の項目が有効かどうかを示す値を取得または設定します。
+        /// Gets or sets a value indicating whether or not the CompressXz
+        /// flag is enabled.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool CompressXZ
+        public bool CompressXz
         {
             get => Facade.Preset.HasFlag(Preset.CompressXz);
             set => Set(Preset.CompressXz, value);
@@ -186,8 +188,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// CompressSfx
         ///
         /// <summary>
-        /// 自己解凍形式で圧縮の項目が有効かどうかを示す値を取得または
-        /// 設定します。
+        /// Gets or sets a value indicating whether or not the CompressSfx
+        /// flag is enabled.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -199,15 +201,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CompressOthers
+        /// CompressDetails
         ///
         /// <summary>
-        /// 詳細を設定して圧縮の項目が有効かどうかを示す値を取得または
-        /// 設定します。
+        /// Gets or sets a value indicating whether or not the CompressDetails
+        /// flag is enabled.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool CompressOthers
+        public bool CompressDetails
         {
             get => Facade.Preset.HasFlag(Preset.CompressDetails);
             set => Set(Preset.CompressDetails, value);
@@ -222,7 +224,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Extract
         ///
         /// <summary>
-        /// 解凍の項目が有効かどうかを示す値を取得または設定します。
+        /// Gets or sets a value indicating whether or not the Extract
+        /// flag is enabled.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -237,7 +240,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// ExtractSource
         ///
         /// <summary>
-        /// ここに解凍の項目が有効かどうかを示す値を取得または設定します。
+        /// Gets or sets a value indicating whether or not the ExtractSource
+        /// flag is enabled.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -252,8 +256,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// ExtractDesktop
         ///
         /// <summary>
-        /// デスクトップに解凍の項目が有効かどうかを示す値を取得または
-        /// 設定します。
+        /// Gets or sets a value indicating whether or not the ExtractDesktop
+        /// flag is enabled.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -268,8 +272,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// ExtractMyDocuments
         ///
         /// <summary>
-        /// マイドキュメントに解凍の項目が有効かどうかを示す値を取得
-        /// または設定します。
+        /// Gets or sets a value indicating whether or not the
+        /// ExtractMyDocuments flag is enabled.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -281,15 +285,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// ExtractRuntime
+        /// ExtractQuery
         ///
         /// <summary>
-        /// 場所を指定して解凍の項目が有効かどうかを示す値を取得または
-        /// 設定します。
+        /// Gets or sets a value indicating whether or not the ExtractQuery
+        /// flag is enabled.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool ExtractRuntime
+        public bool ExtractQuery
         {
             get => Facade.Preset.HasFlag(Preset.ExtractQuery);
             set => Set(Preset.ExtractQuery, value);
@@ -306,7 +310,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Reset
         ///
         /// <summary>
-        /// コンテキストメニューを規定値に再設定します。
+        /// Resets the context menu settings to the default value.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -317,7 +321,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Customize
         ///
         /// <summary>
-        /// カスタマイズを実行します。
+        /// Shows the customize menu.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -358,7 +362,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Set
         ///
         /// <summary>
-        /// PresetMenu に値を設定します。
+        /// Updates the Preset property with the specified arguments.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
