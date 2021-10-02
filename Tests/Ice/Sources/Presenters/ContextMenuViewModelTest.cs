@@ -72,27 +72,27 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var dest = m.Value.Context;
 
             Set(src, true);
-            Assert.That(src.PresetEnabled, Is.True);
+            Assert.That(src.UsePreset, Is.True);
             Assert.That((uint)dest.Preset, Is.EqualTo(0x000fff3));
 
             Set(src, false);
-            Assert.That(src.PresetEnabled, Is.True);
+            Assert.That(src.UsePreset, Is.True);
             Assert.That(dest.Preset, Is.EqualTo(Ice.Preset.None));
 
             src.Reset();
             Assert.That(src.Compress,            Is.True);
-            Assert.That(src.CompressBz2,       Is.True);
-            Assert.That(src.CompressDetails,      Is.True);
-            Assert.That(src.CompressGz,        Is.True);
+            Assert.That(src.CompressBz2,         Is.True);
+            Assert.That(src.CompressDetails,     Is.True);
+            Assert.That(src.CompressGz,          Is.True);
             Assert.That(src.CompressXz,          Is.False);
-            Assert.That(src.Compress7z,    Is.True);
+            Assert.That(src.Compress7z,          Is.True);
             Assert.That(src.CompressSfx,         Is.True);
             Assert.That(src.CompressZip,         Is.True);
             Assert.That(src.CompressZipPassword, Is.True);
             Assert.That(src.Extract,             Is.True);
             Assert.That(src.ExtractDesktop,      Is.True);
             Assert.That(src.ExtractMyDocuments,  Is.True);
-            Assert.That(src.ExtractQuery,      Is.True);
+            Assert.That(src.ExtractQuery,        Is.True);
             Assert.That(src.ExtractSource,       Is.True);
             Assert.That(dest.Preset, Is.EqualTo(Ice.Preset.DefaultContext));
         }

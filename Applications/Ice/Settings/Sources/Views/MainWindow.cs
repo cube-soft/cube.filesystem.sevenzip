@@ -85,7 +85,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             Behaviors.Add(new ClickBehavior(ContextCustomizeButton, vm.Menu.Customize));
             Behaviors.Add(new ClickBehavior(AssociateAllButton, vm.Associate.SelectAll));
             Behaviors.Add(new ClickBehavior(AssociateClearButton, vm.Associate.Clear));
-            Behaviors.Add(new ClickBehavior(ArchiveSaveButton, vm.Compress.Browse));
+            Behaviors.Add(new ClickBehavior(CompressSaveButton, vm.Compress.Browse));
             Behaviors.Add(new ClickBehavior(ExtractSaveButton, vm.Extract.Browse));
 
             _version.Version = vm.Version;

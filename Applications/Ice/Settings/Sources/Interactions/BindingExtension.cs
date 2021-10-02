@@ -30,7 +30,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public static class BindingSourceExtension
+    internal static class BindingSourceExtension
     {
         #region Methods
 

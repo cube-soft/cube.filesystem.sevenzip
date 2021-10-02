@@ -30,17 +30,19 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Invokes the binding settings.
         /// </summary>
         ///
+        /// <param name="vm">VM object to bind.</param>
+        ///
         /* ----------------------------------------------------------------- */
         private void BindCore(SettingViewModel vm)
         {
             // General
             var s0 = vm;
             var b0 = Behaviors.Hook(new BindingSource(s0, ""));
-            b0.Bind(nameof(s0.Filters),      FilterTextBox,        nameof(TextBox.Text));
-            b0.Bind(nameof(s0.ToolTip),      ToolTipCheckBox,      nameof(CheckBox.Checked));
-            b0.Bind(nameof(s0.ToolTip),      ToolTipNumericUpDown, nameof(Enabled));
-            b0.Bind(nameof(s0.ToolTipCount), ToolTipNumericUpDown, nameof(NumericUpDown.Value));
-            b0.Bind(nameof(s0.CheckUpdate),  UpdateCheckBox,       nameof(CheckBox.Checked));
+            b0.Bind(nameof(s0.Filters),      FilterTextBox,   nameof(TextBox.Text));
+            b0.Bind(nameof(s0.ToolTip),      ToolTipCheckBox, nameof(CheckBox.Checked));
+            b0.Bind(nameof(s0.ToolTip),      ToolTipNumeric,  nameof(Enabled));
+            b0.Bind(nameof(s0.ToolTipCount), ToolTipNumeric,  nameof(NumericUpDown.Value));
+            b0.Bind(nameof(s0.CheckUpdate),  UpdateCheckBox,  nameof(CheckBox.Checked));
 
             // File association
             var b1 = Behaviors.Hook(new BindingSource(vm.Associate, ""));
@@ -49,53 +51,53 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             // Context menu
             var s2 = vm.Menu;
             var b2 = Behaviors.Hook(new BindingSource(s2, ""));
-            b2.Bind(nameof(s2.PresetEnabled), ContextPresetPanel,     nameof(Enabled));
-            b2.Bind(nameof(s2.Compress),      ContextArchiveCheckBox, nameof(CheckBox.Checked));
-            b2.Bind(nameof(s2.Compress),      ContextArchivePanel,    nameof(Enabled));
-            b2.Bind(nameof(s2.Extract),       ContextExtractCheckBox, nameof(CheckBox.Checked));
-            b2.Bind(nameof(s2.Extract),       ContextExtractPanel,    nameof(Enabled));
+            b2.Bind(nameof(s2.UsePreset), ContextPresetPanel,      nameof(Enabled));
+            b2.Bind(nameof(s2.Compress),  ContextCompressCheckBox, nameof(CheckBox.Checked));
+            b2.Bind(nameof(s2.Compress),  ContextCompressPanel,    nameof(Enabled));
+            b2.Bind(nameof(s2.Extract),   ContextExtractCheckBox,  nameof(CheckBox.Checked));
+            b2.Bind(nameof(s2.Extract),   ContextExtractPanel,     nameof(Enabled));
             BindContext(b2, 0);
 
             // Desktop shortcut
             var s3 = vm.Shortcut;
             var b3 = Behaviors.Hook(new BindingSource(s3, ""));
-            b3.Bind(nameof(s3.Compress),       ShortcutArchiveCheckBox,  nameof(CheckBox.Checked));
-            b3.Bind(nameof(s3.Compress),       ShortcutArchiveComboBox,  nameof(Enabled));
-            b3.Bind(nameof(s3.CompressOption), ShortcutArchiveComboBox,  nameof(ComboBox.SelectedValue));
-            b3.Bind(nameof(s3.Extract),        ShortcutExtractCheckBox,  nameof(CheckBox.Checked));
-            b3.Bind(nameof(s3.Settings),       ShortcutSettingsCheckBox, nameof(CheckBox.Checked));
-            ShortcutArchiveComboBox.Bind(Resource.Shortcuts);
+            b3.Bind(nameof(s3.Compress),        ShortcutCompressCheckBox,  nameof(CheckBox.Checked));
+            b3.Bind(nameof(s3.Compress),        ShortcutCompressComboBox,  nameof(Enabled));
+            b3.Bind(nameof(s3.CompressOptions), ShortcutCompressComboBox,  nameof(ComboBox.SelectedValue));
+            b3.Bind(nameof(s3.Extract),         ShortcutExtractCheckBox,   nameof(CheckBox.Checked));
+            b3.Bind(nameof(s3.Settings),        ShortcutSettingsCheckBox,  nameof(CheckBox.Checked));
+            ShortcutCompressComboBox.Bind(Resource.Shortcuts);
 
             // Compression
             var s4 = vm.Compress;
             var b4 = Behaviors.Hook(new BindingSource(s4, ""));
-            b4.Bind(nameof(s4.SaveSource),      ArchiveSaveSourceRadioButton , nameof(RadioButton.Checked));
-            b4.Bind(nameof(s4.SaveQuery),       ArchiveSaveRuntimeRadioButton, nameof(RadioButton.Checked));
-            b4.Bind(nameof(s4.SaveOthers),      ArchiveSaveOthersRadioButton,  nameof(RadioButton.Checked));
-            b4.Bind(nameof(s4.SaveDirectory),   ArchiveSaveTextBox,            nameof(TextBox.Text));
-            b4.Bind(nameof(s4.Filtering),       ArchiveFilterCheckBox,         nameof(CheckBox.Checked));
-            b4.Bind(nameof(s4.UseUtf8),         UseUtf8CheckBox,               nameof(CheckBox.Checked));
-            b4.Bind(nameof(s4.OverwritePrompt), OverwritePromptCheckBox,       nameof(CheckBox.Checked));
-            b4.Bind(nameof(s4.OpenDirectory),   ArchiveOpenDirectoryCheckBox,  nameof(CheckBox.Checked));
-            b4.Bind(nameof(s4.OpenDirectory),   ArchiveOpenSmartCheckBox,      nameof(Enabled));
-            b4.Bind(nameof(s4.SkipDesktop),     ArchiveOpenSmartCheckBox,      nameof(CheckBox.Checked));
+            b4.Bind(nameof(s4.SaveSource),      CompressSaveSourceRadioButton , nameof(RadioButton.Checked));
+            b4.Bind(nameof(s4.SaveQuery),       CompressSaveQueryRadioButton,   nameof(RadioButton.Checked));
+            b4.Bind(nameof(s4.SaveOthers),      CompressSaveRadioButton,        nameof(RadioButton.Checked));
+            b4.Bind(nameof(s4.SaveDirectory),   CompressSaveTextBox,            nameof(TextBox.Text));
+            b4.Bind(nameof(s4.Filtering),       CompressFilterCheckBox,         nameof(CheckBox.Checked));
+            b4.Bind(nameof(s4.UseUtf8),         CompressUtf8CheckBox,           nameof(CheckBox.Checked));
+            b4.Bind(nameof(s4.OverwritePrompt), CompressOverwriteCheckBox,      nameof(CheckBox.Checked));
+            b4.Bind(nameof(s4.OpenDirectory),   CompressOpenCheckBox,           nameof(CheckBox.Checked));
+            b4.Bind(nameof(s4.OpenDirectory),   CompressOpenSmartCheckBox,      nameof(Enabled));
+            b4.Bind(nameof(s4.SkipDesktop),     CompressOpenSmartCheckBox,      nameof(CheckBox.Checked));
 
             // Extracting
             var s5 = vm.Extract;
             var b5 = Behaviors.Hook(new BindingSource(s5, ""));
-            b5.Bind(nameof(s5.SaveSource),          ExtractSaveSourceRadioButton,   nameof(RadioButton.Checked));
-            b5.Bind(nameof(s5.SaveQuery),           ExtractSaveRuntimeRadioButton,  nameof(RadioButton.Checked));
-            b5.Bind(nameof(s5.SaveOthers),          ExtractSaveOthersRadioButton,   nameof(RadioButton.Checked));
-            b5.Bind(nameof(s5.SaveDirectory),       ExtractSaveTextBox,             nameof(TextBox.Text));
-            b5.Bind(nameof(s5.Filtering),           ExtractFilterCheckBox,          nameof(CheckBox.Checked));
-            b5.Bind(nameof(s5.DeleteSource),        ExtractDeleteSourceCheckBox,    nameof(CheckBox.Checked));
-            b5.Bind(nameof(s5.Bursty),              BurstyCheckBox,                 nameof(CheckBox.Checked));
-            b5.Bind(nameof(s5.CreateDirectory),     ExtractCreateDirectoryCheckBox, nameof(CheckBox.Checked));
-            b5.Bind(nameof(s5.CreateDirectory),     ExtractCreateSmartCheckBox,     nameof(Enabled));
-            b5.Bind(nameof(s5.SkipSingleDirectory), ExtractCreateSmartCheckBox,     nameof(CheckBox.Checked));
-            b5.Bind(nameof(s5.OpenDirectory),       ExtractOpenDirectoryCheckBox,   nameof(CheckBox.Checked));
-            b5.Bind(nameof(s5.OpenDirectory),       ExtractOpenSmartCheckBox,       nameof(Enabled));
-            b5.Bind(nameof(s5.SkipDesktop),         ExtractOpenSmartCheckBox,       nameof(CheckBox.Checked));
+            b5.Bind(nameof(s5.SaveSource),          ExtractSaveSourceRadioButton, nameof(RadioButton.Checked));
+            b5.Bind(nameof(s5.SaveQuery),           ExtractSaveQueryRadioButton,  nameof(RadioButton.Checked));
+            b5.Bind(nameof(s5.SaveOthers),          ExtractSaveRadioButton,       nameof(RadioButton.Checked));
+            b5.Bind(nameof(s5.SaveDirectory),       ExtractSaveTextBox,           nameof(TextBox.Text));
+            b5.Bind(nameof(s5.Filtering),           ExtractFilterCheckBox,        nameof(CheckBox.Checked));
+            b5.Bind(nameof(s5.DeleteSource),        ExtractDeleteCheckBox,        nameof(CheckBox.Checked));
+            b5.Bind(nameof(s5.Bursty),              ExtractBurstCheckBox,         nameof(CheckBox.Checked));
+            b5.Bind(nameof(s5.CreateDirectory),     ExtractCreateCheckBox,        nameof(CheckBox.Checked));
+            b5.Bind(nameof(s5.CreateDirectory),     ExtractCreateSmartCheckBox,   nameof(Enabled));
+            b5.Bind(nameof(s5.SkipSingleDirectory), ExtractCreateSmartCheckBox,   nameof(CheckBox.Checked));
+            b5.Bind(nameof(s5.OpenDirectory),       ExtractOpenCheckBox,          nameof(CheckBox.Checked));
+            b5.Bind(nameof(s5.OpenDirectory),       ExtractOpenSmartCheckBox,     nameof(Enabled));
+            b5.Bind(nameof(s5.SkipDesktop),         ExtractOpenSmartCheckBox,     nameof(CheckBox.Checked));
         }
 
         /* ----------------------------------------------------------------- */
@@ -107,39 +109,42 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// binding settings.
         /// </summary>
         ///
+        /// <param name="src">Binding source.</param>
+        /// <param name="start">Start tab index.</param>
+        ///
         /* ----------------------------------------------------------------- */
-        private void BindAssociate(BindingSource src, int index) => AssociateMenuPanel.Controls.AddRange(new[]
+        private void BindAssociate(BindingSource src, int start) => AssociateMenuPanel.Controls.AddRange(new[]
         {
             // well-known
-            src.Bind(nameof(AssociateSetting.Zip),      "*.zip",   index++),
-            src.Bind(nameof(AssociateSetting.Lzh),      "*.lzh",   index++),
-            src.Bind(nameof(AssociateSetting.Rar),      "*.rar",   index++),
-            src.Bind(nameof(AssociateSetting.SevenZip), "*.7z",    index++),
-            src.Bind(nameof(AssociateSetting.Iso),      "*.iso",   index++),
-            src.Bind(nameof(AssociateSetting.Tar),      "*.tar",   index++),
-            src.Bind(nameof(AssociateSetting.Gz),       "*.gz",    index++),
-            src.Bind(nameof(AssociateSetting.Tgz),      "*.tgz",   index++),
-            src.Bind(nameof(AssociateSetting.Bz2),      "*.bz2",   index++),
-            src.Bind(nameof(AssociateSetting.Tbz),      "*.tbz",   index++),
-            src.Bind(nameof(AssociateSetting.Xz),       "*.xz",    index++),
-            src.Bind(nameof(AssociateSetting.Txz),      "*.txz",   index++),
+            src.Bind(nameof(AssociateSetting.Zip),      "*.zip",   start++),
+            src.Bind(nameof(AssociateSetting.Lzh),      "*.lzh",   start++),
+            src.Bind(nameof(AssociateSetting.Rar),      "*.rar",   start++),
+            src.Bind(nameof(AssociateSetting.SevenZip), "*.7z",    start++),
+            src.Bind(nameof(AssociateSetting.Iso),      "*.iso",   start++),
+            src.Bind(nameof(AssociateSetting.Tar),      "*.tar",   start++),
+            src.Bind(nameof(AssociateSetting.Gz),       "*.gz",    start++),
+            src.Bind(nameof(AssociateSetting.Tgz),      "*.tgz",   start++),
+            src.Bind(nameof(AssociateSetting.Bz2),      "*.bz2",   start++),
+            src.Bind(nameof(AssociateSetting.Tbz),      "*.tbz",   start++),
+            src.Bind(nameof(AssociateSetting.Xz),       "*.xz",    start++),
+            src.Bind(nameof(AssociateSetting.Txz),      "*.txz",   start++),
 
             // others
-            src.Bind(nameof(AssociateSetting.Arj),      "*.arj",   index++),
-            src.Bind(nameof(AssociateSetting.Cab),      "*.cab",   index++),
-            src.Bind(nameof(AssociateSetting.Chm),      "*.chm",   index++),
-            src.Bind(nameof(AssociateSetting.Cpio),     "*.cpio",  index++),
-            src.Bind(nameof(AssociateSetting.Deb),      "*.deb",   index++),
-            src.Bind(nameof(AssociateSetting.Dmg),      "*.dmg",   index++),
-            src.Bind(nameof(AssociateSetting.Hfs),      "*.hfs",   index++),
-            src.Bind(nameof(AssociateSetting.Jar),      "*.jar",   index++),
-            src.Bind(nameof(AssociateSetting.Nupkg),    "*.nupkg", index++),
-            src.Bind(nameof(AssociateSetting.Rpm),      "*.rpm",   index++),
-            src.Bind(nameof(AssociateSetting.Vhd),      "*.vhd",   index++),
-            src.Bind(nameof(AssociateSetting.Vmdk),     "*.vmdk",  index++),
-            src.Bind(nameof(AssociateSetting.Wim),      "*.wim",   index++),
-            src.Bind(nameof(AssociateSetting.Xar),      "*.xar",   index++),
-            src.Bind(nameof(AssociateSetting.Z),        "*.z",     index++),
+            src.Bind(nameof(AssociateSetting.Arj),      "*.arj",   start++),
+            src.Bind(nameof(AssociateSetting.Cab),      "*.cab",   start++),
+            src.Bind(nameof(AssociateSetting.Chm),      "*.chm",   start++),
+            src.Bind(nameof(AssociateSetting.Cpio),     "*.cpio",  start++),
+            src.Bind(nameof(AssociateSetting.Deb),      "*.deb",   start++),
+            src.Bind(nameof(AssociateSetting.Dmg),      "*.dmg",   start++),
+            src.Bind(nameof(AssociateSetting.Hfs),      "*.hfs",   start++),
+            src.Bind(nameof(AssociateSetting.Jar),      "*.jar",   start++),
+            src.Bind(nameof(AssociateSetting.Nupkg),    "*.nupkg", start++),
+            src.Bind(nameof(AssociateSetting.Rpm),      "*.rpm",   start++),
+            src.Bind(nameof(AssociateSetting.Vhd),      "*.vhd",   start++),
+            src.Bind(nameof(AssociateSetting.Vmdk),     "*.vmdk",  start++),
+            src.Bind(nameof(AssociateSetting.Wim),      "*.wim",   start++),
+            src.Bind(nameof(AssociateSetting.Xar),      "*.xar",   start++),
+            src.Bind(nameof(AssociateSetting.Z),        "*.z",     start++),
         });
 
         /* ----------------------------------------------------------------- */
@@ -151,10 +156,13 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// binding settings.
         /// </summary>
         ///
+        /// <param name="src">Binding source.</param>
+        /// <param name="start">Start tab index.</param>
+        ///
         /* ----------------------------------------------------------------- */
         private void BindContext(BindingSource src, int start)
         {
-            ContextArchivePanel.Controls.AddRange(new[]
+            ContextCompressPanel.Controls.AddRange(new[]
             {
                 src.Bind(Preset.CompressZip,         Properties.Resources.MenuZip,         start++),
                 src.Bind(Preset.CompressZipPassword, Properties.Resources.MenuZipPassword, start++),

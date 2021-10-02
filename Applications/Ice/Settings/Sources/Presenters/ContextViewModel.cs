@@ -59,7 +59,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// PresetEnabled
+        /// UsePreset
         ///
         /// <summary>
         /// Gets a value indicating whether or not the default setting is
@@ -67,7 +67,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public bool PresetEnabled => !Facade.UseCustom;
+        public bool UsePreset => !Facade.UseCustom;
 
         #region Compress
 

@@ -62,7 +62,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Compress
         ///
         /// <summary>
-        /// 圧縮の項目が有効かどうかを示す値を取得または設定します。
+        /// Gets or sets a value indicating whether the compression menu is
+        /// enabled or not.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -77,7 +78,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Extract
         ///
         /// <summary>
-        /// 解凍の項目が有効かどうかを示す値を取得または設定します。
+        /// Gets or sets a value indicating whether the extract menu is
+        /// enabled or not.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -92,7 +94,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Settings
         ///
         /// <summary>
-        /// 設定の項目が有効かどうかを示す値を取得または設定します。
+        /// Gets or sets a value indicating whether the settings menu is
+        /// enabled or not.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -104,14 +107,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CompressOption
+        /// CompressOptions
         ///
         /// <summary>
-        /// 圧縮オプションを取得または設定します。
+        /// Gets or sets options for the compression.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Preset CompressOption
+        public Preset CompressOptions
         {
             get => Facade.Preset & Preset.CompressMask;
             set
