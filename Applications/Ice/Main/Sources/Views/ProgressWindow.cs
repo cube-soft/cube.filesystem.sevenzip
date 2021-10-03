@@ -47,14 +47,6 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             InitializeComponent();
             _taskbar = new(this);
-
-            Behaviors.Add(new ClickBehavior(ExitButton, Close));
-
-            // Manual bindings.
-            Bind(nameof(Value));
-            Bind(nameof(Unit));
-            Bind(nameof(Cancelable));
-            Bind(nameof(Suspended));
         }
 
         #endregion
@@ -166,7 +158,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             if (src is not ProgressViewModel vm) return;
 
-            MainBindingSource.DataSource = vm;
+            BindCore(vm);
 
             Behaviors.Add(new DialogBehavior(vm));
             Behaviors.Add(new OpenDirectoryBehavior(vm));
@@ -176,6 +168,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             Behaviors.Add(new CloseBehavior(this, vm));
             Behaviors.Add(new ShownBehavior(this, vm.Start));
             Behaviors.Add(new ClickBehavior(SuspendButton, vm.SuspendOrResume));
+            Behaviors.Add(new ClickBehavior(ExitButton, Close));
             Behaviors.Add(new ShowDialogBehavior<CompressSettingWindow, CompressSettingViewModel>(vm));
         }
 
@@ -185,15 +178,30 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Bind
+        /// BindCore
         ///
         /// <summary>
-        /// Adds the binding settings with the specified name.
+        /// Invokes the binding settings.
         /// </summary>
         ///
+        /// <param name="vm">VM object to bind.</param>
+        ///
         /* ----------------------------------------------------------------- */
-        private void Bind(string name) =>
-            DataBindings.Add(name, MainBindingSource, name, false, DataSourceUpdateMode.OnPropertyChanged);
+        private void BindCore(ProgressViewModel vm)
+        {
+            var src = Behaviors.Hook(new BindingSource(vm, ""));
+
+            src.Bind(nameof(vm.Value),      this, nameof(Value));
+            src.Bind(nameof(vm.Unit),       this, nameof(Unit));
+            src.Bind(nameof(vm.Cancelable), this, nameof(Cancelable));
+            src.Bind(nameof(vm.Suspended),  this, nameof(Suspended));
+            src.Bind(nameof(vm.Title),      this, nameof(Text));
+
+            src.Bind(nameof(vm.Text),      StatusLabel, nameof(Label.Text));
+            src.Bind(nameof(vm.Count),     CountLabel,  nameof(Label.Text));
+            src.Bind(nameof(vm.Elapsed),   ElapseLabel, nameof(Label.Text));
+            src.Bind(nameof(vm.Remaining), RemainLabel, nameof(Label.Text));
+        }
 
         #endregion
 

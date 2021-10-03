@@ -28,11 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProgressWindow));
             this.RootPanel = new System.Windows.Forms.TableLayoutPanel();
             this.RemainLabel = new System.Windows.Forms.Label();
-            this.MainBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.CountLabel = new System.Windows.Forms.Label();
             this.MainProgressBar = new System.Windows.Forms.ProgressBar();
             this.ElapseLabel = new System.Windows.Forms.Label();
@@ -42,7 +40,6 @@
             this.SuspendButton = new System.Windows.Forms.Button();
             this.ExitButton = new System.Windows.Forms.Button();
             this.RootPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.MainBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.HeaderPictureBox)).BeginInit();
             this.ButtonsPanel.SuspendLayout();
             this.SuspendLayout();
@@ -76,7 +73,6 @@
             // RemainLabel
             //
             this.RemainLabel.AutoSize = true;
-            this.RemainLabel.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.MainBindingSource, "Remaining", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.RemainLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RemainLabel.Location = new System.Drawing.Point(229, 91);
             this.RemainLabel.Margin = new System.Windows.Forms.Padding(12, 3, 12, 3);
@@ -87,15 +83,10 @@
             this.RemainLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.RemainLabel.Visible = false;
             //
-            // MainBindingSource
-            //
-            this.MainBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.ProgressViewModel);
-            //
             // CountLabel
             //
             this.CountLabel.AutoSize = true;
             this.RootPanel.SetColumnSpan(this.CountLabel, 2);
-            this.CountLabel.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.MainBindingSource, "Count", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.CountLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CountLabel.Location = new System.Drawing.Point(12, 43);
             this.CountLabel.Margin = new System.Windows.Forms.Padding(12, 3, 12, 3);
@@ -122,7 +113,6 @@
             // ElapseLabel
             //
             this.ElapseLabel.AutoSize = true;
-            this.ElapseLabel.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.MainBindingSource, "Elapsed", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ElapseLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ElapseLabel.Location = new System.Drawing.Point(12, 91);
             this.ElapseLabel.Margin = new System.Windows.Forms.Padding(12, 3, 12, 3);
@@ -136,7 +126,6 @@
             this.StatusLabel.AutoEllipsis = true;
             this.StatusLabel.AutoSize = true;
             this.RootPanel.SetColumnSpan(this.StatusLabel, 2);
-            this.StatusLabel.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.MainBindingSource, "Text", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.StatusLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.StatusLabel.Location = new System.Drawing.Point(12, 115);
             this.StatusLabel.Margin = new System.Windows.Forms.Padding(12, 3, 12, 3);
@@ -201,7 +190,6 @@
             this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(434, 214);
             this.Controls.Add(this.RootPanel);
-            this.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.MainBindingSource, "Title", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.Font = new System.Drawing.Font("Meiryo UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(128)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -210,7 +198,6 @@
             this.Text = "CubeICE";
             this.RootPanel.ResumeLayout(false);
             this.RootPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.MainBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.HeaderPictureBox)).EndInit();
             this.ButtonsPanel.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -229,7 +216,5 @@
         private System.Windows.Forms.Label ElapseLabel;
         private System.Windows.Forms.Label RemainLabel;
         private System.Windows.Forms.Label StatusLabel;
-        private System.Windows.Forms.BindingSource MainBindingSource;
     }
 }
-
