@@ -35,13 +35,12 @@
             this.GeneralPanel = new System.Windows.Forms.TableLayoutPanel();
             this.ThreadLabel = new System.Windows.Forms.Label();
             this.CompressionMethodComboBox = new System.Windows.Forms.ComboBox();
-            this.MainBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.MethodLabel = new System.Windows.Forms.Label();
             this.CompressionLevelComboBox = new System.Windows.Forms.ComboBox();
             this.LevelLabel = new System.Windows.Forms.Label();
             this.FormatLabel = new System.Windows.Forms.Label();
             this.FormatComboBox = new System.Windows.Forms.ComboBox();
-            this.ThreadNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.ThreadNumeric = new System.Windows.Forms.NumericUpDown();
             this.EncryptionGroupBox = new System.Windows.Forms.GroupBox();
             this.EncryptionWrapperPanel = new System.Windows.Forms.TableLayoutPanel();
             this.EncryptionCheckBox = new System.Windows.Forms.CheckBox();
@@ -64,8 +63,7 @@
             this.RootPanel.SuspendLayout();
             this.GeneralGroupBox.SuspendLayout();
             this.GeneralPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.MainBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ThreadNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ThreadNumeric)).BeginInit();
             this.EncryptionGroupBox.SuspendLayout();
             this.EncryptionWrapperPanel.SuspendLayout();
             this.EncryptionPanel.SuspendLayout();
@@ -119,7 +117,7 @@
             this.GeneralPanel.Controls.Add(this.LevelLabel, 0, 1);
             this.GeneralPanel.Controls.Add(this.FormatLabel, 0, 0);
             this.GeneralPanel.Controls.Add(this.FormatComboBox, 1, 0);
-            this.GeneralPanel.Controls.Add(this.ThreadNumericUpDown, 1, 3);
+            this.GeneralPanel.Controls.Add(this.ThreadNumeric, 1, 3);
             this.GeneralPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.GeneralPanel.Location = new System.Drawing.Point(8, 19);
             this.GeneralPanel.Name = "GeneralPanel";
@@ -145,7 +143,6 @@
             //
             // CompressionMethodComboBox
             //
-            this.CompressionMethodComboBox.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.MainBindingSource, "CompressionMethod", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.CompressionMethodComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CompressionMethodComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.CompressionMethodComboBox.FormattingEnabled = true;
@@ -153,10 +150,6 @@
             this.CompressionMethodComboBox.Name = "CompressionMethodComboBox";
             this.CompressionMethodComboBox.Size = new System.Drawing.Size(238, 23);
             this.CompressionMethodComboBox.TabIndex = 2;
-            //
-            // MainBindingSource
-            //
-            this.MainBindingSource.DataSource = typeof(Cube.FileSystem.SevenZip.Ice.CompressSettingViewModel);
             //
             // MethodLabel
             //
@@ -172,7 +165,6 @@
             //
             // CompressionLevelComboBox
             //
-            this.CompressionLevelComboBox.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.MainBindingSource, "CompressionLevel", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.CompressionLevelComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CompressionLevelComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.CompressionLevelComboBox.FormattingEnabled = true;
@@ -207,7 +199,6 @@
             //
             // FormatComboBox
             //
-            this.FormatComboBox.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.MainBindingSource, "Format", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.FormatComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.FormatComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.FormatComboBox.FormattingEnabled = true;
@@ -216,21 +207,19 @@
             this.FormatComboBox.Size = new System.Drawing.Size(238, 23);
             this.FormatComboBox.TabIndex = 0;
             //
-            // ThreadNumericUpDown
+            // ThreadNumeric
             //
-            this.ThreadNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.MainBindingSource, "ThreadCount", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.ThreadNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Maximum", this.MainBindingSource, "MaximumThreadCount", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.ThreadNumericUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ThreadNumericUpDown.Location = new System.Drawing.Point(103, 90);
-            this.ThreadNumericUpDown.Minimum = new decimal(new int[] {
+            this.ThreadNumeric.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ThreadNumeric.Location = new System.Drawing.Point(103, 90);
+            this.ThreadNumeric.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.ThreadNumericUpDown.Name = "ThreadNumericUpDown";
-            this.ThreadNumericUpDown.Size = new System.Drawing.Size(238, 23);
-            this.ThreadNumericUpDown.TabIndex = 3;
-            this.ThreadNumericUpDown.Value = new decimal(new int[] {
+            this.ThreadNumeric.Name = "ThreadNumeric";
+            this.ThreadNumeric.Size = new System.Drawing.Size(238, 23);
+            this.ThreadNumeric.TabIndex = 3;
+            this.ThreadNumeric.Value = new decimal(new int[] {
             1,
             0,
             0,
@@ -239,7 +228,6 @@
             // EncryptionGroupBox
             //
             this.EncryptionGroupBox.Controls.Add(this.EncryptionWrapperPanel);
-            this.EncryptionGroupBox.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", this.MainBindingSource, "EncryptionSupported", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.EncryptionGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.EncryptionGroupBox.Location = new System.Drawing.Point(12, 217);
             this.EncryptionGroupBox.Margin = new System.Windows.Forms.Padding(12, 3, 12, 3);
@@ -269,7 +257,6 @@
             // EncryptionCheckBox
             //
             this.EncryptionCheckBox.AutoSize = true;
-            this.EncryptionCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.MainBindingSource, "EncryptionEnabled", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.EncryptionCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.EncryptionCheckBox.Location = new System.Drawing.Point(3, 3);
             this.EncryptionCheckBox.Name = "EncryptionCheckBox";
@@ -290,7 +277,6 @@
             this.EncryptionPanel.Controls.Add(this.PasswordLabel, 0, 0);
             this.EncryptionPanel.Controls.Add(this.PasswordTextBox, 1, 0);
             this.EncryptionPanel.Controls.Add(this.ShowPasswordCheckBox, 1, 2);
-            this.EncryptionPanel.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", this.MainBindingSource, "EncryptionEnabled", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.EncryptionPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.EncryptionPanel.Location = new System.Drawing.Point(0, 29);
             this.EncryptionPanel.Margin = new System.Windows.Forms.Padding(0);
@@ -306,8 +292,6 @@
             //
             // EncryptionMethodComboBox
             //
-            this.EncryptionMethodComboBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.MainBindingSource, "EncryptionMethod", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.EncryptionMethodComboBox.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", this.MainBindingSource, "EncryptionMethodEnabled", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.EncryptionMethodComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.EncryptionMethodComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.EncryptionMethodComboBox.FormattingEnabled = true;
@@ -330,7 +314,6 @@
             //
             // ConfirmTextBox
             //
-            this.ConfirmTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.MainBindingSource, "PasswordConfirmation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ConfirmTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ConfirmTextBox.Location = new System.Drawing.Point(103, 32);
             this.ConfirmTextBox.Name = "ConfirmTextBox";
@@ -364,7 +347,6 @@
             //
             // PasswordTextBox
             //
-            this.PasswordTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.MainBindingSource, "Password", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.PasswordTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PasswordTextBox.Location = new System.Drawing.Point(103, 3);
             this.PasswordTextBox.Name = "PasswordTextBox";
@@ -374,7 +356,6 @@
             // ShowPasswordCheckBox
             //
             this.ShowPasswordCheckBox.AutoSize = true;
-            this.ShowPasswordCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.MainBindingSource, "PasswordVisible", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ShowPasswordCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ShowPasswordCheckBox.Location = new System.Drawing.Point(103, 61);
             this.ShowPasswordCheckBox.Name = "ShowPasswordCheckBox";
@@ -409,7 +390,6 @@
             //
             // ExecuteButton
             //
-            this.ExecuteButton.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", this.MainBindingSource, "Executable", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ExecuteButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.ExecuteButton.Location = new System.Drawing.Point(116, 12);
             this.ExecuteButton.Name = "ExecuteButton";
@@ -448,7 +428,6 @@
             //
             // DestinationTextBox
             //
-            this.DestinationTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.MainBindingSource, "Destination", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.DestinationTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DestinationTextBox.Location = new System.Drawing.Point(3, 4);
             this.DestinationTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 3);
@@ -483,8 +462,7 @@
             this.GeneralGroupBox.ResumeLayout(false);
             this.GeneralPanel.ResumeLayout(false);
             this.GeneralPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.MainBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ThreadNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ThreadNumeric)).EndInit();
             this.EncryptionGroupBox.ResumeLayout(false);
             this.EncryptionWrapperPanel.ResumeLayout(false);
             this.EncryptionWrapperPanel.PerformLayout();
@@ -518,7 +496,7 @@
         private System.Windows.Forms.CheckBox ShowPasswordCheckBox;
         private System.Windows.Forms.TextBox PasswordTextBox;
         private System.Windows.Forms.TextBox ConfirmTextBox;
-        private System.Windows.Forms.NumericUpDown ThreadNumericUpDown;
+        private System.Windows.Forms.NumericUpDown ThreadNumeric;
         private System.Windows.Forms.Label FormatLabel;
         private System.Windows.Forms.Label LevelLabel;
         private System.Windows.Forms.Label MethodLabel;
@@ -530,6 +508,5 @@
         private System.Windows.Forms.Button ExecuteButton;
         private System.Windows.Forms.Button DestinationButton;
         private System.Windows.Forms.ToolTip PathToolTip;
-        private System.Windows.Forms.BindingSource MainBindingSource;
     }
 }
