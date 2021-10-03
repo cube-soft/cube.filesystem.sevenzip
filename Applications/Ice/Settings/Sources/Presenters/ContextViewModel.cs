@@ -325,16 +325,12 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Customize()
-        {
-            var e = Query.NewMessage(Facade.UseCustom ?
-                Facade.Custom :
-                Facade.Preset.ToContextCollection()
-            );
-
-            // Views.ShowCustomizeView(e);
-            if (!e.Cancel) Facade.Customize(e.Value);
-        }
+        public void Customize() => Send(new CustomizeViewModel(
+            Facade.UseCustom ? Facade.Custom : Facade.Preset.ToContextCollection(),
+            new(),
+            Context,
+            Facade.Customize
+        ));
 
         /* ----------------------------------------------------------------- */
         ///

@@ -163,7 +163,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         private ContextSetting InvokeCustomize()
         {
             var dest = NewSettings();
-            using (var vm = NewVM(dest)) vm.Customize();
+            using (var vm = NewVM(dest)) vm.Menu.Customize();
             return dest.Value.Context;
         }
 

@@ -15,8 +15,8 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.Collections.Generic;
 using System.Windows.Forms;
+using Cube.Forms.Behaviors;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
@@ -25,20 +25,20 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// CustomizeWindow
     ///
     /// <summary>
-    /// コンテキストメニューのカスタマイズ画面を表すクラスです。
+    /// Represents the cutomize window for the context menu.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class CustomizeWindow : Cube.Forms.Window
+    public partial class CustomizeWindow : Forms.Window
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CustomizeForm
+        /// CustomizeWindow
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initiaizes a new instance of the CustomizeWindow class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -46,35 +46,16 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         {
             InitializeComponent();
 
-            _menu = new CustomizeMenu(SourceTreeView, DestinationTreeView);
-            _menu.Updated += (s, e) => UpdateMenu();
-
-            ApplyButton.Click       += (s, e) => Close();
-            ExitButton.Click        += (s, e) => Close();
-            RenameButton.Click      += (s, e) => _menu.RenameMenu.Execute();
-            AddButton.Click         += (s, e) => _menu.AddMenu.Execute();
-            NewCategoryButton.Click += (s, e) => _menu.NewCategoryMenu.Execute();
-            RemoveButton.Click      += (s, e) => _menu.RemoveMenu.Execute();
-            UpButton.Click          += (s, e) => _menu.UpMenu.Execute();
-            DownButton.Click        += (s, e) => _menu.DownMenu.Execute();
+            _menu = new(SourceTreeView, DestinationTreeView);
+            _menu.Updated += (s, e) => {
+                RenameButton.Enabled = _menu.Editable;
+                RemoveButton.Enabled = _menu.Editable;
+                UpButton.Enabled     = _menu.Editable;
+                DownButton.Enabled   = _menu.Editable;
+            };
 
             ShortcutKeys.Add(Keys.F2, () => _menu.RenameMenu.Execute());
         }
-
-        #endregion
-
-        #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Result
-        ///
-        /// <summary>
-        /// 操作結果を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public IEnumerable<Context> Result => _menu.Result;
 
         #endregion
 
@@ -93,30 +74,18 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         protected override void OnBind(IBindable src)
         {
-            base.OnBind(src);
-            if (!(src is CustomViewModel vm)) return;
+            if (src is not CustomizeViewModel vm) return;
+
+            Behaviors.Add(new ClickBehavior(ApplyButton, vm.Save));
+            Behaviors.Add(new ClickBehavior(ExitButton, Close));
+            Behaviors.Add(new ClickBehavior(RenameButton, _menu.RenameMenu.Execute));
+            Behaviors.Add(new ClickBehavior(AddButton, _menu.AddMenu.Execute));
+            Behaviors.Add(new ClickBehavior(NewCategoryButton, _menu.NewCategoryMenu.Execute));
+            Behaviors.Add(new ClickBehavior(RemoveButton, _menu.RemoveMenu.Execute));
+            Behaviors.Add(new ClickBehavior(UpButton, _menu.UpMenu.Execute));
+            Behaviors.Add(new ClickBehavior(DownButton, _menu.DownMenu.Execute));
+
             _menu.Register(vm.Source, vm.Current, vm.Images);
-        }
-
-        #endregion
-
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// UpdateMenu
-        ///
-        /// <summary>
-        /// ボタンおよびメニュー項目の状態を更新します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void UpdateMenu()
-        {
-            RenameButton.Enabled = _menu.Editable;
-            RemoveButton.Enabled = _menu.Editable;
-            UpButton.Enabled     = _menu.Editable;
-            DownButton.Enabled   = _menu.Editable;
         }
 
         #endregion

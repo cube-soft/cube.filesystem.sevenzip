@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
@@ -24,33 +25,40 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// CustomViewModel
+    /// CustomizeViewModel
     ///
     /// <summary>
     /// Provides functionality to bind values to the CustomizeWindow class.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class CustomViewModel : Presentable<IEnumerable<Context>>
+    public class CustomizeViewModel : Presentable<IEnumerable<Context>>
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CustomMenuViewModel
+        /// CustomizeViewModel
         ///
         /// <summary>
-        /// Initializes a new instance of the CustomMenuViewModel class
+        /// Initializes a new instance of the CustomizeViewModel class
         /// with the specified arguments.
         /// </summary>
         ///
         /// <param name="src">Current context menu.</param>
         /// <param name="aggregator">Message aggregator.</param>
         /// <param name="context">Synchronization context.</param>
+        /// <param name="callback">Callback action.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public CustomViewModel(IEnumerable<Context> src, Aggregator aggregator, SynchronizationContext context) :
-            base(src, aggregator, context) { }
+        public CustomizeViewModel(IEnumerable<Context> src,
+            Aggregator aggregator,
+            SynchronizationContext context,
+            Action<IEnumerable<Context>> callback
+        ) : base(src, aggregator, context)
+        {
+            Save = () => Track(Send<CloseMessage>, () => callback(Facade));
+        }
 
         #endregion
 
@@ -67,7 +75,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public IEnumerable<Context> Source { get; } = PresetExtension.ToContextCollection(
             Preset.Compress | Preset.CompressMask |
-            Preset.Extract  | Preset.ExtractMask
+            Preset.Extract | Preset.ExtractMask
         );
 
         /* ----------------------------------------------------------------- */
@@ -97,6 +105,17 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             Properties.Resources.Extract,
             IconFactory.Create(StockIcons.FolderOpen, IconSize.Small).ToBitmap(),
         };
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Save
+        ///
+        /// <summary>
+        /// Gets the action to save the current settings.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public Action Save { get; }
 
         #endregion
 

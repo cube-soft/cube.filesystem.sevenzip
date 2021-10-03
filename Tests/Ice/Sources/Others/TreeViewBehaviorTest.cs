@@ -225,7 +225,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         private TreeViewBehavior Create()
         {
             var m    = Preset.DefaultContext.ToContextCollection();
-            var vm   = new CustomViewModel(m, new Aggregator(), new SynchronizationContext());
+            var vm   = new CustomizeViewModel(m, new(), new(), e => { });
             var dest = new TreeViewBehavior(new TreeView());
 
             dest.Register(vm.Current, vm.Images);
