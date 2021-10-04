@@ -25,54 +25,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// CustomizeMenuItem
-    ///
-    /// <summary>
-    /// カスタマイズ画面のコンテキストメニュー項目を表すクラスです。
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    public class CustomizeMenuItem : ToolStripMenuItem
-    {
-        #region Constructors
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CustomizeMenuItem
-        ///
-        /// <summary>
-        /// オブジェクトを初期化します。
-        /// </summary>
-        ///
-        /// <param name="text">表示テキスト</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public CustomizeMenuItem(string text) : base(text) { }
-
-        #endregion
-
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Execute
-        ///
-        /// <summary>
-        /// Click イベントを発生させます。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Execute() => OnClick(EventArgs.Empty);
-
-        #endregion
-    }
-
-    /* --------------------------------------------------------------------- */
-    ///
     /// CustomizeMenu
     ///
     /// <summary>
-    /// コンテキストメニューのカスタマイズ画面を表すクラスです。
+    /// Represents the context menu for the CustomizeWindow class.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -85,11 +41,12 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// CustomizeMenu
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the CustomizeMenu class with the
+        /// specified arguments.
         /// </summary>
         ///
-        /// <param name="src">追加可能なメニュー一覧</param>
-        /// <param name="dest">現在のメニュー一覧</param>
+        /// <param name="src">List of menu items that can be added.</param>
+        /// <param name="dest">Current menu.</param>
         ///
         /* ----------------------------------------------------------------- */
         public CustomizeMenu(TreeView src, TreeView dest)
@@ -114,7 +71,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Source
         ///
         /// <summary>
-        /// 追加可能なメニュー一覧を表す TreeView オブジェクトを取得します。
+        /// Get a TreeView object that represents a list of menus that can
+        /// be added.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -125,7 +83,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Target
         ///
         /// <summary>
-        /// 現在のメニュー一覧を表す TreeView オブジェクトを取得します。
+        /// Get a TreeView object that represents the current menu list.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -136,8 +94,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Editable
         ///
         /// <summary>
-        /// 選択中の Node オブジェクトが編集可能かどうかを示す値を取得
-        /// します。
+        /// Gets a value indicating whether the currently selected Node
+        /// object is editable or not.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -148,7 +106,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Registered
         ///
         /// <summary>
-        /// データが登録されたかどうかを示す値を取得します。
+        /// Gets a value indicating whether data has been registered or not.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -159,7 +117,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Result
         ///
         /// <summary>
-        /// 編集結果を取得します。
+        /// Get the result of editing.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -170,24 +128,22 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// AddMenu
         ///
         /// <summary>
-        /// 追加メニューを取得します。
+        /// Get the Add menu.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CustomizeMenuItem AddMenu { get; } =
-            new CustomizeMenuItem(Properties.Resources.MenuAdd);
+        public CustomizeMenuItem AddMenu { get; } = new(Properties.Resources.MenuAdd);
 
         /* ----------------------------------------------------------------- */
         ///
         /// RemoveMenu
         ///
         /// <summary>
-        /// 削除メニューを取得します。
+        /// Gets the Remove menu.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CustomizeMenuItem RemoveMenu { get; } =
-            new CustomizeMenuItem(Properties.Resources.MenuRemove);
+        public CustomizeMenuItem RemoveMenu { get; } = new(Properties.Resources.MenuRemove);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -198,44 +154,40 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CustomizeMenuItem RenameMenu { get; } =
-            new CustomizeMenuItem(Properties.Resources.MenuRename);
+        public CustomizeMenuItem RenameMenu { get; } = new(Properties.Resources.MenuRename);
 
         /* ----------------------------------------------------------------- */
         ///
         /// UpMenu
         ///
         /// <summary>
-        /// 上へ移動メニューを取得します。
+        /// Gets the Up menu.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CustomizeMenuItem UpMenu { get; } =
-            new CustomizeMenuItem(Properties.Resources.MenuUp);
+        public CustomizeMenuItem UpMenu { get; } = new(Properties.Resources.MenuUp);
 
         /* ----------------------------------------------------------------- */
         ///
         /// DownMenu
         ///
         /// <summary>
-        /// 下へ移動メニューを取得します。
+        /// Gets the Down menu.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CustomizeMenuItem DownMenu { get; } =
-            new CustomizeMenuItem(Properties.Resources.MenuDown);
+        public CustomizeMenuItem DownMenu { get; } = new(Properties.Resources.MenuDown);
 
         /* ----------------------------------------------------------------- */
         ///
         /// NewCategoryMenu
         ///
         /// <summary>
-        /// 新しいカテゴリーメニューを取得します。
+        /// Gets the NewCategory menu.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public CustomizeMenuItem NewCategoryMenu { get; } =
-            new CustomizeMenuItem(Properties.Resources.MenuNewCategory);
+        public CustomizeMenuItem NewCategoryMenu { get; } = new(Properties.Resources.MenuNewCategory);
 
         #endregion
 
@@ -246,7 +198,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Updated
         ///
         /// <summary>
-        /// 状態が更新された時に発生するイベントです。
+        /// Occurs when the state is updated.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -257,7 +209,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// OnUpdated
         ///
         /// <summary>
-        /// Updated イベントを発生させます。
+        /// Raises the Updated event.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -272,12 +224,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Register
         ///
         /// <summary>
-        /// データを登録します。
+        /// Registers the data.
         /// </summary>
         ///
+        /// <param name="src">List of menu items that can be added.</param>
+        /// <param name="dest">Current menu.</param>
+        /// <param name="images">Image list to be used the class.</param>
+        ///
         /* ----------------------------------------------------------------- */
-        public void Register(IEnumerable<Context> src,
-            IEnumerable<Context> dest, IEnumerable<Image> images)
+        public void Register(IEnumerable<Context> src, IEnumerable<Context> dest, IEnumerable<Image> images)
         {
             Source.ImageList = images.ToImageList();
             Source.Nodes.Register(src);
@@ -296,7 +251,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// InitializeEvents
         ///
         /// <summary>
-        /// 各種イベントを初期化します。
+        /// Initializes the events.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -317,7 +272,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// InitializeShortcutKeys
         ///
         /// <summary>
-        /// ショートカットキーを初期化します。
+        /// Initializes the shortcut keys.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -336,31 +291,28 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// InitializeMenu
         ///
         /// <summary>
-        /// メニューを初期化します。
+        /// Initializes the menus.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void InitializeMenu()
+        private void InitializeMenu() => Items.AddRange(new ToolStripItem[]
         {
-            Items.AddRange(new ToolStripItem[]
-            {
-                AddMenu,
-                NewCategoryMenu,
-                new ToolStripSeparator(),
-                UpMenu,
-                DownMenu,
-                new ToolStripSeparator(),
-                RemoveMenu,
-                RenameMenu
-            });
-        }
+            AddMenu,
+            NewCategoryMenu,
+            new ToolStripSeparator(),
+            UpMenu,
+            DownMenu,
+            new ToolStripSeparator(),
+            RemoveMenu,
+            RenameMenu
+        });
 
         /* ----------------------------------------------------------------- */
         ///
         /// RaiseUpdated
         ///
         /// <summary>
-        /// メニューの状態を更新します。
+        /// Raises the Update event.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */

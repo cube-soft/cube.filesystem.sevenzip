@@ -15,9 +15,9 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.Generics;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Cube.Mixin.Generics;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
@@ -26,7 +26,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// TreeViewExtension
     ///
     /// <summary>
-    /// TreeView に関連する拡張用クラスです。
+    /// Provides extended methods of the TreeView class.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -39,14 +39,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Register
         ///
         /// <summary>
-        /// TreeNodeCollection にメニューを登録します。
+        /// Register the specified context menus to the specified
+        /// TreeNodeCollection object.
         /// </summary>
         ///
-        /// <param name="src">登録先オブジェクト</param>
-        /// <param name="menu">登録メニュー</param>
+        /// <param name="src">Object to be registered.</param>
+        /// <param name="menu">List of menus to be registered.</param>
         ///
         /// <remarks>
-        /// 子要素を持つ Node オブジェクトの Arguments は削除します。
+        /// Arguments of Node objects with child elements are ignored.
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
@@ -72,7 +73,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
                 node.Nodes.Register(item.Children);
                 if (node.Nodes.Count == 0) tag.Arguments = item.Arguments;
-                src.Add(node);
+                _ = src.Add(node);
             }
         }
 
@@ -81,12 +82,12 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// IsLeaf
         ///
         /// <summary>
-        /// 子要素を保持できないオブジェクトかどうかを判別します。
+        /// Determines if it is a leaf object.
         /// </summary>
         ///
-        /// <param name="src">TreeNode オブジェクト</param>
+        /// <param name="src">Source object.</param>
         ///
-        /// <returns>子要素を保持できるかどうか</returns>
+        /// <returns>true for the leaf object.</returns>
         ///
         /* ----------------------------------------------------------------- */
         public static bool IsLeaf(this TreeNode src) =>

@@ -10,8 +10,8 @@
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
     using System;
-    
-    
+
+
     /// <summary>
     ///   ローカライズされた文字列などを検索するための、厳密に型指定されたリソース クラスです。
     /// </summary>
@@ -23,15 +23,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
-        
+
         private static global::System.Resources.ResourceManager resourceMan;
-        
+
         private static global::System.Globalization.CultureInfo resourceCulture;
-        
+
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal Resources() {
         }
-        
+
         /// <summary>
         ///   このクラスで使用されているキャッシュされた ResourceManager インスタンスを返します。
         /// </summary>
@@ -45,7 +45,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
                 return resourceMan;
             }
         }
-        
+
         /// <summary>
         ///   厳密に型指定されたこのリソース クラスを使用して、すべての検索リソースに対し、
         ///   現在のスレッドの CurrentUICulture プロパティをオーバーライドします。
@@ -59,7 +59,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
                 resourceCulture = value;
             }
         }
-        
+
         /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
@@ -69,7 +69,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        
+
         /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
@@ -79,7 +79,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        
+
         /// <summary>
         ///   cubeice-associate.exe に類似しているローカライズされた文字列を検索します。
         /// </summary>
@@ -88,7 +88,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
                 return ResourceManager.GetString("FileAssociate", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
@@ -98,7 +98,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        
+
         /// <summary>
         ///   メニューを追加 に類似しているローカライズされた文字列を検索します。
         /// </summary>
@@ -107,7 +107,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
                 return ResourceManager.GetString("MenuAdd", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   BZip2 に類似しているローカライズされた文字列を検索します。
         /// </summary>
@@ -116,7 +116,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
                 return ResourceManager.GetString("MenuBZip2", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   デスクトップに解凍 に類似しているローカライズされた文字列を検索します。
         /// </summary>
@@ -125,7 +125,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
                 return ResourceManager.GetString("MenuDesktop", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   詳細設定 に類似しているローカライズされた文字列を検索します。
         /// </summary>
@@ -134,7 +134,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
                 return ResourceManager.GetString("MenuDetails", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   下に移動 に類似しているローカライズされた文字列を検索します。
         /// </summary>
@@ -143,7 +143,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
                 return ResourceManager.GetString("MenuDown", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   GZip に類似しているローカライズされた文字列を検索します。
         /// </summary>
@@ -152,7 +152,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
                 return ResourceManager.GetString("MenuGZip", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   ここに解凍 に類似しているローカライズされた文字列を検索します。
         /// </summary>
@@ -161,7 +161,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
                 return ResourceManager.GetString("MenuHere", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   マイドキュメントに解凍 に類似しているローカライズされた文字列を検索します。
         /// </summary>
@@ -170,7 +170,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
                 return ResourceManager.GetString("MenuMyDocuments", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   新しいカテゴリー に類似しているローカライズされた文字列を検索します。
         /// </summary>
@@ -179,7 +179,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
                 return ResourceManager.GetString("MenuNewCategory", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   削除 に類似しているローカライズされた文字列を検索します。
         /// </summary>
@@ -188,7 +188,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
                 return ResourceManager.GetString("MenuRemove", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   名前を変更 に類似しているローカライズされた文字列を検索します。
         /// </summary>
@@ -197,7 +197,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
                 return ResourceManager.GetString("MenuRename", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   場所を指定して解凍 に類似しているローカライズされた文字列を検索します。
         /// </summary>
@@ -206,7 +206,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
                 return ResourceManager.GetString("MenuRuntime", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   7-Zip に類似しているローカライズされた文字列を検索します。
         /// </summary>
@@ -215,7 +215,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
                 return ResourceManager.GetString("MenuSevenZip", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   自己解凍形式 に類似しているローカライズされた文字列を検索します。
         /// </summary>
@@ -224,7 +224,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
                 return ResourceManager.GetString("MenuSfx", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   メニュートップ に類似しているローカライズされた文字列を検索します。
         /// </summary>
@@ -233,7 +233,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
                 return ResourceManager.GetString("MenuTop", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   上に移動 に類似しているローカライズされた文字列を検索します。
         /// </summary>
@@ -242,7 +242,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
                 return ResourceManager.GetString("MenuUp", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   XZ に類似しているローカライズされた文字列を検索します。
         /// </summary>
@@ -251,7 +251,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
                 return ResourceManager.GetString("MenuXZ", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Zip に類似しているローカライズされた文字列を検索します。
         /// </summary>
@@ -260,7 +260,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
                 return ResourceManager.GetString("MenuZip", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Zip（パスワード） に類似しているローカライズされた文字列を検索します。
         /// </summary>
@@ -269,7 +269,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
                 return ResourceManager.GetString("MenuZipPassword", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   圧縮または解凍したファイルを保存するフォルダを選択して下さい。 に類似しているローカライズされた文字列を検索します。
         /// </summary>
@@ -278,7 +278,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
                 return ResourceManager.GetString("MessageSave", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   http://www.cube-soft.jp/ に類似しているローカライズされた文字列を検索します。
         /// </summary>

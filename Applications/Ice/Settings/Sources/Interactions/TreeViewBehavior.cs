@@ -30,8 +30,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// TreeViewBehavior
     ///
     /// <summary>
-    /// コンテキストメニューを編集するための TreeView オブジェクトの
-    /// 動作を定義したクラスです。
+    /// Represents the behavior of the TreeView object for editing the
+    /// context menu.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -41,13 +41,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// TreeViewAction
+        /// TreeViewBehavior
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the TreeViewBehavior class with
+        /// the specified arguments.
         /// </summary>
         ///
-        /// <param name="src">対象となる TreeView オブジェクト</param>
+        /// <param name="src">Target TreeView object.</param>
         ///
         /* ----------------------------------------------------------------- */
         public TreeViewBehavior(TreeView src)
@@ -69,7 +70,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Source
         ///
         /// <summary>
-        /// 動作の適用される TreeView オブジェクトを取得します。
+        /// Get the TreeView object to which the behavior applies.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -80,7 +81,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Result
         ///
         /// <summary>
-        /// 操作結果を表す ContextMenu 一覧を取得します。
+        /// Retrieves the ContextMenu list representing the result.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -91,8 +92,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Registered
         ///
         /// <summary>
-        /// Register メソッドが実行されたかどうかを示す値を取得または
-        /// 設定します。
+        /// Gets a value indicating whether the Register method has been
+        /// executed.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -103,8 +104,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Editable
         ///
         /// <summary>
-        /// 現在選択中の Node オブジェクトが編集可能かどうかを示す値を
-        /// 取得または設定します。
+        /// Gets a value indicating whether the currently selected Node
+        /// object is editable or not.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -117,7 +118,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// RootNode
         ///
         /// <summary>
-        /// ルートとなる Node オブジェクトを取得します。
+        /// Gets the root Node object.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -139,12 +140,12 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Register
         ///
         /// <summary>
-        /// 対象となる TreeView オブジェクトに、コンテキストメニューに対応
-        /// する TreeNode 一覧を追加します。
+        /// Add the corresponding TreeNode list to the context menu for the
+        /// target TreeView object.
         /// </summary>
         ///
-        /// <param name="src">コンテキストメニュー一覧</param>
-        /// <param name="images">表示アイコン一覧</param>
+        /// <param name="src">List of context menus to be registered.</param>
+        /// <param name="images">List of display icons.</param>
         ///
         /* ----------------------------------------------------------------- */
         public void Register(IEnumerable<Context> src, IEnumerable<Image> images)
@@ -160,10 +161,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Add
         ///
         /// <summary>
-        /// TreeNode オブジェクトの内容をコピーして追加します。
+        /// Copies and adds the contents of the specified TreeNode object.
         /// </summary>
         ///
-        /// <param name="src">追加される Node オブジェクト</param>
+        /// <param name="src">Object to be added.</param>
         ///
         /* ----------------------------------------------------------------- */
         public void Add(TreeNode src)
@@ -172,7 +173,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
             var dest = GetTargetNode();
             Debug.Assert(dest != null);
-            dest.Nodes.Add(Copy(src));
+            _ = dest.Nodes.Add(Copy(src));
             dest.Expand();
         }
 
@@ -181,8 +182,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Add
         ///
         /// <summary>
-        /// 新しい TreeNode オブジェクトを追加します。追加された TreeNode
-        /// オブジェクトは名前を変更する状態となります。
+        /// Adds a new TreeNode object. The added TreeNode object will be
+        /// in a state to be renamed.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -199,7 +200,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             };
 
             Debug.Assert(dest != null);
-            dest.Nodes.Add(src);
+            _ = dest.Nodes.Add(src);
             dest.Expand();
             Source.SelectedNode = src;
             Rename();
@@ -210,7 +211,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Remove
         ///
         /// <summary>
-        /// 現在選択中の TreeNode オブジェクトを削除します。
+        /// Removes the currently selected TreeNode object.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -224,7 +225,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Rename
         ///
         /// <summary>
-        /// 名前を変更処理を実行します。
+        /// Invokes the renaming process.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -235,8 +236,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Move
         ///
         /// <summary>
-        /// 現在選択中の TreeNode オブジェクトを指定した量だけ移動します。
+        /// Moves the currently selected TreeNode object by the specified
+        /// amount.
         /// </summary>
+        ///
+        /// <param name="delta">Number to move.</param>
         ///
         /* ----------------------------------------------------------------- */
         public void Move(int delta)
@@ -261,11 +265,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Move
         ///
         /// <summary>
-        /// src が dest の子要素になるように移動します。
+        /// Move src so that it becomes a child element of dest.
         /// </summary>
         ///
-        /// <param name="src">移動元オブジェクト</param>
-        /// <param name="dest">移動先オブジェクト</param>
+        /// <param name="src">Source object.</param>
+        /// <param name="dest">Target object.</param>
         ///
         /* ----------------------------------------------------------------- */
         public void Move(TreeNode src, TreeNode dest)
@@ -273,7 +277,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             if (!IsMovable(src, dest)) return;
 
             src.Remove();
-            dest.Nodes.Add(src);
+            _ = dest.Nodes.Add(src);
             Source.SelectedNode = src;
             dest.Expand();
         }
@@ -287,7 +291,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// CreateResult
         ///
         /// <summary>
-        /// 操作結果を生成します。
+        /// Creates the process result.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -305,7 +309,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// CreateMenu
         ///
         /// <summary>
-        /// TreeMode の内容を基にして ContextMenu オブジェクトを生成します。
+        /// Creates a ContextMenu object based on the contents of TreeMode.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -323,7 +327,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// CreateRootNode
         ///
         /// <summary>
-        /// ルート項目を生成します。
+        /// Creates the root node.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -345,7 +349,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// GetTargetNode
         ///
         /// <summary>
-        /// 追加等の操作の対象となる Node オブジェクトを取得します。
+        /// Retrieves the Node object to be processed.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -364,7 +368,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// GetTargetNode
         ///
         /// <summary>
-        /// 指定された座標に対応する Node オブジェクトを取得します。
+        /// Gets the Node object corresponding to the specified coordinates.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -376,7 +380,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// GetContextMenu
         ///
         /// <summary>
-        /// ContextMenu オブジェクトを取得します。
+        /// Gets the ContextMenu object.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -392,7 +396,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// Copy
         ///
         /// <summary>
-        /// TreeNode オブジェクトをコピーします。
+        /// Copies the specified TreeNode object.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -422,7 +426,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// IsMovable
         ///
         /// <summary>
-        /// src ノードから dest ノードへ移動可能かどうかを判別します。
+        /// Determines if it is possible to move from the src node to the
+        /// dest node.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -449,7 +454,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// WhenItemDrag
         ///
         /// <summary>
-        /// Node オブジェクトのドラッグ開始時に実行されるハンドラです。
+        /// Occurs when the Node object starts to be dragged.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -466,7 +471,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// WhenDragOver
         ///
         /// <summary>
-        /// ドラッグ状態でのマウスオーバ時に実行されるハンドラです。
+        /// Occurs when the mouse is over while dragging.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -482,7 +487,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// WhenDragDrop
         ///
         /// <summary>
-        /// Node オブジェクトがドロップされた時に実行されるハンドラです。
+        /// Occurs when a Node object is dropped.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
