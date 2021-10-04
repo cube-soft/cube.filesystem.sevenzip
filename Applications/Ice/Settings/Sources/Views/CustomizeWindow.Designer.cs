@@ -64,23 +64,22 @@
             this.RootPanel.Controls.Add(this.DestinationLabel, 3, 1);
             this.RootPanel.Controls.Add(this.SourceLabel, 1, 1);
             this.RootPanel.Controls.Add(this.SubCommandPanel, 4, 2);
-            this.RootPanel.Controls.Add(this.FooterPanel, 1, 3);
+            this.RootPanel.Controls.Add(this.FooterPanel, 0, 3);
             this.RootPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RootPanel.Location = new System.Drawing.Point(0, 0);
             this.RootPanel.Name = "RootPanel";
-            this.RootPanel.RowCount = 5;
+            this.RootPanel.RowCount = 4;
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 9F));
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 48F));
-            this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 9F));
-            this.RootPanel.Size = new System.Drawing.Size(634, 311);
+            this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 66F));
+            this.RootPanel.Size = new System.Drawing.Size(634, 321);
             this.RootPanel.TabIndex = 0;
             //
             // AddButton
             //
             this.AddButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.AddButton.Location = new System.Drawing.Point(239, 123);
+            this.AddButton.Location = new System.Drawing.Point(239, 124);
             this.AddButton.Name = "AddButton";
             this.AddButton.Size = new System.Drawing.Size(50, 40);
             this.AddButton.TabIndex = 9;
@@ -94,7 +93,7 @@
             this.DestinationTreeView.LabelEdit = true;
             this.DestinationTreeView.Location = new System.Drawing.Point(295, 36);
             this.DestinationTreeView.Name = "DestinationTreeView";
-            this.DestinationTreeView.Size = new System.Drawing.Size(221, 215);
+            this.DestinationTreeView.Size = new System.Drawing.Size(221, 216);
             this.DestinationTreeView.TabIndex = 8;
             //
             // SourceTreeView
@@ -103,7 +102,7 @@
             this.SourceTreeView.HideSelection = false;
             this.SourceTreeView.Location = new System.Drawing.Point(12, 36);
             this.SourceTreeView.Name = "SourceTreeView";
-            this.SourceTreeView.Size = new System.Drawing.Size(221, 215);
+            this.SourceTreeView.Size = new System.Drawing.Size(221, 216);
             this.SourceTreeView.TabIndex = 7;
             //
             // DestinationLabel
@@ -150,7 +149,7 @@
             this.SubCommandPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
             this.SubCommandPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
             this.SubCommandPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.SubCommandPanel.Size = new System.Drawing.Size(106, 221);
+            this.SubCommandPanel.Size = new System.Drawing.Size(106, 222);
             this.SubCommandPanel.TabIndex = 3;
             //
             // RemoveButton
@@ -205,27 +204,31 @@
             //
             // FooterPanel
             //
-            this.FooterPanel.ColumnCount = 3;
-            this.RootPanel.SetColumnSpan(this.FooterPanel, 4);
+            this.FooterPanel.BackColor = System.Drawing.SystemColors.Control;
+            this.FooterPanel.ColumnCount = 4;
+            this.RootPanel.SetColumnSpan(this.FooterPanel, 6);
             this.FooterPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.FooterPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 131F));
             this.FooterPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 106F));
-            this.FooterPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 106F));
-            this.FooterPanel.Controls.Add(this.ExitButton, 2, 0);
-            this.FooterPanel.Controls.Add(this.ApplyButton, 1, 0);
+            this.FooterPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 9F));
+            this.FooterPanel.Controls.Add(this.ExitButton, 2, 1);
+            this.FooterPanel.Controls.Add(this.ApplyButton, 1, 1);
             this.FooterPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FooterPanel.Location = new System.Drawing.Point(9, 266);
+            this.FooterPanel.Location = new System.Drawing.Point(0, 267);
             this.FooterPanel.Margin = new System.Windows.Forms.Padding(0, 12, 0, 0);
             this.FooterPanel.Name = "FooterPanel";
-            this.FooterPanel.RowCount = 1;
+            this.FooterPanel.RowCount = 3;
+            this.FooterPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 9F));
             this.FooterPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.FooterPanel.Size = new System.Drawing.Size(616, 36);
+            this.FooterPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 9F));
+            this.FooterPanel.Size = new System.Drawing.Size(634, 54);
             this.FooterPanel.TabIndex = 4;
             //
             // ExitButton
             //
             this.ExitButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.ExitButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ExitButton.Location = new System.Drawing.Point(513, 3);
+            this.ExitButton.Location = new System.Drawing.Point(522, 12);
             this.ExitButton.Name = "ExitButton";
             this.ExitButton.Size = new System.Drawing.Size(100, 30);
             this.ExitButton.TabIndex = 7;
@@ -236,24 +239,25 @@
             //
             this.ApplyButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.ApplyButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ApplyButton.Location = new System.Drawing.Point(407, 3);
+            this.ApplyButton.Location = new System.Drawing.Point(391, 12);
             this.ApplyButton.Name = "ApplyButton";
-            this.ApplyButton.Size = new System.Drawing.Size(100, 30);
+            this.ApplyButton.Size = new System.Drawing.Size(125, 30);
             this.ApplyButton.TabIndex = 6;
             this.ApplyButton.Text = "OK";
             this.ApplyButton.UseVisualStyleBackColor = true;
             //
-            // CustomizeForm
+            // CustomizeWindow
             //
             this.AcceptButton = this.ApplyButton;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.BackColor = System.Drawing.SystemColors.Window;
             this.CancelButton = this.ExitButton;
-            this.ClientSize = new System.Drawing.Size(634, 311);
+            this.ClientSize = new System.Drawing.Size(634, 321);
             this.Controls.Add(this.RootPanel);
             this.Font = new System.Drawing.Font("Meiryo UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(540, 320);
-            this.Name = "CustomizeForm";
+            this.Name = "CustomizeWindow";
             this.Text = "コンテキストメニューのカスタマイズ";
             this.RootPanel.ResumeLayout(false);
             this.RootPanel.PerformLayout();
