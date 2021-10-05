@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System.Windows.Forms;
 using Cube.Forms.Behaviors;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
@@ -87,15 +88,19 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             Behaviors.Add(new ClickBehavior(AssociateClearButton, vm.Associate.Clear));
             Behaviors.Add(new ClickBehavior(CompressSaveButton, vm.Compress.Browse));
             Behaviors.Add(new ClickBehavior(ExtractSaveButton, vm.Extract.Browse));
+            Behaviors.Add(new PathLintBehavior(CompressSaveTextBox, _tooltip));
+            Behaviors.Add(new PathLintBehavior(ExtractSaveTextBox, _tooltip));
             Behaviors.Add(new ShowDialogBehavior<CustomizeWindow, CustomizeViewModel>(vm));
 
             _version.Version = vm.Version;
+            _tooltip.ToolTipTitle = Properties.Resources.MessageInvalidChars;
         }
 
         #endregion
 
         #region Fields
         private readonly Forms.Controls.VersionControl _version = new(typeof(MainWindow).Assembly);
+        private readonly ToolTip _tooltip = new();
         #endregion
     }
 }

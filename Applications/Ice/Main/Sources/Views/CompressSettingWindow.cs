@@ -101,8 +101,8 @@ namespace Cube.FileSystem.SevenZip.Ice
             src.Bind(nameof(vm.Format),                  FormatComboBox,            nameof(ComboBox.SelectedValue));
             src.Bind(nameof(vm.CompressionLevel),        CompressionLevelComboBox,  nameof(ComboBox.SelectedValue));
             src.Bind(nameof(vm.CompressionMethod),       CompressionMethodComboBox, nameof(ComboBox.SelectedValue));
-            src.Bind(nameof(vm.ThreadCount),             ThreadNumeric,       nameof(NumericUpDown.Value));
-            src.Bind(nameof(vm.MaximumThreadCount),      ThreadNumeric,       nameof(ThreadNumeric.Maximum));
+            src.Bind(nameof(vm.ThreadCount),             ThreadNumeric,             nameof(NumericUpDown.Value));
+            src.Bind(nameof(vm.MaximumThreadCount),      ThreadNumeric,             nameof(ThreadNumeric.Maximum));
             src.Bind(nameof(vm.EncryptionSupported),     EncryptionGroupBox,        nameof(Enabled));
             src.Bind(nameof(vm.EncryptionEnabled),       EncryptionCheckBox,        nameof(CheckBox.Checked));
             src.Bind(nameof(vm.EncryptionEnabled),       EncryptionPanel,           nameof(Enabled));
@@ -117,6 +117,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             CompressionLevelComboBox.Bind(Resource.CompressionLevels);
             CompressionMethodComboBox.Bind(Resource.GetCompressionMethods(vm.Format));
             CompressionMethodComboBox.SelectedIndex = 0;
+            PathToolTip.ToolTipTitle = Properties.Resources.MessageInvalidChars;
         }
 
         #endregion

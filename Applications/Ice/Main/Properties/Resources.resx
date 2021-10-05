@@ -85,6 +85,7 @@
   <data name="FormatSfx" xml:space="preserve">
     <value>自己解凍形式</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="Hero" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Assets\Images\Hero.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -135,6 +136,9 @@
   </data>
   <data name="MessageExtractSuccess" xml:space="preserve">
     <value>{0} に解凍しました。</value>
+  </data>
+  <data name="MessageInvalidChars" xml:space="preserve">
+    <value>ファイル名に次の文字を使用する事はできません</value>
   </data>
   <data name="MessageLastWriteTime" xml:space="preserve">
     <value>更新日時</value>
