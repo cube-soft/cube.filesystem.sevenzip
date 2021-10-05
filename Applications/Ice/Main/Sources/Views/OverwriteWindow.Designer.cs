@@ -133,6 +133,7 @@
             //
             // ExitButton
             //
+            this.ExitButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.ExitButton.Location = new System.Drawing.Point(347, 48);
             this.ExitButton.Name = "ExitButton";
             this.ExitButton.Size = new System.Drawing.Size(125, 30);
@@ -163,6 +164,7 @@
             this.AcceptButton = this.YesButton;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.SystemColors.Window;
+            this.CancelButton = this.ExitButton;
             this.ClientSize = new System.Drawing.Size(484, 331);
             this.Controls.Add(this.RootPanel);
             this.Font = new System.Drawing.Font("Meiryo UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(128)));

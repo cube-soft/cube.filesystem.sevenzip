@@ -381,9 +381,9 @@
             // ExitButton
             //
             this.ExitButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.ExitButton.Location = new System.Drawing.Point(247, 12);
+            this.ExitButton.Location = new System.Drawing.Point(272, 12);
             this.ExitButton.Name = "ExitButton";
-            this.ExitButton.Size = new System.Drawing.Size(125, 30);
+            this.ExitButton.Size = new System.Drawing.Size(100, 30);
             this.ExitButton.TabIndex = 1;
             this.ExitButton.Text = "キャンセル";
             this.ExitButton.UseVisualStyleBackColor = true;
@@ -391,7 +391,7 @@
             // ExecuteButton
             //
             this.ExecuteButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.ExecuteButton.Location = new System.Drawing.Point(116, 12);
+            this.ExecuteButton.Location = new System.Drawing.Point(141, 12);
             this.ExecuteButton.Name = "ExecuteButton";
             this.ExecuteButton.Size = new System.Drawing.Size(125, 30);
             this.ExecuteButton.TabIndex = 0;

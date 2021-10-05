@@ -1014,16 +1014,18 @@
             // ExecuteButton
             //
             this.ExecuteButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.ExecuteButton.Location = new System.Drawing.Point(214, 3);
+            this.ExecuteButton.Location = new System.Drawing.Point(189, 3);
             this.ExecuteButton.Name = "ExecuteButton";
-            this.ExecuteButton.Size = new System.Drawing.Size(100, 30);
+            this.ExecuteButton.Size = new System.Drawing.Size(125, 30);
             this.ExecuteButton.TabIndex = 0;
             this.ExecuteButton.Text = "OK";
             this.ExecuteButton.UseVisualStyleBackColor = true;
             //
             // MainWindow
             //
+            this.AcceptButton = this.ExecuteButton;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.CancelButton = this.ExitButton;
             this.ClientSize = new System.Drawing.Size(544, 651);
             this.Controls.Add(this.RootPanel);
             this.Font = new System.Drawing.Font("Meiryo UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(128)));
