@@ -44,15 +44,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <returns>Path to save.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static string Select(this ExtractFacade src)
-        {
-            var dest = new Selector(src.Request, src.Settings.Value.Extract)
-            {
-                Source = src.Source,
-                Query  = src.Select,
-            };
-            return dest.Value;
-        }
+        public static string Select(this ExtractFacade src) => new SaveQueryProxy(
+            src.Select,
+            src.Source,
+            src.Request,
+            src.Settings.Value.Extract
+        ).Value;
 
         /* ----------------------------------------------------------------- */
         ///

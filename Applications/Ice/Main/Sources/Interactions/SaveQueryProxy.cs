@@ -25,7 +25,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// Selector
+    /// SaveQueryProxy
     ///
     /// <summary>
     /// Provides functionality to select the path of file or directory
@@ -33,53 +33,59 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public sealed class Selector
+    public sealed class SaveQueryProxy
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Selector
+        /// SaveQueryProxy
         ///
         /// <summary>
         /// Initializes a new instance of the Selector class with the
         /// specified arguments.
         /// </summary>
         ///
+        /// <param name="query">Query to be wrapped.</param>
+        /// <param name="src">Path of the source file.</param>
         /// <param name="request">Request for the transaction.</param>
         /// <param name="settings">User settings.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public Selector(Request request, ArchiveSetting settings)
+        public SaveQueryProxy(Query<SaveQuerySource, string> query, string src,
+            Request request, ArchiveSetting settings)
         {
+            Query    = query;
+            Source   = src;
             Request  = request;
             Settings = settings;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Selector
-        ///
-        /// <summary>
-        /// Initializes a new instance of the Selector class with the
-        /// specified arguments.
-        /// </summary>
-        ///
-        /// <param name="request">Request for the transaction.</param>
-        /// <param name="settings">User settings.</param>
-        /// <param name="name">Normalized archive name.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public Selector(Request request, ArchiveSetting settings, ArchiveName name) :
-            this(request, settings)
-        {
-            Format = name.Format;
-            Source = name.Value.FullName;
         }
 
         #endregion
 
         #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Query
+        ///
+        /// <summary>
+        /// Gets or sets the object to ask the user to select the save path.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public Query<SaveQuerySource, string> Query { get; }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Source
+        ///
+        /// <summary>
+        /// Gets or sets the path of the source file.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Source { get; }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -105,17 +111,6 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Query
-        ///
-        /// <summary>
-        /// Gets or sets the object to ask the user to select the save path.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public Query<SaveQuerySource, string> Query { get; set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// Format
         ///
         /// <summary>
@@ -123,18 +118,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Format Format { get; set; } = Format.Unknown;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Source
-        ///
-        /// <summary>
-        /// Gets or sets the path of the source file.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Source { get; set; }
+        public Format Format { get; init; } = Format.Unknown;
 
         /* ----------------------------------------------------------------- */
         ///
@@ -145,7 +129,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Value => _value ??= Get();
+        public string Value => _cache ??= GetValue();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -172,47 +156,65 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         #endregion
 
-        #region Implementations
+        #region Methods
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Get
+        /// Invoke
         ///
         /// <summary>
-        /// Gets the result. The method may invoke the query.
+        /// Invokes the provided query and gets the result.
         /// </summary>
         ///
+        /// <remarks>
+        /// In most cases, it is recommended to get the value through the
+        /// Value property instead of executing the method directly.
+        /// </remarks>
+        ///
         /* ----------------------------------------------------------------- */
-        private string Get()
+        public string Invoke()
         {
-            switch (Location)
+            var m = new QueryMessage<SaveQuerySource, string>
             {
-                case SaveLocation.Desktop:
-                    return Environment.SpecialFolder.Desktop.GetName();
-                case SaveLocation.MyDocuments:
-                    return Environment.SpecialFolder.MyDocuments.GetName();
-                case SaveLocation.Source:
-                    return Io.Get(Source).DirectoryName;
-                case SaveLocation.Explicit:
-                    return Request.Directory;
-                case SaveLocation.Query:
-                    var msg = Message.ForSave(Source, Format);
-                    Query?.Request(msg);
-                    if (msg.Cancel) throw new OperationCanceledException();
-                    return msg.Value;
-                case SaveLocation.Preset:
-                    break;
-            }
+                Source = new SaveQuerySource(Source, Format),
+                Value  = string.Empty,
+                Cancel = true,
+            };
 
-            return Settings.SaveDirectory.HasValue() ?
-                   Settings.SaveDirectory :
-                   Environment.SpecialFolder.Desktop.GetName();
+            Query?.Request(m);
+            if (m.Cancel) throw new OperationCanceledException();
+            return m.Value;
         }
 
         #endregion
 
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetValue
+        ///
+        /// <summary>
+        /// Gets the value. The method may invoke the provided query.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private string GetValue() => Location switch
+        {
+            SaveLocation.Desktop     => Environment.SpecialFolder.Desktop.GetName(),
+            SaveLocation.MyDocuments => Environment.SpecialFolder.MyDocuments.GetName(),
+            SaveLocation.Source      => Io.Get(Source).DirectoryName,
+            SaveLocation.Explicit    => Request.Directory,
+            SaveLocation.Query       => Invoke(),
+            /* Preset/Unknown */ _   => Settings.SaveDirectory.HasValue() ?
+                                        Settings.SaveDirectory :
+                                        Environment.SpecialFolder.Desktop.GetName(),
+        };
+
+        #endregion
+
         #region Fields
-        private string _value;
+        private string _cache;
         #endregion
     }
 }

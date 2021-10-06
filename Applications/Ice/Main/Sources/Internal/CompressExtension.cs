@@ -15,7 +15,6 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System;
 using System.Linq;
 using Cube.FileSystem.SevenZip.Ice.Settings;
 using Cube.Mixin.String;
@@ -54,15 +53,17 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             if (settings.Destination.HasValue()) return settings.Destination;
 
-            var ss     = src.Settings.Value.Compress;
-            var name   = new ArchiveName(src.Request.Sources.First(), src.Request.Format);
-            var select = new Selector(src.Request, ss, name) { Query = src.Select };
-            if (select.Location == SaveLocation.Query) return select.Value;
+            var ss  = src.Settings.Value.Compress;
+            var cvt = new ArchiveName(src.Request.Sources.First(), src.Request.Format);
+            var obj = new SaveQueryProxy(src.Select, cvt.Value.FullName, src.Request, ss)
+            {
+                Format = cvt.Format,
+            };
 
-            var dest = Io.Combine(select.Value, name.Value.Name);
-            return Io.Exists(dest) && ss.OverwritePrompt ?
-                   AskDestination(src, dest, name.Format) :
-                   dest;
+            if (obj.Location == SaveLocation.Query) return obj.Value;
+
+            var dest = Io.Combine(obj.Value, cvt.Value.Name);
+            return Io.Exists(dest) && ss.OverwritePrompt ? obj.Invoke() : dest;
         }
 
         /* ----------------------------------------------------------------- */
@@ -97,27 +98,6 @@ namespace Cube.FileSystem.SevenZip.Ice
             src.Destination.HasValue() ?
             string.Format(Properties.Resources.MessageArchive, src.Destination) :
             Properties.Resources.MessagePreArchive;
-
-        #endregion
-
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// AskDestination
-        ///
-        /// <summary>
-        /// Asks the user to select the destination.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private static string AskDestination(CompressFacade facade, string src, Format format)
-        {
-            var m = Message.ForSave(src, format);
-            facade.Select?.Request(m);
-            if (m.Cancel) throw new OperationCanceledException();
-            return m.Value;
-        }
 
         #endregion
     }

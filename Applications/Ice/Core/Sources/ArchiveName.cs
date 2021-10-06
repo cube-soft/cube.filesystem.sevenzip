@@ -83,7 +83,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Entity Value => _value ??= Convert();
+        public Entity Value => _cache ??= GetEntity();
 
         /* ----------------------------------------------------------------- */
         ///
@@ -117,14 +117,14 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Convert
+        /// GetEntity
         ///
         /// <summary>
         /// Invokes the conversion.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private Entity Convert()
+        private Entity GetEntity()
         {
             var src  = Io.Get(_source);
             var tmp  = Io.Get(src.BaseName);
@@ -159,7 +159,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         private readonly string _source;
         private readonly Format _souceFormat;
         private readonly CompressionMethod _sourceMethod;
-        private Entity _value;
+        private Entity _cache;
         #endregion
     }
 }
