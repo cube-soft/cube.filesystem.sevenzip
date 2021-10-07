@@ -87,7 +87,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             src.Select    = new(e => {
                 var m = Message.ForCompressLocation(e.Source);
                 Send(m);
-                e.Value = m.Value;
+                e.Value  = m.Value;
                 e.Cancel = m.Cancel;
             }, Dispatcher.Vanilla);
         }

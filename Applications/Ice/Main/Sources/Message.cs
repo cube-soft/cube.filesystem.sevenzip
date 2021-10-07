@@ -15,6 +15,8 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Mixin.String;
+
 namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
@@ -44,10 +46,35 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <returns>SaveFileDialog object.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static SaveFileMessage ForCompressLocation(SaveQuerySource src) => new()
+        public static SaveFileMessage ForCompressLocation(SaveQuerySource src) =>
+            ForCompressLocation(src.Source, src.Format);
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// ForCompressLocation
+        ///
+        /// <summary>
+        /// Creates a new instance of the SaveFileDialog class with
+        /// the specified arguments.
+        /// </summary>
+        ///
+        /// <param name="src">Path to save.</param>
+        /// <param name="format">Format to save.</param>
+        ///
+        /// <returns>SaveFileDialog object.</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static SaveFileMessage ForCompressLocation(string src, Format format)
         {
-            OverwritePrompt = true,
-        };
+            if (!src.HasValue()) return new();
+
+            var fi = Io.Get(src);
+            return new()
+            {
+                InitialDirectory = fi.DirectoryName,
+                Value            = fi.Name,
+            };
+        }
 
         /* ----------------------------------------------------------------- */
         ///

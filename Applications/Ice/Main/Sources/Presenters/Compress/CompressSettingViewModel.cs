@@ -297,7 +297,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Select() => Track(new SaveFileMessage(), e => Destination = e);
+        public void Select() => Track(Message.ForCompressLocation(Destination, Format), e => Destination = e);
 
         /* ----------------------------------------------------------------- */
         ///
