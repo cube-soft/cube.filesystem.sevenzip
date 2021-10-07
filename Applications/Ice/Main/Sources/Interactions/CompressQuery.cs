@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using Cube.FileSystem.SevenZip.Ice.Settings;
+using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -69,7 +70,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         public CompressRuntimeSetting Get(string src, Format format) =>
-            _value ??= CreateOrRequest(src, format);
+            _cache ??= GetValue(src, format);
 
         #endregion
 
@@ -77,7 +78,7 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CreateOrRequest
+        /// GetValue
         ///
         /// <summary>
         /// Creates a new instance of the CompressRuntimeSetting class
@@ -86,7 +87,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private CompressRuntimeSetting CreateOrRequest(string src, Format format) => format switch
+        private CompressRuntimeSetting GetValue(string src, Format format) => format switch
         {
             Format.Tar      or
             Format.Zip      or
@@ -95,37 +96,42 @@ namespace Cube.FileSystem.SevenZip.Ice
             Format.BZip2    or
             Format.GZip     or
             Format.XZ          => new(Format.Tar) { CompressionMethod = format.ToMethod() },
-            _                  => Request(src),
+            _                  => Invoke(src),
         };
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Request
+        /// Invoke
         ///
         /// <summary>
         /// Asks the user to input the runtime settings.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private CompressRuntimeSetting Request(string src)
+        private CompressRuntimeSetting Invoke(string src)
         {
-            var fi  = Io.Get(src);
-            var msg = new QueryMessage<string, CompressRuntimeSetting>
+            var m = new QueryMessage<string, CompressRuntimeSetting>
             {
-                Source = Io.Combine(fi.DirectoryName, $"{fi.BaseName}.zip"),
                 Value  = new(),
                 Cancel = true,
             };
 
-            Request(msg);
-            if (msg.Cancel) throw new OperationCanceledException();
-            return msg.Value;
+            if (src.HasValue())
+            {
+                var f = Io.Get(src);
+                m.Source = Io.Combine(f.DirectoryName, $"{f.BaseName}.zip");
+                m.Value.Destination = m.Source;
+            }
+
+            Request(m);
+            if (m.Cancel) throw new OperationCanceledException();
+            return m.Value;
         }
 
         #endregion
 
         #region Fields
-        private CompressRuntimeSetting _value;
+        private CompressRuntimeSetting _cache;
         #endregion
     }
 }
