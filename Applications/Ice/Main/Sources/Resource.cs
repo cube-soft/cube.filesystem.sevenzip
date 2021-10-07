@@ -86,7 +86,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             {
                 Format.Zip, new()
                 {
-                    new("Deflate",   CompressionMethod.Deflate),
+                    new("Deflate",   CompressionMethod.Default),
                     new("Deflate64", CompressionMethod.Deflate64),
                     new("BZip2",     CompressionMethod.BZip2),
                     new("LZMA",      CompressionMethod.Lzma),
@@ -97,7 +97,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             {
                 Format.SevenZip, new()
                 {
-                    new("LZMA",      CompressionMethod.Lzma),
+                    new("LZMA",      CompressionMethod.Default),
                     new("LZMA2",     CompressionMethod.Lzma2),
                     new("PPMd",      CompressionMethod.Ppmd),
                     new("BZip2",     CompressionMethod.BZip2),
@@ -111,13 +111,13 @@ namespace Cube.FileSystem.SevenZip.Ice
                     new("GZip",      CompressionMethod.GZip),
                     new("BZip2",     CompressionMethod.BZip2),
                     new("XZ",        CompressionMethod.XZ),
-                    new("Copy",      CompressionMethod.Copy),
+                    new("Copy",      CompressionMethod.Default),
                 }
             },
             {
                 Format.Sfx, new()
                 {
-                    new("LZMA",      CompressionMethod.Lzma),
+                    new("LZMA",      CompressionMethod.Default),
                     new("LZMA2",     CompressionMethod.Lzma2),
                     new("PPMd",      CompressionMethod.Ppmd),
                     new("BZip2",     CompressionMethod.BZip2),
