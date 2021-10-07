@@ -66,14 +66,18 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         public static SaveFileMessage ForCompressLocation(string src, Format format)
         {
-            if (!src.HasValue()) return new();
+            var items = Resource.GetDialogFilters(format);
+            var dest  = new SaveFileMessage { Filter = items.GetFilter() };
 
-            var fi = Io.Get(src);
-            return new()
+            if (src.HasValue())
             {
-                Value            = fi.Name,
-                InitialDirectory = fi.DirectoryName,
-            };
+                var fi = Io.Get(src);
+                dest.Value            = fi.Name;
+                dest.InitialDirectory = fi.DirectoryName;
+                dest.FilterIndex      = items.GetFilterIndex(dest.Value);
+            }
+
+            return dest;
         }
 
         /* ----------------------------------------------------------------- */

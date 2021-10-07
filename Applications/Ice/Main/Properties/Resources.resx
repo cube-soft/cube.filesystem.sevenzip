@@ -58,29 +58,29 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Filter7z" xml:space="preserve">
+    <value>7-Zip ファイル</value>
+  </data>
   <data name="FilterAll" xml:space="preserve">
-    <value>すべてのファイル (*.*)|*.*</value>
+    <value>すべてのファイル</value>
   </data>
-  <data name="FilterBzip2" xml:space="preserve">
-    <value>Tar.BZip2 ファイル (*.tar.bz2, *.tb2, *.tar.bz, *.tbz)|*.tar.bz2;*.tb2;*.tar.bz;*.tbz;*.TAR.BZ2;*.TB2;*.TAR.BZ;*.TBZ</value>
+  <data name="FilterBz2" xml:space="preserve">
+    <value>BZip2 ファイル</value>
   </data>
-  <data name="FilterGzip" xml:space="preserve">
-    <value>Tar.GZip ファイル (*.tar.gz, *.tgz)|*.tar.gz;*.tgz;*.TAR.GZ;*.TGZ</value>
-  </data>
-  <data name="FilterSevenZip" xml:space="preserve">
-    <value>7z ファイル (*.7z)|*.7z;*.7Z</value>
+  <data name="FilterGz" xml:space="preserve">
+    <value>GZip ファイル</value>
   </data>
   <data name="FilterSfx" xml:space="preserve">
-    <value>自己解凍形式ファイル (*.exe)|*.exe;*.EXE</value>
+    <value>自己解凍形式ファイル</value>
   </data>
   <data name="FilterTar" xml:space="preserve">
-    <value>Tar ファイル (*.tar)|*.tar;*.TAR</value>
+    <value>Tar ファイル</value>
   </data>
-  <data name="FilterXZ" xml:space="preserve">
-    <value>Tar.XZ ファイル (*.tar.xz, *.txz)|*.tar.xz;*.txz;*.TAR.XZ;*.TXZ</value>
+  <data name="FilterXz" xml:space="preserve">
+    <value>XZ ファイル</value>
   </data>
   <data name="FilterZip" xml:space="preserve">
-    <value>Zip ファイル (*.zip)|*.zip;*.ZIP</value>
+    <value>Zip ファイル</value>
   </data>
   <data name="FormatSfx" xml:space="preserve">
     <value>自己解凍形式</value>

@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
+using Cube.Collections;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -145,6 +146,28 @@ namespace Cube.FileSystem.SevenZip.Ice
             new("AES256",    EncryptionMethod.Aes256),
         };
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// FileDialogFilters
+        ///
+        /// <summary>
+        /// Gets the collection in which each item consists of a Format
+        /// and a FileDialogFilter pair.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static OrderedDictionary<Format, FileDialogFilter> FileDialogFilters { get; } = new()
+        {
+            { Format.Zip,      new(Properties.Resources.FilterZip, ".zip") },
+            { Format.SevenZip, new(Properties.Resources.Filter7z,  ".7z") },
+            { Format.Tar,      new(Properties.Resources.FilterTar, ".tar") },
+            { Format.GZip,     new(Properties.Resources.FilterGz,  ".tar.gz", ".tgz") },
+            { Format.BZip2,    new(Properties.Resources.FilterBz2, ".tar.bz2", ".tb2", ".tar.bz", ".tbz") },
+            { Format.XZ,       new(Properties.Resources.FilterXz,  ".tar.xz", ".txz") },
+            { Format.Sfx,      new(Properties.Resources.FilterSfx, ".exe") },
+            { Format.Unknown,  new(Properties.Resources.FilterAll, ".*") },
+        };
+
         #endregion
 
         #region Methods
@@ -171,10 +194,11 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetExtensionFilter
+        /// GetDialogFilters
         ///
         /// <summary>
-        /// Gets the extension filter corresponding to the compressed file format.
+        /// Gets the collection of the DialogFilter objects corresponding
+        /// to the specified format.
         /// </summary>
         ///
         /// <param name="src">Archive format.</param>
@@ -182,38 +206,13 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <returns>Extension filter.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static string GetExtensionFilter(Format src) => GetExtensionFilter(src.ToString());
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetExtensionFilter
-        ///
-        /// <summary>
-        /// Gets the extension filter corresponding to the compressed file format.
-        /// </summary>
-        ///
-        /// <param name="src">Archive format.</param>
-        ///
-        /// <returns>Extension filter.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static string GetExtensionFilter(string src)
+        public static IEnumerable<FileDialogFilter> GetDialogFilters(Format src)
         {
-            var obj = new Dictionary<string, string>
-            {
-                { "zip",      Properties.Resources.FilterZip      },
-                { "7z",       Properties.Resources.FilterSevenZip },
-                { "sevenzip", Properties.Resources.FilterSevenZip },
-                { "tar",      Properties.Resources.FilterTar      },
-                { "gzip",     Properties.Resources.FilterGzip     },
-                { "bzip2",    Properties.Resources.FilterBzip2    },
-                { "xz",       Properties.Resources.FilterXZ       },
-                { "sfx",      Properties.Resources.FilterSfx      },
-            };
-
-            return obj.TryGetValue(src.ToLowerInvariant(), out var dest) ?
-                   $"{dest}|{Properties.Resources.FilterAll}" :
-                   Properties.Resources.FilterAll;
+            if (src == Format.Unknown) return FileDialogFilters.Values;
+            var all = FileDialogFilters[Format.Unknown];
+            return FileDialogFilters.TryGetValue(src, out var dest) ?
+                   new[] { dest, all } :
+                   new[] { all };
         }
 
         /* ----------------------------------------------------------------- */

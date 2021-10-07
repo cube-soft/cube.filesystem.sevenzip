@@ -132,61 +132,49 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetExtensionFilter
+        /// GetDialogFilters
         ///
         /// <summary>
         /// Tests the GetExtensionFilter method.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [TestCase(Format.Zip,      "*.zip")]
-        [TestCase(Format.SevenZip, "*.7z")]
-        [TestCase(Format.Tar,      "*.tar")]
-        [TestCase(Format.GZip,     "*.tar.gz;*.tgz")]
-        [TestCase(Format.BZip2,    "*.tar.bz2;*.tb2;*.tar.bz;*.tbz")]
-        [TestCase(Format.XZ,       "*.tar.xz;*.txz")]
-        [TestCase(Format.Sfx,      "*.exe")]
-        public void GetExtensionFilter(Format format, string piece)
+        [TestCase(Format.Zip,      "*.zip"    )]
+        [TestCase(Format.SevenZip, "*.7z"     )]
+        [TestCase(Format.Tar,      "*.tar"    )]
+        [TestCase(Format.GZip,     "*.tar.gz" )]
+        [TestCase(Format.GZip,     "*.tgz"    )]
+        [TestCase(Format.BZip2,    "*.tar.bz2")]
+        [TestCase(Format.BZip2,    "*.tb2"    )]
+        [TestCase(Format.BZip2,    "*.tar.bz" )]
+        [TestCase(Format.BZip2,    "*.tbz"    )]
+        [TestCase(Format.XZ,       "*.tar.xz" )]
+        [TestCase(Format.XZ,       "*.txz"    )]
+        [TestCase(Format.Sfx,      "*.exe"    )]
+        [TestCase(Format.Unknown,  "*.zip"    )] /* Contains all formats */
+        public void GetDialogFilters(Format format, string piece)
         {
-            var dest = Resource.GetExtensionFilter(format);
-            Assert.That(dest.Contains("*.*"),                    Is.True);
-            Assert.That(dest.Contains(piece),                    Is.True);
-            Assert.That(dest.Contains(piece.ToUpperInvariant()), Is.True);
+            var dest  = Resource.GetDialogFilters(format).GetFilter();
+            var upper = piece.ToUpperInvariant();
+            Assert.That(dest.Contains("*.*"));
+            Assert.That(dest.Contains(piece), piece);
+            Assert.That(dest.Contains(upper), upper);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetFilter_7z
+        /// GetDialogFilter_NotSupported
         ///
         /// <summary>
-        /// Tests the GetExtensionFilter method.
+        /// Tests the GetDialogFilters method with an unsupported format.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void GetExtensionFilter_7z()
-        {
-            var dest = Resource.GetExtensionFilter("7z");
-            Assert.That(dest.Contains("*.*"),  Is.True);
-            Assert.That(dest.Contains("*.7z"), Is.True);
-            Assert.That(dest.Contains("*.7Z"), Is.True);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetExtensionFilter_NotSupported()
-        ///
-        /// <summary>
-        /// Tests the GetExtensionFilter method.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [Test]
-        public void GetExtensionFilter_NotSupported()
-        {
-            var dest = Resource.GetExtensionFilter(Format.Rar);
-            Assert.That(dest, Is.EqualTo("すべてのファイル (*.*)|*.*"));
-        }
+        public void GetDialogFilters_NotSupported() => Assert.That(
+            Resource.GetDialogFilters(Format.Rar).GetFilter(),
+            Is.EqualTo("すべてのファイル (*.*)|*.*")
+        );
 
         #endregion
     }
