@@ -87,27 +87,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// <param name="name">Property name of the binding source.</param>
         /// <param name="view">View object to bind.</param>
         /// <param name="viewName">Property name of the view to bind.</param>
-        ///
-        /// <remarks>
-        /// The method will be moved to the Cube.Forms project.
-        /// </remarks>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static void Bind(this BindingSource src, string name, RadioButton view, string viewName) =>
-            Bind(src, name, view, viewName, DataSourceUpdateMode.OnValidation);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Bind
-        ///
-        /// <summary>
-        /// Invokes the binding settings with the specified arguments.
-        /// </summary>
-        ///
-        /// <param name="src">Binding source.</param>
-        /// <param name="name">Property name of the binding source.</param>
-        /// <param name="view">View object to bind.</param>
-        /// <param name="viewName">Property name of the view to bind.</param>
         /// <param name="mode">Update mode.</param>
         ///
         /// <remarks>
