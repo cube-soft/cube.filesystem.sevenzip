@@ -190,7 +190,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Browse() => Track(new OpenDirectoryMessage(), e => SaveDirectory = e);
+        public void Browse() => Track(Message.ForSaveDirectory(SaveDirectory), e => SaveDirectory = e);
 
         #endregion
 

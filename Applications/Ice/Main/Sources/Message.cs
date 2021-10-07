@@ -71,8 +71,8 @@ namespace Cube.FileSystem.SevenZip.Ice
             var fi = Io.Get(src);
             return new()
             {
-                InitialDirectory = fi.DirectoryName,
                 Value            = fi.Name,
+                InitialDirectory = fi.DirectoryName,
             };
         }
 
@@ -90,12 +90,17 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <returns>OpenDirectoryMessage object.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static OpenDirectoryMessage ForExtractLocation(SaveQuerySource src) => new()
+        public static OpenDirectoryMessage ForExtractLocation(SaveQuerySource src)
         {
-            NewButton = true,
-            Text      = Properties.Resources.MessageExtractDestination,
-            Value     = Io.Get(src.Source).DirectoryName,
-        };
+            var dest = new OpenDirectoryMessage
+            {
+                Text      = Properties.Resources.MessageExtractDestination,
+                NewButton = true,
+            };
+
+            if (src.Source.HasValue()) dest.Value = Io.Get(src.Source).DirectoryName;
+            return dest;
+        }
 
         #endregion
     }
