@@ -62,18 +62,6 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Source
-        ///
-        /// <summary>
-        /// Gets the source object. The project will be removed after
-        /// the implementation is finished.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public QueryMessage<string, CompressRuntimeSetting> Source => Facade;
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// Destination
         ///
         /// <summary>
@@ -290,14 +278,14 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Select
+        /// Browse
         ///
         /// <summary>
-        /// Selects the destination.
+        /// Shows the dialog to select the destination.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Select() => Track(Message.ForCompressLocation(Destination, Format.Unknown), e => Destination = e);
+        public void Browse() => Track(Message.ForCompressLocation(Destination, Format.Unknown), e => Destination = e);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -308,7 +296,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Execute() => Track(() => Facade.Cancel = false, Send<CloseMessage>);
+        public void Execute() { Facade.Cancel = false; Send<CloseMessage>(); }
 
         #endregion
     }

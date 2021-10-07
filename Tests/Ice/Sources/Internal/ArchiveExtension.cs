@@ -146,8 +146,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         public static IDisposable SetRuntime(this CompressViewModel src, string value) =>
             src.Subscribe<CompressSettingViewModel>(e =>
         {
-            e.Source.Cancel     = false;
-            e.Source.Value.Destination = value;
+            e.Destination = value;
+            e.Execute();
         });
 
         /* ----------------------------------------------------------------- */

@@ -69,7 +69,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             Behaviors.Add(new DialogBehavior(vm));
             Behaviors.Add(new SaveFileBehavior(vm));
             Behaviors.Add(new CloseBehavior(this, vm));
-            Behaviors.Add(new ClickBehavior(DestinationButton, vm.Select));
+            Behaviors.Add(new ClickBehavior(DestinationButton, vm.Browse));
             Behaviors.Add(new ClickBehavior(ExecuteButton, vm.Execute));
             Behaviors.Add(new ClickBehavior(ExitButton, Close));
             Behaviors.Add(new PathLintBehavior(DestinationTextBox, PathToolTip));
