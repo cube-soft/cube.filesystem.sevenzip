@@ -108,7 +108,9 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         private void AddCompressionMethod(IDictionary<string, PropVariant> dest)
         {
-            var m = Options.CompressionMethod;
+            var m = Options.CompressionMethod == CompressionMethod.Default ?
+                    CompressionMethod.Deflate :
+                    Options.CompressionMethod;
             if (!SupportedMethods.Contains(m)) return;
             dest.Add("m", PropVariant.Create(m.ToString()));
         }
