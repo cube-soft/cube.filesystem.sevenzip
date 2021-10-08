@@ -509,10 +509,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static IEnumerable<string> GetPathArgs(string filename) =>
-            Preset.Extract
-                      .ToArguments()
-                      .Concat(new[] { "/o:source", $"/drop:{typeof(ExtractTest).GetPath(filename)}" });
+        private static IEnumerable<string> GetPathArgs(string filename) => new[]
+        {
+            $"/o:source",
+            $"/save:{typeof(ExtractTest).GetPath(filename)}",
+        };
 
         #endregion
     }
