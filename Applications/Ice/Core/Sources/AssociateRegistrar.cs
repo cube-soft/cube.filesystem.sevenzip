@@ -17,9 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Cube.Logging;
-using Cube.Mixin.Collections;
 using Cube.Mixin.String;
 using Microsoft.Win32;
 
@@ -186,12 +184,17 @@ namespace Cube.FileSystem.SevenZip.Ice
             if (!FileName.HasValue()) return;
 
             var id   = extension.TrimStart('.');
-            var root = Registry.ClassesRoot;
             var name = GetSubKeyName(id);
-            using (var key = root.CreateSubKey(name)) Register(key, id);
+            using (var sk = Registry.ClassesRoot.CreateSubKey(name)) Register(sk, id);
 
             Register(extension, name);
-            DeleteUserChoise(extension);
+            OpenUserChoice(extension, sk =>
+            {
+                var prev = sk.GetValue("Progid") as string ?? "";
+                sk.SetValue(PreArchiver, prev);
+                sk.SetValue("Progid", name);
+                GetType().LogDebug("Explorer", extension, prev, name);
+            });
         }
 
         /* ----------------------------------------------------------------- */
@@ -249,6 +252,17 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void Delete(string extension)
         {
+            OpenUserChoice(extension, sk =>
+            {
+                var name = GetSubKeyName(extension.TrimStart('.'));
+                var cur  = sk.GetValue("Progid") as string ?? "";
+                var prev = sk.GetValue(PreArchiver) as string ?? "";
+
+                sk.SetValue("Progid", prev);
+                sk.DeleteValue(PreArchiver, false);
+                GetType().LogDebug("Explorer", extension, cur, prev);
+            });
+
             using (var sk = Registry.ClassesRoot.CreateSubKey(GetExtension(extension)))
             {
                 var prev = sk.GetValue(PreArchiver, "") as string;
@@ -266,26 +280,21 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// DeleteUserChoise
+        /// OpenUserChoice
         ///
         /// <summary>
-        /// Deletes the UserChoise subkey of the specified extension.
+        /// Opens the UserChoice subkey of the specified extension and
+        /// invokes the specified callback action.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void DeleteUserChoise(string extension) => GetType().LogWarn(() =>
+        private void OpenUserChoice(string extension, Action<RegistryKey> callback)
         {
-            var src  = "UserChoice";
             var root = @"Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts";
-            var name = $@"{root}\{GetExtension(extension)}";
-
-            using var sk = Registry.CurrentUser.OpenSubKey(name, true);
-            if (sk != null && sk.GetSubKeyNames().Any(e => e.FuzzyEquals(src)))
-            {
-                sk.DeleteSubKey(src, false);
-                GetType().LogDebug($"Reset:{name.Quote()}");
-            }
-        });
+            var src  = $@"{root}\{GetExtension(extension)}\UserChoice";
+            using var sk = Registry.CurrentUser.OpenSubKey(src, true);
+            if (sk != null) callback(sk);
+        }
 
         /* ----------------------------------------------------------------- */
         ///
