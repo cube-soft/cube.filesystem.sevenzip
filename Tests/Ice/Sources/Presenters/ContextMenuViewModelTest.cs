@@ -107,10 +107,16 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         [Test, RequiresThread(ApartmentState.STA)]
-        [Ignore("TODO:Under migration")]
         public void Customize()
         {
-            var dest = InvokeCustomize();
+            var ss = NewSettings();
+            using (var vm = NewVM(ss))
+            using (vm.Subscribe<CustomizeViewModel>(e => e.Save()))
+            {
+                vm.Menu.Customize();
+            }
+
+            var dest = ss.Value.Context;
             Assert.That(dest.UseCustom, Is.True);
 
             var root = dest.Custom;
@@ -145,26 +151,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 Assert.That(item.Arguments, Does.StartWith("/x"), item.Name);
                 Assert.That(item.IconIndex, Is.EqualTo(2), item.Name);
             }
-        }
-
-        #endregion
-
-        #region Others
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// InvokeCustomize
-        ///
-        /// <summary>
-        /// Invokes the customize operation.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private ContextSetting InvokeCustomize()
-        {
-            var dest = NewSettings();
-            using (var vm = NewVM(dest)) vm.Menu.Customize();
-            return dest.Value.Context;
         }
 
         #endregion
