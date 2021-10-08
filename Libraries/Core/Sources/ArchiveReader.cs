@@ -284,7 +284,7 @@ namespace Cube.FileSystem.SevenZip
                 _query.Reset();
                 throw new EncryptionException();
             }
-            throw cb.Exception ?? new System.IO.IOException($"{cb.Result}");
+            throw new System.IO.IOException($"{cb.Result}", cb.Exception);
         }
 
         /* ----------------------------------------------------------------- */

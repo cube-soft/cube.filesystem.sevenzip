@@ -383,8 +383,7 @@ namespace Cube.FileSystem.SevenZip
         {
             if (src == OperationResult.OK) return;
             if (src == OperationResult.UserCancel) throw new OperationCanceledException();
-            if (error != null) throw error;
-            else throw new System.IO.IOException($"{src}");
+            throw new System.IO.IOException($"{src}", error);
         }
 
         #endregion
