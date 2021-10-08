@@ -131,10 +131,10 @@ namespace Cube.FileSystem.SevenZip.Ice
                 if (!dest.Exists)
                 {
                     Io.CreateDirectory(dest.FullName);
-                    Io.SetAttributes(dest.FullName, src.Attributes);
                     Io.SetCreationTime(dest.FullName, src.CreationTime);
                     Io.SetLastWriteTime(dest.FullName, src.LastWriteTime);
                     Io.SetLastAccessTime(dest.FullName, src.LastAccessTime);
+                    Io.SetAttributes(dest.FullName, src.Attributes);
                 }
             }
             else Io.Move(src.FullName, dest.FullName, true);

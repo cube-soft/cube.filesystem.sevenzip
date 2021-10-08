@@ -71,10 +71,10 @@ namespace Cube.FileSystem.SevenZip
             var path = Io.Combine(root, src.FullName);
             if (!Io.Exists(path)) return;
 
-            Io.SetAttributes(path, src.Attributes);
             SetCreationTime(src, path);
             SetLastWriteTime(src, path);
             SetLastAccessTime(src, path);
+            Io.SetAttributes(path, src.Attributes);
         }
 
         #endregion
