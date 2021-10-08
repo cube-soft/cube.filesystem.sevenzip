@@ -337,14 +337,17 @@ namespace Cube.FileSystem.SevenZip
             {
                 _extensionToFormat = new()
                 {
-                    { ".7z",  Format.SevenZip },
-                    { ".bz2", Format.BZip2    },
-                    { ".tbz", Format.BZip2    },
-                    { ".gz",  Format.GZip     },
-                    { ".tgz", Format.GZip     },
-                    { ".xz",  Format.XZ       },
-                    { ".txz", Format.XZ       },
-                    { ".z",   Format.Lzw      },
+                    { ".7z",   Format.SevenZip },
+                    { ".bz",   Format.BZip2    },
+                    { ".bz2",  Format.BZip2    },
+                    { ".tbz",  Format.BZip2    },
+                    { ".tb2",  Format.BZip2    },
+                    { ".tbz2", Format.BZip2    },
+                    { ".gz",   Format.GZip     },
+                    { ".tgz",  Format.GZip     },
+                    { ".xz",   Format.XZ       },
+                    { ".txz",  Format.XZ       },
+                    { ".z",    Format.Lzw      },
                 };
 
                 foreach (Format item in Enum.GetValues(typeof(Format)))

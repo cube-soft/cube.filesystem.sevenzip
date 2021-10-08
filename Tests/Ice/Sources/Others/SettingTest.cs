@@ -107,34 +107,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             Assert.That(settings.Exists, Is.False);
         }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ToOption
-        ///
-        /// <summary>
-        /// Tests the ToOption method.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [Test]
-        public void ToOption()
-        {
-            var dest = new CompressRuntimeSetting()
-            {
-                CompressionLevel  = CompressionLevel.High,
-                CompressionMethod = CompressionMethod.Ppmd,
-                EncryptionMethod  = EncryptionMethod.Aes192,
-                Format            = Format.GZip,
-                Password          = "password",
-                Destination       = "dummy",
-                Sfx               = string.Empty,
-                ThreadCount       = 3,
-            }.ToOption(new SettingFolder());
-
-            Assert.That(dest.CompressionLevel, Is.EqualTo(CompressionLevel.High));
-            Assert.That(dest.ThreadCount,      Is.EqualTo(3));
-        }
-
         #endregion
     }
 }

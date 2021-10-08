@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using Cube.Mixin.Assembly;
+using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
@@ -79,7 +80,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         public Format Format
         {
             get => Get(() => Format.Zip);
-            set => Set(value);
+            set => SetFormat(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -94,7 +95,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         public string Destination
         {
             get => Get(() => string.Empty);
-            set => Set(value);
+            set => SetDestination(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -154,7 +155,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         public CompressionMethod CompressionMethod
         {
             get => Get(() => CompressionMethod.Default);
-            set => Set(value);
+            set => SetCompressionMethod(value);
         }
 
         /* ----------------------------------------------------------------- */
@@ -223,6 +224,95 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         protected override void Dispose(bool disposing) { }
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetFormat
+        ///
+        /// <summary>
+        /// Sets values for the Format, CompressionMethod, and Destination
+        /// properties.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void SetFormat(Format src)
+        {
+            if (Set(src, nameof(Format))) _ = Set(CompressionMethod.Default, nameof(CompressionMethod));
+            if (Destination.HasValue() && Format != Format.Unknown) Rename();
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetCompressionMethod
+        ///
+        /// <summary>
+        /// Sets values for the CompressionMethod and Destination properties.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void SetCompressionMethod(CompressionMethod src)
+        {
+            if (!Set(src, nameof(CompressionMethod))) return;
+            if (Destination.HasValue() && Format == Format.Tar) Rename();
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SetDestination
+        ///
+        /// <summary>
+        /// Sets values for the Destination, Format, and CompressionMethod
+        /// properties.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void SetDestination(string src)
+        {
+            if (!Set(src, nameof(Destination))) return;
+            if (!src.HasValue()) return;
+
+            var ext = Io.Get(src).Extension.ToLowerInvariant();
+            var obj = ext == ".exe" ? Format.Sfx : Formatter.FromExtension(ext);
+            if (obj == Format.Unknown) return;
+
+            var cvt = obj == Format.GZip || obj == Format.BZip2 || obj == Format.XZ ? Format.Tar : obj;
+            _ = Set(cvt, nameof(Format));
+            _ = Set(obj.ToMethod(), nameof(CompressionMethod));
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Rename
+        ///
+        /// <summary>
+        /// Renames the Destination with the current values of the Format
+        /// and CompressionMethod properties.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private void Rename()
+        {
+            var fi   = Io.Get(Destination);
+            var cmp  = fi.BaseName.ToLowerInvariant();
+            var name = cmp.EndsWith(".tar") ?
+                       System.IO.Path.GetFileNameWithoutExtension(fi.BaseName) :
+                       fi.BaseName;
+
+            var ext = Format == Format.Tar ? CompressionMethod switch
+            {
+                CompressionMethod.GZip  => ".tar.gz",
+                CompressionMethod.BZip2 => ".tar.bz2",
+                CompressionMethod.XZ    => ".tar.xz",
+                _                       => ".tar",
+            } : Format.ToExtension();
+
+            var dest = Io.Combine(fi.DirectoryName, $"{name}{ext}");
+            _ = Set(dest, nameof(Destination));
+        }
 
         #endregion
     }

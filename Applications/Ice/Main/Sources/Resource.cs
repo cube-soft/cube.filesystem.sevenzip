@@ -162,7 +162,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             { Format.SevenZip, new(Properties.Resources.Filter7z,  ".7z") },
             { Format.Tar,      new(Properties.Resources.FilterTar, ".tar") },
             { Format.GZip,     new(Properties.Resources.FilterGz,  ".tar.gz", ".tgz") },
-            { Format.BZip2,    new(Properties.Resources.FilterBz2, ".tar.bz2", ".tb2", ".tar.bz", ".tbz") },
+            { Format.BZip2,    new(Properties.Resources.FilterBz2, ".tar.bz2", ".tar.bz", ".tbz2", ".tb2", ".tbz") },
             { Format.XZ,       new(Properties.Resources.FilterXz,  ".tar.xz", ".txz") },
             { Format.Sfx,      new(Properties.Resources.FilterSfx, ".exe") },
             { Format.Unknown,  new(Properties.Resources.FilterAll, ".*") },
