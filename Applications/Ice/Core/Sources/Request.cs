@@ -64,23 +64,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         public Request(string[] args)
         {
             if (args == null || args.Length <= 0) return;
-
-            var mode = args[0];
-            if (mode.Length < 2 || mode[0] != '/') return;
-
-            switch (mode[1])
+            if (Any(args[0], "c"))
             {
-                case 'c':
-                    Mode   = Mode.Compress;
-                    Format = GetFormat(mode);
-                    break;
-                case 'x':
-                    Mode   = Mode.Extract;
-                    Format = Format.Unknown;
-                    break;
-                default:
-                    return;
+                Mode   = Mode.Compress;
+                Format = GetFormat(args[0]);
             }
+            else Mode = Mode.Extract;
 
             ParseOptions(args);
         }
@@ -206,17 +195,18 @@ namespace Cube.FileSystem.SevenZip.Ice
             var sources = new List<string>();
             var options = new List<string>();
 
-            for (var i = 1; i < args.Length; ++i)
+            for (var i = 0; i < args.Length; ++i)
             {
-                if (!args[i].StartsWith("/")) sources.Add(args[i]);
-                else
+                if (Any(args[i])) // Represents the option.
                 {
+                    if (Any(args[i], "c", "x")) continue;
+                    else if (Any(args[i], "p")) Password = true;
+                    else if (Any(args[i], "sr")) SuppressRecursive = true;
+                    else if (Any(args[i], "o:", "out:")) Location = GetLocation(args[i]);
+                    else if (Any(args[i], "save:", "drop:")) Directory = Tail(args[i]);
                     options.Add(args[i]);
-                    if (args[i] == "/p") Password = true;
-                    else if (args[i] == "/sr") SuppressRecursive = true;
-                    else if (Any(args[i], "/o:", "/out:")) Location = GetLocation(args[i]);
-                    else if (Any(args[i], "/save:", "/drop:")) Directory = Tail(args[i]);
                 }
+                else sources.Add(args[i]);
             }
 
             var ignore = Location == SaveLocation.Unknown ||
@@ -239,11 +229,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private Format GetFormat(string src)
         {
-            var index = src.IndexOf(':');
-            if (index < 0 || index >= src.Length - 1) return Format.Zip;
-
-            var query = src.Substring(index + 1).ToLowerInvariant();
-            return Formatter.FromString(query);
+            var dest = Tail(src).ToLowerInvariant();
+            return dest.HasValue() ? Formatter.FromString(dest) : Format.Unknown;
         }
 
         /* ----------------------------------------------------------------- */
@@ -257,12 +244,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private SaveLocation GetLocation(string src)
         {
-            var query = Tail(src).ToLowerInvariant();
-            if (!query.HasValue()) return SaveLocation.Unknown;
+            var dest = Tail(src).ToLowerInvariant();
+            if (!dest.HasValue()) return SaveLocation.Unknown;
 
-            foreach (SaveLocation item in Enum.GetValues(typeof(SaveLocation)))
+            foreach (SaveLocation e in Enum.GetValues(typeof(SaveLocation)))
             {
-                if (item.ToString().ToLowerInvariant() == query) return item;
+                if (e.ToString().ToLowerInvariant() == dest) return e;
             }
             return SaveLocation.Unknown;
         }
@@ -289,12 +276,21 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Any
         ///
         /// <summary>
-        /// Determines whether the specified source argument starts with
-        /// any of the specified latter arguments.
+        /// Determines whether the specified source argument represents
+        /// the option and starts with any of the specified latter
+        /// arguments.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private bool Any(string src, params string[] cmp) => cmp.Any(e => src.StartsWith(e));
+        private bool Any(string src, params string[] cmp)
+        {
+            if (src.Length < 2 || src[0] != '/' && src[0] != '-') return false;
+            if (cmp.Length <= 0) return true;
+
+            var cvt = src.Substring(1);
+            var opt = StringComparison.InvariantCultureIgnoreCase;
+            return cmp.Any(e => cvt.StartsWith(e, opt));
+        }
 
         #endregion
     }

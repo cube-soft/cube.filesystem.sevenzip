@@ -87,7 +87,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             yield return new(
                 @"Preset\Complex.1.0.0",
                 new[] { "Complex.1.0.0.zip" },
-                Preset.Extract.ToArguments(),
+                Enumerable.Empty<string>(),
                 new ExtractSetting
                 {
                     SaveLocation = SaveLocation.Preset,

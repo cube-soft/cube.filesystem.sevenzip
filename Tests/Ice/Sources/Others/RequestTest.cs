@@ -36,78 +36,56 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Create_Empty
+        /// Test
         ///
         /// <summary>
-        /// Tests the constructor with empty arguments.
+        /// Tests to detect the mode and format.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [Test]
-        public void Create_Empty()
+        [TestCase("/x",        Mode.Extract,  Format.Unknown)]
+        [TestCase("-x",        Mode.Extract,  Format.Unknown)]
+        [TestCase("/c",        Mode.Compress, Format.Unknown)]
+        [TestCase("/c:7z",     Mode.Compress, Format.SevenZip)]
+        [TestCase("/C:BZIP2",  Mode.Compress, Format.BZip2)]
+        [TestCase("-c:gzip",   Mode.Compress, Format.GZip)]
+        [TestCase("-c:sfx",    Mode.Compress, Format.Sfx)]
+        [TestCase("-c:detail", Mode.Compress, Format.Unknown)]
+        [TestCase("path/to",   Mode.Extract,  Format.Unknown)]
+        public void Test(string src, Mode mode, Format format)
         {
-            var dest = new Request(Enumerable.Empty<string>());
-            Assert.That(dest.Mode,   Is.EqualTo(Mode.None));
-            Assert.That(dest.Format, Is.EqualTo(Format.Unknown));
+            var dest = new Request(new[] { src });
+            Assert.That(dest.Mode,   Is.EqualTo(mode));
+            Assert.That(dest.Format, Is.EqualTo(format));
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Create_WrongMode
+        /// Test_SaveLocation
         ///
         /// <summary>
-        /// Tests the constructor with wrong mode arguments.
+        /// Tests to detect the save location.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [TestCase("c")]
-        [TestCase("/dummy")]
-        public void Create_WrongMode(string mode)
+        [TestCase("/o:source",      SaveLocation.Source     )]
+        [TestCase("-O:DESKTOP",     SaveLocation.Desktop    )]
+        [TestCase("-o:mydocuments", SaveLocation.MyDocuments)]
+        [TestCase("-o:query",       SaveLocation.Query      )]
+        [TestCase("-o:preset",      SaveLocation.Preset     )]
+        [TestCase("-o:explicit",    SaveLocation.Explicit   )]
+        [TestCase("/o",             SaveLocation.Unknown    )]
+        [TestCase("/o:wrong",       SaveLocation.Unknown    )]
+        public void Test_SaveLocation(string src, SaveLocation location)
         {
-            var dest = new Request(new[] { mode });
-            Assert.That(dest.Mode,   Is.EqualTo(Mode.None));
-            Assert.That(dest.Format, Is.EqualTo(Format.Unknown));
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Create_CompressDefault
-        ///
-        /// <summary>
-        /// Tests the constructor with a "/c" argument.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [Test]
-        public void Create_CompressDefault()
-        {
-            var dest = new Request(new[] { "/c" });
-            Assert.That(dest.Mode,   Is.EqualTo(Mode.Compress));
-            Assert.That(dest.Format, Is.EqualTo(Format.Zip));
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Create_WrongLocation
-        ///
-        /// <summary>
-        /// Tests the constructor with arguments that contain a wrong
-        /// "/o" option.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [TestCase("/o")]
-        [TestCase("/o:wrong")]
-        public void Create_WrongLocation(string arg)
-        {
-            var dest = new Request(new[] { "/x", arg });
+            var dest = new Request(new[] { src });
             Assert.That(dest.Mode,     Is.EqualTo(Mode.Extract));
-            Assert.That(dest.Location, Is.EqualTo(SaveLocation.Unknown));
+            Assert.That(dest.Location, Is.EqualTo(location));
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Create_WrongDirectory
+        /// Test_SaveDirectory
         ///
         /// <summary>
         /// Tests the constructor with arguments that contain a wrong
@@ -117,7 +95,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /* ----------------------------------------------------------------- */
         [TestCase("/drop")]
         [TestCase("/save")]
-        public void Create_WrongDirectory(string arg)
+        public void Test_SaveDirectory(string arg)
         {
             var dest = new Request(new[] { "/x", "/sr", "/o:source", arg, "/dummy" });
             Assert.That(dest.Options.Count(),   Is.EqualTo(4));
@@ -125,6 +103,23 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             Assert.That(dest.Location,          Is.EqualTo(SaveLocation.Source));
             Assert.That(dest.Directory,         Is.Empty);
             Assert.That(dest.SuppressRecursive, Is.True);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Test_Empty
+        ///
+        /// <summary>
+        /// Tests the constructor with no arguments.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [Test]
+        public void Test_Empty()
+        {
+            var dest = new Request(Enumerable.Empty<string>());
+            Assert.That(dest.Mode,   Is.EqualTo(Mode.None));
+            Assert.That(dest.Format, Is.EqualTo(Format.Unknown));
         }
 
         #endregion
