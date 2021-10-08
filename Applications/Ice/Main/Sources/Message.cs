@@ -15,6 +15,10 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Cube.Collections;
 using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip.Ice
@@ -74,7 +78,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                 var fi = Io.Get(src);
                 dest.Value            = fi.Name;
                 dest.InitialDirectory = fi.DirectoryName;
-                dest.FilterIndex      = items.GetFilterIndex(dest.Value);
+                dest.FilterIndex      = GetIndex(items, fi);
             }
 
             return dest;
@@ -104,6 +108,37 @@ namespace Cube.FileSystem.SevenZip.Ice
 
             if (src.Source.HasValue()) dest.Value = Io.Get(src.Source).DirectoryName;
             return dest;
+        }
+
+        #endregion
+
+        #region Implementaions
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetIndex
+        ///
+        /// <summary>
+        /// Gets the index of the first occurrence of the specified path
+        /// in the current DisplayFilter collection.
+        /// </summary>
+        ///
+        /// <param name="src">DisplayFilter collection.</param>
+        /// <param name="entity">Target file or directory.</param>
+        ///
+        /// <returns>Filter index.</returns>
+        ///
+        /* ----------------------------------------------------------------- */
+        private static int GetIndex(IEnumerable<FileDialogFilter> src, Entity entity)
+        {
+            var opt = StringComparison.InvariantCultureIgnoreCase;
+            var ext = entity.BaseName.EndsWith(".tar", opt) ?
+                      $"{System.IO.Path.GetExtension(entity.BaseName)}{entity.Extension}" :
+                      entity.Extension;
+
+            return src.Select((e, i) => KeyValuePair.Create(i + 1, e))
+                      .FirstOrDefault(e => e.Value.Targets.Any(e2 => e2.Equals(ext, opt)))
+                      .Key;
         }
 
         #endregion

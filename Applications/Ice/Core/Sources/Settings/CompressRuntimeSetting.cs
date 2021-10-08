@@ -279,8 +279,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             var obj = ext == ".exe" ? Format.Sfx : Formatter.FromExtension(ext);
             if (obj == Format.Unknown) return;
 
-            var cvt = obj == Format.GZip || obj == Format.BZip2 || obj == Format.XZ ? Format.Tar : obj;
-            _ = Set(cvt, nameof(Format));
+            var fmt = obj == Format.GZip || obj == Format.BZip2 || obj == Format.XZ ? Format.Tar : obj;
+            _ = Set(fmt, nameof(Format));
             _ = Set(obj.ToMethod(), nameof(CompressionMethod));
         }
 
@@ -296,13 +296,12 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         private void Rename()
         {
-            var fi   = Io.Get(Destination);
-            var cmp  = fi.BaseName.ToLowerInvariant();
-            var name = cmp.EndsWith(".tar") ?
-                       System.IO.Path.GetFileNameWithoutExtension(fi.BaseName) :
-                       fi.BaseName;
-
-            var ext = Format == Format.Tar ? CompressionMethod switch
+            var src  = Io.Get(Destination);
+            var opt  = StringComparison.InvariantCultureIgnoreCase;
+            var name = src.BaseName.EndsWith(".tar", opt) ?
+                       System.IO.Path.GetFileNameWithoutExtension(src.BaseName) :
+                       src.BaseName;
+            var ext  = Format == Format.Tar ? CompressionMethod switch
             {
                 CompressionMethod.GZip  => ".tar.gz",
                 CompressionMethod.BZip2 => ".tar.bz2",
@@ -310,7 +309,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
                 _                       => ".tar",
             } : Format.ToExtension();
 
-            var dest = Io.Combine(fi.DirectoryName, $"{name}{ext}");
+            var dest = Io.Combine(src.DirectoryName, $"{name}{ext}");
             _ = Set(dest, nameof(Destination));
         }
 

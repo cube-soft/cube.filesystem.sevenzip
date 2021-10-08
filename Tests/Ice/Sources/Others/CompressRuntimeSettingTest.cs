@@ -15,9 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System;
 using Cube.FileSystem.SevenZip.Ice.Settings;
-using Cube.Tests;
 using NUnit.Framework;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests

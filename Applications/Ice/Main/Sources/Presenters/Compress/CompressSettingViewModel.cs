@@ -16,6 +16,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Cube.FileSystem.SevenZip.Ice.Settings;
 using Cube.Mixin.String;
@@ -110,7 +111,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// CompressionMethod
         ///
         /// <summary>
-        /// Gets or sets the compression method.
+        /// Gets or sets the current compression method.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
