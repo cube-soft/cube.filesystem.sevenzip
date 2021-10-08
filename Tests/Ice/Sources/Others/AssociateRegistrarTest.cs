@@ -16,7 +16,6 @@
 //
 /* ------------------------------------------------------------------------- */
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Cube.Tests;
 using NUnit.Framework;
@@ -46,17 +45,21 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// </summary>
         ///
         /* --------------------------------------------------------------------- */
-        [TestCaseSource(nameof(TestCases))]
-        public string Command(string path, IList<string> args) => new AssociateRegistrar(path)
+        [Test]
+        public void Command()
         {
-            Arguments    = args,
-            IconLocation = "",
-            ToolTip      = false,
-        }.Command;
-
+            var path = "C:\\Program Files\\CubeICE\\cubeice.exe";
+            var cmd  = "\"C:\\Program Files\\CubeICE\\cubeice.exe\" \"%1\"";
+            var src  = new AssociateRegistrar(path)
+            {
+                IconLocation = path,
+                ToolTip      = false,
+            };
+            Assert.That(src.Command, Is.EqualTo(cmd));
+        }
         /* --------------------------------------------------------------------- */
         ///
-        /// Update_Throws
+        /// Update
         ///
         /// <summary>
         /// Tests the Update method.
@@ -71,7 +74,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         ///
         /* --------------------------------------------------------------------- */
         [Test]
-        public void Update_Throws()
+        public void Update()
         {
             try
             {
@@ -79,7 +82,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 var path      = @"C:\Program Files\CubeICE\cubeice.exe";
                 var registrar = new AssociateRegistrar(path)
                 {
-                    Arguments = new List<string> { "/x" },
                     IconLocation = $"{path},{settings.Value.Associate.IconIndex}",
                     ToolTip = false,
                 };
@@ -96,32 +98,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             }
             catch (UnauthorizedAccessException err) { Assert.Ignore(err.Message); }
         }
-
-        #endregion
-
-        #region TestCases
-
-        /* --------------------------------------------------------------------- */
-        ///
-        /// TestCases
-        ///
-        /// <summary>
-        /// Gets the test cases.
-        /// </summary>
-        ///
-        /* --------------------------------------------------------------------- */
-        private static IEnumerable<TestCaseData> TestCases { get
-        {
-            yield return new TestCaseData(
-                "C:\\Program Files\\CubeICE\\cubeice.exe",
-                new List<string> { "/x" }
-            ).Returns("\"C:\\Program Files\\CubeICE\\cubeice.exe\" \"/x\" \"%1\"");
-
-            yield return new TestCaseData(
-                "C:\\Program Files (x86)\\CubeICE\\cubeice.exe",
-                new List<string>()
-            ).Returns("\"C:\\Program Files (x86)\\CubeICE\\cubeice.exe\" \"%1\"");
-        }}
 
         #endregion
     }

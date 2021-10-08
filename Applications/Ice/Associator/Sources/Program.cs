@@ -68,7 +68,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Associator
                 ToolTip      = src.Value.ToolTip,
             };
 
-            registrar.Arguments = Preset.Extract.ToArguments();
             registrar.Update(src.Value.Associate.Value);
 
             Shell32.NativeMethods.SHChangeNotify(

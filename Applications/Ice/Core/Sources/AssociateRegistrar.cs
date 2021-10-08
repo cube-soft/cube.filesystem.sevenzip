@@ -74,22 +74,6 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Arguments
-        ///
-        /// <summary>
-        /// Gets or sets the list of file arguments to be executed when
-        /// double clicked.
-        /// </summary>
-        ///
-        /// <remarks>
-        /// The actual arguments are the ones set in the property plus "%1".
-        /// </remarks>
-        ///
-        /* ----------------------------------------------------------------- */
-        public IEnumerable<string> Arguments { get; set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// IconLocation
         ///
         /// <summary>
@@ -120,7 +104,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public string Command => $"{FileName.Quote()} {Arguments.Concat("%1").Select(e => e.Quote()).Join(" ")}";
+        public string Command => $"{FileName.Quote()} {"%1".Quote()}";
 
         #endregion
 
@@ -235,17 +219,12 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Create
+        /// Register
         ///
         /// <summary>
         /// Creates and registers settings to associate CubeICE with the
         /// registry entry representing the extension.
         /// </summary>
-        ///
-        /// <remarks>
-        /// ToolTip の処理が未実装なため、現在は ToolTip に関連する項目は
-        /// 強制的に削除しています。
-        /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
         private void Register(string extension, string name)
