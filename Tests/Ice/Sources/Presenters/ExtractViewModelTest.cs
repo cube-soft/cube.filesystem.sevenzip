@@ -16,6 +16,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using System.Linq;
+using System.Threading.Tasks;
 using Cube.FileSystem.SevenZip.Ice.Settings;
 using Cube.Mixin.Collections;
 using Cube.Tests;
@@ -47,25 +48,29 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        [Ignore("It will be completed before suspending.")]
         public void Suspend()
         {
-            var dest  = Get("Suspend");
-            var args  = Preset.Extract.ToArguments().Concat(GetSource("Complex.1.0.0.zip"));
+            var dir   = Get("Suspend");
+            var args  = Preset.Extract.ToArguments().Concat(GetSource("SampleHeavy.7z"));
             var value = new ExtractSetting
             {
                 SaveLocation  = SaveLocation.Preset,
-                SaveDirectory = dest,
+                SaveDirectory = dir,
             };
 
-            using var vm = NewVM(args, value);
-            vm.Start();
-            Assert.That(Wait.For(() => vm.State == TimerState.Run), $"{vm.State} (1)");
-            vm.SuspendOrResume();
-            Assert.That(Wait.For(() => vm.State == TimerState.Suspend), $"{vm.State} (2)");
-            vm.SuspendOrResume();
-            Assert.That(Wait.For(() => vm.State == TimerState.Stop), $"{vm.State} (3)");
-            Assert.That(Io.Exists(Io.Combine(dest, "Complex.1.0.0")), Is.True);
+            using (var vm = NewVM(args, value))
+            {
+                vm.Start();
+                Assert.That(Wait.For(() => vm.State == TimerState.Run), $"1.{vm.State}");
+                vm.SuspendOrResume();
+                Assert.That(Wait.For(() => vm.State == TimerState.Suspend), $"2.{vm.State}");
+                vm.SuspendOrResume();
+                Assert.That(Wait.For(() => vm.State == TimerState.Run), $"3.{vm.State}");
+                Task.Delay(1000).Wait();
+            }
+
+            var dest = Io.Combine(dir, "SampleHeavy");
+            Assert.That(Io.Exists(dest), dest);
         }
 
         /* ----------------------------------------------------------------- */
