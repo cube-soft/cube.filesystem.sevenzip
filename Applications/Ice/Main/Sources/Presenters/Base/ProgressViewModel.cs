@@ -205,11 +205,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Start() => Track(() =>
-        {
-            try { Facade.Start(); }
-            finally { Send<CloseMessage>(); }
-        });
+        public void Start() => Track(Facade.Start, Send<CloseMessage>);
 
         /* ----------------------------------------------------------------- */
         ///
