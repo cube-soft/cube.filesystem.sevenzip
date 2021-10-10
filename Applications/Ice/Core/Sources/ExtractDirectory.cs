@@ -167,7 +167,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             var hints = GetHints(items);
             Value = IsSame(hints) ? Source : Io.Combine(Source, basename);
-            ValueToOpen = GetOpenDirectory(hints);
+            ValueToOpen = GetValueToOpen(Value, hints);
         }
 
         #endregion
@@ -226,17 +226,17 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetOpenDirectory
+        /// GetValueToOpen
         ///
         /// <summary>
         /// Gets the directory path to open.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetOpenDirectory(IEnumerable<string> hints) =>
+        private string GetValueToOpen(string src, IEnumerable<string> hints) =>
             hints.Take(2).Count() == 1 && hints.First() != WildCard ?
-            Io.Combine(Source, hints.First()) :
-            Source;
+            Io.Combine(src, hints.First()) :
+            src;
 
         /* ----------------------------------------------------------------- */
         ///
