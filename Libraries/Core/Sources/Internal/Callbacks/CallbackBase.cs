@@ -117,7 +117,7 @@ namespace Cube.FileSystem.SevenZip
             try
             {
                 var dest = callback();
-                if (report) Progress?.Report(Copy(Report));
+                if (report && Result == OperationResult.OK) Progress?.Report(Copy(Report));
                 return dest;
             }
             catch (Exception err)
