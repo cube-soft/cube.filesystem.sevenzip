@@ -56,6 +56,23 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Temp
+        ///
+        /// <summary>
+        /// Gets or sets the path used for the temp directory. If the value
+        /// is empty, the same directory as the source file will be used.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [DataMember]
+        public string Temp
+        {
+            get => Get(() => string.Empty);
+            set => Set(value);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Explorer
         ///
         /// <summary>

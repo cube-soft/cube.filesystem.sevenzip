@@ -156,7 +156,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             if (!Temp.HasValue())
             {
-                var dest = Io.Combine(directory, Guid.NewGuid().ToString("N"));
+                var root = Settings.Value.Temp.HasValue() ?
+                           Settings.Value.Temp :
+                           directory;
+                var dest = Io.Combine(root, Guid.NewGuid().ToString("N"));
                 GetType().LogDebug($"{nameof(Temp)}:{dest}");
                 Temp = dest;
             }
