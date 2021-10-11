@@ -200,12 +200,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         private void Move(Entity item)
         {
             if (!item.FullName.HasValue()) return;
+
             var src = Io.Get(Io.Combine(Temp, item.FullName));
             if (!src.Exists) return;
 
             var dest = Io.Get(Io.Combine(Destination, item.FullName));
-            if (dest.Exists) src.Move(dest, Overwrite.Get(src, dest));
-            else src.Move(dest);
+            src.Move(dest, Overwrite);
         }
 
         /* ----------------------------------------------------------------- */

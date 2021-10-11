@@ -87,6 +87,36 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// Move
         ///
         /// <summary>
+        /// Moves the specified file or directory.
+        /// </summary>
+        ///
+        /// <param name="src">Source file or directory information.</param>
+        /// <param name="dest">Destination path to move.</param>
+        /// <param name="query">Query to confirm the overwrite.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static void Move(this Entity src, Entity dest, OverwriteQuery query)
+        {
+            if (src.IsDirectory)
+            {
+                if (!dest.Exists)
+                {
+                    Io.CreateDirectory(dest.FullName);
+                    Io.SetCreationTime(dest.FullName, src.CreationTime);
+                    Io.SetLastWriteTime(dest.FullName, src.LastWriteTime);
+                    Io.SetLastAccessTime(dest.FullName, src.LastAccessTime);
+                    Io.SetAttributes(dest.FullName, src.Attributes);
+                }
+            }
+            else if (dest.Exists) Move(src, dest, query.Get(src, dest));
+            else Io.Move(src.FullName, dest.FullName, true);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Move
+        ///
+        /// <summary>
         /// Moves the specified file or directory according to the
         /// specified method.
         /// </summary>
@@ -96,7 +126,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="method">Overwrite method.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void Move(this Entity src, Entity dest, OverwriteMethod method)
+        private static void Move(this Entity src, Entity dest, OverwriteMethod method)
         {
             switch (method & OverwriteMethod.Operations)
             {
@@ -110,34 +140,6 @@ namespace Cube.FileSystem.SevenZip.Ice
                 case OverwriteMethod.Cancel:
                     break;
             }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Move
-        ///
-        /// <summary>
-        /// Moves the specified file or directory.
-        /// </summary>
-        ///
-        /// <param name="src">Source file or directory information.</param>
-        /// <param name="dest">Destination path to move.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static void Move(this Entity src, Entity dest)
-        {
-            if (src.IsDirectory)
-            {
-                if (!dest.Exists)
-                {
-                    Io.CreateDirectory(dest.FullName);
-                    Io.SetCreationTime(dest.FullName, src.CreationTime);
-                    Io.SetLastWriteTime(dest.FullName, src.LastWriteTime);
-                    Io.SetLastAccessTime(dest.FullName, src.LastAccessTime);
-                    Io.SetAttributes(dest.FullName, src.Attributes);
-                }
-            }
-            else Io.Move(src.FullName, dest.FullName, true);
         }
 
         #endregion
