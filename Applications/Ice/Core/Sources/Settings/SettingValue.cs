@@ -125,7 +125,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         [DataMember]
         public bool ToolTip
         {
-            get => Get(() => true);
+            get => Get(() => false);
             set { if (Set(value)) Associate.Changed = true; }
         }
 
