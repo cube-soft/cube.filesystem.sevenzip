@@ -39,6 +39,23 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
+        /// AlphaFS
+        ///
+        /// <summary>
+        /// Gets or sets a value indicating whether to use the AlphaFS
+        /// module for I/O operation.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [DataMember]
+        public bool AlphaFS
+        {
+            get => Get(() => true);
+            set => Set(value);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Explorer
         ///
         /// <summary>

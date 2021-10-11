@@ -56,25 +56,26 @@ namespace Cube.FileSystem.SevenZip.Ice
             _ = Logger.ObserveTaskException();
             Source.LogInfo(Source.Assembly);
             Source.LogInfo($"[ {args.Join(" ")} ]");
-            Io.Configure(new AlphaFS.IoController());
+
+            var ss = new SettingFolder();
+            ss.Load();
+
+            if (ss.Value.AlphaFS) Io.Configure(new AlphaFS.IoController());
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            var src      = new Request(args);
-            var settings = new SettingFolder();
-            var view     = new ProgressWindow();
-
-            settings.Load();
+            var src  = new Request(args);
+            var view = new ProgressWindow();
 
             switch (src.Mode)
             {
                 case Mode.Compress:
-                    Show(view, new CompressViewModel(src, settings));
+                    Show(view, new CompressViewModel(src, ss));
                     break;
                 case Mode.Extract:
-                    if (src.Sources.Count() > 1 && settings.Value.Extract.Bursty && !src.SuppressRecursive) Execute(src);
-                    else Show(view, new ExtractViewModel(src, settings));
+                    if (IsBurst(src, ss)) Burst(src);
+                    else Show(view, new ExtractViewModel(src, ss));
                     break;
                 default:
                     break;
@@ -98,24 +99,38 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Execute
+        /// Burst
         ///
         /// <summary>
-        /// Executes new processes to Extract the two or more archives.
+        /// Executes new processes to extract the two or more archives at
+        /// the same time.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        static void Execute(Request request)
+        static void Burst(Request src)
         {
             var exec = Source.Assembly.Location;
             var args = new StringBuilder();
 
-            foreach (var e in request.Options) _ = args.Append($"{e.Quote()} ");
-            foreach (var path in request.Sources)
+            foreach (var e in src.Options) _ = args.Append($"{e.Quote()} ");
+            foreach (var path in src.Sources)
             {
                 Source.LogError(() => Process.Start(exec, $"/x /sr {args} {path.Quote()}"));
             }
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// IsBurst
+        ///
+        /// <summary>
+        /// Determines whether to extract the two or more archives at the
+        /// same time.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        static bool IsBurst(Request src, SettingFolder ss) =>
+            src.Sources.Count() > 1 && ss.Value.Extract.Bursty && !src.SuppressRecursive;
 
         #endregion
 
