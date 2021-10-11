@@ -88,10 +88,12 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             Behaviors.Add(new ClickBehavior(AssociateClearButton, vm.Associate.Clear));
             Behaviors.Add(new ClickBehavior(CompressSaveButton, vm.Compress.Browse));
             Behaviors.Add(new ClickBehavior(ExtractSaveButton, vm.Extract.Browse));
+            Behaviors.Add(new ClickBehavior(TempButton, vm.Browse));
             Behaviors.Add(new PathLintBehavior(CompressSaveTextBox, _tooltip));
             Behaviors.Add(new PathLintBehavior(ExtractSaveTextBox, _tooltip));
             Behaviors.Add(new ShowDialogBehavior<CustomizeWindow, CustomizeViewModel>(vm));
 
+            _version.Product = vm.Product;
             _version.Version = vm.Version;
             _tooltip.ToolTipTitle = Properties.Resources.MessageInvalidChars;
         }

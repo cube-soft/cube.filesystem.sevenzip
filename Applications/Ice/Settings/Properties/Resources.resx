@@ -86,6 +86,9 @@
   <data name="MenuDown" xml:space="preserve">
     <value>下に移動</value>
   </data>
+  <data name="MenuExtended" xml:space="preserve">
+    <value>拡張</value>
+  </data>
   <data name="MenuGZip" xml:space="preserve">
     <value>GZip</value>
   </data>
@@ -97,6 +100,9 @@
   </data>
   <data name="MenuNewCategory" xml:space="preserve">
     <value>新しいカテゴリー</value>
+  </data>
+  <data name="MenuNormal" xml:space="preserve">
+    <value>標準</value>
   </data>
   <data name="MenuRemove" xml:space="preserve">
     <value>削除</value>
@@ -132,9 +138,9 @@
     <value>ファイル名に次の文字を使用する事はできません</value>
   </data>
   <data name="MessageSave" xml:space="preserve">
-    <value>圧縮または解凍したファイルを保存するフォルダを選択して下さい。</value>
+    <value>圧縮・解凍したファイルの保存または作業用フォルダーを選択して下さい。</value>
   </data>
   <data name="WebPage" xml:space="preserve">
-    <value>http://www.cube-soft.jp/</value>
+    <value>https://www.cube-soft.jp/</value>
   </data>
 </root>

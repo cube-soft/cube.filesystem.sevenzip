@@ -145,6 +145,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
         }
 
         /// <summary>
+        ///   拡張 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuExtended {
+            get {
+                return ResourceManager.GetString("MenuExtended", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   GZip に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MenuGZip {
@@ -177,6 +186,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
         internal static string MenuNewCategory {
             get {
                 return ResourceManager.GetString("MenuNewCategory", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   標準 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MenuNormal {
+            get {
+                return ResourceManager.GetString("MenuNormal", resourceCulture);
             }
         }
 
@@ -280,7 +298,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
         }
 
         /// <summary>
-        ///   圧縮または解凍したファイルを保存するフォルダを選択して下さい。 に類似しているローカライズされた文字列を検索します。
+        ///   圧縮・解凍したファイルの保存または作業用フォルダーを選択して下さい。 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MessageSave {
             get {
@@ -289,7 +307,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
         }
 
         /// <summary>
-        ///   http://www.cube-soft.jp/ に類似しているローカライズされた文字列を検索します。
+        ///   https://www.cube-soft.jp/ に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string WebPage {
             get {

@@ -149,21 +149,22 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// directory.
         /// </summary>
         ///
-        /// <param name="directory">Path of the root directory.</param>
+        /// <param name="alternate">
+        /// Path of the root directory to be used if the Temp setting does
+        /// not exist.
+        /// </param>
         ///
         /* ----------------------------------------------------------------- */
-        protected void SetTemp(string directory)
+        protected void SetTemp(string alternate)
         {
             if (!Temp.HasValue())
             {
-                var root = Settings.Value.Temp.HasValue() ?
-                           Settings.Value.Temp :
-                           directory;
-                var dest = Io.Combine(root, Guid.NewGuid().ToString("N"));
-                GetType().LogDebug($"{nameof(Temp)}:{dest}");
-                Temp = dest;
+                var src  = Settings.Value.Temp;
+                var root = src.HasValue() && Io.Exists(src) ? src : alternate;
+                Temp = Io.Combine(root, Guid.NewGuid().ToString("N"));
             }
-            else GetType().LogDebug($"Ignore:{directory}");
+
+            GetType().LogDebug($"{nameof(Temp)}:{Temp}");
         }
 
         /* ----------------------------------------------------------------- */

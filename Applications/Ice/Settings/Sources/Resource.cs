@@ -53,6 +53,22 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             new(Properties.Resources.MenuDetails,     Preset.CompressDetails),
         };
 
+        /* ----------------------------------------------------------------- */
+        ///
+        /// IoHandlers
+        ///
+        /// <summary>
+        /// Gets the collection in which each item consists of a display
+        /// string and a bool pair.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static List<KeyValuePair<string, bool>> IoHandlers { get; } = new()
+        {
+            new(Properties.Resources.MenuNormal,   false),
+            new(Properties.Resources.MenuExtended,  true),
+        };
+
         #endregion
     }
 }

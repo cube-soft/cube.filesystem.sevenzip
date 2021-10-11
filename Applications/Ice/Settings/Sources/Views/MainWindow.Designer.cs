@@ -97,10 +97,15 @@
             this.FilterLabel = new System.Windows.Forms.Label();
             this.FilterTextBox = new System.Windows.Forms.TextBox();
             this.OtherGroupBox = new System.Windows.Forms.GroupBox();
-            this.OtherPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.OtherPanel = new System.Windows.Forms.TableLayoutPanel();
             this.ToolTipCheckBox = new System.Windows.Forms.CheckBox();
             this.ToolTipLabel = new System.Windows.Forms.Label();
             this.ToolTipNumeric = new System.Windows.Forms.NumericUpDown();
+            this.IoHandlerLabel = new System.Windows.Forms.Label();
+            this.IoHandlerComboBox = new System.Windows.Forms.ComboBox();
+            this.TempLabel = new System.Windows.Forms.Label();
+            this.TempTextBox = new System.Windows.Forms.TextBox();
+            this.TempButton = new System.Windows.Forms.Button();
             this.UpdateCheckBox = new System.Windows.Forms.CheckBox();
             this.VersionTabPage = new System.Windows.Forms.TabPage();
             this.ButtonsPanel = new System.Windows.Forms.FlowLayoutPanel();
@@ -903,67 +908,139 @@
             this.OtherGroupBox.Location = new System.Drawing.Point(3, 259);
             this.OtherGroupBox.Name = "OtherGroupBox";
             this.OtherGroupBox.Padding = new System.Windows.Forms.Padding(8, 3, 8, 3);
-            this.OtherGroupBox.Size = new System.Drawing.Size(474, 106);
+            this.OtherGroupBox.Size = new System.Drawing.Size(474, 168);
             this.OtherGroupBox.TabIndex = 1;
             this.OtherGroupBox.TabStop = false;
             this.OtherGroupBox.Text = "その他";
             //
             // OtherPanel
             //
-            this.OtherPanel.Controls.Add(this.ToolTipCheckBox);
-            this.OtherPanel.Controls.Add(this.ToolTipLabel);
-            this.OtherPanel.Controls.Add(this.ToolTipNumeric);
-            this.OtherPanel.Controls.Add(this.UpdateCheckBox);
+            this.OtherPanel.ColumnCount = 3;
+            this.OtherPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.OtherPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.OtherPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 66F));
+            this.OtherPanel.Controls.Add(this.ToolTipCheckBox, 0, 0);
+            this.OtherPanel.Controls.Add(this.ToolTipLabel, 0, 1);
+            this.OtherPanel.Controls.Add(this.ToolTipNumeric, 1, 1);
+            this.OtherPanel.Controls.Add(this.IoHandlerLabel, 0, 2);
+            this.OtherPanel.Controls.Add(this.IoHandlerComboBox, 1, 2);
+            this.OtherPanel.Controls.Add(this.TempLabel, 0, 3);
+            this.OtherPanel.Controls.Add(this.TempTextBox, 1, 3);
+            this.OtherPanel.Controls.Add(this.TempButton, 2, 3);
+            this.OtherPanel.Controls.Add(this.UpdateCheckBox, 0, 4);
             this.OtherPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.OtherPanel.Location = new System.Drawing.Point(8, 19);
             this.OtherPanel.Name = "OtherPanel";
-            this.OtherPanel.Size = new System.Drawing.Size(458, 84);
+            this.OtherPanel.RowCount = 6;
+            this.OtherPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.OtherPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.OtherPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.OtherPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.OtherPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.OtherPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.OtherPanel.Size = new System.Drawing.Size(458, 146);
             this.OtherPanel.TabIndex = 0;
             //
             // ToolTipCheckBox
             //
             this.ToolTipCheckBox.AutoSize = true;
-            this.OtherPanel.SetFlowBreak(this.ToolTipCheckBox, true);
+            this.OtherPanel.SetColumnSpan(this.ToolTipCheckBox, 3);
+            this.ToolTipCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ToolTipCheckBox.Location = new System.Drawing.Point(3, 3);
             this.ToolTipCheckBox.Name = "ToolTipCheckBox";
-            this.ToolTipCheckBox.Size = new System.Drawing.Size(267, 19);
+            this.ToolTipCheckBox.Size = new System.Drawing.Size(452, 22);
             this.ToolTipCheckBox.TabIndex = 0;
             this.ToolTipCheckBox.Text = "圧縮ファイルのツールチップにファイル一覧を表示する";
             this.ToolTipCheckBox.UseVisualStyleBackColor = true;
             //
             // ToolTipLabel
             //
-            this.ToolTipLabel.Location = new System.Drawing.Point(15, 26);
-            this.ToolTipLabel.Margin = new System.Windows.Forms.Padding(15, 0, 3, 3);
+            this.ToolTipLabel.AutoSize = true;
+            this.ToolTipLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ToolTipLabel.Location = new System.Drawing.Point(20, 31);
+            this.ToolTipLabel.Margin = new System.Windows.Forms.Padding(20, 3, 3, 3);
             this.ToolTipLabel.Name = "ToolTipLabel";
-            this.ToolTipLabel.Size = new System.Drawing.Size(98, 23);
+            this.ToolTipLabel.Size = new System.Drawing.Size(97, 22);
             this.ToolTipLabel.TabIndex = 1;
-            this.ToolTipLabel.Text = "最大表示件数：";
+            this.ToolTipLabel.Text = "最大表示件数";
             this.ToolTipLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             //
             // ToolTipNumeric
             //
+            this.ToolTipNumeric.Dock = System.Windows.Forms.DockStyle.Left;
             this.ToolTipNumeric.Enabled = false;
-            this.OtherPanel.SetFlowBreak(this.ToolTipNumeric, true);
-            this.ToolTipNumeric.Location = new System.Drawing.Point(119, 26);
-            this.ToolTipNumeric.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
+            this.ToolTipNumeric.Location = new System.Drawing.Point(123, 31);
             this.ToolTipNumeric.Maximum = new decimal(new int[] {
             20,
             0,
             0,
             0});
             this.ToolTipNumeric.Name = "ToolTipNumeric";
-            this.ToolTipNumeric.Size = new System.Drawing.Size(80, 23);
+            this.ToolTipNumeric.Size = new System.Drawing.Size(100, 23);
             this.ToolTipNumeric.TabIndex = 2;
+            //
+            // IoHandlerLabel
+            //
+            this.IoHandlerLabel.AutoSize = true;
+            this.IoHandlerLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.IoHandlerLabel.Location = new System.Drawing.Point(3, 59);
+            this.IoHandlerLabel.Margin = new System.Windows.Forms.Padding(3);
+            this.IoHandlerLabel.Name = "IoHandlerLabel";
+            this.IoHandlerLabel.Size = new System.Drawing.Size(114, 22);
+            this.IoHandlerLabel.TabIndex = 3;
+            this.IoHandlerLabel.Text = "ファイル操作方法";
+            this.IoHandlerLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            //
+            // IoHandlerComboBox
+            //
+            this.IoHandlerComboBox.Dock = System.Windows.Forms.DockStyle.Left;
+            this.IoHandlerComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.IoHandlerComboBox.FormattingEnabled = true;
+            this.IoHandlerComboBox.Location = new System.Drawing.Point(123, 59);
+            this.IoHandlerComboBox.Name = "IoHandlerComboBox";
+            this.IoHandlerComboBox.Size = new System.Drawing.Size(100, 23);
+            this.IoHandlerComboBox.TabIndex = 4;
+            //
+            // TempLabel
+            //
+            this.TempLabel.AutoSize = true;
+            this.TempLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TempLabel.Location = new System.Drawing.Point(3, 87);
+            this.TempLabel.Margin = new System.Windows.Forms.Padding(3);
+            this.TempLabel.Name = "TempLabel";
+            this.TempLabel.Size = new System.Drawing.Size(114, 22);
+            this.TempLabel.TabIndex = 5;
+            this.TempLabel.Text = "作業フォルダー";
+            this.TempLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            //
+            // TempTextBox
+            //
+            this.TempTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TempTextBox.Location = new System.Drawing.Point(123, 87);
+            this.TempTextBox.Name = "TempTextBox";
+            this.TempTextBox.Size = new System.Drawing.Size(266, 23);
+            this.TempTextBox.TabIndex = 6;
+            //
+            // TempButton
+            //
+            this.TempButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TempButton.Location = new System.Drawing.Point(395, 86);
+            this.TempButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 1);
+            this.TempButton.Name = "TempButton";
+            this.TempButton.Size = new System.Drawing.Size(60, 25);
+            this.TempButton.TabIndex = 7;
+            this.TempButton.Text = "...";
+            this.TempButton.UseVisualStyleBackColor = true;
             //
             // UpdateCheckBox
             //
             this.UpdateCheckBox.AutoSize = true;
-            this.OtherPanel.SetFlowBreak(this.UpdateCheckBox, true);
-            this.UpdateCheckBox.Location = new System.Drawing.Point(3, 55);
+            this.OtherPanel.SetColumnSpan(this.UpdateCheckBox, 3);
+            this.UpdateCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.UpdateCheckBox.Location = new System.Drawing.Point(3, 115);
             this.UpdateCheckBox.Name = "UpdateCheckBox";
-            this.UpdateCheckBox.Size = new System.Drawing.Size(238, 19);
-            this.UpdateCheckBox.TabIndex = 4;
+            this.UpdateCheckBox.Size = new System.Drawing.Size(452, 22);
+            this.UpdateCheckBox.TabIndex = 8;
             this.UpdateCheckBox.Text = "コンピュータの起動時にアップデートを確認する";
             this.UpdateCheckBox.UseVisualStyleBackColor = true;
             //
@@ -1148,11 +1225,6 @@
         private System.Windows.Forms.FlowLayoutPanel FilterPanel;
         private System.Windows.Forms.Label FilterLabel;
         private System.Windows.Forms.TextBox FilterTextBox;
-        private System.Windows.Forms.FlowLayoutPanel OtherPanel;
-        private System.Windows.Forms.CheckBox ToolTipCheckBox;
-        private System.Windows.Forms.Label ToolTipLabel;
-        private System.Windows.Forms.NumericUpDown ToolTipNumeric;
-        private System.Windows.Forms.CheckBox UpdateCheckBox;
         private System.Windows.Forms.CheckBox CompressUtf8CheckBox;
         private System.Windows.Forms.CheckBox CompressOverwriteCheckBox;
         private System.Windows.Forms.CheckBox ExtractBurstCheckBox;
@@ -1161,6 +1233,16 @@
         private System.Windows.Forms.CheckBox ContextExtractCheckBox;
         private System.Windows.Forms.CheckBox ContextCompressCheckBox;
         private System.Windows.Forms.FlowLayoutPanel ContextCompressPanel;
+        private System.Windows.Forms.TableLayoutPanel OtherPanel;
+        private System.Windows.Forms.CheckBox ToolTipCheckBox;
+        private System.Windows.Forms.Label ToolTipLabel;
+        private System.Windows.Forms.NumericUpDown ToolTipNumeric;
+        private System.Windows.Forms.Label IoHandlerLabel;
+        private System.Windows.Forms.ComboBox IoHandlerComboBox;
+        private System.Windows.Forms.Label TempLabel;
+        private System.Windows.Forms.TextBox TempTextBox;
+        private System.Windows.Forms.Button TempButton;
+        private System.Windows.Forms.CheckBox UpdateCheckBox;
     }
 }
 

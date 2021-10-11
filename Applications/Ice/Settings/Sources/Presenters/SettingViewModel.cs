@@ -120,6 +120,17 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
+        /// Product
+        ///
+        /// <summary>
+        /// Gets the product name.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Product => "CubeICE";
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// Version
         ///
         /// <summary>
@@ -158,6 +169,38 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         {
             get => Transform(Facade.Value.Filters, "|", Environment.NewLine);
             set => Facade.Value.Filters = Transform(value, Environment.NewLine, "|");
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// AlphaFS
+        ///
+        /// <summary>
+        /// Gets or sets a value indicating whether to use the AlphaFS
+        /// module for I/O operation.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public bool AlphaFS
+        {
+            get => Facade.Value.AlphaFS;
+            set => Facade.Value.AlphaFS = value;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Temp
+        ///
+        /// <summary>
+        /// Gets or sets the path used for the temp directory. If the value
+        /// is empty, the same directory as the source file will be used.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public string Temp
+        {
+            get => Facade.Value.Temp;
+            set => Facade.Value.Temp = value;
         }
 
         /* ----------------------------------------------------------------- */
@@ -221,6 +264,17 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             Associate.Save();
             Shortcut.Save();
         }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Browse
+        ///
+        /// <summary>
+        /// Shows the dialog to select the temp directory.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Browse() => Track(Message.ForSaveDirectory(Temp), e => Temp = e);
 
         /* ----------------------------------------------------------------- */
         ///

@@ -38,11 +38,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             // General
             var s0 = vm;
             var b0 = Behaviors.Hook(new BindingSource(s0, ""));
-            b0.Bind(nameof(s0.Filters),      FilterTextBox,   nameof(TextBox.Text));
-            b0.Bind(nameof(s0.ToolTip),      ToolTipCheckBox, nameof(CheckBox.Checked));
-            b0.Bind(nameof(s0.ToolTip),      ToolTipNumeric,  nameof(Enabled));
-            b0.Bind(nameof(s0.ToolTipCount), ToolTipNumeric,  nameof(NumericUpDown.Value));
-            b0.Bind(nameof(s0.CheckUpdate),  UpdateCheckBox,  nameof(CheckBox.Checked));
+            b0.Bind(nameof(s0.Filters),      FilterTextBox,     nameof(TextBox.Text));
+            b0.Bind(nameof(s0.ToolTip),      ToolTipCheckBox,   nameof(CheckBox.Checked));
+            b0.Bind(nameof(s0.ToolTip),      ToolTipNumeric,    nameof(Enabled));
+            b0.Bind(nameof(s0.ToolTipCount), ToolTipNumeric,    nameof(NumericUpDown.Value));
+            b0.Bind(nameof(s0.AlphaFS),      IoHandlerComboBox, nameof(ComboBox.SelectedValue));
+            b0.Bind(nameof(s0.Temp),         TempTextBox,       nameof(TextBox.Text));
+            b0.Bind(nameof(s0.CheckUpdate),  UpdateCheckBox,    nameof(CheckBox.Checked));
+            IoHandlerComboBox.Bind(Resource.IoHandlers);
 
             // File association
             var b1 = Behaviors.Hook(new BindingSource(vm.Associate, ""));
