@@ -478,7 +478,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 vm0.Associate.Changed = install;
                 vm0.Load();
                 vm0.Associate.Clear();
-                vm0.Save();
+                vm0.Save(true);
             }
 
             using (var m1 = NewSettings())
@@ -487,7 +487,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 m1.Value.Shortcut.Directory = Results;
                 using var vm1 = NewVM(m1);
                 vm1.CheckUpdate = false;
-                vm1.Save();
+                vm1.Save(true);
             }
         }
 

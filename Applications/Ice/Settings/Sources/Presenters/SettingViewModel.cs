@@ -258,11 +258,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Save()
+        public void Save(bool close)
         {
-            Facade.Save();
-            Associate.Save();
-            Shortcut.Save();
+            try
+            {
+                Facade.Save();
+                Associate.Save();
+                Shortcut.Save();
+            }
+            finally { if (close) Send<CloseMessage>(); }
         }
 
         /* ----------------------------------------------------------------- */

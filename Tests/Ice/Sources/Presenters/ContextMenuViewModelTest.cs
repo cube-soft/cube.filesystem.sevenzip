@@ -111,7 +111,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         {
             var ss = NewSettings();
             using (var vm = NewVM(ss))
-            using (vm.Subscribe<CustomizeViewModel>(e => e.Save()))
+            using (vm.Subscribe<CustomizeViewModel>(e => e.Save(e.Current)))
             {
                 vm.Menu.Customize();
             }

@@ -52,10 +52,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             _version.Location    = new(40, 40);
             _version.Size        = new(400, 300);
             VersionTabPage.Controls.Add(_version);
-
-            SettingsPanel.OKButton     = ExecuteButton;
-            SettingsPanel.CancelButton = ExitButton;
-            SettingsPanel.ApplyButton  = ApplyButton;
         }
 
         #endregion
@@ -81,7 +77,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
             Behaviors.Add(new DialogBehavior(vm));
             Behaviors.Add(new OpenDirectoryBehavior(vm));
-            Behaviors.Add(new EventBehavior(SettingsPanel, "Apply", vm.Save));
+            Behaviors.Add(new ClickBehavior(ExecuteButton, () => vm.Save(true)));
+            Behaviors.Add(new ClickBehavior(ApplyButton, () => vm.Save(false)));
+            Behaviors.Add(new ClickBehavior(ExitButton, Close));
             Behaviors.Add(new ClickBehavior(ContextResetButton, vm.Menu.Reset));
             Behaviors.Add(new ClickBehavior(ContextCustomizeButton, vm.Menu.Customize));
             Behaviors.Add(new ClickBehavior(AssociateAllButton, vm.Associate.SelectAll));

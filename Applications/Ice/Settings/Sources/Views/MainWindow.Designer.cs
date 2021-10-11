@@ -30,8 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.RootPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.SettingsPanel = new Cube.Forms.Controls.SettingControl();
-            this.SettingsTabControl = new System.Windows.Forms.TabControl();
+            this.SettingTabControl = new System.Windows.Forms.TabControl();
             this.GeneralTabPage = new System.Windows.Forms.TabPage();
             this.GeneralPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.AssociateGroupBox = new System.Windows.Forms.GroupBox();
@@ -59,14 +58,14 @@
             this.CompressTabPage = new System.Windows.Forms.TabPage();
             this.CompressPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.CompressSaveGroupBox = new System.Windows.Forms.GroupBox();
-            this.ArchiveSavePanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.CompressSavePanel = new System.Windows.Forms.FlowLayoutPanel();
             this.CompressSaveRadioButton = new System.Windows.Forms.RadioButton();
             this.CompressSaveTextBox = new System.Windows.Forms.TextBox();
             this.CompressSaveButton = new System.Windows.Forms.Button();
             this.CompressSaveSourceRadioButton = new System.Windows.Forms.RadioButton();
             this.CompressSaveQueryRadioButton = new System.Windows.Forms.RadioButton();
             this.CompressOptionGroupBox = new System.Windows.Forms.GroupBox();
-            this.ArchiveOptionPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.CompressOptionPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.CompressFilterCheckBox = new System.Windows.Forms.CheckBox();
             this.CompressUtf8CheckBox = new System.Windows.Forms.CheckBox();
             this.CompressOverwriteCheckBox = new System.Windows.Forms.CheckBox();
@@ -96,8 +95,8 @@
             this.FilterPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.FilterLabel = new System.Windows.Forms.Label();
             this.FilterTextBox = new System.Windows.Forms.TextBox();
-            this.OtherGroupBox = new System.Windows.Forms.GroupBox();
-            this.OtherPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.MiscOptionGroupBox = new System.Windows.Forms.GroupBox();
+            this.MiscOptionPanel = new System.Windows.Forms.TableLayoutPanel();
             this.ToolTipCheckBox = new System.Windows.Forms.CheckBox();
             this.ToolTipLabel = new System.Windows.Forms.Label();
             this.ToolTipNumeric = new System.Windows.Forms.NumericUpDown();
@@ -113,8 +112,7 @@
             this.ExitButton = new System.Windows.Forms.Button();
             this.ExecuteButton = new System.Windows.Forms.Button();
             this.RootPanel.SuspendLayout();
-            this.SettingsPanel.SuspendLayout();
-            this.SettingsTabControl.SuspendLayout();
+            this.SettingTabControl.SuspendLayout();
             this.GeneralTabPage.SuspendLayout();
             this.GeneralPanel.SuspendLayout();
             this.AssociateGroupBox.SuspendLayout();
@@ -129,9 +127,9 @@
             this.CompressTabPage.SuspendLayout();
             this.CompressPanel.SuspendLayout();
             this.CompressSaveGroupBox.SuspendLayout();
-            this.ArchiveSavePanel.SuspendLayout();
+            this.CompressSavePanel.SuspendLayout();
             this.CompressOptionGroupBox.SuspendLayout();
-            this.ArchiveOptionPanel.SuspendLayout();
+            this.CompressOptionPanel.SuspendLayout();
             this.ExtractTabPage.SuspendLayout();
             this.ExtractPanel.SuspendLayout();
             this.ExtractSaveGroupBox.SuspendLayout();
@@ -142,8 +140,8 @@
             this.MiscPanel.SuspendLayout();
             this.FilterGroupBox.SuspendLayout();
             this.FilterPanel.SuspendLayout();
-            this.OtherGroupBox.SuspendLayout();
-            this.OtherPanel.SuspendLayout();
+            this.MiscOptionGroupBox.SuspendLayout();
+            this.MiscOptionPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ToolTipNumeric)).BeginInit();
             this.ButtonsPanel.SuspendLayout();
             this.SuspendLayout();
@@ -152,7 +150,7 @@
             //
             this.RootPanel.ColumnCount = 1;
             this.RootPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.RootPanel.Controls.Add(this.SettingsPanel, 0, 0);
+            this.RootPanel.Controls.Add(this.SettingTabControl, 0, 0);
             this.RootPanel.Controls.Add(this.ButtonsPanel, 0, 1);
             this.RootPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RootPanel.Location = new System.Drawing.Point(0, 0);
@@ -160,32 +158,24 @@
             this.RootPanel.RowCount = 2;
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.RootPanel.Size = new System.Drawing.Size(544, 651);
             this.RootPanel.TabIndex = 0;
             //
-            // SettingsPanel
+            // SettingTabControl
             //
-            this.SettingsPanel.Controls.Add(this.SettingsTabControl);
-            this.SettingsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SettingsPanel.Location = new System.Drawing.Point(3, 3);
-            this.SettingsPanel.Name = "SettingsPanel";
-            this.SettingsPanel.Padding = new System.Windows.Forms.Padding(8);
-            this.SettingsPanel.Size = new System.Drawing.Size(538, 595);
-            this.SettingsPanel.TabIndex = 0;
-            //
-            // SettingsTabControl
-            //
-            this.SettingsTabControl.Controls.Add(this.GeneralTabPage);
-            this.SettingsTabControl.Controls.Add(this.CompressTabPage);
-            this.SettingsTabControl.Controls.Add(this.ExtractTabPage);
-            this.SettingsTabControl.Controls.Add(this.MiscTabPage);
-            this.SettingsTabControl.Controls.Add(this.VersionTabPage);
-            this.SettingsTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SettingsTabControl.Location = new System.Drawing.Point(8, 8);
-            this.SettingsTabControl.Name = "SettingsTabControl";
-            this.SettingsTabControl.SelectedIndex = 0;
-            this.SettingsTabControl.Size = new System.Drawing.Size(522, 579);
-            this.SettingsTabControl.TabIndex = 0;
+            this.SettingTabControl.Controls.Add(this.GeneralTabPage);
+            this.SettingTabControl.Controls.Add(this.CompressTabPage);
+            this.SettingTabControl.Controls.Add(this.ExtractTabPage);
+            this.SettingTabControl.Controls.Add(this.MiscTabPage);
+            this.SettingTabControl.Controls.Add(this.VersionTabPage);
+            this.SettingTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SettingTabControl.Location = new System.Drawing.Point(9, 9);
+            this.SettingTabControl.Margin = new System.Windows.Forms.Padding(9);
+            this.SettingTabControl.Name = "SettingTabControl";
+            this.SettingTabControl.SelectedIndex = 0;
+            this.SettingTabControl.Size = new System.Drawing.Size(526, 583);
+            this.SettingTabControl.TabIndex = 2;
             //
             // GeneralTabPage
             //
@@ -193,7 +183,7 @@
             this.GeneralTabPage.Location = new System.Drawing.Point(4, 24);
             this.GeneralTabPage.Name = "GeneralTabPage";
             this.GeneralTabPage.Padding = new System.Windows.Forms.Padding(12, 8, 3, 8);
-            this.GeneralTabPage.Size = new System.Drawing.Size(514, 551);
+            this.GeneralTabPage.Size = new System.Drawing.Size(518, 555);
             this.GeneralTabPage.TabIndex = 0;
             this.GeneralTabPage.Text = "一般";
             this.GeneralTabPage.UseVisualStyleBackColor = true;
@@ -207,7 +197,7 @@
             this.GeneralPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.GeneralPanel.Location = new System.Drawing.Point(12, 8);
             this.GeneralPanel.Name = "GeneralPanel";
-            this.GeneralPanel.Size = new System.Drawing.Size(499, 535);
+            this.GeneralPanel.Size = new System.Drawing.Size(503, 539);
             this.GeneralPanel.TabIndex = 0;
             //
             // AssociateGroupBox
@@ -466,7 +456,7 @@
             this.CompressTabPage.Location = new System.Drawing.Point(4, 24);
             this.CompressTabPage.Name = "CompressTabPage";
             this.CompressTabPage.Padding = new System.Windows.Forms.Padding(12, 8, 3, 8);
-            this.CompressTabPage.Size = new System.Drawing.Size(514, 551);
+            this.CompressTabPage.Size = new System.Drawing.Size(518, 555);
             this.CompressTabPage.TabIndex = 1;
             this.CompressTabPage.Text = "圧縮";
             this.CompressTabPage.UseVisualStyleBackColor = true;
@@ -479,12 +469,12 @@
             this.CompressPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CompressPanel.Location = new System.Drawing.Point(12, 8);
             this.CompressPanel.Name = "CompressPanel";
-            this.CompressPanel.Size = new System.Drawing.Size(499, 535);
+            this.CompressPanel.Size = new System.Drawing.Size(503, 539);
             this.CompressPanel.TabIndex = 0;
             //
             // CompressSaveGroupBox
             //
-            this.CompressSaveGroupBox.Controls.Add(this.ArchiveSavePanel);
+            this.CompressSaveGroupBox.Controls.Add(this.CompressSavePanel);
             this.CompressSaveGroupBox.Location = new System.Drawing.Point(3, 3);
             this.CompressSaveGroupBox.Name = "CompressSaveGroupBox";
             this.CompressSaveGroupBox.Padding = new System.Windows.Forms.Padding(8, 3, 8, 3);
@@ -493,24 +483,24 @@
             this.CompressSaveGroupBox.TabStop = false;
             this.CompressSaveGroupBox.Text = "保存場所";
             //
-            // ArchiveSavePanel
+            // CompressSavePanel
             //
-            this.ArchiveSavePanel.Controls.Add(this.CompressSaveRadioButton);
-            this.ArchiveSavePanel.Controls.Add(this.CompressSaveTextBox);
-            this.ArchiveSavePanel.Controls.Add(this.CompressSaveButton);
-            this.ArchiveSavePanel.Controls.Add(this.CompressSaveSourceRadioButton);
-            this.ArchiveSavePanel.Controls.Add(this.CompressSaveQueryRadioButton);
-            this.ArchiveSavePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ArchiveSavePanel.Location = new System.Drawing.Point(8, 19);
-            this.ArchiveSavePanel.Name = "ArchiveSavePanel";
-            this.ArchiveSavePanel.Size = new System.Drawing.Size(458, 113);
-            this.ArchiveSavePanel.TabIndex = 0;
+            this.CompressSavePanel.Controls.Add(this.CompressSaveRadioButton);
+            this.CompressSavePanel.Controls.Add(this.CompressSaveTextBox);
+            this.CompressSavePanel.Controls.Add(this.CompressSaveButton);
+            this.CompressSavePanel.Controls.Add(this.CompressSaveSourceRadioButton);
+            this.CompressSavePanel.Controls.Add(this.CompressSaveQueryRadioButton);
+            this.CompressSavePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CompressSavePanel.Location = new System.Drawing.Point(8, 19);
+            this.CompressSavePanel.Name = "CompressSavePanel";
+            this.CompressSavePanel.Size = new System.Drawing.Size(458, 113);
+            this.CompressSavePanel.TabIndex = 0;
             //
             // CompressSaveRadioButton
             //
             this.CompressSaveRadioButton.AutoSize = true;
             this.CompressSaveRadioButton.Checked = true;
-            this.ArchiveSavePanel.SetFlowBreak(this.CompressSaveRadioButton, true);
+            this.CompressSavePanel.SetFlowBreak(this.CompressSaveRadioButton, true);
             this.CompressSaveRadioButton.Location = new System.Drawing.Point(3, 3);
             this.CompressSaveRadioButton.Name = "CompressSaveRadioButton";
             this.CompressSaveRadioButton.Size = new System.Drawing.Size(223, 19);
@@ -529,7 +519,7 @@
             //
             // CompressSaveButton
             //
-            this.ArchiveSavePanel.SetFlowBreak(this.CompressSaveButton, true);
+            this.CompressSavePanel.SetFlowBreak(this.CompressSaveButton, true);
             this.CompressSaveButton.Location = new System.Drawing.Point(371, 27);
             this.CompressSaveButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 3);
             this.CompressSaveButton.Name = "CompressSaveButton";
@@ -541,7 +531,7 @@
             // CompressSaveSourceRadioButton
             //
             this.CompressSaveSourceRadioButton.AutoSize = true;
-            this.ArchiveSavePanel.SetFlowBreak(this.CompressSaveSourceRadioButton, true);
+            this.CompressSavePanel.SetFlowBreak(this.CompressSaveSourceRadioButton, true);
             this.CompressSaveSourceRadioButton.Location = new System.Drawing.Point(3, 58);
             this.CompressSaveSourceRadioButton.Name = "CompressSaveSourceRadioButton";
             this.CompressSaveSourceRadioButton.Size = new System.Drawing.Size(145, 19);
@@ -552,7 +542,7 @@
             // CompressSaveQueryRadioButton
             //
             this.CompressSaveQueryRadioButton.AutoSize = true;
-            this.ArchiveSavePanel.SetFlowBreak(this.CompressSaveQueryRadioButton, true);
+            this.CompressSavePanel.SetFlowBreak(this.CompressSaveQueryRadioButton, true);
             this.CompressSaveQueryRadioButton.Location = new System.Drawing.Point(3, 83);
             this.CompressSaveQueryRadioButton.Name = "CompressSaveQueryRadioButton";
             this.CompressSaveQueryRadioButton.Size = new System.Drawing.Size(113, 19);
@@ -562,7 +552,7 @@
             //
             // CompressOptionGroupBox
             //
-            this.CompressOptionGroupBox.Controls.Add(this.ArchiveOptionPanel);
+            this.CompressOptionGroupBox.Controls.Add(this.CompressOptionPanel);
             this.CompressOptionGroupBox.Location = new System.Drawing.Point(3, 144);
             this.CompressOptionGroupBox.Name = "CompressOptionGroupBox";
             this.CompressOptionGroupBox.Padding = new System.Windows.Forms.Padding(8, 3, 8, 3);
@@ -571,19 +561,19 @@
             this.CompressOptionGroupBox.TabStop = false;
             this.CompressOptionGroupBox.Text = "オプション";
             //
-            // ArchiveOptionPanel
+            // CompressOptionPanel
             //
-            this.ArchiveOptionPanel.Controls.Add(this.CompressFilterCheckBox);
-            this.ArchiveOptionPanel.Controls.Add(this.CompressUtf8CheckBox);
-            this.ArchiveOptionPanel.Controls.Add(this.CompressOverwriteCheckBox);
-            this.ArchiveOptionPanel.Controls.Add(this.CompressOpenCheckBox);
-            this.ArchiveOptionPanel.Controls.Add(this.CompressOpenSmartCheckBox);
-            this.ArchiveOptionPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ArchiveOptionPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.ArchiveOptionPanel.Location = new System.Drawing.Point(8, 19);
-            this.ArchiveOptionPanel.Name = "ArchiveOptionPanel";
-            this.ArchiveOptionPanel.Size = new System.Drawing.Size(458, 133);
-            this.ArchiveOptionPanel.TabIndex = 0;
+            this.CompressOptionPanel.Controls.Add(this.CompressFilterCheckBox);
+            this.CompressOptionPanel.Controls.Add(this.CompressUtf8CheckBox);
+            this.CompressOptionPanel.Controls.Add(this.CompressOverwriteCheckBox);
+            this.CompressOptionPanel.Controls.Add(this.CompressOpenCheckBox);
+            this.CompressOptionPanel.Controls.Add(this.CompressOpenSmartCheckBox);
+            this.CompressOptionPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CompressOptionPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.CompressOptionPanel.Location = new System.Drawing.Point(8, 19);
+            this.CompressOptionPanel.Name = "CompressOptionPanel";
+            this.CompressOptionPanel.Size = new System.Drawing.Size(458, 133);
+            this.CompressOptionPanel.TabIndex = 0;
             //
             // CompressFilterCheckBox
             //
@@ -643,7 +633,7 @@
             this.ExtractTabPage.Location = new System.Drawing.Point(4, 24);
             this.ExtractTabPage.Name = "ExtractTabPage";
             this.ExtractTabPage.Padding = new System.Windows.Forms.Padding(12, 8, 3, 8);
-            this.ExtractTabPage.Size = new System.Drawing.Size(514, 551);
+            this.ExtractTabPage.Size = new System.Drawing.Size(518, 555);
             this.ExtractTabPage.TabIndex = 2;
             this.ExtractTabPage.Text = "解凍";
             this.ExtractTabPage.UseVisualStyleBackColor = true;
@@ -656,7 +646,7 @@
             this.ExtractPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ExtractPanel.Location = new System.Drawing.Point(12, 8);
             this.ExtractPanel.Name = "ExtractPanel";
-            this.ExtractPanel.Size = new System.Drawing.Size(499, 535);
+            this.ExtractPanel.Size = new System.Drawing.Size(503, 539);
             this.ExtractPanel.TabIndex = 0;
             //
             // ExtractSaveGroupBox
@@ -844,7 +834,7 @@
             this.MiscTabPage.Location = new System.Drawing.Point(4, 24);
             this.MiscTabPage.Name = "MiscTabPage";
             this.MiscTabPage.Padding = new System.Windows.Forms.Padding(12, 8, 3, 8);
-            this.MiscTabPage.Size = new System.Drawing.Size(514, 551);
+            this.MiscTabPage.Size = new System.Drawing.Size(518, 555);
             this.MiscTabPage.TabIndex = 3;
             this.MiscTabPage.Text = "詳細";
             this.MiscTabPage.UseVisualStyleBackColor = true;
@@ -853,11 +843,11 @@
             //
             this.MiscPanel.AutoScroll = true;
             this.MiscPanel.Controls.Add(this.FilterGroupBox);
-            this.MiscPanel.Controls.Add(this.OtherGroupBox);
+            this.MiscPanel.Controls.Add(this.MiscOptionGroupBox);
             this.MiscPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MiscPanel.Location = new System.Drawing.Point(12, 8);
             this.MiscPanel.Name = "MiscPanel";
-            this.MiscPanel.Size = new System.Drawing.Size(499, 535);
+            this.MiscPanel.Size = new System.Drawing.Size(503, 539);
             this.MiscPanel.TabIndex = 2;
             //
             // FilterGroupBox
@@ -902,49 +892,49 @@
             this.FilterTextBox.TabIndex = 1;
             this.FilterTextBox.WordWrap = false;
             //
-            // OtherGroupBox
+            // MiscOptionGroupBox
             //
-            this.OtherGroupBox.Controls.Add(this.OtherPanel);
-            this.OtherGroupBox.Location = new System.Drawing.Point(3, 259);
-            this.OtherGroupBox.Name = "OtherGroupBox";
-            this.OtherGroupBox.Padding = new System.Windows.Forms.Padding(8, 3, 8, 3);
-            this.OtherGroupBox.Size = new System.Drawing.Size(474, 168);
-            this.OtherGroupBox.TabIndex = 1;
-            this.OtherGroupBox.TabStop = false;
-            this.OtherGroupBox.Text = "その他";
+            this.MiscOptionGroupBox.Controls.Add(this.MiscOptionPanel);
+            this.MiscOptionGroupBox.Location = new System.Drawing.Point(3, 259);
+            this.MiscOptionGroupBox.Name = "MiscOptionGroupBox";
+            this.MiscOptionGroupBox.Padding = new System.Windows.Forms.Padding(8, 3, 8, 3);
+            this.MiscOptionGroupBox.Size = new System.Drawing.Size(474, 168);
+            this.MiscOptionGroupBox.TabIndex = 1;
+            this.MiscOptionGroupBox.TabStop = false;
+            this.MiscOptionGroupBox.Text = "その他";
             //
-            // OtherPanel
+            // MiscOptionPanel
             //
-            this.OtherPanel.ColumnCount = 3;
-            this.OtherPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
-            this.OtherPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.OtherPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 66F));
-            this.OtherPanel.Controls.Add(this.ToolTipCheckBox, 0, 0);
-            this.OtherPanel.Controls.Add(this.ToolTipLabel, 0, 1);
-            this.OtherPanel.Controls.Add(this.ToolTipNumeric, 1, 1);
-            this.OtherPanel.Controls.Add(this.IoHandlerLabel, 0, 2);
-            this.OtherPanel.Controls.Add(this.IoHandlerComboBox, 1, 2);
-            this.OtherPanel.Controls.Add(this.TempLabel, 0, 3);
-            this.OtherPanel.Controls.Add(this.TempTextBox, 1, 3);
-            this.OtherPanel.Controls.Add(this.TempButton, 2, 3);
-            this.OtherPanel.Controls.Add(this.UpdateCheckBox, 0, 4);
-            this.OtherPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.OtherPanel.Location = new System.Drawing.Point(8, 19);
-            this.OtherPanel.Name = "OtherPanel";
-            this.OtherPanel.RowCount = 6;
-            this.OtherPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.OtherPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.OtherPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.OtherPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.OtherPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.OtherPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.OtherPanel.Size = new System.Drawing.Size(458, 146);
-            this.OtherPanel.TabIndex = 0;
+            this.MiscOptionPanel.ColumnCount = 3;
+            this.MiscOptionPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.MiscOptionPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.MiscOptionPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 66F));
+            this.MiscOptionPanel.Controls.Add(this.ToolTipCheckBox, 0, 0);
+            this.MiscOptionPanel.Controls.Add(this.ToolTipLabel, 0, 1);
+            this.MiscOptionPanel.Controls.Add(this.ToolTipNumeric, 1, 1);
+            this.MiscOptionPanel.Controls.Add(this.IoHandlerLabel, 0, 2);
+            this.MiscOptionPanel.Controls.Add(this.IoHandlerComboBox, 1, 2);
+            this.MiscOptionPanel.Controls.Add(this.TempLabel, 0, 3);
+            this.MiscOptionPanel.Controls.Add(this.TempTextBox, 1, 3);
+            this.MiscOptionPanel.Controls.Add(this.TempButton, 2, 3);
+            this.MiscOptionPanel.Controls.Add(this.UpdateCheckBox, 0, 4);
+            this.MiscOptionPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MiscOptionPanel.Location = new System.Drawing.Point(8, 19);
+            this.MiscOptionPanel.Name = "MiscOptionPanel";
+            this.MiscOptionPanel.RowCount = 6;
+            this.MiscOptionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.MiscOptionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.MiscOptionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.MiscOptionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.MiscOptionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.MiscOptionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.MiscOptionPanel.Size = new System.Drawing.Size(458, 146);
+            this.MiscOptionPanel.TabIndex = 0;
             //
             // ToolTipCheckBox
             //
             this.ToolTipCheckBox.AutoSize = true;
-            this.OtherPanel.SetColumnSpan(this.ToolTipCheckBox, 3);
+            this.MiscOptionPanel.SetColumnSpan(this.ToolTipCheckBox, 3);
             this.ToolTipCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ToolTipCheckBox.Location = new System.Drawing.Point(3, 3);
             this.ToolTipCheckBox.Name = "ToolTipCheckBox";
@@ -1035,7 +1025,7 @@
             // UpdateCheckBox
             //
             this.UpdateCheckBox.AutoSize = true;
-            this.OtherPanel.SetColumnSpan(this.UpdateCheckBox, 3);
+            this.MiscOptionPanel.SetColumnSpan(this.UpdateCheckBox, 3);
             this.UpdateCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.UpdateCheckBox.Location = new System.Drawing.Point(3, 115);
             this.UpdateCheckBox.Name = "UpdateCheckBox";
@@ -1049,7 +1039,7 @@
             this.VersionTabPage.Location = new System.Drawing.Point(4, 24);
             this.VersionTabPage.Name = "VersionTabPage";
             this.VersionTabPage.Padding = new System.Windows.Forms.Padding(12);
-            this.VersionTabPage.Size = new System.Drawing.Size(514, 551);
+            this.VersionTabPage.Size = new System.Drawing.Size(518, 555);
             this.VersionTabPage.TabIndex = 4;
             this.VersionTabPage.Text = "バージョン情報";
             this.VersionTabPage.UseVisualStyleBackColor = true;
@@ -1069,7 +1059,6 @@
             // ApplyButton
             //
             this.ApplyButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.ApplyButton.Enabled = false;
             this.ApplyButton.Location = new System.Drawing.Point(426, 3);
             this.ApplyButton.Margin = new System.Windows.Forms.Padding(12, 3, 3, 3);
             this.ApplyButton.Name = "ApplyButton";
@@ -1114,8 +1103,7 @@
             this.Name = "MainWindow";
             this.Text = "CubeICE 設定";
             this.RootPanel.ResumeLayout(false);
-            this.SettingsPanel.ResumeLayout(false);
-            this.SettingsTabControl.ResumeLayout(false);
+            this.SettingTabControl.ResumeLayout(false);
             this.GeneralTabPage.ResumeLayout(false);
             this.GeneralPanel.ResumeLayout(false);
             this.AssociateGroupBox.ResumeLayout(false);
@@ -1131,11 +1119,11 @@
             this.CompressTabPage.ResumeLayout(false);
             this.CompressPanel.ResumeLayout(false);
             this.CompressSaveGroupBox.ResumeLayout(false);
-            this.ArchiveSavePanel.ResumeLayout(false);
-            this.ArchiveSavePanel.PerformLayout();
+            this.CompressSavePanel.ResumeLayout(false);
+            this.CompressSavePanel.PerformLayout();
             this.CompressOptionGroupBox.ResumeLayout(false);
-            this.ArchiveOptionPanel.ResumeLayout(false);
-            this.ArchiveOptionPanel.PerformLayout();
+            this.CompressOptionPanel.ResumeLayout(false);
+            this.CompressOptionPanel.PerformLayout();
             this.ExtractTabPage.ResumeLayout(false);
             this.ExtractPanel.ResumeLayout(false);
             this.ExtractSaveGroupBox.ResumeLayout(false);
@@ -1149,9 +1137,9 @@
             this.FilterGroupBox.ResumeLayout(false);
             this.FilterPanel.ResumeLayout(false);
             this.FilterPanel.PerformLayout();
-            this.OtherGroupBox.ResumeLayout(false);
-            this.OtherPanel.ResumeLayout(false);
-            this.OtherPanel.PerformLayout();
+            this.MiscOptionGroupBox.ResumeLayout(false);
+            this.MiscOptionPanel.ResumeLayout(false);
+            this.MiscOptionPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ToolTipNumeric)).EndInit();
             this.ButtonsPanel.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -1161,13 +1149,12 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel RootPanel;
-        private Forms.Controls.SettingControl SettingsPanel;
-        private System.Windows.Forms.TabControl SettingsTabControl;
+        private System.Windows.Forms.FlowLayoutPanel ButtonsPanel;
+        private System.Windows.Forms.Button ApplyButton;
+        private System.Windows.Forms.Button ExitButton;
+        private System.Windows.Forms.Button ExecuteButton;
+        private System.Windows.Forms.TabControl SettingTabControl;
         private System.Windows.Forms.TabPage GeneralTabPage;
-        private System.Windows.Forms.TabPage CompressTabPage;
-        private System.Windows.Forms.TabPage ExtractTabPage;
-        private System.Windows.Forms.TabPage MiscTabPage;
-        private System.Windows.Forms.TabPage VersionTabPage;
         private System.Windows.Forms.FlowLayoutPanel GeneralPanel;
         private System.Windows.Forms.GroupBox AssociateGroupBox;
         private System.Windows.Forms.TableLayoutPanel AssociatePanel;
@@ -1180,26 +1167,35 @@
         private System.Windows.Forms.FlowLayoutPanel ContextButtonsPanel;
         private System.Windows.Forms.Button ContextResetButton;
         private System.Windows.Forms.Button ContextCustomizeButton;
+        private System.Windows.Forms.TableLayoutPanel ContextPresetPanel;
+        private System.Windows.Forms.FlowLayoutPanel ContextExtractPanel;
+        private System.Windows.Forms.CheckBox ContextExtractCheckBox;
+        private System.Windows.Forms.CheckBox ContextCompressCheckBox;
+        private System.Windows.Forms.FlowLayoutPanel ContextCompressPanel;
         private System.Windows.Forms.GroupBox ShortcutGroupBox;
         private System.Windows.Forms.FlowLayoutPanel ShortcutPanel;
         private System.Windows.Forms.CheckBox ShortcutCompressCheckBox;
         private System.Windows.Forms.ComboBox ShortcutCompressComboBox;
         private System.Windows.Forms.CheckBox ShortcutExtractCheckBox;
         private System.Windows.Forms.CheckBox ShortcutSettingsCheckBox;
-        private System.Windows.Forms.FlowLayoutPanel ButtonsPanel;
-        private System.Windows.Forms.Button ApplyButton;
-        private System.Windows.Forms.Button ExitButton;
-        private System.Windows.Forms.Button ExecuteButton;
+        private System.Windows.Forms.TabPage CompressTabPage;
         private System.Windows.Forms.FlowLayoutPanel CompressPanel;
-        private System.Windows.Forms.FlowLayoutPanel ExtractPanel;
-        private System.Windows.Forms.FlowLayoutPanel MiscPanel;
         private System.Windows.Forms.GroupBox CompressSaveGroupBox;
-        private System.Windows.Forms.FlowLayoutPanel ArchiveSavePanel;
+        private System.Windows.Forms.FlowLayoutPanel CompressSavePanel;
         private System.Windows.Forms.RadioButton CompressSaveRadioButton;
         private System.Windows.Forms.TextBox CompressSaveTextBox;
         private System.Windows.Forms.Button CompressSaveButton;
         private System.Windows.Forms.RadioButton CompressSaveSourceRadioButton;
         private System.Windows.Forms.RadioButton CompressSaveQueryRadioButton;
+        private System.Windows.Forms.GroupBox CompressOptionGroupBox;
+        private System.Windows.Forms.FlowLayoutPanel CompressOptionPanel;
+        private System.Windows.Forms.CheckBox CompressFilterCheckBox;
+        private System.Windows.Forms.CheckBox CompressUtf8CheckBox;
+        private System.Windows.Forms.CheckBox CompressOverwriteCheckBox;
+        private System.Windows.Forms.CheckBox CompressOpenCheckBox;
+        private System.Windows.Forms.CheckBox CompressOpenSmartCheckBox;
+        private System.Windows.Forms.TabPage ExtractTabPage;
+        private System.Windows.Forms.FlowLayoutPanel ExtractPanel;
         private System.Windows.Forms.GroupBox ExtractSaveGroupBox;
         private System.Windows.Forms.FlowLayoutPanel ExtractSavePanel;
         private System.Windows.Forms.RadioButton ExtractSaveRadioButton;
@@ -1207,33 +1203,23 @@
         private System.Windows.Forms.Button ExtractSaveButton;
         private System.Windows.Forms.RadioButton ExtractSaveSourceRadioButton;
         private System.Windows.Forms.RadioButton ExtractSaveQueryRadioButton;
-        private System.Windows.Forms.GroupBox CompressOptionGroupBox;
         private System.Windows.Forms.GroupBox ExtractOptionGroupBox;
-        private System.Windows.Forms.GroupBox FilterGroupBox;
-        private System.Windows.Forms.GroupBox OtherGroupBox;
-        private System.Windows.Forms.FlowLayoutPanel ArchiveOptionPanel;
-        private System.Windows.Forms.CheckBox CompressFilterCheckBox;
-        private System.Windows.Forms.CheckBox CompressOpenCheckBox;
-        private System.Windows.Forms.CheckBox CompressOpenSmartCheckBox;
         private System.Windows.Forms.FlowLayoutPanel ExtractOptionPanel;
+        private System.Windows.Forms.CheckBox ExtractBurstCheckBox;
         private System.Windows.Forms.CheckBox ExtractCreateCheckBox;
         private System.Windows.Forms.CheckBox ExtractCreateSmartCheckBox;
         private System.Windows.Forms.CheckBox ExtractFilterCheckBox;
         private System.Windows.Forms.CheckBox ExtractOpenCheckBox;
         private System.Windows.Forms.CheckBox ExtractOpenSmartCheckBox;
         private System.Windows.Forms.CheckBox ExtractDeleteCheckBox;
+        private System.Windows.Forms.TabPage MiscTabPage;
+        private System.Windows.Forms.FlowLayoutPanel MiscPanel;
+        private System.Windows.Forms.GroupBox FilterGroupBox;
         private System.Windows.Forms.FlowLayoutPanel FilterPanel;
         private System.Windows.Forms.Label FilterLabel;
         private System.Windows.Forms.TextBox FilterTextBox;
-        private System.Windows.Forms.CheckBox CompressUtf8CheckBox;
-        private System.Windows.Forms.CheckBox CompressOverwriteCheckBox;
-        private System.Windows.Forms.CheckBox ExtractBurstCheckBox;
-        private System.Windows.Forms.TableLayoutPanel ContextPresetPanel;
-        private System.Windows.Forms.FlowLayoutPanel ContextExtractPanel;
-        private System.Windows.Forms.CheckBox ContextExtractCheckBox;
-        private System.Windows.Forms.CheckBox ContextCompressCheckBox;
-        private System.Windows.Forms.FlowLayoutPanel ContextCompressPanel;
-        private System.Windows.Forms.TableLayoutPanel OtherPanel;
+        private System.Windows.Forms.GroupBox MiscOptionGroupBox;
+        private System.Windows.Forms.TableLayoutPanel MiscOptionPanel;
         private System.Windows.Forms.CheckBox ToolTipCheckBox;
         private System.Windows.Forms.Label ToolTipLabel;
         private System.Windows.Forms.NumericUpDown ToolTipNumeric;
@@ -1243,6 +1229,7 @@
         private System.Windows.Forms.TextBox TempTextBox;
         private System.Windows.Forms.Button TempButton;
         private System.Windows.Forms.CheckBox UpdateCheckBox;
+        private System.Windows.Forms.TabPage VersionTabPage;
     }
 }
 
