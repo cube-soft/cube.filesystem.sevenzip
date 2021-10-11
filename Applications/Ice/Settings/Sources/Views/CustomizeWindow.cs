@@ -76,7 +76,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         {
             if (src is not CustomizeViewModel vm) return;
 
-            Behaviors.Add(new ClickBehavior(ApplyButton, vm.Save));
+            Behaviors.Add(new ClickBehavior(ApplyButton, () => vm.Save(_menu.Result)));
             Behaviors.Add(new ClickBehavior(ExitButton, Close));
             Behaviors.Add(new ClickBehavior(RenameButton, _menu.RenameMenu.Execute));
             Behaviors.Add(new ClickBehavior(AddButton, _menu.AddMenu.Execute));
