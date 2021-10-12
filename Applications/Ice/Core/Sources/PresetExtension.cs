@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using System.Collections.Generic;
 using System.Linq;
+using Cube.Mixin.Collections;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -128,7 +129,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         public static Context ToContext(this Preset src) => new()
         {
             Name      = src.ToName(),
-            Arguments = string.Join(" ", src.ToArguments()),
+            Arguments = src.ToArguments().Join(" "),
             IconIndex = src.ToIconIndex(),
         };
 
