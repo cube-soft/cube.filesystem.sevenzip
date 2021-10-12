@@ -82,7 +82,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             var dest = new StringBuilder();
             _ = dest.Append($"{percentage}%");
             if (path.HasValue()) _ = dest.Append($" - {Io.Get(path).Name}");
-            _ = dest.Append($" - {src.GetType().Assembly.GetProduct()}");
+            _ = dest.Append($" - {src.GetType().Assembly.GetTitle()}");
             return dest.ToString();
         }
 

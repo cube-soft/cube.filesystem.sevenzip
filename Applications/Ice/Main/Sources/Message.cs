@@ -136,7 +136,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                       $"{System.IO.Path.GetExtension(entity.BaseName)}{entity.Extension}" :
                       entity.Extension;
 
-            return src.Select((e, i) => KeyValuePair.Create(i + 1, e))
+            return src.Select((e, i) => new KeyValuePair<int, FileDialogFilter>(i + 1, e))
                       .FirstOrDefault(e => e.Value.Targets.Any(e2 => e2.Equals(ext, opt)))
                       .Key;
         }
