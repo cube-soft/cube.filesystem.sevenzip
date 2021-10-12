@@ -65,7 +65,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             var view = new MainWindow();
             var vm   = new SettingViewModel(src, SynchronizationContext.Current);
             vm.Associate.Changed = im;
-            if (!im) vm.Load();
+            vm.Load();
             view.Bind(vm);
 
             Application.Run(view);

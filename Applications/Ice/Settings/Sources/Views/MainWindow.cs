@@ -75,6 +75,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
             BindCore(vm);
 
+            Behaviors.Add(new CloseBehavior(this, vm));
             Behaviors.Add(new DialogBehavior(vm));
             Behaviors.Add(new OpenDirectoryBehavior(vm));
             Behaviors.Add(new ClickBehavior(ExecuteButton, () => vm.Save(true)));
