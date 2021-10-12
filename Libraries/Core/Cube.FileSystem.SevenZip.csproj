@@ -9,7 +9,7 @@
         <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
         <PackageIcon>images\Icon.png</PackageIcon>
         <PackageProjectUrl>https://github.com/cube-soft/Cube.FileSystem.SevenZip</PackageProjectUrl>
-        <TargetFramework>net45</TargetFramework>
+        <TargetFramework>net35</TargetFramework>
         <LangVersion>latest</LangVersion>
         <Optimize>true</Optimize>
         <EnableDefaultNoneItems>false</EnableDefaultNoneItems>

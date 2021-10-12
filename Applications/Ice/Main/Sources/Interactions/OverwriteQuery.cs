@@ -16,6 +16,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using System;
+using Cube.Backports;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {

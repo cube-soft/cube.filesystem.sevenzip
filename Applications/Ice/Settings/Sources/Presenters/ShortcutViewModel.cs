@@ -16,6 +16,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using System.Threading;
+using Cube.Backports;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {

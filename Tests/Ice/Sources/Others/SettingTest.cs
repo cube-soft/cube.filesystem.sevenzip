@@ -16,6 +16,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using System;
+using Cube.Backports;
 using Cube.FileSystem.SevenZip.Ice.Settings;
 using Cube.Tests;
 using NUnit.Framework;

@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cube.Backports;
 using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip.Ice

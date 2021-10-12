@@ -29,7 +29,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public record ArchiveOption
+    public class ArchiveOption
     {
         /* ----------------------------------------------------------------- */
         ///

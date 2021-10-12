@@ -259,7 +259,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             finally
             {
                 _timer.Dispose();
-                _supender.Dispose();
+                //_supender.Dispose();
             }
         }
 

@@ -66,7 +66,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 Assert.That(Wait.For(() => vm.State == TimerState.Suspend), $"2.{vm.State}");
                 vm.SuspendOrResume();
                 Assert.That(Wait.For(() => vm.State == TimerState.Run), $"3.{vm.State}");
-                Task.Delay(1000).Wait();
+                TaskEx.Delay(1000).Wait();
             }
 
             var dest = Io.Combine(dir, "SampleHeavy");
