@@ -33,6 +33,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
+    [NonParallelizable]
     class CompressTest : VmFixture
     {
         #region Tests
