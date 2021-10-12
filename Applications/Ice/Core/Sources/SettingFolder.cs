@@ -78,7 +78,6 @@ namespace Cube.FileSystem.SevenZip.Ice
             base(format, location, assembly.GetSoftwareVersion())
         {
             AutoSave = false;
-            Version.Suffix = Properties.Resources.VersionSuffix;
 
             var exe = Io.Combine(assembly.GetDirectoryName(), "CubeChecker.exe");
             Startup = new("cubeice-checker") { Source = exe };

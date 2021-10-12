@@ -74,7 +74,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             // Compression
             var s4 = vm.Compress;
             var b4 = Behaviors.Hook(new BindingSource(s4, ""));
-            b4.Bind(nameof(s4.SaveSource),      CompressSaveSourceRadioButton , nameof(RadioButton.Checked));
+            b4.Bind(nameof(s4.SaveSource),      CompressSaveSourceRadioButton,  nameof(RadioButton.Checked));
             b4.Bind(nameof(s4.SaveQuery),       CompressSaveQueryRadioButton,   nameof(RadioButton.Checked));
             b4.Bind(nameof(s4.SaveOthers),      CompressSaveRadioButton,        nameof(RadioButton.Checked));
             b4.Bind(nameof(s4.SaveOthers),      CompressSaveButton,             nameof(Enabled));

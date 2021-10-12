@@ -230,14 +230,5 @@ namespace Cube.FileSystem.SevenZip.Ice.Properties {
                 return ResourceManager.GetString("ScSettings", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   β に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        internal static string VersionSuffix {
-            get {
-                return ResourceManager.GetString("VersionSuffix", resourceCulture);
-            }
-        }
     }
 }

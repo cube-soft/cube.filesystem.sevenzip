@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <Version>0.11.0</Version>
+        <Version>1.0.0</Version>
         <Authors>clown;cube-soft</Authors>
         <Company>CubeSoft</Company>
-        <Description>Core library for CubeICE.</Description>
+        <Description>CubeICE core library.</Description>
         <Copyright>Copyright © 2010 CubeSoft, Inc.</Copyright>
         <TargetFramework>net45</TargetFramework>
         <LangVersion>latest</LangVersion>
