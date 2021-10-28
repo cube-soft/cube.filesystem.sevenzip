@@ -69,6 +69,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         ///
         /* ----------------------------------------------------------------- */
         [TestCase("/o:source",      SaveLocation.Source     )]
+        [TestCase("/o:runtime",     SaveLocation.Query      )]
+        [TestCase("/o:others",      SaveLocation.Preset     )]
         [TestCase("-O:DESKTOP",     SaveLocation.Desktop    )]
         [TestCase("-o:mydocuments", SaveLocation.MyDocuments)]
         [TestCase("-o:query",       SaveLocation.Query      )]
