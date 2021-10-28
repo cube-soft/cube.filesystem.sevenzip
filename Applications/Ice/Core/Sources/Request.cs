@@ -251,6 +251,11 @@ namespace Cube.FileSystem.SevenZip.Ice
             {
                 if (e.ToString().ToLowerInvariant() == dest) return e;
             }
+
+            // Compatible with older versions.
+            if (dest == "runtime") return SaveLocation.Query;
+            if (dest == "others" ) return SaveLocation.Preset;
+
             return SaveLocation.Unknown;
         }
 
