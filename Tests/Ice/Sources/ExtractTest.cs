@@ -103,7 +103,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 Preset.ExtractQuery.ToArguments(),
                 new ExtractSetting
                 {
-                    SaveLocation = SaveLocation.Query,
+                    SaveLocation = SaveLocation.Preset,
                     SaveMethod   = SaveMethod.CreateSmart,
                     Filtering    = false,
                 }

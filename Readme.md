@@ -10,11 +10,7 @@ Cube.FileSystem.SevenZip is a wrapper library of the [7-Zip](http://www.7-zip.or
 ## Usage
 
 You can install the library through the NuGet package.
-Add a dependency in your project file using the following syntax:
-
-    <PackageReference Include="Cube.FileSystem.SevenZip" Version="5.0.0" />
-
-Or select it from the NuGet packages UI on Visual Studio.
+Add dependencies in your project file or select it from the NuGet packages UI on Visual Studio.
 
 ### Examples for archiving files
 
@@ -98,8 +94,7 @@ Use Task.Run() in the whole transaction if you need to archive or extract files 
 ## Dependencies
 
 * [7-Zip](https://www.7-zip.org/) ... [Cube.Native.SevenZip](https://github.com/cube-soft/Cube.Native.SevenZip) is optimized for Japanese encoding.
-* [AlphaFS](https://alphafs.alphaleonis.com/)
-* [NLog](https://nlog-project.org/)
+* [AlphaFS](https://alphafs.alphaleonis.com/) ... [Cube.FileSystem.AlphaFS](https://www.nuget.org/packages/Cube.FileSystem.AlphaFS/) is a wrapper library for using AlphaFS in Cube projects.
 
 ## Contributing
 
