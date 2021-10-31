@@ -18,7 +18,6 @@
 using System;
 using System.Diagnostics;
 using System.Threading;
-using Cube.Logging;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {

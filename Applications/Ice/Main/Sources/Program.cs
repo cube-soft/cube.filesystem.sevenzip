@@ -20,7 +20,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Cube.Logging;
 using Cube.Mixin.Collections;
 using Cube.Mixin.String;
 

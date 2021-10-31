@@ -18,8 +18,9 @@
 using System;
 using System.ComponentModel;
 using System.Text;
-using System.Windows.Forms;
-using Cube.Images.Icons;
+using Cube.Forms;
+using Cube.Forms.Behaviors;
+using Cube.Icons;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -32,7 +33,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class OverwriteWindow : Form
+    public partial class OverwriteWindow : Window
     {
         #region Constructors
 
@@ -49,14 +50,14 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             InitializeComponent();
 
-            IconPictureBox.Image = StockIcons.Warning.GetIcon(IconSize.Large).ToBitmap();
+            IconPictureBox.Image = StockIcon.Warning.GetImage(IconSize.Large);
 
-            YesButton.Click          += (s, e) => Close(OverwriteMethod.Yes);
-            NoButton.Click           += (s, e) => Close(OverwriteMethod.No);
-            ExitButton.Click         += (s, e) => Close(OverwriteMethod.Cancel);
-            AlwaysYesButton.Click    += (s, e) => Close(OverwriteMethod.AlwaysYes);
-            AlwaysNoButton.Click     += (s, e) => Close(OverwriteMethod.AlwaysNo);
-            AlwaysRenameButton.Click += (s, e) => Close(OverwriteMethod.AlwaysRename);
+            Behaviors.Add(new ClickEventBehavior(YesButton, () => Close(OverwriteMethod.Yes)));
+            Behaviors.Add(new ClickEventBehavior(NoButton, () => Close(OverwriteMethod.No)));
+            Behaviors.Add(new ClickEventBehavior(ExitButton, () => Close(OverwriteMethod.Cancel)));
+            Behaviors.Add(new ClickEventBehavior(AlwaysYesButton, () => Close(OverwriteMethod.AlwaysYes)));
+            Behaviors.Add(new ClickEventBehavior(AlwaysNoButton, () => Close(OverwriteMethod.AlwaysNo)));
+            Behaviors.Add(new ClickEventBehavior(AlwaysRenameButton, () => Close(OverwriteMethod.AlwaysRename)));
         }
 
         #endregion

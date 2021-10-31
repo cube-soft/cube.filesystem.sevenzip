@@ -19,7 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
-using Cube.Images.Icons;
+using Cube.Icons;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
@@ -100,10 +100,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public List<Image> Images { get; } = new()
         {
-            IconFactory.Create(StockIcons.Folder, IconSize.Small).ToBitmap(),
+            StockIcon.Folder.GetImage(IconSize.Small),
             Properties.Resources.Archive,
             Properties.Resources.Extract,
-            IconFactory.Create(StockIcons.FolderOpen, IconSize.Small).ToBitmap(),
+            StockIcon.FolderOpen.GetImage(IconSize.Small),
         };
 
         /* ----------------------------------------------------------------- */

@@ -112,7 +112,6 @@ namespace Cube.FileSystem.SevenZip
                     Options.CompressionMethod;
             if (!SupportedMethods.Contains(m)) return;
             dest.Add("0", PropVariant.Create(m.ToString()));
-            Logging.Logger.LogDebug(GetType(), "m", m.ToString());
         }
 
         #endregion

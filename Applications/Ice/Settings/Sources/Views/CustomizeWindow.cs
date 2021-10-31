@@ -76,14 +76,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         {
             if (src is not CustomizeViewModel vm) return;
 
-            Behaviors.Add(new ClickBehavior(ApplyButton, () => vm.Save(_menu.Result)));
-            Behaviors.Add(new ClickBehavior(ExitButton, Close));
-            Behaviors.Add(new ClickBehavior(RenameButton, _menu.RenameMenu.Execute));
-            Behaviors.Add(new ClickBehavior(AddButton, _menu.AddMenu.Execute));
-            Behaviors.Add(new ClickBehavior(NewCategoryButton, _menu.NewCategoryMenu.Execute));
-            Behaviors.Add(new ClickBehavior(RemoveButton, _menu.RemoveMenu.Execute));
-            Behaviors.Add(new ClickBehavior(UpButton, _menu.UpMenu.Execute));
-            Behaviors.Add(new ClickBehavior(DownButton, _menu.DownMenu.Execute));
+            Behaviors.Add(new ClickEventBehavior(ApplyButton, () => vm.Save(_menu.Result)));
+            Behaviors.Add(new ClickEventBehavior(ExitButton, Close));
+            Behaviors.Add(new ClickEventBehavior(RenameButton, _menu.RenameMenu.Execute));
+            Behaviors.Add(new ClickEventBehavior(AddButton, _menu.AddMenu.Execute));
+            Behaviors.Add(new ClickEventBehavior(NewCategoryButton, _menu.NewCategoryMenu.Execute));
+            Behaviors.Add(new ClickEventBehavior(RemoveButton, _menu.RemoveMenu.Execute));
+            Behaviors.Add(new ClickEventBehavior(UpButton, _menu.UpMenu.Execute));
+            Behaviors.Add(new ClickEventBehavior(DownButton, _menu.DownMenu.Execute));
 
             _menu.Register(vm.Source, vm.Current, vm.Images);
         }

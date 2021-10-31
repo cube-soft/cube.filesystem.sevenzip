@@ -16,7 +16,6 @@
 //
 /* ------------------------------------------------------------------------- */
 using System.Reflection;
-using Cube.Logging;
 using NUnit.Framework;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests

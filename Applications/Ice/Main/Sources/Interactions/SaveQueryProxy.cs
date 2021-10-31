@@ -17,7 +17,6 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using Cube.FileSystem.SevenZip.Ice.Settings;
-using Cube.Logging;
 using Cube.Mixin.Environment;
 using Cube.Mixin.String;
 

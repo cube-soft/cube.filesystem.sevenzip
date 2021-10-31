@@ -18,7 +18,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cube.FileSystem.SevenZip.Ice.Settings;
-using Cube.Logging;
 using NUnit.Framework;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests

@@ -18,7 +18,6 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
-using Cube.Logging;
 using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip

@@ -20,7 +20,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cube.Collections;
-using Cube.Logging;
 
 namespace Cube.FileSystem.SevenZip
 {

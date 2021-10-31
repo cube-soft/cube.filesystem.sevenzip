@@ -17,7 +17,6 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Collections.Generic;
-using Cube.Logging;
 using Cube.Mixin.String;
 using Microsoft.Win32;
 

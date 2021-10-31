@@ -166,9 +166,9 @@ namespace Cube.FileSystem.SevenZip.Ice
             Behaviors.Add(new OverwriteBehavior(vm));
             Behaviors.Add(new PasswordBehavior(vm));
             Behaviors.Add(new CloseBehavior(this, vm));
-            Behaviors.Add(new ShownBehavior(this, vm.Start));
-            Behaviors.Add(new ClickBehavior(SuspendButton, vm.SuspendOrResume));
-            Behaviors.Add(new ClickBehavior(ExitButton, Close));
+            Behaviors.Add(new ShownEventBehavior(this, vm.Start));
+            Behaviors.Add(new ClickEventBehavior(SuspendButton, vm.SuspendOrResume));
+            Behaviors.Add(new ClickEventBehavior(ExitButton, Close));
             Behaviors.Add(new ShowDialogBehavior<CompressSettingWindow, CompressSettingViewModel>(vm));
         }
 

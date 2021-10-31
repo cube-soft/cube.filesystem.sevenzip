@@ -15,9 +15,9 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Cube.Mixin.Forms;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
@@ -33,70 +33,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     internal static class BindingSourceExtension
     {
         #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Hook
-        ///
-        /// <summary>
-        /// Adds the specified object and returns it.
-        /// </summary>
-        ///
-        /// <param name="src">Source container.</param>
-        /// <param name="obj">Object to be added.</param>
-        ///
-        /// <returns>Same as the specified object.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static T Hook<T>(this DisposableContainer src, T obj) where T : IDisposable
-        {
-            src.Add(obj);
-            return obj;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Bind
-        ///
-        /// <summary>
-        /// Invokes the binding settings with the specified arguments.
-        /// </summary>
-        ///
-        /// <param name="src">Binding source.</param>
-        /// <param name="name">Property name of the binding source.</param>
-        /// <param name="view">View object to bind.</param>
-        /// <param name="viewName">Property name of the view to bind.</param>
-        ///
-        /// <remarks>
-        /// The method will be moved to the Cube.Forms project.
-        /// </remarks>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static void Bind(this BindingSource src, string name, Control view, string viewName) =>
-            Bind(src, name, view, viewName, DataSourceUpdateMode.OnPropertyChanged);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Bind
-        ///
-        /// <summary>
-        /// Invokes the binding settings with the specified arguments.
-        /// </summary>
-        ///
-        /// <param name="src">Binding source.</param>
-        /// <param name="name">Property name of the binding source.</param>
-        /// <param name="view">View object to bind.</param>
-        /// <param name="viewName">Property name of the view to bind.</param>
-        /// <param name="mode">Update mode.</param>
-        ///
-        /// <remarks>
-        /// The method will be moved to the Cube.Forms project.
-        /// </remarks>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static void Bind(this BindingSource src, string name,
-            Control view, string viewName, DataSourceUpdateMode mode) =>
-            view.DataBindings.Add(new(viewName, src, name, false, mode));
 
         /* ----------------------------------------------------------------- */
         ///
