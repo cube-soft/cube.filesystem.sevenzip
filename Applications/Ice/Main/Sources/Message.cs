@@ -68,21 +68,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <returns>SaveFileDialog object.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static SaveFileMessage ForCompressLocation(string src, Format format)
-        {
-            var items = Resource.GetDialogFilters(format);
-            var dest  = new SaveFileMessage { Filter = items.GetFilter() };
-
-            if (src.HasValue())
-            {
-                var fi = Io.Get(src);
-                dest.Value            = fi.Name;
-                dest.InitialDirectory = fi.DirectoryName;
-                dest.FilterIndex      = GetIndex(items, fi);
-            }
-
-            return dest;
-        }
+        public static SaveFileMessage ForCompressLocation(string src, Format format) =>
+            new(src) { Filters = Resource.GetDialogFilters(format) };
 
         /* ----------------------------------------------------------------- */
         ///
@@ -108,37 +95,6 @@ namespace Cube.FileSystem.SevenZip.Ice
 
             if (src.Source.HasValue()) dest.Value = Io.Get(src.Source).DirectoryName;
             return dest;
-        }
-
-        #endregion
-
-        #region Implementaions
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetIndex
-        ///
-        /// <summary>
-        /// Gets the index of the first occurrence of the specified path
-        /// in the current DisplayFilter collection.
-        /// </summary>
-        ///
-        /// <param name="src">DisplayFilter collection.</param>
-        /// <param name="entity">Target file or directory.</param>
-        ///
-        /// <returns>Filter index.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        private static int GetIndex(IEnumerable<FileDialogFilter> src, Entity entity)
-        {
-            var opt = StringComparison.InvariantCultureIgnoreCase;
-            var ext = entity.BaseName.EndsWith(".tar", opt) ?
-                      $"{System.IO.Path.GetExtension(entity.BaseName)}{entity.Extension}" :
-                      entity.Extension;
-
-            return src.Select((e, i) => new KeyValuePair<int, FileDialogFilter>(i + 1, e))
-                      .FirstOrDefault(e => e.Value.Targets.Any(e2 => e2.Equals(ext, opt)))
-                      .Key;
         }
 
         #endregion

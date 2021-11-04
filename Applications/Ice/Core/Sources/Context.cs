@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Cube.DataContract;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {

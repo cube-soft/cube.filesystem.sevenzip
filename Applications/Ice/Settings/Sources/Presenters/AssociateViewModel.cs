@@ -30,7 +30,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class AssociateViewModel : Presentable<AssociateSetting>
+    public class AssociateViewModel : PresentableBase<AssociateSetting>
     {
         #region Constructors
 

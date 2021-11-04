@@ -32,7 +32,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class CustomizeViewModel : Presentable<IEnumerable<Context>>
+    public class CustomizeViewModel : PresentableBase<IEnumerable<Context>>
     {
         #region Constructors
 
@@ -57,7 +57,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             Action<IEnumerable<Context>> callback
         ) : base(src, aggregator, context)
         {
-            Save = e => Track(() => { callback(e); Send<CloseMessage>(); }, true);
+            Save = e => Close(() => callback(e), true);
         }
 
         #endregion

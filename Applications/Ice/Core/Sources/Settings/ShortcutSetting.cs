@@ -18,6 +18,7 @@
 using System;
 using System.Linq;
 using System.Runtime.Serialization;
+using Cube.DataContract;
 using Cube.Mixin.Assembly;
 using Cube.Mixin.Collections;
 using Cube.Mixin.Environment;

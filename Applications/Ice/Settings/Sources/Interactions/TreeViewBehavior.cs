@@ -21,7 +21,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using Cube.Mixin.Forms.Controls;
-using Cube.Mixin.Generics;
+using Cube.Mixin.Generic;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {

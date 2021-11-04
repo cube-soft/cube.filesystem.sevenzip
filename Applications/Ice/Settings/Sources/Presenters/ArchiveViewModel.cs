@@ -29,7 +29,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public abstract class ArchiveViewModel<TModel> : Presentable<TModel>
+    public abstract class ArchiveViewModel<TModel> : PresentableBase<TModel>
         where TModel : ArchiveSetting
     {
         #region Constructors
@@ -190,7 +190,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Browse() => Track(Message.ForSaveDirectory(SaveDirectory), e => SaveDirectory = e);
+        public void Browse() => Send(
+            Message.ForSaveDirectory(SaveDirectory),
+            e => SaveDirectory = e,
+            true
+        );
 
         #endregion
 

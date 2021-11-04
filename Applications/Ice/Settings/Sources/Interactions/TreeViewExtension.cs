@@ -17,7 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Cube.Mixin.Generics;
+using Cube.Mixin.Generic;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {

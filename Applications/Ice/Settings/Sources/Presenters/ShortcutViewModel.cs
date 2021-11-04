@@ -29,7 +29,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ShortcutViewModel : Presentable<ShortcutSetting>
+    public class ShortcutViewModel : PresentableBase<ShortcutSetting>
     {
         #region Constructors
 

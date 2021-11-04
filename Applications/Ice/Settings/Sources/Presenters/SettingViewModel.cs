@@ -30,7 +30,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class SettingViewModel : Presentable<SettingFolder>
+    public class SettingViewModel : PresentableBase<SettingFolder>
     {
         #region Constructors
 
@@ -258,16 +258,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Save(bool close)
-        {
-            try
-            {
+        public void Save(bool close) => Run(
+            () => {
                 Facade.Save();
                 Associate.Save();
                 Shortcut.Save();
-            }
-            finally { if (close) Send<CloseMessage>(); }
-        }
+            },
+            () => { if (close) Send(new CloseMessage()); },
+            true
+        );
 
         /* ----------------------------------------------------------------- */
         ///
@@ -278,7 +277,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Browse() => Track(Message.ForSaveDirectory(Temp), e => Temp = e);
+        public void Browse() => Send(Message.ForSaveDirectory(Temp), e => Temp = e, true);
 
         /* ----------------------------------------------------------------- */
         ///
