@@ -57,7 +57,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             Action<IEnumerable<Context>> callback
         ) : base(src, aggregator, context)
         {
-            Save = e => Close(() => callback(e), true);
+            Save = e => Quit(() => callback(e), true);
         }
 
         #endregion

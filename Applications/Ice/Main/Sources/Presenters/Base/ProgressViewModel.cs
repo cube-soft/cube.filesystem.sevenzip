@@ -205,7 +205,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Start() => Close(Facade.Start, false);
+        public void Start() => Quit(Facade.Start, false);
 
         /* ----------------------------------------------------------------- */
         ///

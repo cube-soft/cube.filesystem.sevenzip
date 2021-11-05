@@ -300,7 +300,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Execute() => Close(() => Facade.Cancel = false, true);
+        public void Execute() => Quit(() => Facade.Cancel = false, true);
 
         #endregion
     }
