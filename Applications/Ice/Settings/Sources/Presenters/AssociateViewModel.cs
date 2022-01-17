@@ -560,6 +560,17 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
+        /// SelectIcon
+        ///
+        /// <summary>
+        /// Selects the icon for file association.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void SelectIcon() => Send(new AssociateIconMessage(Facade.IconIndex));
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// SelectAll
         ///
         /// <summary>

@@ -42,4 +42,9 @@
         <None Include="Assets\**\*" />
         <None Include="App.*" />
     </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Update="Sources\Views\AssociateIconWindow.resx">
+        <DependentUpon>AssociateIconWindow.cs</DependentUpon>
+      </EmbeddedResource>
+    </ItemGroup>
 </Project>

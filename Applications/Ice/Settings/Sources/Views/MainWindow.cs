@@ -83,6 +83,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             Behaviors.Add(new ClickEventBehavior(ExitButton, Close));
             Behaviors.Add(new ClickEventBehavior(ContextResetButton, vm.Menu.Reset));
             Behaviors.Add(new ClickEventBehavior(ContextCustomizeButton, vm.Menu.Customize));
+            Behaviors.Add(new ClickEventBehavior(AssociateIconButton, vm.Associate.SelectIcon));
             Behaviors.Add(new ClickEventBehavior(AssociateAllButton, vm.Associate.SelectAll));
             Behaviors.Add(new ClickEventBehavior(AssociateClearButton, vm.Associate.Clear));
             Behaviors.Add(new ClickEventBehavior(CompressSaveButton, vm.Compress.Browse));
@@ -90,6 +91,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             Behaviors.Add(new ClickEventBehavior(TempButton, vm.Browse));
             Behaviors.Add(new PathLintBehavior(CompressSaveTextBox, _tooltip));
             Behaviors.Add(new PathLintBehavior(ExtractSaveTextBox, _tooltip));
+            Behaviors.Add(new AssociateIconBehavior(vm));
             Behaviors.Add(new ShowDialogBehavior<CustomizeWindow, CustomizeViewModel>(vm));
 
             _version.Product = vm.Product;

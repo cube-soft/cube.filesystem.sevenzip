@@ -111,6 +111,7 @@
             this.ApplyButton = new System.Windows.Forms.Button();
             this.ExitButton = new System.Windows.Forms.Button();
             this.ExecuteButton = new System.Windows.Forms.Button();
+            this.AssociateIconButton = new System.Windows.Forms.Button();
             this.RootPanel.SuspendLayout();
             this.SettingTabControl.SuspendLayout();
             this.GeneralTabPage.SuspendLayout();
@@ -240,6 +241,7 @@
             //
             this.AssociateButtonsPanel.Controls.Add(this.AssociateClearButton);
             this.AssociateButtonsPanel.Controls.Add(this.AssociateAllButton);
+            this.AssociateButtonsPanel.Controls.Add(this.AssociateIconButton);
             this.AssociateButtonsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.AssociateButtonsPanel.Location = new System.Drawing.Point(0, 127);
             this.AssociateButtonsPanel.Margin = new System.Windows.Forms.Padding(0);
@@ -253,7 +255,7 @@
             this.AssociateClearButton.Location = new System.Drawing.Point(355, 3);
             this.AssociateClearButton.Name = "AssociateClearButton";
             this.AssociateClearButton.Size = new System.Drawing.Size(100, 25);
-            this.AssociateClearButton.TabIndex = 0;
+            this.AssociateClearButton.TabIndex = 2;
             this.AssociateClearButton.Text = "すべて解除";
             this.AssociateClearButton.UseVisualStyleBackColor = true;
             //
@@ -262,7 +264,7 @@
             this.AssociateAllButton.Location = new System.Drawing.Point(249, 3);
             this.AssociateAllButton.Name = "AssociateAllButton";
             this.AssociateAllButton.Size = new System.Drawing.Size(100, 25);
-            this.AssociateAllButton.TabIndex = 0;
+            this.AssociateAllButton.TabIndex = 1;
             this.AssociateAllButton.Text = "すべて選択";
             this.AssociateAllButton.UseVisualStyleBackColor = true;
             //
@@ -1087,6 +1089,15 @@
             this.ExecuteButton.Text = "OK";
             this.ExecuteButton.UseVisualStyleBackColor = true;
             //
+            // AssociateIconButton
+            //
+            this.AssociateIconButton.Location = new System.Drawing.Point(143, 3);
+            this.AssociateIconButton.Name = "AssociateIconButton";
+            this.AssociateIconButton.Size = new System.Drawing.Size(100, 25);
+            this.AssociateIconButton.TabIndex = 0;
+            this.AssociateIconButton.Text = "アイコンの変更";
+            this.AssociateIconButton.UseVisualStyleBackColor = true;
+            //
             // MainWindow
             //
             this.AcceptButton = this.ExecuteButton;
@@ -1230,6 +1241,7 @@
         private System.Windows.Forms.Button TempButton;
         private System.Windows.Forms.CheckBox UpdateCheckBox;
         private System.Windows.Forms.TabPage VersionTabPage;
+        private System.Windows.Forms.Button AssociateIconButton;
     }
 }
 
