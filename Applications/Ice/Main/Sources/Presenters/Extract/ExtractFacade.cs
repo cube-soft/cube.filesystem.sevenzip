@@ -96,7 +96,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                 InvokePreProcess(dir);
 
                 var list = Settings.Value.GetFilters(Settings.Value.Extract.Filtering);
-                var opts = new ArchiveOption { Filter = new Filter(list).Match };
+                var opts = new ArchiveOption { Filter = Filter.From(list) };
                 using (var e = new ArchiveReader(src, Password, opts))
                 {
                     if (e.Items.Count == 1) Invoke(e, 0, dir);
