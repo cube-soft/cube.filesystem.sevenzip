@@ -202,7 +202,7 @@ namespace Cube.FileSystem.SevenZip.Ice
                     if (Any(args[i], "c", "x")) continue;
                     else if (Any(args[i], "p")) Password = true;
                     else if (Any(args[i], "sr")) SuppressRecursive = true;
-                    else if (Any(args[i], "o:", "out:")) Location = GetLocation(args[i]);
+                    else if (Any(args[i], "o:", "out:")) ParseLocation(args[i]);
                     else if (Any(args[i], "save:", "drop:")) Directory = Tail(args[i]);
                     options.Add(args[i]);
                 }
@@ -220,17 +220,25 @@ namespace Cube.FileSystem.SevenZip.Ice
 
         /* ----------------------------------------------------------------- */
         ///
-        /// GetFormat
+        /// ParseLocation
         ///
         /// <summary>
-        /// Gets the Format object corresponding to the string.
+        /// Parses the save location. The method may change the values of
+        /// Location and Directory properties.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private Format GetFormat(string src)
+        private void ParseLocation(string src)
         {
-            var dest = Tail(src).ToLowerInvariant();
-            return dest.HasValue() ? Formatter.FromString(dest) : Format.Unknown;
+            Location = GetLocation(src);
+            if (Location != SaveLocation.Explicit) return;
+
+            var opt = StringComparison.InvariantCultureIgnoreCase;
+            var tmp = Tail(src);
+            if (!tmp.StartsWith("to:", opt)) return;
+
+            var path = Tail(tmp);
+            if (path.HasValue()) Directory = path;
         }
 
         /* ----------------------------------------------------------------- */
@@ -252,11 +260,30 @@ namespace Cube.FileSystem.SevenZip.Ice
                 if (e.ToString().ToLowerInvariant() == dest) return e;
             }
 
+            // For -out:to:path pattern.
+            var opt = StringComparison.InvariantCultureIgnoreCase;
+            if (dest.StartsWith("to:", opt)) return SaveLocation.Explicit;
+
             // Compatible with older versions.
             if (dest == "runtime") return SaveLocation.Query;
             if (dest == "others" ) return SaveLocation.Preset;
 
             return SaveLocation.Unknown;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetFormat
+        ///
+        /// <summary>
+        /// Gets the Format object corresponding to the string.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private Format GetFormat(string src)
+        {
+            var dest = Tail(src).ToLowerInvariant();
+            return dest.HasValue() ? Formatter.FromString(dest) : Format.Unknown;
         }
 
         /* ----------------------------------------------------------------- */
