@@ -90,32 +90,32 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
         }
 
         /// <summary>
-        ///   (アイコン) に類似した型 System.Drawing.Icon のローカライズされたリソースを検索します。
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
-        internal static System.Drawing.Icon FileIcon {
-            get {
-                object obj = ResourceManager.GetObject("FileIcon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-
-        /// <summary>
-        ///   (アイコン) に類似した型 System.Drawing.Icon のローカライズされたリソースを検索します。
-        /// </summary>
-        internal static System.Drawing.Icon FileV1Icon {
+        internal static System.Drawing.Bitmap FileV1Icon {
             get {
                 object obj = ResourceManager.GetObject("FileV1Icon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
 
         /// <summary>
-        ///   (アイコン) に類似した型 System.Drawing.Icon のローカライズされたリソースを検索します。
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
-        internal static System.Drawing.Icon FileV2Icon {
+        internal static System.Drawing.Bitmap FileV2Icon {
             get {
                 object obj = ResourceManager.GetObject("FileV2Icon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap FileV3Icon {
+            get {
+                object obj = ResourceManager.GetObject("FileV3Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
 

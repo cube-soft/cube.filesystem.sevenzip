@@ -57,7 +57,7 @@
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 54F));
-            this.RootPanel.Size = new System.Drawing.Size(384, 261);
+            this.RootPanel.Size = new System.Drawing.Size(384, 191);
             this.RootPanel.TabIndex = 0;
             //
             // HeaderLabel
@@ -77,8 +77,9 @@
             this.IconListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.IconListView.HideSelection = false;
             this.IconListView.Location = new System.Drawing.Point(12, 32);
+            this.IconListView.MultiSelect = false;
             this.IconListView.Name = "IconListView";
-            this.IconListView.Size = new System.Drawing.Size(360, 152);
+            this.IconListView.Size = new System.Drawing.Size(360, 82);
             this.IconListView.TabIndex = 2;
             this.IconListView.UseCompatibleStateImageBehavior = false;
             //
@@ -94,7 +95,7 @@
             this.ButtonsPanel.Controls.Add(this.ExecButton, 1, 0);
             this.ButtonsPanel.Controls.Add(this.ExitButton, 2, 0);
             this.ButtonsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ButtonsPanel.Location = new System.Drawing.Point(0, 207);
+            this.ButtonsPanel.Location = new System.Drawing.Point(0, 137);
             this.ButtonsPanel.Margin = new System.Windows.Forms.Padding(0);
             this.ButtonsPanel.Name = "ButtonsPanel";
             this.ButtonsPanel.RowCount = 1;
@@ -104,6 +105,7 @@
             //
             // ExecButton
             //
+            this.ExecButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.ExecButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ExecButton.Location = new System.Drawing.Point(141, 12);
             this.ExecButton.Margin = new System.Windows.Forms.Padding(3, 12, 3, 12);
@@ -125,18 +127,20 @@
             this.ExitButton.Text = "キャンセル";
             this.ExitButton.UseVisualStyleBackColor = true;
             //
-            // IconWindow
+            // AssociateIconWindow
             //
             this.AcceptButton = this.ExitButton;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.CancelButton = this.ExitButton;
-            this.ClientSize = new System.Drawing.Size(384, 261);
+            this.ClientSize = new System.Drawing.Size(384, 191);
             this.Controls.Add(this.RootPanel);
             this.Font = new System.Drawing.Font("Meiryo UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "IconWindow";
-            this.Text = "IconWindow";
+            this.MinimumSize = new System.Drawing.Size(400, 230);
+            this.Name = "AssociateIconWindow";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "ファイルの関連付け用アイコンの変更";
             this.RootPanel.ResumeLayout(false);
             this.RootPanel.PerformLayout();
             this.ButtonsPanel.ResumeLayout(false);

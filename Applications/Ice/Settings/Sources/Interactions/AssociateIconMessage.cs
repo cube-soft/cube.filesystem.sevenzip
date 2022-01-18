@@ -62,9 +62,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public IEnumerable<Image> Sources { get; } = new[]
         {
-            new Icon(Properties.Resources.FileIcon,   48, 48).ToBitmap(),
-            new Icon(Properties.Resources.FileV1Icon, 48, 48).ToBitmap(),
-            new Icon(Properties.Resources.FileV2Icon, 48, 48).ToBitmap(),
+            Properties.Resources.FileV3Icon,
+            Properties.Resources.FileV1Icon,
+            Properties.Resources.FileV2Icon,
         };
 
         #endregion

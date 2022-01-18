@@ -567,7 +567,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void SelectIcon() => Send(new AssociateIconMessage(Facade.IconIndex));
+        public void SelectIcon() =>
+            Send(new AssociateIconMessage(Facade.IconIndex), e => Facade.IconIndex = e, true);
 
         /* ----------------------------------------------------------------- */
         ///

@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System;
 using System.Windows.Forms;
 using Cube.Forms.Behaviors;
 
@@ -46,8 +47,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         public AssociateIconBehavior(IBindable vm) : base(vm, e => {
+            var offset = 3;
             using var view = new AssociateIconWindow();
+            view.Set(e.Sources, Math.Max(e.Value - offset, 0));
             e.Cancel = view.ShowDialog() == DialogResult.Cancel;
+            if (!e.Cancel) e.Value = view.SelectedIndex + offset;
         }) { }
 
         #endregion

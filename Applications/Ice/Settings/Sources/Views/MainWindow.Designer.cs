@@ -39,6 +39,7 @@
             this.AssociateButtonsPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.AssociateClearButton = new System.Windows.Forms.Button();
             this.AssociateAllButton = new System.Windows.Forms.Button();
+            this.AssociateIconButton = new System.Windows.Forms.Button();
             this.ContextGroupBox = new System.Windows.Forms.GroupBox();
             this.ContextPanel = new System.Windows.Forms.TableLayoutPanel();
             this.ContextButtonsPanel = new System.Windows.Forms.FlowLayoutPanel();
@@ -111,7 +112,6 @@
             this.ApplyButton = new System.Windows.Forms.Button();
             this.ExitButton = new System.Windows.Forms.Button();
             this.ExecuteButton = new System.Windows.Forms.Button();
-            this.AssociateIconButton = new System.Windows.Forms.Button();
             this.RootPanel.SuspendLayout();
             this.SettingTabControl.SuspendLayout();
             this.GeneralTabPage.SuspendLayout();
@@ -267,6 +267,15 @@
             this.AssociateAllButton.TabIndex = 1;
             this.AssociateAllButton.Text = "すべて選択";
             this.AssociateAllButton.UseVisualStyleBackColor = true;
+            //
+            // AssociateIconButton
+            //
+            this.AssociateIconButton.Location = new System.Drawing.Point(143, 3);
+            this.AssociateIconButton.Name = "AssociateIconButton";
+            this.AssociateIconButton.Size = new System.Drawing.Size(100, 25);
+            this.AssociateIconButton.TabIndex = 0;
+            this.AssociateIconButton.Text = "アイコンの変更";
+            this.AssociateIconButton.UseVisualStyleBackColor = true;
             //
             // ContextGroupBox
             //
@@ -1088,15 +1097,6 @@
             this.ExecuteButton.TabIndex = 0;
             this.ExecuteButton.Text = "OK";
             this.ExecuteButton.UseVisualStyleBackColor = true;
-            //
-            // AssociateIconButton
-            //
-            this.AssociateIconButton.Location = new System.Drawing.Point(143, 3);
-            this.AssociateIconButton.Name = "AssociateIconButton";
-            this.AssociateIconButton.Size = new System.Drawing.Size(100, 25);
-            this.AssociateIconButton.TabIndex = 0;
-            this.AssociateIconButton.Text = "アイコンの変更";
-            this.AssociateIconButton.UseVisualStyleBackColor = true;
             //
             // MainWindow
             //
