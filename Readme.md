@@ -26,7 +26,7 @@ var options = new CompressionOption
     CompressionMethod = CompressionMethod.Lzma,
     EncryptionMethod  = EncryptionMethod.Aes256,
     Password          = "password",
-    Filter            = new Filter(files).Match,
+    Filter            = Filter.From(files),
     CodePage          = CodePage.Utf8,
 };
 
@@ -76,10 +76,7 @@ var password = new Cube.Query<string>(e =>
 
 // Supports only the Filter property
 var files   = new[] { ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini" };
-var options = new ArchiveOption
-{
-    Filter = new Filter(files).Match
-};
+var options = new ArchiveOption { Filter = Filter.From(files) };
 
 using (var reader = new ArchiveReader(@"path\to\archive", password, options))
 {
