@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "Cube.FileSystem.SevenZip.Ice.Main": {
-      "commandName": "Project",
-      "commandLineArgs": "/c:detail \"C:\\Users\\clown\\Desktop\\Test\""
-    }
-  }
-}
