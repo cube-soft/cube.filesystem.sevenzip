@@ -18,7 +18,6 @@
 using System;
 using System.Threading;
 using System.Windows.Forms;
-using Cube.Logging;
 using Cube.Mixin.Collections;
 using Cube.Mixin.String;
 

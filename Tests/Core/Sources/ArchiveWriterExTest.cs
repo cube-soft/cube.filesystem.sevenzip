@@ -36,7 +36,7 @@ namespace Cube.FileSystem.SevenZip.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Cjk
+        /// WithCjk
         ///
         /// <summary>
         /// Tests to compress a file containing a CJK filename.
@@ -45,11 +45,11 @@ namespace Cube.FileSystem.SevenZip.Tests
         /* ----------------------------------------------------------------- */
         [TestCase(CodePage.Utf8)]
         [TestCase(CodePage.Japanese)]
-        public void Cjk(CodePage cp)
+        public void WithCjk(CodePage cp)
         {
             var zip  = Format.Zip;
             var src  = Get("日本語のファイル名.txt");
-            var dest = Get($"{nameof(Cjk)}{zip}{cp}.zip");
+            var dest = Get($"{nameof(WithCjk)}{zip}{cp}.zip");
 
             Io.Copy(GetSource("Sample.txt"), src, true);
             Assert.That(Io.Exists(src), Is.True);
@@ -66,7 +66,7 @@ namespace Cube.FileSystem.SevenZip.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Filter
+        /// WithFilter
         ///
         /// <summary>
         /// Tests to create an archive with filter values.
@@ -75,13 +75,13 @@ namespace Cube.FileSystem.SevenZip.Tests
         /* ----------------------------------------------------------------- */
         [TestCase(true,  ExpectedResult = 5)]
         [TestCase(false, ExpectedResult = 9)]
-        public int Filter(bool enabled)
+        public int WithFilter(bool enabled)
         {
             var dest = Get($"Filter{enabled}.zip");
             var opts = new CompressionOption
             {
                 Filter = enabled ?
-                         new Filter(new[] { "Filter.txt", "FilterDirectory" }).Match :
+                         Filter.From(new[] { "Filter.txt", "FilterDirectory" }) :
                          default,
             };
 

@@ -17,7 +17,6 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Linq;
-using Cube.Logging;
 using Cube.Mixin.Assembly;
 using Cube.Mixin.Collections;
 

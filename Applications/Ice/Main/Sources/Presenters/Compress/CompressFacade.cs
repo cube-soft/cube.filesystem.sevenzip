@@ -18,7 +18,6 @@
 using System;
 using System.Linq;
 using Cube.FileSystem.SevenZip.Ice.Settings;
-using Cube.Logging;
 using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip.Ice

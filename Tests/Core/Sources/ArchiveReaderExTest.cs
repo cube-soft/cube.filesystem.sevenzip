@@ -37,7 +37,7 @@ namespace Cube.FileSystem.SevenZip.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Filter
+        /// WithFilter
         ///
         /// <summary>
         /// Tests the Extract method with filters.
@@ -45,12 +45,12 @@ namespace Cube.FileSystem.SevenZip.Tests
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Filter()
+        public void WithFilter()
         {
             var src   = GetSource("SampleFilter.zip");
-            var dest  = Get(nameof(Filter));
+            var dest  = Get(nameof(WithFilter));
             var files = new[] { ".DS_Store", "Thumbs.db", "__MACOSX", "desktop.ini" };
-            var opts  = new ArchiveOption { Filter = new Filter(files).Match };
+            var opts  = new ArchiveOption { Filter = Filter.From(files) };
 
             using (var archive = new ArchiveReader(src, opts)) archive.Save(dest);
 

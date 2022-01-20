@@ -30,7 +30,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class AssociateViewModel : Presentable<AssociateSetting>
+    public class AssociateViewModel : PresentableBase<AssociateSetting>
     {
         #region Constructors
 
@@ -557,6 +557,18 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         #endregion
 
         #region Methods
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// SelectIcon
+        ///
+        /// <summary>
+        /// Selects the icon for file association.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void SelectIcon() =>
+            Send(new AssociateIconMessage(Facade.IconIndex), e => Facade.IconIndex = e, true);
 
         /* ----------------------------------------------------------------- */
         ///

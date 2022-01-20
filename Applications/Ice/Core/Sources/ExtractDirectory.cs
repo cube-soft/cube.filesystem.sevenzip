@@ -191,9 +191,8 @@ namespace Cube.FileSystem.SevenZip.Ice
             if (force) return Enumerable.Empty<string>();
 
             var dest = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
-            var cvt  = Filters.Any() ?
-                       src.Where(e => !new Filter(Filters).Match(e)) :
-                       src;
+            var func = Filter.From(Filters);
+            var cvt  = Filters.Any() ? src.Where(e => !func(e)) : src;
 
             foreach (var e in cvt)
             {

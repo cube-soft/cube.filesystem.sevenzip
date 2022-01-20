@@ -18,7 +18,6 @@
 using System;
 using System.Collections.Generic;
 using Cube.Backports;
-using Cube.Logging;
 using Cube.Mixin.String;
 using Microsoft.Win32;
 

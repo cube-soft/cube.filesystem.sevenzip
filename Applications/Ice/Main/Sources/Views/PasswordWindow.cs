@@ -15,8 +15,9 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.Windows.Forms;
-using Cube.Images.Icons;
+using Cube.Forms;
+using Cube.Forms.Behaviors;
+using Cube.Icons;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -29,7 +30,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class PasswordWindow : Form
+    public partial class PasswordWindow : Window
     {
         #region Constructors
 
@@ -46,13 +47,14 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             InitializeComponent();
 
-            IconPictureBox.Image = StockIcons.Warning.GetIcon(IconSize.Large).ToBitmap();
+            IconPictureBox.Image = StockIcon.Warning.GetImage(IconSize.Large);
 
-            ExecButton.Click += (s, e) => Close();
-            ExitButton.Click += (s, e) => Close();
-
-            PasswordTextBox.TextChanged += (s, e) => ExecButton.Enabled = PasswordTextBox.TextLength > 0;
-            VisibleCheckBox.CheckedChanged += (s, e) => PasswordTextBox.UseSystemPasswordChar = !VisibleCheckBox.Checked;
+            Behaviors.Add(new ClickEventBehavior(ExecButton, Close));
+            Behaviors.Add(new ClickEventBehavior(ExitButton, Close));
+            Behaviors.Add(new EventBehavior(PasswordTextBox, "TextChanged",
+                () => ExecButton.Enabled = PasswordTextBox.TextLength > 0));
+            Behaviors.Add(new EventBehavior(VisibleCheckBox, "CheckedChanged",
+                () => PasswordTextBox.UseSystemPasswordChar = !VisibleCheckBox.Checked));
         }
 
         #endregion

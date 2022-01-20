@@ -15,37 +15,45 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.Reflection;
-using NUnit.Framework;
+using System;
+using System.Windows.Forms;
+using Cube.Forms.Behaviors;
 
-namespace Cube.FileSystem.SevenZip.Ice.Tests
+namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// GlobalSetup
+    /// AssociateIconBehavior
     ///
     /// <summary>
-    /// Represents the global setup operations.
+    /// Represents the behavior to select the icon for file association.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [SetUpFixture]
-    public class GlobalSetup
+    public class AssociateIconBehavior : MessageBehavior<AssociateIconMessage>
     {
+        #region Constructors
+
         /* ----------------------------------------------------------------- */
         ///
-        /// OneTimeSetup
+        /// AssociateIconBehavior
         ///
         /// <summary>
-        /// Invokes the setup method only once.
+        /// Initializes a new instance of the AssociateIconBehavior class
+        /// with the specified arguments.
         /// </summary>
         ///
+        /// <param name="vm">ViewModel object.</param>
+        ///
         /* ----------------------------------------------------------------- */
-        [OneTimeSetUp]
-        public void OneTimeSetup()
-        {
-            _ = Logger.ObserveTaskException();
-            typeof(GlobalSetup).LogInfo(Assembly.GetExecutingAssembly());
-        }
+        public AssociateIconBehavior(IBindable vm) : base(vm, e => {
+            var offset = 3;
+            using var view = new AssociateIconWindow();
+            view.Set(e.Sources, Math.Max(e.Value - offset, 0));
+            e.Cancel = view.ShowDialog() == DialogResult.Cancel;
+            if (!e.Cancel) e.Value = view.SelectedIndex + offset;
+        }) { }
+
+        #endregion
     }
 }

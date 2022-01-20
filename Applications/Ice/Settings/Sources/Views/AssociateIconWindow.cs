@@ -15,95 +15,95 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.Runtime.Serialization;
-using Cube.DataContract;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveSetting
+    /// AssociateIconWindow
     ///
     /// <summary>
-    /// Represents the common settings of compressing or extracting
-    /// archives.
+    /// Represents the window to select the icon for file association.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [DataContract]
-    public abstract class ArchiveSetting : SerializableBase
+    public partial class AssociateIconWindow : Forms.Window
     {
+        #region Constructors
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// AssociateIconWindow
+        ///
+        /// <summary>
+        /// Initiaizes a new instance of the AssociateIconWindow class.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public AssociateIconWindow()
+        {
+            InitializeComponent();
+
+            ExecButton.Click += (s, e) => Close();
+            ExitButton.Click += (s, e) => Close();
+        }
+
+        #endregion
+
         #region Properties
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SaveLocation
+        /// SelectedIndex
         ///
         /// <summary>
-        /// Gets or sets the value that represents the save location.
+        /// Gets the selected index.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [DataMember]
-        public SaveLocation SaveLocation
-        {
-            get => Get(() => SaveLocation.Preset);
-            set => Set(value);
-        }
+        public int SelectedIndex => IconListView.SelectedIndices.Cast<int>().FirstOrDefault();
+
+        #endregion
+
+        #region Methods
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SaveDirectory
+        /// Set
         ///
         /// <summary>
-        /// Gets or sets the directory name to save.
+        /// Sets the selection source and the selected index.
         /// </summary>
         ///
-        /// <remarks>
-        /// The property is used when the SaveLocation property is set
-        /// to Others.
-        /// </remarks>
+        /// <param name="src">Selection source.</param>
+        /// <param name="index">Initial value of the selected index.</param>
         ///
         /* ----------------------------------------------------------------- */
-        [DataMember(Name = "SaveDirectoryName")]
-        public string SaveDirectory
+        public void Set(IEnumerable<Image> src, int index)
         {
-            get => Get(() => string.Empty);
-            set => Set(value);
-        }
+            if (!src.Any()) return;
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Filtering
-        ///
-        /// <summary>
-        /// Gets or sets a value indicating whether to filter some files
-        /// and directories.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [DataMember]
-        public bool Filtering
-        {
-            get => Get(() => true);
-            set => Set(value);
-        }
+            IconListView.LargeImageList = new ImageList
+            {
+                ColorDepth = ColorDepth.Depth32Bit,
+                ImageSize  = new(src.First().Width, src.First().Height),
+            };
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OpenDirectory
-        ///
-        /// <summary>
-        /// Gets or sets the value that represents the method to open
-        /// directory.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [DataMember(Name = "OpenDirectory")]
-        public OpenMethod OpenMethod
-        {
-            get => Get(() => OpenMethod.OpenNotDesktop);
-            set => Set(value);
+            foreach (var e in src)
+            {
+                IconListView.LargeImageList.Images.Add(e);
+                var i = IconListView.LargeImageList.Images.Count - 1;
+                _ = IconListView.Items.Add(new ListViewItem
+                {
+                    Text       = string.Empty,
+                    ImageIndex = i,
+                    Selected   = i == index,
+                });
+            }
         }
 
         #endregion

@@ -15,8 +15,9 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Forms;
 using Cube.Forms.Behaviors;
-using Cube.Images.Icons;
+using Cube.Icons;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -29,7 +30,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class PasswordSettingWindow : Cube.Forms.Window
+    public partial class PasswordSettingWindow : Window
     {
         #region Constructors
 
@@ -46,14 +47,13 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             InitializeComponent();
 
-            IconPictureBox.Image = StockIcons.Warning.GetIcon(IconSize.Large).ToBitmap();
+            IconPictureBox.Image = StockIcon.Warning.GetImage(IconSize.Large);
 
-            ExecuteButton.Click += (s, e) => Close();
-            ExitButton.Click    += (s, e) => Close();
+            Behaviors.Add(new ClickEventBehavior(ExecuteButton, Close));
+            Behaviors.Add(new ClickEventBehavior(ExitButton, Close));
 
-            var pb = new PasswordLintBehavior(PasswordTextBox, ConfirmTextBox, ShowPasswordCheckBox);
-            pb.Updated += (s, e) => ExecuteButton.Enabled = pb.Valid;
-            Behaviors.Add(pb);
+            var obj = Behaviors.Hook(new PasswordLintBehavior(PasswordTextBox, ConfirmTextBox, ShowPasswordCheckBox));
+            obj.Updated += (s, e) => ExecuteButton.Enabled = obj.Valid;
         }
 
         #endregion

@@ -15,7 +15,6 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Logging;
 using Cube.Mixin.Assembly;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings

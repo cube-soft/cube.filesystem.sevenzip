@@ -30,7 +30,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public abstract class ProgressViewModel : Presentable<ProgressFacade>
+    public abstract class ProgressViewModel : PresentableBase<ProgressFacade>
     {
         #region Constructors
 
@@ -205,7 +205,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Start() => Track(Facade.Start, Send<CloseMessage>);
+        public void Start() => Quit(Facade.Start, false);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -217,7 +217,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void SuspendOrResume() => Track(Facade.SuspendOrResume, true);
+        public void SuspendOrResume() => Run(Facade.SuspendOrResume, true);
 
         /* ----------------------------------------------------------------- */
         ///

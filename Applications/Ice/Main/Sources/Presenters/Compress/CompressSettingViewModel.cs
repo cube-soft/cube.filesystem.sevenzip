@@ -16,7 +16,6 @@
 //
 /* ------------------------------------------------------------------------- */
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using Cube.FileSystem.SevenZip.Ice.Settings;
 using Cube.Mixin.String;
@@ -32,7 +31,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public sealed class CompressSettingViewModel : Presentable<QueryMessage<string, CompressRuntimeSetting>>
+    public sealed class CompressSettingViewModel : PresentableBase<QueryMessage<string, CompressRuntimeSetting>>
     {
         #region Constructors
 
@@ -286,7 +285,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Browse() => Track(Message.ForCompressLocation(Destination, Format.Unknown), e => Destination = e);
+        public void Browse() => Send(
+            Message.ForCompressLocation(Destination, Format.Unknown),
+            e => Destination = e,
+            true
+        );
 
         /* ----------------------------------------------------------------- */
         ///
@@ -297,7 +300,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Execute() { Facade.Cancel = false; Send<CloseMessage>(); }
+        public void Execute() => Quit(() => Facade.Cancel = false, true);
 
         #endregion
     }

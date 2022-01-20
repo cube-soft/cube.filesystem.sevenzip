@@ -30,7 +30,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ContextViewModel : Presentable<ContextSetting>
+    public class ContextViewModel : PresentableBase<ContextSetting>
     {
         #region Constructors
 

@@ -18,7 +18,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cube.FileSystem.SevenZip.Ice.Settings;
-using Cube.Logging;
 using NUnit.Framework;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
@@ -184,44 +183,28 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 @"RootDirectory\Single-0x00\Sample 00..01.txt",
                 new[] { "Single.1.0.0.zip" },
                 GetPathArgs(@"RootDirectory\Single-0x00"),
-                new ExtractSetting
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    SaveMethod   = SaveMethod.None,
-                }
+                new ExtractSetting { SaveMethod = SaveMethod.None }
             );
 
             yield return new(
                 @"RootDirectory\Single-0x01\Single.1.0.0\Sample 00..01.txt",
                 new[] { "Single.1.0.0.zip" },
                 GetPathArgs(@"RootDirectory\Single-0x01"),
-                new ExtractSetting
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    SaveMethod   = SaveMethod.Create,
-                }
+                new ExtractSetting { SaveMethod = SaveMethod.Create }
             );
 
             yield return new(
                 @"RootDirectory\Single-0x03\Single.1.0.0\Sample 00..01.txt",
                 new[] { "Single.1.0.0.zip" },
                 GetPathArgs(@"RootDirectory\Single-0x03"),
-                new ExtractSetting
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    SaveMethod   = SaveMethod.CreateSmart,
-                }
+                new ExtractSetting { SaveMethod = SaveMethod.CreateSmart }
             );
 
             yield return new(
                 @"RootDirectory\Single-0x05\Sample 00..01.txt",
                 new[] { "Single.1.0.0.zip" },
                 GetPathArgs(@"RootDirectory\Single-0x05"),
-                new ExtractSetting
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    SaveMethod   = SaveMethod.Create | SaveMethod.SkipSingleFile,
-                }
+                new ExtractSetting { SaveMethod = SaveMethod.Create | SaveMethod.SkipSingleFile }
             );
 
             yield return new(
@@ -230,10 +213,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 GetPathArgs(@"RootDirectory\Single-0x07"),
                 new ExtractSetting
                 {
-                    SaveLocation = SaveLocation.Preset,
-                    SaveMethod   = SaveMethod.Create |
-                                    SaveMethod.SkipSingleFile |
-                                    SaveMethod.SkipSingleDirectory,
+                    SaveMethod = SaveMethod.Create |
+                                 SaveMethod.SkipSingleFile |
+                                 SaveMethod.SkipSingleDirectory,
                 }
             );
 
@@ -241,44 +223,28 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 @"RootDirectory\SingleDirectory-0x00\Sample",
                 new[] { "SingleDirectory.1.0.0.zip" },
                 GetPathArgs(@"RootDirectory\SingleDirectory-0x00"),
-                new ExtractSetting
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    SaveMethod   = SaveMethod.None,
-                }
+                new ExtractSetting { SaveMethod = SaveMethod.None }
             );
 
             yield return new(
                 @"RootDirectory\SingleDirectory-0x01\SingleDirectory.1.0.0",
                 new[] { "SingleDirectory.1.0.0.zip" },
                 GetPathArgs(@"RootDirectory\SingleDirectory-0x01"),
-                new ExtractSetting
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    SaveMethod   = SaveMethod.Create,
-                }
+                new ExtractSetting { SaveMethod = SaveMethod.Create }
             );
 
             yield return new(
                 @"RootDirectory\SingleDirectory-0x03\Sample",
                 new[] { "SingleDirectory.1.0.0.zip" },
                 GetPathArgs(@"RootDirectory\SingleDirectory-0x03"),
-                new ExtractSetting
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    SaveMethod   = SaveMethod.CreateSmart,
-                }
+                new ExtractSetting { SaveMethod = SaveMethod.CreateSmart }
             );
 
             yield return new(
                 @"RootDirectory\SingleDirectory-0x05\SingleDirectory.1.0.0",
                 new[] { "SingleDirectory.1.0.0.zip" },
                 GetPathArgs(@"RootDirectory\SingleDirectory-0x05"),
-                new ExtractSetting
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    SaveMethod   = SaveMethod.Create | SaveMethod.SkipSingleFile,
-                }
+                new ExtractSetting { SaveMethod = SaveMethod.Create | SaveMethod.SkipSingleFile }
             );
 
             yield return new(
@@ -287,10 +253,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 GetPathArgs(@"RootDirectory\SingleDirectory-0x07"),
                 new ExtractSetting
                 {
-                    SaveLocation = SaveLocation.Preset,
-                    SaveMethod   = SaveMethod.Create |
-                                    SaveMethod.SkipSingleFile |
-                                    SaveMethod.SkipSingleDirectory,
+                    SaveMethod = SaveMethod.Create |
+                                 SaveMethod.SkipSingleFile |
+                                 SaveMethod.SkipSingleDirectory,
                 }
             );
 
@@ -298,44 +263,28 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 @"RootDirectory\MultiDirectory-0x00\Directory",
                 new[] { "MultiDirectory.1.0.0.zip" },
                 GetPathArgs(@"RootDirectory\MultiDirectory-0x00"),
-                new ExtractSetting
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    SaveMethod   = SaveMethod.None,
-                }
+                new ExtractSetting { SaveMethod = SaveMethod.None }
             );
 
             yield return new(
                 @"RootDirectory\MultiDirectory-0x01\MultiDirectory.1.0.0",
                 new[] { "MultiDirectory.1.0.0.zip" },
                 GetPathArgs(@"RootDirectory\MultiDirectory-0x01"),
-                new ExtractSetting
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    SaveMethod   = SaveMethod.Create,
-                }
+                new ExtractSetting { SaveMethod = SaveMethod.Create }
             );
 
             yield return new(
                 @"RootDirectory\MultiDirectory-0x03\MultiDirectory.1.0.0",
                 new[] { "MultiDirectory.1.0.0.zip" },
                 GetPathArgs(@"RootDirectory\MultiDirectory-0x03"),
-                new ExtractSetting
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    SaveMethod   = SaveMethod.CreateSmart,
-                }
+                new ExtractSetting { SaveMethod = SaveMethod.CreateSmart }
             );
 
             yield return new(
                 @"RootDirectory\MultiDirectory-0x05\MultiDirectory.1.0.0",
                 new[] { "MultiDirectory.1.0.0.zip" },
                 GetPathArgs(@"RootDirectory\MultiDirectory-0x05"),
-                new ExtractSetting
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    SaveMethod   = SaveMethod.Create | SaveMethod.SkipSingleFile,
-                }
+                new ExtractSetting { SaveMethod = SaveMethod.Create | SaveMethod.SkipSingleFile }
             );
 
             yield return new(
@@ -344,10 +293,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 GetPathArgs(@"RootDirectory\MultiDirectory-0x07"),
                 new ExtractSetting
                 {
-                    SaveLocation = SaveLocation.Preset,
-                    SaveMethod   = SaveMethod.Create |
-                                    SaveMethod.SkipSingleFile |
-                                    SaveMethod.SkipSingleDirectory,
+                    SaveMethod = SaveMethod.Create |
+                                 SaveMethod.SkipSingleFile |
+                                 SaveMethod.SkipSingleDirectory,
                 }
             );
 
@@ -355,44 +303,28 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 @"RootDirectory\Complex-0x00\Foo.txt",
                 new[] { "Complex.1.0.0.zip" },
                 GetPathArgs(@"RootDirectory\Complex-0x00"),
-                new ExtractSetting
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    SaveMethod   = SaveMethod.None,
-                }
+                new ExtractSetting { SaveMethod = SaveMethod.None }
             );
 
             yield return new(
                 @"RootDirectory\Complex-0x01\Complex.1.0.0",
                 new[] { "Complex.1.0.0.zip" },
                 GetPathArgs(@"RootDirectory\Complex-0x01"),
-                new ExtractSetting
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    SaveMethod   = SaveMethod.Create,
-                }
+                new ExtractSetting { SaveMethod = SaveMethod.Create }
             );
 
             yield return new(
                 @"RootDirectory\Complex-0x03\Complex.1.0.0",
                 new[] { "Complex.1.0.0.zip" },
                 GetPathArgs(@"RootDirectory\Complex-0x03"),
-                new ExtractSetting
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    SaveMethod   = SaveMethod.CreateSmart,
-                }
+                new ExtractSetting { SaveMethod = SaveMethod.CreateSmart }
             );
 
             yield return new(
                 @"RootDirectory\Complex-0x05\Complex.1.0.0",
                 new[] { "Complex.1.0.0.zip" },
                 GetPathArgs(@"RootDirectory\Complex-0x05"),
-                new ExtractSetting
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    SaveMethod   = SaveMethod.Create | SaveMethod.SkipSingleFile,
-                }
+                new ExtractSetting { SaveMethod = SaveMethod.Create | SaveMethod.SkipSingleFile }
             );
 
             yield return new(
@@ -401,10 +333,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 GetPathArgs(@"RootDirectory\Complex-0x07"),
                 new ExtractSetting
                 {
-                    SaveLocation = SaveLocation.Preset,
-                    SaveMethod   = SaveMethod.Create |
-                                    SaveMethod.SkipSingleFile |
-                                    SaveMethod.SkipSingleDirectory,
+                    SaveMethod = SaveMethod.Create |
+                                 SaveMethod.SkipSingleFile |
+                                 SaveMethod.SkipSingleDirectory,
                 }
             );
 
@@ -412,88 +343,56 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 @"Tar\TarSample",
                 new[] { "Sample.tar" },
                 GetPathArgs("Tar"),
-                new ExtractSetting
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    SaveMethod   = SaveMethod.CreateSmart,
-                }
+                new ExtractSetting { SaveMethod = SaveMethod.CreateSmart }
             );
 
             yield return new(
                 @"Tar\BZipSample\TarSample",
                 new[] { "Sample.tbz" },
                 GetPathArgs(@"Tar\BZipSample"),
-                new ExtractSetting
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    SaveMethod   = SaveMethod.CreateSmart,
-                }
+                new ExtractSetting { SaveMethod = SaveMethod.CreateSmart }
             );
 
             yield return new(
                 @"Tar\GZipSample\TarSample",
                 new[] { "Sample.tgz" },
                 GetPathArgs(@"Tar\GZipSample"),
-                new ExtractSetting
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    SaveMethod   = SaveMethod.CreateSmart,
-                }
+                new ExtractSetting { SaveMethod = SaveMethod.CreateSmart }
             );
 
             yield return new(
                 @"Tar\LzmaSample\Sample",
                 new[] { "Sample.tar.lzma" },
                 GetPathArgs(@"Tar\LzmaSample"),
-                new ExtractSetting
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    SaveMethod   = SaveMethod.CreateSmart,
-                }
+                new ExtractSetting { SaveMethod = SaveMethod.CreateSmart }
             );
 
             yield return new(
                 @"Tar\LzwSample\Sample",
                 new[] { "Sample.tar.z" },
                 GetPathArgs(@"Tar\LzwSample"),
-                new ExtractSetting
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    SaveMethod   = SaveMethod.CreateSmart,
-                }
+                new ExtractSetting { SaveMethod = SaveMethod.CreateSmart }
             );
 
             yield return new(
                 @"Bz2Sample\Sample\Sample.txt",
                 new[] { "Sample.txt.bz2" },
                 GetPathArgs("Bz2Sample"),
-                new ExtractSetting
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    SaveMethod   = SaveMethod.CreateSmart,
-                }
+                new ExtractSetting { SaveMethod = SaveMethod.CreateSmart }
             );
 
             yield return new(
                 @"SfxSample\Sample\Foo.txt",
                 new[] { "SampleSfx.exe" },
                 GetPathArgs("SfxSample"),
-                new ExtractSetting
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    SaveMethod   = SaveMethod.CreateSmart,
-                }
+                new ExtractSetting { SaveMethod = SaveMethod.CreateSmart }
             );
 
             yield return new(
                 @"Multiple\Complex.1.0.0",
                 new[] { "Complex.1.0.0.zip", "Single.1.0.0.zip" },
                 GetPathArgs("Multiple"),
-                new ExtractSetting
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    SaveMethod = SaveMethod.CreateSmart,
-                }
+                new ExtractSetting { SaveMethod = SaveMethod.CreateSmart }
             );
         }}
 
@@ -512,8 +411,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /* ----------------------------------------------------------------- */
         private static IEnumerable<string> GetPathArgs(string filename) => new[]
         {
-            $"/o:source",
-            $"/save:{typeof(ExtractTest).GetPath(filename)}",
+            $"/o:to:{typeof(ExtractTest).GetPath(filename)}",
         };
 
         #endregion

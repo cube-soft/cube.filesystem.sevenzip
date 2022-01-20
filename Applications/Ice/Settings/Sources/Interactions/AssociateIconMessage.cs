@@ -15,37 +15,58 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.Reflection;
-using NUnit.Framework;
+using System.Collections.Generic;
+using System.Drawing;
 
-namespace Cube.FileSystem.SevenZip.Ice.Tests
+namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// GlobalSetup
+    /// AssociateIconMessage
     ///
     /// <summary>
-    /// Represents the global setup operations.
+    /// Represents the message to select the icon for file association.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [SetUpFixture]
-    public class GlobalSetup
+    public class AssociateIconMessage : CancelMessage<int>
     {
+        #region Constructors
+
         /* ----------------------------------------------------------------- */
         ///
-        /// OneTimeSetup
+        /// AssociateIconMessage
         ///
         /// <summary>
-        /// Invokes the setup method only once.
+        /// Initializes a new instance of the AssociateIconMessage class
+        /// with the specified arguments.
+        /// </summary>
+        ///
+        /// <param name="src">Icon index, which is 3 or more.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public AssociateIconMessage(int src) { Value = src; }
+
+        #endregion
+
+        #region Properties
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Sources
+        ///
+        /// <summary>
+        /// Gets the selectable icons.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [OneTimeSetUp]
-        public void OneTimeSetup()
+        public IEnumerable<Image> Sources { get; } = new[]
         {
-            _ = Logger.ObserveTaskException();
-            typeof(GlobalSetup).LogInfo(Assembly.GetExecutingAssembly());
-        }
+            Properties.Resources.FileV3Icon,
+            Properties.Resources.FileV1Icon,
+            Properties.Resources.FileV2Icon,
+        };
+
+        #endregion
     }
 }

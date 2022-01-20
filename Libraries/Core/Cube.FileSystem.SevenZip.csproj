@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <Version>5.0.1</Version>
+        <Version>6.0.0</Version>
         <Authors>clown;cube-soft</Authors>
         <Company>CubeSoft</Company>
         <Description>7-Zip wrapper library for .NET.</Description>
@@ -23,8 +23,8 @@
         <DocumentationFile>bin\Any CPU\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Cube.FileSystem" Version="5.0.0" />
-        <PackageReference Include="Cube.Native.SevenZip" Version="19.0.1" />
+        <PackageReference Include="Cube.Core" Version="6.0.0" />
+        <PackageReference Include="Cube.Native.SevenZip" Version="21.7.1" />
     </ItemGroup>
     <ItemGroup>
         <None Include="..\..\Icon.png" Pack="true" PackagePath="images" />

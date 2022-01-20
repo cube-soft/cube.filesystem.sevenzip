@@ -18,35 +18,39 @@
 /* ------------------------------------------------------------------------- */
 using System.Collections.Generic;
 using System.Linq;
+using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// SevenZipOptionSetter
+    /// FilterCollection
     ///
     /// <summary>
-    /// Provides the functionality to set optional settings for 7zip archives.
+    /// Provides functionality to determine if the provided file or
+    /// directory is filtered.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal class SevenZipOptionSetter : CompressionOptionSetter
+    public class FilterCollection
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SevenZipOptionSetter
+        /// FilterCollection
         ///
         /// <summary>
-        /// Initializes a new instance of the SevenZipOptionSetter class
-        /// with the specified options.
+        /// Initializes a new instance of the FilterCollection class with
+        /// the specified file or directory names.
         /// </summary>
         ///
-        /// <param name="options">Archive options.</param>
+        /// <param name="src">
+        /// Collection of file or directory  names to be filtered.
+        /// </param>
         ///
         /* ----------------------------------------------------------------- */
-        public SevenZipOptionSetter(CompressionOption options) : base(options) { }
+        public FilterCollection(IEnumerable<string> src) => Names = src;
 
         #endregion
 
@@ -54,22 +58,14 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SupportedMethods
+        /// Names
         ///
         /// <summary>
-        /// Gets the supported compression methods.
+        /// Gets the collection of file or directory names to be filtered.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public static CompressionMethod[] SupportedMethods => new[]
-        {
-            CompressionMethod.Lzma,
-            CompressionMethod.Lzma2,
-            CompressionMethod.Ppmd,
-            CompressionMethod.BZip2,
-            CompressionMethod.Deflate,
-            CompressionMethod.Copy,
-        };
+        public IEnumerable<string> Names { get; }
 
         #endregion
 
@@ -77,19 +73,28 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Invoke
+        /// Match
         ///
         /// <summary>
-        /// Sets the current options to the specified collection.
+        /// Determines if the specified file or directory is filtered.
         /// </summary>
         ///
-        /// <param name="dest">Collection of options.</param>
+        /// <param name="src">File or directory information.</param>
+        ///
+        /// <returns>true for filtered.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        protected override void Invoke(IDictionary<string, PropVariant> dest)
+        public bool Match(Entity src)
         {
-            AddCompressionMethod(dest);
-            base.Invoke(dest);
+            if (!Names.Any()) return false;
+            var parts = Split(src.FullName);
+            if (!parts.Any()) return false;
+
+            foreach (var name in Names)
+            {
+                if (parts.Any(e => string.Compare(e, name, true) == 0)) return true;
+            }
+            return false;
         }
 
         #endregion
@@ -98,21 +103,16 @@ namespace Cube.FileSystem.SevenZip
 
         /* ----------------------------------------------------------------- */
         ///
-        /// AddCompressionMethod
+        /// Split
         ///
         /// <summary>
-        /// Adds the specified compression method.
+        /// Splits the specified path with the path separator.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void AddCompressionMethod(IDictionary<string, PropVariant> dest)
-        {
-            var m = Options.CompressionMethod == CompressionMethod.Default ?
-                    CompressionMethod.Lzma :
-                    Options.CompressionMethod;
-            if (!SupportedMethods.Contains(m)) return;
-            dest.Add("0", PropVariant.Create(m.ToString()));
-        }
+        private IEnumerable<string> Split(string src) =>
+            src.Split(SafePath.SeparatorChars.ToArray())
+               .SkipWhile(s => !s.HasValue());
 
         #endregion
     }

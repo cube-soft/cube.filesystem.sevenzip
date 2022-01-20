@@ -15,6 +15,8 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System;
+
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
@@ -47,7 +49,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public static CompressionOption ToOption(this CompressRuntimeSetting src, SettingFolder settings)
         {
-            var filter = new Filter(settings.Value.GetFilters(settings.Value.Compress.Filtering));
+            var filter = Filter.From(settings.Value.GetFilters(settings.Value.Compress.Filtering));
 
             return src.Format switch
             {
@@ -71,7 +73,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         private static CompressionOption MakeZip(CompressRuntimeSetting src,
-            Filter filter, CompressSetting others) => new()
+            Predicate<Entity> filter, CompressSetting others) => new()
         {
             CompressionLevel  = src.CompressionLevel,
             CompressionMethod = src.CompressionMethod,
@@ -79,7 +81,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             Password          = src.Password,
             ThreadCount       = src.ThreadCount,
             CodePage          = others.UseUtf8 ? CodePage.Utf8 : CodePage.Oem,
-            Filter            = filter.Match,
+            Filter            = filter,
         };
 
         /* ----------------------------------------------------------------- */
@@ -91,14 +93,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static SfxOption MakeSfx(CompressRuntimeSetting src, Filter filter) => new()
+        private static SfxOption MakeSfx(CompressRuntimeSetting src, Predicate<Entity> filter) => new()
         {
             CompressionLevel  = src.CompressionLevel,
             CompressionMethod = src.CompressionMethod,
             ThreadCount       = src.ThreadCount,
             Module            = src.Sfx,
             Password          = src.Password,
-            Filter            = filter.Match,
+            Filter            = filter,
         };
 
         /* ----------------------------------------------------------------- */
@@ -110,14 +112,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static CompressionOption MakeCommon(CompressRuntimeSetting src, Filter filter) => new()
+        private static CompressionOption MakeCommon(CompressRuntimeSetting src, Predicate<Entity> filter) => new()
         {
             CompressionMethod = src.CompressionMethod,
             CompressionLevel  = src.CompressionLevel,
             EncryptionMethod  = src.EncryptionMethod,
             Password          = src.Password,
             ThreadCount       = src.ThreadCount,
-            Filter            = filter.Match,
+            Filter            = filter,
         };
 
         #endregion

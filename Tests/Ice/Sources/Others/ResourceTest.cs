@@ -155,8 +155,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [TestCase(Format.Unknown,  "*.zip"    )] /* Contains all formats */
         public void GetDialogFilters(Format format, string piece)
         {
-            var dest  = Resource.GetDialogFilters(format).GetFilter();
             var upper = piece.ToUpperInvariant();
+            var dest  = new SaveFileMessage("dummy") {
+                Filters = Resource.GetDialogFilters(format)
+            }.GetFilterText();
+
             Assert.That(dest.Contains("*.*"));
             Assert.That(dest.Contains(piece), piece);
             Assert.That(dest.Contains(upper), upper);
@@ -173,7 +176,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /* ----------------------------------------------------------------- */
         [Test]
         public void GetDialogFilters_NotSupported() => Assert.That(
-            Resource.GetDialogFilters(Format.Rar).GetFilter(),
+            new SaveFileMessage("dummy") {
+                Filters = Resource.GetDialogFilters(Format.Rar)
+            }.GetFilterText(),
             Is.EqualTo("すべてのファイル (*.*)|*.*")
         );
 

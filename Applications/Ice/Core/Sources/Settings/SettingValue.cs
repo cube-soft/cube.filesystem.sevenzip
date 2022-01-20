@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using Cube.DataContract;
 using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings

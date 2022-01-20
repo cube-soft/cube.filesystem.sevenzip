@@ -76,6 +76,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [TestCase("-o:query",       SaveLocation.Query      )]
         [TestCase("-o:preset",      SaveLocation.Preset     )]
         [TestCase("-o:explicit",    SaveLocation.Explicit   )]
+        [TestCase("-o:to:\"path\"", SaveLocation.Explicit   )]
+        [TestCase("-o:to",          SaveLocation.Unknown    )]
         [TestCase("/o",             SaveLocation.Unknown    )]
         [TestCase("/o:wrong",       SaveLocation.Unknown    )]
         public void Test_SaveLocation(string src, SaveLocation location)

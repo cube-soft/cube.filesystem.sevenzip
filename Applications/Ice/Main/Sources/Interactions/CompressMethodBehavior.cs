@@ -49,9 +49,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         {
             void handler(object s, EventArgs e)
             {
-                if (format.SelectedValue is not Format fmt) return;
-                src.SelectedValue = CompressionMethod.Default;
-                src.Bind(Resource.GetCompressionMethods(fmt));
+                if (format.SelectedValue is Format fmt)
+                {
+                    src.Bind(Resource.GetCompressionMethods(fmt));
+                }
             }
 
             format.SelectedValueChanged += handler;

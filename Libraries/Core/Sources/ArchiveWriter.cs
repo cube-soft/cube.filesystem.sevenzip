@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Cube.Backports;
 using Cube.Collections;
-using Cube.Logging;
 
 namespace Cube.FileSystem.SevenZip
 {
@@ -365,7 +364,7 @@ namespace Cube.FileSystem.SevenZip
             catch (Exception e) { error = e; }
             finally
             {
-                var kv = KeyValuePair.Create(cb.Result, error ?? cb.Exception);
+                var kv = new KeyValuePair<OperationResult, Exception>(cb.Result, error ?? cb.Exception);
                 cb.Dispose();
                 Terminate(kv.Key, kv.Value);
             }
