@@ -1,13 +1,13 @@
 CubeICE ユーザーマニュアル
 ====
 
-Copyright © 2010 CubeSoft, Inc.  
+Copyright © 2011 CubeSoft, Inc.  
 support@cube-soft.jp  
 https://www.cube-soft.jp/cubeice/
 
 ## 概要
 
-![CubeICE の概要](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Applications/Ice/Assets/Main.01.ja.png?raw=true)
+![CubeICE の概要](https://raw.githubusercontent.com/cube-soft/Cube.Assets/master/cubeice/overview.ja.png)
 
 CubeICE には、ファイルやフォルダーの圧縮・解凍（展開）処理を実際に行う **CubeICE** と、
 圧縮・解凍（展開）処理に関する各種設定を変更する **CubeICE 設定** の 2 種類のアプリケーションが存在します。
@@ -19,7 +19,7 @@ CubeICE には、ファイルやフォルダーの圧縮・解凍（展開）処
 圧縮したいファイルやフォルダーを選択し、右クリックで表示されるコンテキストメニューから **圧縮** を選択します。
 サブメニューに圧縮形式の一覧が表示されますので、使用したい圧縮形式を選択します。
 
-![圧縮メニュー](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Applications/Ice/Assets/Main.02.ja.png?raw=true)
+![圧縮メニュー](https://raw.githubusercontent.com/cube-soft/Cube.Assets/master/cubeice/doc/v1/ja/main-02.png)
 
 サブメニューで **詳細設定** を選択した場合、上記のようなダイアログが表示されます。
 必要な設定を行った後、OK ボタンをクリックして下さい。
@@ -29,7 +29,7 @@ CubeICE には、ファイルやフォルダーの圧縮・解凍（展開）処
 
 ### ショートカットへドラッグ&amp;ドロップ
 
-![ショートカットへドラッグ&amp;ドロップ](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Applications/Ice/Assets/Main.03.ja.png?raw=true)
+![ショートカットへドラッグ&amp;ドロップ](https://raw.githubusercontent.com/cube-soft/Cube.Assets/master/cubeice/doc/v1/ja/main-03.png)
 
 圧縮ファイルを作成する別の方法として、ファイルやフォルダーを選択して **CubeICE 圧縮** ショートカットにドラッグ&amp;ドロップする方法があります。
 この方法で圧縮ファイルを作成した場合、初期設定では Zip ファイルが作成されます。
@@ -37,7 +37,7 @@ CubeICE には、ファイルやフォルダーの圧縮・解凍（展開）処
 
 ### パスワードの設定
 
-![パスワードの設定](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Applications/Ice/Assets/Main.04.ja.png?raw=true)
+![パスワードの設定](https://raw.githubusercontent.com/cube-soft/Cube.Assets/master/cubeice/doc/v1/ja/main-04.png)
 
 右クリックで表示されるコンテキストメニューから **Zip（パスワード）** を選択、
 または圧縮形式を **Zip（パスワード）** に設定している **CubeICE 圧縮** ショートカットにファイルやフォルダをドラッグ&amp;ドロップした場合、
@@ -54,20 +54,20 @@ CubeICE に関連付けされた圧縮ファイルをダブルクリックする
 
 ### コンテキストメニューから選択
 
-![解凍メニュー](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Applications/Ice/Assets/Main.05.ja.png?raw=true)
+![解凍メニュー](https://raw.githubusercontent.com/cube-soft/Cube.Assets/master/cubeice/doc/v1/ja/main-05.png)
 
 エクスプローラー等で圧縮ファイルを右クリックすると **解凍** と言うメニューが表示されます。
 この「解凍」メニューをクリックする事によっても解凍が始まります。
 
-### ショートカットへのドラッグ&amp;ドロップ
+### ショートカットへのドラッグ&ドロップ
 
-![ショートカットへドラッグ&amp;ドロップ](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Applications/Ice/Assets/Main.06.ja.png?raw=true)
+![ショートカットへドラッグ&ドロップ](https://raw.githubusercontent.com/cube-soft/Cube.Assets/master/cubeice/doc/v1/ja/main-06.png)
 
-CubeICE で圧縮ファイルを解凍（展開）する 3つめの方法は、圧縮ファイルを **CubeICE 解凍** にドラッグ&amp;ドロップする方法です。
+CubeICE で圧縮ファイルを解凍（展開）する 3つめの方法は、圧縮ファイルを **CubeICE 解凍** にドラッグ&ドロップする方法です。
 
 ### 上書きの確認
 
-![上書きの確認](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Applications/Ice/Assets/Main.07.ja.png?raw=true)
+![上書きの確認](https://raw.githubusercontent.com/cube-soft/Cube.Assets/master/cubeice/doc/v1/ja/main-07.png)
 
 CubeICE で圧縮ファイルを解凍（展開）時、保存先に同名のファイルが存在すると上記のような確認ダイアログが表示されます。
 
@@ -79,13 +79,13 @@ CubeICE が⾃動的に新しいファイル名に変更します。
 
 ### パスワードの入力
 
-![パスワードの入力](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Applications/Ice/Assets/Main.08.ja.png?raw=true)
+![パスワードの入力](https://raw.githubusercontent.com/cube-soft/Cube.Assets/master/cubeice/doc/v1/ja/main-08.png)
 
 解凍（展開）しようとした圧縮ファイルにパスワードが設定されている場合、パスワードを⼊⼒するダイアログが表示されます。
 
 ## ファイル一覧の表示
 
-![ファイル一覧の表示](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Applications/Ice/Assets/Main.09.ja.png?raw=true)
+![ファイル一覧の表示](https://raw.githubusercontent.com/cube-soft/Cube.Assets/master/cubeice/doc/v1/ja/main-09.png)
 
 エクスプローラー等で CubeICE に関連付けられている圧縮ファイルにマウス・カーソルをあわせると、
 ツールチップにその圧縮ファイルのファイル一覧が表示されます。
@@ -99,13 +99,15 @@ CubeICE が⾃動的に新しいファイル名に変更します。
 
 ### 一般
 
-![メニュー等に関する設定](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Applications/Ice/Assets/Settings.01.ja.png?raw=true)
+![メニュー等に関する設定](https://raw.githubusercontent.com/cube-soft/Cube.Assets/master/cubeice/doc/v1/ja/settings-01.png)
 
 ##### ファイルの関連付け
 
 ファイルをダブルクリックした際に CubeICE で解凍（展開）するファイルの種類を選択します。
 関連付け可能なファイル形式は、zip, lzh, rar, 7z, iso, tar, gz, tgz, bz2, tbz, xz, txz,
 arj, cab, chm, cpio, deb, dmb, hfs, jar, nupkg, rpm, vhd, vmdk, wim, xar, z の 27 種類です。
+
+**アイコンの変更** をクリックすると、関連付けられた圧縮ファイルに表示されるアイコンを変更する事ができます。変更可能なアイコンは 3 種類です。
 
 ##### コンテキストメニュー
 
@@ -119,7 +121,7 @@ arj, cab, chm, cpio, deb, dmb, hfs, jar, nupkg, rpm, vhd, vmdk, wim, xar, z の 
 
 ### 圧縮
 
-![圧縮に関する設定](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Applications/Ice/Assets/Settings.02.ja.png?raw=true)
+![圧縮に関する設定](https://raw.githubusercontent.com/cube-soft/Cube.Assets/master/cubeice/doc/v1/ja/settings-02.png)
 
 ##### 保存場所
 
@@ -133,7 +135,7 @@ CubeICE で解凍（展開）した時、作成された圧縮ファイルを保
   圧縮対象となるファイルやフォルダーと同じフォルダに圧縮ファイルも作成します。
 * **実⾏時に指定する**  
   実⾏時に以下のようなダイアログが表示されます。  
-  ![名前を付けて保存](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Applications/Ice/Assets/Settings.06.ja.png?raw=true)
+  ![名前を付けて保存](https://raw.githubusercontent.com/cube-soft/Cube.Assets/master/cubeice/doc/v1/ja/settings-06.png)
 
 ##### オプション
 
@@ -155,7 +157,7 @@ CubeICE で解凍（展開）した時、作成された圧縮ファイルを保
 
 ### 解凍（展開）
 
-![解凍（展開）に関する設定](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Applications/Ice/Assets/Settings.03.ja.png?raw=true)
+![解凍（展開）に関する設定](https://raw.githubusercontent.com/cube-soft/Cube.Assets/master/cubeice/doc/v1/ja/settings-03.png)
 
 ##### 保存場所
 
@@ -191,7 +193,7 @@ CubeICE で圧縮ファイルを解凍（展開）した時に、作成された
 
 ### 詳細
 
-![その他の設定](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Applications/Ice/Assets/Settings.04.ja.png?raw=true)
+![その他の設定](https://raw.githubusercontent.com/cube-soft/Cube.Assets/master/cubeice/doc/v1/ja/settings-04.png)
 
 ##### フィルタリング
 
@@ -220,7 +222,7 @@ CubeICE で圧縮ファイルを解凍（展開）した時に、作成された
 
 ### バージョン情報
 
-![バージョン情報](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Applications/Ice/Assets/Settings.05.ja.png?raw=true)
+![バージョン情報](https://raw.githubusercontent.com/cube-soft/Cube.Assets/master/cubeice/doc/v1/ja/settings-05.png)
 
 CubeICE のバージョン情報が表示されます。
 CubeICE には 32bit 版と 64bit 版が存在しますが、どちらを使用しているのかもここで判別できます。
@@ -231,11 +233,11 @@ CubeICE をアンインストールするには、まず、コントロールパ
 または、設定のアプリと機能（Windows 8 以降）を選択します。そして、表示される画面で
 CubeICE のアイコンを選択してアンインストールの項目を実行して下さい。
 
-![アンインストール（コントロールパネル）](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Applications/Ice/Assets/UnInstall.01.ja.png?raw=true)
-![アンインストール（設定）](https://github.com/cube-soft/Cube.FileSystem.SevenZip/blob/master/Applications/Ice/Assets/UnInstall.02.ja.png?raw=true)
+![アンインストール（コントロールパネル）](https://raw.githubusercontent.com/cube-soft/Cube.Assets/master/cubeice/doc/v1/ja/uninstall-01.png)
+![アンインストール（設定）](https://raw.githubusercontent.com/cube-soft/Cube.Assets/master/cubeice/doc/v1/ja/uninstall-02.png)
 
 ## CubeICE で問題が発生した場合
 
 CubeICE は、以下のフォルダに実行ログを出力しています（%UserName% は、ログオン中のユーザ名に置換）。  
-```C:\Users\%UserName%\AppData\Local\CubeSoft\CubeIce\Log```  
+``C:\Users\%UserName%\AppData\Local\CubeSoft\CubeIce\Log``  
 問題が発生した時は、これらのログを添付して support@cube-soft.jp までご連絡をお願いいたします。

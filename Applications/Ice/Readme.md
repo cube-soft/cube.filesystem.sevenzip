@@ -1,7 +1,7 @@
 CubeICE
 ====
 
-Copyright © 2010 CubeSoft, Inc.  
+Copyright © 2011 CubeSoft, Inc.  
 Apache License, Version 2.0 (Apache 2.0)  
 support@cube-soft.jp  
 https://www.cube-soft.jp/cubeice/
