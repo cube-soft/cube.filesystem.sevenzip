@@ -102,7 +102,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         #endregion
 
         #region Fields
-        private readonly Forms.Controls.VersionControl _version = new(typeof(MainWindow).Assembly);
+        private readonly Forms.Controls.VersionControl _version = new();
         private readonly ToolTip _tooltip = new();
         #endregion
     }
