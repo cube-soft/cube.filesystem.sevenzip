@@ -95,7 +95,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             b5.Bind(nameof(s5.SaveQuery),           ExtractSaveQueryRadioButton,  nameof(RadioButton.Checked));
             b5.Bind(nameof(s5.SaveOthers),          ExtractSaveRadioButton,       nameof(RadioButton.Checked));
             b5.Bind(nameof(s5.SaveOthers),          ExtractSaveButton,            nameof(Enabled));
-            b5.Bind(nameof(s5.SaveOthers),          ExtractSaveTextBox,            nameof(Enabled));
+            b5.Bind(nameof(s5.SaveOthers),          ExtractSaveTextBox,           nameof(Enabled));
             b5.Bind(nameof(s5.SaveDirectory),       ExtractSaveTextBox,           nameof(TextBox.Text));
             b5.Bind(nameof(s5.Filtering),           ExtractFilterCheckBox,        nameof(CheckBox.Checked));
             b5.Bind(nameof(s5.DeleteSource),        ExtractDeleteCheckBox,        nameof(CheckBox.Checked));
