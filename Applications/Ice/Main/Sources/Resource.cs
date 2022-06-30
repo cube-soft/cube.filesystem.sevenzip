@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using Cube.Collections;
+using Cube.Forms;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {
@@ -44,12 +45,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public static List<KeyValuePair<string, Format>> Formats { get; } = new()
+        public static ComboListSource<Format> Formats { get; } = new()
         {
-            new("Zip", Format.Zip),
-            new("7z",  Format.SevenZip),
-            new("Tar", Format.Tar),
-            new(Properties.Resources.FormatSfx, Format.Sfx),
+            { "Zip", Format.Zip },
+            { "7z",  Format.SevenZip },
+            { "Tar", Format.Tar },
+            { Properties.Resources.FormatSfx, Format.Sfx },
         };
 
         /* ----------------------------------------------------------------- */
@@ -62,14 +63,14 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public static List<KeyValuePair<string, CompressionLevel>> CompressionLevels { get; } = new()
+        public static ComboListSource<CompressionLevel> CompressionLevels { get; } = new()
         {
-            new(Properties.Resources.LevelNone,   CompressionLevel.None),
-            new(Properties.Resources.LevelFast,   CompressionLevel.Fast),
-            new(Properties.Resources.LevelLow,    CompressionLevel.Low),
-            new(Properties.Resources.LevelNormal, CompressionLevel.Normal),
-            new(Properties.Resources.LevelHigh,   CompressionLevel.High),
-            new(Properties.Resources.LevelUltra,  CompressionLevel.Ultra)
+            { Properties.Resources.LevelNone,   CompressionLevel.None },
+            { Properties.Resources.LevelFast,   CompressionLevel.Fast },
+            { Properties.Resources.LevelLow,    CompressionLevel.Low },
+            { Properties.Resources.LevelNormal, CompressionLevel.Normal },
+            { Properties.Resources.LevelHigh,   CompressionLevel.High },
+            { Properties.Resources.LevelUltra,  CompressionLevel.Ultra },
         };
 
         /* ----------------------------------------------------------------- */
@@ -82,48 +83,48 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public static Dictionary<Format, List<KeyValuePair<string, CompressionMethod>>> CompressionMethods { get; } = new()
+        public static Dictionary<Format, ComboListSource<CompressionMethod>> CompressionMethods { get; } = new()
         {
             {
                 Format.Zip, new()
                 {
-                    new("Deflate",   CompressionMethod.Default),
-                    new("Deflate64", CompressionMethod.Deflate64),
-                    new("BZip2",     CompressionMethod.BZip2),
-                    new("LZMA",      CompressionMethod.Lzma),
-                    new("PPMd",      CompressionMethod.Ppmd),
-                    new("Copy",      CompressionMethod.Copy),
+                    { "Deflate",   CompressionMethod.Default },
+                    { "Deflate64", CompressionMethod.Deflate64 },
+                    { "BZip2",     CompressionMethod.BZip2 },
+                    { "LZMA",      CompressionMethod.Lzma },
+                    { "PPMd",      CompressionMethod.Ppmd },
+                    { "Copy",      CompressionMethod.Copy },
                 }
             },
             {
                 Format.SevenZip, new()
                 {
-                    new("LZMA",      CompressionMethod.Default),
-                    new("LZMA2",     CompressionMethod.Lzma2),
-                    new("PPMd",      CompressionMethod.Ppmd),
-                    new("BZip2",     CompressionMethod.BZip2),
-                    new("Deflate",   CompressionMethod.Deflate),
-                    new("Copy",      CompressionMethod.Copy),
+                    { "LZMA",      CompressionMethod.Default },
+                    { "LZMA2",     CompressionMethod.Lzma2 },
+                    { "PPMd",      CompressionMethod.Ppmd },
+                    { "BZip2",     CompressionMethod.BZip2 },
+                    { "Deflate",   CompressionMethod.Deflate },
+                    { "Copy",      CompressionMethod.Copy },
                 }
             },
             {
                 Format.Tar, new()
                 {
-                    new("GZip",      CompressionMethod.GZip),
-                    new("BZip2",     CompressionMethod.BZip2),
-                    new("XZ",        CompressionMethod.XZ),
-                    new("Copy",      CompressionMethod.Default),
+                    { "GZip",      CompressionMethod.GZip },
+                    { "BZip2",     CompressionMethod.BZip2 },
+                    { "XZ",        CompressionMethod.XZ },
+                    { "Copy",      CompressionMethod.Default },
                 }
             },
             {
                 Format.Sfx, new()
                 {
-                    new("LZMA",      CompressionMethod.Default),
-                    new("LZMA2",     CompressionMethod.Lzma2),
-                    new("PPMd",      CompressionMethod.Ppmd),
-                    new("BZip2",     CompressionMethod.BZip2),
-                    new("Deflate",   CompressionMethod.Deflate),
-                    new("Copy",      CompressionMethod.Copy),
+                    { "LZMA",      CompressionMethod.Default },
+                    { "LZMA2",     CompressionMethod.Lzma2 },
+                    { "PPMd",      CompressionMethod.Ppmd },
+                    { "BZip2",     CompressionMethod.BZip2 },
+                    { "Deflate",   CompressionMethod.Deflate },
+                    { "Copy",      CompressionMethod.Copy },
                 }
             }
         };
@@ -138,12 +139,12 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public static List<KeyValuePair<string, EncryptionMethod>> EncryptionMethods { get; } = new()
+        public static ComboListSource<EncryptionMethod> EncryptionMethods { get; } = new()
         {
-            new("ZipCrypto", EncryptionMethod.ZipCrypto),
-            new("AES128",    EncryptionMethod.Aes128),
-            new("AES192",    EncryptionMethod.Aes192),
-            new("AES256",    EncryptionMethod.Aes256),
+            { "ZipCrypto", EncryptionMethod.ZipCrypto },
+            { "AES128",    EncryptionMethod.Aes128 },
+            { "AES192",    EncryptionMethod.Aes192 },
+            { "AES256",    EncryptionMethod.Aes256 },
         };
 
         /* ----------------------------------------------------------------- */
@@ -189,7 +190,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static List<KeyValuePair<string, CompressionMethod>> GetCompressionMethods(Format src) =>
+        public static ComboListSource<CompressionMethod> GetCompressionMethods(Format src) =>
             CompressionMethods.TryGetValue(src, out var dest) ? dest : null;
 
         /* ----------------------------------------------------------------- */

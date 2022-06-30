@@ -17,7 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 using System.Windows.Forms;
-using Cube.Mixin.Forms.Controls;
+using Cube.Forms.Binding;
 
 namespace Cube.FileSystem.SevenZip.Ice
 {

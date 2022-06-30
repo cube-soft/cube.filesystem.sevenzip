@@ -16,6 +16,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Linq;
 using NUnit.Framework;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
@@ -127,7 +128,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [TestCase(Format.BZip2,    0)]
         public void GetCompressionMethod(Format format, int n)
         {
-            Assert.That(Resource.GetCompressionMethods(format)?.Count ?? 0, Is.EqualTo(n));
+            Assert.That(Resource.GetCompressionMethods(format)?.Count() ?? 0, Is.EqualTo(n));
         }
 
         /* ----------------------------------------------------------------- */

@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.Collections.Generic;
+using Cube.Forms;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
@@ -42,15 +42,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public static List<KeyValuePair<string, Preset>> Shortcuts { get; } = new()
+        public static ComboListSource<Preset> Shortcuts { get; } = new()
         {
-            new(Properties.Resources.MenuZip,         Preset.CompressZip),
-            new(Properties.Resources.MenuZipPassword, Preset.CompressZipPassword),
-            new(Properties.Resources.MenuSevenZip,    Preset.Compress7z),
-            new(Properties.Resources.MenuBZip2,       Preset.CompressBz2),
-            new(Properties.Resources.MenuGZip,        Preset.CompressGz),
-            new(Properties.Resources.MenuSfx,         Preset.CompressSfx),
-            new(Properties.Resources.MenuDetails,     Preset.CompressDetails),
+            { Properties.Resources.MenuZip,         Preset.CompressZip },
+            { Properties.Resources.MenuZipPassword, Preset.CompressZipPassword },
+            { Properties.Resources.MenuSevenZip,    Preset.Compress7z },
+            { Properties.Resources.MenuBZip2,       Preset.CompressBz2 },
+            { Properties.Resources.MenuGZip,        Preset.CompressGz },
+            { Properties.Resources.MenuSfx,         Preset.CompressSfx },
+            { Properties.Resources.MenuDetails,     Preset.CompressDetails },
         };
 
         /* ----------------------------------------------------------------- */
@@ -63,10 +63,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public static List<KeyValuePair<string, bool>> IoHandlers { get; } = new()
+        public static ComboListSource<bool> IoHandlers { get; } = new()
         {
-            new(Properties.Resources.MenuNormal,   false),
-            new(Properties.Resources.MenuExtended,  true),
+            { Properties.Resources.MenuNormal,   false },
+            { Properties.Resources.MenuExtended,  true },
         };
 
         #endregion
