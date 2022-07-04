@@ -28,7 +28,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class CompressViewModel : ArchiveViewModel<CompressSetting>
+    public class CompressViewModel : ArchiveViewModel<CompressSettingValue>
     {
         #region Constructors
 
@@ -46,7 +46,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressViewModel(CompressSetting src, Aggregator aggregator, SynchronizationContext context) :
+        public CompressViewModel(CompressSettingValue src, Aggregator aggregator, SynchronizationContext context) :
             base(src, aggregator, context) { }
 
         #endregion

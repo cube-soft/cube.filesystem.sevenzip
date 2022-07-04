@@ -16,70 +16,93 @@
 //
 /* ------------------------------------------------------------------------- */
 using System.Runtime.Serialization;
+using Cube.DataContract;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// CompressSetting
+    /// ArchiveSettingValue
     ///
     /// <summary>
-    /// Represents the settings when compressing archives.
+    /// Represents the common settings of compressing or extracting
+    /// archives.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public sealed class CompressSetting : ArchiveSetting
+    public abstract class ArchiveSettingValue : SerializableBase
     {
         #region Properties
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CompressionLevel
+        /// SaveLocation
         ///
         /// <summary>
-        /// Gets or sets the compression level.
+        /// Gets or sets the value that represents the save location.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public CompressionLevel CompressionLevel
+        public SaveLocation SaveLocation
         {
-            get => Get(() => CompressionLevel.Normal);
+            get => Get(() => SaveLocation.Preset);
             set => Set(value);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// UseUtf8
+        /// SaveDirectory
         ///
         /// <summary>
-        /// Gets or sets a value indicating whether to convert to the UTF-8
-        /// encoding when compressing.
+        /// Gets or sets the directory name to save.
         /// </summary>
         ///
+        /// <remarks>
+        /// The property is used when the SaveLocation property is set
+        /// to Others.
+        /// </remarks>
+        ///
         /* ----------------------------------------------------------------- */
-        [DataMember(Name = "UseUTF8")]
-        public bool UseUtf8
+        [DataMember(Name = "SaveDirectoryName")]
+        public string SaveDirectory
         {
-            get => Get(() => false);
+            get => Get(() => string.Empty);
             set => Set(value);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OverwritePrompt
+        /// Filtering
         ///
         /// <summary>
-        /// Gets or sets a value indicating whether to show the overwrite
-        /// prompt.
+        /// Gets or sets a value indicating whether to filter some files
+        /// and directories.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public bool OverwritePrompt
+        public bool Filtering
         {
             get => Get(() => true);
+            set => Set(value);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// OpenDirectory
+        ///
+        /// <summary>
+        /// Gets or sets the value that represents the method to open
+        /// directory.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [DataMember(Name = "OpenDirectory")]
+        public OpenMethod OpenMethod
+        {
+            get => Get(() => OpenMethod.OpenNotDesktop);
             set => Set(value);
         }
 

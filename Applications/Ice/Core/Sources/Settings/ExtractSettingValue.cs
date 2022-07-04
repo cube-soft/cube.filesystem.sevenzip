@@ -15,112 +15,72 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Cube.DataContract;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ContextSetting
+    /// ExtractSettingValue
     ///
     /// <summary>
-    /// Represents the settings of the context menu that is displayed
-    /// in the explorer.
+    /// Represents the settings when extracting archives.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public sealed class ContextSetting : SerializableBase
+    public sealed class ExtractSettingValue : ArchiveSettingValue
     {
         #region Properties
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Preset
+        /// RootDirectory
         ///
         /// <summary>
-        /// Gets or sets the value that represents the preset menu.
+        /// Gets or sets the method to determine the root directory.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [DataMember]
-        public Preset Preset
+        [DataMember(Name = "RootDirectory")]
+        public SaveMethod SaveMethod
         {
-            get => Get(() => Preset.DefaultContext);
+            get => Get(() => SaveMethod.CreateSmart);
             set => Set(value);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Custom
+        /// DeleteSource
         ///
         /// <summary>
-        /// Gets or sets the collection of customized context menu.
+        /// Gets or sets a value indicating whether to delete the source
+        /// archive after extracting.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public List<Context> Custom
-        {
-            get => Get(() => new List<Context>());
-            set => Set(value);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// UseCustom
-        ///
-        /// <summary>
-        /// Gets or sets a value indicating whether to use the customized
-        /// context menu.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [DataMember(Name = "IsCustomized")]
-        public bool UseCustom
+        public bool DeleteSource
         {
             get => Get(() => false);
             set => Set(value);
         }
 
-        #endregion
-
-        #region Methods
-
         /* ----------------------------------------------------------------- */
         ///
-        /// Customize
+        /// Bursty
         ///
         /// <summary>
-        /// Apply the customized context menu.
-        /// </summary>
-        ///
-        /// <param name="src">Customized context menu.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Customize(IEnumerable<Context> src)
-        {
-            Custom.Clear();
-            foreach (var m in src) Custom.Add(m);
-            UseCustom = true;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Reset
-        ///
-        /// <summary>
-        /// Resets the settings.
+        /// Gets or sets a value indicating whether to extract archives
+        /// burstly.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void Reset()
+        [DataMember]
+        public bool Bursty
         {
-            Preset    = Preset.DefaultContext;
-            Custom    = new List<Context>();
-            UseCustom = false;
+            get => Get(() => true);
+            set => Set(value);
         }
 
         #endregion

@@ -31,7 +31,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public sealed class CompressSettingViewModel : PresentableBase<QueryMessage<string, CompressRuntimeSetting>>
+    public sealed class CompressSettingViewModel : PresentableBase<QueryMessage<string, CompressQueryValue>>
     {
         #region Constructors
 
@@ -49,7 +49,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         public CompressSettingViewModel(
-            QueryMessage<string, CompressRuntimeSetting> src,
+            QueryMessage<string, CompressQueryValue> src,
             SynchronizationContext context
         ) : base(src, new(), context)
         {

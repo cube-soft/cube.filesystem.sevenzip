@@ -39,7 +39,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public static void Invoke(AssociateSetting src) => typeof(AssociateAction).LogWarn(() =>
+        public static void Invoke(AssociateSettingValue src) => typeof(AssociateAction).LogWarn(() =>
         {
             if (!src.Changed) return;
 

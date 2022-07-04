@@ -73,7 +73,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var extract  = new Shortcut { FullName = Get("CubeICE 解凍") };
             var settings = new Shortcut { FullName = Get("CubeICE 設定") };
 
-            var src  = new ShortcutSetting { Directory = Results };
+            var src  = new ShortcutSettingValue { Directory = Results };
             var menu = Preset.Compress |
                        Preset.CompressDetails |
                        Preset.Extract |

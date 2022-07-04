@@ -50,7 +50,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// <returns>CompressViewModel object.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        protected CompressViewModel NewVM(IEnumerable<string> args, CompressSetting settings)
+        protected CompressViewModel NewVM(IEnumerable<string> args, CompressSettingValue settings)
         {
             var ss = NewSettings();
 
@@ -76,7 +76,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// <returns>ExtractViewModel object.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        protected ExtractViewModel NewVM(IEnumerable<string> args, ExtractSetting settings)
+        protected ExtractViewModel NewVM(IEnumerable<string> args, ExtractSettingValue settings)
         {
             var ss = NewSettings();
 

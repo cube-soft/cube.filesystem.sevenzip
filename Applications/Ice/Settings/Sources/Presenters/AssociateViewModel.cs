@@ -30,7 +30,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class AssociateViewModel : PresentableBase<AssociateSetting>
+    public class AssociateViewModel : PresentableBase<AssociateSettingValue>
     {
         #region Constructors
 
@@ -48,7 +48,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public AssociateViewModel(AssociateSetting src, Aggregator aggregator, SynchronizationContext context) :
+        public AssociateViewModel(AssociateSettingValue src, Aggregator aggregator, SynchronizationContext context) :
             base(src, aggregator, context)
         {
             Assets.Add(new ObservableProxy(Facade, this));

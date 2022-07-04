@@ -32,7 +32,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public sealed class CompressQuery : Query<string, CompressRuntimeSetting>
+    public sealed class CompressQuery : Query<string, CompressQueryValue>
     {
         #region Constructors
 
@@ -48,7 +48,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="callback">Callback action for the request.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressQuery(Action<QueryMessage<string, CompressRuntimeSetting>> callback) :
+        public CompressQuery(Action<QueryMessage<string, CompressQueryValue>> callback) :
             base(callback, Dispatcher.Vanilla) { }
 
         #endregion
@@ -70,7 +70,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <returns>Compression query value.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressRuntimeSetting Get(Request request, CompressSetting settings) =>
+        public CompressQueryValue Get(Request request, CompressSettingValue settings) =>
             _cache ??= GetValue(request, settings);
 
         #endregion
@@ -88,16 +88,20 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private CompressRuntimeSetting GetValue(Request request, CompressSetting settings) => request.Format switch
+        private CompressQueryValue GetValue(Request request, CompressSettingValue settings) => request.Format switch
         {
             Format.Tar      or
             Format.Zip      or
             Format.SevenZip or
-            Format.Sfx         => new(request.Format, settings),
+            Format.Sfx         => new(settings) { Format = request.Format },
             Format.BZip2    or
             Format.GZip     or
-            Format.XZ          => new(Format.Tar, settings) { CompressionMethod = request.Format.ToMethod() },
-            _                  => Invoke(request, settings),
+            Format.XZ          => new(settings)
+            {
+                Format = Format.Tar,
+                CompressionMethod = request.Format.ToMethod()
+            },
+            _ => Invoke(request, settings),
         };
 
         /* ----------------------------------------------------------------- */
@@ -109,9 +113,9 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private CompressRuntimeSetting Invoke(Request request, CompressSetting settings)
+        private CompressQueryValue Invoke(Request request, CompressSettingValue settings)
         {
-            var m = new QueryMessage<string, CompressRuntimeSetting>
+            var m = new QueryMessage<string, CompressQueryValue>
             {
                 Value  = new(settings),
                 Cancel = true,
@@ -133,7 +137,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         #endregion
 
         #region Fields
-        private CompressRuntimeSetting _cache;
+        private CompressQueryValue _cache;
         #endregion
     }
 }
