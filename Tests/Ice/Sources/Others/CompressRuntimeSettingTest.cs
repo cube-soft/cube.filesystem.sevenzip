@@ -58,7 +58,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [TestCase("Sample.txt",     Format.Zip,      CompressionMethod.Default)]
         public void SetDestination(string dest, Format format, CompressionMethod method)
         {
-            var src = new CompressRuntimeSetting { Destination = dest };
+            var src = new CompressRuntimeSetting(new()) { Destination = dest };
             Assert.That(src.Format, Is.EqualTo(format));
             Assert.That(src.CompressionMethod, Is.EqualTo(method));
         }
@@ -83,7 +83,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [TestCase(Format.Sfx,      CompressionMethod.Default, "Sample.exe"    )]
         public void SetMethod(Format format, CompressionMethod method, string dest)
         {
-            var src = new CompressRuntimeSetting { Destination = "Sample.txt" };
+            var src = new CompressRuntimeSetting(new()) { Destination = "Sample.txt" };
             Assert.That(src.Format,            Is.EqualTo(Format.Zip));
             Assert.That(src.CompressionMethod, Is.EqualTo(CompressionMethod.Default));
 
@@ -108,7 +108,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void ToOption()
         {
-            var dest = new CompressRuntimeSetting()
+            var dest = new CompressRuntimeSetting(new())
             {
                 CompressionLevel  = CompressionLevel.High,
                 CompressionMethod = CompressionMethod.Ppmd,
@@ -118,7 +118,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 Destination       = "dummy",
                 Sfx               = string.Empty,
                 ThreadCount       = 3,
-            }.ToOption(new SettingFolder());
+            }.ToOption(new());
 
             Assert.That(dest.CompressionLevel, Is.EqualTo(CompressionLevel.High));
             Assert.That(dest.ThreadCount,      Is.EqualTo(3));

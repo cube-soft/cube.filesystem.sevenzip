@@ -80,7 +80,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         protected override void Invoke()
         {
-            var src = Configure.Get(Request.Sources.First(), Request.Format);
+            var src = Configure.Get(Request, Settings.Value.Compress);
             InvokePreProcess(src);
             Invoke(src);
             InvokePostProcess();

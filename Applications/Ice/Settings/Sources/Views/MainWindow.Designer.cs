@@ -66,7 +66,7 @@
             this.CompressOpenCheckBox = new System.Windows.Forms.CheckBox();
             this.CompressOpenSmartCheckBox = new System.Windows.Forms.CheckBox();
             this.CompressLevelLabel = new System.Windows.Forms.Label();
-            this.CompressLevelCheckBox = new System.Windows.Forms.ComboBox();
+            this.CompressLevelComboBox = new System.Windows.Forms.ComboBox();
             this.CompressSaveGroupBox = new System.Windows.Forms.GroupBox();
             this.CompressSavePanel = new System.Windows.Forms.TableLayoutPanel();
             this.CompressSaveRadioButton = new System.Windows.Forms.RadioButton();
@@ -557,7 +557,7 @@
             this.tableLayoutPanel1.Controls.Add(this.CompressOpenCheckBox, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.CompressOpenSmartCheckBox, 0, 5);
             this.tableLayoutPanel1.Controls.Add(this.CompressLevelLabel, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.CompressLevelCheckBox, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.CompressLevelComboBox, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(9, 19);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -646,15 +646,15 @@
             this.CompressLevelLabel.Text = "圧縮レベル";
             this.CompressLevelLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             //
-            // CompressLevelCheckBox
+            // CompressLevelComboBox
             //
-            this.CompressLevelCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.CompressLevelCheckBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.CompressLevelCheckBox.FormattingEnabled = true;
-            this.CompressLevelCheckBox.Location = new System.Drawing.Point(83, 3);
-            this.CompressLevelCheckBox.Name = "CompressLevelCheckBox";
-            this.CompressLevelCheckBox.Size = new System.Drawing.Size(396, 23);
-            this.CompressLevelCheckBox.TabIndex = 1;
+            this.CompressLevelComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CompressLevelComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CompressLevelComboBox.FormattingEnabled = true;
+            this.CompressLevelComboBox.Location = new System.Drawing.Point(83, 3);
+            this.CompressLevelComboBox.Name = "CompressLevelComboBox";
+            this.CompressLevelComboBox.Size = new System.Drawing.Size(396, 23);
+            this.CompressLevelComboBox.TabIndex = 1;
             //
             // CompressSaveGroupBox
             //
@@ -1372,7 +1372,7 @@
         private System.Windows.Forms.CheckBox CompressOpenCheckBox;
         private System.Windows.Forms.CheckBox CompressOpenSmartCheckBox;
         private System.Windows.Forms.Label CompressLevelLabel;
-        private System.Windows.Forms.ComboBox CompressLevelCheckBox;
+        private System.Windows.Forms.ComboBox CompressLevelComboBox;
         private System.Windows.Forms.TableLayoutPanel ExtractPanel;
         private System.Windows.Forms.GroupBox ExtractSaveGroupBox;
         private System.Windows.Forms.GroupBox ExtractOptionGroupBox;

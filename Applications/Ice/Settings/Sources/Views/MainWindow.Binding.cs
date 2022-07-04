@@ -74,18 +74,20 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             // Compression
             var s4 = vm.Compress;
             var b4 = Behaviors.Hook(new BindingSource(s4, ""));
-            b4.Bind(nameof(s4.SaveSource),      CompressSaveSourceRadioButton,  nameof(RadioButton.Checked));
-            b4.Bind(nameof(s4.SaveQuery),       CompressSaveQueryRadioButton,   nameof(RadioButton.Checked));
-            b4.Bind(nameof(s4.SaveOthers),      CompressSaveRadioButton,        nameof(RadioButton.Checked));
-            b4.Bind(nameof(s4.SaveOthers),      CompressSaveButton,             nameof(Enabled));
-            b4.Bind(nameof(s4.SaveOthers),      CompressSaveTextBox,            nameof(Enabled));
-            b4.Bind(nameof(s4.SaveDirectory),   CompressSaveTextBox,            nameof(TextBox.Text));
-            b4.Bind(nameof(s4.Filtering),       CompressFilterCheckBox,         nameof(CheckBox.Checked));
-            b4.Bind(nameof(s4.UseUtf8),         CompressUtf8CheckBox,           nameof(CheckBox.Checked));
-            b4.Bind(nameof(s4.OverwritePrompt), CompressOverwriteCheckBox,      nameof(CheckBox.Checked));
-            b4.Bind(nameof(s4.OpenDirectory),   CompressOpenCheckBox,           nameof(CheckBox.Checked));
-            b4.Bind(nameof(s4.OpenDirectory),   CompressOpenSmartCheckBox,      nameof(Enabled));
-            b4.Bind(nameof(s4.SkipDesktop),     CompressOpenSmartCheckBox,      nameof(CheckBox.Checked));
+            b4.Bind(nameof(s4.SaveSource),       CompressSaveSourceRadioButton, nameof(RadioButton.Checked));
+            b4.Bind(nameof(s4.SaveQuery),        CompressSaveQueryRadioButton,  nameof(RadioButton.Checked));
+            b4.Bind(nameof(s4.SaveOthers),       CompressSaveRadioButton,       nameof(RadioButton.Checked));
+            b4.Bind(nameof(s4.SaveOthers),       CompressSaveButton,            nameof(Enabled));
+            b4.Bind(nameof(s4.SaveOthers),       CompressSaveTextBox,           nameof(Enabled));
+            b4.Bind(nameof(s4.SaveDirectory),    CompressSaveTextBox,           nameof(TextBox.Text));
+            b4.Bind(nameof(s4.CompressionLevel), CompressLevelComboBox,         nameof(ComboBox.SelectedValue));
+            b4.Bind(nameof(s4.Filtering),        CompressFilterCheckBox,        nameof(CheckBox.Checked));
+            b4.Bind(nameof(s4.UseUtf8),          CompressUtf8CheckBox,          nameof(CheckBox.Checked));
+            b4.Bind(nameof(s4.OverwritePrompt),  CompressOverwriteCheckBox,     nameof(CheckBox.Checked));
+            b4.Bind(nameof(s4.OpenDirectory),    CompressOpenCheckBox,          nameof(CheckBox.Checked));
+            b4.Bind(nameof(s4.OpenDirectory),    CompressOpenSmartCheckBox,     nameof(Enabled));
+            b4.Bind(nameof(s4.SkipDesktop),      CompressOpenSmartCheckBox,     nameof(CheckBox.Checked));
+            CompressLevelComboBox.Bind(Resource.CompressionLevels);
 
             // Extracting
             var s5 = vm.Extract;

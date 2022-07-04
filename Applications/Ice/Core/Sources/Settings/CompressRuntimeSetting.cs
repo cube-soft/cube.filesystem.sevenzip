@@ -43,8 +43,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// the specified arguments.
         /// </summary>
         ///
+        /// <param name="settings">Default settings.</param>
+        ///
         /* ----------------------------------------------------------------- */
-        public CompressRuntimeSetting() : this(Format.Zip) { }
+        public CompressRuntimeSetting(CompressSetting settings) : this(Format.Zip, settings) { }
 
         /* ----------------------------------------------------------------- */
         ///
@@ -56,12 +58,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /// <param name="format">Archive format.</param>
+        /// <param name="settings">Default settings.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressRuntimeSetting(Format format)
+        public CompressRuntimeSetting(Format format, CompressSetting settings)
         {
             Format = format;
-            Sfx    = Io.Combine(GetType().Assembly.GetDirectoryName(), Formatter.SfxName);
+            CompressionLevel = settings.CompressionLevel;
+            Sfx = Io.Combine(GetType().Assembly.GetDirectoryName(), Formatter.SfxName);
         }
 
         #endregion
@@ -139,7 +143,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public CompressionLevel CompressionLevel
         {
-            get => Get(() => CompressionLevel.Ultra);
+            get => Get(() => CompressionLevel.Normal);
             set => Set(value);
         }
 

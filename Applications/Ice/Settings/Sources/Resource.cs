@@ -55,6 +55,26 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
+        /// CompressionLevels
+        ///
+        /// <summary>
+        /// Gets the collection in which each item consists of a display
+        /// string and a CompressionLevel pair.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static ComboListSource<CompressionLevel> CompressionLevels { get; } = new()
+        {
+            { Properties.Resources.LevelNone,   CompressionLevel.None },
+            { Properties.Resources.LevelFast,   CompressionLevel.Fast },
+            { Properties.Resources.LevelLow,    CompressionLevel.Low },
+            { Properties.Resources.LevelNormal, CompressionLevel.Normal },
+            { Properties.Resources.LevelHigh,   CompressionLevel.High },
+            { Properties.Resources.LevelUltra,  CompressionLevel.Ultra },
+        };
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// IoHandlers
         ///
         /// <summary>

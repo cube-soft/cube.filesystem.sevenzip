@@ -35,6 +35,22 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
+        /// CompressionLevel
+        ///
+        /// <summary>
+        /// Gets or sets the compression level.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [DataMember]
+        public CompressionLevel CompressionLevel
+        {
+            get => Get(() => CompressionLevel.Normal);
+            set => Set(value);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// UseUtf8
         ///
         /// <summary>

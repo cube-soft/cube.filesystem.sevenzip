@@ -55,6 +55,21 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
+        /// CompressionLevel
+        ///
+        /// <summary>
+        /// Gets or sets the compression level.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public CompressionLevel CompressionLevel
+        {
+            get => Facade.CompressionLevel;
+            set => Facade.CompressionLevel = value;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
         /// UseUtf8
         ///
         /// <summary>

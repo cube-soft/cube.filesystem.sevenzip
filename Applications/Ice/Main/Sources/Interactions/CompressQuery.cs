@@ -16,6 +16,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Linq;
 using Cube.FileSystem.SevenZip.Ice.Settings;
 using Cube.Mixin.String;
 
@@ -63,14 +64,14 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// The method may invoke the Query.Request method as needed.
         /// </summary>
         ///
-        /// <param name="src">Path of the source file.</param>
-        /// <param name="format">Archive format.</param>
+        /// <param name="request">User request.</param>
+        /// <param name="settings">Default compression settings.</param>
         ///
-        /// <returns>Compression settings.</returns>
+        /// <returns>Compression query value.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressRuntimeSetting Get(string src, Format format) =>
-            _cache ??= GetValue(src, format);
+        public CompressRuntimeSetting Get(Request request, CompressSetting settings) =>
+            _cache ??= GetValue(request, settings);
 
         #endregion
 
@@ -87,16 +88,16 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private CompressRuntimeSetting GetValue(string src, Format format) => format switch
+        private CompressRuntimeSetting GetValue(Request request, CompressSetting settings) => request.Format switch
         {
             Format.Tar      or
             Format.Zip      or
             Format.SevenZip or
-            Format.Sfx         => new(format),
+            Format.Sfx         => new(request.Format, settings),
             Format.BZip2    or
             Format.GZip     or
-            Format.XZ          => new(Format.Tar) { CompressionMethod = format.ToMethod() },
-            _                  => Invoke(src),
+            Format.XZ          => new(Format.Tar, settings) { CompressionMethod = request.Format.ToMethod() },
+            _                  => Invoke(request, settings),
         };
 
         /* ----------------------------------------------------------------- */
@@ -108,14 +109,15 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private CompressRuntimeSetting Invoke(string src)
+        private CompressRuntimeSetting Invoke(Request request, CompressSetting settings)
         {
             var m = new QueryMessage<string, CompressRuntimeSetting>
             {
-                Value  = new(),
+                Value  = new(settings),
                 Cancel = true,
             };
 
+            var src = request.Sources.First();
             if (src.HasValue())
             {
                 var f = Io.Get(src);
