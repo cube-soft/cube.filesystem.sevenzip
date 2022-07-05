@@ -48,11 +48,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public AssociateViewModel(AssociateSettingValue src, Aggregator aggregator, SynchronizationContext context) :
-            base(src, aggregator, context)
-        {
-            Assets.Add(new ObservableProxy(Facade, this));
-        }
+        public AssociateViewModel(AssociateSettingValue src,
+            Aggregator aggregator,
+            SynchronizationContext context
+        ) : base(src, aggregator, context) => Assets.Add(new ObservableProxy(Facade, this));
 
         #endregion
 
@@ -591,17 +590,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         public void Clear() => SetAll(false);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Save
-        ///
-        /// <summary>
-        /// Saves the settings for the file association.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Save() => AssociateAction.Invoke(Facade);
 
         /* ----------------------------------------------------------------- */
         ///

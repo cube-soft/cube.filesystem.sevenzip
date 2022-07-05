@@ -63,10 +63,13 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             if (args.Options.ContainsKey("init")) Init(src);
             else src.Value.Associate.Changed = false;
 
-            var view = new MainWindow();
-            view.Bind(new SettingViewModel(src, SynchronizationContext.Current));
-
-            Application.Run(view);
+            if (args.Options.ContainsKey("silent")) Command.Save(src);
+            else
+            {
+                var view = new MainWindow();
+                view.Bind(new SettingViewModel(src, SynchronizationContext.Current));
+                Application.Run(view);
+            }
         });
 
         #endregion

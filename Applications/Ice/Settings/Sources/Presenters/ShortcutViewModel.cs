@@ -47,11 +47,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ShortcutViewModel(ShortcutSettingValue src, Aggregator aggregator, SynchronizationContext context) :
-            base(src, aggregator, context)
-        {
-            Assets.Add(new ObservableProxy(Facade, this));
-        }
+        public ShortcutViewModel(ShortcutSettingValue src,
+            Aggregator aggregator,
+            SynchronizationContext context
+        ) : base(src, aggregator, context) => Assets.Add(new ObservableProxy(Facade, this));
 
         #endregion
 
@@ -127,17 +126,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         #endregion
 
         #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Save
-        ///
-        /// <summary>
-        /// Creates or removes shortcut links.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Save() => Facade.Save();
 
         /* ----------------------------------------------------------------- */
         ///
