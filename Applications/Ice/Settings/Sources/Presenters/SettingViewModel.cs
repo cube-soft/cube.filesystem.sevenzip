@@ -240,17 +240,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Load
-        ///
-        /// <summary>
-        /// Updates the setting values according to the actual situation.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Load() => Shortcut.Load();
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// Save
         ///
         /// <summary>

@@ -54,7 +54,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             Assert.That(dest.Version.ToString(), Is.EqualTo("2.0.0"));
             Assert.That(dest.Format,             Is.EqualTo(DataContract.Format.Registry));
             Assert.That(dest.Location,           Is.EqualTo(@"CubeSoft\CubeICE\v3"));
-            Assert.That(dest.Value,              Is.Not.Null);
+
+            var v = dest.Value;
+            Assert.That(v, Is.Not.Null);
+            Assert.That(v.Associate.Changed, Is.False);
         }
 
         /* ----------------------------------------------------------------- */

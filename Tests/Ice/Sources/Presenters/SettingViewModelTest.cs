@@ -438,23 +438,18 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
             dest.Directory = Results;
 
-            src.Compress       = true;
-            src.Extract        = true;
-            src.Settings       = true;
+            m.Value.Shortcut.Load();
+            Assert.That(src.Compress,        Is.False);
+            Assert.That(src.Extract,         Is.False);
+            Assert.That(src.Settings,        Is.False);
+            Assert.That(src.CompressOptions, Is.EqualTo(Preset.CompressZip));
+            Assert.That(dest.Preset,         Is.EqualTo(Preset.CompressZip));
+
+            src.Compress = true;
+            src.Extract  = true;
+            src.Settings = true;
             src.CompressOptions = Preset.CompressZip;
             Assert.That((uint)dest.Preset, Is.EqualTo(0x107));
-
-            src.Load();
-            Assert.That(src.Compress,       Is.False);
-            Assert.That(src.Extract,        Is.False);
-            Assert.That(src.Settings,       Is.False);
-            Assert.That(src.CompressOptions, Is.EqualTo(Preset.CompressZip));
-            Assert.That(dest.Preset,        Is.EqualTo(Preset.CompressZip));
-
-            src.Compress  = false;
-            src.Extract   = false;
-            src.Settings  = false;
-            Assert.That(dest.Preset, Is.EqualTo(Preset.CompressZip));
         }
 
         /* ----------------------------------------------------------------- */
@@ -466,8 +461,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [TestCase(true)]
-        [TestCase(false)]
         public void LoadAndSave(bool install)
         {
             using (var m0 = NewSettings())
@@ -476,7 +469,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 using var vm0 = NewVM(m0);
                 vm0.CheckUpdate = true;
                 vm0.Associate.Changed = install;
-                vm0.Load();
                 vm0.Associate.Clear();
                 vm0.Save(true);
             }

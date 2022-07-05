@@ -130,18 +130,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Load
-        ///
-        /// <summary>
-        /// Applies the current shortcut link existence to properties of
-        /// the object.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Load() => Facade.Load();
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// Save
         ///
         /// <summary>

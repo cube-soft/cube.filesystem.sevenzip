@@ -18,8 +18,8 @@
 using System;
 using System.Threading;
 using System.Windows.Forms;
+using Cube.Collections;
 using Cube.Mixin.Collections;
-using Cube.Mixin.String;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
@@ -46,29 +46,60 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         [STAThread]
-        static void Main(string[] args) => Source.LogError(() =>
+        static void Main(string[] s) => Source.LogError(() =>
         {
             _ = Logger.ObserveTaskException();
             Source.LogInfo(Source.Assembly);
-            Source.LogInfo($"[ {args.Join(" ")} ]");
+            Source.LogInfo($"[ {s.Join(" ")} ]");
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
             var src = new SettingFolder();
             src.Load();
+            src.Value.Shortcut.Load();
 
-            var im = args.Length > 0 && args[0].FuzzyEquals("/Install");
-            if (im) Source.LogInfo("Mode:Install");
+            var args = new ArgumentCollection(s);
+            if (args.Options.ContainsKey("init")) Init(src);
+            else src.Value.Associate.Changed = false;
 
             var view = new MainWindow();
-            var vm   = new SettingViewModel(src, SynchronizationContext.Current);
-            vm.Associate.Changed = im;
-            vm.Load();
-            view.Bind(vm);
+            view.Bind(new SettingViewModel(src, SynchronizationContext.Current));
 
             Application.Run(view);
         });
+
+        #endregion
+
+        #region Implementations
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Init
+        ///
+        /// <summary>
+        /// Applies the default settings.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        private static void Init(SettingFolder src)
+        {
+            Source.LogInfo($"Init:{!src.Value.Associate.Changed}");
+            if (src.Value.Associate.Changed) return;
+
+            src.Value.Associate.Zip      = true;
+            src.Value.Associate.Lzh      = true;
+            src.Value.Associate.Rar      = true;
+            src.Value.Associate.SevenZip = true;
+            src.Value.Associate.Tar      = true;
+            src.Value.Associate.Gz       = true;
+            src.Value.Associate.Tgz      = true;
+            src.Value.Associate.Bz2      = true;
+            src.Value.Associate.Tbz      = true;
+            src.Value.Associate.Xz       = true;
+            src.Value.Associate.Txz      = true;
+            src.Value.Shortcut.Preset    = Preset.Settings;
+        }
 
         #endregion
 
