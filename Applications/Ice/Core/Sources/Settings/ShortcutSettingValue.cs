@@ -99,6 +99,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             var b2 = new Shortcut { FullName = GetFileName(Properties.Resources.ScSettings) }.Exists;
             if (b2) Preset |= Preset.Settings;
             else Preset &= ~Preset.Settings;
+
+            if ((Preset & Preset.CompressMask) == Preset.None) Preset |= Preset.CompressZip;
         }
 
         /* ----------------------------------------------------------------- */
