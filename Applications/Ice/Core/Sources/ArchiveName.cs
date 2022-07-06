@@ -127,7 +127,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         private Entity GetEntity()
         {
             var src  = Io.Get(_source);
-            var tmp  = Io.Get(src.BaseName);
+            var tmp  = Io.Get(src.BaseName.HasValue() ? src.BaseName : src.Name);
             var name = src.IsDirectory ? src.Name :
                        tmp.Extension.FuzzyEquals(".tar") ? tmp.BaseName :
                        tmp.Name;

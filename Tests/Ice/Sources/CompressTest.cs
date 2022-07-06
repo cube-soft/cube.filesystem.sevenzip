@@ -111,6 +111,18 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             );
 
             yield return new(
+                @"Preset\.Sample.zip",
+                new[] { ".Sample" },
+                Preset.Compress.ToArguments(),
+                new CompressSettingValue
+                {
+                    SaveLocation  = SaveLocation.Preset,
+                    OpenMethod    = OpenMethod.None,
+                    Filtering     = true,
+                }
+            );
+
+            yield return new(
                 @"Preset\Sample.7z",
                 new[] { "Sample.txt", "Sample 00..01" },
                 Preset.Compress7z.ToArguments(),

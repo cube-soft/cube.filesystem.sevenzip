@@ -121,6 +121,17 @@ namespace Cube.FileSystem.SevenZip.Tests
                 ).Returns(Format.Zip);
 
                 yield return new TestCaseData(
+                    $"{n++:000}-ZipDotFolder.zip",
+                    Format.Zip,
+                    new[] { "Sample.txt", ".Sample" },
+                    new CompressionOption
+                    {
+                        CompressionLevel = CompressionLevel.Normal,
+                        ThreadCount      = Environment.ProcessorCount,
+                    }
+                ).Returns(Format.Zip);
+
+                yield return new TestCaseData(
                     $"{n++:000}-ZipLzma.zip",
                     Format.Zip,
                     new[] { "Sample.txt", "Sample 00..01" },
