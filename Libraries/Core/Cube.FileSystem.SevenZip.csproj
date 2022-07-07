@@ -12,6 +12,7 @@
         <TargetFramework>net35</TargetFramework>
         <LangVersion>latest</LangVersion>
         <Optimize>true</Optimize>
+        <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
         <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <DefineConstants Condition=" '$(Configuration)' == 'Debug' ">DEBUG;TRACE</DefineConstants>

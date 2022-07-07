@@ -17,6 +17,7 @@
         <RuntimeIdentifiers>win7-x86;win7-x64</RuntimeIdentifiers>
         <IsPackable>false</IsPackable>
         <Optimize>true</Optimize>
+        <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
         <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <DefineConstants Condition=" '$(Configuration)' == 'Debug' ">DEBUG;TRACE</DefineConstants>
