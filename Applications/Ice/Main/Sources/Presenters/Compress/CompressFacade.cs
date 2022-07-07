@@ -101,7 +101,11 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void Invoke(CompressQueryValue src)
         {
-            GetType().LogDebug($"Format:{src.Format}", $"Method:{src.CompressionMethod}");
+            GetType().LogDebug(
+                $"Format:{src.Format}",
+                $"Method:{src.CompressionMethod}",
+                $"Level:{src.CompressionLevel}"
+            );
 
             using (var writer = new ArchiveWriter(src.Format, src.ToOption(Settings)))
             {
