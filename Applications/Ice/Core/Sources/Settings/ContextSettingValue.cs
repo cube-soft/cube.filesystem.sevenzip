@@ -15,72 +15,112 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Cube.DataContract;
 
 namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ExtractSetting
+    /// ContextSettingValue
     ///
     /// <summary>
-    /// Represents the settings when extracting archives.
+    /// Represents the settings of the context menu that is displayed
+    /// in the explorer.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public sealed class ExtractSetting : ArchiveSetting
+    public sealed class ContextSettingValue : SerializableBase
     {
         #region Properties
 
         /* ----------------------------------------------------------------- */
         ///
-        /// RootDirectory
+        /// Preset
         ///
         /// <summary>
-        /// Gets or sets the method to determine the root directory.
+        /// Gets or sets the value that represents the preset menu.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [DataMember(Name = "RootDirectory")]
-        public SaveMethod SaveMethod
+        [DataMember]
+        public Preset Preset
         {
-            get => Get(() => SaveMethod.CreateSmart);
+            get => Get(() => Preset.DefaultContext);
             set => Set(value);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// DeleteSource
+        /// Custom
         ///
         /// <summary>
-        /// Gets or sets a value indicating whether to delete the source
-        /// archive after extracting.
+        /// Gets or sets the collection of customized context menu.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public bool DeleteSource
+        public List<Context> Custom
+        {
+            get => Get(() => new List<Context>());
+            set => Set(value);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// UseCustom
+        ///
+        /// <summary>
+        /// Gets or sets a value indicating whether to use the customized
+        /// context menu.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [DataMember(Name = "IsCustomized")]
+        public bool UseCustom
         {
             get => Get(() => false);
             set => Set(value);
         }
 
+        #endregion
+
+        #region Methods
+
         /* ----------------------------------------------------------------- */
         ///
-        /// Bursty
+        /// Customize
         ///
         /// <summary>
-        /// Gets or sets a value indicating whether to extract archives
-        /// burstly.
+        /// Apply the customized context menu.
+        /// </summary>
+        ///
+        /// <param name="src">Customized context menu.</param>
+        ///
+        /* ----------------------------------------------------------------- */
+        public void Customize(IEnumerable<Context> src)
+        {
+            Custom.Clear();
+            foreach (var m in src) Custom.Add(m);
+            UseCustom = true;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Reset
+        ///
+        /// <summary>
+        /// Resets the settings.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [DataMember]
-        public bool Bursty
+        public void Reset()
         {
-            get => Get(() => true);
-            set => Set(value);
+            Preset    = Preset.DefaultContext;
+            Custom    = new List<Context>();
+            UseCustom = false;
         }
 
         #endregion

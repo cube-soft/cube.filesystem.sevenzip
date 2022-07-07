@@ -21,30 +21,46 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// CompressSetting
+    /// ExtractSettingValue
     ///
     /// <summary>
-    /// Represents the settings when compressing archives.
+    /// Represents the settings when extracting archives.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public sealed class CompressSetting : ArchiveSetting
+    public sealed class ExtractSettingValue : ArchiveSettingValue
     {
         #region Properties
 
         /* ----------------------------------------------------------------- */
         ///
-        /// UseUtf8
+        /// RootDirectory
         ///
         /// <summary>
-        /// Gets or sets a value indicating whether to convert to the UTF-8
-        /// encoding when compressing.
+        /// Gets or sets the method to determine the root directory.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [DataMember(Name = "UseUTF8")]
-        public bool UseUtf8
+        [DataMember(Name = "RootDirectory")]
+        public SaveMethod SaveMethod
+        {
+            get => Get(() => SaveMethod.CreateSmart);
+            set => Set(value);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// DeleteSource
+        ///
+        /// <summary>
+        /// Gets or sets a value indicating whether to delete the source
+        /// archive after extracting.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        [DataMember]
+        public bool DeleteSource
         {
             get => Get(() => false);
             set => Set(value);
@@ -52,16 +68,16 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// OverwritePrompt
+        /// Bursty
         ///
         /// <summary>
-        /// Gets or sets a value indicating whether to show the overwrite
-        /// prompt.
+        /// Gets or sets a value indicating whether to extract archives
+        /// burstly.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public bool OverwritePrompt
+        public bool Bursty
         {
             get => Get(() => true);
             set => Set(value);

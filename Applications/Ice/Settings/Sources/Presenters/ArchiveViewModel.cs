@@ -31,7 +31,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     ///
     /* --------------------------------------------------------------------- */
     public abstract class ArchiveViewModel<TModel> : PresentableBase<TModel>
-        where TModel : ArchiveSetting
+        where TModel : ArchiveSettingValue
     {
         #region Constructors
 

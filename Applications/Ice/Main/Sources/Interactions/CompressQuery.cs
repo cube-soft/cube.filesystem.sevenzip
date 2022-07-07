@@ -16,6 +16,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using System;
+using System.Linq;
 using Cube.FileSystem.SevenZip.Ice.Settings;
 using Cube.Mixin.String;
 
@@ -31,7 +32,7 @@ namespace Cube.FileSystem.SevenZip.Ice
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public sealed class CompressQuery : Query<string, CompressRuntimeSetting>
+    public sealed class CompressQuery : Query<string, CompressQueryValue>
     {
         #region Constructors
 
@@ -47,7 +48,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="callback">Callback action for the request.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressQuery(Action<QueryMessage<string, CompressRuntimeSetting>> callback) :
+        public CompressQuery(Action<QueryMessage<string, CompressQueryValue>> callback) :
             base(callback, Dispatcher.Vanilla) { }
 
         #endregion
@@ -63,14 +64,14 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// The method may invoke the Query.Request method as needed.
         /// </summary>
         ///
-        /// <param name="src">Path of the source file.</param>
-        /// <param name="format">Archive format.</param>
+        /// <param name="request">User request.</param>
+        /// <param name="settings">Default compression settings.</param>
         ///
-        /// <returns>Compression settings.</returns>
+        /// <returns>Compression query value.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public CompressRuntimeSetting Get(string src, Format format) =>
-            _cache ??= GetValue(src, format);
+        public CompressQueryValue Get(Request request, CompressSettingValue settings) =>
+            _cache ??= GetValue(request, settings);
 
         #endregion
 
@@ -87,16 +88,20 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private CompressRuntimeSetting GetValue(string src, Format format) => format switch
+        private CompressQueryValue GetValue(Request request, CompressSettingValue settings) => request.Format switch
         {
             Format.Tar      or
             Format.Zip      or
             Format.SevenZip or
-            Format.Sfx         => new(format),
+            Format.Sfx         => new(settings) { Format = request.Format },
             Format.BZip2    or
             Format.GZip     or
-            Format.XZ          => new(Format.Tar) { CompressionMethod = format.ToMethod() },
-            _                  => Invoke(src),
+            Format.XZ          => new(settings)
+            {
+                Format = Format.Tar,
+                CompressionMethod = request.Format.ToMethod()
+            },
+            _ => Invoke(request, settings),
         };
 
         /* ----------------------------------------------------------------- */
@@ -108,14 +113,15 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private CompressRuntimeSetting Invoke(string src)
+        private CompressQueryValue Invoke(Request request, CompressSettingValue settings)
         {
-            var m = new QueryMessage<string, CompressRuntimeSetting>
+            var m = new QueryMessage<string, CompressQueryValue>
             {
-                Value  = new(),
+                Value  = new(settings),
                 Cancel = true,
             };
 
+            var src = request.Sources.First();
             if (src.HasValue())
             {
                 var f = Io.Get(src);
@@ -131,7 +137,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         #endregion
 
         #region Fields
-        private CompressRuntimeSetting _cache;
+        private CompressQueryValue _cache;
         #endregion
     }
 }

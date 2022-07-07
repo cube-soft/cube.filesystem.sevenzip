@@ -17,7 +17,7 @@
 /* ------------------------------------------------------------------------- */
 using System;
 
-namespace Cube.FileSystem.SevenZip.Ice.Settings
+namespace Cube.FileSystem.SevenZip.Ice
 {
     /* --------------------------------------------------------------------- */
     ///
@@ -47,7 +47,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// <remarks>CompressionOption object.</remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public static CompressionOption ToOption(this CompressRuntimeSetting src, SettingFolder settings)
+        public static CompressionOption ToOption(this CompressQueryValue src, SettingFolder settings)
         {
             var filter = Filter.From(settings.Value.GetFilters(settings.Value.Compress.Filtering));
 
@@ -72,8 +72,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static CompressionOption MakeZip(CompressRuntimeSetting src,
-            Predicate<Entity> filter, CompressSetting others) => new()
+        private static CompressionOption MakeZip(CompressQueryValue src,
+            Predicate<Entity> filter, Settings.CompressSettingValue others) => new()
         {
             CompressionLevel  = src.CompressionLevel,
             CompressionMethod = src.CompressionMethod,
@@ -93,7 +93,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static SfxOption MakeSfx(CompressRuntimeSetting src, Predicate<Entity> filter) => new()
+        private static SfxOption MakeSfx(CompressQueryValue src, Predicate<Entity> filter) => new()
         {
             CompressionLevel  = src.CompressionLevel,
             CompressionMethod = src.CompressionMethod,
@@ -112,7 +112,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private static CompressionOption MakeCommon(CompressRuntimeSetting src, Predicate<Entity> filter) => new()
+        private static CompressionOption MakeCommon(CompressQueryValue src, Predicate<Entity> filter) => new()
         {
             CompressionMethod = src.CompressionMethod,
             CompressionLevel  = src.CompressionLevel,

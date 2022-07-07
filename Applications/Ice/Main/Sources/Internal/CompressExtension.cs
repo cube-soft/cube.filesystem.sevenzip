@@ -49,7 +49,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <returns>Path to save.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static string Select(this CompressFacade src, CompressRuntimeSetting settings)
+        public static string Select(this CompressFacade src, CompressQueryValue settings)
         {
             if (settings.Destination.HasValue()) return settings.Destination;
 

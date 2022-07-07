@@ -157,9 +157,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         [DataMember(Name = "Archive")]
-        public CompressSetting Compress
+        public CompressSettingValue Compress
         {
-            get => Get(() => new CompressSetting());
+            get => Get(() => new CompressSettingValue());
             set => Set(value);
         }
 
@@ -173,9 +173,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public ExtractSetting Extract
+        public ExtractSettingValue Extract
         {
-            get => Get(() => new ExtractSetting());
+            get => Get(() => new ExtractSettingValue());
             set => Set(value);
         }
 
@@ -189,9 +189,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public AssociateSetting Associate
+        public AssociateSettingValue Associate
         {
-            get => Get(() => new AssociateSetting());
+            get => Get(() => new AssociateSettingValue());
             set => Set(value);
         }
 
@@ -205,9 +205,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public ContextSetting Context
+        public ContextSettingValue Context
         {
-            get => Get(() => new ContextSetting());
+            get => Get(() => new ContextSettingValue());
             set => Set(value);
         }
 
@@ -221,9 +221,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public ShortcutSetting Shortcut
+        public ShortcutSettingValue Shortcut
         {
-            get => Get(() => new ShortcutSetting());
+            get => Get(() => new ShortcutSettingValue());
             set => Set(value);
         }
 

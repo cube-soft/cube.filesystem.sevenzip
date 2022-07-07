@@ -21,33 +21,49 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// AssociateAction
+    /// Command
     ///
     /// <summary>
-    /// Provides functionality to invoke the file association.
+    /// Provides functionality of core action of the application.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public static class AssociateAction
+    public static class Command
     {
         /* ----------------------------------------------------------------- */
         ///
-        /// Invoke
+        /// Save
+        ///
+        /// <summary>
+        /// Saves the current settings.
+        /// </summary>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static void Save(SettingFolder src)
+        {
+            src.Save();
+            src.Value.Shortcut.Save();
+            Associate(src.Value.Associate);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Associate
         ///
         /// <summary>
         /// Invokes the file association.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public static void Invoke(AssociateSetting src) => typeof(AssociateAction).LogWarn(() =>
+        public static void Associate(AssociateSettingValue src) => typeof(Command).LogWarn(() =>
         {
             if (!src.Changed) return;
 
-            var dir = typeof(AssociateAction).Assembly.GetDirectoryName();
+            var dir = typeof(Command).Assembly.GetDirectoryName();
             var exe = Io.Combine(dir, Properties.Resources.FileAssociate);
 
             if (Io.Exists(exe)) System.Diagnostics.Process.Start(exe).WaitForExit();
-            else typeof(AssociateAction).LogWarn($"{exe} not found");
+            else typeof(Command).LogWarn($"{exe} not found");
 
             src.Changed = false;
         });

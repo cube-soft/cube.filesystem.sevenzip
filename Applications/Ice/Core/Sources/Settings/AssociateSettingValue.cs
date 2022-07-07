@@ -24,7 +24,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// AssociateSetting
+    /// AssociateSettingValue
     ///
     /// <summary>
     /// Represents the settings about the associated files.
@@ -32,7 +32,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public sealed class AssociateSetting : SerializableBase
+    public sealed class AssociateSettingValue : SerializableBase
     {
         #region Properties
 
@@ -47,35 +47,35 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /* ----------------------------------------------------------------- */
         public IDictionary<string, bool> Value => Get(() => new Dictionary<string, bool>
         {
-            { "7z",          true  },
+            { "7z",          false },
             { nameof(Arj),   false },
-            { nameof(Bz2),   true  },
+            { nameof(Bz2),   false },
             { nameof(Cab),   false },
             { nameof(Chm),   false },
             { nameof(Cpio),  false },
             { nameof(Deb),   false },
             { nameof(Dmg),   false },
             { nameof(Flv),   false },
-            { nameof(Gz),    true  },
+            { nameof(Gz),    false },
             { nameof(Hfs),   false },
             { nameof(Iso),   false },
             { nameof(Jar),   false },
-            { nameof(Lzh),   true  },
+            { nameof(Lzh),   false },
             { nameof(Nupkg), false },
-            { nameof(Rar),   true  },
+            { nameof(Rar),   false },
             { nameof(Rpm),   false },
             { nameof(Swf),   false },
-            { nameof(Tar),   true  },
-            { nameof(Tbz),   true  },
-            { nameof(Tgz),   true  },
-            { nameof(Txz),   true  },
+            { nameof(Tar),   false },
+            { nameof(Tbz),   false },
+            { nameof(Tgz),   false },
+            { nameof(Txz),   false },
             { nameof(Vhd),   false },
             { nameof(Vmdk),  false },
             { nameof(Wim),   false },
             { nameof(Xar),   false },
-            { nameof(Xz),    true  },
+            { nameof(Xz),    false },
             { nameof(Z),     false },
-            { nameof(Zip),   true  },
+            { nameof(Zip),   false },
         });
 
         /* ----------------------------------------------------------------- */

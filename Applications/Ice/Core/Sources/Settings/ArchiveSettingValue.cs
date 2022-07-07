@@ -15,7 +15,6 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Cube.DataContract;
 
@@ -23,104 +22,88 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ContextSetting
+    /// ArchiveSettingValue
     ///
     /// <summary>
-    /// Represents the settings of the context menu that is displayed
-    /// in the explorer.
+    /// Represents the common settings of compressing or extracting
+    /// archives.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [DataContract]
-    public sealed class ContextSetting : SerializableBase
+    public abstract class ArchiveSettingValue : SerializableBase
     {
         #region Properties
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Preset
+        /// SaveLocation
         ///
         /// <summary>
-        /// Gets or sets the value that represents the preset menu.
+        /// Gets or sets the value that represents the save location.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public Preset Preset
+        public SaveLocation SaveLocation
         {
-            get => Get(() => Preset.DefaultContext);
+            get => Get(() => SaveLocation.Preset);
             set => Set(value);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Custom
+        /// SaveDirectory
         ///
         /// <summary>
-        /// Gets or sets the collection of customized context menu.
+        /// Gets or sets the directory name to save.
+        /// </summary>
+        ///
+        /// <remarks>
+        /// The property is used when the SaveLocation property is set
+        /// to Others.
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        [DataMember(Name = "SaveDirectoryName")]
+        public string SaveDirectory
+        {
+            get => Get(() => string.Empty);
+            set => Set(value);
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// Filtering
+        ///
+        /// <summary>
+        /// Gets or sets a value indicating whether to filter some files
+        /// and directories.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [DataMember]
-        public List<Context> Custom
+        public bool Filtering
         {
-            get => Get(() => new List<Context>());
+            get => Get(() => true);
             set => Set(value);
         }
 
         /* ----------------------------------------------------------------- */
         ///
-        /// UseCustom
+        /// OpenDirectory
         ///
         /// <summary>
-        /// Gets or sets a value indicating whether to use the customized
-        /// context menu.
+        /// Gets or sets the value that represents the method to open
+        /// directory.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        [DataMember(Name = "IsCustomized")]
-        public bool UseCustom
+        [DataMember(Name = "OpenDirectory")]
+        public OpenMethod OpenMethod
         {
-            get => Get(() => false);
+            get => Get(() => OpenMethod.OpenNotDesktop);
             set => Set(value);
-        }
-
-        #endregion
-
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Customize
-        ///
-        /// <summary>
-        /// Apply the customized context menu.
-        /// </summary>
-        ///
-        /// <param name="src">Customized context menu.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Customize(IEnumerable<Context> src)
-        {
-            Custom.Clear();
-            foreach (var m in src) Custom.Add(m);
-            UseCustom = true;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Reset
-        ///
-        /// <summary>
-        /// Resets the settings.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Reset()
-        {
-            Preset    = Preset.DefaultContext;
-            Custom    = new List<Context>();
-            UseCustom = false;
         }
 
         #endregion

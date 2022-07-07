@@ -80,7 +80,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         protected override void Invoke()
         {
-            var src = Configure.Get(Request.Sources.First(), Request.Format);
+            var src = Configure.Get(Request, Settings.Value.Compress);
             InvokePreProcess(src);
             Invoke(src);
             InvokePostProcess();
@@ -99,9 +99,13 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void Invoke(CompressRuntimeSetting src)
+        private void Invoke(CompressQueryValue src)
         {
-            GetType().LogDebug($"Format:{src.Format}", $"Method:{src.CompressionMethod}");
+            GetType().LogDebug(
+                $"Format:{src.Format}",
+                $"Method:{src.CompressionMethod}",
+                $"Level:{src.CompressionLevel}"
+            );
 
             using (var writer = new ArchiveWriter(src.Format, src.ToOption(Settings)))
             {
@@ -121,7 +125,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void InvokePreProcess(CompressRuntimeSetting src)
+        private void InvokePreProcess(CompressQueryValue src)
         {
             Destination = this.Select(src);
             SetTemp(Io.Get(Destination).DirectoryName);
@@ -151,7 +155,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void SetPassword(CompressRuntimeSetting src)
+        private void SetPassword(CompressQueryValue src)
         {
             if (src.Password.HasValue() || !Request.Password) return;
 

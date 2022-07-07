@@ -240,17 +240,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Load
-        ///
-        /// <summary>
-        /// Updates the setting values according to the actual situation.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Load() => Shortcut.Load();
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// Save
         ///
         /// <summary>
@@ -259,11 +248,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         ///
         /* ----------------------------------------------------------------- */
         public void Save(bool close) => Run(
-            () => {
-                Facade.Save();
-                Associate.Save();
-                Shortcut.Save();
-            },
+            () => Command.Save(Facade),
             () => { if (close) Send(new CloseMessage()); },
             true
         );

@@ -52,7 +52,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         public SaveQueryProxy(Query<SaveQuerySource, string> query, string src,
-            Request request, ArchiveSetting settings)
+            Request request, ArchiveSettingValue settings)
         {
             Query    = query;
             Source   = src;
@@ -106,7 +106,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public ArchiveSetting Settings { get; }
+        public ArchiveSettingValue Settings { get; }
 
         /* ----------------------------------------------------------------- */
         ///

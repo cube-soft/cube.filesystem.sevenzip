@@ -52,10 +52,13 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var dest = new SettingFolder();
             Assert.That(dest.AutoSave,           Is.False);
             Assert.That(dest.AutoSaveDelay,      Is.EqualTo(TimeSpan.FromSeconds(1)));
-            Assert.That(dest.Version.ToString(), Is.EqualTo("1.1.1"));
+            Assert.That(dest.Version.ToString(), Is.EqualTo("2.0.0"));
             Assert.That(dest.Format,             Is.EqualTo(DataContract.Format.Registry));
             Assert.That(dest.Location,           Is.EqualTo(@"CubeSoft\CubeICE\v3"));
-            Assert.That(dest.Value,              Is.Not.Null);
+
+            var v = dest.Value;
+            Assert.That(v, Is.Not.Null);
+            Assert.That(v.Associate.Changed, Is.False);
         }
 
         /* ----------------------------------------------------------------- */
@@ -74,7 +77,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             var extract  = new Shortcut { FullName = Get("CubeICE 解凍") };
             var settings = new Shortcut { FullName = Get("CubeICE 設定") };
 
-            var src  = new ShortcutSetting { Directory = Results };
+            var src  = new ShortcutSettingValue { Directory = Results };
             var menu = Preset.Compress |
                        Preset.CompressDetails |
                        Preset.Extract |

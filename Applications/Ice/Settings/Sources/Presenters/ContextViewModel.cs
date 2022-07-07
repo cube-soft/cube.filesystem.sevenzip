@@ -30,7 +30,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ContextViewModel : PresentableBase<ContextSetting>
+    public class ContextViewModel : PresentableBase<ContextSettingValue>
     {
         #region Constructors
 
@@ -48,7 +48,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// <param name="context">Synchronization context.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public ContextViewModel(ContextSetting src, Aggregator aggregator, SynchronizationContext context) :
+        public ContextViewModel(ContextSettingValue src, Aggregator aggregator, SynchronizationContext context) :
             base(src, aggregator, context)
         {
             Assets.Add(new ObservableProxy(Facade, this));
