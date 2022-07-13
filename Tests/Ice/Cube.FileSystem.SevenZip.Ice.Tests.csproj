@@ -23,6 +23,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\Applications\Ice\Main\Cube.FileSystem.SevenZip.Ice.Main.csproj" />
         <ProjectReference Include="..\..\Applications\Ice\Settings\Cube.FileSystem.SevenZip.Ice.Settings.csproj" />
+        <ProjectReference Include="..\..\Applications\Ice\Associator\Cube.FileSystem.SevenZip.Ice.Associator.csproj" />
         <PackageReference Include="Cube.Tests" Version="7.0.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="*" />
         <PackageReference Include="NUnit3TestAdapter" Version="*" />
