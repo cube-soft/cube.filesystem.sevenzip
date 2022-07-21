@@ -59,7 +59,8 @@ namespace Cube.FileSystem.SevenZip.Ice
             var ss = new SettingFolder();
             ss.Load();
 
-            if (ss.Value.AlphaFS) Io.Configure(new AlphaFS.IoController());
+            // Ignore in .NET 6.0
+            // if (ss.Value.AlphaFS) Io.Configure(new AlphaFS.IoController());
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

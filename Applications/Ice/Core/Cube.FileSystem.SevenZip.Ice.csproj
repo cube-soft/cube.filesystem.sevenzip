@@ -5,7 +5,7 @@
         <Company>CubeSoft</Company>
         <Description>CubeICE core library.</Description>
         <Copyright>Copyright © 2010 CubeSoft, Inc.</Copyright>
-        <TargetFramework>net47</TargetFramework>
+        <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>latest</LangVersion>
         <Optimize>true</Optimize>
         <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>

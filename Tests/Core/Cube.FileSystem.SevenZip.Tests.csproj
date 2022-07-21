@@ -6,7 +6,7 @@
         <Copyright>Copyright © 2010 CubeSoft, Inc.</Copyright>
         <StartupObject>Cube.FileSystem.SevenZip.Tests.Program</StartupObject>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net47</TargetFramework>
+        <TargetFramework>net6.0-windows</TargetFramework>
         <RuntimeIdentifiers>win7-x86;win7-x64</RuntimeIdentifiers>
         <LangVersion>latest</LangVersion>
         <IsPackable>false</IsPackable>
@@ -24,9 +24,9 @@
         <ProjectReference Include="..\..\Libraries\Core\Cube.FileSystem.SevenZip.csproj" />
         <PackageReference Include="Cube.Tests" Version="7.0.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="*" />
+        <PackageReference Include="Microsoft.VisualBasic" Version="*" />
         <PackageReference Include="NUnit3TestAdapter" Version="*" />
         <PackageReference Include="Appveyor.TestLogger" Version="*" />
-        <Reference Include="Microsoft.VisualBasic" />
     </ItemGroup>
     <ItemGroup>
         <None Include="App.config" />
