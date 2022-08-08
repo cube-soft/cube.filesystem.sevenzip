@@ -162,9 +162,6 @@
   <data name="CtxZipPassword" xml:space="preserve">
     <value>Zip (パスワード)</value>
   </data>
-  <data name="FileSuffix" xml:space="preserve">
-    <value>ファイル</value>
-  </data>
   <data name="ScArcive" xml:space="preserve">
     <value>CubeICE 圧縮</value>
   </data>

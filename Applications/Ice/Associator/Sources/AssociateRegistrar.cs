@@ -207,7 +207,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         private void Register(RegistryKey src, string id)
         {
-            src.SetValue("", $"{id} {Properties.Resources.FileSuffix}".ToUpperInvariant());
+            src.SetValue("", $"{id} {Associator.Properties.Resources.SuffixFiletype}".ToUpperInvariant());
 
             using (var sk = src.CreateSubKey("shell"))
             {
