@@ -50,24 +50,26 @@ namespace Cube.FileSystem.SevenZip.Ice.Associator
             Source.LogInfo(Source.Assembly);
             Source.LogInfo($"[ {args.Join(" ")} ]");
 
-            var src = new SettingFolder();
-            if (args.Length > 0 && args[0].ToLowerInvariant() == "/uninstall") Clear(src);
-            else src.Load();
+            var settings = new SettingFolder();
+            if (args.Length > 0 && args[0].ToLowerInvariant() == "/uninstall") Clear(settings);
+            else settings.Load();
 
             var dir  = Source.Assembly.GetDirectoryName();
             var exe  = System.IO.Path.Combine(dir, "cubeice.exe");
-            var icon = $"{exe},{src.Value.Associate.IconIndex}";
+            var icon = $"{exe},{settings.Value.Associate.IconIndex}";
+            var src  = settings.Value.Associate.Value;
 
             Source.LogInfo($"FileName:{exe}");
             Source.LogInfo($"IconLocation:{icon}");
+            Source.LogInfo($"Associate:[ {src.Where(e => e.Value).Select(e => e.Key).Join(" ")} ]");
 
             var registrar = new AssociateRegistrar(exe)
             {
                 IconLocation = icon,
-                ToolTip      = src.Value.ToolTip,
+                ToolTip      = settings.Value.ToolTip,
             };
 
-            registrar.Update(src.Value.Associate.Value);
+            registrar.Update(src);
 
             Shell32.NativeMethods.SHChangeNotify(
                 0x08000000, // SHCNE_ASSOCCHANGED
