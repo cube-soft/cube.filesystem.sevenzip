@@ -63,7 +63,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             if (args.Options.ContainsKey("init")) Init(src);
             else src.Value.Associate.Changed = false;
 
-            if (args.Options.ContainsKey("silent")) Command.Save(src);
+            if (args.Options.ContainsKey("silent")) src.SaveEx();
             else
             {
                 var view = new MainWindow();

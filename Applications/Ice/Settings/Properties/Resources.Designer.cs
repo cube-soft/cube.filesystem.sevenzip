@@ -81,15 +81,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to cubeice-associate.exe.
-        /// </summary>
-        internal static string FileAssociate {
-            get {
-                return ResourceManager.GetString("FileAssociate", resourceCulture);
-            }
-        }
-
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap FileV1Icon {
@@ -387,15 +378,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings.Properties {
         internal static string MessageSave {
             get {
                 return ResourceManager.GetString("MessageSave", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to https://www.cube-soft.jp/.
-        /// </summary>
-        internal static string WebPage {
-            get {
-                return ResourceManager.GetString("WebPage", resourceCulture);
             }
         }
     }
