@@ -21,15 +21,17 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// Command
+    /// SettingExtension
     ///
     /// <summary>
-    /// Provides functionality of core action of the application.
+    /// Provides extended methods of the SettingFolder class.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public static class Command
+    public static class SettingExtension
     {
+        #region Methods
+
         /* ----------------------------------------------------------------- */
         ///
         /// Save
@@ -39,12 +41,16 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public static void Save(SettingFolder src)
+        public static void SaveEx(this SettingFolder src)
         {
             src.Save();
-            src.Value.Shortcut.Save();
+            src.GetType().LogWarn(src.Value.Shortcut.Save);
             Associate(src.Value.Associate);
         }
+
+        #endregion
+
+        #region Implementations
 
         /* ----------------------------------------------------------------- */
         ///
@@ -55,17 +61,19 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public static void Associate(AssociateSettingValue src) => typeof(Command).LogWarn(() =>
+        private static void Associate(AssociateSettingValue src) => typeof(SettingExtension).LogWarn(() =>
         {
             if (!src.Changed) return;
 
-            var dir = typeof(Command).Assembly.GetDirectoryName();
-            var exe = Io.Combine(dir, Properties.Resources.FileAssociate);
+            var dir = typeof(SettingExtension).Assembly.GetDirectoryName();
+            var exe = Io.Combine(dir, "cubeice-associate.exe");
 
             if (Io.Exists(exe)) System.Diagnostics.Process.Start(exe).WaitForExit();
-            else typeof(Command).LogWarn($"{exe} not found");
+            else typeof(SettingExtension).LogWarn($"{exe} not found");
 
             src.Changed = false;
         });
+
+        #endregion
     }
 }

@@ -65,9 +65,6 @@
   <data name="Extract" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Assets\Images\Extract.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="FileAssociate" xml:space="preserve">
-    <value>cubeice-associate.exe</value>
-  </data>
   <data name="FileV1Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Assets\Images\FileV1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -166,8 +163,5 @@
   </data>
   <data name="MessageSave" xml:space="preserve">
     <value>圧縮・解凍したファイルの保存または作業用フォルダーを選択して下さい。</value>
-  </data>
-  <data name="WebPage" xml:space="preserve">
-    <value>https://www.cube-soft.jp/</value>
   </data>
 </root>

@@ -18,6 +18,8 @@
 using System;
 using Cube.Tests;
 using NUnit.Framework;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Cube.FileSystem.SevenZip.Tests
 {

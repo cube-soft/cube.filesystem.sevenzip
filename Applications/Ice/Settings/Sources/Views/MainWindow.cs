@@ -48,7 +48,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
             _version.Description = string.Empty;
             _version.Image       = Properties.Resources.Logo;
-            _version.Uri         = new(Properties.Resources.WebPage);
+            _version.Uri         = new("https://www.cube-soft.jp/");
             _version.Location    = new(40, 40);
             _version.Size        = new(400, 300);
             VersionTabPage.Controls.Add(_version);
