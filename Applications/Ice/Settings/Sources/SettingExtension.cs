@@ -44,7 +44,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         public static void SaveEx(this SettingFolder src)
         {
             src.Save();
-            src.Value.Shortcut.Save();
+            src.GetType().LogWarn(src.Value.Shortcut.Save);
             Associate(src.Value.Associate);
         }
 
