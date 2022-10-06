@@ -15,77 +15,76 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.Text;
-using Cube.Mixin.Assembly;
-using Cube.Mixin.String;
+namespace Cube.FileSystem.SevenZip.Ice;
 
-namespace Cube.FileSystem.SevenZip.Ice
+using System.Text;
+using Cube.Reflection.Extensions;
+using Cube.Text.Extensions;
+
+/* ------------------------------------------------------------------------- */
+///
+/// ProgressExtension
+///
+/// <summary>
+/// Provides extended methods of the ProgressFacade class.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+internal static class ProgressExtension
 {
+    #region Methods
+
     /* --------------------------------------------------------------------- */
     ///
-    /// ProgressExtension
+    /// SuspendOrResume
     ///
     /// <summary>
-    /// Provides extended methods of the ProgressFacade class.
+    /// Invokes the Suspend or Resume method according to the current
+    /// state.
     /// </summary>
     ///
+    /// <param name="src">Facade to report progress.</param>
+    ///
     /* --------------------------------------------------------------------- */
-    internal static class ProgressExtension
+    public static void SuspendOrResume(this ProgressFacade src)
     {
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SuspendOrResume
-        ///
-        /// <summary>
-        /// Invokes the Suspend or Resume method according to the current
-        /// state.
-        /// </summary>
-        ///
-        /// <param name="src">Facade to report progress.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static void SuspendOrResume(this ProgressFacade src)
+        switch (src.State)
         {
-            switch (src.State)
-            {
-                case TimerState.Run:
-                    src.Suspend();
-                    break;
-                case TimerState.Suspend:
-                    src.Resume();
-                    break;
-                case TimerState.Stop:
-                case TimerState.Unknown:
-                    break;
-            }
+            case TimerState.Run:
+                src.Suspend();
+                break;
+            case TimerState.Suspend:
+                src.Resume();
+                break;
+            case TimerState.Stop:
+            case TimerState.Unknown:
+                break;
         }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetTitle
-        ///
-        /// <summary>
-        /// Gets the title of application.
-        /// </summary>
-        ///
-        /// <param name="src">Facade object.</param>
-        /// <param name="path">Target filename.</param>
-        ///
-        /// <returns>Title of application.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static string GetTitle(this ProgressFacade src, string path)
-        {
-            var percentage = (int)(src.Report.Ratio * 100.0);
-            var dest = new StringBuilder();
-            _ = dest.Append($"{percentage}%");
-            if (path.HasValue()) _ = dest.Append($" - {Io.Get(path).Name}");
-            _ = dest.Append($" - {src.GetType().Assembly.GetTitle()}");
-            return dest.ToString();
-        }
-
-        #endregion
     }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// GetTitle
+    ///
+    /// <summary>
+    /// Gets the title of application.
+    /// </summary>
+    ///
+    /// <param name="src">Facade object.</param>
+    /// <param name="path">Target filename.</param>
+    ///
+    /// <returns>Title of application.</returns>
+    ///
+    /* --------------------------------------------------------------------- */
+    public static string GetTitle(this ProgressFacade src, string path)
+    {
+        var percentage = (int)(src.Report.Ratio * 100.0);
+        var dest = new StringBuilder();
+        _ = dest.Append($"{percentage}%");
+        if (path.HasValue()) _ = dest.Append($" - {Io.Get(path).Name}");
+        _ = dest.Append($" - {src.GetType().Assembly.GetTitle()}");
+        return dest.ToString();
+    }
+
+    #endregion
 }

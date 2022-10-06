@@ -16,76 +16,75 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.String;
+namespace Cube.FileSystem.SevenZip;
 
-namespace Cube.FileSystem.SevenZip
+using Cube.Text.Extensions;
+
+/* ------------------------------------------------------------------------- */
+///
+/// PasswordCallback
+///
+/// <summary>
+/// Provides callback functions to query the password when extracting
+/// archived files.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+internal abstract class PasswordCallback : CallbackBase, ICryptoGetTextPassword
 {
+    #region Properties
+
     /* --------------------------------------------------------------------- */
     ///
-    /// PasswordCallback
+    /// Source
     ///
     /// <summary>
-    /// Provides callback functions to query the password when extracting
-    /// archived files.
+    /// Gets the path of the archive file.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal abstract class PasswordCallback : CallbackBase, ICryptoGetTextPassword
+    public string Source { get; init; }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Password
+    ///
+    /// <summary>
+    /// Gets the object to query for a password.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public IQuery<string> Password { get; init; }
+
+    #endregion
+
+    #region Methods
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// CryptoGetTextPassword
+    ///
+    /// <summary>
+    /// Gets the password of the provided archive.
+    /// </summary>
+    ///
+    /// <param name="password">Password result.</param>
+    ///
+    /// <returns>OperationResult</returns>
+    ///
+    /* --------------------------------------------------------------------- */
+    public int CryptoGetTextPassword(out string password)
     {
-        #region Properties
+        var e = Query.NewMessage(Source);
+        Password.Request(e);
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Source
-        ///
-        /// <summary>
-        /// Gets the path of the archive file.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Source { get; init; }
+        Result = e.Cancel           ? OperationResult.UserCancel :
+                 e.Value.HasValue() ? OperationResult.OK :
+                                      OperationResult.WrongPassword;
+        password = (Result == OperationResult.OK) ? e.Value : string.Empty;
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Password
-        ///
-        /// <summary>
-        /// Gets the object to query for a password.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public IQuery<string> Password { get; init; }
-
-        #endregion
-
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CryptoGetTextPassword
-        ///
-        /// <summary>
-        /// Gets the password of the provided archive.
-        /// </summary>
-        ///
-        /// <param name="password">Password result.</param>
-        ///
-        /// <returns>OperationResult</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public int CryptoGetTextPassword(out string password)
-        {
-            var e = Query.NewMessage(Source);
-            Password.Request(e);
-
-            Result = e.Cancel           ? OperationResult.UserCancel :
-                     e.Value.HasValue() ? OperationResult.OK :
-                                          OperationResult.WrongPassword;
-            password = (Result == OperationResult.OK) ? e.Value : string.Empty;
-
-            return (int)Result;
-        }
-
-        #endregion
+        return (int)Result;
     }
+
+    #endregion
 }

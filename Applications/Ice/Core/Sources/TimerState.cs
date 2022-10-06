@@ -15,43 +15,25 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-namespace Cube.FileSystem.SevenZip.Ice.Settings;
-
-using Cube.Text.Extensions;
+namespace Cube.FileSystem.SevenZip.Ice;
 
 /* ------------------------------------------------------------------------- */
 ///
-/// Message
+/// TimerState
 ///
 /// <summary>
-/// Provides functionality to create a message object.
+/// Specifies the timer state.
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-public static class Message
+public enum TimerState
 {
-    #region Methods
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// ForSaveDirectory
-    ///
-    /// <summary>
-    /// Creates a new instance of the OpenDirectoryMessage class with
-    /// the specified source.
-    /// </summary>
-    ///
-    /// <param name="src">Query source object.</param>
-    ///
-    /// <returns>OpenDirectoryMessage object.</returns>
-    ///
-    /* --------------------------------------------------------------------- */
-    public static OpenDirectoryMessage ForSaveDirectory(string src)
-    {
-        var dest = new OpenDirectoryMessage(Properties.Resources.MessageSave) { NewButton = true };
-        if (src.HasValue()) dest.Value = src;
-        return dest;
-    }
-
-    #endregion
+    /// <summary>Run</summary>
+    Run = 0,
+    /// <summary>Stop</summary>
+    Stop = 1,
+    /// <summary>Suspend</summary>
+    Suspend = 2,
+    /// <summary>Unknown</summary>
+    Unknown = -1
 }

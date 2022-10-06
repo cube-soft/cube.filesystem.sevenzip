@@ -15,65 +15,64 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.Assembly;
+namespace Cube.FileSystem.SevenZip.Ice.Settings;
 
-namespace Cube.FileSystem.SevenZip.Ice.Settings
+using Cube.Reflection.Extensions;
+
+/* ------------------------------------------------------------------------- */
+///
+/// SettingExtension
+///
+/// <summary>
+/// Provides extended methods of the SettingFolder class.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+public static class SettingExtension
 {
+    #region Methods
+
     /* --------------------------------------------------------------------- */
     ///
-    /// SettingExtension
+    /// Save
     ///
     /// <summary>
-    /// Provides extended methods of the SettingFolder class.
+    /// Saves the current settings.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public static class SettingExtension
+    public static void SaveEx(this SettingFolder src)
     {
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Save
-        ///
-        /// <summary>
-        /// Saves the current settings.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static void SaveEx(this SettingFolder src)
-        {
-            src.GetType().LogWarn(src.Save);
-            src.GetType().LogWarn(src.Value.Shortcut.Save);
-            Associate(src.Value.Associate);
-        }
-
-        #endregion
-
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Associate
-        ///
-        /// <summary>
-        /// Invokes the file association.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private static void Associate(AssociateSettingValue src) => typeof(SettingExtension).LogWarn(() =>
-        {
-            if (!src.Changed) return;
-
-            var dir = typeof(SettingExtension).Assembly.GetDirectoryName();
-            var exe = Io.Combine(dir, "cubeice-associate.exe");
-
-            if (Io.Exists(exe)) System.Diagnostics.Process.Start(exe).WaitForExit();
-            else typeof(SettingExtension).LogWarn($"{exe} not found");
-
-            src.Changed = false;
-        });
-
-        #endregion
+        Logger.Warn(src.Save);
+        Logger.Warn(src.Value.Shortcut.Save);
+        Logger.Warn(() => Associate(src.Value.Associate));
     }
+
+    #endregion
+
+    #region Implementations
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Associate
+    ///
+    /// <summary>
+    /// Invokes the file association.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private static void Associate(AssociateSettingValue src)
+    {
+        if (!src.Changed) return;
+
+        var dir = typeof(SettingExtension).Assembly.GetDirectoryName();
+        var exe = Io.Combine(dir, "cubeice-associate.exe");
+
+        if (Io.Exists(exe)) System.Diagnostics.Process.Start(exe).WaitForExit();
+        else Logger.Warn($"{exe} not found");
+
+        src.Changed = false;
+    }
+
+    #endregion
 }

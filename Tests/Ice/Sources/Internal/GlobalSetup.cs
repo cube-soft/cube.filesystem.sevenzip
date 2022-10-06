@@ -15,37 +15,35 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.Reflection;
+namespace Cube.FileSystem.SevenZip.Ice.Tests;
+
 using NUnit.Framework;
 
-namespace Cube.FileSystem.SevenZip.Ice.Tests
+/* ------------------------------------------------------------------------- */
+///
+/// GlobalSetup
+///
+/// <summary>
+/// Represents the global setup operations.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+[SetUpFixture]
+public class GlobalSetup
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// GlobalSetup
+    /// OneTimeSetup
     ///
     /// <summary>
-    /// Represents the global setup operations.
+    /// Invokes the setup method only once.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [SetUpFixture]
-    public class GlobalSetup
+    [OneTimeSetUp]
+    public void OneTimeSetup()
     {
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OneTimeSetup
-        ///
-        /// <summary>
-        /// Invokes the setup method only once.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [OneTimeSetUp]
-        public void OneTimeSetup()
-        {
-            _ = Logger.ObserveTaskException();
-            typeof(GlobalSetup).LogInfo(Assembly.GetExecutingAssembly());
-        }
+        Logger.ObserveTaskException();
+        Logger.Info(typeof(GlobalSetup).Assembly);
     }
 }

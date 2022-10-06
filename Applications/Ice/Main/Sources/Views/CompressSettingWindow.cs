@@ -15,111 +15,110 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip.Ice;
+
 using System.Windows.Forms;
 using Cube.Forms.Behaviors;
 using Cube.Forms.Binding;
 
-namespace Cube.FileSystem.SevenZip.Ice
+/* ------------------------------------------------------------------------- */
+///
+/// CompressSettingWindow
+///
+/// <summary>
+/// Represents the window for the runtime compression settings.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+public partial class CompressSettingWindow : Forms.Window
 {
+    #region Constructors
+
     /* --------------------------------------------------------------------- */
     ///
     /// CompressSettingWindow
     ///
     /// <summary>
-    /// Represents the window for the runtime compression settings.
+    /// Initializes a new instance of the CompressSettingWindow class.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public partial class CompressSettingWindow : Forms.WindowBase
+    public CompressSettingWindow() => InitializeComponent();
+
+    #endregion
+
+    #region Methods
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// OnBind
+    ///
+    /// <summary>
+    /// Binds the specified object.
+    /// </summary>
+    ///
+    /// <param name="src">Bindable object.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    protected override void OnBind(IBindable src)
     {
-        #region Constructors
+        if (src is not CompressSettingViewModel vm) return;
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CompressSettingWindow
-        ///
-        /// <summary>
-        /// Initializes a new instance of the CompressSettingWindow class.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public CompressSettingWindow() => InitializeComponent();
+        BindCore(vm);
 
-        #endregion
-
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnBind
-        ///
-        /// <summary>
-        /// Binds the specified object.
-        /// </summary>
-        ///
-        /// <param name="src">Bindable object.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected override void OnBind(IBindable src)
-        {
-            if (src is not CompressSettingViewModel vm) return;
-
-            BindCore(vm);
-
-            Behaviors.Add(new DialogBehavior(vm));
-            Behaviors.Add(new SaveFileBehavior(vm));
-            Behaviors.Add(new CloseBehavior(this, vm));
-            Behaviors.Add(new ClickEventBehavior(DestinationButton, vm.Browse));
-            Behaviors.Add(new ClickEventBehavior(ExecuteButton, vm.Execute));
-            Behaviors.Add(new ClickEventBehavior(ExitButton, Close));
-            Behaviors.Add(new PathLintBehavior(DestinationTextBox, PathToolTip));
-            Behaviors.Add(new PasswordLintBehavior(PasswordTextBox, ConfirmTextBox, ShowPasswordCheckBox));
-            Behaviors.Add(new CompressMethodBehavior(CompressionMethodComboBox, FormatComboBox));
-        }
-
-        #endregion
-
-        #region  Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// BindCore
-        ///
-        /// <summary>
-        /// Invokes the binding settings.
-        /// </summary>
-        ///
-        /// <param name="vm">VM object to bind.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void BindCore(CompressSettingViewModel vm)
-        {
-            var src = Behaviors.Hook(new BindingSource(vm, ""));
-
-            src.Bind(nameof(vm.Executable),              ExecuteButton,             nameof(Enabled));
-            src.Bind(nameof(vm.Destination),             DestinationTextBox,        nameof(TextBox.Text));
-            src.Bind(nameof(vm.Format),                  FormatComboBox,            nameof(ComboBox.SelectedValue));
-            src.Bind(nameof(vm.CompressionLevel),        CompressionLevelComboBox,  nameof(ComboBox.SelectedValue));
-            src.Bind(nameof(vm.CompressionMethod),       CompressionMethodComboBox, nameof(ComboBox.SelectedValue));
-            src.Bind(nameof(vm.ThreadCount),             ThreadNumeric,             nameof(NumericUpDown.Value));
-            src.Bind(nameof(vm.MaximumThreadCount),      ThreadNumeric,             nameof(ThreadNumeric.Maximum));
-            src.Bind(nameof(vm.EncryptionSupported),     EncryptionGroupBox,        nameof(Enabled));
-            src.Bind(nameof(vm.EncryptionEnabled),       EncryptionCheckBox,        nameof(CheckBox.Checked));
-            src.Bind(nameof(vm.EncryptionEnabled),       EncryptionPanel,           nameof(Enabled));
-            src.Bind(nameof(vm.EncryptionMethod),        EncryptionMethodComboBox,  nameof(ComboBox.SelectedValue));
-            src.Bind(nameof(vm.EncryptionMethodEnabled), EncryptionMethodComboBox,  nameof(Enabled));
-            src.Bind(nameof(vm.Password),                PasswordTextBox,           nameof(TextBox.Text));
-            src.Bind(nameof(vm.PasswordConfirmation),    ConfirmTextBox,            nameof(TextBox.Text));
-            src.Bind(nameof(vm.PasswordVisible),         ShowPasswordCheckBox,      nameof(CheckBox.Checked));
-
-            FormatComboBox.Bind(Resource.Formats);
-            EncryptionMethodComboBox.Bind(Resource.EncryptionMethods);
-            CompressionLevelComboBox.Bind(Resource.CompressionLevels);
-            CompressionMethodComboBox.Bind(Resource.GetCompressionMethods(vm.Format));
-            CompressionMethodComboBox.SelectedIndex = 0;
-            PathToolTip.ToolTipTitle = Properties.Resources.MessageInvalidChars;
-        }
-
-        #endregion
+        Behaviors.Add(new DialogBehavior(vm));
+        Behaviors.Add(new SaveFileBehavior(vm));
+        Behaviors.Add(new CloseBehavior(this, vm));
+        Behaviors.Add(new ClickEventBehavior(DestinationButton, vm.Browse));
+        Behaviors.Add(new ClickEventBehavior(ExecuteButton, vm.Execute));
+        Behaviors.Add(new ClickEventBehavior(ExitButton, Close));
+        Behaviors.Add(new PathLintBehavior(DestinationTextBox, PathToolTip));
+        Behaviors.Add(new PasswordLintBehavior(PasswordTextBox, ConfirmTextBox, ShowPasswordCheckBox));
+        Behaviors.Add(new CompressMethodBehavior(CompressionMethodComboBox, FormatComboBox));
     }
+
+    #endregion
+
+    #region  Implementations
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// BindCore
+    ///
+    /// <summary>
+    /// Invokes the binding settings.
+    /// </summary>
+    ///
+    /// <param name="vm">VM object to bind.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    private void BindCore(CompressSettingViewModel vm)
+    {
+        var src = Behaviors.Hook(new BindingSource(vm, ""));
+
+        src.Bind(nameof(vm.Executable),              ExecuteButton,             nameof(ExecuteButton.Enabled));
+        src.Bind(nameof(vm.Destination),             DestinationTextBox,        nameof(DestinationTextBox.Text));
+        src.Bind(nameof(vm.Format),                  FormatComboBox,            nameof(FormatComboBox.SelectedValue));
+        src.Bind(nameof(vm.CompressionLevel),        CompressionLevelComboBox,  nameof(CompressionLevelComboBox.SelectedValue));
+        src.Bind(nameof(vm.CompressionMethod),       CompressionMethodComboBox, nameof(CompressionMethodComboBox.SelectedValue));
+        src.Bind(nameof(vm.ThreadCount),             ThreadNumeric,             nameof(ThreadNumeric.Value));
+        src.Bind(nameof(vm.MaximumThreadCount),      ThreadNumeric,             nameof(ThreadNumeric.Maximum));
+        src.Bind(nameof(vm.EncryptionSupported),     EncryptionGroupBox,        nameof(EncryptionGroupBox.Enabled));
+        src.Bind(nameof(vm.EncryptionEnabled),       EncryptionCheckBox,        nameof(EncryptionCheckBox.Checked));
+        src.Bind(nameof(vm.EncryptionEnabled),       EncryptionPanel,           nameof(EncryptionPanel.Enabled));
+        src.Bind(nameof(vm.EncryptionMethod),        EncryptionMethodComboBox,  nameof(EncryptionMethodComboBox.SelectedValue));
+        src.Bind(nameof(vm.EncryptionMethodEnabled), EncryptionMethodComboBox,  nameof(EncryptionMethodComboBox.Enabled));
+        src.Bind(nameof(vm.Password),                PasswordTextBox,           nameof(PasswordTextBox.Text));
+        src.Bind(nameof(vm.PasswordConfirmation),    ConfirmTextBox,            nameof(ConfirmTextBox.Text));
+        src.Bind(nameof(vm.PasswordVisible),         ShowPasswordCheckBox,      nameof(ShowPasswordCheckBox.Checked));
+
+        FormatComboBox.Bind(Resource.Formats);
+        EncryptionMethodComboBox.Bind(Resource.EncryptionMethods);
+        CompressionLevelComboBox.Bind(Resource.CompressionLevels);
+        CompressionMethodComboBox.Bind(Resource.GetCompressionMethods(vm.Format));
+        CompressionMethodComboBox.SelectedIndex = 0;
+        PathToolTip.ToolTipTitle = Properties.Resources.MessageInvalidChars;
+    }
+
+    #endregion
 }

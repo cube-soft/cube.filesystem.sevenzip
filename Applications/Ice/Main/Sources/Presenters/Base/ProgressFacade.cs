@@ -15,292 +15,291 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip.Ice;
+
 using System;
 using System.Diagnostics;
 using System.Threading;
 
-namespace Cube.FileSystem.SevenZip.Ice
+/* ------------------------------------------------------------------------- */
+///
+/// ProgressFacade
+///
+/// <summary>
+/// Provides functionality to report the progress for compressing or
+/// extracting archives.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+public abstract class ProgressFacade : ObservableBase
 {
+    #region Constructors
+
     /* --------------------------------------------------------------------- */
     ///
     /// ProgressFacade
     ///
     /// <summary>
-    /// Provides functionality to report the progress for compressing or
-    /// extracting archives.
+    /// Initializes a new instance of the ProgressFacade class with the
+    /// specified arguments.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public abstract class ProgressFacade : ObservableBase
+    protected ProgressFacade()
     {
-        #region Constructors
+        _timer.Elapsed += (s, e) => {
+            Remaining = Report.Estimate(Elapsed, Remaining);
+            Refresh(nameof(Report), nameof(Elapsed));
+        };
+    }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ProgressFacade
-        ///
-        /// <summary>
-        /// Initializes a new instance of the ProgressFacade class with the
-        /// specified arguments.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected ProgressFacade()
+    #endregion
+
+    #region Properties
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Report
+    ///
+    /// <summary>
+    /// Gets the current progress report.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public Report Report { get; } = new Report();
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Elapsed
+    ///
+    /// <summary>
+    /// Gets the elapsed time of the process.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public TimeSpan Elapsed => _watch.Elapsed;
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Remaining
+    ///
+    /// <summary>
+    /// Gets the remaining time of the process.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public TimeSpan Remaining
+    {
+        get => Get(() => TimeSpan.Zero);
+        private set => Set(value);
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// State
+    ///
+    /// <summary>
+    /// Gets the current state.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public TimerState State
+    {
+        get => Get(() => TimerState.Stop);
+        private set => Set(value);
+    }
+
+    #endregion
+
+    #region Methods
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// GetProgress
+    ///
+    /// <summary>
+    /// Gets the object to report the progress.
+    /// </summary>
+    ///
+    /// <returns>Progress object.</returns>
+    ///
+    /* --------------------------------------------------------------------- */
+    public IProgress<Report> GetProgress() => GetProgress(e => e.CopyTo(Report));
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// GetProgress
+    ///
+    /// <summary>
+    /// Gets the object to report the progress.
+    /// </summary>
+    ///
+    /// <param name="callback">Callback action to report.</param>
+    ///
+    /// <returns>Progress object.</returns>
+    ///
+    /* --------------------------------------------------------------------- */
+    public IProgress<Report> GetProgress(Action<Report> callback) =>
+        new SuspendableProgress<Report>(_cts.Token, _supender, callback);
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Start
+    ///
+    /// <summary>
+    /// Starts the operation.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public void Start()
+    {
+        try
         {
-            _timer.Elapsed += (s, e) => {
-                Remaining = Report.Estimate(Elapsed, Remaining);
-                Refresh(nameof(Report), nameof(Elapsed));
-            };
+            _timer.Start();
+            _watch.Start();
+            State = TimerState.Run;
+            Invoke();
+            Terminate();
         }
-
-        #endregion
-
-        #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Report
-        ///
-        /// <summary>
-        /// Gets the current progress report.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public Report Report { get; } = new Report();
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Elapsed
-        ///
-        /// <summary>
-        /// Gets the elapsed time of the process.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public TimeSpan Elapsed => _watch.Elapsed;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Remaining
-        ///
-        /// <summary>
-        /// Gets the remaining time of the process.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public TimeSpan Remaining
+        catch (OperationCanceledException) { /* user cancel */ }
+        finally
         {
-            get => Get(() => TimeSpan.Zero);
-            private set => Set(value);
+            State = TimerState.Stop;
+            _watch.Stop();
+            _timer.Stop();
         }
+    }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// State
-        ///
-        /// <summary>
-        /// Gets the current state.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public TimerState State
-        {
-            get => Get(() => TimerState.Stop);
-            private set => Set(value);
-        }
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Cancel
+    ///
+    /// <summary>
+    /// Cancels the current operation.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public void Cancel()
+    {
+        _watch.Stop();
+        _cts.Cancel();
+        Resume();
+    }
 
-        #endregion
-
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetProgress
-        ///
-        /// <summary>
-        /// Gets the object to report the progress.
-        /// </summary>
-        ///
-        /// <returns>Progress object.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public IProgress<Report> GetProgress() => GetProgress(e => e.CopyTo(Report));
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetProgress
-        ///
-        /// <summary>
-        /// Gets the object to report the progress.
-        /// </summary>
-        ///
-        /// <param name="callback">Callback action to report.</param>
-        ///
-        /// <returns>Progress object.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public IProgress<Report> GetProgress(Action<Report> callback) =>
-            new SuspendableProgress<Report>(_cts.Token, _supender, callback);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Start
-        ///
-        /// <summary>
-        /// Starts the operation.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Start()
-        {
-            try
-            {
-                _timer.Start();
-                _watch.Start();
-                State = TimerState.Run;
-                Invoke();
-                Terminate();
-            }
-            catch (OperationCanceledException) { /* user cancel */ }
-            finally
-            {
-                State = TimerState.Stop;
-                _watch.Stop();
-                _timer.Stop();
-            }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Cancel
-        ///
-        /// <summary>
-        /// Cancels the current operation.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Cancel()
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Suspend
+    ///
+    /// <summary>
+    /// Suspends the current operation.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public void Suspend()
+    {
+        if (State != TimerState.Run) return;
+        if (_supender.Reset())
         {
             _watch.Stop();
-            _cts.Cancel();
-            Resume();
+            State = TimerState.Suspend;
         }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Suspend
-        ///
-        /// <summary>
-        /// Suspends the current operation.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Suspend()
-        {
-            if (State != TimerState.Run) return;
-            if (_supender.Reset())
-            {
-                _watch.Stop();
-                State = TimerState.Suspend;
-            }
-            else GetType().LogWarn($"{nameof(Suspend)} failed");
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Resume
-        ///
-        /// <summary>
-        /// Resumes the operation.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Resume()
-        {
-            if (State != TimerState.Suspend) return;
-            if (_supender.Set())
-            {
-                State = TimerState.Run;
-                _watch.Start();
-            }
-            else GetType().LogWarn($"{nameof(Resume)} failed");
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Invoke
-        ///
-        /// <summary>
-        /// Invokes the main process.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected abstract void Invoke();
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Dispose
-        ///
-        /// <summary>
-        /// Releases the unmanaged resources used by the object and
-        /// optionally releases the managed resources.
-        /// </summary>
-        ///
-        /// <param name="disposing">
-        /// true to release both managed and unmanaged resources;
-        /// false to release only unmanaged resources.
-        /// </param>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected override void Dispose(bool disposing)
-        {
-            try { Cancel(); }
-            finally
-            {
-                _timer.Dispose();
-                _supender.Dispose();
-            }
-        }
-
-        #endregion
-
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Terminate
-        ///
-        /// <summary>
-        /// Invokes the termination process.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Terminate()
-        {
-            var hack = Report.Count < Report.TotalCount ||
-                       Report.Bytes < Report.TotalBytes;
-
-            if (hack)
-            {
-                GetType().LogDebug(
-                    $"{nameof(Report.Count)}:{Report.Count:#,0}/{Report.TotalCount:#,0}",
-                    $"{nameof(Report.Bytes)}:{Report.Bytes:#,0}/{Report.TotalBytes:#,0}"
-                );
-
-                Report.Count = Report.TotalCount;
-                Report.Bytes = Report.TotalBytes;
-
-                Refresh(nameof(Report));
-            }
-        }
-
-        #endregion
-
-        #region Fields
-        private readonly System.Timers.Timer _timer = new(100.0);
-        private readonly Stopwatch _watch = new();
-        private readonly ManualResetEvent _supender = new(true);
-        private readonly CancellationTokenSource _cts = new();
-        #endregion
+        else Logger.Warn($"{nameof(Suspend)} failed");
     }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Resume
+    ///
+    /// <summary>
+    /// Resumes the operation.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public void Resume()
+    {
+        if (State != TimerState.Suspend) return;
+        if (_supender.Set())
+        {
+            State = TimerState.Run;
+            _watch.Start();
+        }
+        else Logger.Warn($"{nameof(Resume)} failed");
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Invoke
+    ///
+    /// <summary>
+    /// Invokes the main process.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    protected abstract void Invoke();
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Dispose
+    ///
+    /// <summary>
+    /// Releases the unmanaged resources used by the object and
+    /// optionally releases the managed resources.
+    /// </summary>
+    ///
+    /// <param name="disposing">
+    /// true to release both managed and unmanaged resources;
+    /// false to release only unmanaged resources.
+    /// </param>
+    ///
+    /* --------------------------------------------------------------------- */
+    protected override void Dispose(bool disposing)
+    {
+        try { Cancel(); }
+        finally
+        {
+            _timer.Dispose();
+            _supender.Dispose();
+        }
+    }
+
+    #endregion
+
+    #region Implementations
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Terminate
+    ///
+    /// <summary>
+    /// Invokes the termination process.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private void Terminate()
+    {
+        var hack = Report.Count < Report.TotalCount ||
+                   Report.Bytes < Report.TotalBytes;
+
+        if (hack)
+        {
+            Logger.Debug(string.Join(", ",
+                $"Count:{Report.Count:#,0}/{Report.TotalCount:#,0}",
+                $"Bytes:{Report.Bytes:#,0}/{Report.TotalBytes:#,0}"
+            ));
+
+            Report.Count = Report.TotalCount;
+            Report.Bytes = Report.TotalBytes;
+
+            Refresh(nameof(Report));
+        }
+    }
+
+    #endregion
+
+    #region Fields
+    private readonly System.Timers.Timer _timer = new(100.0);
+    private readonly Stopwatch _watch = new();
+    private readonly ManualResetEvent _supender = new(true);
+    private readonly CancellationTokenSource _cts = new();
+    #endregion
 }

@@ -15,246 +15,245 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip.Ice.Tests;
+
 using System.Collections.Generic;
 using System.Linq;
 using Cube.FileSystem.SevenZip.Ice.Settings;
 using NUnit.Framework;
 
-namespace Cube.FileSystem.SevenZip.Ice.Tests
+/* ------------------------------------------------------------------------- */
+///
+/// CompressTest
+///
+/// <summary>
+/// Tests to create archives.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+[TestFixture]
+[NonParallelizable]
+class CompressTest : VmFixture
 {
+    #region Tests
+
     /* --------------------------------------------------------------------- */
     ///
-    /// CompressTest
+    /// Compress
     ///
     /// <summary>
-    /// Tests to create archives.
+    /// Tests the compression.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [TestFixture]
-    [NonParallelizable]
-    class CompressTest : VmFixture
+    [TestCaseSource(nameof(TestCases))]
+    public void Compress(string dest, IEnumerable<string> files, IEnumerable<string> args, CompressSettingValue settings)
     {
-        #region Tests
+        using var vm = NewVM(args.Concat(files.Select(e => GetSource(e))), settings);
+        var filename = GetFileName(GetSource(files.First()), dest);
+        var cvt      = Get("Runtime", filename);
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Compress
-        ///
-        /// <summary>
-        /// Tests the compression.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [TestCaseSource(nameof(TestCases))]
-        public void Compress(string dest, IEnumerable<string> files, IEnumerable<string> args, CompressSettingValue settings)
+        using (vm.SetPassword("password"))
+        using (vm.SetDestination(cvt))
+        using (vm.SetRuntime(cvt))
         {
-            using var vm = NewVM(args.Concat(files.Select(e => GetSource(e))), settings);
-            var filename = GetFileName(GetSource(files.First()), dest);
-            var cvt      = Get("Runtime", filename);
-
-            using (vm.SetPassword("password"))
-            using (vm.SetDestination(cvt))
-            using (vm.SetRuntime(cvt))
-            {
-                Assert.That(vm.State,      Is.EqualTo(TimerState.Stop));
-                Assert.That(vm.Cancelable, Is.False);
-                Assert.That(vm.Suspended,  Is.False);
-                Assert.That(vm.Count,      Is.Not.Null.And.Not.Empty);
-                Assert.That(vm.Title,      Does.StartWith("0%").And.EndsWith("CubeICE"));
-                Assert.That(vm.Text,       Does.StartWith("ファイルを圧縮する準備をしています"));
-                vm.Test();
-                GetType().LogDebug(vm.Elapsed, vm.Remaining, vm.Title);
-            }
-
-            Assert.That(Io.Exists(Get(dest)), Is.True, dest);
+            Assert.That(vm.State,      Is.EqualTo(TimerState.Stop));
+            Assert.That(vm.Cancelable, Is.False);
+            Assert.That(vm.Suspended,  Is.False);
+            Assert.That(vm.Count,      Is.Not.Null.And.Not.Empty);
+            Assert.That(vm.Title,      Does.StartWith("0%").And.EndsWith("CubeICE"));
+            Assert.That(vm.Text,       Does.StartWith("ファイルを圧縮する準備をしています"));
+            vm.Test();
+            Logger.Debug($"{vm.Elapsed}, {vm.Remaining}, {vm.Title}");
         }
 
-        #endregion
-
-        #region TestCases
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// TestCases
-        ///
-        /// <summary>
-        /// Gets the test cases. Format is: destination, source files,
-        /// other arguments, and user settings.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private static IEnumerable<TestCaseData> TestCases { get
-        {
-            yield return new(
-                @"Preset\Sample.zip",
-                new[] { "Sample.txt" },
-                Preset.Compress.ToArguments(),
-                new CompressSettingValue
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    OpenMethod   = OpenMethod.None,
-                    Filtering    = true,
-                }
-            );
-
-            yield return new(
-                @"Preset\Sample 00..01.zip",
-                new[] { "Sample 00..01" },
-                Preset.Compress.ToArguments(),
-                new CompressSettingValue
-                {
-                    SaveLocation  = SaveLocation.Preset,
-                    OpenMethod    = OpenMethod.None,
-                    Filtering     = true,
-                }
-            );
-
-            yield return new(
-                @"Preset\.Sample.zip",
-                new[] { ".Sample" },
-                Preset.Compress.ToArguments(),
-                new CompressSettingValue
-                {
-                    SaveLocation  = SaveLocation.Preset,
-                    OpenMethod    = OpenMethod.None,
-                    Filtering     = true,
-                }
-            );
-
-            yield return new(
-                @"Preset\Sample.7z",
-                new[] { "Sample.txt", "Sample 00..01" },
-                Preset.Compress7z.ToArguments(),
-                new CompressSettingValue
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    OpenMethod   = OpenMethod.None,
-                    Filtering    = false,
-                }
-            );
-
-            yield return new(
-                @"Preset\Sample.tar.bz2",
-                new[] { "Sample.txt", "Sample 00..01" },
-                Preset.CompressBz2.ToArguments(),
-                new CompressSettingValue
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    OpenMethod   = OpenMethod.None,
-                    Filtering    = true,
-                }
-            );
-
-            yield return new(
-                @"Preset\Sample.exe",
-                new[] { "Sample.txt", "Sample 00..01" },
-                Preset.CompressSfx.ToArguments(),
-                new CompressSettingValue
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    OpenMethod   = OpenMethod.None,
-                    Filtering    = true,
-                }
-            );
-
-            yield return new(
-                @"Runtime\Sample.zip",
-                new[] { "Sample.txt", "Sample 00..01" },
-                Preset.CompressDetails.ToArguments(),
-                new CompressSettingValue
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    OpenMethod   = OpenMethod.None,
-                    Filtering    = true,
-                }
-            );
-
-            yield return new(
-                @"Runtime\Sample.7z",
-                new[] { "Sample.txt", "Sample 00..01" },
-                Preset.Compress7z.ToArguments().Concat(new[] { "/p" }),
-                new CompressSettingValue
-                {
-                    SaveLocation = SaveLocation.Query,
-                    OpenMethod   = OpenMethod.None,
-                    Filtering    = true,
-                }
-            );
-
-            yield return new(
-                @"Runtime\Sample.tar.bz2",
-                new[] { "Sample.txt", "Sample 00..01" },
-                Preset.CompressBz2.ToArguments().Concat(new[] { "/o:runtime" }),
-                new CompressSettingValue
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    OpenMethod   = OpenMethod.None,
-                    Filtering    = true,
-                }
-            );
-
-            yield return new(
-                @"Drop\Sample.tar.gz",
-                new[] { "Sample.txt", "Sample 00..01" },
-                GetPathArgs(Preset.CompressGz, "Drop"),
-                new CompressSettingValue
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    OpenMethod   = OpenMethod.None,
-                    Filtering    = true,
-                }
-            );
-
-            yield return new(
-                @"Drop\Sample.tar.xz",
-                new[] { "Sample.txt", "Sample 00..01" },
-                GetPathArgs(Preset.CompressXz, "Drop"),
-                new CompressSettingValue
-                {
-                    SaveLocation = SaveLocation.Preset,
-                    OpenMethod   = OpenMethod.None,
-                    Filtering    = true,
-                }
-            );
-        }}
-
-        #endregion
-
-        #region Others
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetPathArgs
-        ///
-        /// <summary>
-        /// Gets the arguments that contain the path argument.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private static IEnumerable<string> GetPathArgs(Preset menu, string filename) =>
-            menu.ToArguments()
-                .Concat(new[] { $"/drop:{typeof(CompressTest).GetPath(filename)}" });
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetFileName
-        ///
-        /// <summary>
-        /// Gets the filename of save path from the specified paths.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private string GetFileName(string src, string dest)
-        {
-            var fi   = Io.Get(src);
-            var name = fi.IsDirectory ? fi.Name : fi.BaseName;
-            var ext  = Io.Get(dest).Extension;
-            return ext == ".bz2" || ext == ".gz" || ext == ".xz" ?
-                   $"{name}.tar{ext}" :
-                   $"{name}{ext}";
-        }
-
-        #endregion
+        Assert.That(Io.Exists(Get(dest)), Is.True, dest);
     }
+
+    #endregion
+
+    #region TestCases
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// TestCases
+    ///
+    /// <summary>
+    /// Gets the test cases. Format is: destination, source files,
+    /// other arguments, and user settings.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private static IEnumerable<TestCaseData> TestCases { get
+    {
+        yield return new(
+            @"Preset\Sample.zip",
+            new[] { "Sample.txt" },
+            Preset.Compress.ToArguments(),
+            new CompressSettingValue
+            {
+                SaveLocation = SaveLocation.Preset,
+                OpenMethod   = OpenMethod.None,
+                Filtering    = true,
+            }
+        );
+
+        yield return new(
+            @"Preset\Sample 00..01.zip",
+            new[] { "Sample 00..01" },
+            Preset.Compress.ToArguments(),
+            new CompressSettingValue
+            {
+                SaveLocation  = SaveLocation.Preset,
+                OpenMethod    = OpenMethod.None,
+                Filtering     = true,
+            }
+        );
+
+        yield return new(
+            @"Preset\.Sample.zip",
+            new[] { ".Sample" },
+            Preset.Compress.ToArguments(),
+            new CompressSettingValue
+            {
+                SaveLocation  = SaveLocation.Preset,
+                OpenMethod    = OpenMethod.None,
+                Filtering     = true,
+            }
+        );
+
+        yield return new(
+            @"Preset\Sample.7z",
+            new[] { "Sample.txt", "Sample 00..01" },
+            Preset.Compress7z.ToArguments(),
+            new CompressSettingValue
+            {
+                SaveLocation = SaveLocation.Preset,
+                OpenMethod   = OpenMethod.None,
+                Filtering    = false,
+            }
+        );
+
+        yield return new(
+            @"Preset\Sample.tar.bz2",
+            new[] { "Sample.txt", "Sample 00..01" },
+            Preset.CompressBz2.ToArguments(),
+            new CompressSettingValue
+            {
+                SaveLocation = SaveLocation.Preset,
+                OpenMethod   = OpenMethod.None,
+                Filtering    = true,
+            }
+        );
+
+        yield return new(
+            @"Preset\Sample.exe",
+            new[] { "Sample.txt", "Sample 00..01" },
+            Preset.CompressSfx.ToArguments(),
+            new CompressSettingValue
+            {
+                SaveLocation = SaveLocation.Preset,
+                OpenMethod   = OpenMethod.None,
+                Filtering    = true,
+            }
+        );
+
+        yield return new(
+            @"Runtime\Sample.zip",
+            new[] { "Sample.txt", "Sample 00..01" },
+            Preset.CompressDetails.ToArguments(),
+            new CompressSettingValue
+            {
+                SaveLocation = SaveLocation.Preset,
+                OpenMethod   = OpenMethod.None,
+                Filtering    = true,
+            }
+        );
+
+        yield return new(
+            @"Runtime\Sample.7z",
+            new[] { "Sample.txt", "Sample 00..01" },
+            Preset.Compress7z.ToArguments().Concat(new[] { "/p" }),
+            new CompressSettingValue
+            {
+                SaveLocation = SaveLocation.Query,
+                OpenMethod   = OpenMethod.None,
+                Filtering    = true,
+            }
+        );
+
+        yield return new(
+            @"Runtime\Sample.tar.bz2",
+            new[] { "Sample.txt", "Sample 00..01" },
+            Preset.CompressBz2.ToArguments().Concat(new[] { "/o:runtime" }),
+            new CompressSettingValue
+            {
+                SaveLocation = SaveLocation.Preset,
+                OpenMethod   = OpenMethod.None,
+                Filtering    = true,
+            }
+        );
+
+        yield return new(
+            @"Drop\Sample.tar.gz",
+            new[] { "Sample.txt", "Sample 00..01" },
+            GetPathArgs(Preset.CompressGz, "Drop"),
+            new CompressSettingValue
+            {
+                SaveLocation = SaveLocation.Preset,
+                OpenMethod   = OpenMethod.None,
+                Filtering    = true,
+            }
+        );
+
+        yield return new(
+            @"Drop\Sample.tar.xz",
+            new[] { "Sample.txt", "Sample 00..01" },
+            GetPathArgs(Preset.CompressXz, "Drop"),
+            new CompressSettingValue
+            {
+                SaveLocation = SaveLocation.Preset,
+                OpenMethod   = OpenMethod.None,
+                Filtering    = true,
+            }
+        );
+    }}
+
+    #endregion
+
+    #region Others
+
+    /* ----------------------------------------------------------------- */
+    ///
+    /// GetPathArgs
+    ///
+    /// <summary>
+    /// Gets the arguments that contain the path argument.
+    /// </summary>
+    ///
+    /* ----------------------------------------------------------------- */
+    private static IEnumerable<string> GetPathArgs(Preset menu, string filename) =>
+        menu.ToArguments()
+            .Concat(new[] { $"/drop:{typeof(CompressTest).GetPath(filename)}" });
+
+    /* ----------------------------------------------------------------- */
+    ///
+    /// GetFileName
+    ///
+    /// <summary>
+    /// Gets the filename of save path from the specified paths.
+    /// </summary>
+    ///
+    /* ----------------------------------------------------------------- */
+    private string GetFileName(string src, string dest)
+    {
+        var fi   = Io.Get(src);
+        var name = fi.IsDirectory ? fi.Name : fi.BaseName;
+        var ext  = Io.Get(dest).Extension;
+        return ext == ".bz2" || ext == ".gz" || ext == ".xz" ?
+               $"{name}.tar{ext}" :
+               $"{name}{ext}";
+    }
+
+    #endregion
 }

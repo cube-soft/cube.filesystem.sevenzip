@@ -15,94 +15,92 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip.Ice;
+
 using System;
 
-namespace Cube.FileSystem.SevenZip.Ice
+/* ------------------------------------------------------------------------- */
+///
+/// OverwriteQuery
+///
+/// <summary>
+/// Provides functionality to determine the overwrite method.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+public sealed class OverwriteQuery : Query<OverwriteQuerySource, OverwriteMethod>
 {
+    #region Constructors
+
     /* --------------------------------------------------------------------- */
     ///
     /// OverwriteQuery
     ///
     /// <summary>
-    /// Provides functionality to determine the overwrite method.
+    /// Initializes a new instance of the OverwriteQuery class
+    /// with the specified arguments.
+    /// </summary>
+    ///
+    /// <param name="callback">Callback action for the request.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    public OverwriteQuery(Action<QueryMessage<OverwriteQuerySource, OverwriteMethod>> callback) :
+        base(callback, Dispatcher.Vanilla) { }
+
+    #endregion
+
+    #region Methods
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Get
+    ///
+    /// <summary>
+    /// Gets the overwrite method.
+    /// The method may invoke the Query.Request method as needed.
+    /// </summary>
+    ///
+    /// <param name="src">File to overwrite.</param>
+    /// <param name="dest">File to be overwritten.</param>
+    ///
+    /// <returns>Overwrite method.</returns>
+    ///
+    /* --------------------------------------------------------------------- */
+    public OverwriteMethod Get(Entity src, Entity dest)
+    {
+        if (!_value.HasFlag(OverwriteMethod.Always)) _value = Request(src, dest);
+        return _value;
+    }
+
+    #endregion
+
+    #region Implementations
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Request
+    ///
+    /// <summary>
+    /// Asks the user to select the overwrite method.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public sealed class OverwriteQuery : Query<OverwriteQuerySource, OverwriteMethod>
+    private OverwriteMethod Request(Entity src, Entity dest)
     {
-        #region Constructors
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OverwriteQuery
-        ///
-        /// <summary>
-        /// Initializes a new instance of the OverwriteQuery class
-        /// with the specified arguments.
-        /// </summary>
-        ///
-        /// <param name="callback">Callback action for the request.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public OverwriteQuery(Action<QueryMessage<OverwriteQuerySource, OverwriteMethod>> callback) :
-            base(callback, Dispatcher.Vanilla) { }
-
-        #endregion
-
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Get
-        ///
-        /// <summary>
-        /// Gets the overwrite method.
-        /// The method may invoke the Query.Request method as needed.
-        /// </summary>
-        ///
-        /// <param name="src">File to overwrite.</param>
-        /// <param name="dest">File to be overwritten.</param>
-        ///
-        /// <returns>Overwrite method.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public OverwriteMethod Get(Entity src, Entity dest)
+        var msg = new QueryMessage<OverwriteQuerySource, OverwriteMethod>(new(src, dest))
         {
-            if (!_value.HasFlag(OverwriteMethod.Always)) _value = Request(src, dest);
-            return _value;
-        }
+            Value  = OverwriteMethod.Query,
+            Cancel = true,
+        };
 
-        #endregion
-
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Request
-        ///
-        /// <summary>
-        /// Asks the user to select the overwrite method.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private OverwriteMethod Request(Entity src, Entity dest)
-        {
-            var msg = new QueryMessage<OverwriteQuerySource, OverwriteMethod>
-            {
-                Source = new OverwriteQuerySource(src, dest),
-                Value  = OverwriteMethod.Query,
-                Cancel = true,
-            };
-
-            Request(msg);
-            if (msg.Cancel) throw new OperationCanceledException();
-            return msg.Value;
-        }
-
-        #endregion
-
-        #region Fields
-        private OverwriteMethod _value = OverwriteMethod.Query;
-        #endregion
+        Request(msg);
+        if (msg.Cancel) throw new OperationCanceledException();
+        return msg.Value;
     }
+
+    #endregion
+
+    #region Fields
+    private OverwriteMethod _value = OverwriteMethod.Query;
+    #endregion
 }

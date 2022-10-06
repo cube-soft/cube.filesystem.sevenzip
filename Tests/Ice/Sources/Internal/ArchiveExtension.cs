@@ -15,184 +15,183 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip.Ice.Tests;
+
 using System;
 using System.Threading;
-using Cube.Mixin.Assembly;
-using Cube.Mixin.Observing;
+using Cube.Observable.Extensions;
+using Cube.Reflection.Extensions;
 using Cube.Tests;
 using NUnit.Framework;
 
-namespace Cube.FileSystem.SevenZip.Ice.Tests
+/* ------------------------------------------------------------------------- */
+///
+/// ArchiveExtension
+///
+/// <summary>
+/// Provides extended methods of ProgressViewModel and inherited
+/// classes.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+static class ArchiveExtension
 {
+    #region Methods
+
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveExtension
+    /// Test
     ///
     /// <summary>
-    /// Provides extended methods of ProgressViewModel and inherited
-    /// classes.
+    /// Tests the main operation.
     /// </summary>
     ///
+    /// <param name="src">Source ViewModel.</param>
+    ///
     /* --------------------------------------------------------------------- */
-    static class ArchiveExtension
+    public static void Test(this ProgressViewModel src) => src.Test(() => { });
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Test
+    ///
+    /// <summary>
+    /// Tests the main operation.
+    /// </summary>
+    ///
+    /// <param name="src">Source ViewModel.</param>
+    /// <param name="callback">Action after starting.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    public static void Test(this ProgressViewModel src, Action callback)
     {
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Test
-        ///
-        /// <summary>
-        /// Tests the main operation.
-        /// </summary>
-        ///
-        /// <param name="src">Source ViewModel.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static void Test(this ProgressViewModel src) => src.Test(() => { });
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Test
-        ///
-        /// <summary>
-        /// Tests the main operation.
-        /// </summary>
-        ///
-        /// <param name="src">Source ViewModel.</param>
-        /// <param name="callback">Action after starting.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static void Test(this ProgressViewModel src, Action callback)
-        {
-            var cts = new CancellationTokenSource();
-            using (src.Subscribe(e => {
-                if (e == nameof(src.State) && src.State == TimerState.Stop) cts.Cancel();
-            })) {
-                src.Start();
-                callback();
-                Assert.That(Wait.For(cts.Token), "Timeout");
-            }
+        var cts = new CancellationTokenSource();
+        using (src.Subscribe(e => {
+            if (e == nameof(src.State) && src.State == TimerState.Stop) cts.Cancel();
+        })) {
+            src.Start();
+            callback();
+            Assert.That(Wait.For(cts.Token), "Timeout");
         }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SetPassword
-        ///
-        /// <summary>
-        /// Subscribes the message to set password.
-        /// </summary>
-        ///
-        /// <param name="src">Source ViewModel.</param>
-        /// <param name="value">Password to set when requested.</param>
-        ///
-        /// <returns>Object to clear the subscription.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static IDisposable SetPassword(this ProgressViewModel src, string value) =>
-            src.Subscribe<QueryMessage<string, string>>(e =>
-        {
-            e.Value  = value;
-            e.Cancel = false;
-        });
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SetDestination
-        ///
-        /// <summary>
-        /// Subscribes the message to select the save path.
-        /// </summary>
-        ///
-        /// <param name="src">Source ViewModel.</param>
-        /// <param name="value">Save path to set when requested.</param>
-        ///
-        /// <returns>Object to clear the subscription.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static IDisposable SetDestination(this ProgressViewModel src, string value)
-        {
-            var dest = new DisposableContainer();
-
-            dest.Add(src.Subscribe<OpenDirectoryMessage>(e =>
-            {
-                e.Value  = value;
-                e.Cancel = false;
-            }));
-
-            dest.Add(src.Subscribe<SaveFileMessage>(e => {
-                e.Value  = value;
-                e.Cancel = false;
-            }));
-
-            return dest;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SetRuntime
-        ///
-        /// <summary>
-        /// Subscribes the message to select the details of compressing
-        /// settings.
-        /// </summary>
-        ///
-        /// <param name="src">Source ViewModel.</param>
-        /// <param name="value">Save path to set when requested.</param>
-        ///
-        /// <returns>Object to clear the subscription.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static IDisposable SetRuntime(this CompressViewModel src, string value) =>
-            src.Subscribe<CompressSettingViewModel>(e =>
-        {
-            e.Destination = value;
-            e.Execute();
-        });
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SetOverwrite
-        ///
-        /// <summary>
-        /// Subscribes the message to select the overwrite method.
-        /// </summary>
-        ///
-        /// <param name="src">Source ViewModel.</param>
-        /// <param name="value">
-        /// Overwrite method to set when requested.
-        /// </param>
-        ///
-        /// <returns>Object to clear the subscription.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static IDisposable SetOverwrite(this ExtractViewModel src, OverwriteMethod value) =>
-            src.Subscribe<QueryMessage<OverwriteQuerySource, OverwriteMethod>>(e =>
-        {
-            e.Value  = value;
-            e.Cancel = false;
-        });
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetPath
-        ///
-        /// <summary>
-        /// Gets the absolute path of the specified filename.
-        /// </summary>
-        ///
-        /// <param name="src">Source type.</param>
-        /// <param name="filename">Filename or relative path.</param>
-        ///
-        /// <returns>Absolute path.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static string GetPath(this Type src, string filename)
-        {
-            var root = src.Assembly.GetDirectoryName();
-            return Io.Combine(root, "Results", src.FullName, filename);
-        }
-
-        #endregion
     }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// SetPassword
+    ///
+    /// <summary>
+    /// Subscribes the message to set password.
+    /// </summary>
+    ///
+    /// <param name="src">Source ViewModel.</param>
+    /// <param name="value">Password to set when requested.</param>
+    ///
+    /// <returns>Object to clear the subscription.</returns>
+    ///
+    /* --------------------------------------------------------------------- */
+    public static IDisposable SetPassword(this ProgressViewModel src, string value) =>
+        src.Subscribe<QueryMessage<string, string>>(e =>
+    {
+        e.Value  = value;
+        e.Cancel = false;
+    });
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// SetDestination
+    ///
+    /// <summary>
+    /// Subscribes the message to select the save path.
+    /// </summary>
+    ///
+    /// <param name="src">Source ViewModel.</param>
+    /// <param name="value">Save path to set when requested.</param>
+    ///
+    /// <returns>Object to clear the subscription.</returns>
+    ///
+    /* --------------------------------------------------------------------- */
+    public static IDisposable SetDestination(this ProgressViewModel src, string value)
+    {
+        var dest = new DisposableContainer();
+
+        dest.Add(src.Subscribe<OpenDirectoryMessage>(e =>
+        {
+            e.Value  = value;
+            e.Cancel = false;
+        }));
+
+        dest.Add(src.Subscribe<SaveFileMessage>(e => {
+            e.Value  = value;
+            e.Cancel = false;
+        }));
+
+        return dest;
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// SetRuntime
+    ///
+    /// <summary>
+    /// Subscribes the message to select the details of compressing
+    /// settings.
+    /// </summary>
+    ///
+    /// <param name="src">Source ViewModel.</param>
+    /// <param name="value">Save path to set when requested.</param>
+    ///
+    /// <returns>Object to clear the subscription.</returns>
+    ///
+    /* --------------------------------------------------------------------- */
+    public static IDisposable SetRuntime(this CompressViewModel src, string value) =>
+        src.Subscribe<CompressSettingViewModel>(e =>
+    {
+        e.Destination = value;
+        e.Execute();
+    });
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// SetOverwrite
+    ///
+    /// <summary>
+    /// Subscribes the message to select the overwrite method.
+    /// </summary>
+    ///
+    /// <param name="src">Source ViewModel.</param>
+    /// <param name="value">
+    /// Overwrite method to set when requested.
+    /// </param>
+    ///
+    /// <returns>Object to clear the subscription.</returns>
+    ///
+    /* --------------------------------------------------------------------- */
+    public static IDisposable SetOverwrite(this ExtractViewModel src, OverwriteMethod value) =>
+        src.Subscribe<QueryMessage<OverwriteQuerySource, OverwriteMethod>>(e =>
+    {
+        e.Value  = value;
+        e.Cancel = false;
+    });
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// GetPath
+    ///
+    /// <summary>
+    /// Gets the absolute path of the specified filename.
+    /// </summary>
+    ///
+    /// <param name="src">Source type.</param>
+    /// <param name="filename">Filename or relative path.</param>
+    ///
+    /// <returns>Absolute path.</returns>
+    ///
+    /* --------------------------------------------------------------------- */
+    public static string GetPath(this Type src, string filename)
+    {
+        var root = src.Assembly.GetDirectoryName();
+        return Io.Combine(root, "Results", src.FullName, filename);
+    }
+
+    #endregion
 }

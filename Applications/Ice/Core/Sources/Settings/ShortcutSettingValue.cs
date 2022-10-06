@@ -15,219 +15,217 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip.Ice.Settings;
+
 using System;
 using System.Linq;
 using System.Runtime.Serialization;
+using Cube.Collections.Extensions;
 using Cube.DataContract;
-using Cube.Mixin.Assembly;
-using Cube.Mixin.Collections;
-using Cube.Mixin.Environment;
-using Cube.Mixin.String;
+using Cube.Reflection.Extensions;
+using Cube.Text.Extensions;
 
-namespace Cube.FileSystem.SevenZip.Ice.Settings
+/* ------------------------------------------------------------------------- */
+///
+/// ShortcutSettingValue
+///
+/// <summary>
+/// Represents the settings for creating shortcut links on the desktop.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+[DataContract]
+public sealed class ShortcutSettingValue : SerializableBase
 {
+    #region Properties
+
     /* --------------------------------------------------------------------- */
     ///
-    /// ShortcutSettingValue
+    /// Preset
     ///
     /// <summary>
-    /// Represents the settings for creating shortcut links on the desktop.
+    /// Gets or sets the preset menu.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [DataContract]
-    public sealed class ShortcutSettingValue : SerializableBase
+    [DataMember]
+    public Preset Preset
     {
-        #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Preset
-        ///
-        /// <summary>
-        /// Gets or sets the preset menu.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [DataMember]
-        public Preset Preset
-        {
-            get => Get(() => Preset.DefaultDesktop);
-            set => Set(value);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Directory
-        ///
-        /// <summary>
-        /// Gets or sets the path to create shortcut links.
-        /// If not set, the shortcut will be created on the desktop.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Directory
-        {
-            get => Get(() => string.Empty);
-            set => Set(value);
-        }
-
-        #endregion
-
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Load
-        ///
-        /// <summary>
-        /// Applies the current shortcut link existence to properties of
-        /// the object.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Load()
-        {
-            var b0 = new Shortcut { FullName = GetFileName(Properties.Resources.ScArcive) }.Exists;
-            if (b0) Preset |= Preset.Compress;
-            else Preset &= ~Preset.Compress;
-
-            var b1 = new Shortcut { FullName = GetFileName(Properties.Resources.ScExtract) }.Exists;
-            if (b1) Preset |= Preset.Extract;
-            else Preset &= ~Preset.Extract;
-
-            var b2 = new Shortcut { FullName = GetFileName(Properties.Resources.ScSettings) }.Exists;
-            if (b2) Preset |= Preset.Settings;
-            else Preset &= ~Preset.Settings;
-
-            if ((Preset & Preset.CompressMask) == Preset.None) Preset |= Preset.CompressZip;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Save
-        ///
-        /// <summary>
-        /// Creates or removes shortcut links.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Save()
-        {
-            SaveCompressShortcut();
-            SaveExtractShortcut();
-            SaveSettingShortcut();
-        }
-
-        #endregion
-
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SaveCompressShortcut
-        ///
-        /// <summary>
-        /// Creates or removes the shortcut link for compressing.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void SaveCompressShortcut()
-        {
-            var src  = GetFileName(Properties.Resources.ScArcive);
-            var dest = GetLink("cubeice.exe");
-            var sc   = new Shortcut
-            {
-                FullName     = src,
-                Target       = dest,
-                Arguments    = Preset.ToArguments().Select(e => e.Quote()).Join(" "),
-                IconLocation = $"{dest},1",
-            };
-
-            if ((Preset & Preset.Compress) != 0) sc.Create();
-            else sc.Delete();
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SaveExtractShortcut
-        ///
-        /// <summary>
-        /// Creates or removes the shortcut link for extracting.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void SaveExtractShortcut()
-        {
-            var src  = GetFileName(Properties.Resources.ScExtract);
-            var dest = GetLink("cubeice.exe");
-            var sc   = new Shortcut
-            {
-                FullName     = src,
-                Target       = dest,
-                Arguments    = Preset.Extract.ToArguments().Select(e => e.Quote()).Join(" "),
-                IconLocation = $"{dest},2",
-            };
-
-            if ((Preset & Preset.Extract) != 0) sc.Create();
-            else sc.Delete();
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SaveSettingShortcut
-        ///
-        /// <summary>
-        /// Creates or removes the shortcut link for settings.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void SaveSettingShortcut()
-        {
-            var src  = GetFileName(Properties.Resources.ScSettings);
-            var dest = GetLink("cubeice-setting.exe");
-            var sc   = new Shortcut
-            {
-                FullName     = src,
-                Target       = dest,
-                IconLocation = dest,
-            };
-
-            if ((Preset & Preset.Settings) != 0) sc.Create();
-            else sc.Delete();
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetFileName
-        ///
-        /// <summary>
-        /// Gets the path of the shortcut link.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private string GetFileName(string name)
-        {
-            var dir = Directory.HasValue() ?
-                      Directory :
-                      Environment.SpecialFolder.Desktop.GetName();
-            return Io.Combine(dir, name);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetLink
-        ///
-        /// <summary>
-        /// Gets the target path of the specified shortcut link.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private string GetLink(string filename) => Io.Combine(
-            typeof(ShortcutSettingValue).Assembly.GetDirectoryName(),
-            filename
-        );
-
-        #endregion
+        get => Get(() => Preset.DefaultDesktop);
+        set => Set(value);
     }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Directory
+    ///
+    /// <summary>
+    /// Gets or sets the path to create shortcut links.
+    /// If not set, the shortcut will be created on the desktop.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public string Directory
+    {
+        get => Get(() => string.Empty);
+        set => Set(value);
+    }
+
+    #endregion
+
+    #region Methods
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Load
+    ///
+    /// <summary>
+    /// Applies the current shortcut link existence to properties of
+    /// the object.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public void Load()
+    {
+        var b0 = new Shortcut { FullName = GetFileName(Properties.Resources.ScArcive) }.Exists;
+        if (b0) Preset |= Preset.Compress;
+        else Preset &= ~Preset.Compress;
+
+        var b1 = new Shortcut { FullName = GetFileName(Properties.Resources.ScExtract) }.Exists;
+        if (b1) Preset |= Preset.Extract;
+        else Preset &= ~Preset.Extract;
+
+        var b2 = new Shortcut { FullName = GetFileName(Properties.Resources.ScSettings) }.Exists;
+        if (b2) Preset |= Preset.Settings;
+        else Preset &= ~Preset.Settings;
+
+        if ((Preset & Preset.CompressMask) == Preset.None) Preset |= Preset.CompressZip;
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Save
+    ///
+    /// <summary>
+    /// Creates or removes shortcut links.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public void Save()
+    {
+        SaveCompressShortcut();
+        SaveExtractShortcut();
+        SaveSettingShortcut();
+    }
+
+    #endregion
+
+    #region Implementations
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// SaveCompressShortcut
+    ///
+    /// <summary>
+    /// Creates or removes the shortcut link for compressing.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private void SaveCompressShortcut()
+    {
+        var src  = GetFileName(Properties.Resources.ScArcive);
+        var dest = GetLink("cubeice.exe");
+        var sc   = new Shortcut
+        {
+            FullName     = src,
+            Target       = dest,
+            Arguments    = Preset.ToArguments().Select(e => e.Quote()).Join(" "),
+            IconLocation = $"{dest},1",
+        };
+
+        if ((Preset & Preset.Compress) != 0) sc.Create();
+        else sc.Delete();
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// SaveExtractShortcut
+    ///
+    /// <summary>
+    /// Creates or removes the shortcut link for extracting.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private void SaveExtractShortcut()
+    {
+        var src  = GetFileName(Properties.Resources.ScExtract);
+        var dest = GetLink("cubeice.exe");
+        var sc   = new Shortcut
+        {
+            FullName     = src,
+            Target       = dest,
+            Arguments    = Preset.Extract.ToArguments().Select(e => e.Quote()).Join(" "),
+            IconLocation = $"{dest},2",
+        };
+
+        if ((Preset & Preset.Extract) != 0) sc.Create();
+        else sc.Delete();
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// SaveSettingShortcut
+    ///
+    /// <summary>
+    /// Creates or removes the shortcut link for settings.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private void SaveSettingShortcut()
+    {
+        var src  = GetFileName(Properties.Resources.ScSettings);
+        var dest = GetLink("cubeice-setting.exe");
+        var sc   = new Shortcut
+        {
+            FullName     = src,
+            Target       = dest,
+            IconLocation = dest,
+        };
+
+        if ((Preset & Preset.Settings) != 0) sc.Create();
+        else sc.Delete();
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// GetFileName
+    ///
+    /// <summary>
+    /// Gets the path of the shortcut link.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private string GetFileName(string name)
+    {
+        var dir = Directory.HasValue() ?
+                  Directory :
+                  Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        return Io.Combine(dir, name);
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// GetLink
+    ///
+    /// <summary>
+    /// Gets the target path of the specified shortcut link.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private string GetLink(string filename) => Io.Combine(
+        typeof(ShortcutSettingValue).Assembly.GetDirectoryName(),
+        filename
+    );
+
+    #endregion
 }
