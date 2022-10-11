@@ -18,74 +18,59 @@
 /* ------------------------------------------------------------------------- */
 namespace Cube.FileSystem.SevenZip;
 
+using System;
+using System.Runtime.InteropServices;
+
 /* ------------------------------------------------------------------------- */
 ///
-/// ArchiveEntity
+/// IArchiveOpenVolumeCallback
 ///
 /// <summary>
-/// Represents an item in the archive.
+/// Represents an interface for decompressing a split archive.
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-public sealed class ArchiveEntity : Entity
+[ComImport]
+[Guid("23170F69-40C1-278A-0000-000600300000")]
+[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+internal interface IArchiveOpenVolumeCallback
 {
-    #region Constructors
-
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveEntity
+    /// GetProperty
     ///
     /// <summary>
-    /// Initializes a new instance of the ArchiveEntity class with the
-    /// specified arguments.
+    /// Gets the property of the compressed file for the specified ID.
     /// </summary>
     ///
-    /// <param name="src">Source object.</param>
+    /// <param name="pid">Property ID</param>
+    /// <param name="value">
+    /// Value corresponding to the property ID.
+    /// </param>
+    ///
+    /// <returns>OperationResult</returns>
     ///
     /* --------------------------------------------------------------------- */
-    internal ArchiveEntity(ArchiveEntitySource src) : base(src)
-    {
-        Index     = src.Index;
-        Crc       = src.Crc;
-        Encrypted = src.Encrypted;
-    }
-
-    #endregion
-
-    #region Properties
+    [PreserveSig]
+    int GetProperty(ItemPropId pid, ref PropVariant value);
 
     /* --------------------------------------------------------------------- */
     ///
-    /// Index
+    /// GetStream
     ///
     /// <summary>
-    /// Gets the index in the archive.
+    /// Get the stream corresponding to the volume to be read.
     /// </summary>
     ///
-    /* --------------------------------------------------------------------- */
-    public int Index { get; }
-
-    /* --------------------------------------------------------------------- */
+    /// <param name="name">Volume name.</param>
+    /// <param name="stream">Target input stream.</param>
     ///
-    /// Crc
-    ///
-    /// <summary>
-    /// Gets the CRC value of the item.
-    /// </summary>
+    /// <returns>OperationResult</returns>
     ///
     /* --------------------------------------------------------------------- */
-    public uint Crc { get; }
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// Encrypted
-    ///
-    /// <summary>
-    /// Gets the value indicating whether the archive is encrypted.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    public bool Encrypted { get; }
-
-    #endregion
+    [PreserveSig]
+    int GetStream(
+        [MarshalAs(UnmanagedType.LPWStr)] string name,
+        [Out, MarshalAs(UnmanagedType.Interface)] out IInStream stream
+    );
 }

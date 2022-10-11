@@ -16,28 +16,27 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-namespace Cube.FileSystem.SevenZip
+namespace Cube.FileSystem.SevenZip;
+
+/* ------------------------------------------------------------------------- */
+///
+/// SfxOption
+///
+/// <summary>
+/// Represents options when creating a new self-executable archive.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+public record SfxOption : CompressionOption
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// SfxOption
+    /// Module
     ///
     /// <summary>
-    /// Represents options when creating a new self-executable archive.
+    /// Gets or sets the path of SFX module.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public record SfxOption : CompressionOption
-    {
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Module
-        ///
-        /// <summary>
-        /// Gets or sets the path of SFX module.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Module { get; init; }
-    }
+    public string Module { get; init; }
 }

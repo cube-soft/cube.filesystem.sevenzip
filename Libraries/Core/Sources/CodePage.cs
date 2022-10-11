@@ -16,28 +16,27 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-namespace Cube.FileSystem.SevenZip
+namespace Cube.FileSystem.SevenZip;
+
+/* ------------------------------------------------------------------------- */
+///
+/// CodePage
+///
+/// <summary>
+/// Specifies code pages in Windows.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+public enum CodePage
 {
-    /* --------------------------------------------------------------------- */
-    ///
-    /// CodePage
-    ///
-    /// <summary>
-    /// Specifies code pages in Windows.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    public enum CodePage
-    {
-        /// <summary>ASCII</summary>
-        Ascii = 0,
-        /// <summary>Code page corresponding to the locale settings</summary>
-        Oem = 1,
-        /// <summary>Symbol</summary>
-        Symbol = 42,
-        /// <summary>Japanese (Shift_JIS compatible)</summary>
-        Japanese = 932,
-        /// <summary>UTF-8</summary>
-        Utf8 = 65001,
-    }
+    /// <summary>ASCII</summary>
+    Ascii = 0,
+    /// <summary>Code page corresponding to the locale settings</summary>
+    Oem = 1,
+    /// <summary>Symbol</summary>
+    Symbol = 42,
+    /// <summary>Japanese (Shift_JIS compatible)</summary>
+    Japanese = 932,
+    /// <summary>UTF-8</summary>
+    Utf8 = 65001,
 }

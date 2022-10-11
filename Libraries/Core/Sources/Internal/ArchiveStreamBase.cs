@@ -18,36 +18,43 @@
 /* ------------------------------------------------------------------------- */
 namespace Cube.FileSystem.SevenZip;
 
+using System;
+using System.IO;
+using System.Runtime.InteropServices;
+
 /* ------------------------------------------------------------------------- */
 ///
-/// ArchiveEntity
+/// ArchiveStreamBase
 ///
 /// <summary>
-/// Represents an item in the archive.
+/// Represents the base class for streams that handle archives.
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-public sealed class ArchiveEntity : Entity
+internal class ArchiveStreamBase : DisposableBase
 {
     #region Constructors
 
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveEntity
+    /// ArchiveStreamBase
     ///
     /// <summary>
-    /// Initializes a new instance of the ArchiveEntity class with the
-    /// specified arguments.
+    /// Initializes a new instance of the ArchiveStreamBase class with
+    /// the specified arguments.
     /// </summary>
     ///
-    /// <param name="src">Source object.</param>
+    /// <param name="src">Target stream.</param>
+    /// <param name="dispose">
+    /// Value indicating whether to discard the BaseStream object when
+    /// disposed.
+    /// </param>
     ///
     /* --------------------------------------------------------------------- */
-    internal ArchiveEntity(ArchiveEntitySource src) : base(src)
+    protected ArchiveStreamBase(Stream src, bool dispose)
     {
-        Index     = src.Index;
-        Crc       = src.Crc;
-        Encrypted = src.Encrypted;
+        BaseStream = src;
+        _dispose   = dispose;
     }
 
     #endregion
@@ -56,36 +63,62 @@ public sealed class ArchiveEntity : Entity
 
     /* --------------------------------------------------------------------- */
     ///
-    /// Index
+    /// BaseStream
     ///
     /// <summary>
-    /// Gets the index in the archive.
+    /// Gets the target stream.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public int Index { get; }
+    protected Stream BaseStream { get; }
+
+    #endregion
+
+    #region Methods
 
     /* --------------------------------------------------------------------- */
     ///
-    /// Crc
+    /// Seek
     ///
     /// <summary>
-    /// Gets the CRC value of the item.
+    /// Sets the position of the stream.
+    /// The method implements IInStream.Seek(long, SeekOrigin, IntPtr).
     /// </summary>
     ///
+    /// <param name="offset">Offset value from the origin.</param>
+    /// <param name="origin">Starting position.</param>
+    /// <param name="result">Position after setting.</param>
+    ///
     /* --------------------------------------------------------------------- */
-    public uint Crc { get; }
+    public virtual void Seek(long offset, SeekOrigin origin, IntPtr result)
+    {
+        var pos = BaseStream.Seek(offset, origin);
+        if (result != IntPtr.Zero) Marshal.WriteInt64(result, pos);
+    }
 
     /* --------------------------------------------------------------------- */
     ///
-    /// Encrypted
+    /// Dispose
     ///
     /// <summary>
-    /// Gets the value indicating whether the archive is encrypted.
+    /// Releases the unmanaged resources used by the object and
+    /// optionally releases the managed resources.
     /// </summary>
     ///
+    /// <param name="disposing">
+    /// true to release both managed and unmanaged resources;
+    /// false to release only unmanaged resources.
+    /// </param>
+    ///
     /* --------------------------------------------------------------------- */
-    public bool Encrypted { get; }
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing && _dispose) BaseStream.Dispose();
+    }
 
+    #endregion
+
+    #region Fields
+    private readonly bool _dispose = true;
     #endregion
 }

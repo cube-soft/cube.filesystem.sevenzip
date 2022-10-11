@@ -16,43 +16,42 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip;
+
 using System.Runtime.ConstrainedExecution;
 using Microsoft.Win32.SafeHandles;
 
-namespace Cube.FileSystem.SevenZip
+/* ------------------------------------------------------------------------- */
+///
+/// SafeLibraryHandle
+///
+/// <summary>
+/// Provides the functionality to hold a DLL handle.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+internal sealed class SafeLibraryHandle : SafeHandleZeroOrMinusOneIsInvalid
 {
     /* --------------------------------------------------------------------- */
     ///
     /// SafeLibraryHandle
     ///
     /// <summary>
-    /// Provides the functionality to hold a DLL handle.
+    /// Initializes a new instance of the SafeLibraryHandle class.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal sealed class SafeLibraryHandle : SafeHandleZeroOrMinusOneIsInvalid
-    {
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SafeLibraryHandle
-        ///
-        /// <summary>
-        /// Initializes a new instance of the SafeLibraryHandle class.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public SafeLibraryHandle() : base(true) { }
+    public SafeLibraryHandle() : base(true) { }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ReleaseHandle
-        ///
-        /// <summary>
-        /// Releases the handle.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
-        protected override bool ReleaseHandle() => Kernel32.NativeMethods.FreeLibrary(handle);
-    }
+    /* --------------------------------------------------------------------- */
+    ///
+    /// ReleaseHandle
+    ///
+    /// <summary>
+    /// Releases the handle.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
+    protected override bool ReleaseHandle() => Kernel32.NativeMethods.FreeLibrary(handle);
 }

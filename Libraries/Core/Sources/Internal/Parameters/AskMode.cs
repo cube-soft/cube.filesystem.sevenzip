@@ -16,21 +16,20 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-namespace Cube.FileSystem.SevenZip
+namespace Cube.FileSystem.SevenZip;
+
+/* ------------------------------------------------------------------------- */
+///
+/// AskMode
+///
+/// <summary>
+/// Specifies processing mode.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+internal enum AskMode
 {
-    /* --------------------------------------------------------------------- */
-    ///
-    /// AskMode
-    ///
-    /// <summary>
-    /// Specifies processing mode.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    internal enum AskMode
-    {
-        Extract = 0,
-        Test,
-        Skip
-    }
+    Extract = 0,
+    Test,
+    Skip
 }

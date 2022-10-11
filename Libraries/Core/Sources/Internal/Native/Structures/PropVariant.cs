@@ -16,263 +16,246 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip;
+
 using System;
 using System.Runtime.InteropServices;
 
-namespace Cube.FileSystem.SevenZip
+/* ------------------------------------------------------------------------- */
+///
+/// PropVariant
+///
+/// <summary>
+/// https://msdn.microsoft.com/en-us/library/windows/desktop/aa380072.aspx
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+[StructLayout(LayoutKind.Explicit)]
+internal struct PropVariant
 {
+    #region Properties
+
     /* --------------------------------------------------------------------- */
     ///
-    /// PropVariant
+    /// VarType
     ///
     /// <summary>
-    /// https://msdn.microsoft.com/en-us/library/windows/desktop/aa380072.aspx
+    /// Gets the object type.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [StructLayout(LayoutKind.Explicit)]
-    internal struct PropVariant
+    public VarEnum VarType
     {
-        #region Properties
+        get => (VarEnum)_vt;
+        private set => _vt = (ushort)value;
+    }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// VarType
-        ///
-        /// <summary>
-        /// Gets the object type.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public VarEnum VarType
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Object
+    ///
+    /// <summary>
+    /// Gets the content.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public object Object
+    {
+        get
         {
-            get => (VarEnum)_vt;
-            private set => _vt = (ushort)value;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Object
-        ///
-        /// <summary>
-        /// Gets the content.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public object Object
-        {
-            get
+            switch (VarType)
             {
-                switch (VarType)
-                {
-                    case VarEnum.VT_EMPTY:
-                        return null;
-                    case VarEnum.VT_FILETIME:
-                        return DateTime.FromFileTime(_v64);
-                    default:
-                        var h = GCHandle.Alloc(this, GCHandleType.Pinned);
-                        try { return Marshal.GetObjectForNativeVariant(h.AddrOfPinnedObject()); }
-                        finally { h.Free(); }
-                }
+                case VarEnum.VT_EMPTY:
+                    return null;
+                case VarEnum.VT_FILETIME:
+                    return DateTime.FromFileTime(_v64);
+                default:
+                    var h = GCHandle.Alloc(this, GCHandleType.Pinned);
+                    try { return Marshal.GetObjectForNativeVariant(h.AddrOfPinnedObject()); }
+                    finally { h.Free(); }
             }
         }
-
-        #endregion
-
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Clear
-        ///
-        /// <summary>
-        /// Clears the fields.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Clear() => Ole32.NativeMethods.PropVariantClear(ref this);
-
-        #region Set
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Set
-        ///
-        /// <summary>
-        /// Sets the specified boolean value.
-        /// </summary>
-        ///
-        /// <param name="value">Setting value.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Set(bool value)
-        {
-            VarType = VarEnum.VT_BOOL;
-            _v64u   = value ? 1UL : 0UL;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Set
-        ///
-        /// <summary>
-        /// Sets the specified uint value.
-        /// </summary>
-        ///
-        /// <param name="value">Setting value.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Set(uint value)
-        {
-            VarType = VarEnum.VT_UI4;
-            _v32u   = value;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Set
-        ///
-        /// <summary>
-        /// Sets the specified ulong value.
-        /// </summary>
-        ///
-        /// <param name="value">Setting value.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Set(ulong value)
-        {
-            VarType = VarEnum.VT_UI8;
-            _v64u   = value;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Set
-        ///
-        /// <summary>
-        /// Sets the specified string.
-        /// </summary>
-        ///
-        /// <param name="value">Setting value.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Set(string value)
-        {
-            VarType = VarEnum.VT_BSTR;
-            _vstr   = Marshal.StringToBSTR(value);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Set
-        ///
-        /// <summary>
-        /// Sets the specified DateTime object.
-        /// </summary>
-        ///
-        /// <param name="value">Setting value.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Set(DateTime value)
-        {
-            VarType = VarEnum.VT_FILETIME;
-            _v64    = value.ToFileTime();
-        }
-
-        #endregion
-
-        #region Create
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Create
-        ///
-        /// <summary>
-        /// Creates a new instance of the PropVariant class with the
-        /// specified boolean value.
-        /// </summary>
-        ///
-        /// <param name="value">Setting value</param>
-        ///
-        /// <returns>PropVariant object.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static PropVariant Create(bool value)
-        {
-            var dest = new PropVariant();
-            dest.Set(value);
-            return dest;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Create
-        ///
-        /// <summary>
-        /// Creates a new instance of the PropVariant class with the
-        /// specified uint value.
-        /// </summary>
-        ///
-        /// <param name="value">Setting value</param>
-        ///
-        /// <returns>PropVariant object.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static PropVariant Create(uint value)
-        {
-            var dest = new PropVariant();
-            dest.Set(value);
-            return dest;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Create
-        ///
-        /// <summary>
-        /// Creates a new instance of the PropVariant class with the
-        /// specified string.
-        /// </summary>
-        ///
-        /// <param name="value">Setting value</param>
-        ///
-        /// <returns>PropVariant object.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static PropVariant Create(string value)
-        {
-            var dest = new PropVariant();
-            dest.Set(value);
-            return dest;
-        }
-
-        #endregion
-
-        #endregion
-
-        #region Fields
-        [FieldOffset(0)] private ushort _vt;
-        [FieldOffset(8)] private IntPtr _vstr;
-        [FieldOffset(8)] private uint   _v32u;
-        [FieldOffset(8)] private long   _v64;
-        [FieldOffset(8)] private ulong  _v64u;
-        [FieldOffset(8)] private PropArray _hack;
-        #endregion
     }
+
+    #endregion
+
+    #region Methods
 
     /* --------------------------------------------------------------------- */
     ///
-    /// PropArray
+    /// Clear
     ///
     /// <summary>
-    /// The class is used to bridge the x86/x64 size difference.
+    /// Clears the fields.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct PropArray
+    public void Clear() => Ole32.NativeMethods.PropVariantClear(ref this);
+
+    #region Set
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Set
+    ///
+    /// <summary>
+    /// Sets the specified boolean value.
+    /// </summary>
+    ///
+    /// <param name="value">Setting value.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    public void Set(bool value)
     {
-        uint _cElems;
-        IntPtr _pElems;
+        VarType = VarEnum.VT_BOOL;
+        _v64u   = value ? 1UL : 0UL;
     }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Set
+    ///
+    /// <summary>
+    /// Sets the specified uint value.
+    /// </summary>
+    ///
+    /// <param name="value">Setting value.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    public void Set(uint value)
+    {
+        VarType = VarEnum.VT_UI4;
+        _v32u   = value;
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Set
+    ///
+    /// <summary>
+    /// Sets the specified ulong value.
+    /// </summary>
+    ///
+    /// <param name="value">Setting value.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    public void Set(ulong value)
+    {
+        VarType = VarEnum.VT_UI8;
+        _v64u   = value;
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Set
+    ///
+    /// <summary>
+    /// Sets the specified string.
+    /// </summary>
+    ///
+    /// <param name="value">Setting value.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    public void Set(string value)
+    {
+        VarType = VarEnum.VT_BSTR;
+        _vstr   = Marshal.StringToBSTR(value);
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Set
+    ///
+    /// <summary>
+    /// Sets the specified DateTime object.
+    /// </summary>
+    ///
+    /// <param name="value">Setting value.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    public void Set(DateTime value)
+    {
+        VarType = VarEnum.VT_FILETIME;
+        _v64    = value.ToFileTime();
+    }
+
+    #endregion
+
+    #region Create
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Create
+    ///
+    /// <summary>
+    /// Creates a new instance of the PropVariant class with the
+    /// specified boolean value.
+    /// </summary>
+    ///
+    /// <param name="value">Setting value</param>
+    ///
+    /// <returns>PropVariant object.</returns>
+    ///
+    /* --------------------------------------------------------------------- */
+    public static PropVariant Create(bool value)
+    {
+        var dest = new PropVariant();
+        dest.Set(value);
+        return dest;
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Create
+    ///
+    /// <summary>
+    /// Creates a new instance of the PropVariant class with the
+    /// specified uint value.
+    /// </summary>
+    ///
+    /// <param name="value">Setting value</param>
+    ///
+    /// <returns>PropVariant object.</returns>
+    ///
+    /* --------------------------------------------------------------------- */
+    public static PropVariant Create(uint value)
+    {
+        var dest = new PropVariant();
+        dest.Set(value);
+        return dest;
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Create
+    ///
+    /// <summary>
+    /// Creates a new instance of the PropVariant class with the
+    /// specified string.
+    /// </summary>
+    ///
+    /// <param name="value">Setting value</param>
+    ///
+    /// <returns>PropVariant object.</returns>
+    ///
+    /* --------------------------------------------------------------------- */
+    public static PropVariant Create(string value)
+    {
+        var dest = new PropVariant();
+        dest.Set(value);
+        return dest;
+    }
+
+    #endregion
+
+    #endregion
+
+    #region Fields
+    [FieldOffset(0)] private ushort _vt;
+    [FieldOffset(8)] private IntPtr _vstr;
+    [FieldOffset(8)] private uint   _v32u;
+    [FieldOffset(8)] private long   _v64;
+    [FieldOffset(8)] private ulong  _v64u;
+    [FieldOffset(8)] private PropArray _hack;
+    #endregion
 }

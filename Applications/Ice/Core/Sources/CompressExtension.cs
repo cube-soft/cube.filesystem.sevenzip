@@ -15,113 +15,112 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip.Ice;
+
 using System;
 
-namespace Cube.FileSystem.SevenZip.Ice
+/* ------------------------------------------------------------------------- */
+///
+/// CompressExtension
+///
+/// <summary>
+/// Provides extended methods of the CompressRuntime class.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+public static class CompressExtension
 {
+    #region Methods
+
     /* --------------------------------------------------------------------- */
     ///
-    /// CompressExtension
+    /// ToOption
     ///
     /// <summary>
-    /// Provides extended methods of the CompressRuntime class.
+    /// Creates a new instance of the CompressionOption class with the
+    /// specified arguments.
+    /// </summary>
+    ///
+    /// <param name="src">Runtime settings.</param>
+    /// <param name="settings">User settings.</param>
+    ///
+    /// <remarks>CompressionOption object.</remarks>
+    ///
+    /* --------------------------------------------------------------------- */
+    public static CompressionOption ToOption(this CompressQueryValue src, SettingFolder settings)
+    {
+        var filter = Filter.From(settings.Value.GetFilters(settings.Value.Compress.Filtering));
+
+        return src.Format switch
+        {
+            Format.Zip => MakeZip(src, filter, settings.Value.Compress),
+            Format.Sfx => MakeSfx(src, filter),
+            _          => MakeCommon(src, filter),
+        };
+    }
+
+    #endregion
+
+    #region Implementations
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// MakeZip
+    ///
+    /// <summary>
+    /// Creates a new instance of the CompressionOption class.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public static class CompressExtension
+    private static CompressionOption MakeZip(CompressQueryValue src,
+        Predicate<Entity> filter, Settings.CompressSettingValue others) => new()
     {
-        #region Methods
+        CompressionLevel  = src.CompressionLevel,
+        CompressionMethod = src.CompressionMethod,
+        EncryptionMethod  = src.EncryptionMethod,
+        Password          = src.Password,
+        ThreadCount       = src.ThreadCount,
+        CodePage          = others.UseUtf8 ? CodePage.Utf8 : CodePage.Oem,
+        Filter            = filter,
+    };
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ToOption
-        ///
-        /// <summary>
-        /// Creates a new instance of the CompressionOption class with the
-        /// specified arguments.
-        /// </summary>
-        ///
-        /// <param name="src">Runtime settings.</param>
-        /// <param name="settings">User settings.</param>
-        ///
-        /// <remarks>CompressionOption object.</remarks>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static CompressionOption ToOption(this CompressQueryValue src, SettingFolder settings)
-        {
-            var filter = Filter.From(settings.Value.GetFilters(settings.Value.Compress.Filtering));
+    /* --------------------------------------------------------------------- */
+    ///
+    /// CreateSfxOption
+    ///
+    /// <summary>
+    /// Creates a new instance of the SfxOption class.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private static SfxOption MakeSfx(CompressQueryValue src, Predicate<Entity> filter) => new()
+    {
+        CompressionLevel  = src.CompressionLevel,
+        CompressionMethod = src.CompressionMethod,
+        ThreadCount       = src.ThreadCount,
+        Module            = src.Sfx,
+        Password          = src.Password,
+        Filter            = filter,
+    };
 
-            return src.Format switch
-            {
-                Format.Zip      => MakeZip(src, filter, settings.Value.Compress),
-                Format.Sfx      => MakeSfx(src, filter),
-                _               => MakeCommon(src, filter),
-            };
-        }
+    /* --------------------------------------------------------------------- */
+    ///
+    /// MakeCommon
+    ///
+    /// <summary>
+    /// Creates a new instance of the ArchiveOption class.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private static CompressionOption MakeCommon(CompressQueryValue src, Predicate<Entity> filter) => new()
+    {
+        CompressionMethod = src.CompressionMethod,
+        CompressionLevel  = src.CompressionLevel,
+        EncryptionMethod  = src.EncryptionMethod,
+        Password          = src.Password,
+        ThreadCount       = src.ThreadCount,
+        Filter            = filter,
+    };
 
-        #endregion
-
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// MakeZip
-        ///
-        /// <summary>
-        /// Creates a new instance of the CompressionOption class.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private static CompressionOption MakeZip(CompressQueryValue src,
-            Predicate<Entity> filter, Settings.CompressSettingValue others) => new()
-        {
-            CompressionLevel  = src.CompressionLevel,
-            CompressionMethod = src.CompressionMethod,
-            EncryptionMethod  = src.EncryptionMethod,
-            Password          = src.Password,
-            ThreadCount       = src.ThreadCount,
-            CodePage          = others.UseUtf8 ? CodePage.Utf8 : CodePage.Oem,
-            Filter            = filter,
-        };
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CreateSfxOption
-        ///
-        /// <summary>
-        /// Creates a new instance of the SfxOption class.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private static SfxOption MakeSfx(CompressQueryValue src, Predicate<Entity> filter) => new()
-        {
-            CompressionLevel  = src.CompressionLevel,
-            CompressionMethod = src.CompressionMethod,
-            ThreadCount       = src.ThreadCount,
-            Module            = src.Sfx,
-            Password          = src.Password,
-            Filter            = filter,
-        };
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// MakeCommon
-        ///
-        /// <summary>
-        /// Creates a new instance of the ArchiveOption class.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private static CompressionOption MakeCommon(CompressQueryValue src, Predicate<Entity> filter) => new()
-        {
-            CompressionMethod = src.CompressionMethod,
-            CompressionLevel  = src.CompressionLevel,
-            EncryptionMethod  = src.EncryptionMethod,
-            Password          = src.Password,
-            ThreadCount       = src.ThreadCount,
-            Filter            = filter,
-        };
-
-        #endregion
-    }
+    #endregion
 }

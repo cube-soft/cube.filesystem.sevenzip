@@ -15,90 +15,89 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip.Ice;
+
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Cube.DataContract;
 
-namespace Cube.FileSystem.SevenZip.Ice
+/* ------------------------------------------------------------------------- */
+///
+/// Context
+///
+/// <summary>
+/// Represents the information of a context menu.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+[DataContract]
+public sealed class Context : SerializableBase
 {
+    #region Properties
+
     /* --------------------------------------------------------------------- */
     ///
-    /// Context
+    /// Name
     ///
     /// <summary>
-    /// Represents the information of a context menu.
+    /// Get or set the display name of the context menu.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [DataContract]
-    public sealed class Context : SerializableBase
+    [DataMember]
+    public string Name
     {
-        #region Properties
-
-        /* --------------------------------------------------------------------- */
-        ///
-        /// Name
-        ///
-        /// <summary>
-        /// Get or set the display name of the context menu.
-        /// </summary>
-        ///
-        /* --------------------------------------------------------------------- */
-        [DataMember]
-        public string Name
-        {
-            get => Get(() => string.Empty);
-            set => Set(value);
-        }
-
-        /* --------------------------------------------------------------------- */
-        ///
-        /// Arguments
-        ///
-        /// <summary>
-        /// Get or set the argument for executing the context menu.
-        /// </summary>
-        ///
-        /* --------------------------------------------------------------------- */
-        [DataMember]
-        public string Arguments
-        {
-            get => Get(() => string.Empty);
-            set => Set(value);
-        }
-
-        /* --------------------------------------------------------------------- */
-        ///
-        /// IconIndex
-        ///
-        /// <summary>
-        /// Gets or sets the index indicating the icon of the context menu.
-        /// </summary>
-        ///
-        /* --------------------------------------------------------------------- */
-        [DataMember]
-        public int IconIndex
-        {
-            get => Get(() => 0);
-            set => Set(value);
-        }
-
-        /* --------------------------------------------------------------------- */
-        ///
-        /// Children
-        ///
-        /// <summary>
-        /// Gets or sets the child elements.
-        /// </summary>
-        ///
-        /* --------------------------------------------------------------------- */
-        [DataMember]
-        public List<Context> Children
-        {
-            get => Get(() => new List<Context>());
-            set => Set(value);
-        }
-
-        #endregion
+        get => Get(() => string.Empty);
+        set => Set(value);
     }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Arguments
+    ///
+    /// <summary>
+    /// Get or set the argument for executing the context menu.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    [DataMember]
+    public string Arguments
+    {
+        get => Get(() => string.Empty);
+        set => Set(value);
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// IconIndex
+    ///
+    /// <summary>
+    /// Gets or sets the index indicating the icon of the context menu.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    [DataMember]
+    public int IconIndex
+    {
+        get => Get(() => 0);
+        set => Set(value);
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Children
+    ///
+    /// <summary>
+    /// Gets or sets the child elements.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    [DataMember]
+    public List<Context> Children
+    {
+        get => Get(() => new List<Context>());
+        set => Set(value);
+    }
+
+    #endregion
 }

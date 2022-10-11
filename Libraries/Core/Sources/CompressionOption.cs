@@ -16,62 +16,61 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-namespace Cube.FileSystem.SevenZip
+namespace Cube.FileSystem.SevenZip;
+
+/* ------------------------------------------------------------------------- */
+///
+/// CompressionOption
+///
+/// <summary>
+/// Represents options when creating a new archive.
+/// Some formats may support only some of these options.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+public record CompressionOption : ArchiveOption
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// CompressionOption
+    /// CompressionLevel
     ///
     /// <summary>
-    /// Represents options when creating a new archive.
-    /// Some formats may support only some of these options.
+    /// Gets or sets the compression level.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public record CompressionOption : ArchiveOption
-    {
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CompressionLevel
-        ///
-        /// <summary>
-        /// Gets or sets the compression level.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public CompressionLevel CompressionLevel { get; init; } = CompressionLevel.Normal;
+    public CompressionLevel CompressionLevel { get; init; } = CompressionLevel.Normal;
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CompressionMethod
-        ///
-        /// <summary>
-        /// Gets or sets the compression method.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public CompressionMethod CompressionMethod { get; init; } = CompressionMethod.Default;
+    /* --------------------------------------------------------------------- */
+    ///
+    /// CompressionMethod
+    ///
+    /// <summary>
+    /// Gets or sets the compression method.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public CompressionMethod CompressionMethod { get; init; } = CompressionMethod.Default;
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// EncryptionMethod
-        ///
-        /// <summary>
-        /// Gets or sets the encryption method.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public EncryptionMethod EncryptionMethod { get; init; } = EncryptionMethod.Default;
+    /* --------------------------------------------------------------------- */
+    ///
+    /// EncryptionMethod
+    ///
+    /// <summary>
+    /// Gets or sets the encryption method.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public EncryptionMethod EncryptionMethod { get; init; } = EncryptionMethod.Default;
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Password
-        ///
-        /// <summary>
-        /// Gets or sets a password to encrypt the archive being created.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Password { get; init; } = string.Empty;
-    }
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Password
+    ///
+    /// <summary>
+    /// Gets or sets a password to encrypt the archive being created.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public string Password { get; init; } = string.Empty;
 }

@@ -16,54 +16,53 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip;
+
 using System;
 
-namespace Cube.FileSystem.SevenZip
+/* ------------------------------------------------------------------------- */
+///
+/// ArchiveOption
+///
+/// <summary>
+/// Represents options when creating a new archive.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+public record ArchiveOption
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveOption
+    /// ThreadCount
     ///
     /// <summary>
-    /// Represents options when creating a new archive.
+    /// Gets or sets the number of threads that the archiver is
+    /// available.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public record ArchiveOption
-    {
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ThreadCount
-        ///
-        /// <summary>
-        /// Gets or sets the number of threads that the archiver is
-        /// available.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public int ThreadCount { get; init; } = 1;
+    public int ThreadCount { get; init; } = 1;
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CodePage
-        ///
-        /// <summary>
-        /// Gets or sets the value of code page.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public CodePage CodePage { get; init; } = CodePage.Oem;
+    /* --------------------------------------------------------------------- */
+    ///
+    /// CodePage
+    ///
+    /// <summary>
+    /// Gets or sets the value of code page.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public CodePage CodePage { get; init; } = CodePage.Oem;
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Filter
-        ///
-        /// <summary>
-        /// Gets or sets the predicate function to filter some of files or
-        /// directories.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public Predicate<Entity> Filter { get; init; }
-    }
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Filter
+    ///
+    /// <summary>
+    /// Gets or sets the predicate function to filter some of files or
+    /// directories.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public Predicate<Entity> Filter { get; init; }
 }

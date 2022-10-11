@@ -16,87 +16,39 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip;
+
 using System;
 using System.Runtime.InteropServices;
 
-namespace Cube.FileSystem.SevenZip
+/* ------------------------------------------------------------------------- */
+///
+/// ICryptoGetTextPassword
+///
+/// <summary>
+/// Represents an interface for entering a password when decompressing
+/// an archive.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+[ComImport]
+[Guid("23170F69-40C1-278A-0000-000500100000")]
+[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+internal interface ICryptoGetTextPassword
 {
-    #region ICryptoGetTextPassword
-
     /* --------------------------------------------------------------------- */
     ///
-    /// ICryptoGetTextPassword
+    /// CryptoGetTextPassword
     ///
     /// <summary>
-    /// Represents an interface for entering a password when decompressing
-    /// an archive.
+    /// Gets the password of the provided archive.
     /// </summary>
     ///
-    /* --------------------------------------------------------------------- */
-    [ComImport]
-    [Guid("23170F69-40C1-278A-0000-000500100000")]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICryptoGetTextPassword
-    {
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CryptoGetTextPassword
-        ///
-        /// <summary>
-        /// Gets the password of the provided archive.
-        /// </summary>
-        ///
-        /// <param name="password">Password.</param>
-        ///
-        /// <returns>OperationResult</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        [PreserveSig]
-        int CryptoGetTextPassword([MarshalAs(UnmanagedType.BStr)] out string password);
-    }
-
-    #endregion
-
-    #region ICryptoGetTextPassword2
-
-    /* --------------------------------------------------------------------- */
+    /// <param name="password">Password.</param>
     ///
-    /// ICryptoGetTextPassword2
-    ///
-    /// <summary>
-    /// Represents an interface for entering a password when compressing
-    /// an archive.
-    /// </summary>
+    /// <returns>OperationResult</returns>
     ///
     /* --------------------------------------------------------------------- */
-    [ComImport]
-    [Guid("23170F69-40C1-278A-0000-000500110000")]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICryptoGetTextPassword2
-    {
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CryptoGetTextPassword2
-        ///
-        /// <summary>
-        /// Gets the password of the provided archive.
-        /// </summary>
-        ///
-        /// <param name="enable">
-        /// Value indicating whether to set a password (0 if not).
-        /// </param>
-        ///
-        /// <param name="password">Password.</param>
-        ///
-        /// <returns>OperationResult</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        [PreserveSig]
-        int CryptoGetTextPassword2(
-            ref int enable,
-            [MarshalAs(UnmanagedType.BStr)] out string password
-        );
-    }
-
-    #endregion
+    [PreserveSig]
+    int CryptoGetTextPassword([MarshalAs(UnmanagedType.BStr)] out string password);
 }

@@ -19,37 +19,52 @@
 namespace Cube.FileSystem.SevenZip;
 
 using System;
-using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 /* ------------------------------------------------------------------------- */
 ///
-/// Filter
+/// ISequentialOutStream
 ///
 /// <summary>
-/// Provides functionality to create the filter functions.
+/// Represents an interface for processing the output stream of an
+/// archive.
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-public static class Filter
+[ComImport]
+[Guid("23170F69-40C1-278A-0000-000300020000")]
+[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+internal interface ISequentialOutStream
 {
-    #region Methods
-
     /* --------------------------------------------------------------------- */
     ///
-    /// From
+    /// Write
     ///
     /// <summary>
-    /// Creates a new filter function with the specified file or
-    /// directory names.
+    /// Writes data to unpacked file stream
     /// </summary>
     ///
-    /// <param name="src">
-    /// Collection of file or directory  names to be filtered.
-    /// </param>
+    /// <param name="data">Array of bytes available for reading</param>
+    /// <param name="size">Array size</param>
+    /// <param name="processedSize">Processed data size</param>
+    ///
+    /// <returns>S_OK if success</returns>
+    ///
+    /// <remarks>
+    /// If size != 0, return value is S_OK and (*processedSize == 0),
+    /// then there are no more bytes in stream.
+    /// If (size > 0) and there are bytes in stream,
+    /// this function must read at least 1 byte.
+    /// This function is allowed to rwrite less than "size" bytes.
+    /// You must call Write function in loop, if you need exact
+    /// amount of data.
+    /// </remarks>
     ///
     /* --------------------------------------------------------------------- */
-    public static Predicate<Entity> From(IEnumerable<string> src) =>
-        new FilterCollection(src).Match;
-
-    #endregion
+    [PreserveSig]
+    int Write(
+        [In, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] byte[] data,
+        uint size,
+        IntPtr processedSize
+    );
 }

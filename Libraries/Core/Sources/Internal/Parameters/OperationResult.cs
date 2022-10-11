@@ -16,31 +16,30 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-namespace Cube.FileSystem.SevenZip
-{
-    /* --------------------------------------------------------------------- */
-    ///
-    /// OperationResult
-    ///
-    /// <summary>
-    /// Specifies the operation result.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    internal enum OperationResult
-    {
-        OK = 0,
-        UnsupportedMethod,
-        DataError,
-        CrcError,
-        Unavailable,
-        UnexpectedEnd,
-        DataAfterEnd,
-        IsNotArc,
-        HeadersError,
-        WrongPassword,
+namespace Cube.FileSystem.SevenZip;
 
-        // Extended for Cube.FileSystem
-        UserCancel = -2,
-    }
+/* ------------------------------------------------------------------------- */
+///
+/// OperationResult
+///
+/// <summary>
+/// Specifies the operation result.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+internal enum OperationResult
+{
+    OK = 0,
+    UnsupportedMethod,
+    DataError,
+    CrcError,
+    Unavailable,
+    UnexpectedEnd,
+    DataAfterEnd,
+    IsNotArc,
+    HeadersError,
+    WrongPassword,
+
+    // Extended for Cube.FileSystem
+    UserCancel = -2,
 }

@@ -15,114 +15,113 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip.Ice.Settings;
+
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Cube.DataContract;
 
-namespace Cube.FileSystem.SevenZip.Ice.Settings
+/* ------------------------------------------------------------------------- */
+///
+/// ContextSettingValue
+///
+/// <summary>
+/// Represents the settings of the context menu that is displayed
+/// in the explorer.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+[DataContract]
+public sealed class ContextSettingValue : SerializableBase
 {
+    #region Properties
+
     /* --------------------------------------------------------------------- */
     ///
-    /// ContextSettingValue
+    /// Preset
     ///
     /// <summary>
-    /// Represents the settings of the context menu that is displayed
-    /// in the explorer.
+    /// Gets or sets the value that represents the preset menu.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [DataContract]
-    public sealed class ContextSettingValue : SerializableBase
+    [DataMember]
+    public Preset Preset
     {
-        #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Preset
-        ///
-        /// <summary>
-        /// Gets or sets the value that represents the preset menu.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [DataMember]
-        public Preset Preset
-        {
-            get => Get(() => Preset.DefaultContext);
-            set => Set(value);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Custom
-        ///
-        /// <summary>
-        /// Gets or sets the collection of customized context menu.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [DataMember]
-        public List<Context> Custom
-        {
-            get => Get(() => new List<Context>());
-            set => Set(value);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// UseCustom
-        ///
-        /// <summary>
-        /// Gets or sets a value indicating whether to use the customized
-        /// context menu.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [DataMember(Name = "IsCustomized")]
-        public bool UseCustom
-        {
-            get => Get(() => false);
-            set => Set(value);
-        }
-
-        #endregion
-
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Customize
-        ///
-        /// <summary>
-        /// Apply the customized context menu.
-        /// </summary>
-        ///
-        /// <param name="src">Customized context menu.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Customize(IEnumerable<Context> src)
-        {
-            Custom.Clear();
-            foreach (var m in src) Custom.Add(m);
-            UseCustom = true;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Reset
-        ///
-        /// <summary>
-        /// Resets the settings.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Reset()
-        {
-            Preset    = Preset.DefaultContext;
-            Custom    = new List<Context>();
-            UseCustom = false;
-        }
-
-        #endregion
+        get => Get(() => Preset.DefaultContext);
+        set => Set(value);
     }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Custom
+    ///
+    /// <summary>
+    /// Gets or sets the collection of customized context menu.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    [DataMember]
+    public List<Context> Custom
+    {
+        get => Get(() => new List<Context>());
+        set => Set(value);
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// UseCustom
+    ///
+    /// <summary>
+    /// Gets or sets a value indicating whether to use the customized
+    /// context menu.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    [DataMember(Name = "IsCustomized")]
+    public bool UseCustom
+    {
+        get => Get(() => false);
+        set => Set(value);
+    }
+
+    #endregion
+
+    #region Methods
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Customize
+    ///
+    /// <summary>
+    /// Apply the customized context menu.
+    /// </summary>
+    ///
+    /// <param name="src">Customized context menu.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    public void Customize(IEnumerable<Context> src)
+    {
+        Custom.Clear();
+        foreach (var m in src) Custom.Add(m);
+        UseCustom = true;
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Reset
+    ///
+    /// <summary>
+    /// Resets the settings.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public void Reset()
+    {
+        Preset    = Preset.DefaultContext;
+        Custom    = new List<Context>();
+        UseCustom = false;
+    }
+
+    #endregion
 }

@@ -15,74 +15,73 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip.Ice.Settings;
+
 using System.Runtime.Serialization;
 
-namespace Cube.FileSystem.SevenZip.Ice.Settings
+/* ------------------------------------------------------------------------- */
+///
+/// CompressSettingValue
+///
+/// <summary>
+/// Represents the settings when compressing archives.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+[DataContract]
+public sealed class CompressSettingValue : ArchiveSettingValue
 {
+    #region Properties
+
     /* --------------------------------------------------------------------- */
     ///
-    /// CompressSettingValue
+    /// CompressionLevel
     ///
     /// <summary>
-    /// Represents the settings when compressing archives.
+    /// Gets or sets the compression level.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [DataContract]
-    public sealed class CompressSettingValue : ArchiveSettingValue
+    [DataMember]
+    public CompressionLevel CompressionLevel
     {
-        #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CompressionLevel
-        ///
-        /// <summary>
-        /// Gets or sets the compression level.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [DataMember]
-        public CompressionLevel CompressionLevel
-        {
-            get => Get(() => CompressionLevel.Normal);
-            set => Set(value);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// UseUtf8
-        ///
-        /// <summary>
-        /// Gets or sets a value indicating whether to convert to the UTF-8
-        /// encoding when compressing.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [DataMember(Name = "UseUTF8")]
-        public bool UseUtf8
-        {
-            get => Get(() => false);
-            set => Set(value);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OverwritePrompt
-        ///
-        /// <summary>
-        /// Gets or sets a value indicating whether to show the overwrite
-        /// prompt.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [DataMember]
-        public bool OverwritePrompt
-        {
-            get => Get(() => true);
-            set => Set(value);
-        }
-
-        #endregion
+        get => Get(() => CompressionLevel.Normal);
+        set => Set(value);
     }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// UseUtf8
+    ///
+    /// <summary>
+    /// Gets or sets a value indicating whether to convert to the UTF-8
+    /// encoding when compressing.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    [DataMember(Name = "UseUTF8")]
+    public bool UseUtf8
+    {
+        get => Get(() => false);
+        set => Set(value);
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// OverwritePrompt
+    ///
+    /// <summary>
+    /// Gets or sets a value indicating whether to show the overwrite
+    /// prompt.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    [DataMember]
+    public bool OverwritePrompt
+    {
+        get => Get(() => true);
+        set => Set(value);
+    }
+
+    #endregion
 }

@@ -29,7 +29,7 @@
         <Reference Include="Microsoft.VisualBasic" />
     </ItemGroup>
     <ItemGroup>
-        <None Include="App.config" />
+        <None Include="NLog.config" CopyToOutputDirectory="Always" />
         <None Include="Examples\**\*" CopyToOutputDirectory="Always" />
     </ItemGroup>
 </Project>

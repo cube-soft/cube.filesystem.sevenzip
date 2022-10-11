@@ -19,37 +19,20 @@
 namespace Cube.FileSystem.SevenZip;
 
 using System;
-using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 /* ------------------------------------------------------------------------- */
 ///
-/// Filter
+/// PropArray
 ///
 /// <summary>
-/// Provides functionality to create the filter functions.
+/// The class is used to bridge the x86/x64 size difference.
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-public static class Filter
+[StructLayout(LayoutKind.Sequential)]
+internal struct PropArray
 {
-    #region Methods
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// From
-    ///
-    /// <summary>
-    /// Creates a new filter function with the specified file or
-    /// directory names.
-    /// </summary>
-    ///
-    /// <param name="src">
-    /// Collection of file or directory  names to be filtered.
-    /// </param>
-    ///
-    /* --------------------------------------------------------------------- */
-    public static Predicate<Entity> From(IEnumerable<string> src) =>
-        new FilterCollection(src).Match;
-
-    #endregion
+    uint _cElems;
+    IntPtr _pElems;
 }

@@ -16,34 +16,33 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip;
+
 using System;
 using System.IO;
 
-namespace Cube.FileSystem.SevenZip
-{
-    /* --------------------------------------------------------------------- */
-    ///
-    /// UnknownFormatException
-    ///
-    /// <summary>
-    /// Represents that the specified file is not supported by the SevenZip
-    /// module.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    [Serializable]
-    public class UnknownFormatException : NotSupportedException { }
+/* ------------------------------------------------------------------------- */
+///
+/// UnknownFormatException
+///
+/// <summary>
+/// Represents that the specified file is not supported by the SevenZip
+/// module.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+[Serializable]
+public class UnknownFormatException : NotSupportedException { }
 
-    /* --------------------------------------------------------------------- */
-    ///
-    /// EncryptionException
-    ///
-    /// <summary>
-    /// Represents the encryption related exception like the password
-    /// unmatched error.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    [Serializable]
-    public class EncryptionException : IOException { }
-}
+/* ------------------------------------------------------------------------- */
+///
+/// EncryptionException
+///
+/// <summary>
+/// Represents the encryption related exception like the password
+/// unmatched error.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+[Serializable]
+public class EncryptionException : IOException { }

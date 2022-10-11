@@ -18,38 +18,21 @@
 /* ------------------------------------------------------------------------- */
 namespace Cube.FileSystem.SevenZip;
 
-using System;
-using System.Collections.Generic;
-
 /* ------------------------------------------------------------------------- */
 ///
-/// Filter
+/// ReportStatus
 ///
 /// <summary>
-/// Provides functionality to create the filter functions.
+/// Specifies status of the provided report.
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-public static class Filter
+public enum ReportStatus
 {
-    #region Methods
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// From
-    ///
-    /// <summary>
-    /// Creates a new filter function with the specified file or
-    /// directory names.
-    /// </summary>
-    ///
-    /// <param name="src">
-    /// Collection of file or directory  names to be filtered.
-    /// </param>
-    ///
-    /* --------------------------------------------------------------------- */
-    public static Predicate<Entity> From(IEnumerable<string> src) =>
-        new FilterCollection(src).Match;
-
-    #endregion
+    /// <summary>Current file begins to be archived or extracted</summary>
+    Begin,
+    /// <summary>Current file ends to be archived or extracted</summary>
+    End,
+    /// <summary>Archiving or Extracting operation is in progress.</summary>
+    Progress,
 }

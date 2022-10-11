@@ -18,74 +18,72 @@
 /* ------------------------------------------------------------------------- */
 namespace Cube.FileSystem.SevenZip;
 
+using System.IO;
+
 /* ------------------------------------------------------------------------- */
 ///
-/// ArchiveEntity
+/// ArchiveStreamReader
 ///
 /// <summary>
-/// Represents an item in the archive.
+/// Represents a stream for reading an archive.
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-public sealed class ArchiveEntity : Entity
+internal class ArchiveStreamReader : ArchiveStreamBase, ISequentialInStream, IInStream
 {
     #region Constructors
 
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveEntity
+    /// ArchiveStreamReader
     ///
     /// <summary>
-    /// Initializes a new instance of the ArchiveEntity class with the
-    /// specified arguments.
+    /// Initializes a new instance of the ArchiveStreamReader class
+    /// with the specified stream. BaseStream is disposed when disposed.
     /// </summary>
     ///
-    /// <param name="src">Source object.</param>
+    /// <param name="src">Target stream.</param>
     ///
     /* --------------------------------------------------------------------- */
-    internal ArchiveEntity(ArchiveEntitySource src) : base(src)
-    {
-        Index     = src.Index;
-        Crc       = src.Crc;
-        Encrypted = src.Encrypted;
-    }
+    public ArchiveStreamReader(Stream src) : this(src, true) { }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// ArchiveStreamReader
+    ///
+    /// <summary>
+    /// Initializes a new instance of the ArchiveStreamReader class
+    /// with the specified arguments.
+    /// </summary>
+    ///
+    /// <param name="src">Target stream.</param>
+    /// <param name="dispose">
+    /// Value indicating whether to discard the BaseStream object when
+    /// disposed.
+    /// </param>
+    ///
+    /* --------------------------------------------------------------------- */
+    public ArchiveStreamReader(Stream src, bool dispose) : base(src, dispose) { }
 
     #endregion
 
-    #region Properties
+    #region Methods
 
     /* --------------------------------------------------------------------- */
     ///
-    /// Index
+    /// Read
     ///
     /// <summary>
-    /// Gets the index in the archive.
+    /// Reads the data.
     /// </summary>
     ///
-    /* --------------------------------------------------------------------- */
-    public int Index { get; }
-
-    /* --------------------------------------------------------------------- */
+    /// <param name="buffer">Buffer.</param>
+    /// <param name="size">Size to read.</param>
     ///
-    /// Crc
-    ///
-    /// <summary>
-    /// Gets the CRC value of the item.
-    /// </summary>
+    /// <returns>Actual size read.</returns>
     ///
     /* --------------------------------------------------------------------- */
-    public uint Crc { get; }
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// Encrypted
-    ///
-    /// <summary>
-    /// Gets the value indicating whether the archive is encrypted.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    public bool Encrypted { get; }
+    public int Read(byte[] buffer, uint size) => BaseStream.Read(buffer, 0, (int)size);
 
     #endregion
 }

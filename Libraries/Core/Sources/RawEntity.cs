@@ -16,68 +16,64 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-namespace Cube.FileSystem.SevenZip
+namespace Cube.FileSystem.SevenZip;
+
+/* ------------------------------------------------------------------------- */
+///
+/// RawEntity
+///
+/// <summary>
+/// Represents the information of the file or directory to be archived.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+public class RawEntity : Entity
 {
+    #region Constructors
+
     /* --------------------------------------------------------------------- */
     ///
     /// RawEntity
     ///
     /// <summary>
-    /// Represents the information of the file or directory to be archived.
+    /// Initializes a new instance of the RawEntity class with the
+    /// specified arguments.
+    /// </summary>
+    ///
+    /// <param name="src">Source object.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    public RawEntity(EntitySource src) : this(src, src.Name) { }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// RawEntity
+    ///
+    /// <summary>
+    /// Initializes a new instance of the RawEntity class with the
+    /// specified arguments.
+    /// </summary>
+    ///
+    /// <param name="src">Source object.</param>
+    /// <param name="name">Relative path in the archive.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    public RawEntity(EntitySource src, string name) : base(src) => RelativeName = name;
+
+    #endregion
+
+    #region Properties
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// RelativeName
+    ///
+    /// <summary>
+    /// Gets the relative path in the archive.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class RawEntity : Entity
-    {
-        #region Constructors
+    public string RelativeName { get; }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// RawEntity
-        ///
-        /// <summary>
-        /// Initializes a new instance of the RawEntity class with the
-        /// specified arguments.
-        /// </summary>
-        ///
-        /// <param name="src">Source object.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public RawEntity(EntitySource src) : this(src, src.Name) { }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// RawEntity
-        ///
-        /// <summary>
-        /// Initializes a new instance of the RawEntity class with the
-        /// specified arguments.
-        /// </summary>
-        ///
-        /// <param name="src">Source object.</param>
-        /// <param name="name">Relative path in the archive.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public RawEntity(EntitySource src, string name) : base(src)
-        {
-            RelativeName = name;
-        }
-
-        #endregion
-
-        #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// RelativeName
-        ///
-        /// <summary>
-        /// Gets the relative path in the archive.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string RelativeName { get; }
-
-        #endregion
-    }
+    #endregion
 }

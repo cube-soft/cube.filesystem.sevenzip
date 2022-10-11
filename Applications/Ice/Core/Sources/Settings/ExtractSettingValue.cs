@@ -15,74 +15,73 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip.Ice.Settings;
+
 using System.Runtime.Serialization;
 
-namespace Cube.FileSystem.SevenZip.Ice.Settings
+/* ------------------------------------------------------------------------- */
+///
+/// ExtractSettingValue
+///
+/// <summary>
+/// Represents the settings when extracting archives.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+[DataContract]
+public sealed class ExtractSettingValue : ArchiveSettingValue
 {
+    #region Properties
+
     /* --------------------------------------------------------------------- */
     ///
-    /// ExtractSettingValue
+    /// RootDirectory
     ///
     /// <summary>
-    /// Represents the settings when extracting archives.
+    /// Gets or sets the method to determine the root directory.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [DataContract]
-    public sealed class ExtractSettingValue : ArchiveSettingValue
+    [DataMember(Name = "RootDirectory")]
+    public SaveMethod SaveMethod
     {
-        #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// RootDirectory
-        ///
-        /// <summary>
-        /// Gets or sets the method to determine the root directory.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [DataMember(Name = "RootDirectory")]
-        public SaveMethod SaveMethod
-        {
-            get => Get(() => SaveMethod.CreateSmart);
-            set => Set(value);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// DeleteSource
-        ///
-        /// <summary>
-        /// Gets or sets a value indicating whether to delete the source
-        /// archive after extracting.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [DataMember]
-        public bool DeleteSource
-        {
-            get => Get(() => false);
-            set => Set(value);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Bursty
-        ///
-        /// <summary>
-        /// Gets or sets a value indicating whether to extract archives
-        /// burstly.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [DataMember]
-        public bool Bursty
-        {
-            get => Get(() => true);
-            set => Set(value);
-        }
-
-        #endregion
+        get => Get(() => SaveMethod.CreateSmart);
+        set => Set(value);
     }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// DeleteSource
+    ///
+    /// <summary>
+    /// Gets or sets a value indicating whether to delete the source
+    /// archive after extracting.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    [DataMember]
+    public bool DeleteSource
+    {
+        get => Get(() => false);
+        set => Set(value);
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Bursty
+    ///
+    /// <summary>
+    /// Gets or sets a value indicating whether to extract archives
+    /// burstly.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    [DataMember]
+    public bool Bursty
+    {
+        get => Get(() => true);
+        set => Set(value);
+    }
+
+    #endregion
 }

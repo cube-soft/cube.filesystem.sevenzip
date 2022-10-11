@@ -19,37 +19,42 @@
 namespace Cube.FileSystem.SevenZip;
 
 using System;
-using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 /* ------------------------------------------------------------------------- */
 ///
-/// Filter
+/// ISequentialInStream
 ///
 /// <summary>
-/// Provides functionality to create the filter functions.
+/// Represents an interface for processing the input stream of an archive.
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-public static class Filter
+[ComImport]
+[Guid("23170F69-40C1-278A-0000-000300010000")]
+[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+internal interface ISequentialInStream
 {
-    #region Methods
-
     /* --------------------------------------------------------------------- */
     ///
-    /// From
+    /// Read
     ///
     /// <summary>
-    /// Creates a new filter function with the specified file or
-    /// directory names.
+    /// Writes data to 7-zip packer
     /// </summary>
     ///
-    /// <param name="src">
-    /// Collection of file or directory  names to be filtered.
-    /// </param>
+    /// <param name="data">Array of bytes available for writing</param>
+    /// <param name="size">Array size</param>
     ///
+    /// <returns>S_OK if success</returns>
+    ///
+    /// <remarks>
+    /// If (size > 0) and there are bytes in stream,
+    /// this function must read at least 1 byte.
+    /// This function is allowed to read less than "size" bytes.
+    /// You must call Read function in loop, if you need exact
+    /// amount of data.
+    /// </remarks>
     /* --------------------------------------------------------------------- */
-    public static Predicate<Entity> From(IEnumerable<string> src) =>
-        new FilterCollection(src).Match;
-
-    #endregion
+    int Read([Out, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] byte[] data, uint size);
 }

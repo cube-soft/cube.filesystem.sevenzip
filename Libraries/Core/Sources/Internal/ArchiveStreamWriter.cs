@@ -18,74 +18,103 @@
 /* ------------------------------------------------------------------------- */
 namespace Cube.FileSystem.SevenZip;
 
+using System;
+using System.IO;
+using System.Runtime.InteropServices;
+
 /* ------------------------------------------------------------------------- */
 ///
-/// ArchiveEntity
+/// ArchiveStreamWriter
 ///
 /// <summary>
-/// Represents an item in the archive.
+/// Represents a stream for writing an archive.
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-public sealed class ArchiveEntity : Entity
+internal class ArchiveStreamWriter : ArchiveStreamBase, ISequentialOutStream, IOutStream
 {
     #region Constructors
 
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveEntity
+    /// ArchiveStreamWriter
     ///
     /// <summary>
-    /// Initializes a new instance of the ArchiveEntity class with the
-    /// specified arguments.
+    /// Initializes a new instance of the ArchiveStreamReader class
+    /// with the specified stream. BaseStream is disposed when disposed.
     /// </summary>
     ///
-    /// <param name="src">Source object.</param>
+    /// <param name="src">Target stream.</param>
     ///
     /* --------------------------------------------------------------------- */
-    internal ArchiveEntity(ArchiveEntitySource src) : base(src)
-    {
-        Index     = src.Index;
-        Crc       = src.Crc;
-        Encrypted = src.Encrypted;
-    }
+    public ArchiveStreamWriter(Stream src) : this(src, true) { }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// ArchiveStreamWriter
+    ///
+    /// <summary>
+    /// Initializes a new instance of the ArchiveStreamReader class
+    /// with the specified arguments.
+    /// </summary>
+    ///
+    /// <param name="src">Target stream.</param>
+    /// <param name="dispose">
+    /// Value indicating whether to discard the BaseStream object when
+    /// disposed.
+    /// </param>
+    ///
+    /* --------------------------------------------------------------------- */
+    public ArchiveStreamWriter(Stream src, bool dispose) : base(src, dispose) { }
 
     #endregion
 
-    #region Properties
+    #region Methods
 
     /* --------------------------------------------------------------------- */
     ///
-    /// Index
+    /// SetSize
     ///
     /// <summary>
-    /// Gets the index in the archive.
+    /// Sets the length of the current stream.
+    /// The method implements IOutStream.SetSize(long).
     /// </summary>
     ///
+    /// <param name="size">Size to set.</param>
+    ///
+    /// <returns>Zero.</returns>
+    ///
     /* --------------------------------------------------------------------- */
-    public int Index { get; }
+    public int SetSize(long size)
+    {
+        BaseStream.SetLength(size);
+        return 0;
+    }
 
     /* --------------------------------------------------------------------- */
     ///
-    /// Crc
+    /// Write
     ///
     /// <summary>
-    /// Gets the CRC value of the item.
+    /// Writes a byte sequence to the current stream and advances the
+    /// current position of the stream by the number of bytes written.
+    /// The method implements IOutStream.Write(byte[], uint, IntPtr).
     /// </summary>
     ///
-    /* --------------------------------------------------------------------- */
-    public uint Crc { get; }
-
-    /* --------------------------------------------------------------------- */
+    /// <param name="data">data for writing</param>
+    /// <param name="size">size to write.</param>
+    /// <param name="result">written size.</param>
     ///
-    /// Encrypted
-    ///
-    /// <summary>
-    /// Gets the value indicating whether the archive is encrypted.
-    /// </summary>
+    /// <returns>Zero.</returns>
     ///
     /* --------------------------------------------------------------------- */
-    public bool Encrypted { get; }
+    public int Write(byte[] data, uint size, IntPtr result)
+    {
+        var count = (int)size;
+        BaseStream.Write(data, 0, count);
+        if (result != IntPtr.Zero) Marshal.WriteInt32(result, count);
+        return 0;
+    }
 
     #endregion
 }

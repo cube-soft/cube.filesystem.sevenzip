@@ -16,144 +16,143 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip;
+
 using System;
 
-namespace Cube.FileSystem.SevenZip
+/* ------------------------------------------------------------------------- */
+///
+/// CallbackBase
+///
+/// <summary>
+/// Represents the base class of other callback classes.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+internal abstract class CallbackBase : DisposableBase
 {
+    #region Properties
+
     /* --------------------------------------------------------------------- */
     ///
-    /// CallbackBase
+    /// Progress
     ///
     /// <summary>
-    /// Represents the base class of other callback classes.
+    /// Gets or sets the object to report the progress.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal abstract class CallbackBase : DisposableBase
+    public IProgress<Report> Progress { get; init; }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Result
+    ///
+    /// <summary>
+    /// Gets the operation result.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public OperationResult Result { get; protected set; } = OperationResult.OK;
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Exception
+    ///
+    /// <summary>
+    /// Get the exceptions that occurred during processing.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public Exception Exception { get; private set; }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Report
+    ///
+    /// <summary>
+    /// Gets or sets the content of the progress report.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    protected Report Report { get; } = new();
+
+    #endregion
+
+    #region Methods
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Invoke
+    ///
+    /// <summary>
+    /// Invokes the specified callback and optionally reports the
+    /// progress.
+    /// </summary>
+    ///
+    /// <param name="callback">Callback action.</param>
+    /// <param name="report">Reports or not the progress.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    protected void Invoke(Action callback, bool report) =>
+        Invoke(() => { callback(); return true; }, report);
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Invoke
+    ///
+    /// <summary>
+    /// Invokes the specified callback and optionally reports the
+    /// progress.
+    /// </summary>
+    ///
+    /// <param name="callback">Callback function.</param>
+    /// <param name="report">Reports or not the progress.</param>
+    ///
+    /// <returns>Result of the callback function.</returns>
+    ///
+    /* --------------------------------------------------------------------- */
+    protected T Invoke<T>(Func<T> callback, bool report)
     {
-        #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Progress
-        ///
-        /// <summary>
-        /// Gets or sets the object to report the progress.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public IProgress<Report> Progress { get; init; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Result
-        ///
-        /// <summary>
-        /// Gets the operation result.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public OperationResult Result { get; protected set; } = OperationResult.OK;
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Exception
-        ///
-        /// <summary>
-        /// Get the exceptions that occurred during processing.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public Exception Exception { get; private set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Report
-        ///
-        /// <summary>
-        /// Gets or sets the content of the progress report.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected Report Report { get; } = new();
-
-        #endregion
-
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Invoke
-        ///
-        /// <summary>
-        /// Invokes the specified callback and optionally reports the
-        /// progress.
-        /// </summary>
-        ///
-        /// <param name="callback">Callback action.</param>
-        /// <param name="report">Reports or not the progress.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected void Invoke(Action callback, bool report) =>
-            Invoke(() => { callback(); return true; }, report);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Invoke
-        ///
-        /// <summary>
-        /// Invokes the specified callback and optionally reports the
-        /// progress.
-        /// </summary>
-        ///
-        /// <param name="callback">Callback function.</param>
-        /// <param name="report">Reports or not the progress.</param>
-        ///
-        /// <returns>Result of the callback function.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected T Invoke<T>(Func<T> callback, bool report)
+        try
         {
-            try
-            {
-                var dest = callback();
-                if (report && Result == OperationResult.OK) Progress?.Report(Copy(Report));
-                return dest;
-            }
-            catch (Exception err)
-            {
-                Result    = err is OperationCanceledException ?
-                            OperationResult.UserCancel :
-                            OperationResult.DataError;
-                Exception = err;
-                throw;
-            }
-            finally { Report.Status = ReportStatus.Progress; }
+            var dest = callback();
+            if (report && Result == OperationResult.OK) Progress?.Report(Copy(Report));
+            return dest;
         }
-
-        #endregion
-
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Copy
-        ///
-        /// <summary>
-        /// Creates a copied instance of the Report class.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private Report Copy(Report src) => new()
+        catch (Exception err)
         {
-            Status     = src.Status,
-            Current    = src.Current,
-            Count      = src.Count,
-            Bytes      = src.Bytes,
-            TotalCount = src.TotalCount,
-            TotalBytes = src.TotalBytes,
-        };
-
-        #endregion
+            Result    = err is OperationCanceledException ?
+                        OperationResult.UserCancel :
+                        OperationResult.DataError;
+            Exception = err;
+            throw;
+        }
+        finally { Report.Status = ReportStatus.Progress; }
     }
+
+    #endregion
+
+    #region Implementations
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Copy
+    ///
+    /// <summary>
+    /// Creates a copied instance of the Report class.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private Report Copy(Report src) => new()
+    {
+        Status     = src.Status,
+        Current    = src.Current,
+        Count      = src.Count,
+        Bytes      = src.Bytes,
+        TotalCount = src.TotalCount,
+        TotalBytes = src.TotalBytes,
+    };
+
+    #endregion
 }

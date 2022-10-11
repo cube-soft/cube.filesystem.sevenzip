@@ -16,122 +16,121 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip;
+
 using System;
 
-namespace Cube.FileSystem.SevenZip
+/* ------------------------------------------------------------------------- */
+///
+/// ArchiveEntityExtension
+///
+/// <summary>
+/// Provides extended methods of the ArchiveEntity class.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+public static class ArchiveEntityExtension
 {
+    #region Methods
+
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveEntityExtension
+    /// CreateDirectory
     ///
     /// <summary>
-    /// Provides extended methods of the ArchiveEntity class.
+    /// Creates the directory.
+    /// </summary>
+    ///
+    /// <param name="src">Information of the archived item.</param>
+    /// <param name="root">Path of the root directory.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    public static void CreateDirectory(this ArchiveEntity src, string root)
+    {
+        if (!src.IsDirectory) return;
+        var path = Io.Combine(root, src.FullName);
+        Io.CreateDirectory(path);
+        SetAttributes(src, root);
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// SetAttributes
+    ///
+    /// <summary>
+    /// Sets attributes, creation time, last written time, and last
+    /// accessed time to the extracted file or directory.
+    /// </summary>
+    ///
+    /// <param name="src">Information of the archived item.</param>
+    /// <param name="root">Path of the root directory.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    public static void SetAttributes(this ArchiveEntity src, string root)
+    {
+        var path = Io.Combine(root, src.FullName);
+        if (!Io.Exists(path)) return;
+
+        SetCreationTime(src, path);
+        SetLastWriteTime(src, path);
+        SetLastAccessTime(src, path);
+        Io.SetAttributes(path, src.Attributes);
+    }
+
+    #endregion
+
+    #region Implementations
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// SetCreationTime
+    ///
+    /// <summary>
+    /// Sets the creation time.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public static class ArchiveEntityExtension
+    private static void SetCreationTime(ArchiveEntity src, string path)
     {
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CreateDirectory
-        ///
-        /// <summary>
-        /// Creates the directory.
-        /// </summary>
-        ///
-        /// <param name="src">Information of the archived item.</param>
-        /// <param name="root">Path of the root directory.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static void CreateDirectory(this ArchiveEntity src, string root)
-        {
-            if (!src.IsDirectory) return;
-            var path = Io.Combine(root, src.FullName);
-            Io.CreateDirectory(path);
-            SetAttributes(src, root);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SetAttributes
-        ///
-        /// <summary>
-        /// Sets attributes, creation time, last written time, and last
-        /// accessed time to the extracted file or directory.
-        /// </summary>
-        ///
-        /// <param name="src">Information of the archived item.</param>
-        /// <param name="root">Path of the root directory.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static void SetAttributes(this ArchiveEntity src, string root)
-        {
-            var path = Io.Combine(root, src.FullName);
-            if (!Io.Exists(path)) return;
-
-            SetCreationTime(src, path);
-            SetLastWriteTime(src, path);
-            SetLastAccessTime(src, path);
-            Io.SetAttributes(path, src.Attributes);
-        }
-
-        #endregion
-
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SetCreationTime
-        ///
-        /// <summary>
-        /// Sets the creation time.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private static void SetCreationTime(ArchiveEntity src, string path)
-        {
-            var time = src.CreationTime  != DateTime.MinValue ? src.CreationTime :
-                       src.LastWriteTime != DateTime.MinValue ? src.LastWriteTime :
-                       src.LastAccessTime;
-            if (time != DateTime.MinValue) Io.SetCreationTime(path, time);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SetLastWriteTime
-        ///
-        /// <summary>
-        /// Sets the last written time.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private static void SetLastWriteTime(ArchiveEntity src, string path)
-        {
-            var time = src.LastWriteTime  != DateTime.MinValue ? src.LastWriteTime :
-                       src.LastAccessTime != DateTime.MinValue ? src.LastAccessTime :
-                       src.CreationTime;
-            if (time != DateTime.MinValue) Io.SetLastWriteTime(path, time);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SetLastAccessTime
-        ///
-        /// <summary>
-        /// Sets the last accessed time.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private static void SetLastAccessTime(ArchiveEntity src, string path)
-        {
-            var time = src.LastAccessTime != DateTime.MinValue ? src.LastAccessTime :
-                       src.LastWriteTime  != DateTime.MinValue ? src.LastWriteTime :
-                       src.CreationTime;
-            if (time != DateTime.MinValue) Io.SetLastAccessTime(path, time);
-        }
-
-        #endregion
+        var time = src.CreationTime  != DateTime.MinValue ? src.CreationTime :
+                   src.LastWriteTime != DateTime.MinValue ? src.LastWriteTime :
+                   src.LastAccessTime;
+        if (time != DateTime.MinValue) Io.SetCreationTime(path, time);
     }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// SetLastWriteTime
+    ///
+    /// <summary>
+    /// Sets the last written time.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private static void SetLastWriteTime(ArchiveEntity src, string path)
+    {
+        var time = src.LastWriteTime  != DateTime.MinValue ? src.LastWriteTime :
+                   src.LastAccessTime != DateTime.MinValue ? src.LastAccessTime :
+                   src.CreationTime;
+        if (time != DateTime.MinValue) Io.SetLastWriteTime(path, time);
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// SetLastAccessTime
+    ///
+    /// <summary>
+    /// Sets the last accessed time.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private static void SetLastAccessTime(ArchiveEntity src, string path)
+    {
+        var time = src.LastAccessTime != DateTime.MinValue ? src.LastAccessTime :
+                   src.LastWriteTime  != DateTime.MinValue ? src.LastWriteTime :
+                   src.CreationTime;
+        if (time != DateTime.MinValue) Io.SetLastAccessTime(path, time);
+    }
+
+    #endregion
 }

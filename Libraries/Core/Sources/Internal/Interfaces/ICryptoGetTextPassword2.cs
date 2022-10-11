@@ -19,37 +19,40 @@
 namespace Cube.FileSystem.SevenZip;
 
 using System;
-using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 /* ------------------------------------------------------------------------- */
 ///
-/// Filter
+/// ICryptoGetTextPassword2
 ///
 /// <summary>
-/// Provides functionality to create the filter functions.
+/// Represents an interface for entering a password when compressing
+/// an archive.
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-public static class Filter
+[ComImport]
+[Guid("23170F69-40C1-278A-0000-000500110000")]
+[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+internal interface ICryptoGetTextPassword2
 {
-    #region Methods
-
     /* --------------------------------------------------------------------- */
     ///
-    /// From
+    /// CryptoGetTextPassword2
     ///
     /// <summary>
-    /// Creates a new filter function with the specified file or
-    /// directory names.
+    /// Gets the password of the provided archive.
     /// </summary>
     ///
-    /// <param name="src">
-    /// Collection of file or directory  names to be filtered.
+    /// <param name="enable">
+    /// Value indicating whether to set a password (0 if not).
     /// </param>
     ///
+    /// <param name="password">Password.</param>
+    ///
+    /// <returns>OperationResult</returns>
+    ///
     /* --------------------------------------------------------------------- */
-    public static Predicate<Entity> From(IEnumerable<string> src) =>
-        new FilterCollection(src).Match;
-
-    #endregion
+    [PreserveSig]
+    int CryptoGetTextPassword2(ref int enable, [MarshalAs(UnmanagedType.BStr)] out string password);
 }
