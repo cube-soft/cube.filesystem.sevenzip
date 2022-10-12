@@ -15,146 +15,145 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip.Ice.Tests;
+
 using System.Linq;
 using Cube.FileSystem.SevenZip.Ice.Settings;
 using NUnit.Framework;
 
-namespace Cube.FileSystem.SevenZip.Ice.Tests
+/* ------------------------------------------------------------------------- */
+///
+/// CompressViewModelTest
+///
+/// <summary>
+/// Tests the CompressViewModel class except for the main operation.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+[TestFixture]
+[NonParallelizable]
+class CompressViewModelTest : VmFixture
 {
+    #region Tests
+
     /* --------------------------------------------------------------------- */
     ///
-    /// CompressViewModelTest
+    /// OverwritePrompt
     ///
     /// <summary>
-    /// Tests the CompressViewModel class except for the main operation.
+    /// Tests to send the SaveDialogMessage because the specified
+    /// file exists.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [TestFixture]
-    [NonParallelizable]
-    class CompressViewModelTest : VmFixture
+    [Test]
+    public void OverwritePrompt()
     {
-        #region Tests
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OverwritePrompt
-        ///
-        /// <summary>
-        /// Tests to send the SaveDialogMessage because the specified
-        /// file exists.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [Test]
-        public void OverwritePrompt()
+        var dir   = Get("Exists");
+        var src   = new[] { GetSource("Sample.txt") };
+        var dest  = Io.Combine(dir, "SampleRuntime.zip");
+        var args  = Preset.Compress.ToArguments().Concat(src);
+        var value = new CompressSettingValue
         {
-            var dir   = Get("Exists");
-            var src   = new[] { GetSource("Sample.txt") };
-            var dest  = Io.Combine(dir, "SampleRuntime.zip");
-            var args  = Preset.Compress.ToArguments().Concat(src);
-            var value = new CompressSettingValue
-            {
-                SaveLocation  = SaveLocation.Preset,
-                SaveDirectory = dir,
-                OpenMethod    = OpenMethod.None,
-            };
+            SaveLocation  = SaveLocation.Preset,
+            SaveDirectory = dir,
+            OpenMethod    = OpenMethod.None,
+        };
 
-            Io.Copy(GetSource("Single.1.0.0.zip"), Io.Combine(dir, "Sample.zip"), true);
-            using var vm = NewVM(args, value);
-            using (vm.SetDestination(dest)) vm.Test();
-            Assert.That(Io.Exists(dest), Is.True, dest);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Overwrite
-        ///
-        /// <summary>
-        /// Tests to overwrite the archive.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [Test]
-        public void Overwrite()
-        {
-            var dir  = Get("Overwrite");
-            var src  = new[] { GetSource("Sample.txt") };
-            var dest = Io.Combine(dir, "Sample.zip");
-            var args = Preset.Compress.ToArguments().Concat(src);
-            var value = new CompressSettingValue
-            {
-                SaveLocation = SaveLocation.Query,
-                OpenMethod   = OpenMethod.None,
-           };
-
-            Io.Copy(GetSource("Single.1.0.0.zip"), dest, true);
-            using var vm = NewVM(args, value);
-            using (vm.SetDestination(dest)) vm.Test();
-            Assert.That(Io.Exists(dest), Is.True, dest);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CancelPassword
-        ///
-        /// <summary>
-        /// Tests to cancel the password input.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [Test]
-        public void CancelPassword()
-        {
-            var dir   = Get("CancelPassword");
-            var src   = new[] { GetSource("Sample.txt") };
-            var dest  = Io.Combine(dir, "Sample.zip");
-            var args  = Preset.CompressZipPassword.ToArguments().Concat(src);
-            var value = new CompressSettingValue
-            {
-                SaveLocation  = SaveLocation.Preset,
-                SaveDirectory = dir,
-                OpenMethod    = OpenMethod.None,
-            };
-
-            using var vm = NewVM(args, value);
-            using (vm.SetDestination(dest)) vm.Test();
-            Assert.That(Io.Exists(dest), Is.False, dest);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// MoveFailed
-        ///
-        /// <summary>
-        /// Confirms the behavior when the compressed file is failed to
-        /// move.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [Test]
-        public void MoveFailed()
-        {
-            var dir   = Get("MoveFailed");
-            var src   = new[] { GetSource("Sample.txt") };
-            var dest  = Io.Combine(dir, "Sample.zip");
-            var args  = Preset.CompressZip.ToArguments().Concat(new[] { "/o:runtime" }).Concat(src);
-            var value = new CompressSettingValue
-            {
-                SaveLocation  = SaveLocation.Preset,
-                SaveDirectory = dir,
-                OpenMethod    = OpenMethod.None,
-            };
-
-            Io.Copy(GetSource("Single.1.0.0.zip"), dest, true);
-            using var vm = NewVM(args, value);
-            using (Io.Open(dest))
-            using (vm.SetDestination(dest))
-            {
-                vm.Test();
-            }
-        }
-
-        #endregion
+        Io.Copy(GetSource("Single.1.0.0.zip"), Io.Combine(dir, "Sample.zip"), true);
+        using var vm = NewVM(args, value);
+        using (vm.SetDestination(dest)) vm.Test();
+        Assert.That(Io.Exists(dest), Is.True, dest);
     }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Overwrite
+    ///
+    /// <summary>
+    /// Tests to overwrite the archive.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    [Test]
+    public void Overwrite()
+    {
+        var dir  = Get("Overwrite");
+        var src  = new[] { GetSource("Sample.txt") };
+        var dest = Io.Combine(dir, "Sample.zip");
+        var args = Preset.Compress.ToArguments().Concat(src);
+        var value = new CompressSettingValue
+        {
+            SaveLocation = SaveLocation.Query,
+            OpenMethod   = OpenMethod.None,
+       };
+
+        Io.Copy(GetSource("Single.1.0.0.zip"), dest, true);
+        using var vm = NewVM(args, value);
+        using (vm.SetDestination(dest)) vm.Test();
+        Assert.That(Io.Exists(dest), Is.True, dest);
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// CancelPassword
+    ///
+    /// <summary>
+    /// Tests to cancel the password input.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    [Test]
+    public void CancelPassword()
+    {
+        var dir   = Get("CancelPassword");
+        var src   = new[] { GetSource("Sample.txt") };
+        var dest  = Io.Combine(dir, "Sample.zip");
+        var args  = Preset.CompressZipPassword.ToArguments().Concat(src);
+        var value = new CompressSettingValue
+        {
+            SaveLocation  = SaveLocation.Preset,
+            SaveDirectory = dir,
+            OpenMethod    = OpenMethod.None,
+        };
+
+        using var vm = NewVM(args, value);
+        using (vm.SetDestination(dest)) vm.Test();
+        Assert.That(Io.Exists(dest), Is.False, dest);
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// MoveFailed
+    ///
+    /// <summary>
+    /// Confirms the behavior when the compressed file is failed to
+    /// move.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    [Test]
+    public void MoveFailed()
+    {
+        var dir   = Get("MoveFailed");
+        var src   = new[] { GetSource("Sample.txt") };
+        var dest  = Io.Combine(dir, "Sample.zip");
+        var args  = Preset.CompressZip.ToArguments().Concat(new[] { "/o:runtime" }).Concat(src);
+        var value = new CompressSettingValue
+        {
+            SaveLocation  = SaveLocation.Preset,
+            SaveDirectory = dir,
+            OpenMethod    = OpenMethod.None,
+        };
+
+        Io.Copy(GetSource("Single.1.0.0.zip"), dest, true);
+        using var vm = NewVM(args, value);
+        using (Io.Open(dest))
+        using (vm.SetDestination(dest))
+        {
+            vm.Test();
+        }
+    }
+
+    #endregion
 }

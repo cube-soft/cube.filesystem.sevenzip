@@ -15,55 +15,54 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip.Tests;
+
 using System;
 using System.Collections.Generic;
 
-namespace Cube.FileSystem.SevenZip.Tests
+/* ------------------------------------------------------------------------- */
+///
+/// Counter
+///
+/// <summary>
+/// Provides functioality to count each report status synchronously.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+internal class Counter : IProgress<Report>
 {
+    #region Properties
+
     /* --------------------------------------------------------------------- */
     ///
-    /// Counter
+    /// Results
     ///
     /// <summary>
-    /// Provides functioality to count each report status synchronously.
+    /// Gets the counting results.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal class Counter : IProgress<Report>
+    public Dictionary<ReportStatus, int> Results { get; } = new()
     {
-        #region Properties
+        { ReportStatus.Begin,    0 },
+        { ReportStatus.End,      0 },
+        { ReportStatus.Progress, 0 },
+    };
 
-        /* --------------------------------------------------------------------- */
-        ///
-        /// Results
-        ///
-        /// <summary>
-        /// Gets the counting results.
-        /// </summary>
-        ///
-        /* --------------------------------------------------------------------- */
-        public Dictionary<ReportStatus, int> Results { get; } = new()
-        {
-            { ReportStatus.Begin,    0 },
-            { ReportStatus.End,      0 },
-            { ReportStatus.Progress, 0 },
-        };
+    #endregion
 
-        #endregion
+    #region Methods
 
-        #region Methods
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Report
+    ///
+    /// <summary>
+    /// Reports the progress.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public void Report(Report value) => Results[value.Status]++;
 
-        /* --------------------------------------------------------------------- */
-        ///
-        /// Report
-        ///
-        /// <summary>
-        /// Reports the progress.
-        /// </summary>
-        ///
-        /* --------------------------------------------------------------------- */
-        public void Report(Report value) => Results[value.Status]++;
-
-        #endregion
-    }
+    #endregion
 }
