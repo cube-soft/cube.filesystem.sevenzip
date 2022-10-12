@@ -49,7 +49,7 @@ public sealed class CompressionQueryValue : ObservableBase
     public CompressionQueryValue(CompressionSettingValue settings)
     {
         CompressionLevel = settings.CompressionLevel;
-        Sfx = Io.Combine(GetType().Assembly.GetDirectoryName(), Formatter.SfxName);
+        Sfx = Io.Combine(GetType().Assembly.GetDirectoryName(), "7z.sfx");
     }
 
     #endregion

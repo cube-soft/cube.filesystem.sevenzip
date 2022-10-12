@@ -34,21 +34,6 @@ using System.IO;
 /* ------------------------------------------------------------------------- */
 public static class Formatter
 {
-    #region Properteis
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// SfxName
-    ///
-    /// <summary>
-    /// Gets the default name of SFX module.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    public static string SfxName { get; } = "7z.sfx";
-
-    #endregion
-
     #region Methods
 
     #region ToXxx
@@ -317,7 +302,7 @@ public static class Formatter
     ///
     /* --------------------------------------------------------------------- */
     private static Format Convert(Format src, string path) =>
-        src == Format.PE && FileVersionInfo.GetVersionInfo(path).InternalName == SfxName ?
+        src == Format.PE && FileVersionInfo.GetVersionInfo(path).InternalName == "7z.sfx" ?
         Format.Sfx :
         src;
 

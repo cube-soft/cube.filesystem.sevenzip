@@ -253,7 +253,7 @@ class ArchiveWriterTest : FileFixture
                 {
                     CompressionMethod = CompressionMethod.Lzma,
                     CompressionLevel  = CompressionLevel.Ultra,
-                    Module = Io.Combine(typeof(ArchiveWriterTest).Assembly.GetDirectoryName(), Formatter.SfxName),
+                    Module = Io.Combine(typeof(ArchiveWriterTest).Assembly.GetDirectoryName(), "7z.sfx"),
                 }
             ).Returns(Format.PE);
         }
