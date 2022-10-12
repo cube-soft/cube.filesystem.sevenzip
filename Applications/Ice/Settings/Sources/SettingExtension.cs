@@ -45,7 +45,7 @@ public static class SettingExtension
     {
         Logger.Warn(src.Save);
         Logger.Warn(src.Value.Shortcut.Save);
-        Logger.Warn(() => Associate(src.Value.Associate));
+        Logger.Warn(() => Associate(src.Value.Association));
     }
 
     #endregion
@@ -61,7 +61,7 @@ public static class SettingExtension
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private static void Associate(AssociateSettingValue src)
+    private static void Associate(AssociationSettingValue src)
     {
         if (!src.Changed) return;
 

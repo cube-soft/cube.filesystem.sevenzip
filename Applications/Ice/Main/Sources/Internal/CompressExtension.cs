@@ -48,11 +48,11 @@ internal static class CompressExtension
     /// <returns>Path to save.</returns>
     ///
     /* --------------------------------------------------------------------- */
-    public static string Select(this CompressFacade src, CompressQueryValue settings)
+    public static string Select(this CompressFacade src, CompressionQueryValue settings)
     {
         if (settings.Destination.HasValue()) return settings.Destination;
 
-        var ss  = src.Settings.Value.Compress;
+        var ss  = src.Settings.Value.Compression;
         var cvt = new ArchiveName(src.Request.Sources.First(), src.Request.Format);
         var obj = new SaveQueryProxy(src.Select, cvt.Value.FullName, src.Request, ss)
         {

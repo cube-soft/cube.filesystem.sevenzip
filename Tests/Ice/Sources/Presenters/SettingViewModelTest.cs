@@ -102,7 +102,7 @@ class SettingViewModelTest : VmFixture
         using var vm = NewVM(m);
 
         var src  = vm.Compress;
-        var dest = m.Value.Compress;
+        var dest = m.Value.Compression;
 
         src.SaveSource = true;
         Assert.That(src.SaveSource,    Is.True);
@@ -195,7 +195,7 @@ class SettingViewModelTest : VmFixture
         using var vm = NewVM(m);
 
         var src  = vm.Extract;
-        var dest = m.Value.Extract;
+        var dest = m.Value.Extraction;
 
         src.SaveSource = true;
         Assert.That(src.SaveSource,    Is.True);
@@ -315,7 +315,7 @@ class SettingViewModelTest : VmFixture
         using var vm = NewVM(m);
 
         var src  = vm.Associate;
-        var dest = m.Value.Associate;
+        var dest = m.Value.Association;
 
         Assert.That(dest.Value.Count, Is.EqualTo(29));
         Assert.That(dest.IconIndex,   Is.EqualTo(3));

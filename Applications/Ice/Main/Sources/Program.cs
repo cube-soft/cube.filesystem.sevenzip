@@ -129,7 +129,7 @@ static class Program
     ///
     /* --------------------------------------------------------------------- */
     static bool IsBurst(Request src, SettingFolder ss) =>
-        src.Sources.Count() > 1 && ss.Value.Extract.Bursty && !src.SuppressRecursive;
+        src.Sources.Count() > 1 && ss.Value.Extraction.Bursty && !src.SuppressRecursive;
 
     #endregion
 

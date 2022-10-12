@@ -19,7 +19,6 @@ namespace Cube.FileSystem.SevenZip.Ice;
 
 using System;
 using System.Linq;
-using Cube.FileSystem.SevenZip.Ice.Settings;
 using Cube.Text.Extensions;
 
 /* ------------------------------------------------------------------------- */
@@ -32,7 +31,7 @@ using Cube.Text.Extensions;
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-public sealed class CompressQuery : Query<string, CompressQueryValue>
+public sealed class CompressQuery : Query<string, CompressionQueryValue>
 {
     #region Constructors
 
@@ -48,7 +47,7 @@ public sealed class CompressQuery : Query<string, CompressQueryValue>
     /// <param name="callback">Callback action for the request.</param>
     ///
     /* --------------------------------------------------------------------- */
-    public CompressQuery(Action<QueryMessage<string, CompressQueryValue>> callback) :
+    public CompressQuery(Action<QueryMessage<string, CompressionQueryValue>> callback) :
         base(callback, Dispatcher.Vanilla) { }
 
     #endregion
@@ -70,7 +69,7 @@ public sealed class CompressQuery : Query<string, CompressQueryValue>
     /// <returns>Compression query value.</returns>
     ///
     /* --------------------------------------------------------------------- */
-    public CompressQueryValue Get(Request request, CompressSettingValue settings) =>
+    public CompressionQueryValue Get(Request request, CompressionSettingValue settings) =>
         _cache ??= GetValue(request, settings);
 
     #endregion
@@ -88,7 +87,7 @@ public sealed class CompressQuery : Query<string, CompressQueryValue>
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private CompressQueryValue GetValue(Request request, CompressSettingValue settings) => request.Format switch
+    private CompressionQueryValue GetValue(Request request, CompressionSettingValue settings) => request.Format switch
     {
         Format.Tar      or
         Format.Zip      or
@@ -113,9 +112,9 @@ public sealed class CompressQuery : Query<string, CompressQueryValue>
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private CompressQueryValue Invoke(Request request, CompressSettingValue settings)
+    private CompressionQueryValue Invoke(Request request, CompressionSettingValue settings)
     {
-        var m = new QueryMessage<string, CompressQueryValue>(GetSource(request))
+        var m = new QueryMessage<string, CompressionQueryValue>(GetSource(request))
         {
             Value  = new(settings),
             Cancel = true,
@@ -151,6 +150,6 @@ public sealed class CompressQuery : Query<string, CompressQueryValue>
     #endregion
 
     #region Fields
-    private CompressQueryValue _cache;
+    private CompressionQueryValue _cache;
     #endregion
 }

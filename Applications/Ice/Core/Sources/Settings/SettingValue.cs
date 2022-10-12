@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-namespace Cube.FileSystem.SevenZip.Ice.Settings;
+namespace Cube.FileSystem.SevenZip.Ice;
 
 using System;
 using System.Collections.Generic;
@@ -127,7 +127,7 @@ public sealed class SettingValue : SerializableBase
     public bool ToolTip
     {
         get => Get(() => false);
-        set { if (Set(value)) Associate.Changed = true; }
+        set { if (Set(value)) Association.Changed = true; }
     }
 
     /* --------------------------------------------------------------------- */
@@ -149,49 +149,49 @@ public sealed class SettingValue : SerializableBase
 
     /* --------------------------------------------------------------------- */
     ///
-    /// Compress
+    /// Compression
     ///
     /// <summary>
-    /// Gets or sets the settings for creating an archive.
+    /// Gets or sets the settings for compressing archives.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [DataMember(Name = "Archive")]
-    public CompressSettingValue Compress
+    public CompressionSettingValue Compression
     {
-        get => Get(() => new CompressSettingValue());
+        get => Get(() => new CompressionSettingValue());
         set => Set(value);
     }
 
     /* --------------------------------------------------------------------- */
     ///
-    /// Extract
+    /// Extraction
     ///
     /// <summary>
     /// Gets or sets the settings for extracting archives.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [DataMember]
-    public ExtractSettingValue Extract
+    [DataMember(Name = "Extract")]
+    public ExtractionSettingValue Extraction
     {
-        get => Get(() => new ExtractSettingValue());
+        get => Get(() => new ExtractionSettingValue());
         set => Set(value);
     }
 
     /* --------------------------------------------------------------------- */
     ///
-    /// Associate
+    /// Association
     ///
     /// <summary>
     /// Gets or sets the settings for the file association.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [DataMember]
-    public AssociateSettingValue Associate
+    [DataMember(Name = "Associate")]
+    public AssociationSettingValue Association
     {
-        get => Get(() => new AssociateSettingValue());
+        get => Get(() => new AssociationSettingValue());
         set => Set(value);
     }
 

@@ -57,7 +57,7 @@ class CompressRuntimeSettingTest
     [TestCase("Sample.txt",     Format.Zip,      CompressionMethod.Default)]
     public void SetDestination(string dest, Format format, CompressionMethod method)
     {
-        var src = new CompressQueryValue(new()) { Destination = dest };
+        var src = new CompressionQueryValue(new()) { Destination = dest };
         Assert.That(src.Format, Is.EqualTo(format));
         Assert.That(src.CompressionMethod, Is.EqualTo(method));
     }
@@ -82,7 +82,7 @@ class CompressRuntimeSettingTest
     [TestCase(Format.Sfx,      CompressionMethod.Default, "Sample.exe"    )]
     public void SetMethod(Format format, CompressionMethod method, string dest)
     {
-        var src = new CompressQueryValue(new()) { Destination = "Sample.txt" };
+        var src = new CompressionQueryValue(new()) { Destination = "Sample.txt" };
         Assert.That(src.Format,            Is.EqualTo(Format.Zip));
         Assert.That(src.CompressionMethod, Is.EqualTo(CompressionMethod.Default));
 
@@ -107,7 +107,7 @@ class CompressRuntimeSettingTest
     [Test]
     public void ToOption()
     {
-        var dest = new CompressQueryValue(new())
+        var dest = new CompressionQueryValue(new())
         {
             CompressionLevel  = CompressionLevel.High,
             CompressionMethod = CompressionMethod.Ppmd,

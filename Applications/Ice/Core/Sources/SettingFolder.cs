@@ -29,7 +29,7 @@ using Cube.Reflection.Extensions;
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-public class SettingFolder : SettingFolder<Settings.SettingValue>
+public class SettingFolder : SettingFolder<SettingValue>
 {
     #region Constructors
 

@@ -23,20 +23,20 @@ using Cube.Text.Extensions;
 
 /* ------------------------------------------------------------------------- */
 ///
-/// CompressQueryValue
+/// CompressionQueryValue
 ///
 /// <summary>
 /// Represents the run-time settings when compressing files.
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-public sealed class CompressQueryValue : ObservableBase
+public sealed class CompressionQueryValue : ObservableBase
 {
     #region Constructors
 
     /* --------------------------------------------------------------------- */
     ///
-    /// CompressQueryValue
+    /// CompressionQueryValue
     ///
     /// <summary>
     /// Initializes a new instance of the CompressRuntime class with
@@ -46,7 +46,7 @@ public sealed class CompressQueryValue : ObservableBase
     /// <param name="settings">Default settings.</param>
     ///
     /* --------------------------------------------------------------------- */
-    public CompressQueryValue(Settings.CompressSettingValue settings)
+    public CompressionQueryValue(CompressionSettingValue settings)
     {
         CompressionLevel = settings.CompressionLevel;
         Sfx = Io.Combine(GetType().Assembly.GetDirectoryName(), Formatter.SfxName);

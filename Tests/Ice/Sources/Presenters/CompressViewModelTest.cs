@@ -53,7 +53,7 @@ class CompressViewModelTest : VmFixture
         var src   = new[] { GetSource("Sample.txt") };
         var dest  = Io.Combine(dir, "SampleRuntime.zip");
         var args  = Preset.Compress.ToArguments().Concat(src);
-        var value = new CompressSettingValue
+        var value = new CompressionSettingValue
         {
             SaveLocation  = SaveLocation.Preset,
             SaveDirectory = dir,
@@ -82,7 +82,7 @@ class CompressViewModelTest : VmFixture
         var src  = new[] { GetSource("Sample.txt") };
         var dest = Io.Combine(dir, "Sample.zip");
         var args = Preset.Compress.ToArguments().Concat(src);
-        var value = new CompressSettingValue
+        var value = new CompressionSettingValue
         {
             SaveLocation = SaveLocation.Query,
             OpenMethod   = OpenMethod.None,
@@ -110,7 +110,7 @@ class CompressViewModelTest : VmFixture
         var src   = new[] { GetSource("Sample.txt") };
         var dest  = Io.Combine(dir, "Sample.zip");
         var args  = Preset.CompressZipPassword.ToArguments().Concat(src);
-        var value = new CompressSettingValue
+        var value = new CompressionSettingValue
         {
             SaveLocation  = SaveLocation.Preset,
             SaveDirectory = dir,
@@ -139,7 +139,7 @@ class CompressViewModelTest : VmFixture
         var src   = new[] { GetSource("Sample.txt") };
         var dest  = Io.Combine(dir, "Sample.zip");
         var args  = Preset.CompressZip.ToArguments().Concat(new[] { "/o:runtime" }).Concat(src);
-        var value = new CompressSettingValue
+        var value = new CompressionSettingValue
         {
             SaveLocation  = SaveLocation.Preset,
             SaveDirectory = dir,

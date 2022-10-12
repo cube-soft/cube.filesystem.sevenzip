@@ -31,7 +31,7 @@ using Cube.Observable.Extensions;
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-public class AssociateViewModel : PresentableBase<AssociateSettingValue>
+public class AssociateViewModel : PresentableBase<AssociationSettingValue>
 {
     #region Constructors
 
@@ -49,7 +49,7 @@ public class AssociateViewModel : PresentableBase<AssociateSettingValue>
     /// <param name="context">Synchronization context.</param>
     ///
     /* --------------------------------------------------------------------- */
-    public AssociateViewModel(AssociateSettingValue src,
+    public AssociateViewModel(AssociationSettingValue src,
         Aggregator aggregator,
         SynchronizationContext context
     ) : base(src, aggregator, context) => Assets.Add(Facade.Forward(this));

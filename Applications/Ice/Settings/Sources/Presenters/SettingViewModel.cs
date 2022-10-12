@@ -51,9 +51,9 @@ public class SettingViewModel : PresentableBase<SettingFolder>
     public SettingViewModel(SettingFolder src, SynchronizationContext context) :
         base(src, new(), context)
     {
-        Compress  = new(src.Value.Compress,  Aggregator, Context);
-        Extract   = new(src.Value.Extract,   Aggregator, Context);
-        Associate = new(src.Value.Associate, Aggregator, Context);
+        Compress  = new(src.Value.Compression,  Aggregator, Context);
+        Extract   = new(src.Value.Extraction,   Aggregator, Context);
+        Associate = new(src.Value.Association, Aggregator, Context);
         Menu      = new(src.Value.Context,   Aggregator, Context);
         Shortcut  = new(src.Value.Shortcut,  Aggregator, Context);
 

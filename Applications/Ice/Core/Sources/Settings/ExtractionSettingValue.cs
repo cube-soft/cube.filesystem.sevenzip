@@ -15,13 +15,13 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-namespace Cube.FileSystem.SevenZip.Ice.Settings;
+namespace Cube.FileSystem.SevenZip.Ice;
 
 using System.Runtime.Serialization;
 
 /* ------------------------------------------------------------------------- */
 ///
-/// ExtractSettingValue
+/// ExtractionSettingValue
 ///
 /// <summary>
 /// Represents the settings when extracting archives.
@@ -29,7 +29,7 @@ using System.Runtime.Serialization;
 ///
 /* ------------------------------------------------------------------------- */
 [DataContract]
-public sealed class ExtractSettingValue : ArchiveSettingValue
+public sealed class ExtractionSettingValue : ArchiveSettingValue
 {
     #region Properties
 

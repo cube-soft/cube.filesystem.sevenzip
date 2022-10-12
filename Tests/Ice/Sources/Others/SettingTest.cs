@@ -57,7 +57,7 @@ class SettingTest : FileFixture
 
         var v = dest.Value;
         Assert.That(v, Is.Not.Null);
-        Assert.That(v.Associate.Changed, Is.False);
+        Assert.That(v.Association.Changed, Is.False);
     }
 
     /* --------------------------------------------------------------------- */

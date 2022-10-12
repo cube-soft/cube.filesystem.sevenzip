@@ -61,7 +61,7 @@ static class Program
 
         var args = new ArgumentCollection(s);
         if (args.Options.ContainsKey("init")) Init(src);
-        else src.Value.Associate.Changed = false;
+        else src.Value.Association.Changed = false;
 
         if (args.Options.ContainsKey("silent")) src.SaveEx();
         else
@@ -87,20 +87,20 @@ static class Program
     /* --------------------------------------------------------------------- */
     private static void Init(SettingFolder src)
     {
-        Logger.Info($"Init:{!src.Value.Associate.Changed}");
-        if (src.Value.Associate.Changed) return;
+        Logger.Info($"Init:{!src.Value.Association.Changed}");
+        if (src.Value.Association.Changed) return;
 
-        src.Value.Associate.Zip      = true;
-        src.Value.Associate.Lzh      = true;
-        src.Value.Associate.Rar      = true;
-        src.Value.Associate.SevenZip = true;
-        src.Value.Associate.Tar      = true;
-        src.Value.Associate.Gz       = true;
-        src.Value.Associate.Tgz      = true;
-        src.Value.Associate.Bz2      = true;
-        src.Value.Associate.Tbz      = true;
-        src.Value.Associate.Xz       = true;
-        src.Value.Associate.Txz      = true;
+        src.Value.Association.Zip      = true;
+        src.Value.Association.Lzh      = true;
+        src.Value.Association.Rar      = true;
+        src.Value.Association.SevenZip = true;
+        src.Value.Association.Tar      = true;
+        src.Value.Association.Gz       = true;
+        src.Value.Association.Tgz      = true;
+        src.Value.Association.Bz2      = true;
+        src.Value.Association.Tbz      = true;
+        src.Value.Association.Xz       = true;
+        src.Value.Association.Txz      = true;
         src.Value.Shortcut.Preset    = Preset.Settings;
     }
 

@@ -47,7 +47,7 @@ class ExtractTest : VmFixture
     ///
     /* --------------------------------------------------------------------- */
     [TestCaseSource(nameof(TestCases))]
-    public void Extract(string dest, IEnumerable<string> files, IEnumerable<string> args, ExtractSettingValue settings)
+    public void Extract(string dest, IEnumerable<string> files, IEnumerable<string> args, ExtractionSettingValue settings)
     {
         settings.SaveDirectory = Get("Preset");
 
@@ -88,7 +88,7 @@ class ExtractTest : VmFixture
             @"Preset\Complex.1.0.0",
             new[] { "Complex.1.0.0.zip" },
             Enumerable.Empty<string>(),
-            new ExtractSettingValue
+            new ExtractionSettingValue
             {
                 SaveLocation = SaveLocation.Preset,
                 SaveMethod   = SaveMethod.CreateSmart,
@@ -100,7 +100,7 @@ class ExtractTest : VmFixture
             @"Runtime\Complex.1.0.0",
             new[] { "Complex.1.0.0.zip" },
             Preset.ExtractQuery.ToArguments(),
-            new ExtractSettingValue
+            new ExtractionSettingValue
             {
                 SaveLocation = SaveLocation.Preset,
                 SaveMethod   = SaveMethod.CreateSmart,
@@ -112,7 +112,7 @@ class ExtractTest : VmFixture
             @"Preset\Sample\Empty",
             new[] { "SampleEmpty.zip" },
             Preset.Extract.ToArguments(),
-            new ExtractSettingValue
+            new ExtractionSettingValue
             {
                 SaveLocation = SaveLocation.Preset,
                 SaveMethod   = SaveMethod.CreateSmart,
@@ -124,7 +124,7 @@ class ExtractTest : VmFixture
             @"Preset\フィルタリング テスト用",
             new[] { "SampleFilter.zip" },
             Preset.Extract.ToArguments(),
-            new ExtractSettingValue
+            new ExtractionSettingValue
             {
                 SaveLocation = SaveLocation.Preset,
                 SaveMethod   = SaveMethod.CreateSmart,
@@ -136,7 +136,7 @@ class ExtractTest : VmFixture
             @"Preset\名称未設定フォルダ",
             new[] { "SampleMac.zip" },
             Preset.Extract.ToArguments(),
-            new ExtractSettingValue
+            new ExtractionSettingValue
             {
                 SaveLocation = SaveLocation.Preset,
                 SaveMethod   = SaveMethod.CreateSmart,
@@ -148,7 +148,7 @@ class ExtractTest : VmFixture
             @"Preset\Sample 2018.02.13",
             new[] { "Sample 2018.02.13.zip" },
             Preset.Extract.ToArguments(),
-            new ExtractSettingValue
+            new ExtractionSettingValue
             {
                 SaveLocation = SaveLocation.Preset,
                 SaveMethod   = SaveMethod.CreateSmart,
@@ -160,7 +160,7 @@ class ExtractTest : VmFixture
             @"Preset\Sample..DoubleDot",
             new[] { "Sample..DoubleDot.zip" },
             Preset.Extract.ToArguments(),
-            new ExtractSettingValue
+            new ExtractionSettingValue
             {
                 SaveLocation = SaveLocation.Preset,
                 SaveMethod   = SaveMethod.CreateSmart,
@@ -172,7 +172,7 @@ class ExtractTest : VmFixture
             @"Preset\Password",
             new[] { "Password.7z" },
             Preset.Extract.ToArguments(),
-            new ExtractSettingValue
+            new ExtractionSettingValue
             {
                 SaveLocation = SaveLocation.Preset,
                 SaveMethod   = SaveMethod.CreateSmart,
@@ -183,35 +183,35 @@ class ExtractTest : VmFixture
             @"RootDirectory\Single-0x00\Sample 00..01.txt",
             new[] { "Single.1.0.0.zip" },
             GetPathArgs(@"RootDirectory\Single-0x00"),
-            new ExtractSettingValue { SaveMethod = SaveMethod.None }
+            new ExtractionSettingValue { SaveMethod = SaveMethod.None }
         );
 
         yield return new(
             @"RootDirectory\Single-0x01\Single.1.0.0\Sample 00..01.txt",
             new[] { "Single.1.0.0.zip" },
             GetPathArgs(@"RootDirectory\Single-0x01"),
-            new ExtractSettingValue { SaveMethod = SaveMethod.Create }
+            new ExtractionSettingValue { SaveMethod = SaveMethod.Create }
         );
 
         yield return new(
             @"RootDirectory\Single-0x03\Single.1.0.0\Sample 00..01.txt",
             new[] { "Single.1.0.0.zip" },
             GetPathArgs(@"RootDirectory\Single-0x03"),
-            new ExtractSettingValue { SaveMethod = SaveMethod.CreateSmart }
+            new ExtractionSettingValue { SaveMethod = SaveMethod.CreateSmart }
         );
 
         yield return new(
             @"RootDirectory\Single-0x05\Sample 00..01.txt",
             new[] { "Single.1.0.0.zip" },
             GetPathArgs(@"RootDirectory\Single-0x05"),
-            new ExtractSettingValue { SaveMethod = SaveMethod.Create | SaveMethod.SkipSingleFile }
+            new ExtractionSettingValue { SaveMethod = SaveMethod.Create | SaveMethod.SkipSingleFile }
         );
 
         yield return new(
             @"RootDirectory\Single-0x07\Sample 00..01.txt",
             new[] { "Single.1.0.0.zip" },
             GetPathArgs(@"RootDirectory\Single-0x07"),
-            new ExtractSettingValue
+            new ExtractionSettingValue
             {
                 SaveMethod = SaveMethod.Create |
                              SaveMethod.SkipSingleFile |
@@ -223,35 +223,35 @@ class ExtractTest : VmFixture
             @"RootDirectory\SingleDirectory-0x00\Sample",
             new[] { "SingleDirectory.1.0.0.zip" },
             GetPathArgs(@"RootDirectory\SingleDirectory-0x00"),
-            new ExtractSettingValue { SaveMethod = SaveMethod.None }
+            new ExtractionSettingValue { SaveMethod = SaveMethod.None }
         );
 
         yield return new(
             @"RootDirectory\SingleDirectory-0x01\SingleDirectory.1.0.0",
             new[] { "SingleDirectory.1.0.0.zip" },
             GetPathArgs(@"RootDirectory\SingleDirectory-0x01"),
-            new ExtractSettingValue { SaveMethod = SaveMethod.Create }
+            new ExtractionSettingValue { SaveMethod = SaveMethod.Create }
         );
 
         yield return new(
             @"RootDirectory\SingleDirectory-0x03\Sample",
             new[] { "SingleDirectory.1.0.0.zip" },
             GetPathArgs(@"RootDirectory\SingleDirectory-0x03"),
-            new ExtractSettingValue { SaveMethod = SaveMethod.CreateSmart }
+            new ExtractionSettingValue { SaveMethod = SaveMethod.CreateSmart }
         );
 
         yield return new(
             @"RootDirectory\SingleDirectory-0x05\SingleDirectory.1.0.0",
             new[] { "SingleDirectory.1.0.0.zip" },
             GetPathArgs(@"RootDirectory\SingleDirectory-0x05"),
-            new ExtractSettingValue { SaveMethod = SaveMethod.Create | SaveMethod.SkipSingleFile }
+            new ExtractionSettingValue { SaveMethod = SaveMethod.Create | SaveMethod.SkipSingleFile }
         );
 
         yield return new(
             @"RootDirectory\SingleDirectory-0x07\Sample",
             new[] { "SingleDirectory.1.0.0.zip" },
             GetPathArgs(@"RootDirectory\SingleDirectory-0x07"),
-            new ExtractSettingValue
+            new ExtractionSettingValue
             {
                 SaveMethod = SaveMethod.Create |
                              SaveMethod.SkipSingleFile |
@@ -263,35 +263,35 @@ class ExtractTest : VmFixture
             @"RootDirectory\MultiDirectory-0x00\Directory",
             new[] { "MultiDirectory.1.0.0.zip" },
             GetPathArgs(@"RootDirectory\MultiDirectory-0x00"),
-            new ExtractSettingValue { SaveMethod = SaveMethod.None }
+            new ExtractionSettingValue { SaveMethod = SaveMethod.None }
         );
 
         yield return new(
             @"RootDirectory\MultiDirectory-0x01\MultiDirectory.1.0.0",
             new[] { "MultiDirectory.1.0.0.zip" },
             GetPathArgs(@"RootDirectory\MultiDirectory-0x01"),
-            new ExtractSettingValue { SaveMethod = SaveMethod.Create }
+            new ExtractionSettingValue { SaveMethod = SaveMethod.Create }
         );
 
         yield return new(
             @"RootDirectory\MultiDirectory-0x03\MultiDirectory.1.0.0",
             new[] { "MultiDirectory.1.0.0.zip" },
             GetPathArgs(@"RootDirectory\MultiDirectory-0x03"),
-            new ExtractSettingValue { SaveMethod = SaveMethod.CreateSmart }
+            new ExtractionSettingValue { SaveMethod = SaveMethod.CreateSmart }
         );
 
         yield return new(
             @"RootDirectory\MultiDirectory-0x05\MultiDirectory.1.0.0",
             new[] { "MultiDirectory.1.0.0.zip" },
             GetPathArgs(@"RootDirectory\MultiDirectory-0x05"),
-            new ExtractSettingValue { SaveMethod = SaveMethod.Create | SaveMethod.SkipSingleFile }
+            new ExtractionSettingValue { SaveMethod = SaveMethod.Create | SaveMethod.SkipSingleFile }
         );
 
         yield return new(
             @"RootDirectory\MultiDirectory-0x07\MultiDirectory.1.0.0",
             new[] { "MultiDirectory.1.0.0.zip" },
             GetPathArgs(@"RootDirectory\MultiDirectory-0x07"),
-            new ExtractSettingValue
+            new ExtractionSettingValue
             {
                 SaveMethod = SaveMethod.Create |
                              SaveMethod.SkipSingleFile |
@@ -303,35 +303,35 @@ class ExtractTest : VmFixture
             @"RootDirectory\Complex-0x00\Foo.txt",
             new[] { "Complex.1.0.0.zip" },
             GetPathArgs(@"RootDirectory\Complex-0x00"),
-            new ExtractSettingValue { SaveMethod = SaveMethod.None }
+            new ExtractionSettingValue { SaveMethod = SaveMethod.None }
         );
 
         yield return new(
             @"RootDirectory\Complex-0x01\Complex.1.0.0",
             new[] { "Complex.1.0.0.zip" },
             GetPathArgs(@"RootDirectory\Complex-0x01"),
-            new ExtractSettingValue { SaveMethod = SaveMethod.Create }
+            new ExtractionSettingValue { SaveMethod = SaveMethod.Create }
         );
 
         yield return new(
             @"RootDirectory\Complex-0x03\Complex.1.0.0",
             new[] { "Complex.1.0.0.zip" },
             GetPathArgs(@"RootDirectory\Complex-0x03"),
-            new ExtractSettingValue { SaveMethod = SaveMethod.CreateSmart }
+            new ExtractionSettingValue { SaveMethod = SaveMethod.CreateSmart }
         );
 
         yield return new(
             @"RootDirectory\Complex-0x05\Complex.1.0.0",
             new[] { "Complex.1.0.0.zip" },
             GetPathArgs(@"RootDirectory\Complex-0x05"),
-            new ExtractSettingValue { SaveMethod = SaveMethod.Create | SaveMethod.SkipSingleFile }
+            new ExtractionSettingValue { SaveMethod = SaveMethod.Create | SaveMethod.SkipSingleFile }
         );
 
         yield return new(
             @"RootDirectory\Complex-0x07\Complex.1.0.0",
             new[] { "Complex.1.0.0.zip" },
             GetPathArgs(@"RootDirectory\Complex-0x07"),
-            new ExtractSettingValue
+            new ExtractionSettingValue
             {
                 SaveMethod = SaveMethod.Create |
                              SaveMethod.SkipSingleFile |
@@ -343,56 +343,56 @@ class ExtractTest : VmFixture
             @"Tar\TarSample",
             new[] { "Sample.tar" },
             GetPathArgs("Tar"),
-            new ExtractSettingValue { SaveMethod = SaveMethod.CreateSmart }
+            new ExtractionSettingValue { SaveMethod = SaveMethod.CreateSmart }
         );
 
         yield return new(
             @"Tar\BZipSample\TarSample",
             new[] { "Sample.tbz" },
             GetPathArgs(@"Tar\BZipSample"),
-            new ExtractSettingValue { SaveMethod = SaveMethod.CreateSmart }
+            new ExtractionSettingValue { SaveMethod = SaveMethod.CreateSmart }
         );
 
         yield return new(
             @"Tar\GZipSample\TarSample",
             new[] { "Sample.tgz" },
             GetPathArgs(@"Tar\GZipSample"),
-            new ExtractSettingValue { SaveMethod = SaveMethod.CreateSmart }
+            new ExtractionSettingValue { SaveMethod = SaveMethod.CreateSmart }
         );
 
         yield return new(
             @"Tar\LzmaSample\Sample",
             new[] { "Sample.tar.lzma" },
             GetPathArgs(@"Tar\LzmaSample"),
-            new ExtractSettingValue { SaveMethod = SaveMethod.CreateSmart }
+            new ExtractionSettingValue { SaveMethod = SaveMethod.CreateSmart }
         );
 
         yield return new(
             @"Tar\LzwSample\Sample",
             new[] { "Sample.tar.z" },
             GetPathArgs(@"Tar\LzwSample"),
-            new ExtractSettingValue { SaveMethod = SaveMethod.CreateSmart }
+            new ExtractionSettingValue { SaveMethod = SaveMethod.CreateSmart }
         );
 
         yield return new(
             @"Bz2Sample\Sample\Sample.txt",
             new[] { "Sample.txt.bz2" },
             GetPathArgs("Bz2Sample"),
-            new ExtractSettingValue { SaveMethod = SaveMethod.CreateSmart }
+            new ExtractionSettingValue { SaveMethod = SaveMethod.CreateSmart }
         );
 
         yield return new(
             @"SfxSample\Sample\Foo.txt",
             new[] { "SampleSfx.exe" },
             GetPathArgs("SfxSample"),
-            new ExtractSettingValue { SaveMethod = SaveMethod.CreateSmart }
+            new ExtractionSettingValue { SaveMethod = SaveMethod.CreateSmart }
         );
 
         yield return new(
             @"Multiple\Complex.1.0.0",
             new[] { "Complex.1.0.0.zip", "Single.1.0.0.zip" },
             GetPathArgs("Multiple"),
-            new ExtractSettingValue { SaveMethod = SaveMethod.CreateSmart }
+            new ExtractionSettingValue { SaveMethod = SaveMethod.CreateSmart }
         );
     }}
 

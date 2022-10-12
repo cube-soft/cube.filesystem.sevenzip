@@ -15,13 +15,13 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-namespace Cube.FileSystem.SevenZip.Ice.Settings;
+namespace Cube.FileSystem.SevenZip.Ice;
 
 using System.Runtime.Serialization;
 
 /* ------------------------------------------------------------------------- */
 ///
-/// CompressSettingValue
+/// CompressionSettingValue
 ///
 /// <summary>
 /// Represents the settings when compressing archives.
@@ -29,7 +29,7 @@ using System.Runtime.Serialization;
 ///
 /* ------------------------------------------------------------------------- */
 [DataContract]
-public sealed class CompressSettingValue : ArchiveSettingValue
+public sealed class CompressionSettingValue : ArchiveSettingValue
 {
     #region Properties
 

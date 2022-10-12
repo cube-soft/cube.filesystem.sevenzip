@@ -31,7 +31,7 @@ namespace Cube.FileSystem.SevenZip.Ice;
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-public sealed class CompressSettingViewModel : PresentableBase<QueryMessage<string, CompressQueryValue>>
+public sealed class CompressSettingViewModel : PresentableBase<QueryMessage<string, CompressionQueryValue>>
 {
     #region Constructors
 
@@ -49,7 +49,7 @@ public sealed class CompressSettingViewModel : PresentableBase<QueryMessage<stri
     ///
     /* --------------------------------------------------------------------- */
     public CompressSettingViewModel(
-        QueryMessage<string, CompressQueryValue> src,
+        QueryMessage<string, CompressionQueryValue> src,
         SynchronizationContext context
     ) : base(src, new(), context) => Assets.Add(Facade.Value.Forward(this));
 

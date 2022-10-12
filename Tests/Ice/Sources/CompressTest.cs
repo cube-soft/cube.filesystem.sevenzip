@@ -47,7 +47,7 @@ class CompressTest : VmFixture
     ///
     /* --------------------------------------------------------------------- */
     [TestCaseSource(nameof(TestCases))]
-    public void Compress(string dest, IEnumerable<string> files, IEnumerable<string> args, CompressSettingValue settings)
+    public void Compress(string dest, IEnumerable<string> files, IEnumerable<string> args, CompressionSettingValue settings)
     {
         using var vm = NewVM(args.Concat(files.Select(e => GetSource(e))), settings);
         var filename = GetFileName(GetSource(files.First()), dest);
@@ -90,7 +90,7 @@ class CompressTest : VmFixture
             @"Preset\Sample.zip",
             new[] { "Sample.txt" },
             Preset.Compress.ToArguments(),
-            new CompressSettingValue
+            new CompressionSettingValue
             {
                 SaveLocation = SaveLocation.Preset,
                 OpenMethod   = OpenMethod.None,
@@ -102,7 +102,7 @@ class CompressTest : VmFixture
             @"Preset\Sample 00..01.zip",
             new[] { "Sample 00..01" },
             Preset.Compress.ToArguments(),
-            new CompressSettingValue
+            new CompressionSettingValue
             {
                 SaveLocation  = SaveLocation.Preset,
                 OpenMethod    = OpenMethod.None,
@@ -114,7 +114,7 @@ class CompressTest : VmFixture
             @"Preset\.Sample.zip",
             new[] { ".Sample" },
             Preset.Compress.ToArguments(),
-            new CompressSettingValue
+            new CompressionSettingValue
             {
                 SaveLocation  = SaveLocation.Preset,
                 OpenMethod    = OpenMethod.None,
@@ -126,7 +126,7 @@ class CompressTest : VmFixture
             @"Preset\Sample.7z",
             new[] { "Sample.txt", "Sample 00..01" },
             Preset.Compress7z.ToArguments(),
-            new CompressSettingValue
+            new CompressionSettingValue
             {
                 SaveLocation = SaveLocation.Preset,
                 OpenMethod   = OpenMethod.None,
@@ -138,7 +138,7 @@ class CompressTest : VmFixture
             @"Preset\Sample.tar.bz2",
             new[] { "Sample.txt", "Sample 00..01" },
             Preset.CompressBz2.ToArguments(),
-            new CompressSettingValue
+            new CompressionSettingValue
             {
                 SaveLocation = SaveLocation.Preset,
                 OpenMethod   = OpenMethod.None,
@@ -150,7 +150,7 @@ class CompressTest : VmFixture
             @"Preset\Sample.exe",
             new[] { "Sample.txt", "Sample 00..01" },
             Preset.CompressSfx.ToArguments(),
-            new CompressSettingValue
+            new CompressionSettingValue
             {
                 SaveLocation = SaveLocation.Preset,
                 OpenMethod   = OpenMethod.None,
@@ -162,7 +162,7 @@ class CompressTest : VmFixture
             @"Runtime\Sample.zip",
             new[] { "Sample.txt", "Sample 00..01" },
             Preset.CompressDetails.ToArguments(),
-            new CompressSettingValue
+            new CompressionSettingValue
             {
                 SaveLocation = SaveLocation.Preset,
                 OpenMethod   = OpenMethod.None,
@@ -174,7 +174,7 @@ class CompressTest : VmFixture
             @"Runtime\Sample.7z",
             new[] { "Sample.txt", "Sample 00..01" },
             Preset.Compress7z.ToArguments().Concat(new[] { "/p" }),
-            new CompressSettingValue
+            new CompressionSettingValue
             {
                 SaveLocation = SaveLocation.Query,
                 OpenMethod   = OpenMethod.None,
@@ -186,7 +186,7 @@ class CompressTest : VmFixture
             @"Runtime\Sample.tar.bz2",
             new[] { "Sample.txt", "Sample 00..01" },
             Preset.CompressBz2.ToArguments().Concat(new[] { "/o:runtime" }),
-            new CompressSettingValue
+            new CompressionSettingValue
             {
                 SaveLocation = SaveLocation.Preset,
                 OpenMethod   = OpenMethod.None,
@@ -198,7 +198,7 @@ class CompressTest : VmFixture
             @"Drop\Sample.tar.gz",
             new[] { "Sample.txt", "Sample 00..01" },
             GetPathArgs(Preset.CompressGz, "Drop"),
-            new CompressSettingValue
+            new CompressionSettingValue
             {
                 SaveLocation = SaveLocation.Preset,
                 OpenMethod   = OpenMethod.None,
@@ -210,7 +210,7 @@ class CompressTest : VmFixture
             @"Drop\Sample.tar.xz",
             new[] { "Sample.txt", "Sample 00..01" },
             GetPathArgs(Preset.CompressXz, "Drop"),
-            new CompressSettingValue
+            new CompressionSettingValue
             {
                 SaveLocation = SaveLocation.Preset,
                 OpenMethod   = OpenMethod.None,

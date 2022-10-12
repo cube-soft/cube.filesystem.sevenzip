@@ -21,14 +21,14 @@ using System;
 
 /* ------------------------------------------------------------------------- */
 ///
-/// CompressExtension
+/// CompressionExtension
 ///
 /// <summary>
 /// Provides extended methods of the CompressRuntime class.
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-public static class CompressExtension
+public static class CompressionExtension
 {
     #region Methods
 
@@ -47,13 +47,13 @@ public static class CompressExtension
     /// <remarks>CompressionOption object.</remarks>
     ///
     /* --------------------------------------------------------------------- */
-    public static CompressionOption ToOption(this CompressQueryValue src, SettingFolder settings)
+    public static CompressionOption ToOption(this CompressionQueryValue src, SettingFolder settings)
     {
-        var filter = Filter.From(settings.Value.GetFilters(settings.Value.Compress.Filtering));
+        var filter = Filter.From(settings.Value.GetFilters(settings.Value.Compression.Filtering));
 
         return src.Format switch
         {
-            Format.Zip => MakeZip(src, filter, settings.Value.Compress),
+            Format.Zip => MakeZip(src, filter, settings.Value.Compression),
             Format.Sfx => MakeSfx(src, filter),
             _          => MakeCommon(src, filter),
         };
@@ -72,8 +72,8 @@ public static class CompressExtension
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private static CompressionOption MakeZip(CompressQueryValue src,
-        Predicate<Entity> filter, Settings.CompressSettingValue others) => new()
+    private static CompressionOption MakeZip(CompressionQueryValue src,
+        Predicate<Entity> filter, CompressionSettingValue others) => new()
     {
         CompressionLevel  = src.CompressionLevel,
         CompressionMethod = src.CompressionMethod,
@@ -93,7 +93,7 @@ public static class CompressExtension
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private static SfxOption MakeSfx(CompressQueryValue src, Predicate<Entity> filter) => new()
+    private static SfxOption MakeSfx(CompressionQueryValue src, Predicate<Entity> filter) => new()
     {
         CompressionLevel  = src.CompressionLevel,
         CompressionMethod = src.CompressionMethod,
@@ -112,7 +112,7 @@ public static class CompressExtension
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private static CompressionOption MakeCommon(CompressQueryValue src, Predicate<Entity> filter) => new()
+    private static CompressionOption MakeCommon(CompressionQueryValue src, Predicate<Entity> filter) => new()
     {
         CompressionMethod = src.CompressionMethod,
         CompressionLevel  = src.CompressionLevel,

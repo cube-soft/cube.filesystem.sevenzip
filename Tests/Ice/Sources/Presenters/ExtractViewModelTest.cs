@@ -53,7 +53,7 @@ class ExtractViewModelTest : VmFixture
     {
         var dir   = Get("Suspend");
         var args  = Preset.Extract.ToArguments().Concat(GetSource("SampleHeavy.7z"));
-        var value = new ExtractSettingValue
+        var value = new ExtractionSettingValue
         {
             SaveLocation  = SaveLocation.Preset,
             SaveDirectory = dir,
@@ -88,7 +88,7 @@ class ExtractViewModelTest : VmFixture
     {
         var dest  = Get("CancelPassword");
         var args  = Preset.Extract.ToArguments().Concat(GetSource("Password.7z"));
-        var value = new ExtractSettingValue
+        var value = new ExtractionSettingValue
         {
             SaveLocation  = SaveLocation.Preset,
             SaveDirectory = dest,
@@ -113,7 +113,7 @@ class ExtractViewModelTest : VmFixture
         var src   = Get("Complex.zip");
         var dest  = Get("DeleteSource");
         var args  = Preset.Extract.ToArguments().Concat(src);
-        var value = new ExtractSettingValue
+        var value = new ExtractionSettingValue
         {
             SaveLocation  = SaveLocation.Preset,
             SaveDirectory = dest,
@@ -143,7 +143,7 @@ class ExtractViewModelTest : VmFixture
         var dummy = GetSource("Sample.txt");
         var dest  = Get(@"Rename");
         var args  = Preset.Extract.ToArguments().Concat(GetSource("Complex.1.0.0.zip"));
-        var value = new ExtractSettingValue
+        var value = new ExtractionSettingValue
         {
             SaveLocation  = SaveLocation.Preset,
             SaveDirectory = dest,
@@ -176,7 +176,7 @@ class ExtractViewModelTest : VmFixture
         var size  = Io.Get(dummy).Length;
         var dest  = Get("CancelOverwrite");
         var args  = Preset.Extract.ToArguments().Concat(GetSource("Complex.1.0.0.zip"));
-        var value = new ExtractSettingValue
+        var value = new ExtractionSettingValue
         {
             SaveLocation  = SaveLocation.Preset,
             SaveDirectory = dest,

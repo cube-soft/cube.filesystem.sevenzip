@@ -83,17 +83,17 @@ class AssociateRegistrarTest : FileFixture
             var path      = @"C:\Program Files\CubeICE\cubeice.exe";
             var registrar = new AssociateRegistrar(path)
             {
-                IconLocation = $"{path},{settings.Value.Associate.IconIndex}",
+                IconLocation = $"{path},{settings.Value.Association.IconIndex}",
                 ToolTip = false,
             };
 
-            registrar.Update(settings.Value.Associate.Value);
+            registrar.Update(settings.Value.Association.Value);
 
-            foreach (var key in settings.Value.Associate.Value.Keys.ToArray())
+            foreach (var key in settings.Value.Association.Value.Keys.ToArray())
             {
-                settings.Value.Associate.Value[key] = false;
+                settings.Value.Association.Value[key] = false;
             }
-            registrar.Update(settings.Value.Associate.Value);
+            registrar.Update(settings.Value.Association.Value);
 
             Assert.Pass("Administrator");
         }

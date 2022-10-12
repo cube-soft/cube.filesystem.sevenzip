@@ -95,7 +95,7 @@ public sealed class ExtractFacade : ArchiveFacade
             var dir = new ExtractDirectory(this.Select(), Settings);
             InvokePreProcess(dir);
 
-            var list = Settings.Value.GetFilters(Settings.Value.Extract.Filtering);
+            var list = Settings.Value.GetFilters(Settings.Value.Extraction.Filtering);
             var opts = new ArchiveOption { Filter = Filter.From(list) };
             using (var e = new ArchiveReader(src, Password, opts))
             {
@@ -181,7 +181,7 @@ public sealed class ExtractFacade : ArchiveFacade
     /* --------------------------------------------------------------------- */
     private void InvokePostProcess(ExtractDirectory dir)
     {
-        var ss = Settings.Value.Extract;
+        var ss = Settings.Value.Extraction;
         var app = Settings.Value.Explorer;
         Io.Get(dir.ValueToOpen).Open(ss.OpenMethod, app);
         if (ss.DeleteSource) Logger.Warn(() => Io.Delete(Source));

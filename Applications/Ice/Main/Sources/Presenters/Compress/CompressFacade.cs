@@ -78,7 +78,7 @@ public sealed class CompressFacade : ArchiveFacade
     /* --------------------------------------------------------------------- */
     protected override void Invoke()
     {
-        var src = Configure.Get(Request, Settings.Value.Compress);
+        var src = Configure.Get(Request, Settings.Value.Compression);
         InvokePreProcess(src);
         Invoke(src);
         InvokePostProcess();
@@ -97,7 +97,7 @@ public sealed class CompressFacade : ArchiveFacade
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private void Invoke(CompressQueryValue src)
+    private void Invoke(CompressionQueryValue src)
     {
         Logger.Debug(string.Join(", ",
             $"Format:{src.Format}",
@@ -123,7 +123,7 @@ public sealed class CompressFacade : ArchiveFacade
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private void InvokePreProcess(CompressQueryValue src)
+    private void InvokePreProcess(CompressionQueryValue src)
     {
         Destination = this.Select(src);
         SetTemp(Io.Get(Destination).DirectoryName);
@@ -140,7 +140,7 @@ public sealed class CompressFacade : ArchiveFacade
     ///
     /* --------------------------------------------------------------------- */
     private void InvokePostProcess() => Io.Get(Destination).Open(
-        Settings.Value.Compress.OpenMethod,
+        Settings.Value.Compression.OpenMethod,
         Settings.Value.Explorer
     );
 
@@ -153,7 +153,7 @@ public sealed class CompressFacade : ArchiveFacade
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private void SetPassword(CompressQueryValue src)
+    private void SetPassword(CompressionQueryValue src)
     {
         if (src.Password.HasValue() || !Request.Password) return;
 

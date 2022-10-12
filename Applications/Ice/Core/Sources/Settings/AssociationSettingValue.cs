@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-namespace Cube.FileSystem.SevenZip.Ice.Settings;
+namespace Cube.FileSystem.SevenZip.Ice;
 
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -24,15 +24,15 @@ using Cube.DataContract;
 
 /* ------------------------------------------------------------------------- */
 ///
-/// AssociateSettingValue
+/// AssociationSettingValue
 ///
 /// <summary>
-/// Represents the settings about the associated files.
+/// Represents the settings about the file association.
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
 [DataContract]
-public sealed class AssociateSettingValue : SerializableBase
+public sealed class AssociationSettingValue : SerializableBase
 {
     #region Properties
 

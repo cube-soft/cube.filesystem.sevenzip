@@ -18,7 +18,6 @@
 namespace Cube.FileSystem.SevenZip.Ice;
 
 using System;
-using Cube.FileSystem.SevenZip.Ice.Settings;
 using Cube.Text.Extensions;
 
 /* ------------------------------------------------------------------------- */

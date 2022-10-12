@@ -51,8 +51,8 @@ public sealed class ExtractDirectory
     /* --------------------------------------------------------------------- */
     public ExtractDirectory(string src, SettingFolder settings) : this(
         src,
-        settings.Value.Extract.SaveMethod,
-        settings.Value.Extract.Filtering ?
+        settings.Value.Extraction.SaveMethod,
+        settings.Value.Extraction.Filtering ?
         settings.Value.GetFilters() :
         Enumerable.Empty<string>()
     ) { }

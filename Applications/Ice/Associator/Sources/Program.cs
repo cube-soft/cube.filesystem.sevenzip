@@ -56,8 +56,8 @@ static class Program
 
         var dir  = typeof(Program).Assembly.GetDirectoryName();
         var exe  = System.IO.Path.Combine(dir, "cubeice.exe");
-        var icon = $"{exe},{settings.Value.Associate.IconIndex}";
-        var src  = settings.Value.Associate.Value;
+        var icon = $"{exe},{settings.Value.Association.IconIndex}";
+        var src  = settings.Value.Association.Value;
 
         Logger.Info($"FileName:{exe}");
         Logger.Info($"IconLocation:{icon}");
@@ -91,9 +91,9 @@ static class Program
     /* --------------------------------------------------------------------- */
     static void Clear(SettingFolder settings)
     {
-        foreach (var key in settings.Value.Associate.Value.Keys.ToArray())
+        foreach (var key in settings.Value.Association.Value.Keys.ToArray())
         {
-            settings.Value.Associate.Value[key] = false;
+            settings.Value.Association.Value[key] = false;
         }
     }
 

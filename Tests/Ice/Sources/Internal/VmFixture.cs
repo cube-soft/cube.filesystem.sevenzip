@@ -49,13 +49,13 @@ abstract class VmFixture : FileFixture
     /// <returns>CompressViewModel object.</returns>
     ///
     /* --------------------------------------------------------------------- */
-    protected CompressViewModel NewVM(IEnumerable<string> args, Settings.CompressSettingValue settings)
+    protected CompressViewModel NewVM(IEnumerable<string> args, CompressionSettingValue settings)
     {
         var ss = NewSettings();
 
-        ss.Value.Compress = settings;
-        ss.Value.Compress.OpenMethod = OpenMethod.None;
-        ss.Value.Compress.SaveDirectory = Get("Preset");
+        ss.Value.Compression = settings;
+        ss.Value.Compression.OpenMethod = OpenMethod.None;
+        ss.Value.Compression.SaveDirectory = Get("Preset");
 
         return new CompressViewModel(new(args), ss, new());
     }
@@ -75,12 +75,12 @@ abstract class VmFixture : FileFixture
     /// <returns>ExtractViewModel object.</returns>
     ///
     /* --------------------------------------------------------------------- */
-    protected ExtractViewModel NewVM(IEnumerable<string> args, Settings.ExtractSettingValue settings)
+    protected ExtractViewModel NewVM(IEnumerable<string> args, ExtractionSettingValue settings)
     {
         var ss = NewSettings();
 
-        ss.Value.Extract = settings;
-        ss.Value.Extract.OpenMethod = OpenMethod.None;
+        ss.Value.Extraction = settings;
+        ss.Value.Extraction.OpenMethod = OpenMethod.None;
 
         return new ExtractViewModel(new(args), ss, new());
     }
