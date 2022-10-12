@@ -46,6 +46,30 @@ public class ArchiveReport
 
     /* --------------------------------------------------------------------- */
     ///
+    /// Exception
+    ///
+    /// <summary>
+    /// Gets or sets an exception object. The property is set when the value
+    /// of Status is Failed.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public Exception Exception { get; set; }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Handled
+    ///
+    /// <summary>
+    /// Gets or sets a value indicating whether the user has performed the
+    /// processing according to the report.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public bool Handled { get; set; } = false;
+
+    /* --------------------------------------------------------------------- */
+    ///
     /// Current
     ///
     /// <summary>
