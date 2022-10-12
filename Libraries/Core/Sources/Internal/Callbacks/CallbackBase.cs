@@ -42,7 +42,7 @@ internal abstract class CallbackBase : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public IProgress<Report> Progress { get; init; }
+    public IProgress<ArchiveReport> Progress { get; init; }
 
     /* --------------------------------------------------------------------- */
     ///
@@ -75,7 +75,7 @@ internal abstract class CallbackBase : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    protected Report Report { get; } = new();
+    protected ArchiveReport Report { get; } = new();
 
     #endregion
 
@@ -128,7 +128,7 @@ internal abstract class CallbackBase : DisposableBase
             Exception = err;
             throw;
         }
-        finally { Report.Status = ReportStatus.Progress; }
+        finally { Report.Status = ArchiveStatus.Progress; }
     }
 
     #endregion
@@ -144,7 +144,7 @@ internal abstract class CallbackBase : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private Report Copy(Report src) => new()
+    private ArchiveReport Copy(ArchiveReport src) => new()
     {
         Status     = src.Status,
         Current    = src.Current,

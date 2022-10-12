@@ -248,7 +248,7 @@ public sealed class ArchiveReader : DisposableBase
     /// <param name="progress">Progress object.</param>
     ///
     /* --------------------------------------------------------------------- */
-    public void Save(string dest, IProgress<Report> progress) => Save(dest, null, progress);
+    public void Save(string dest, IProgress<ArchiveReport> progress) => Save(dest, null, progress);
 
     /* --------------------------------------------------------------------- */
     ///
@@ -268,7 +268,7 @@ public sealed class ArchiveReader : DisposableBase
     /// <param name="progress">Progress object.</param>
     ///
     /* --------------------------------------------------------------------- */
-    public void Save(string dest, uint[] src, IProgress<Report> progress)
+    public void Save(string dest, uint[] src, IProgress<ArchiveReport> progress)
     {
         using var cb = Create(dest, src, progress);
 
@@ -337,7 +337,7 @@ public sealed class ArchiveReader : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private ExtractCallback Create(string dest, uint[] src, IProgress<Report> progress)
+    private ExtractCallback Create(string dest, uint[] src, IProgress<ArchiveReport> progress)
     {
         var v = src != null ?
                 src.Select(i => (int)i) :

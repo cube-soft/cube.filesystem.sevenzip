@@ -66,7 +66,7 @@ public abstract class ProgressFacade : ObservableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public Report Report { get; } = new Report();
+    public ArchiveReport Report { get; } = new ArchiveReport();
 
     /* --------------------------------------------------------------------- */
     ///
@@ -124,7 +124,7 @@ public abstract class ProgressFacade : ObservableBase
     /// <returns>Progress object.</returns>
     ///
     /* --------------------------------------------------------------------- */
-    public IProgress<Report> GetProgress() => GetProgress(e => e.CopyTo(Report));
+    public IProgress<ArchiveReport> GetProgress() => GetProgress(e => e.CopyTo(Report));
 
     /* --------------------------------------------------------------------- */
     ///
@@ -139,8 +139,8 @@ public abstract class ProgressFacade : ObservableBase
     /// <returns>Progress object.</returns>
     ///
     /* --------------------------------------------------------------------- */
-    public IProgress<Report> GetProgress(Action<Report> callback) =>
-        new SuspendableProgress<Report>(_cts.Token, _supender, callback);
+    public IProgress<ArchiveReport> GetProgress(Action<ArchiveReport> callback) =>
+        new SuspendableProgress<ArchiveReport>(_cts.Token, _supender, callback);
 
     /* --------------------------------------------------------------------- */
     ///

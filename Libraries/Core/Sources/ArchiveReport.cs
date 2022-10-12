@@ -22,14 +22,14 @@ using System;
 
 /* ------------------------------------------------------------------------- */
 ///
-/// Report
+/// ArchiveReport
 ///
 /// <summary>
-/// Represents information of the archived or extracted report.
+/// Represetns the progress of compression and extraction.
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-public class Report
+public class ArchiveReport
 {
     #region Properties
 
@@ -38,11 +38,11 @@ public class Report
     /// Status
     ///
     /// <summary>
-    /// Gets or sets the reporting status.
+    /// Gets or sets the current status.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public ReportStatus Status { get; set; } = ReportStatus.Progress;
+    public ArchiveStatus Status { get; set; } = ArchiveStatus.Progress;
 
     /* --------------------------------------------------------------------- */
     ///

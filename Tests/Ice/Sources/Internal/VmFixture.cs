@@ -18,7 +18,6 @@
 namespace Cube.FileSystem.SevenZip.Ice.Tests;
 
 using System.Collections.Generic;
-using Cube.FileSystem.SevenZip.Ice.Settings;
 using Cube.Tests;
 
 /* ------------------------------------------------------------------------- */
@@ -50,7 +49,7 @@ abstract class VmFixture : FileFixture
     /// <returns>CompressViewModel object.</returns>
     ///
     /* --------------------------------------------------------------------- */
-    protected CompressViewModel NewVM(IEnumerable<string> args, CompressSettingValue settings)
+    protected CompressViewModel NewVM(IEnumerable<string> args, Settings.CompressSettingValue settings)
     {
         var ss = NewSettings();
 
@@ -76,7 +75,7 @@ abstract class VmFixture : FileFixture
     /// <returns>ExtractViewModel object.</returns>
     ///
     /* --------------------------------------------------------------------- */
-    protected ExtractViewModel NewVM(IEnumerable<string> args, ExtractSettingValue settings)
+    protected ExtractViewModel NewVM(IEnumerable<string> args, Settings.ExtractSettingValue settings)
     {
         var ss = NewSettings();
 
@@ -97,7 +96,7 @@ abstract class VmFixture : FileFixture
     /// <returns>SettingViewModel object.</returns>
     ///
     /* --------------------------------------------------------------------- */
-    protected SettingViewModel NewVM() => NewVM(NewSettings());
+    protected Settings.SettingViewModel NewVM() => NewVM(NewSettings());
 
     /* --------------------------------------------------------------------- */
     ///
@@ -113,7 +112,7 @@ abstract class VmFixture : FileFixture
     /// <returns>SettingViewModel object.</returns>
     ///
     /* --------------------------------------------------------------------- */
-    protected SettingViewModel NewVM(SettingFolder src) => new(src, new());
+    protected Settings.SettingViewModel NewVM(SettingFolder src) => new(src, new());
 
     /* --------------------------------------------------------------------- */
     ///

@@ -20,19 +20,21 @@ namespace Cube.FileSystem.SevenZip;
 
 /* ------------------------------------------------------------------------- */
 ///
-/// ReportStatus
+/// ArchiveStatus
 ///
 /// <summary>
-/// Specifies status of the provided report.
+/// Specifies compression or extraction status.
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-public enum ReportStatus
+public enum ArchiveStatus
 {
-    /// <summary>Current file begins to be archived or extracted</summary>
-    Begin,
-    /// <summary>Current file ends to be archived or extracted</summary>
-    End,
-    /// <summary>Archiving or Extracting operation is in progress.</summary>
+    /// <summary>Current file has begun to compress or decompress.</summary>
+    Start,
+    /// <summary>Compression or Extraction is in progress.</summary>
     Progress,
+    /// <summary>Current file was successfully compressed or decompressed.</summary>
+    Success,
+    /// <summary>Current file failed to compress or extract.</summary>
+    Failed,
 }

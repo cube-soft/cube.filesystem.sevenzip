@@ -173,7 +173,7 @@ internal class ExtractCallback : PasswordCallback, IArchiveExtractCallback
         if (_dic.TryGetValue(_iterator.Current, out var src))
         {
             Report.Current = src.Source;
-            Report.Status  = ReportStatus.Begin;
+            Report.Status  = ArchiveStatus.Start;
         }
     }, true);
 
@@ -202,7 +202,7 @@ internal class ExtractCallback : PasswordCallback, IArchiveExtractCallback
             }
 
             Report.Current = src.Source;
-            Report.Status = ReportStatus.End;
+            Report.Status = ArchiveStatus.Success;
             Report.Count++;
         }
     }, true);
