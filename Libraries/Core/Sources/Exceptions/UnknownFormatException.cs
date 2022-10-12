@@ -19,7 +19,6 @@
 namespace Cube.FileSystem.SevenZip;
 
 using System;
-using System.IO;
 
 /* ------------------------------------------------------------------------- */
 ///
@@ -33,16 +32,3 @@ using System.IO;
 /* ------------------------------------------------------------------------- */
 [Serializable]
 public class UnknownFormatException : NotSupportedException { }
-
-/* ------------------------------------------------------------------------- */
-///
-/// EncryptionException
-///
-/// <summary>
-/// Represents the encryption related exception like the password
-/// unmatched error.
-/// </summary>
-///
-/* ------------------------------------------------------------------------- */
-[Serializable]
-public class EncryptionException : IOException { }
