@@ -79,7 +79,7 @@ internal static class ArchiveExtension
 
         var e0  = Io.Get(path);
         var e1  = Io.Get(e0.BaseName);
-        var fmt = Formatter.FromExtension(e1.Extension);
+        var fmt = FormatDetector.FromExtension(e1.Extension);
         if (fmt != Format.Unknown) return e1.Name;
 
         var name = index == 0 ? e1.Name : $"{e1.Name}({index})";

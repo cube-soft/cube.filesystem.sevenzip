@@ -110,7 +110,7 @@ public sealed class ArchiveReader : DisposableBase
     ///
     /* --------------------------------------------------------------------- */
     public ArchiveReader(string src, string password, ArchiveOption options) :
-        this(Formatter.FromFile(src), src, new(password), options) { }
+        this(FormatDetector.From(src), src, new(password), options) { }
 
     /* --------------------------------------------------------------------- */
     ///
@@ -127,7 +127,7 @@ public sealed class ArchiveReader : DisposableBase
     ///
     /* --------------------------------------------------------------------- */
     public ArchiveReader(string src, IQuery<string> password, ArchiveOption options) :
-        this(Formatter.FromFile(src), src, new(password), options) { }
+        this(FormatDetector.From(src), src, new(password), options) { }
 
     /* --------------------------------------------------------------------- */
     ///

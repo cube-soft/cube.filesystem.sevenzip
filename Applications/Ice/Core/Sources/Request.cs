@@ -282,8 +282,17 @@ public class Request
     /* --------------------------------------------------------------------- */
     private Format GetFormat(string src)
     {
-        var dest = Tail(src).ToLowerInvariant();
-        return dest.HasValue() ? Formatter.FromString(dest) : Format.Unknown;
+        var cvt = Tail(src).ToLowerInvariant();
+
+        if (!cvt.HasValue()) return Format.Unknown;
+        if (cvt == "7z")     return Format.SevenZip;
+        if (cvt == "exe")    return Format.Sfx;
+
+        foreach (Format e in Enum.GetValues(typeof(Format)))
+        {
+            if (e.ToString().ToLowerInvariant() == cvt) return e;
+        }
+        return Format.Unknown;
     }
 
     /* --------------------------------------------------------------------- */
