@@ -53,7 +53,7 @@ internal abstract class CallbackBase : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public OperationResult Result { get; protected set; } = OperationResult.OK;
+    public ArchiveErrorReason Result { get; protected set; } = ArchiveErrorReason.OK;
 
     /* --------------------------------------------------------------------- */
     ///
@@ -117,14 +117,14 @@ internal abstract class CallbackBase : DisposableBase
         try
         {
             var dest = callback();
-            if (report && Result == OperationResult.OK) Progress?.Report(Copy(Report));
+            if (report && Result == ArchiveErrorReason.OK) Progress?.Report(Copy(Report));
             return dest;
         }
         catch (Exception err)
         {
             Result    = err is OperationCanceledException ?
-                        OperationResult.UserCancel :
-                        OperationResult.DataError;
+                        ArchiveErrorReason.UserCancel :
+                        ArchiveErrorReason.DataError;
             Exception = err;
             throw;
         }

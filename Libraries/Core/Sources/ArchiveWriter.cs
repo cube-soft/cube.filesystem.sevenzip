@@ -362,7 +362,7 @@ public sealed class ArchiveWriter : DisposableBase
         catch (Exception e) { error = e; }
         finally
         {
-            var kv = new KeyValuePair<OperationResult, Exception>(cb.Result, error ?? cb.Exception);
+            var kv = new KeyValuePair<ArchiveErrorReason, Exception>(cb.Result, error ?? cb.Exception);
             cb.Dispose();
             Terminate(kv.Key, kv.Value);
         }
@@ -377,11 +377,11 @@ public sealed class ArchiveWriter : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private void Terminate(OperationResult src, Exception error)
+    private void Terminate(ArchiveErrorReason src, Exception error)
     {
-        if (src == OperationResult.OK) return;
-        if (src == OperationResult.UserCancel) throw new OperationCanceledException();
-        throw new System.IO.IOException($"{src}", error);
+        if (src == ArchiveErrorReason.OK) return;
+        if (src == ArchiveErrorReason.UserCancel) throw new OperationCanceledException();
+        throw new SevenZipException(src, error);
     }
 
     #endregion

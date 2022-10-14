@@ -276,15 +276,15 @@ public sealed class ArchiveReader : DisposableBase
         var test = dest.HasValue() ? 0 : 1;
         _ = _core.Extract(src, n , test, cb);
 
-        if (cb.Result == OperationResult.OK) return;
-        if (cb.Result == OperationResult.UserCancel) throw new OperationCanceledException();
-        if (cb.Result == OperationResult.WrongPassword ||
-            cb.Result == OperationResult.DataError && IsEncrypted(src))
+        if (cb.Result == ArchiveErrorReason.OK) return;
+        if (cb.Result == ArchiveErrorReason.UserCancel) throw new OperationCanceledException();
+        if (cb.Result == ArchiveErrorReason.WrongPassword ||
+            cb.Result == ArchiveErrorReason.DataError && IsEncrypted(src))
         {
             _query.Reset();
             throw new EncryptionException();
         }
-        throw new System.IO.IOException($"{cb.Result}", cb.Exception);
+        throw new SevenZipException(cb.Result, cb.Exception);
     }
 
     /* --------------------------------------------------------------------- */

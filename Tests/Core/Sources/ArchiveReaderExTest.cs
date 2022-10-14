@@ -126,7 +126,7 @@ class ArchiveReaderExTest : FileFixture
         using var ss = Io.Open(locked);
         using var archive = new ArchiveReader(GetSource("Sample.zip"), "");
 
-        Assert.That(() => archive.Save(dest), Throws.TypeOf<System.IO.IOException>());
+        Assert.That(() => archive.Save(dest), Throws.TypeOf<SevenZipException>());
     }
 
     /* --------------------------------------------------------------------- */
@@ -152,7 +152,7 @@ class ArchiveReaderExTest : FileFixture
         var src = Io.Combine(dest, "SampleVolume.rar.001");
         using var archive = new ArchiveReader(src);
 
-        Assert.That(() => archive.Save(dest), Throws.TypeOf<System.IO.IOException>());
+        Assert.That(() => archive.Save(dest), Throws.TypeOf<SevenZipException>());
     }
 
     /* --------------------------------------------------------------------- */

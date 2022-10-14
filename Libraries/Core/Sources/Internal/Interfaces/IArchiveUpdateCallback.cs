@@ -127,7 +127,7 @@ internal interface IArchiveUpdateCallback
     /// <param name="result">Operation result.</param>
     ///
     /* --------------------------------------------------------------------- */
-    void SetOperationResult(OperationResult result);
+    void SetOperationResult(ArchiveErrorReason result);
 
     /* --------------------------------------------------------------------- */
     ///

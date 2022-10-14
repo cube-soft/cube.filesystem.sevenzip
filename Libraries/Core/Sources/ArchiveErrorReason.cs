@@ -27,19 +27,28 @@ namespace Cube.FileSystem.SevenZip;
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-internal enum OperationResult
+public enum ArchiveErrorReason
 {
+    /// <summary>No error is detected.</summary>
     OK = 0,
+    /// <summary>Specified method does not support.</summary>
     UnsupportedMethod,
+    /// <summary>Some errors exist in compressing or extracting data.</summary>
     DataError,
+    /// <summary>CRC does not match.</summary>
     CrcError,
+    /// <summary></summary>
     Unavailable,
+    /// <summary></summary>
     UnexpectedEnd,
+    /// <summary></summary>
     DataAfterEnd,
+    /// <summary></summary>
     IsNotArc,
+    /// <summary></summary>
     HeadersError,
+    /// <summary>Input password is not correct.</summary>
     WrongPassword,
-
-    // Extended for Cube.FileSystem
+    /// <summary>Operation is canceled by user.</summary>
     UserCancel = -2,
 }

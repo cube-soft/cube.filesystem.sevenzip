@@ -235,7 +235,7 @@ internal sealed class UpdateCallback : CallbackBase, IArchiveUpdateCallback, ICr
     /// <param name="result">Operation result.</param>
     ///
     /* --------------------------------------------------------------------- */
-    public void SetOperationResult(OperationResult result) => Invoke(() =>
+    public void SetOperationResult(ArchiveErrorReason result) => Invoke(() =>
     {
         Result        = result;
         Report.Status = ArchiveStatus.Success;
@@ -275,7 +275,7 @@ internal sealed class UpdateCallback : CallbackBase, IArchiveUpdateCallback, ICr
     {
         enabled = Password.HasValue() ? 1 : 0;
         password = Password;
-        Result = OperationResult.OK;
+        Result = ArchiveErrorReason.OK;
 
         return (int)Result;
     }

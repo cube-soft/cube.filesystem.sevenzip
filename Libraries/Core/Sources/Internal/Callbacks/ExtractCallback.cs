@@ -188,7 +188,7 @@ internal class ExtractCallback : PasswordCallback, IArchiveExtractCallback
     /// <param name="result">Operation result.</param>
     ///
     /* --------------------------------------------------------------------- */
-    public void SetOperationResult(OperationResult result) => Invoke(() =>
+    public void SetOperationResult(ArchiveErrorReason result) => Invoke(() =>
     {
         Result = result;
         if (_mode == AskMode.Skip) return;
@@ -198,7 +198,7 @@ internal class ExtractCallback : PasswordCallback, IArchiveExtractCallback
             {
                 src.Stream?.Dispose();
                 _ = _dic.Remove(_iterator.Current);
-                if (result == OperationResult.OK) src.Source.SetAttributes(Destination);
+                if (result == ArchiveErrorReason.OK) src.Source.SetAttributes(Destination);
             }
 
             Report.Current = src.Source;
@@ -228,7 +228,7 @@ internal class ExtractCallback : PasswordCallback, IArchiveExtractCallback
         foreach (var kv in _dic)
         {
             kv.Value.Stream?.Dispose();
-            if (Result != OperationResult.OK) continue;
+            if (Result != ArchiveErrorReason.OK) continue;
             if (Destination.HasValue()) Invoke(() => kv.Value.Source.SetAttributes(Destination), true);
         }
         _dic.Clear();
@@ -249,7 +249,7 @@ internal class ExtractCallback : PasswordCallback, IArchiveExtractCallback
     /* --------------------------------------------------------------------- */
     private ArchiveStreamWriter CreateStream(uint index, AskMode mode)
     {
-        if (Result != OperationResult.OK || mode == AskMode.Skip) return null;
+        if (Result != ArchiveErrorReason.OK || mode == AskMode.Skip) return null;
 
         while (_iterator.MoveNext())
         {

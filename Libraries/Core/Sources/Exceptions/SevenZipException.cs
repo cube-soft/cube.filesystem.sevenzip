@@ -18,73 +18,68 @@
 /* ------------------------------------------------------------------------- */
 namespace Cube.FileSystem.SevenZip;
 
-using Cube.Text.Extensions;
+using System;
+using System.IO;
 
 /* ------------------------------------------------------------------------- */
 ///
-/// PasswordCallback
+/// SevenZipException
 ///
 /// <summary>
-/// Provides callback functions to query the password when extracting
-/// archived files.
+/// Represents the exception that an error occurs in the 7-Zip library.
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-internal abstract class PasswordCallback : CallbackBase, ICryptoGetTextPassword
+[Serializable]
+public class SevenZipException : IOException
 {
+    #region Constructors
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// SevenZipException
+    ///
+    /// <summary>
+    /// Initializes a new instance of the SevenZipException class with the
+    /// specified error reason.
+    /// </summary>
+    /// 
+    /// <param name="reason">Error reason.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    public SevenZipException(ArchiveErrorReason reason) :
+        base(reason.ToString()) => Reason = reason;
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// SevenZipException
+    ///
+    /// <summary>
+    /// Initializes a new instance of the SevenZipException class with the
+    /// specified arguments.
+    /// </summary>
+    /// 
+    /// <param name="reason">Error reason.</param>
+    /// <param name="inner">Inner exception.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    public SevenZipException(ArchiveErrorReason reason, Exception inner) :
+        base(reason.ToString(), inner) => Reason = reason;
+
+    #endregion
+
     #region Properties
 
     /* --------------------------------------------------------------------- */
     ///
-    /// Source
+    /// Reason
     ///
     /// <summary>
-    /// Gets the path of the archive file.
+    /// Gets the error reason.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public string Source { get; init; }
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// Password
-    ///
-    /// <summary>
-    /// Gets the object to query for a password.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    public IQuery<string> Password { get; init; }
-
-    #endregion
-
-    #region Methods
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// CryptoGetTextPassword
-    ///
-    /// <summary>
-    /// Gets the password of the provided archive.
-    /// </summary>
-    ///
-    /// <param name="password">Password result.</param>
-    ///
-    /// <returns>OperationResult</returns>
-    ///
-    /* --------------------------------------------------------------------- */
-    public int CryptoGetTextPassword(out string password)
-    {
-        var e = Query.NewMessage(Source);
-        Password.Request(e);
-
-        Result = e.Cancel           ? ArchiveErrorReason.UserCancel :
-                 e.Value.HasValue() ? ArchiveErrorReason.OK :
-                                      ArchiveErrorReason.WrongPassword;
-        password = (Result == ArchiveErrorReason.OK) ? e.Value : string.Empty;
-
-        return (int)Result;
-    }
+    public ArchiveErrorReason Reason { get; }
 
     #endregion
 }

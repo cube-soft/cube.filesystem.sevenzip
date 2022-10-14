@@ -89,7 +89,7 @@ internal class OpenCallback : PasswordCallback, IArchiveOpenCallback, IArchiveOp
     {
         if (count != IntPtr.Zero) Report.Count = Marshal.ReadInt64(count);
         if (bytes != IntPtr.Zero) Report.Bytes = Marshal.ReadInt64(bytes);
-        Result = OperationResult.OK;
+        Result = ArchiveErrorReason.OK;
     }, true);
 
     #endregion
@@ -145,7 +145,7 @@ internal class OpenCallback : PasswordCallback, IArchiveOpenCallback, IArchiveOp
             return dest;
         }, true);
 
-        Result = (stream != null) ? OperationResult.OK : OperationResult.DataError;
+        Result = (stream != null) ? ArchiveErrorReason.OK : ArchiveErrorReason.DataError;
         return (int)Result;
     }
 
