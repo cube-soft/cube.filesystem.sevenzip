@@ -53,7 +53,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        public static TimeSpan Estimate(this ArchiveReport src, TimeSpan elapsed, TimeSpan prev)
+        public static TimeSpan Estimate(this ArchiveProgressValue src, TimeSpan elapsed, TimeSpan prev)
         {
             if (src.Ratio < 0.01 || elapsed <= TimeSpan.Zero) return TimeSpan.Zero;
 
@@ -78,10 +78,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /// <param name="dest">Target object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        public static void CopyTo(this ArchiveReport src, ArchiveReport dest)
+        public static void CopyTo(this ArchiveProgressValue src, ArchiveProgressValue dest)
         {
             dest.Current    = src.Current;
-            dest.Status     = src.Status;
+            dest.State      = src.State;
             dest.Count      = src.Count;
             dest.TotalCount = src.TotalCount;
             dest.Bytes      = src.Bytes;

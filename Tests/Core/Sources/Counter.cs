@@ -29,7 +29,7 @@ using System.Collections.Generic;
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-internal class Counter : IProgress<ArchiveReport>
+internal class Counter : IProgress<ArchiveProgressValue>
 {
     #region Properties
 
@@ -42,12 +42,12 @@ internal class Counter : IProgress<ArchiveReport>
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public Dictionary<ArchiveStatus, int> Results { get; } = new()
+    public Dictionary<ArchiveProgressState, int> Results { get; } = new()
     {
-        { ArchiveStatus.Start,    0 },
-        { ArchiveStatus.Progress, 0 },
-        { ArchiveStatus.Success,  0 },
-        { ArchiveStatus.Failed,   0 },
+        { ArchiveProgressState.Start,    0 },
+        { ArchiveProgressState.Progress, 0 },
+        { ArchiveProgressState.Success,  0 },
+        { ArchiveProgressState.Failed,   0 },
     };
 
     #endregion
@@ -63,7 +63,7 @@ internal class Counter : IProgress<ArchiveReport>
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public void Report(ArchiveReport value) => Results[value.Status]++;
+    public void Report(ArchiveProgressValue value) => Results[value.State]++;
 
     #endregion
 }

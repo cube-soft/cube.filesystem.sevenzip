@@ -89,7 +89,7 @@ internal class OpenCallback : PasswordCallback, IArchiveOpenCallback, IArchiveOp
     {
         if (count != IntPtr.Zero) Report.Count = Marshal.ReadInt64(count);
         if (bytes != IntPtr.Zero) Report.Bytes = Marshal.ReadInt64(bytes);
-        Result = ArchiveErrorReason.OK;
+        Result = SevenZipErrorCode.OK;
     }, true);
 
     #endregion
@@ -145,7 +145,7 @@ internal class OpenCallback : PasswordCallback, IArchiveOpenCallback, IArchiveOp
             return dest;
         }, true);
 
-        Result = (stream != null) ? ArchiveErrorReason.OK : ArchiveErrorReason.DataError;
+        Result = (stream != null) ? SevenZipErrorCode.OK : SevenZipErrorCode.DataError;
         return (int)Result;
     }
 

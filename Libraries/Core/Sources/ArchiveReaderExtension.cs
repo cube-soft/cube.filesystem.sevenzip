@@ -72,7 +72,7 @@ public static class ArchiveReaderExtension
     ///
     /* --------------------------------------------------------------------- */
     public static void Save(this ArchiveReader src,
-        string dest, ArchiveEntity item, IProgress<ArchiveReport> progress) =>
+        string dest, ArchiveEntity item, IProgress<ArchiveProgressValue> progress) =>
         src.Save(dest, new[] { (uint)item.Index }, progress);
 
     #endregion
@@ -105,7 +105,7 @@ public static class ArchiveReaderExtension
     /// <param name="progress">Progress object.</param>
     ///
     /* --------------------------------------------------------------------- */
-    public static void Test(this ArchiveReader src, IProgress<ArchiveReport> progress) =>
+    public static void Test(this ArchiveReader src, IProgress<ArchiveProgressValue> progress) =>
         src.Save(null, null, progress);
 
     #endregion

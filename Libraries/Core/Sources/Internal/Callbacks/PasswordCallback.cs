@@ -78,10 +78,10 @@ internal abstract class PasswordCallback : CallbackBase, ICryptoGetTextPassword
         var e = Query.NewMessage(Source);
         Password.Request(e);
 
-        Result = e.Cancel           ? ArchiveErrorReason.UserCancel :
-                 e.Value.HasValue() ? ArchiveErrorReason.OK :
-                                      ArchiveErrorReason.WrongPassword;
-        password = (Result == ArchiveErrorReason.OK) ? e.Value : string.Empty;
+        Result = e.Cancel           ? SevenZipErrorCode.UserCancel :
+                 e.Value.HasValue() ? SevenZipErrorCode.OK :
+                                      SevenZipErrorCode.WrongPassword;
+        password = (Result == SevenZipErrorCode.OK) ? e.Value : string.Empty;
 
         return (int)Result;
     }

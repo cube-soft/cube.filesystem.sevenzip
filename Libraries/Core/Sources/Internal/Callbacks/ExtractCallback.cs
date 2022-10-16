@@ -173,7 +173,7 @@ internal class ExtractCallback : PasswordCallback, IArchiveExtractCallback
         if (_dic.TryGetValue(_iterator.Current, out var src))
         {
             Report.Current = src.Source;
-            Report.Status  = ArchiveStatus.Start;
+            Report.State   = ArchiveProgressState.Start;
         }
     }, true);
 
@@ -188,7 +188,7 @@ internal class ExtractCallback : PasswordCallback, IArchiveExtractCallback
     /// <param name="result">Operation result.</param>
     ///
     /* --------------------------------------------------------------------- */
-    public void SetOperationResult(ArchiveErrorReason result) => Invoke(() =>
+    public void SetOperationResult(SevenZipErrorCode result) => Invoke(() =>
     {
         Result = result;
         if (_mode == AskMode.Skip) return;
@@ -198,11 +198,11 @@ internal class ExtractCallback : PasswordCallback, IArchiveExtractCallback
             {
                 src.Stream?.Dispose();
                 _ = _dic.Remove(_iterator.Current);
-                if (result == ArchiveErrorReason.OK) src.Source.SetAttributes(Destination);
+                if (result == SevenZipErrorCode.OK) src.Source.SetAttributes(Destination);
             }
 
             Report.Current = src.Source;
-            Report.Status = ArchiveStatus.Success;
+            Report.State   = ArchiveProgressState.Success;
             Report.Count++;
         }
     }, true);
@@ -228,7 +228,7 @@ internal class ExtractCallback : PasswordCallback, IArchiveExtractCallback
         foreach (var kv in _dic)
         {
             kv.Value.Stream?.Dispose();
-            if (Result != ArchiveErrorReason.OK) continue;
+            if (Result != SevenZipErrorCode.OK) continue;
             if (Destination.HasValue()) Invoke(() => kv.Value.Source.SetAttributes(Destination), true);
         }
         _dic.Clear();
@@ -249,7 +249,7 @@ internal class ExtractCallback : PasswordCallback, IArchiveExtractCallback
     /* --------------------------------------------------------------------- */
     private ArchiveStreamWriter CreateStream(uint index, AskMode mode)
     {
-        if (Result != ArchiveErrorReason.OK || mode == AskMode.Skip) return null;
+        if (Result != SevenZipErrorCode.OK || mode == AskMode.Skip) return null;
 
         while (_iterator.MoveNext())
         {

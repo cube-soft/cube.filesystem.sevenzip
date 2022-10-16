@@ -248,7 +248,7 @@ public sealed class ArchiveReader : DisposableBase
     /// <param name="progress">Progress object.</param>
     ///
     /* --------------------------------------------------------------------- */
-    public void Save(string dest, IProgress<ArchiveReport> progress) => Save(dest, null, progress);
+    public void Save(string dest, IProgress<ArchiveProgressValue> progress) => Save(dest, null, progress);
 
     /* --------------------------------------------------------------------- */
     ///
@@ -268,7 +268,7 @@ public sealed class ArchiveReader : DisposableBase
     /// <param name="progress">Progress object.</param>
     ///
     /* --------------------------------------------------------------------- */
-    public void Save(string dest, uint[] src, IProgress<ArchiveReport> progress)
+    public void Save(string dest, uint[] src, IProgress<ArchiveProgressValue> progress)
     {
         using var cb = Create(dest, src, progress);
 
@@ -276,10 +276,10 @@ public sealed class ArchiveReader : DisposableBase
         var test = dest.HasValue() ? 0 : 1;
         _ = _core.Extract(src, n , test, cb);
 
-        if (cb.Result == ArchiveErrorReason.OK) return;
-        if (cb.Result == ArchiveErrorReason.UserCancel) throw new OperationCanceledException();
-        if (cb.Result == ArchiveErrorReason.WrongPassword ||
-            cb.Result == ArchiveErrorReason.DataError && IsEncrypted(src))
+        if (cb.Result == SevenZipErrorCode.OK) return;
+        if (cb.Result == SevenZipErrorCode.UserCancel) throw new OperationCanceledException();
+        if (cb.Result == SevenZipErrorCode.WrongPassword ||
+            cb.Result == SevenZipErrorCode.DataError && IsEncrypted(src))
         {
             _query.Reset();
             throw new EncryptionException();
@@ -337,7 +337,7 @@ public sealed class ArchiveReader : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private ExtractCallback Create(string dest, uint[] src, IProgress<ArchiveReport> progress)
+    private ExtractCallback Create(string dest, uint[] src, IProgress<ArchiveProgressValue> progress)
     {
         var v = src != null ?
                 src.Select(i => (int)i) :

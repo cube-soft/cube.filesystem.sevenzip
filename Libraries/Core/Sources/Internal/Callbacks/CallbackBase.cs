@@ -42,7 +42,7 @@ internal abstract class CallbackBase : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public IProgress<ArchiveReport> Progress { get; init; }
+    public IProgress<ArchiveProgressValue> Progress { get; init; }
 
     /* --------------------------------------------------------------------- */
     ///
@@ -53,7 +53,7 @@ internal abstract class CallbackBase : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public ArchiveErrorReason Result { get; protected set; } = ArchiveErrorReason.OK;
+    public SevenZipErrorCode Result { get; protected set; } = SevenZipErrorCode.OK;
 
     /* --------------------------------------------------------------------- */
     ///
@@ -75,7 +75,7 @@ internal abstract class CallbackBase : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    protected ArchiveReport Report { get; } = new();
+    protected ArchiveProgressValue Report { get; } = new();
 
     #endregion
 
@@ -117,18 +117,18 @@ internal abstract class CallbackBase : DisposableBase
         try
         {
             var dest = callback();
-            if (report && Result == ArchiveErrorReason.OK) Progress?.Report(Copy(Report));
+            if (report && Result == SevenZipErrorCode.OK) Progress?.Report(Copy(Report));
             return dest;
         }
         catch (Exception err)
         {
             Result    = err is OperationCanceledException ?
-                        ArchiveErrorReason.UserCancel :
-                        ArchiveErrorReason.DataError;
+                        SevenZipErrorCode.UserCancel :
+                        SevenZipErrorCode.DataError;
             Exception = err;
             throw;
         }
-        finally { Report.Status = ArchiveStatus.Progress; }
+        finally { Report.State = ArchiveProgressState.Progress; }
     }
 
     #endregion
@@ -144,9 +144,9 @@ internal abstract class CallbackBase : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private ArchiveReport Copy(ArchiveReport src) => new()
+    private ArchiveProgressValue Copy(ArchiveProgressValue src) => new()
     {
-        Status     = src.Status,
+        State      = src.State,
         Current    = src.Current,
         Count      = src.Count,
         Bytes      = src.Bytes,

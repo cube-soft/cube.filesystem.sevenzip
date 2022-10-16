@@ -163,7 +163,7 @@ public sealed class ArchiveWriter : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public void Save(string dest, IProgress<ArchiveReport> progress)
+    public void Save(string dest, IProgress<ArchiveProgressValue> progress)
     {
         if (Format == Format.Sfx) SaveAsSfx(dest, _items, progress);
         else if (Format == Format.Tar) SaveAsTar(dest, _items, progress);
@@ -200,7 +200,7 @@ public sealed class ArchiveWriter : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private void SaveAs(string dest, IList<RawEntity> src, Format fmt, IProgress<ArchiveReport> progress)
+    private void SaveAs(string dest, IList<RawEntity> src, Format fmt, IProgress<ArchiveProgressValue> progress)
     {
         var dir = Io.Get(dest).DirectoryName;
         Io.CreateDirectory(dir);
@@ -225,7 +225,7 @@ public sealed class ArchiveWriter : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private void SaveAsTar(string dest, IList<RawEntity> src, IProgress<ArchiveReport> progress)
+    private void SaveAsTar(string dest, IList<RawEntity> src, IProgress<ArchiveProgressValue> progress)
     {
         var fi  = Io.Get(dest);
         var dir = Io.Combine(fi.DirectoryName, Guid.NewGuid().ToString("N"));
@@ -256,7 +256,7 @@ public sealed class ArchiveWriter : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private void SaveAsSfx(string dest, IList<RawEntity> src, IProgress<ArchiveReport> progress)
+    private void SaveAsSfx(string dest, IList<RawEntity> src, IProgress<ArchiveProgressValue> progress)
     {
         var sfx = (Options as SfxOption)?.Module;
         if (!Io.Exists(sfx)) throw new System.IO.FileNotFoundException("SFX");
@@ -348,7 +348,7 @@ public sealed class ArchiveWriter : DisposableBase
     ///
     /* --------------------------------------------------------------------- */
     private void Invoke(Action<UpdateCallback> callback,
-        IList<RawEntity> src, string dest, IProgress<ArchiveReport> progress)
+        IList<RawEntity> src, string dest, IProgress<ArchiveProgressValue> progress)
     {
         var error = default(Exception);
         var cb    = new UpdateCallback(src)
@@ -362,7 +362,7 @@ public sealed class ArchiveWriter : DisposableBase
         catch (Exception e) { error = e; }
         finally
         {
-            var kv = new KeyValuePair<ArchiveErrorReason, Exception>(cb.Result, error ?? cb.Exception);
+            var kv = new KeyValuePair<SevenZipErrorCode, Exception>(cb.Result, error ?? cb.Exception);
             cb.Dispose();
             Terminate(kv.Key, kv.Value);
         }
@@ -377,10 +377,10 @@ public sealed class ArchiveWriter : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private void Terminate(ArchiveErrorReason src, Exception error)
+    private void Terminate(SevenZipErrorCode src, Exception error)
     {
-        if (src == ArchiveErrorReason.OK) return;
-        if (src == ArchiveErrorReason.UserCancel) throw new OperationCanceledException();
+        if (src == SevenZipErrorCode.OK) return;
+        if (src == SevenZipErrorCode.UserCancel) throw new OperationCanceledException();
         throw new SevenZipException(src, error);
     }
 

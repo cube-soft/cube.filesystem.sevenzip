@@ -120,5 +120,5 @@ internal interface IArchiveExtractCallback
     /// <param name="result">Operation result.</param>
     ///
     /* --------------------------------------------------------------------- */
-    void SetOperationResult(ArchiveErrorReason result);
+    void SetOperationResult(SevenZipErrorCode result);
 }

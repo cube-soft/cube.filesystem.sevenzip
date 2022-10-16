@@ -43,12 +43,12 @@ public class SevenZipException : IOException
     /// Initializes a new instance of the SevenZipException class with the
     /// specified error reason.
     /// </summary>
-    /// 
-    /// <param name="reason">Error reason.</param>
+    ///
+    /// <param name="code">Error code.</param>
     ///
     /* --------------------------------------------------------------------- */
-    public SevenZipException(ArchiveErrorReason reason) :
-        base(reason.ToString()) => Reason = reason;
+    public SevenZipException(SevenZipErrorCode code) :
+        base(code.ToString()) => Code = code;
 
     /* --------------------------------------------------------------------- */
     ///
@@ -58,13 +58,13 @@ public class SevenZipException : IOException
     /// Initializes a new instance of the SevenZipException class with the
     /// specified arguments.
     /// </summary>
-    /// 
-    /// <param name="reason">Error reason.</param>
+    ///
+    /// <param name="code">Error code.</param>
     /// <param name="inner">Inner exception.</param>
     ///
     /* --------------------------------------------------------------------- */
-    public SevenZipException(ArchiveErrorReason reason, Exception inner) :
-        base(reason.ToString(), inner) => Reason = reason;
+    public SevenZipException(SevenZipErrorCode code, Exception inner) :
+        base(code.ToString(), inner) => Code = code;
 
     #endregion
 
@@ -72,14 +72,14 @@ public class SevenZipException : IOException
 
     /* --------------------------------------------------------------------- */
     ///
-    /// Reason
+    /// Code
     ///
     /// <summary>
-    /// Gets the error reason.
+    /// Gets the error code.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public ArchiveErrorReason Reason { get; }
+    public SevenZipErrorCode Code { get; }
 
     #endregion
 }

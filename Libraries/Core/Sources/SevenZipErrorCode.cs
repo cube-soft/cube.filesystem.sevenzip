@@ -20,21 +20,35 @@ namespace Cube.FileSystem.SevenZip;
 
 /* ------------------------------------------------------------------------- */
 ///
-/// ArchiveStatus
+/// SevenZipErrorCode
 ///
 /// <summary>
-/// Specifies compression or extraction status.
+/// Specifies the error code sent by SevenZip library.
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-public enum ArchiveStatus
+public enum SevenZipErrorCode
 {
-    /// <summary>Current file has begun to compress or decompress.</summary>
-    Start,
-    /// <summary>Compression or Extraction is in progress.</summary>
-    Progress,
-    /// <summary>Current file was successfully compressed or decompressed.</summary>
-    Success,
-    /// <summary>Current file failed to compress or extract.</summary>
-    Failed,
+    /// <summary>No errors.</summary>
+    OK = 0,
+    /// <summary>Specified method does not support.</summary>
+    UnsupportedMethod,
+    /// <summary>Some errors exist in compressing or extracting data.</summary>
+    DataError,
+    /// <summary>CRC does not match.</summary>
+    CrcError,
+    /// <summary></summary>
+    Unavailable,
+    /// <summary>Unexpected end position was found.</summary>
+    UnexpectedEnd,
+    /// <summary>Data was found after the end position.</summary>
+    DataAfterEnd,
+    /// <summary>Specified file is not an archive.</summary>
+    IsNotArc,
+    /// <summary>Some errors are detected in the archive header.</summary>
+    HeadersError,
+    /// <summary>Input password is not correct.</summary>
+    WrongPassword,
+    /// <summary>Operation is canceled by user.</summary>
+    UserCancel = -2,
 }
