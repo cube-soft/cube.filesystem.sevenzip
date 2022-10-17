@@ -152,7 +152,7 @@ internal class ExtractCallback : PasswordCallback, IArchiveExtractCallback
     public int GetStream(uint index, out ISequentialOutStream stream, AskMode mode)
     {
         stream = Invoke(() => CreateStream(index, mode), false);
-        return (int)Result;
+        return 0;
     }
 
     /* --------------------------------------------------------------------- */
