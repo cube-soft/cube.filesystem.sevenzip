@@ -145,7 +145,7 @@ internal class OpenCallback : PasswordCallback, IArchiveOpenCallback, IArchiveOp
             return dest;
         }, true);
 
-        Result = (stream != null) ? SevenZipErrorCode.OK : SevenZipErrorCode.DataError;
+        Result = (stream != null) ? SevenZipErrorCode.OK : SevenZipErrorCode.CallbackError;
         return (int)Result;
     }
 

@@ -122,9 +122,8 @@ internal abstract class CallbackBase : DisposableBase
         }
         catch (Exception err)
         {
-            Result    = err is OperationCanceledException ?
-                        SevenZipErrorCode.UserCancel :
-                        SevenZipErrorCode.DataError;
+            if (err is OperationCanceledException) Result = SevenZipErrorCode.UserCancel;
+            else if (Result == SevenZipErrorCode.OK) Result = SevenZipErrorCode.CallbackError;
             Exception = err;
             throw;
         }

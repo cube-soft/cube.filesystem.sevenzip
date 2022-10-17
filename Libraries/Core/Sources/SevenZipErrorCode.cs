@@ -49,6 +49,8 @@ public enum SevenZipErrorCode
     HeadersError,
     /// <summary>Input password is not correct.</summary>
     WrongPassword,
+    /// <summary>Error sent by callback.</summary>
+    CallbackError = -1,
     /// <summary>Operation is canceled by user.</summary>
     UserCancel = -2,
 }
