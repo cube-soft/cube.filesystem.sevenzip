@@ -47,6 +47,7 @@ static class Program
     [STAThread]
     static void Main(string[] args) => Logger.Error(() =>
     {
+        Logger.Configure(new Logging.NLog.LoggerSource());
         Logger.Info(typeof(Program).Assembly);
         Logger.Info($"[ {args.Join(" ")} ]");
 

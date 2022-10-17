@@ -52,6 +52,7 @@ static class Program
     {
         if (args.Length <= 0) return;
 
+        Logger.Configure(new Logging.NLog.LoggerSource());
         Logger.ObserveTaskException();
         Logger.Info(typeof(Program).Assembly);
         Logger.Info($"[ {args.Join(" ")} ]");
