@@ -20,14 +20,14 @@ namespace Cube.FileSystem.SevenZip;
 
 /* ------------------------------------------------------------------------- */
 ///
-/// ArchiveProgressState
+/// ProgressState
 ///
 /// <summary>
 /// Specifies the progress state for compression or extraction.
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-public enum ArchiveProgressState
+public enum ProgressState
 {
     /// <summary>Current file has begun to compress or decompress.</summary>
     Start,

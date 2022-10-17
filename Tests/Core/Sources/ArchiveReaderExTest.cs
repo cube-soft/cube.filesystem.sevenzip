@@ -88,7 +88,7 @@ class ArchiveReaderExTest : FileFixture
 
         Assert.That(() => archive.Save(Results, cnt),
             Throws.TypeOf<OperationCanceledException>());
-        Assert.That(cnt.Results[ArchiveProgressState.Success], Is.EqualTo(2));
+        Assert.That(cnt.Results[ProgressState.Success], Is.EqualTo(2));
     }
 
     /* --------------------------------------------------------------------- */

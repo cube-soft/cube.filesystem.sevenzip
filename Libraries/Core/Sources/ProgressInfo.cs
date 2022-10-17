@@ -22,14 +22,14 @@ using System;
 
 /* ------------------------------------------------------------------------- */
 ///
-/// ArchiveProgressValue
+/// ProgressInfo
 ///
 /// <summary>
 /// Represetns the progress information for compression or extraction.
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-public class ArchiveProgressValue
+public class ProgressInfo
 {
     #region Properties
 
@@ -42,7 +42,7 @@ public class ArchiveProgressValue
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public ArchiveProgressState State { get; set; } = ArchiveProgressState.Progress;
+    public ProgressState State { get; set; } = ProgressState.Progress;
 
     /* --------------------------------------------------------------------- */
     ///

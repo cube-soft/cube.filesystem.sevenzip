@@ -101,7 +101,7 @@ class ArchiveReaderTest : FileFixture
         using (var obj = new ArchiveReader(src)) obj.Test(); // Test
         using (var obj = new ArchiveReader(src)) obj.Save(dest, cnt);
 
-        return cnt.Results[ArchiveProgressState.Success];
+        return cnt.Results[ProgressState.Success];
     }
 
     /* --------------------------------------------------------------------- */

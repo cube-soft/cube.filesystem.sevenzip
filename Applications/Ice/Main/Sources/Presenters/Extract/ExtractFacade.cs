@@ -127,7 +127,7 @@ public sealed class ExtractFacade : ArchiveFacade
 
         var progress = GetProgress(e => {
             e.CopyTo(Report);
-            if (Report.State == ArchiveProgressState.Success) Move(e.Current);
+            if (Report.State == ProgressState.Success) Move(e.Current);
         });
 
         Retry(() => src.Save(Temp, progress));

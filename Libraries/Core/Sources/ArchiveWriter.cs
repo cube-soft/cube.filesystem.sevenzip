@@ -163,7 +163,7 @@ public sealed class ArchiveWriter : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public void Save(string dest, IProgress<ArchiveProgressValue> progress)
+    public void Save(string dest, IProgress<ProgressInfo> progress)
     {
         if (Format == Format.Sfx) SaveAsSfx(dest, _items, progress);
         else if (Format == Format.Tar) SaveAsTar(dest, _items, progress);
@@ -200,7 +200,7 @@ public sealed class ArchiveWriter : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private void SaveAs(string dest, IList<RawEntity> src, Format fmt, IProgress<ArchiveProgressValue> progress)
+    private void SaveAs(string dest, IList<RawEntity> src, Format fmt, IProgress<ProgressInfo> progress)
     {
         var dir = Io.Get(dest).DirectoryName;
         Io.CreateDirectory(dir);
@@ -225,7 +225,7 @@ public sealed class ArchiveWriter : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private void SaveAsTar(string dest, IList<RawEntity> src, IProgress<ArchiveProgressValue> progress)
+    private void SaveAsTar(string dest, IList<RawEntity> src, IProgress<ProgressInfo> progress)
     {
         var fi  = Io.Get(dest);
         var dir = Io.Combine(fi.DirectoryName, Guid.NewGuid().ToString("N"));
@@ -256,7 +256,7 @@ public sealed class ArchiveWriter : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private void SaveAsSfx(string dest, IList<RawEntity> src, IProgress<ArchiveProgressValue> progress)
+    private void SaveAsSfx(string dest, IList<RawEntity> src, IProgress<ProgressInfo> progress)
     {
         var sfx = (Options as SfxOption)?.Module;
         if (!Io.Exists(sfx)) throw new System.IO.FileNotFoundException("SFX");
@@ -348,7 +348,7 @@ public sealed class ArchiveWriter : DisposableBase
     ///
     /* --------------------------------------------------------------------- */
     private void Invoke(Action<UpdateCallback> callback,
-        IList<RawEntity> src, string dest, IProgress<ArchiveProgressValue> progress)
+        IList<RawEntity> src, string dest, IProgress<ProgressInfo> progress)
     {
         var error = default(Exception);
         var cb    = new UpdateCallback(src)

@@ -218,7 +218,7 @@ internal sealed class UpdateCallback : CallbackBase, IArchiveUpdateCallback, ICr
         {
             Report.Count   = index + 1;
             Report.Current = _items[(int)index];
-            Report.State   = ArchiveProgressState.Start;
+            Report.State   = ProgressState.Start;
             return GetStream(Report.Current);
         }, true);
         return (int)Result;
@@ -238,7 +238,7 @@ internal sealed class UpdateCallback : CallbackBase, IArchiveUpdateCallback, ICr
     public void SetOperationResult(SevenZipErrorCode result) => Invoke(() =>
     {
         Result       = result;
-        Report.State = ArchiveProgressState.Success;
+        Report.State = ProgressState.Success;
     }, true);
 
     /* --------------------------------------------------------------------- */
