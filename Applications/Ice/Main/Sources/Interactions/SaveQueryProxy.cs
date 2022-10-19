@@ -199,7 +199,7 @@ public sealed class SaveQueryProxy
     {
         SaveLocation.Desktop     => Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
         SaveLocation.MyDocuments => Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-        SaveLocation.Source      => Io.Get(Source).DirectoryName,
+        SaveLocation.Source      => Io.GetDirectoryName(Source),
         SaveLocation.Explicit    => Request.Directory,
         SaveLocation.Query       => Invoke(),
         /* Preset/Unknown */ _   => Settings.SaveDirectory.HasValue() ?

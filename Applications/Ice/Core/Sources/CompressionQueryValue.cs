@@ -263,7 +263,7 @@ public sealed class CompressionQueryValue : ObservableBase
         if (!Set(src, nameof(Destination))) return;
         if (!src.HasValue()) return;
 
-        var ext = Io.Get(src).Extension.ToLowerInvariant();
+        var ext = Io.GetExtension(src).ToLowerInvariant();
         var obj = ext == ".exe" ? Format.Sfx : FormatDetector.FromExtension(ext);
         if (obj == Format.Unknown) return;
 

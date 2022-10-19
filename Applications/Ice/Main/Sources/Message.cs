@@ -84,7 +84,7 @@ public static class Message
     public static OpenDirectoryMessage ForExtractLocation(SaveQuerySource src)
     {
         var dest = new OpenDirectoryMessage(Properties.Resources.MessageExtractDestination) { NewButton = true };
-        if (src.Source.HasValue()) dest.Value = Io.Get(src.Source).DirectoryName;
+        if (src.Source.HasValue()) dest.Value = Io.GetDirectoryName(src.Source);
         return dest;
     }
 

@@ -137,7 +137,7 @@ internal class OpenCallback : PasswordCallback, IArchiveOpenCallback, IArchiveOp
     {
         stream = Invoke(() =>
         {
-            var src = Io.Exists(name) ? name : Io.Combine(Io.Get(Source).DirectoryName, name);
+            var src = Io.Exists(name) ? name : Io.Combine(Io.GetDirectoryName(Source), name);
             if (!Io.Exists(src)) return default;
 
             var dest = new ArchiveStreamReader(Io.Open(src));

@@ -139,12 +139,7 @@ public sealed class CompressQuery : Query<string, CompressionQueryValue>
     private string GetSource(Request request)
     {
         var src = request.Sources.First();
-        if (src.HasValue())
-        {
-            var f = Io.Get(src);
-            return Io.Combine(f.DirectoryName, $"{f.BaseName}.zip");
-        }
-        else return string.Empty;
+        return src.HasValue() ? IoEx.RenameExtension(src, ".zip") : string.Empty;
     }
 
     #endregion

@@ -109,7 +109,7 @@ public sealed class ArchiveWriter : DisposableBase
     /// <param name="src">Path of file or directory.</param>
     ///
     /* --------------------------------------------------------------------- */
-    public void Add(string src) => Add(src, Io.Get(src).Name);
+    public void Add(string src) => Add(src, Io.GetFileName(src));
 
     /* --------------------------------------------------------------------- */
     ///
@@ -202,7 +202,7 @@ public sealed class ArchiveWriter : DisposableBase
     /* --------------------------------------------------------------------- */
     private void SaveAs(string dest, IList<RawEntity> src, Format fmt, IProgress<ProgressInfo> progress)
     {
-        var dir = Io.Get(dest).DirectoryName;
+        var dir = Io.GetDirectoryName(dest);
         Io.CreateDirectory(dir);
 
         Invoke(cb =>
@@ -260,7 +260,7 @@ public sealed class ArchiveWriter : DisposableBase
     {
         var sfx = (Options as SfxOption)?.Module;
         if (!Io.Exists(sfx)) throw new System.IO.FileNotFoundException("SFX");
-        var tmp = Io.Combine(Io.Get(dest).DirectoryName, Guid.NewGuid().ToString("N"));
+        var tmp = Io.Combine(Io.GetDirectoryName(dest), Guid.NewGuid().ToString("N"));
 
         try
         {

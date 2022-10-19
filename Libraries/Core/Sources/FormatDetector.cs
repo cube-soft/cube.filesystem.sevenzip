@@ -99,7 +99,7 @@ public static class FormatDetector
                 return sfx ? Format.Sfx : format;
             }
         }
-        return FromExtension(Io.Get(src).Extension);
+        return FromExtension(Io.GetExtension(src));
     }
 
     /* --------------------------------------------------------------------- */

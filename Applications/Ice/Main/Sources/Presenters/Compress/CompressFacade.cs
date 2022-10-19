@@ -126,7 +126,7 @@ public sealed class CompressFacade : ArchiveFacade
     private void InvokePreProcess(CompressionQueryValue src)
     {
         Destination = this.Select(src);
-        SetTemp(Io.Get(Destination).DirectoryName);
+        SetTemp(Io.GetDirectoryName(Destination));
         SetPassword(src);
     }
 
