@@ -19,116 +19,238 @@
 namespace Cube.FileSystem.SevenZip;
 
 using System;
+using System.Collections.Generic;
+using Cube.Text.Extensions;
 
 /* ------------------------------------------------------------------------- */
 ///
 /// CallbackBase
 ///
 /// <summary>
-/// Represents the base class of other callback classes.
+/// Provides functionality to report the progress of compression or
+/// extraction process.
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
 internal abstract class CallbackBase : DisposableBase
 {
+    #region Constructors
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// CallbackBase
+    ///
+    /// <summary>
+    /// Initializes a new instance of the CallbackBase class with the
+    /// specified arguments.
+    /// </summary>
+    ///
+    /// <param name="aggregator">User object to report the progress.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    protected CallbackBase(IProgress<Report> aggregator) => _inner = aggregator;
+
+    #endregion
+
     #region Properties
 
     /* --------------------------------------------------------------------- */
     ///
-    /// Progress
+    /// Count
     ///
     /// <summary>
-    /// Gets or sets the object to report the progress.
+    /// Gets or sets the number of processed files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public IProgress<ProgressInfo> Progress { get; init; }
+    public long Count { get; protected set; }
 
     /* --------------------------------------------------------------------- */
     ///
-    /// Result
+    /// TotalCount
     ///
     /// <summary>
-    /// Gets the operation result.
+    /// Gets or sets the number of files to be processed.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public SevenZipErrorCode Result { get; protected set; } = SevenZipErrorCode.OK;
+    public long TotalCount { get; protected set; }
 
     /* --------------------------------------------------------------------- */
     ///
-    /// Exception
+    /// Bytes
     ///
     /// <summary>
-    /// Get the exceptions that occurred during processing.
+    /// Gets or sets the number of processed bytes.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public Exception Exception { get; private set; }
+    public long Bytes { get; protected set; }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// TotalBytes
+    ///
+    /// <summary>
+    /// Gets or sets the number of bytes to be processed.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public long TotalBytes { get; protected set; }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Exceptions
+    ///
+    /// <summary>
+    /// Gets exceptions occurred during processing.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public Stack<Exception> Exceptions { get; } = new();
+
+    #endregion
+
+    #region Methods
+
+    #region Report
 
     /* --------------------------------------------------------------------- */
     ///
     /// Report
     ///
     /// <summary>
-    /// Gets or sets the content of the progress report.
+    /// Reports the progress with the specified arguments.
     /// </summary>
     ///
+    /// <param name="state">Progress state.</param>
+    /// <param name="entity">Processing item.</param>
+    ///
+    /// <returns>
+    /// Cancel if the Report.Cancel property is set to true; otherwise None.
+    /// </returns>
+    ///
     /* --------------------------------------------------------------------- */
-    protected ProgressInfo Report { get; } = new();
+    protected SevenZipCode Report(ProgressState state, Entity entity) =>
+        Report(Make(state, entity, default));
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Report
+    ///
+    /// <summary>
+    /// Reports the progress with the specified arguments.
+    /// </summary>
+    ///
+    /// <param name="error">Exception object.</param>
+    /// <param name="entity">Processing item.</param>
+    ///
+    /// <returns>
+    /// Cancel if the Report.Cancel property is set to true; otherwise None.
+    /// </returns>
+    ///
+    /* --------------------------------------------------------------------- */
+    protected SevenZipCode Report(Exception error, Entity entity) =>
+        Report(Make(ProgressState.Failed, entity, error));
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Report
+    ///
+    /// <summary>
+    /// Notifies the specified report.
+    /// </summary>
+    ///
+    /// <param name="src">Report object.</param>
+    ///
+    /// <returns>
+    /// Cancel if the Report.Cancel property is set to true; otherwise None.
+    /// </returns>
+    ///
+    /* --------------------------------------------------------------------- */
+    protected SevenZipCode Report(Report src)
+    {
+        _inner?.Report(src);
+        return src.Cancel ? SevenZipCode.Cancel : SevenZipCode.Success;
+    }
 
     #endregion
 
-    #region Methods
+    #region Run
 
     /* --------------------------------------------------------------------- */
     ///
-    /// Invoke
+    /// Run
     ///
     /// <summary>
-    /// Invokes the specified callback and optionally reports the
-    /// progress.
+    /// Invokes the specified function and report the progress.
     /// </summary>
     ///
-    /// <param name="callback">Callback action.</param>
-    /// <param name="report">Reports or not the progress.</param>
+    /// <param name="func">User function.</param>
+    /// <param name="state">Progress state.</param>
+    /// <param name="entity">Processing item.</param>
+    ///
+    /// <returns>
+    /// Cancel if the Report.Cancel property is set to true;
+    /// otherwise the value returned by the specified function.
+    /// </returns>
     ///
     /* --------------------------------------------------------------------- */
-    protected void Invoke(Action callback, bool report) =>
-        Invoke(() => { callback(); return true; }, report);
+    protected SevenZipCode Run(Func<SevenZipCode> func, ProgressState state, Entity entity) =>
+        Run(func, state, () => entity);
 
     /* --------------------------------------------------------------------- */
     ///
-    /// Invoke
+    /// Run
     ///
     /// <summary>
-    /// Invokes the specified callback and optionally reports the
-    /// progress.
+    /// Invokes the specified function and report the progress.
     /// </summary>
     ///
-    /// <param name="callback">Callback function.</param>
-    /// <param name="report">Reports or not the progress.</param>
+    /// <param name="func">User function.</param>
+    /// <param name="state">Progress state.</param>
+    /// <param name="entity">Function to get the processing item.</param>
     ///
-    /// <returns>Result of the callback function.</returns>
+    /// <returns>
+    /// Cancel if the Report.Cancel property is set to true;
+    /// otherwise the value returned by the specified function.
+    /// </returns>
     ///
     /* --------------------------------------------------------------------- */
-    protected T Invoke<T>(Func<T> callback, bool report)
+    protected SevenZipCode Run(Func<SevenZipCode> func, ProgressState state, Func<Entity> entity)
     {
         try
         {
-            var dest = callback();
-            if (report && Result == SevenZipErrorCode.OK) Progress?.Report(Copy(Report));
-            return dest;
+            var c0 = func();
+            var c1 = Report(state, entity());
+            return c1 == SevenZipCode.Cancel ? c1 : c0;
         }
-        catch (Exception err)
+        catch (Exception e)
         {
-            if (err is OperationCanceledException) Result = SevenZipErrorCode.UserCancel;
-            else if (Result == SevenZipErrorCode.OK) Result = SevenZipErrorCode.CallbackError;
-            Exception = err;
-            throw;
+            Exceptions.Push(e);
+            if (_inner is not null) return Report(e, entity());
+            else if (e is SevenZipException se) return se.Code;
+            else return SevenZipCode.UnknownError;
         }
-        finally { Report.State = ProgressState.Progress; }
     }
+
+    #endregion
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Combine
+    ///
+    /// <summary>
+    /// Combines the specified paths
+    /// </summary>
+    ///
+    /// <param name="s0">First path.</param>
+    /// <param name="s1">Second path.</param>
+    ///
+    /// <returns>Combined path.</returns>
+    ///
+    /* --------------------------------------------------------------------- */
+    protected string Combine(string s0, string s1) => !s0.HasValue() ? s1 : Io.Combine(s0, s1);
 
     #endregion
 
@@ -136,22 +258,34 @@ internal abstract class CallbackBase : DisposableBase
 
     /* --------------------------------------------------------------------- */
     ///
-    /// Copy
+    /// Make
     ///
     /// <summary>
-    /// Creates a copied instance of the Report class.
+    /// Creates a new report with the specified arguments.
     /// </summary>
     ///
+    /// <param name="state">Progress state.</param>
+    /// <param name="entity">Processing item.</param>
+    /// <param name="error">Exception object.</param>
+    ///
+    /// <returns>Report object.</returns>
+    ///
     /* --------------------------------------------------------------------- */
-    private ProgressInfo Copy(ProgressInfo src) => new()
+    private Report Make(ProgressState state, Entity entity, Exception error) => new()
     {
-        State      = src.State,
-        Current    = src.Current,
-        Count      = src.Count,
-        Bytes      = src.Bytes,
-        TotalCount = src.TotalCount,
-        TotalBytes = src.TotalBytes,
+        Cancel     = state == ProgressState.Failed,
+        State      = state,
+        Exception  = error,
+        Current    = entity,
+        Bytes      = Bytes,
+        Count      = Count,
+        TotalBytes = TotalBytes,
+        TotalCount = TotalCount,
     };
 
+    #endregion
+
+    #region Fields
+    private readonly IProgress<Report> _inner;
     #endregion
 }

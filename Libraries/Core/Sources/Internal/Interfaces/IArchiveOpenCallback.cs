@@ -46,13 +46,11 @@ internal interface IArchiveOpenCallback
     /// <param name="count">Total number of files.</param>
     /// <param name="bytes">Total compressed bytes.</param>
     ///
-    /// <remarks>
-    /// IntPtr is used instead of ref ulong because 7z.dll is often set
-    /// to null. To get the value when non-null, use Marshal.ReadInt64.
-    /// </remarks>
+    /// <returns>ErrorCode.None for success.</returns>
     ///
     /* --------------------------------------------------------------------- */
-    void SetTotal(IntPtr /* ref ulong */ count, IntPtr /* ref ulong */ bytes);
+    [PreserveSig]
+    SevenZipCode SetTotal(IntPtr count, IntPtr bytes);
 
     /* --------------------------------------------------------------------- */
     ///
@@ -65,6 +63,9 @@ internal interface IArchiveOpenCallback
     /// <param name="count">Number of files.</param>
     /// <param name="bytes">Completed bytes.</param>
     ///
+    /// <returns>ErrorCode.None for success.</returns>
+    ///
     /* --------------------------------------------------------------------- */
-    void SetCompleted(IntPtr /* ref ulong */ count, IntPtr /* ref ulong */ bytes);
+    [PreserveSig]
+    SevenZipCode SetCompleted(IntPtr count, IntPtr bytes);
 }

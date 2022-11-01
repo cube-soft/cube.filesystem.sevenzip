@@ -20,24 +20,25 @@ namespace Cube.FileSystem.SevenZip;
 
 /* ------------------------------------------------------------------------- */
 ///
-/// SevenZipErrorCode
+/// SevenZipCode
 ///
 /// <summary>
-/// Specifies the error code sent by SevenZip library.
+/// Specifies the operation code for compressing or extracting archives
+/// via the 7-Zip library.
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-public enum SevenZipErrorCode
+public enum SevenZipCode
 {
-    /// <summary>No errors.</summary>
-    OK = 0,
+    /// <summary>Operation success.</summary>
+    Success = 0,
     /// <summary>Specified method does not support.</summary>
     UnsupportedMethod,
     /// <summary>Some errors exist in compressing or extracting data.</summary>
     DataError,
     /// <summary>CRC does not match.</summary>
     CrcError,
-    /// <summary></summary>
+    /// <summary>Specified archive item is not available.</summary>
     Unavailable,
     /// <summary>Unexpected end position was found.</summary>
     UnexpectedEnd,
@@ -49,8 +50,8 @@ public enum SevenZipErrorCode
     HeadersError,
     /// <summary>Input password is not correct.</summary>
     WrongPassword,
-    /// <summary>Error sent by callback.</summary>
-    CallbackError = -1,
+    /// <summary>Unknown error.</summary>
+    UnknownError = -1,
     /// <summary>Operation is canceled by user.</summary>
-    UserCancel = -2,
+    Cancel = -2,
 }

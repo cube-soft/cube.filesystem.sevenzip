@@ -19,58 +19,66 @@
 namespace Cube.FileSystem.SevenZip;
 
 using System;
-using System.Runtime.InteropServices;
+using System.IO;
 
 /* ------------------------------------------------------------------------- */
 ///
-/// IArchiveOpenVolumeCallback
+/// SevenZipException
 ///
 /// <summary>
-/// Represents an interface for decompressing a split archive.
+/// Represents the exception that an error occurs in the 7-Zip library.
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-[ComImport]
-[Guid("23170F69-40C1-278A-0000-000600300000")]
-[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-internal interface IArchiveOpenVolumeCallback
+[Serializable]
+public class SevenZipException : IOException
 {
-    /* --------------------------------------------------------------------- */
-    ///
-    /// GetProperty
-    ///
-    /// <summary>
-    /// Gets the property of the compressed file for the specified ID.
-    /// </summary>
-    ///
-    /// <param name="pid">Property ID</param>
-    /// <param name="value">
-    /// Value corresponding to the property ID.
-    /// </param>
-    ///
-    /// <returns>ErrorCode.None for success.</returns>
-    ///
-    /* --------------------------------------------------------------------- */
-    [PreserveSig]
-    SevenZipCode GetProperty(ItemPropId pid, ref PropVariant value);
+    #region Constructors
 
     /* --------------------------------------------------------------------- */
     ///
-    /// GetStream
+    /// SevenZipException
     ///
     /// <summary>
-    /// Get the stream corresponding to the volume to be read.
+    /// Initializes a new instance of the SevenZipException class with the
+    /// specified error reason.
     /// </summary>
     ///
-    /// <param name="name">Volume name.</param>
-    /// <param name="stream">Target input stream.</param>
-    ///
-    /// <returns>ErrorCode.None for success.</returns>
+    /// <param name="code">Error code.</param>
     ///
     /* --------------------------------------------------------------------- */
-    [PreserveSig]
-    SevenZipCode GetStream(
-        [MarshalAs(UnmanagedType.LPWStr)] string name,
-        [Out, MarshalAs(UnmanagedType.Interface)] out IInStream stream
-    );
+    public SevenZipException(SevenZipCode code) : base(code.ToString()) => Code = code;
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// SevenZipException
+    ///
+    /// <summary>
+    /// Initializes a new instance of the SevenZipException class with the
+    /// specified arguments.
+    /// </summary>
+    ///
+    /// <param name="code">Error code.</param>
+    /// <param name="inner">Inner exception.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    public SevenZipException(SevenZipCode code, Exception inner) :
+        base(code.ToString(), inner) => Code = code;
+
+    #endregion
+
+    #region Properties
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Code
+    ///
+    /// <summary>
+    /// Gets the 7-Zip operation code.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public SevenZipCode Code { get; }
+
+    #endregion
 }

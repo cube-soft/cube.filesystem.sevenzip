@@ -135,7 +135,7 @@ internal class ArchiveEntitySource : EntitySource
         Extension     = fi?.Extension ?? string.Empty;
         DirectoryName = fi?.DirectoryName ?? string.Empty;
 
-        if (FullName != RawName) Logger.Debug($"Raw:{RawName.Quote()}, Cvt:{FullName.Quote()}");
+        if (FullName != RawName) Logger.Debug($"{RawName.Quote()} -> {FullName.Quote()}");
     }
 
     /* --------------------------------------------------------------------- */

@@ -19,67 +19,62 @@
 namespace Cube.FileSystem.SevenZip;
 
 using System;
-using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 /* ------------------------------------------------------------------------- */
 ///
-/// SevenZipException
+/// CallbackExtension
 ///
 /// <summary>
-/// Represents the exception that an error occurs in the 7-Zip library.
+/// Provides extended methods of the CallbackBase class.
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-[Serializable]
-public class SevenZipException : IOException
+internal static class CallbackExtension
 {
-    #region Constructors
+    #region Methods
 
     /* --------------------------------------------------------------------- */
     ///
-    /// SevenZipException
+    /// GetException
     ///
     /// <summary>
-    /// Initializes a new instance of the SevenZipException class with the
-    /// specified error reason.
+    /// Creates a new instance of the SevenZipException class
+    /// with the specified arguments.
     /// </summary>
     ///
-    /// <param name="code">Error code.</param>
+    /// <param name="src">Callback object.</param>
+    /// <param name="code">Operation result.</param>
+    ///
+    /// <returns>Exception object.</returns>
     ///
     /* --------------------------------------------------------------------- */
-    public SevenZipException(SevenZipErrorCode code) :
-        base(code.ToString()) => Code = code;
+    public static SevenZipException GetException(this CallbackBase src, int code) =>
+        src.Exceptions.Count > 0 ?
+        new SevenZipException((SevenZipCode)code, src.Exceptions.Pop()) :
+        new SevenZipException((SevenZipCode)code);
 
     /* --------------------------------------------------------------------- */
     ///
-    /// SevenZipException
+    /// CreateCancelException
     ///
     /// <summary>
-    /// Initializes a new instance of the SevenZipException class with the
-    /// specified arguments.
+    /// Creates a new instance of the OperationCanceledException class
+    /// with the specified arguments.
     /// </summary>
     ///
-    /// <param name="code">Error code.</param>
-    /// <param name="inner">Inner exception.</param>
+    /// <param name="src">Callback object.</param>
+    ///
+    /// <returns>Exception object.</returns>
     ///
     /* --------------------------------------------------------------------- */
-    public SevenZipException(SevenZipErrorCode code, Exception inner) :
-        base(code.ToString(), inner) => Code = code;
-
-    #endregion
-
-    #region Properties
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// Code
-    ///
-    /// <summary>
-    /// Gets the error code.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    public SevenZipErrorCode Code { get; }
+    public static OperationCanceledException GetCancelException(this CallbackBase src) =>
+        src.Exceptions.Count > 0 ?
+        new OperationCanceledException("", src.Exceptions.Pop()) :
+        new OperationCanceledException();
 
     #endregion
 }

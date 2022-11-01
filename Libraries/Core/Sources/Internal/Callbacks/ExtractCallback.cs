@@ -20,6 +20,7 @@ namespace Cube.FileSystem.SevenZip;
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Cube.Text.Extensions;
 
 /* ------------------------------------------------------------------------- */
@@ -45,20 +46,19 @@ internal class ExtractCallback : PasswordCallback, IArchiveExtractCallback
     /// specified arguments.
     /// </summary>
     ///
-    /// <param name="src">Archive controller.</param>
-    /// <param name="indices">Indices of extracting items.</param>
-    /// <param name="count">Number of indices.</param>
+    /// <param name="src">Source archive.</param>
+    /// <param name="iterator">Items to be extracted.</param>
+    /// <param name="progress">User object to report the progress.</param>
     ///
     /* --------------------------------------------------------------------- */
-    public ExtractCallback(ArchiveReader src, IEnumerable<int> indices, int count)
+    public ExtractCallback(string src, ArchiveEnumerator iterator, IProgress<Report> progress) :
+        base(src, progress)
     {
-        _reader   = src;
-        _iterator = indices.GetEnumerator();
-
-        Report.TotalCount = count;
-        Report.TotalBytes = -1;
-        Report.Count      = 0;
-        Report.Bytes      = 0;
+        _iterator  = iterator;
+        TotalCount = iterator.Count;
+        TotalBytes = -1;
+        Count      = 0;
+        Bytes      = 0;
     }
 
     #endregion
@@ -74,7 +74,7 @@ internal class ExtractCallback : PasswordCallback, IArchiveExtractCallback
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public string Destination { get; init; }
+    public string Destination { get; init; } = string.Empty;
 
     /* --------------------------------------------------------------------- */
     ///
@@ -90,7 +90,7 @@ internal class ExtractCallback : PasswordCallback, IArchiveExtractCallback
 
     #endregion
 
-    #region Methods
+    #region IProgress
 
     /* --------------------------------------------------------------------- */
     ///
@@ -104,11 +104,12 @@ internal class ExtractCallback : PasswordCallback, IArchiveExtractCallback
     /// <param name="bytes">Number of bytes.</param>
     ///
     /* --------------------------------------------------------------------- */
-    public void SetTotal(ulong bytes) => Invoke(() =>
+    public SevenZipCode SetTotal(ulong bytes)
     {
-        if (Report.TotalBytes < 0) Report.TotalBytes = (long)bytes;
-        _hack = Math.Max((long)bytes - Report.TotalBytes, 0);
-    }, true);
+        if (TotalBytes < 0) TotalBytes = (long)bytes;
+        _hack = Math.Max((long)bytes - TotalBytes, 0);
+        return Report(ProgressState.Prepare, Current());
+    }
 
     /* --------------------------------------------------------------------- */
     ///
@@ -120,6 +121,8 @@ internal class ExtractCallback : PasswordCallback, IArchiveExtractCallback
     ///
     /// <param name="bytes">Number of bytes.</param>
     ///
+    /// <returns>Operation result.</returns>
+    ///
     /// <remarks>
     /// When the IInArchive.Extract method is invoked multiple times,
     /// the values obtained by SetTotal and SetCompleted differ
@@ -128,11 +131,15 @@ internal class ExtractCallback : PasswordCallback, IArchiveExtractCallback
     /// </remarks>
     ///
     /* --------------------------------------------------------------------- */
-    public void SetCompleted(ref ulong bytes)
+    public SevenZipCode SetCompleted(IntPtr bytes)
     {
-        var cvt = Math.Min(Math.Max((long)bytes - _hack, 0), Report.TotalBytes);
-        _ = Invoke(() => Report.Bytes = cvt, true);
+        if (bytes != IntPtr.Zero) Bytes = Math.Min(Math.Max(Marshal.ReadInt64(bytes) - _hack, 0), TotalBytes);
+        return Report(ProgressState.Progress, Current());
     }
+
+    #endregion
+
+    #region IArchiveExtractCallback
 
     /* --------------------------------------------------------------------- */
     ///
@@ -149,10 +156,17 @@ internal class ExtractCallback : PasswordCallback, IArchiveExtractCallback
     /// <returns>Operation result.</returns>
     ///
     /* --------------------------------------------------------------------- */
-    public int GetStream(uint index, out ISequentialOutStream stream, AskMode mode)
+    public SevenZipCode GetStream(uint index, out ISequentialOutStream stream, AskMode mode)
     {
-        stream = Invoke(() => CreateStream(index, mode), false);
-        return 0;
+        var dest = default(ISequentialOutStream);
+        try
+        {
+            return Run(() => {
+                dest = NewStream(index, mode);
+                return SevenZipCode.Success;
+            }, ProgressState.Start, Current);
+        }
+        finally { stream = dest; }
     }
 
     /* --------------------------------------------------------------------- */
@@ -166,16 +180,12 @@ internal class ExtractCallback : PasswordCallback, IArchiveExtractCallback
     /// <param name="mode">Operation mode.</param>
     ///
     /* --------------------------------------------------------------------- */
-    public void PrepareOperation(AskMode mode) => Invoke(() =>
+    public SevenZipCode PrepareOperation(AskMode mode)
     {
         _mode = mode;
-        if (mode == AskMode.Skip) return;
-        if (_dic.TryGetValue(_iterator.Current, out var src))
-        {
-            Report.Current = src.Source;
-            Report.State   = ProgressState.Start;
-        }
-    }, true);
+        if (mode == AskMode.Skip) return SevenZipCode.Success;
+        return Report(ProgressState.Progress, Current());
+    }
 
     /* --------------------------------------------------------------------- */
     ///
@@ -185,27 +195,27 @@ internal class ExtractCallback : PasswordCallback, IArchiveExtractCallback
     /// Sets the extracted result.
     /// </summary>
     ///
-    /// <param name="result">Operation result.</param>
+    /// <param name="code">Operation result.</param>
     ///
     /* --------------------------------------------------------------------- */
-    public void SetOperationResult(SevenZipErrorCode result) => Invoke(() =>
+    public SevenZipCode SetOperationResult(SevenZipCode code)
     {
-        Result = result;
-        if (_mode == AskMode.Skip) return;
-        if (_dic.TryGetValue(_iterator.Current, out var src))
-        {
-            if (_mode == AskMode.Extract)
-            {
-                src.Stream?.Dispose();
-                _ = _dic.Remove(_iterator.Current);
-                if (result == SevenZipErrorCode.OK) src.Source.SetAttributes(Destination);
-            }
+        if (code == SevenZipCode.WrongPassword) return code;
+        if (code == SevenZipCode.DataError && PasswordTimes > 0) return SevenZipCode.WrongPassword;
+        if (_mode == AskMode.Skip) return SevenZipCode.Success;
 
-            Report.Current = src.Source;
-            Report.State   = ProgressState.Success;
-            Report.Count++;
+        try
+        {
+            if (_mode == AskMode.Extract) Finalize(_iterator.Current);
+            Count++;
+            return Report(code, default);
         }
-    }, true);
+        catch (Exception e) { return Report(code, e); }
+    }
+
+    #endregion
+
+    #region IDisposable
 
     /* --------------------------------------------------------------------- */
     ///
@@ -225,13 +235,8 @@ internal class ExtractCallback : PasswordCallback, IArchiveExtractCallback
     /* --------------------------------------------------------------------- */
     protected override void Dispose(bool disposing)
     {
-        foreach (var kv in _dic)
-        {
-            kv.Value.Stream?.Dispose();
-            if (Result != SevenZipErrorCode.OK) continue;
-            if (Destination.HasValue()) Invoke(() => kv.Value.Source.SetAttributes(Destination), true);
-        }
-        _dic.Clear();
+        foreach (var kv in _streams) kv.Value?.Dispose();
+        _streams.Clear();
     }
 
     #endregion
@@ -240,71 +245,107 @@ internal class ExtractCallback : PasswordCallback, IArchiveExtractCallback
 
     /* --------------------------------------------------------------------- */
     ///
-    /// CreateStream
+    /// NewStream
     ///
     /// <summary>
     /// Creates a stream from the specified arguments.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private ArchiveStreamWriter CreateStream(uint index, AskMode mode)
+    private ArchiveStreamWriter NewStream(uint index, AskMode mode)
     {
-        if (Result != SevenZipErrorCode.OK || mode == AskMode.Skip) return null;
-
         while (_iterator.MoveNext())
         {
-            var key = _iterator.Current;
-            if (key != index) continue;
-            var value = new Core(_reader.Items[key]);
-            _dic.Add(key, value);
-
-            var vi = value.Source;
-            if (mode == AskMode.Extract && vi.FullName.HasValue())
-            {
-                if (Filter?.Invoke(vi) ?? false) Logger.Debug($"Skip:{vi.FullName}");
-                else if (vi.IsDirectory) vi.CreateDirectory(Destination);
-                else value.Stream = CreateStream(vi);
-            }
-            return value.Stream;
+            if (_iterator.Current.Index == index) break;
         }
+        if (!_iterator.Valid || mode != AskMode.Extract) return null;
 
+        var e = _iterator.Current;
+        if (e.FullName.HasValue())
+        {
+            if (Filter?.Invoke(e) ?? false) Skip(e);
+            else if (e.IsDirectory) e.CreateDirectory(Destination);
+            else
+            {
+                var stream = Io.Create(Combine(Destination, e.FullName));
+                var dest   = new ArchiveStreamWriter(stream);
+                _streams.Add(e.Index, dest);
+                return dest;
+            }
+        }
         return null;
     }
 
     /* --------------------------------------------------------------------- */
     ///
-    /// CreateStream
+    /// Finalize
     ///
     /// <summary>
-    /// Creates a stream from the specified item.
+    /// Executes the termination process for the specified object.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private ArchiveStreamWriter CreateStream(ArchiveEntity src) =>
-        new(Io.Create(Io.Combine(Destination, src.FullName)));
+    private void Finalize(ArchiveEntity src)
+    {
+        if (src is null) return;
+        if (_streams.TryGetValue(src.Index, out var obj))
+        {
+            obj?.Dispose();
+            _ = _streams.Remove(src.Index);
+        }
+        src.SetAttributes(Destination);
+    }
 
     /* --------------------------------------------------------------------- */
     ///
-    /// Core
+    /// Skip
     ///
     /// <summary>
-    /// Represents core information.
+    /// Skips extracting the current target item.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private class Core
+    private void Skip(ArchiveEntity src) => Logger.Warn(() => {
+        if (!src.IsDirectory) Count++;
+        Logger.Debug($"[{nameof(Skip)}] ({Count}/{TotalCount}) {src.FullName.Quote()}");
+    });
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Report
+    ///
+    /// <summary>
+    /// Reports the progress with the specified arguments.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private SevenZipCode Report(SevenZipCode code, Exception error)
     {
-        public Core(ArchiveEntity src) { Source = src; }
-        public ArchiveEntity Source { get; }
-        public ArchiveStreamWriter Stream { get; set; }
+        var e = Current();
+        if (code == SevenZipCode.Success && error is null) return Report(ProgressState.Success, e);
+
+        var obj = error ?? new SevenZipException(code);
+        Exceptions.Push(obj);
+        if (Report(obj, e) == SevenZipCode.Cancel) return SevenZipCode.Cancel;
+        return code != SevenZipCode.Success ? code : SevenZipCode.UnknownError;
     }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Current
+    ///
+    /// <summary>
+    /// Gets the current target item.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private ArchiveEntity Current() => _iterator.Valid ? _iterator.Current : default;
 
     #endregion
 
     #region Fields
-    private readonly ArchiveReader _reader;
-    private readonly IEnumerator<int> _iterator;
-    private readonly Dictionary<int, Core> _dic = new();
+    private readonly ArchiveEnumerator _iterator;
+    private readonly Dictionary<int, ArchiveStreamWriter> _streams = new();
     private AskMode _mode = AskMode.Extract;
     private long _hack = 0;
     #endregion

@@ -20,7 +20,6 @@ namespace Cube.FileSystem.SevenZip;
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Cube.Text.Extensions;
 
 /* ------------------------------------------------------------------------- */
@@ -139,24 +138,20 @@ public sealed class ArchiveReader : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private ArchiveReader(Format format, string src, PasswordQuery query, ArchiveOption options)
+    private ArchiveReader(Format format, string src, PasswordQuery password, ArchiveOption options)
     {
         if (format == Format.Unknown) throw new UnknownFormatException();
 
         Source  = src;
         Format  = format;
         Options = options;
-        _query  = query;
+        _query  = password;
+        _core   = Hook(new SevenZipLibrary()).GetInArchive(format);
 
-        var lib = Attach(new SevenZipLibrary());
-        var ss  = new ArchiveStreamReader(Io.Open(src));
-        var cb  = Attach(new OpenCallback(ss)
-        {
-            Source   = src,
-            Password = _query,
-        });
+        var cb = Hook(new OpenCallback(src) { Password = _query });
 
-        _core = lib.GetInArchive(format);
+        var ss = new ArchiveStreamReader(Io.Open(src));
+        cb.Streams.Add(ss);
         _ = _core.Open(ss, IntPtr.Zero, cb);
 
         var n = (int)Math.Max(_core.GetNumberOfItems(), 1);
@@ -248,7 +243,7 @@ public sealed class ArchiveReader : DisposableBase
     /// <param name="progress">Progress object.</param>
     ///
     /* --------------------------------------------------------------------- */
-    public void Save(string dest, IProgress<ProgressInfo> progress) => Save(dest, null, progress);
+    public void Save(string dest, IProgress<Report> progress) => Save(dest, null, progress);
 
     /* --------------------------------------------------------------------- */
     ///
@@ -268,23 +263,22 @@ public sealed class ArchiveReader : DisposableBase
     /// <param name="progress">Progress object.</param>
     ///
     /* --------------------------------------------------------------------- */
-    public void Save(string dest, uint[] src, IProgress<ProgressInfo> progress)
+    public void Save(string dest, uint[] src, IProgress<Report> progress)
     {
-        using var cb = Create(dest, src, progress);
-
-        var n    = (uint?)src?.Length ?? uint.MaxValue;
-        var test = dest.HasValue() ? 0 : 1;
-        _ = _core.Extract(src, n , test, cb);
-
-        if (cb.Result == SevenZipErrorCode.OK) return;
-        if (cb.Result == SevenZipErrorCode.UserCancel) throw new OperationCanceledException();
-        if (cb.Result == SevenZipErrorCode.WrongPassword ||
-            cb.Result == SevenZipErrorCode.DataError && IsEncrypted(src))
+        try
         {
-            _query.Reset();
-            throw new EncryptionException();
+            using var cb = CreateCallback(dest, src, progress);
+
+            var n    = (uint?)src?.Length ?? uint.MaxValue;
+            var test = dest.HasValue() ? 0 : 1;
+            var code = _core.Extract(src, n , test, cb);
+
+            if (code == (int)SevenZipCode.Success) return;
+            if (code == (int)SevenZipCode.WrongPassword) throw new EncryptionException();
+            if (code == (int)SevenZipCode.Cancel) throw cb.GetCancelException();
+            else throw cb.GetException(code);
         }
-        throw new SevenZipException(cb.Result, cb.Exception);
+        finally { _query.Reset(); }
     }
 
     /* --------------------------------------------------------------------- */
@@ -314,14 +308,14 @@ public sealed class ArchiveReader : DisposableBase
 
     /* --------------------------------------------------------------------- */
     ///
-    /// Attach
+    /// Hook
     ///
     /// <summary>
     /// Attaches the specified object as disposable.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private T Attach<T>(T src) where T : IDisposable
+    private T Hook<T>(T src) where T : IDisposable
     {
         _disposable.Add(src);
         return src;
@@ -329,7 +323,7 @@ public sealed class ArchiveReader : DisposableBase
 
     /* --------------------------------------------------------------------- */
     ///
-    /// Create
+    /// CreateCallback
     ///
     /// <summary>
     /// Creates a new instance of the ExtractCallback class with the
@@ -337,33 +331,19 @@ public sealed class ArchiveReader : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private ExtractCallback Create(string dest, uint[] src, IProgress<ProgressInfo> progress)
+    private ExtractCallback CreateCallback(string dest, uint[] src, IProgress<Report> progress)
     {
-        var v = src != null ?
-                src.Select(i => (int)i) :
-                Enumerable.Range(0, Items.Count);
-        var n = src?.Length ?? Items.Count;
+        var e = src is not null ?
+                new ArchiveEnumerator(Items, src) :
+                new ArchiveEnumerator(Items);
 
-        return new(this, v, n)
+        return new(Source, e, progress)
         {
-            Destination = dest,
+            Destination = dest ?? string.Empty,
             Password    = _query,
-            Progress    = progress,
             Filter      = Options.Filter,
         };
     }
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// IsEncrypted
-    ///
-    /// <summary>
-    /// Determines if any of the specified items are encrypted.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    private bool IsEncrypted(IEnumerable<uint> indices) =>
-        (indices?.Select(i => Items[(int)i]) ?? Items).Any(e => e.Encrypted);
 
     #endregion
 

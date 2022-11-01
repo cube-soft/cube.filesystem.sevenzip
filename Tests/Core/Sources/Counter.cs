@@ -29,7 +29,7 @@ using System.Collections.Generic;
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-internal class Counter : IProgress<ProgressInfo>
+internal class Counter : IProgress<Report>
 {
     #region Properties
 
@@ -63,7 +63,7 @@ internal class Counter : IProgress<ProgressInfo>
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public void Report(ProgressInfo value) => Results[value.State]++;
+    public void Report(Report value) => Results[value.State]++;
 
     #endregion
 }

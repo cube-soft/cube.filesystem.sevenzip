@@ -46,9 +46,9 @@ internal interface ICryptoGetTextPassword
     ///
     /// <param name="password">Password.</param>
     ///
-    /// <returns>OperationResult</returns>
+    /// <returns>ErrorCode.None for success.</returns>
     ///
     /* --------------------------------------------------------------------- */
     [PreserveSig]
-    int CryptoGetTextPassword([MarshalAs(UnmanagedType.BStr)] out string password);
+    SevenZipCode CryptoGetTextPassword([MarshalAs(UnmanagedType.BStr)] out string password);
 }

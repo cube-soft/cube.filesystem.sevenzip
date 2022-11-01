@@ -18,6 +18,7 @@
 /* ------------------------------------------------------------------------- */
 namespace Cube.FileSystem.SevenZip;
 
+using System;
 using Cube.Text.Extensions;
 
 /* ------------------------------------------------------------------------- */
@@ -32,6 +33,25 @@ using Cube.Text.Extensions;
 /* ------------------------------------------------------------------------- */
 internal abstract class PasswordCallback : CallbackBase, ICryptoGetTextPassword
 {
+    #region Constructors
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// PasswordCallback
+    ///
+    /// <summary>
+    /// Initializes a new instance of the PasswordCallback with the specified
+    /// arguments.
+    /// </summary>
+    ///
+    /// <param name="src">Source archive.</param>
+    /// <param name="progress">User object to report the progress.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    protected PasswordCallback(string src, IProgress<Report> progress) : base(progress) => Source = src;
+
+    #endregion
+
     #region Properties
 
     /* --------------------------------------------------------------------- */
@@ -43,22 +63,33 @@ internal abstract class PasswordCallback : CallbackBase, ICryptoGetTextPassword
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public string Source { get; init; }
+    public string Source { get; }
 
     /* --------------------------------------------------------------------- */
     ///
     /// Password
     ///
     /// <summary>
-    /// Gets the object to query for a password.
+    /// Gets or sets the object to query the password.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     public IQuery<string> Password { get; init; }
 
+    /* --------------------------------------------------------------------- */
+    ///
+    /// PasswordTimes
+    ///
+    /// <summary>
+    /// Get the number of times the password was requested.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public int PasswordTimes { get; private set; }
+
     #endregion
 
-    #region Methods
+    #region ICryptoGetTextPassword
 
     /* --------------------------------------------------------------------- */
     ///
@@ -68,22 +99,24 @@ internal abstract class PasswordCallback : CallbackBase, ICryptoGetTextPassword
     /// Gets the password of the provided archive.
     /// </summary>
     ///
-    /// <param name="password">Password result.</param>
+    /// <param name="value">Password result.</param>
     ///
-    /// <returns>OperationResult</returns>
+    /// <returns>Operation result</returns>
     ///
     /* --------------------------------------------------------------------- */
-    public int CryptoGetTextPassword(out string password)
+    public SevenZipCode CryptoGetTextPassword(out string value)
     {
+        PasswordTimes++;
+        value = string.Empty;
+        if (Password is null) return SevenZipCode.WrongPassword;
+
         var e = Query.NewMessage(Source);
         Password.Request(e);
+        if (e.Cancel) return SevenZipCode.Cancel;
 
-        Result = e.Cancel           ? SevenZipErrorCode.UserCancel :
-                 e.Value.HasValue() ? SevenZipErrorCode.OK :
-                                      SevenZipErrorCode.WrongPassword;
-        password = (Result == SevenZipErrorCode.OK) ? e.Value : string.Empty;
-
-        return (int)Result;
+        var done = e.Value.HasValue();
+        if (done) value = e.Value;
+        return done ? SevenZipCode.Success : SevenZipCode.WrongPassword;
     }
 
     #endregion

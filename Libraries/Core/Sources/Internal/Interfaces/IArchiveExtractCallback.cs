@@ -46,8 +46,11 @@ internal interface IArchiveExtractCallback
     ///
     /// <param name="bytes">Number of bytes.</param>
     ///
+    /// <returns>Operation result.</returns>
+    ///
     /* --------------------------------------------------------------------- */
-    void SetTotal(ulong bytes);
+    [PreserveSig]
+    SevenZipCode SetTotal(ulong bytes);
 
     /* --------------------------------------------------------------------- */
     ///
@@ -59,15 +62,11 @@ internal interface IArchiveExtractCallback
     ///
     /// <param name="bytes">Number of bytes.</param>
     ///
-    /// <remarks>
-    /// When the IInArchive.Extract method is invoked multiple times,
-    /// the values obtained by SetTotal and SetCompleted differ
-    /// depending on the Format. ArchiveExtractCallback normalizes the
-    /// values to eliminate the differences between formats.
-    /// </remarks>
+    /// <returns>Operation result.</returns>
     ///
     /* --------------------------------------------------------------------- */
-    void SetCompleted(ref ulong bytes);
+    [PreserveSig]
+    SevenZipCode SetCompleted(IntPtr bytes);
 
     /* --------------------------------------------------------------------- */
     ///
@@ -81,16 +80,11 @@ internal interface IArchiveExtractCallback
     /// <param name="stream">Output stream.</param>
     /// <param name="mode">Operation mode.</param>
     ///
-    /// <returns>Operation result.</returns>
-    ///
-    /// <remarks>
-    /// If you want to skip the decompression, return a value other than
-    /// OperationResult.OK.
-    /// </remarks>
+    /// <returns>ErrorCode.None for success.</returns>
     ///
     /* --------------------------------------------------------------------- */
     [PreserveSig]
-    int GetStream(
+    SevenZipCode GetStream(
         uint index,
         [Out, MarshalAs(UnmanagedType.Interface)] out ISequentialOutStream stream,
         AskMode mode
@@ -106,8 +100,11 @@ internal interface IArchiveExtractCallback
     ///
     /// <param name="mode">Operation mode.</param>
     ///
+    /// <returns>ErrorCode.None for success.</returns>
+    ///
     /* --------------------------------------------------------------------- */
-    void PrepareOperation(AskMode mode);
+    [PreserveSig]
+    SevenZipCode PrepareOperation(AskMode mode);
 
     /* --------------------------------------------------------------------- */
     ///
@@ -117,8 +114,11 @@ internal interface IArchiveExtractCallback
     /// Sets the extracted result.
     /// </summary>
     ///
-    /// <param name="result">Operation result.</param>
+    /// <param name="code">Operation result.</param>
+    ///
+    /// <returns>ErrorCode.None for success.</returns>
     ///
     /* --------------------------------------------------------------------- */
-    void SetOperationResult(SevenZipErrorCode result);
+    [PreserveSig]
+    SevenZipCode SetOperationResult(SevenZipCode code);
 }

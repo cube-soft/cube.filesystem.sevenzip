@@ -152,7 +152,12 @@ class ArchiveReaderExTest : FileFixture
         var src = Io.Combine(dest, "SampleVolume.rar.001");
         using var archive = new ArchiveReader(src);
 
-        Assert.That(() => archive.Save(dest), Throws.TypeOf<SevenZipException>());
+        Assert.That(() => archive.Save(dest), Throws
+            .TypeOf<OperationCanceledException>()
+            .And
+            .InnerException
+            .TypeOf<SevenZipException>()
+        );
     }
 
     /* --------------------------------------------------------------------- */
@@ -164,11 +169,11 @@ class ArchiveReaderExTest : FileFixture
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [TestCase("")]
-    [TestCase("incorrect")]
-    public void Error_IncorrectPassword(string password)
+    [TestCase("Password.7z", "")]
+    [TestCase("Password.7z", "incorrect")]
+    public void Error_IncorrectPassword(string filename, string password)
     {
-        var src = GetSource("Password.7z");
+        var src = GetSource(filename);
         using var archive = new ArchiveReader(src, password);
 
         Assert.That(() => archive.Save(Results), Throws.TypeOf<EncryptionException>());

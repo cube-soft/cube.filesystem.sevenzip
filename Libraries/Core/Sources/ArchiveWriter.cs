@@ -163,7 +163,7 @@ public sealed class ArchiveWriter : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public void Save(string dest, IProgress<ProgressInfo> progress)
+    public void Save(string dest, IProgress<Report> progress)
     {
         if (Format == Format.Sfx) SaveAsSfx(dest, _items, progress);
         else if (Format == Format.Tar) SaveAsTar(dest, _items, progress);
@@ -200,7 +200,7 @@ public sealed class ArchiveWriter : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private void SaveAs(string dest, IList<RawEntity> src, Format fmt, IProgress<ProgressInfo> progress)
+    private void SaveAs(string dest, IList<RawEntity> src, Format fmt, IProgress<Report> progress)
     {
         var dir = Io.GetDirectoryName(dest);
         Io.CreateDirectory(dir);
@@ -212,7 +212,7 @@ public sealed class ArchiveWriter : DisposableBase
             var setter  = CompressionOptionSetter.From(Format, Options);
 
             setter?.Invoke(archive as ISetProperties);
-            _ = archive.UpdateItems(ss, (uint)src.Count, cb);
+            return archive.UpdateItems(ss, (uint)src.Count, cb);
         }, src, dest, progress);
     }
 
@@ -225,7 +225,7 @@ public sealed class ArchiveWriter : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private void SaveAsTar(string dest, IList<RawEntity> src, IProgress<ProgressInfo> progress)
+    private void SaveAsTar(string dest, IList<RawEntity> src, IProgress<Report> progress)
     {
         var fi  = Io.Get(dest);
         var dir = Io.Combine(fi.DirectoryName, Guid.NewGuid().ToString("N"));
@@ -256,7 +256,7 @@ public sealed class ArchiveWriter : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private void SaveAsSfx(string dest, IList<RawEntity> src, IProgress<ProgressInfo> progress)
+    private void SaveAsSfx(string dest, IList<RawEntity> src, IProgress<Report> progress)
     {
         var sfx = (Options as SfxOption)?.Module;
         if (!Io.Exists(sfx)) throw new System.IO.FileNotFoundException("SFX");
@@ -347,41 +347,19 @@ public sealed class ArchiveWriter : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private void Invoke(Action<UpdateCallback> callback,
-        IList<RawEntity> src, string dest, IProgress<ProgressInfo> progress)
+    private void Invoke(Func<UpdateCallback, int> func,
+        IList<RawEntity> src, string dest, IProgress<Report> progress)
     {
-        var error = default(Exception);
-        var cb    = new UpdateCallback(src)
+        using var cb = new UpdateCallback(src, progress)
         {
             Destination = dest,
             Password    = Options.Password,
-            Progress    = progress,
         };
 
-        try { callback(cb); }
-        catch (Exception e) { error = e; }
-        finally
-        {
-            var kv = new KeyValuePair<SevenZipErrorCode, Exception>(cb.Result, error ?? cb.Exception);
-            cb.Dispose();
-            Terminate(kv.Key, kv.Value);
-        }
-    }
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// Terminate
-    ///
-    /// <summary>
-    /// Invokes post processing and throws an exception if needed.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    private void Terminate(SevenZipErrorCode src, Exception error)
-    {
-        if (src == SevenZipErrorCode.OK) return;
-        if (src == SevenZipErrorCode.UserCancel) throw new OperationCanceledException();
-        throw new SevenZipException(src, error);
+        var code = func(cb);
+        if (code == (int)SevenZipCode.Success) return;
+        if (code == (int)SevenZipCode.Cancel) throw cb.GetCancelException();
+        else throw cb.GetException(code);
     }
 
     #endregion

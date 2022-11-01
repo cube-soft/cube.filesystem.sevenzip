@@ -19,7 +19,9 @@
 namespace Cube.FileSystem.SevenZip;
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Cube.Text.Extensions;
 
 /* ------------------------------------------------------------------------- */
@@ -45,12 +47,13 @@ internal sealed class UpdateCallback : CallbackBase, IArchiveUpdateCallback, ICr
     /// </summary>
     ///
     /// <param name="items">List of files to be compressed.</param>
+    /// <param name="progress">User object to report the progress.</param>
     ///
     /* --------------------------------------------------------------------- */
-    public UpdateCallback(IList<RawEntity> items)
+    public UpdateCallback(IList<RawEntity> items, IProgress<Report> progress) : base(progress)
     {
         _items = items;
-        Report.TotalCount = items.Count;
+        TotalCount = items.Count;
     }
 
     #endregion
@@ -81,9 +84,7 @@ internal sealed class UpdateCallback : CallbackBase, IArchiveUpdateCallback, ICr
 
     #endregion
 
-    #region Methods
-
-    #region IArchiveUpdateCallback
+    #region IProgress
 
     /* --------------------------------------------------------------------- */
     ///
@@ -95,8 +96,14 @@ internal sealed class UpdateCallback : CallbackBase, IArchiveUpdateCallback, ICr
     ///
     /// <param name="bytes">Total bytes of target files.</param>
     ///
+    /// <returns>Operation result.</returns>
+    ///
     /* --------------------------------------------------------------------- */
-    public void SetTotal(ulong bytes) => Invoke(() => Report.TotalBytes = (long)bytes, true);
+    public SevenZipCode SetTotal(ulong bytes)
+    {
+        TotalBytes = (long)bytes;
+        return Report(ProgressState.Prepare, Current());
+    }
 
     /* --------------------------------------------------------------------- */
     ///
@@ -108,12 +115,18 @@ internal sealed class UpdateCallback : CallbackBase, IArchiveUpdateCallback, ICr
     ///
     /// <param name="bytes">Bytes to be archived.</param>
     ///
+    /// <returns>Operation result.</returns>
+    ///
     /* --------------------------------------------------------------------- */
-    public void SetCompleted(ref ulong bytes)
+    public SevenZipCode SetCompleted(IntPtr bytes)
     {
-        var cvt = (long)bytes;
-        _ = Invoke(() => Report.Bytes = cvt, true);
+        if (bytes != IntPtr.Zero) Bytes = Marshal.ReadInt64(bytes);
+        return Report(ProgressState.Progress, Current());
     }
+
+    #endregion
+
+    #region IArchiveUpdateCallback
 
     /* --------------------------------------------------------------------- */
     ///
@@ -135,12 +148,15 @@ internal sealed class UpdateCallback : CallbackBase, IArchiveUpdateCallback, ICr
     /// </remarks>
     ///
     /* --------------------------------------------------------------------- */
-    public int GetUpdateItemInfo(uint index, ref int newdata, ref int newprop, ref uint indexInArchive)
+    public SevenZipCode GetUpdateItemInfo(uint index, ref int newdata, ref int newprop, ref uint indexInArchive)
     {
         newdata = 1;
         newprop = 1;
         indexInArchive = uint.MaxValue;
-        return Invoke(() => (int)Result, true);
+
+        var i = (int)index;
+        var e = (i >= 0 && i < _items.Count) ? _items[i] : default;
+        return Report(ProgressState.Prepare, e);
     }
 
     /* --------------------------------------------------------------------- */
@@ -156,12 +172,13 @@ internal sealed class UpdateCallback : CallbackBase, IArchiveUpdateCallback, ICr
     /// <param name="pid">Property ID to get information.</param>
     /// <param name="value">Value of the specified property.</param>
     ///
-    /// <returns>OperationResult</returns>
+    /// <returns>Operation result.</returns>
     ///
     /* --------------------------------------------------------------------- */
-    public int GetProperty(uint index, ItemPropId pid, ref PropVariant value)
+    public SevenZipCode GetProperty(uint index, ItemPropId pid, ref PropVariant value)
     {
-        var src = _items[(int)index];
+        var i   = (int)index;
+        var src = (i >= 0 && i < _items.Count) ? _items[i] : default;
 
         switch (pid)
         {
@@ -189,13 +206,16 @@ internal sealed class UpdateCallback : CallbackBase, IArchiveUpdateCallback, ICr
             case ItemPropId.Size:
                 value.Set((ulong)src.Length);
                 break;
+            case ItemPropId.Comment:
+                value.Clear(); // TODO: implement
+                break;
             default:
                 Logger.Debug($"Unknown\tPid:{pid}");
                 value.Clear();
                 break;
         }
 
-        return Invoke(() => (int)Result, true);
+        return Report(ProgressState.Prepare, src);
     }
 
     /* --------------------------------------------------------------------- */
@@ -212,16 +232,21 @@ internal sealed class UpdateCallback : CallbackBase, IArchiveUpdateCallback, ICr
     /// <returns>OperationResult</returns>
     ///
     /* --------------------------------------------------------------------- */
-    public int GetStream(uint index, out ISequentialInStream stream)
+    public SevenZipCode GetStream(uint index, out ISequentialInStream stream)
     {
-        stream = Invoke(() =>
+        _index = (int)index;
+
+        var dest = default(ISequentialInStream);
+        var src  = Current();
+
+        try
         {
-            Report.Count   = index + 1;
-            Report.Current = _items[(int)index];
-            Report.State   = ProgressState.Start;
-            return GetStream(Report.Current);
-        }, true);
-        return (int)Result;
+            return Run(() => {
+                dest = Open(src);
+                return SevenZipCode.Success;
+            }, ProgressState.Start, src);
+        }
+        finally { stream = dest; }
     }
 
     /* --------------------------------------------------------------------- */
@@ -232,14 +257,19 @@ internal sealed class UpdateCallback : CallbackBase, IArchiveUpdateCallback, ICr
     /// Sets the specified operation result.
     /// </summary>
     ///
-    /// <param name="result">Operation result.</param>
+    /// <param name="code">Operation result.</param>
+    ///
+    /// <remarks>Operation result.</remarks>
     ///
     /* --------------------------------------------------------------------- */
-    public void SetOperationResult(SevenZipErrorCode result) => Invoke(() =>
+    public SevenZipCode SetOperationResult(SevenZipCode code)
     {
-        Result       = result;
-        Report.State = ProgressState.Success;
-    }, true);
+        Count++;
+        return code == SevenZipCode.Success ?
+               Report(ProgressState.Success, Current()) :
+               Report(new SevenZipException(code), Current());
+
+    }
 
     /* --------------------------------------------------------------------- */
     ///
@@ -262,25 +292,25 @@ internal sealed class UpdateCallback : CallbackBase, IArchiveUpdateCallback, ICr
     /// CryptoGetTextPassword2
     ///
     /// <summary>
-    /// Get the password to be set for the compressed file.
+    /// Gets the password to be set for the compressed file.
     /// </summary>
     ///
     /// <param name="enabled">Password is enabled or not.</param>
-    /// <param name="password">Password value.</param>
+    /// <param name="password">Password string.</param>
     ///
-    /// <returns>OperationResult</returns>
+    /// <returns>Operation result.</returns>
     ///
     /* --------------------------------------------------------------------- */
-    public int CryptoGetTextPassword2(ref int enabled, out string password)
+    public SevenZipCode CryptoGetTextPassword2(ref int enabled, out string password)
     {
-        enabled = Password.HasValue() ? 1 : 0;
+        enabled  = Password.HasValue() ? 1 : 0;
         password = Password;
-        Result = SevenZipErrorCode.OK;
-
-        return (int)Result;
+        return SevenZipCode.Success;
     }
 
     #endregion
+
+    #region IDisposable
 
     /* --------------------------------------------------------------------- */
     ///
@@ -300,11 +330,8 @@ internal sealed class UpdateCallback : CallbackBase, IArchiveUpdateCallback, ICr
     /* --------------------------------------------------------------------- */
     protected override void Dispose(bool disposing)
     {
-        if (disposing)
-        {
-            foreach (var stream in _streams) stream.Dispose();
-            _streams.Clear();
-        }
+        foreach (var stream in _streams) stream.Dispose();
+        _streams.Clear();
     }
 
     #endregion
@@ -313,25 +340,37 @@ internal sealed class UpdateCallback : CallbackBase, IArchiveUpdateCallback, ICr
 
     /* --------------------------------------------------------------------- */
     ///
-    /// GetStream
+    /// Open
     ///
     /// <summary>
-    /// Gets the stream corresponding to the specified information.
+    /// Gets the stream of the specified file.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private ArchiveStreamReader GetStream(Entity src)
+    private ArchiveStreamReader Open(Entity src)
     {
-        if (!src.Exists || src.IsDirectory) return null;
+        if (!src.Exists || src.IsDirectory) return default;
         var dest = new ArchiveStreamReader(Io.Open(src.FullName));
         _streams.Add(dest);
         return dest;
     }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Current
+    ///
+    /// <summary>
+    /// Gets the currently compressed entity.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private RawEntity Current() => (_index >= 0 && _index < _items.Count) ? _items[_index] : default;
 
     #endregion
 
     #region Fields
     private readonly List<ArchiveStreamReader> _streams = new();
     private readonly IList<RawEntity> _items;
+    private int _index = -1;
     #endregion
 }

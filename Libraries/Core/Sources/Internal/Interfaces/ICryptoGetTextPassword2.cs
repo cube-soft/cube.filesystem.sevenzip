@@ -41,18 +41,15 @@ internal interface ICryptoGetTextPassword2
     /// CryptoGetTextPassword2
     ///
     /// <summary>
-    /// Gets the password of the provided archive.
+    /// Gets the password to be set for the compressed file.
     /// </summary>
     ///
-    /// <param name="enable">
-    /// Value indicating whether to set a password (0 if not).
-    /// </param>
+    /// <param name="enabled">Password is enabled or not.</param>
+    /// <param name="password">Password string.</param>
     ///
-    /// <param name="password">Password.</param>
-    ///
-    /// <returns>OperationResult</returns>
+    /// <returns>Operation result.</returns>
     ///
     /* --------------------------------------------------------------------- */
     [PreserveSig]
-    int CryptoGetTextPassword2(ref int enable, [MarshalAs(UnmanagedType.BStr)] out string password);
+    SevenZipCode CryptoGetTextPassword2(ref int enabled, [MarshalAs(UnmanagedType.BStr)] out string password);
 }

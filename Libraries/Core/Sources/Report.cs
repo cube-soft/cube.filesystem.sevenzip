@@ -22,16 +22,28 @@ using System;
 
 /* ------------------------------------------------------------------------- */
 ///
-/// ProgressInfo
+/// Report
 ///
 /// <summary>
 /// Represetns the progress information for compression or extraction.
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-public class ProgressInfo
+public class Report
 {
     #region Properties
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Cancel
+    ///
+    /// <summary>
+    /// Gets or sets a value indicating whether the process was canceled
+    /// by the user.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public bool Cancel { get; set; } = false;
 
     /* --------------------------------------------------------------------- */
     ///
@@ -55,18 +67,6 @@ public class ProgressInfo
     ///
     /* --------------------------------------------------------------------- */
     public Exception Exception { get; set; }
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// Handled
-    ///
-    /// <summary>
-    /// Gets or sets a value indicating whether the user has performed the
-    /// processing according to the report.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    public bool Handled { get; set; } = false;
 
     /* --------------------------------------------------------------------- */
     ///

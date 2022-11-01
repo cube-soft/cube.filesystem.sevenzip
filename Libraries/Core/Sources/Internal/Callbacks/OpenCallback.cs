@@ -27,7 +27,7 @@ using System.Runtime.InteropServices;
 /// OpenCallback
 ///
 /// <summary>
-/// Provides callback functions to open an archive.
+/// Provides callback functions to open an archived file.
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
@@ -44,14 +44,27 @@ internal class OpenCallback : PasswordCallback, IArchiveOpenCallback, IArchiveOp
     /// specified arguments.
     /// </summary>
     ///
-    /// <param name="src">Input stream of the archived file.</param>
+    /// <param name="src">Path of the archived file.</param>
     ///
     /* --------------------------------------------------------------------- */
-    public OpenCallback(ArchiveStreamReader src) => _streams.Add(src);
+    public OpenCallback(string src) : base(src, default) { }
 
     #endregion
 
-    #region Methods
+    #region Properties
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Streams
+    ///
+    /// <summary>
+    /// Gets the collection of input streams.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public ICollection<ArchiveStreamReader> Streams { get; } = new List<ArchiveStreamReader>();
+
+    #endregion
 
     #region IArchiveOpenCallback
 
@@ -66,12 +79,15 @@ internal class OpenCallback : PasswordCallback, IArchiveOpenCallback, IArchiveOp
     /// <param name="count">Total number of files.</param>
     /// <param name="bytes">Total compressed bytes.</param>
     ///
+    /// <returns>ErrorCode.None for success.</returns>
+    ///
     /* --------------------------------------------------------------------- */
-    public void SetTotal(IntPtr count, IntPtr bytes) => Invoke(() =>
+    public SevenZipCode SetTotal(IntPtr count, IntPtr bytes)
     {
-        if (count != IntPtr.Zero) Report.TotalCount = Marshal.ReadInt64(count);
-        if (bytes != IntPtr.Zero) Report.TotalBytes = Marshal.ReadInt64(bytes);
-    }, true);
+        if (count != IntPtr.Zero) TotalCount = Marshal.ReadInt64(count);
+        if (bytes != IntPtr.Zero) TotalBytes = Marshal.ReadInt64(bytes);
+        return SevenZipCode.Success;
+    }
 
     /* --------------------------------------------------------------------- */
     ///
@@ -84,13 +100,15 @@ internal class OpenCallback : PasswordCallback, IArchiveOpenCallback, IArchiveOp
     /// <param name="count">Number of files.</param>
     /// <param name="bytes">Completed bytes.</param>
     ///
+    /// <returns>ErrorCode.None for success.</returns>
+    ///
     /* --------------------------------------------------------------------- */
-    public void SetCompleted(IntPtr count, IntPtr bytes) => Invoke(() =>
+    public SevenZipCode SetCompleted(IntPtr count, IntPtr bytes)
     {
-        if (count != IntPtr.Zero) Report.Count = Marshal.ReadInt64(count);
-        if (bytes != IntPtr.Zero) Report.Bytes = Marshal.ReadInt64(bytes);
-        Result = SevenZipErrorCode.OK;
-    }, true);
+        if (count != IntPtr.Zero) Count = Marshal.ReadInt64(count);
+        if (bytes != IntPtr.Zero) Bytes = Marshal.ReadInt64(bytes);
+        return SevenZipCode.Success;
+    }
 
     #endregion
 
@@ -105,18 +123,16 @@ internal class OpenCallback : PasswordCallback, IArchiveOpenCallback, IArchiveOp
     /// </summary>
     ///
     /// <param name="pid">Property ID</param>
-    /// <param name="value">
-    /// Value corresponding to the property ID.
-    /// </param>
+    /// <param name="value">Value for the specified property ID.</param>
     ///
-    /// <returns>OperationResult</returns>
+    /// <returns>ErrorCode.None for success.</returns>
     ///
     /* --------------------------------------------------------------------- */
-    public int GetProperty(ItemPropId pid, ref PropVariant value)
+    public SevenZipCode GetProperty(ItemPropId pid, ref PropVariant value)
     {
-        if (pid == ItemPropId.Name) value.Set(Io.Get(Source).FullName);
+        if (pid == ItemPropId.Name) value.Set(Source);
         else value.Clear();
-        return Invoke(() => (int)Result, true);
+        return SevenZipCode.Success;
     }
 
     /* --------------------------------------------------------------------- */
@@ -130,26 +146,27 @@ internal class OpenCallback : PasswordCallback, IArchiveOpenCallback, IArchiveOp
     /// <param name="name">Volume name.</param>
     /// <param name="stream">Target input stream.</param>
     ///
-    /// <returns>OperationResult</returns>
+    /// <returns>ErrorCode.None for success.</returns>
     ///
     /* --------------------------------------------------------------------- */
-    public int GetStream(string name, out IInStream stream)
+    public SevenZipCode GetStream(string name, out IInStream stream)
     {
-        stream = Invoke(() =>
+        stream = default;
+
+        var src = Io.Exists(name) ? name : Combine(Io.GetDirectoryName(Source), name);
+        if (Io.Exists(src))
         {
-            var src = Io.Exists(name) ? name : Io.Combine(Io.GetDirectoryName(Source), name);
-            if (!Io.Exists(src)) return default;
-
             var dest = new ArchiveStreamReader(Io.Open(src));
-            _streams.Add(dest);
-            return dest;
-        }, true);
+            Streams.Add(dest);
+            stream = dest;
+        }
 
-        Result = (stream != null) ? SevenZipErrorCode.OK : SevenZipErrorCode.CallbackError;
-        return (int)Result;
+        return SevenZipCode.Success;
     }
 
     #endregion
+
+    #region IDisposable
 
     /* --------------------------------------------------------------------- */
     ///
@@ -168,13 +185,9 @@ internal class OpenCallback : PasswordCallback, IArchiveOpenCallback, IArchiveOp
     /* --------------------------------------------------------------------- */
     protected override void Dispose(bool disposing)
     {
-        foreach (var item in _streams) item.Dispose();
-        _streams.Clear();
+        foreach (var item in Streams) item.Dispose();
+        Streams.Clear();
     }
 
-    #endregion
-
-    #region Fields
-    private readonly List<ArchiveStreamReader> _streams = new();
     #endregion
 }

@@ -45,8 +45,11 @@ internal interface IArchiveUpdateCallback
     ///
     /// <param name="bytes">Total bytes of target files.</param>
     ///
+    /// <returns>Operation result.</returns>
+    ///
     /* --------------------------------------------------------------------- */
-    void SetTotal(ulong bytes);
+    [PreserveSig]
+    SevenZipCode SetTotal(ulong bytes);
 
     /* --------------------------------------------------------------------- */
     ///
@@ -58,8 +61,11 @@ internal interface IArchiveUpdateCallback
     ///
     /// <param name="bytes">Bytes to be archived.</param>
     ///
+    /// <returns>Operation result.</returns>
+    ///
     /* --------------------------------------------------------------------- */
-    void SetCompleted(ref ulong bytes);
+    [PreserveSig]
+    SevenZipCode SetCompleted(IntPtr bytes);
 
     /* --------------------------------------------------------------------- */
     ///
@@ -74,11 +80,11 @@ internal interface IArchiveUpdateCallback
     /// <param name="newprop">1 if new, 0 if not</param>
     /// <param name="indexInArchive">-1 if doesn't matter</param>
     ///
-    /// <returns>OperationResult</returns>
+    /// <returns>Operation result.</returns>
     ///
     /* --------------------------------------------------------------------- */
     [PreserveSig]
-    int GetUpdateItemInfo(uint index, ref int newdata, ref int newprop, ref uint indexInArchive);
+    SevenZipCode GetUpdateItemInfo(uint index, ref int newdata, ref int newprop, ref uint indexInArchive);
 
     /* --------------------------------------------------------------------- */
     ///
@@ -93,11 +99,11 @@ internal interface IArchiveUpdateCallback
     /// <param name="pid">Property ID to get information.</param>
     /// <param name="value">Value of the specified property.</param>
     ///
-    /// <returns>OperationResult</returns>
+    /// <returns>Operation result</returns>
     ///
     /* --------------------------------------------------------------------- */
     [PreserveSig]
-    int GetProperty(uint index, ItemPropId pid, ref PropVariant value);
+    SevenZipCode GetProperty(uint index, ItemPropId pid, ref PropVariant value);
 
     /* --------------------------------------------------------------------- */
     ///
@@ -110,11 +116,11 @@ internal interface IArchiveUpdateCallback
     /// <param name="index">Index of the target file.</param>
     /// <param name="stream">Stream to read data.</param>
     ///
-    /// <returns>OperationResult</returns>
+    /// <returns>Operation result.</returns>
     ///
     /* --------------------------------------------------------------------- */
     [PreserveSig]
-    int GetStream(uint index, [Out, MarshalAs(UnmanagedType.Interface)] out ISequentialInStream stream);
+    SevenZipCode GetStream(uint index, [Out, MarshalAs(UnmanagedType.Interface)] out ISequentialInStream stream);
 
     /* --------------------------------------------------------------------- */
     ///
@@ -126,8 +132,11 @@ internal interface IArchiveUpdateCallback
     ///
     /// <param name="result">Operation result.</param>
     ///
+    /// <returns>Operation result.</returns>
+    ///
     /* --------------------------------------------------------------------- */
-    void SetOperationResult(SevenZipErrorCode result);
+    [PreserveSig]
+    SevenZipCode SetOperationResult(SevenZipCode result);
 
     /* --------------------------------------------------------------------- */
     ///

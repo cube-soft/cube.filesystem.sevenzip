@@ -29,12 +29,14 @@ namespace Cube.FileSystem.SevenZip;
 /* ------------------------------------------------------------------------- */
 public enum ProgressState
 {
-    /// <summary>Current file has begun to compress or decompress.</summary>
+    /// <summary>Prepares operation for compression or extraction.</summary>
+    Prepare,
+    /// <summary>Starts compressing or extracting for the current file.</summary>
     Start,
     /// <summary>Compression or Extraction is in progress.</summary>
     Progress,
-    /// <summary>Current file was successfully compressed or decompressed.</summary>
+    /// <summary>Successfully compressed or decompressed.</summary>
     Success,
-    /// <summary>Current file failed to compress or extract.</summary>
+    /// <summary>Any erorrs occur when compressing or extracting.</summary>
     Failed,
 }
