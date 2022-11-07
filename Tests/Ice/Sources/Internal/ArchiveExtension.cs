@@ -22,6 +22,7 @@ using System.Threading;
 using Cube.Observable.Extensions;
 using Cube.Reflection.Extensions;
 using Cube.Tests;
+using Cube.Text.Extensions;
 using NUnit.Framework;
 
 /* ------------------------------------------------------------------------- */
@@ -66,9 +67,8 @@ static class ArchiveExtension
     public static void Test(this ProgressViewModel src, Action callback)
     {
         var cts = new CancellationTokenSource();
-        using (src.Subscribe(e => {
-            if (e == nameof(src.State) && src.State == TimerState.Stop) cts.Cancel();
-        })) {
+        using (src.Subscribe<CloseMessage>(_ => cts.Cancel()))
+        {
             src.Start();
             callback();
             Assert.That(Wait.For(cts.Token), "Timeout");
@@ -93,7 +93,7 @@ static class ArchiveExtension
         src.Subscribe<QueryMessage<string, string>>(e =>
     {
         e.Value  = value;
-        e.Cancel = false;
+        e.Cancel = !value.HasValue();
     });
 
     /* --------------------------------------------------------------------- */

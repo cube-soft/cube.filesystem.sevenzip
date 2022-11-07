@@ -109,6 +109,17 @@ public abstract class ProgressFacade : ObservableBase
         private set => Set(value);
     }
 
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Error
+    ///
+    /// <summary>
+    /// Gets or sets the callback action when progress report notifies an error.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public Action<Report> Error { get; set; }
+
     #endregion
 
     #region Methods
@@ -124,7 +135,11 @@ public abstract class ProgressFacade : ObservableBase
     /// <returns>Progress object.</returns>
     ///
     /* --------------------------------------------------------------------- */
-    public IProgress<Report> GetProgress() => GetProgress(e => e.CopyTo(Report));
+    public IProgress<Report> GetProgress() => GetProgress(e =>
+    {
+        e.CopyTo(Report);
+        if (Report.State == ProgressState.Failed) Error?.Invoke(e);
+    });
 
     /* --------------------------------------------------------------------- */
     ///

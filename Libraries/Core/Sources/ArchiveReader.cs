@@ -152,7 +152,8 @@ public sealed class ArchiveReader : DisposableBase
 
         var ss = new ArchiveStreamReader(Io.Open(src));
         cb.Streams.Add(ss);
-        _ = _core.Open(ss, IntPtr.Zero, cb);
+        var code = _core.Open(ss, IntPtr.Zero, cb);
+        if (code != 0) Logger.Warn($"Open failed ({code})");
 
         var n = (int)Math.Max(_core.GetNumberOfItems(), 1);
         Items = new ArchiveCollection(_core, n, src);

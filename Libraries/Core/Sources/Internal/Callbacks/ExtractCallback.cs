@@ -200,6 +200,7 @@ internal class ExtractCallback : PasswordCallback, IArchiveExtractCallback
     /* --------------------------------------------------------------------- */
     public SevenZipCode SetOperationResult(SevenZipCode code)
     {
+        if (code != SevenZipCode.Success) Logger.Debug($"[{code}] Index:{Current()?.Index ?? -1}, Name:{Current()?.RawName ?? ""}");
         if (code == SevenZipCode.WrongPassword) return code;
         if (code == SevenZipCode.DataError && PasswordTimes > 0) return SevenZipCode.WrongPassword;
         if (_mode == AskMode.Skip) return SevenZipCode.Success;
@@ -326,8 +327,7 @@ internal class ExtractCallback : PasswordCallback, IArchiveExtractCallback
 
         var obj = error ?? new SevenZipException(code);
         Exceptions.Push(obj);
-        if (Report(obj, e) == SevenZipCode.Cancel) return SevenZipCode.Cancel;
-        return code != SevenZipCode.Success ? code : SevenZipCode.UnknownError;
+        return Report(obj, e);
     }
 
     /* --------------------------------------------------------------------- */

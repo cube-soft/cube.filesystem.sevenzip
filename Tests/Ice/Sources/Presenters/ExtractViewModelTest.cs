@@ -95,6 +95,7 @@ class ExtractViewModelTest : VmFixture
         };
 
         using var vm = NewVM(args, value);
+        using var dc = vm.SetPassword("");
         vm.Test();
     }
 

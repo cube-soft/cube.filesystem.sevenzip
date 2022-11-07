@@ -55,6 +55,12 @@ public abstract class ProgressViewModel : PresentableBase<ProgressFacade>
             if (e == nameof(Facade.Report)) Refresh(nameof(Title));
             else Refresh(e);
         }));
+
+        src.Error = e => {
+            var m = Message.Error(e);
+            Send(m);
+            e.Cancel = m.Cancel;
+        };
     }
 
     #endregion

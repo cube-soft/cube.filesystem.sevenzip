@@ -265,6 +265,7 @@ internal sealed class UpdateCallback : CallbackBase, IArchiveUpdateCallback, ICr
     public SevenZipCode SetOperationResult(SevenZipCode code)
     {
         Count++;
+        if (code != SevenZipCode.Success) Logger.Debug($"[{code}] Index:{_index}, Name:{Current()?.RawName ?? ""}");
         return code == SevenZipCode.Success ?
                Report(ProgressState.Success, Current()) :
                Report(new SevenZipException(code), Current());
