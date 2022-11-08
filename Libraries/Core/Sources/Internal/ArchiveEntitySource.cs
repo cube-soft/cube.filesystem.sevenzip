@@ -51,7 +51,13 @@ internal class ArchiveEntitySource : EntitySource
     public ArchiveEntitySource(IInArchive core, int index, string path) :
         base(core.GetPath(index, path), false)
     {
-        Index = index;
+        Index         = index;
+        FullName      = string.Empty;
+        Name          = string.Empty;
+        BaseName      = string.Empty;
+        Extension     = string.Empty;
+        DirectoryName = string.Empty;
+
         _core = core;
         _path = new(RawName)
         {
@@ -127,13 +133,13 @@ internal class ArchiveEntitySource : EntitySource
         LastWriteTime  = _core.Get<DateTime>(Index, ItemPropId.LastWriteTime);
         LastAccessTime = _core.Get<DateTime>(Index, ItemPropId.LastAccessTime);
 
-        var fi = _path.Value.HasValue() ? Io.Get(_path.Value) : default;
+        if (!_path.Value.HasValue()) return;
 
         FullName      = _path.Value;
-        Name          = fi?.Name ?? string.Empty;
-        BaseName      = fi?.BaseName ?? string.Empty;
-        Extension     = fi?.Extension ?? string.Empty;
-        DirectoryName = fi?.DirectoryName ?? string.Empty;
+        Name          = Io.GetFileName(FullName);
+        BaseName      = Io.GetBaseName(FullName);
+        Extension     = Io.GetExtension(FullName);
+        DirectoryName = Io.GetDirectoryName(FullName);
 
         if (FullName != RawName) Logger.Debug($"{RawName.Quote()} -> {FullName.Quote()}");
     }

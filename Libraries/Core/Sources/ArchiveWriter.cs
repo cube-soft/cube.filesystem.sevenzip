@@ -227,9 +227,8 @@ public sealed class ArchiveWriter : DisposableBase
     /* --------------------------------------------------------------------- */
     private void SaveAsTar(string dest, IList<RawEntity> src, IProgress<Report> progress)
     {
-        var fi  = Io.Get(dest);
-        var dir = Io.Combine(fi.DirectoryName, Guid.NewGuid().ToString("N"));
-        var tmp = Io.Combine(dir, GetTarName(fi));
+        var dir = Io.Combine(Io.GetDirectoryName(dest), Guid.NewGuid().ToString("N"));
+        var tmp = Io.Combine(dir, GetTarName(dest));
 
         try
         {
@@ -282,9 +281,9 @@ public sealed class ArchiveWriter : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private string GetTarName(Entity src)
+    private string GetTarName(string src)
     {
-        var name = src.BaseName;
+        var name = Io.GetBaseName(src);
         var cmp  = StringComparison.InvariantCultureIgnoreCase;
         return name.EndsWith(".tar", cmp) ? name : $"{name}.tar";
     }

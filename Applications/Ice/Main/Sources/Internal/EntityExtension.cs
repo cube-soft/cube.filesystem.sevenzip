@@ -19,7 +19,6 @@ namespace Cube.FileSystem.SevenZip.Ice;
 
 using System;
 using System.Diagnostics;
-using System.Linq;
 using Cube.Text.Extensions;
 
 /* ------------------------------------------------------------------------- */
@@ -91,21 +90,21 @@ internal static class EntityExtension
     /// <param name="query">Query to confirm the overwrite.</param>
     ///
     /* --------------------------------------------------------------------- */
-    public static void Move(this Entity src, Entity dest, OverwriteQuery query)
+    public static void Move(this Entity src, string dest, OverwriteQuery query)
     {
         if (src.IsDirectory)
         {
-            if (!dest.Exists)
+            if (!Io.Exists(dest))
             {
-                Io.CreateDirectory(dest.FullName);
-                Io.SetCreationTime(dest.FullName, src.CreationTime);
-                Io.SetLastWriteTime(dest.FullName, src.LastWriteTime);
-                Io.SetLastAccessTime(dest.FullName, src.LastAccessTime);
-                Io.SetAttributes(dest.FullName, src.Attributes);
+                Io.CreateDirectory(dest);
+                Io.SetCreationTime(dest, src.CreationTime);
+                Io.SetLastWriteTime(dest, src.LastWriteTime);
+                Io.SetLastAccessTime(dest, src.LastAccessTime);
+                Io.SetAttributes(dest, src.Attributes);
             }
         }
-        else if (dest.Exists) Move(src, dest, query.Get(src, dest));
-        else Io.Move(src.FullName, dest.FullName, true);
+        else if (Io.Exists(dest)) Move(src, dest, query.Get(src, Io.Get(dest)));
+        else Io.Move(src.FullName, dest, true);
     }
 
     /* --------------------------------------------------------------------- */
@@ -122,60 +121,20 @@ internal static class EntityExtension
     /// <param name="method">Overwrite method.</param>
     ///
     /* --------------------------------------------------------------------- */
-    private static void Move(this Entity src, Entity dest, OverwriteMethod method)
+    private static void Move(this Entity src, string dest, OverwriteMethod method)
     {
         switch (method & OverwriteMethod.Operations)
         {
             case OverwriteMethod.Yes:
-                Io.Move(src.FullName, dest.FullName, true);
+                Io.Move(src.FullName, dest, true);
                 break;
             case OverwriteMethod.Rename:
-                Io.Move(src.FullName, IoEx.GetUniqueName(dest.FullName), false);
+                Io.Move(src.FullName, IoEx.GetUniqueName(dest), false);
                 break;
             case OverwriteMethod.No:
             case OverwriteMethod.Cancel:
                 break;
         }
-    }
-
-    #endregion
-
-    #region GetBaseName
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// GetBaseName
-    ///
-    /// <summary>
-    /// Gets the base-name from the specified arguments.
-    /// </summary>
-    ///
-    /// <param name="src">File information.</param>
-    /// <param name="format">Archive format.</param>
-    ///
-    /* --------------------------------------------------------------------- */
-    public static string GetBaseName(this Entity src, Format format) =>
-        new[] { Format.BZip2, Format.GZip, Format.XZ }.Contains(format) ?
-        TrimExtension(src.BaseName) :
-        src.BaseName;
-
-    #endregion
-
-    #region Implementations
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// TrimExtension
-    ///
-    /// <summary>
-    /// Trims the extension of the specified filename.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    private static string TrimExtension(string src)
-    {
-        var index = src.LastIndexOf('.');
-        return index < 0 ? src : src.Substring(0, index);
     }
 
     #endregion

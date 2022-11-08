@@ -77,13 +77,12 @@ internal static class ArchiveExtension
         var dest = src.Get<string>(index, ItemPropId.Path);
         if (dest.HasValue()) return dest;
 
-        var e0  = Io.Get(path);
-        var e1  = Io.Get(e0.BaseName);
-        var fmt = FormatDetector.FromExtension(e1.Extension);
-        if (fmt != Format.Unknown) return e1.Name;
+        var tmp = Io.GetBaseName(path);
+        var fmt = FormatDetector.FromExtension(Io.GetExtension(tmp));
+        if (fmt != Format.Unknown) return Io.GetFileName(tmp);
 
-        var name = index == 0 ? e1.Name : $"{e1.Name}({index})";
-        var ext  = e0.Extension.ToLowerInvariant();
+        var name = index == 0 ? Io.GetFileName(tmp) : $"{Io.GetFileName(tmp)}({index})";
+        var ext  = Io.GetExtension(path).ToLowerInvariant();
         var tar  = ext == ".tb2" ||
                    ext.Length == 4 && ext[0] == '.' && ext[1] == 't' && ext[3] == 'z';
         return tar ? $"{name}.tar" : name;

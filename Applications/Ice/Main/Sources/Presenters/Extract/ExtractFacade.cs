@@ -214,11 +214,11 @@ public sealed class ExtractFacade : ArchiveFacade
     {
         if (!item.FullName.HasValue()) return;
 
-        var src = Io.Get(Io.Combine(Temp, item.FullName));
-        if (!src.Exists) return;
+        var src = Io.Combine(Temp, item.FullName);
+        if (!Io.Exists(src)) return;
 
-        var dest = Io.Get(Io.Combine(Destination, item.FullName));
-        src.Move(dest, Overwrite);
+        var dest = Io.Combine(Destination, item.FullName);
+        Io.Get(src).Move(dest, Overwrite);
     }
 
     /* --------------------------------------------------------------------- */
@@ -232,9 +232,28 @@ public sealed class ExtractFacade : ArchiveFacade
     /* --------------------------------------------------------------------- */
     private void SetDestination(ArchiveReader src, ExtractDirectory dir)
     {
-        var basename = Io.Get(src.Source).GetBaseName(src.Format);
-        dir.Resolve(basename, src.Items);
+        static bool is_trim(Format e) => e == Format.GZip || e == Format.BZip2 || e == Format.XZ;
+
+        var tmp  = Io.GetBaseName(src.Source);
+        var name = is_trim(src.Format) ? TrimExtension(tmp) : tmp;
+
+        dir.Resolve(name, src.Items);
         Destination = dir.Value;
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// TrimExtension
+    ///
+    /// <summary>
+    /// Trims the extension of the specified filename.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private string TrimExtension(string src)
+    {
+        var index = src.LastIndexOf('.');
+        return index < 0 ? src : src.Substring(0, index);
     }
 
     /* --------------------------------------------------------------------- */

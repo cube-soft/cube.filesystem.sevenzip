@@ -284,11 +284,9 @@ public sealed class CompressionQueryValue : ObservableBase
     /* --------------------------------------------------------------------- */
     private void Rename()
     {
-        var src  = Io.Get(Destination);
         var opt  = StringComparison.InvariantCultureIgnoreCase;
-        var name = src.BaseName.EndsWith(".tar", opt) ?
-                   System.IO.Path.GetFileNameWithoutExtension(src.BaseName) :
-                   src.BaseName;
+        var tmp  = Io.GetBaseName(Destination);
+        var name = tmp.EndsWith(".tar", opt) ? Io.GetBaseName(tmp) : tmp;
         var ext  = Format == Format.Tar ? CompressionMethod switch
         {
             CompressionMethod.GZip  => ".tar.gz",
@@ -297,7 +295,7 @@ public sealed class CompressionQueryValue : ObservableBase
             _                       => ".tar",
         } : Format.ToExtension();
 
-        var dest = Io.Combine(src.DirectoryName, $"{name}{ext}");
+        var dest = Io.Combine(Io.GetDirectoryName(Destination), $"{name}{ext}");
         _ = Set(dest, nameof(Destination));
     }
 

@@ -127,10 +127,10 @@ public sealed class ArchiveName
     private Entity GetEntity()
     {
         var src  = Io.Get(_source);
-        var tmp  = Io.Get(src.BaseName.HasValue() ? src.BaseName : src.Name);
+        var tmp  = src.BaseName.HasValue() ? src.BaseName : src.Name;
         var name = src.IsDirectory ? src.Name :
-                   tmp.Extension.FuzzyEquals(".tar") ? tmp.BaseName :
-                   tmp.Name;
+                   Io.GetExtension(tmp).FuzzyEquals(".tar") ? Io.GetBaseName(tmp) :
+                   Io.GetFileName(tmp);
         var dest = Io.Combine(src.DirectoryName, $"{name}{GetExtension()}");
 
         return Io.Get(dest);
