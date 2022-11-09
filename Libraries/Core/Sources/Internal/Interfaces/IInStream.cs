@@ -16,107 +16,54 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip;
+
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace Cube.FileSystem.SevenZip
+/* ------------------------------------------------------------------------- */
+///
+/// IInStream
+///
+/// <summary>
+/// Represents an interface for processing the input stream of an archive.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+[ComImport]
+[Guid("23170F69-40C1-278A-0000-000300030000")]
+[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+internal interface IInStream
 {
-    #region ISequentialInStream
-
     /* --------------------------------------------------------------------- */
     ///
-    /// ISequentialInStream
+    /// Read
     ///
     /// <summary>
-    /// Represents an interface for processing the input stream of an archive.
+    /// Read routine
     /// </summary>
     ///
+    /// <param name="data">Array of bytes to set</param>
+    /// <param name="size">Array size</param>
+    ///
+    /// <returns>Zero if Ok</returns>
+    ///
     /* --------------------------------------------------------------------- */
-    [ComImport]
-    [Guid("23170F69-40C1-278A-0000-000300010000")]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ISequentialInStream
-    {
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Read
-        ///
-        /// <summary>
-        /// Writes data to 7-zip packer
-        /// </summary>
-        ///
-        /// <param name="data">Array of bytes available for writing</param>
-        /// <param name="size">Array size</param>
-        ///
-        /// <returns>S_OK if success</returns>
-        ///
-        /// <remarks>
-        /// If (size > 0) and there are bytes in stream,
-        /// this function must read at least 1 byte.
-        /// This function is allowed to read less than "size" bytes.
-        /// You must call Read function in loop, if you need exact
-        /// amount of data.
-        /// </remarks>
-        /* ----------------------------------------------------------------- */
-        int Read(
-            [Out, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] byte[] data,
-            uint size
-        );
-    }
-
-    #endregion
-
-    #region IInStream
+    int Read([Out, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] byte[] data, uint size);
 
     /* --------------------------------------------------------------------- */
     ///
-    /// IInStream
+    /// Seek
     ///
     /// <summary>
-    /// Represents an interface for processing the input stream of an archive.
+    /// Seek routine
     /// </summary>
     ///
+    /// <param name="offset">Offset value</param>
+    /// <param name="origin">Seek origin value</param>
+    /// <param name="newpos">New position pointer</param>
+    ///
     /* --------------------------------------------------------------------- */
-    [ComImport]
-    [Guid("23170F69-40C1-278A-0000-000300030000")]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface IInStream
-    {
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Read
-        ///
-        /// <summary>
-        /// Read routine
-        /// </summary>
-        ///
-        /// <param name="data">Array of bytes to set</param>
-        /// <param name="size">Array size</param>
-        ///
-        /// <returns>Zero if Ok</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        int Read(
-            [Out, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] byte[] data,
-            uint size
-        );
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Seek
-        ///
-        /// <summary>
-        /// Seek routine
-        /// </summary>
-        ///
-        /// <param name="offset">Offset value</param>
-        /// <param name="origin">Seek origin value</param>
-        /// <param name="newpos">New position pointer</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        void Seek(long offset, SeekOrigin origin, IntPtr newpos);
-    }
-
-    #endregion
+    void Seek(long offset, SeekOrigin origin, IntPtr newpos);
 }

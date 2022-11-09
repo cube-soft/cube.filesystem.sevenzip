@@ -16,121 +16,120 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip;
+
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Cube.FileSystem.SevenZip
+/* ------------------------------------------------------------------------- */
+///
+/// ZipOptionSetter
+///
+/// <summary>
+/// Provides the functionality to set optional settings for Zip archives.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+internal class ZipOptionSetter : CompressionOptionSetter
 {
+    #region Constructors
+
     /* --------------------------------------------------------------------- */
     ///
     /// ZipOptionSetter
     ///
     /// <summary>
-    /// Provides the functionality to set optional settings for Zip archives.
+    /// Initializes a new instance of the ZipOptionSetter class with the
+    /// specified options.
+    /// </summary>
+    ///
+    /// <param name="options">Archive options.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    public ZipOptionSetter(CompressionOption options) : base(options) { }
+
+    #endregion
+
+    #region Properties
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// SupportedMethods
+    ///
+    /// <summary>
+    /// Gets the supported compression methods.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal class ZipOptionSetter : CompressionOptionSetter
+    public static CompressionMethod[] SupportedMethods => new[]
     {
-        #region Constructors
+        CompressionMethod.Copy,
+        CompressionMethod.Deflate,
+        CompressionMethod.Deflate64,
+        CompressionMethod.BZip2,
+        CompressionMethod.Lzma,
+        CompressionMethod.Ppmd,
+    };
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ZipOptionSetter
-        ///
-        /// <summary>
-        /// Initializes a new instance of the ZipOptionSetter class with the
-        /// specified options.
-        /// </summary>
-        ///
-        /// <param name="options">Archive options.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public ZipOptionSetter(CompressionOption options) : base(options) { }
+    #endregion
 
-        #endregion
+    #region Methods
 
-        #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SupportedMethods
-        ///
-        /// <summary>
-        /// Gets the supported compression methods.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static CompressionMethod[] SupportedMethods => new[]
-        {
-            CompressionMethod.Copy,
-            CompressionMethod.Deflate,
-            CompressionMethod.Deflate64,
-            CompressionMethod.BZip2,
-            CompressionMethod.Lzma,
-            CompressionMethod.Ppmd,
-        };
-
-        #endregion
-
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Invoke
-        ///
-        /// <summary>
-        /// Sets the current options to the specified collection.
-        /// </summary>
-        ///
-        /// <param name="dest">Collection of options.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected override void Invoke(IDictionary<string, PropVariant> dest)
-        {
-            AddCompressionMethod(dest);
-            AddEncryptionMethod(dest);
-            base.Invoke(dest);
-        }
-
-        #endregion
-
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// AddCompressionMethod
-        ///
-        /// <summary>
-        /// Adds the compression method.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void AddCompressionMethod(IDictionary<string, PropVariant> dest)
-        {
-            var m = Options.CompressionMethod == CompressionMethod.Default ?
-                    CompressionMethod.Deflate :
-                    Options.CompressionMethod;
-            if (!SupportedMethods.Contains(m)) return;
-            dest.Add("m", PropVariant.Create(m.ToString()));
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// AddEncryptionMethod
-        ///
-        /// <summary>
-        /// Adds the encryption method.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void AddEncryptionMethod(IDictionary<string, PropVariant> dest)
-        {
-            var em = Options.EncryptionMethod;
-            if (em == EncryptionMethod.Default) return;
-            dest.Add("em", PropVariant.Create(em.ToString()));
-        }
-
-        #endregion
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Invoke
+    ///
+    /// <summary>
+    /// Sets the current options to the specified collection.
+    /// </summary>
+    ///
+    /// <param name="dest">Collection of options.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    protected override void Invoke(IDictionary<string, PropVariant> dest)
+    {
+        AddCompressionMethod(dest);
+        AddEncryptionMethod(dest);
+        base.Invoke(dest);
     }
+
+    #endregion
+
+    #region Implementations
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// AddCompressionMethod
+    ///
+    /// <summary>
+    /// Adds the compression method.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private void AddCompressionMethod(IDictionary<string, PropVariant> dest)
+    {
+        var m = Options.CompressionMethod == CompressionMethod.Default ?
+                CompressionMethod.Deflate :
+                Options.CompressionMethod;
+        if (!SupportedMethods.Contains(m)) return;
+        dest.Add("m", PropVariant.Create(m.ToString()));
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// AddEncryptionMethod
+    ///
+    /// <summary>
+    /// Adds the encryption method.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private void AddEncryptionMethod(IDictionary<string, PropVariant> dest)
+    {
+        var em = Options.EncryptionMethod;
+        if (em == EncryptionMethod.Default) return;
+        dest.Add("em", PropVariant.Create(em.ToString()));
+    }
+
+    #endregion
 }

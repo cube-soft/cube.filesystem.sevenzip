@@ -16,28 +16,27 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-namespace Cube.FileSystem.SevenZip
+namespace Cube.FileSystem.SevenZip;
+
+/* ------------------------------------------------------------------------- */
+///
+/// EncryptionMethod
+///
+/// <summary>
+/// Specifies encryption methods.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+public enum EncryptionMethod
 {
-    /* --------------------------------------------------------------------- */
-    ///
-    /// EncryptionMethod
-    ///
-    /// <summary>
-    /// Specifies encryption methods.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    public enum EncryptionMethod
-    {
-        /// <summary>AES 128bit</summary>
-        Aes128,
-        /// <summary>AES 192bit</summary>
-        Aes192,
-        /// <summary>AES 256bit</summary>
-        Aes256,
-        /// <summary>Zip crypto algorithm</summary>
-        ZipCrypto,
-        /// <summary>Default settings</summary>
-        Default,
-    }
+    /// <summary>AES 128bit</summary>
+    Aes128,
+    /// <summary>AES 192bit</summary>
+    Aes192,
+    /// <summary>AES 256bit</summary>
+    Aes256,
+    /// <summary>Zip crypto algorithm</summary>
+    ZipCrypto,
+    /// <summary>Default settings</summary>
+    Default,
 }

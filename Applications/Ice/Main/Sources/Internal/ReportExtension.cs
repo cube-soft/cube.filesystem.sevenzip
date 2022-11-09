@@ -81,7 +81,7 @@ namespace Cube.FileSystem.SevenZip.Ice
         public static void CopyTo(this Report src, Report dest)
         {
             dest.Current    = src.Current;
-            dest.Status     = src.Status;
+            dest.State      = src.State;
             dest.Count      = src.Count;
             dest.TotalCount = src.TotalCount;
             dest.Bytes      = src.Bytes;

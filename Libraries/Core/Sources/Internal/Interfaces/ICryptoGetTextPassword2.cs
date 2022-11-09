@@ -16,34 +16,40 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-using System;
-using System.IO;
+namespace Cube.FileSystem.SevenZip;
 
-namespace Cube.FileSystem.SevenZip
+using System;
+using System.Runtime.InteropServices;
+
+/* ------------------------------------------------------------------------- */
+///
+/// ICryptoGetTextPassword2
+///
+/// <summary>
+/// Represents an interface for entering a password when compressing
+/// an archive.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+[ComImport]
+[Guid("23170F69-40C1-278A-0000-000500110000")]
+[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+internal interface ICryptoGetTextPassword2
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// UnknownFormatException
+    /// CryptoGetTextPassword2
     ///
     /// <summary>
-    /// Represents that the specified file is not supported by the SevenZip
-    /// module.
+    /// Gets the password to be set for the compressed file.
     /// </summary>
     ///
-    /* --------------------------------------------------------------------- */
-    [Serializable]
-    public class UnknownFormatException : NotSupportedException { }
-
-    /* --------------------------------------------------------------------- */
+    /// <param name="enabled">Password is enabled or not.</param>
+    /// <param name="password">Password string.</param>
     ///
-    /// EncryptionException
-    ///
-    /// <summary>
-    /// Represents the encryption related exception like the password
-    /// unmatched error.
-    /// </summary>
+    /// <returns>Operation result.</returns>
     ///
     /* --------------------------------------------------------------------- */
-    [Serializable]
-    public class EncryptionException : IOException { }
+    [PreserveSig]
+    SevenZipCode CryptoGetTextPassword2(ref int enabled, [MarshalAs(UnmanagedType.BStr)] out string password);
 }

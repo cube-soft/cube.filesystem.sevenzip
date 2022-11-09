@@ -16,44 +16,43 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip;
+
 using System;
 using System.Runtime.InteropServices;
 
-namespace Cube.FileSystem.SevenZip
+/* ------------------------------------------------------------------------- */
+///
+/// ISetProperties
+///
+/// <summary>
+/// Represents an interface for setting various properties.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+[ComImport]
+[Guid("23170F69-40C1-278A-0000-000600030000")]
+[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+internal interface ISetProperties
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ISetProperties
+    /// SetProperties
     ///
     /// <summary>
-    /// Represents an interface for setting various properties.
+    /// Sets properties to the compressing file.
     /// </summary>
     ///
+    /// <param name="names">Property names.</param>
+    /// <param name="values">Property values.</param>
+    /// <param name="numProperties">Number of properties.</param>
+    ///
+    /// <returns>OperationResult</returns>
+    ///
     /* --------------------------------------------------------------------- */
-    [ComImport]
-    [Guid("23170F69-40C1-278A-0000-000600030000")]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ISetProperties
-    {
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SetProperties
-        ///
-        /// <summary>
-        /// Sets properties to the compressing file.
-        /// </summary>
-        ///
-        /// <param name="names">Property names.</param>
-        /// <param name="values">Property values.</param>
-        /// <param name="numProperties">Number of properties.</param>
-        ///
-        /// <returns>OperationResult</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        int SetProperties(
-            [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPWStr, SizeParamIndex = 2)] string[] names,
-            IntPtr values,
-            uint numProperties
-        );
-    }
+    int SetProperties(
+        [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPWStr, SizeParamIndex = 2)] string[] names,
+        IntPtr values,
+        uint numProperties
+    );
 }

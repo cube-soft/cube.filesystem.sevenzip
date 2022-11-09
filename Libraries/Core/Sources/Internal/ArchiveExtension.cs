@@ -16,79 +16,77 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.String;
+namespace Cube.FileSystem.SevenZip;
 
-namespace Cube.FileSystem.SevenZip
+using Cube.Text.Extensions;
+
+/* ------------------------------------------------------------------------- */
+///
+/// ArchiveExtension
+///
+/// <summary>
+/// Provides extended methods for the IInArchive interface.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+internal static class ArchiveExtension
 {
+    #region Methods
+
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveExtension
+    /// Get
     ///
     /// <summary>
-    /// Provides extended methods for the IInArchive interface.
+    /// Gets information corresponding to the specified ID.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal static class ArchiveExtension
+    public static T Get<T>(this IInArchive src, int index, ItemPropId pid)
     {
-        #region Methods
+        var var = new PropVariant();
+        src.GetProperty((uint)index, pid, ref var);
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Get
-        ///
-        /// <summary>
-        /// Gets information corresponding to the specified ID.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static T Get<T>(this IInArchive src, int index, ItemPropId pid)
-        {
-            var var = new PropVariant();
-            src.GetProperty((uint)index, pid, ref var);
-
-            var obj = var.Object;
-            return obj is T dest ? dest : default;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// GetPath
-        ///
-        /// <summary>
-        /// Gets the path of the specified index.
-        /// </summary>
-        ///
-        /// <param name="src">7-zip core object.</param>
-        /// <param name="index">Target index in the archive.</param>
-        /// <param name="path">Path of the archive file.</param>
-        ///
-        /// <returns>Path of the specified index.</returns>
-        ///
-        /// <remarks>
-        /// For TAR files, it is not possible to get the path information,
-        /// so we use the original file name with the extension changed to
-        /// .tar as the path.
-        /// </remarks>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static string GetPath(this IInArchive src, int index, string path)
-        {
-            var dest = src.Get<string>(index, ItemPropId.Path);
-            if (dest.HasValue()) return dest;
-
-            var e0  = Io.Get(path);
-            var e1  = Io.Get(e0.BaseName);
-            var fmt = Formatter.FromExtension(e1.Extension);
-            if (fmt != Format.Unknown) return e1.Name;
-
-            var name = index == 0 ? e1.Name : $"{e1.Name}({index})";
-            var ext  = e0.Extension.ToLowerInvariant();
-            var tar  = ext == ".tb2" ||
-                       ext.Length == 4 && ext[0] == '.' && ext[1] == 't' && ext[3] == 'z';
-            return tar ? $"{name}.tar" : name;
-        }
-
-        #endregion
+        var obj = var.Object;
+        return obj is T dest ? dest : default;
     }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// GetPath
+    ///
+    /// <summary>
+    /// Gets the path of the specified index.
+    /// </summary>
+    ///
+    /// <param name="src">7-zip core object.</param>
+    /// <param name="index">Target index in the archive.</param>
+    /// <param name="path">Path of the archive file.</param>
+    ///
+    /// <returns>Path of the specified index.</returns>
+    ///
+    /// <remarks>
+    /// For TAR files, it is not possible to get the path information,
+    /// so we use the original file name with the extension changed to
+    /// .tar as the path.
+    /// </remarks>
+    ///
+    /* --------------------------------------------------------------------- */
+    public static string GetPath(this IInArchive src, int index, string path)
+    {
+        var dest = src.Get<string>(index, ItemPropId.Path);
+        if (dest.HasValue()) return dest;
+
+        var tmp = Io.GetBaseName(path);
+        var fmt = FormatDetector.FromExtension(Io.GetExtension(tmp));
+        if (fmt != Format.Unknown) return Io.GetFileName(tmp);
+
+        var name = index == 0 ? Io.GetFileName(tmp) : $"{Io.GetFileName(tmp)}({index})";
+        var ext  = Io.GetExtension(path).ToLowerInvariant();
+        var tar  = ext == ".tb2" ||
+                   ext.Length == 4 && ext[0] == '.' && ext[1] == 't' && ext[3] == 'z';
+        return tar ? $"{name}.tar" : name;
+    }
+
+    #endregion
 }

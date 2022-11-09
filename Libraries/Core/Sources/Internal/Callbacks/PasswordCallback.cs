@@ -16,76 +16,108 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.String;
+namespace Cube.FileSystem.SevenZip;
 
-namespace Cube.FileSystem.SevenZip
+using System;
+using Cube.Text.Extensions;
+
+/* ------------------------------------------------------------------------- */
+///
+/// PasswordCallback
+///
+/// <summary>
+/// Provides callback functions to query the password when extracting
+/// archived files.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+internal abstract class PasswordCallback : CallbackBase, ICryptoGetTextPassword
 {
+    #region Constructors
+
     /* --------------------------------------------------------------------- */
     ///
     /// PasswordCallback
     ///
     /// <summary>
-    /// Provides callback functions to query the password when extracting
-    /// archived files.
+    /// Initializes a new instance of the PasswordCallback with the specified
+    /// arguments.
+    /// </summary>
+    ///
+    /// <param name="src">Source archive.</param>
+    /// <param name="progress">User object to report the progress.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    protected PasswordCallback(string src, IProgress<Report> progress) : base(progress) => Source = src;
+
+    #endregion
+
+    #region Properties
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Source
+    ///
+    /// <summary>
+    /// Gets the path of the archive file.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal abstract class PasswordCallback : CallbackBase, ICryptoGetTextPassword
+    public string Source { get; }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Password
+    ///
+    /// <summary>
+    /// Gets or sets the object to query the password.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public IQuery<string> Password { get; init; }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// PasswordTimes
+    ///
+    /// <summary>
+    /// Get the number of times the password was requested.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public int PasswordTimes { get; private set; }
+
+    #endregion
+
+    #region ICryptoGetTextPassword
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// CryptoGetTextPassword
+    ///
+    /// <summary>
+    /// Gets the password of the provided archive.
+    /// </summary>
+    ///
+    /// <param name="value">Password result.</param>
+    ///
+    /// <returns>Operation result</returns>
+    ///
+    /* --------------------------------------------------------------------- */
+    public SevenZipCode CryptoGetTextPassword(out string value)
     {
-        #region Properties
+        PasswordTimes++;
+        value = string.Empty;
+        if (Password is null) return SevenZipCode.WrongPassword;
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Source
-        ///
-        /// <summary>
-        /// Gets the path of the archive file.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Source { get; init; }
+        var e = Query.NewMessage(Source);
+        Password.Request(e);
+        if (e.Cancel) return SevenZipCode.Cancel;
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Password
-        ///
-        /// <summary>
-        /// Gets the object to query for a password.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public IQuery<string> Password { get; init; }
-
-        #endregion
-
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CryptoGetTextPassword
-        ///
-        /// <summary>
-        /// Gets the password of the provided archive.
-        /// </summary>
-        ///
-        /// <param name="password">Password result.</param>
-        ///
-        /// <returns>OperationResult</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public int CryptoGetTextPassword(out string password)
-        {
-            var e = Query.NewMessage(Source);
-            Password.Request(e);
-
-            Result = e.Cancel           ? OperationResult.UserCancel :
-                     e.Value.HasValue() ? OperationResult.OK :
-                                          OperationResult.WrongPassword;
-            password = (Result == OperationResult.OK) ? e.Value : string.Empty;
-
-            return (int)Result;
-        }
-
-        #endregion
+        var done = e.Value.HasValue();
+        if (done) value = e.Value;
+        return done ? SevenZipCode.Success : SevenZipCode.WrongPassword;
     }
+
+    #endregion
 }

@@ -16,28 +16,19 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-namespace Cube.FileSystem.SevenZip
-{
-    /* --------------------------------------------------------------------- */
-    ///
-    /// SfxOption
-    ///
-    /// <summary>
-    /// Represents options when creating a new self-executable archive.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    public record SfxOption : CompressionOption
-    {
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Module
-        ///
-        /// <summary>
-        /// Gets or sets the path of SFX module.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Module { get; init; }
-    }
-}
+namespace Cube.FileSystem.SevenZip;
+
+using System;
+
+/* ------------------------------------------------------------------------- */
+///
+/// UnknownFormatException
+///
+/// <summary>
+/// Represents that the specified file is not supported by the SevenZip
+/// module.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+[Serializable]
+public class UnknownFormatException : NotSupportedException { }

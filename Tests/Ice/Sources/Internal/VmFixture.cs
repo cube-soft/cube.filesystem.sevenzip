@@ -15,125 +15,123 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip.Ice.Tests;
+
 using System.Collections.Generic;
-using Cube.FileSystem.SevenZip.Ice.Settings;
 using Cube.Tests;
 
-namespace Cube.FileSystem.SevenZip.Ice.Tests
+/* ------------------------------------------------------------------------- */
+///
+/// VmFixture
+///
+/// <summary>
+/// Provides functionality to help the tests for ArchiveViewModel
+/// and its inherited classes.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+abstract class VmFixture : FileFixture
 {
+    #region Methods
+
     /* --------------------------------------------------------------------- */
     ///
-    /// VmFixture
+    /// NewVM
     ///
     /// <summary>
-    /// Provides functionality to help the tests for ArchiveViewModel
-    /// and its inherited classes.
+    /// Creates a new instance of the CompressViewModel class with
+    /// the specified arguments.
+    /// </summary>
+    ///
+    /// <param name="args">Program arguments.</param>
+    /// <param name="settings">User settings for compression.</param>
+    ///
+    /// <returns>CompressViewModel object.</returns>
+    ///
+    /* --------------------------------------------------------------------- */
+    protected CompressViewModel NewVM(IEnumerable<string> args, CompressionSettingValue settings)
+    {
+        var ss = NewSettings();
+
+        ss.Value.Compression = settings;
+        ss.Value.Compression.OpenMethod = OpenMethod.None;
+        ss.Value.Compression.SaveDirectory = Get("Preset");
+
+        return new CompressViewModel(new(args), ss, new());
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// NewVM
+    ///
+    /// <summary>
+    /// Creates a new instance of the ExtractViewModel class with
+    /// the specified arguments.
+    /// </summary>
+    ///
+    /// <param name="args">Program arguments.</param>
+    /// <param name="settings">User settings for compression.</param>
+    ///
+    /// <returns>ExtractViewModel object.</returns>
+    ///
+    /* --------------------------------------------------------------------- */
+    protected ExtractViewModel NewVM(IEnumerable<string> args, ExtractionSettingValue settings)
+    {
+        var ss = NewSettings();
+
+        ss.Value.Extraction = settings;
+        ss.Value.Extraction.OpenMethod = OpenMethod.None;
+
+        return new ExtractViewModel(new(args), ss, new());
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// NewVM
+    ///
+    /// <summary>
+    /// Creates a new instance of the SettingViewModel class.
+    /// </summary>
+    ///
+    /// <returns>SettingViewModel object.</returns>
+    ///
+    /* --------------------------------------------------------------------- */
+    protected Settings.SettingViewModel NewVM() => NewVM(NewSettings());
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// NewVM
+    ///
+    /// <summary>
+    /// Creates a new instance of the SettingViewModel class with the
+    /// specified settings.
+    /// </summary>
+    ///
+    /// <param name="src">User settings.</param>
+    ///
+    /// <returns>SettingViewModel object.</returns>
+    ///
+    /* --------------------------------------------------------------------- */
+    protected Settings.SettingViewModel NewVM(SettingFolder src) => new(src, new());
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// NewSettings
+    ///
+    /// <summary>
+    /// Creates a new instance of the SettingFolder class.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    abstract class VmFixture : FileFixture
+    protected SettingFolder NewSettings()
     {
-        #region Methods
+        var dest = new SettingFolder(DataContract.Format.Json, Get("Settings.json"));
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// NewVM
-        ///
-        /// <summary>
-        /// Creates a new instance of the CompressViewModel class with
-        /// the specified arguments.
-        /// </summary>
-        ///
-        /// <param name="args">Program arguments.</param>
-        /// <param name="settings">User settings for compression.</param>
-        ///
-        /// <returns>CompressViewModel object.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected CompressViewModel NewVM(IEnumerable<string> args, CompressSettingValue settings)
-        {
-            var ss = NewSettings();
+        dest.Value.Filters  = "Filter.txt|FilterDirectory|__MACOSX";
+        dest.Value.Explorer = "dummy.exe";
 
-            ss.Value.Compress = settings;
-            ss.Value.Compress.OpenMethod = OpenMethod.None;
-            ss.Value.Compress.SaveDirectory = Get("Preset");
-
-            return new CompressViewModel(new(args), ss, new());
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// NewVM
-        ///
-        /// <summary>
-        /// Creates a new instance of the ExtractViewModel class with
-        /// the specified arguments.
-        /// </summary>
-        ///
-        /// <param name="args">Program arguments.</param>
-        /// <param name="settings">User settings for compression.</param>
-        ///
-        /// <returns>ExtractViewModel object.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected ExtractViewModel NewVM(IEnumerable<string> args, ExtractSettingValue settings)
-        {
-            var ss = NewSettings();
-
-            ss.Value.Extract = settings;
-            ss.Value.Extract.OpenMethod = OpenMethod.None;
-
-            return new ExtractViewModel(new(args), ss, new());
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// NewVM
-        ///
-        /// <summary>
-        /// Creates a new instance of the SettingViewModel class.
-        /// </summary>
-        ///
-        /// <returns>SettingViewModel object.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected SettingViewModel NewVM() => NewVM(NewSettings());
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// NewVM
-        ///
-        /// <summary>
-        /// Creates a new instance of the SettingViewModel class with the
-        /// specified settings.
-        /// </summary>
-        ///
-        /// <param name="src">User settings.</param>
-        ///
-        /// <returns>SettingViewModel object.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected SettingViewModel NewVM(SettingFolder src) => new(src, new());
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// NewSettings
-        ///
-        /// <summary>
-        /// Creates a new instance of the SettingFolder class.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected SettingFolder NewSettings()
-        {
-            var dest = new SettingFolder(DataContract.Format.Json, Get("Settings.json"));
-
-            dest.Value.Filters  = "Filter.txt|FilterDirectory|__MACOSX";
-            dest.Value.Explorer = "dummy.exe";
-
-            return dest;
-        }
-
-        #endregion
+        return dest;
     }
+
+    #endregion
 }

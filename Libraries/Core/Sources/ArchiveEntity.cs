@@ -16,77 +16,76 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-namespace Cube.FileSystem.SevenZip
+namespace Cube.FileSystem.SevenZip;
+
+/* ------------------------------------------------------------------------- */
+///
+/// ArchiveEntity
+///
+/// <summary>
+/// Represents an item in the archive.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+public sealed class ArchiveEntity : Entity
 {
+    #region Constructors
+
     /* --------------------------------------------------------------------- */
     ///
     /// ArchiveEntity
     ///
     /// <summary>
-    /// Represents an item in the archive.
+    /// Initializes a new instance of the ArchiveEntity class with the
+    /// specified arguments.
+    /// </summary>
+    ///
+    /// <param name="src">Source object.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    internal ArchiveEntity(ArchiveEntitySource src) : base(src)
+    {
+        Index     = src.Index;
+        Crc       = src.Crc;
+        Encrypted = src.Encrypted;
+    }
+
+    #endregion
+
+    #region Properties
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Index
+    ///
+    /// <summary>
+    /// Gets the index in the archive.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public sealed class ArchiveEntity : Entity
-    {
-        #region Constructors
+    public int Index { get; }
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ArchiveEntity
-        ///
-        /// <summary>
-        /// Initializes a new instance of the ArchiveEntity class with the
-        /// specified arguments.
-        /// </summary>
-        ///
-        /// <param name="src">Source object.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        internal ArchiveEntity(ArchiveEntitySource src) : base(src)
-        {
-            Index     = src.Index;
-            Crc       = src.Crc;
-            Encrypted = src.Encrypted;
-        }
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Crc
+    ///
+    /// <summary>
+    /// Gets the CRC value of the item.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public uint Crc { get; }
 
-        #endregion
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Encrypted
+    ///
+    /// <summary>
+    /// Gets the value indicating whether the archive is encrypted.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public bool Encrypted { get; }
 
-        #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Index
-        ///
-        /// <summary>
-        /// Gets the index in the archive.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public int Index { get; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Crc
-        ///
-        /// <summary>
-        /// Gets the CRC value of the item.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public uint Crc { get; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Encrypted
-        ///
-        /// <summary>
-        /// Gets the value indicating whether the archive is encrypted.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public bool Encrypted { get; }
-
-        #endregion
-    }
+    #endregion
 }

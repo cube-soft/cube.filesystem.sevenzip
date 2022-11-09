@@ -16,55 +16,54 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-namespace Cube.FileSystem.SevenZip
+namespace Cube.FileSystem.SevenZip;
+
+/* ------------------------------------------------------------------------- */
+///
+/// ItemPropId
+///
+/// <summary>
+/// Specifies the property ID in an archived item.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+internal enum ItemPropId : uint
 {
-    /* --------------------------------------------------------------------- */
-    ///
-    /// ItemPropId
-    ///
-    /// <summary>
-    /// Specifies the property ID in an archived item.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    internal enum ItemPropId : uint
-    {
-        NoProperty          = 0x00000,
-        HandlerItemIndex    = 0x00002,
-        Path,
-        Name,
-        Extension,
-        IsDirectory,
-        Size,
-        PackedSize,
-        Attributes,
-        CreationTime,
-        LastAccessTime,
-        LastWriteTime,
-        Solid,
-        Commented,
-        Encrypted,
-        SplitBefore,
-        SplitAfter,
-        DictionarySize,
-        Crc,
-        Type,
-        IsAnti,
-        Method,
-        HostOS,
-        FileSystem,
-        User,
-        Group,
-        Block,
-        Comment,
-        Position,
-        Prefix,
-        TotalSize           = 0x01100,
-        FreeSpace,
-        ClusterSize,
-        VolumeName,
-        LocalName           = 0x01200,
-        Provider,
-        UserDefined         = 0x10000
-    }
+    NoProperty          = 0x00000,
+    HandlerItemIndex    = 0x00002,
+    Path,
+    Name,
+    Extension,
+    IsDirectory,
+    Size,
+    PackedSize,
+    Attributes,
+    CreationTime,
+    LastAccessTime,
+    LastWriteTime,
+    Solid,
+    Commented,
+    Encrypted,
+    SplitBefore,
+    SplitAfter,
+    DictionarySize,
+    Crc,
+    Type,
+    IsAnti,
+    Method,
+    HostOS,
+    FileSystem,
+    User,
+    Group,
+    Block,
+    Comment,
+    Position,
+    Prefix,
+    TotalSize           = 0x01100,
+    FreeSpace,
+    ClusterSize,
+    VolumeName,
+    LocalName           = 0x01200,
+    Provider,
+    UserDefined         = 0x10000
 }

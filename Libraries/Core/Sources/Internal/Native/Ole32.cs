@@ -16,39 +16,38 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip.Ole32;
+
 using System.Runtime.InteropServices;
 
-namespace Cube.FileSystem.SevenZip.Ole32
+/* ------------------------------------------------------------------------- */
+///
+/// Ole32.NativeMethods
+///
+/// <summary>
+/// Provides native methods defined in the ole32.dll.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+internal static class NativeMethods
 {
+    #region Methods
+
     /* --------------------------------------------------------------------- */
     ///
-    /// Ole32.NativeMethods
+    /// PropVariantClear
     ///
     /// <summary>
-    /// Provides native methods defined in the ole32.dll.
+    /// https://msdn.microsoft.com/en-us/library/windows/desktop/aa380073.aspx
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal static class NativeMethods
-    {
-        #region Methods
+    [DllImport(LibName)]
+    public static extern int PropVariantClear(ref PropVariant pvar);
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// PropVariantClear
-        ///
-        /// <summary>
-        /// https://msdn.microsoft.com/en-us/library/windows/desktop/aa380073.aspx
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [DllImport(LibName)]
-        public static extern int PropVariantClear(ref PropVariant pvar);
+    #endregion
 
-        #endregion
-
-        #region Fields
-        private const string LibName = "ole32.dll";
-        #endregion
-    }
+    #region Fields
+    private const string LibName = "ole32.dll";
+    #endregion
 }

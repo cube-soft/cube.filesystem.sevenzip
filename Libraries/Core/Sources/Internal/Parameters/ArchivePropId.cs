@@ -16,27 +16,26 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-namespace Cube.FileSystem.SevenZip
+namespace Cube.FileSystem.SevenZip;
+
+/* ------------------------------------------------------------------------- */
+///
+/// ArchivePropId
+///
+/// <summary>
+/// Specifies the property ID in an archive.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+internal enum ArchivePropId : uint
 {
-    /* --------------------------------------------------------------------- */
-    ///
-    /// ArchivePropId
-    ///
-    /// <summary>
-    /// Specifies the property ID in an archive.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    internal enum ArchivePropId : uint
-    {
-        Name = 0,
-        ClassID,
-        Extension,
-        AddExtension,
-        Update,
-        KeepName,
-        StartSignature,
-        FinishSignature,
-        Associate
-    }
+    Name = 0,
+    ClassID,
+    Extension,
+    AddExtension,
+    Update,
+    KeepName,
+    StartSignature,
+    FinishSignature,
+    Associate
 }

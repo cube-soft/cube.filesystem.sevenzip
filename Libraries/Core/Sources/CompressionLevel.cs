@@ -16,30 +16,29 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-namespace Cube.FileSystem.SevenZip
+namespace Cube.FileSystem.SevenZip;
+
+/* ------------------------------------------------------------------------- */
+///
+/// CompressionLevel
+///
+/// <summary>
+/// Specifies compression levels.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+public enum CompressionLevel
 {
-    /* --------------------------------------------------------------------- */
-    ///
-    /// CompressionLevel
-    ///
-    /// <summary>
-    /// Specifies compression levels.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    public enum CompressionLevel
-    {
-        /// <summary>None</summary>
-        None = 0,
-        /// <summary>Fast</summary>
-        Fast = 1,
-        /// <summary>Low</summary>
-        Low = 3,
-        /// <summary>Normal</summary>
-        Normal = 5,
-        /// <summary>High</summary>
-        High = 7,
-        /// <summary>Ultra</summary>
-        Ultra = 9,
-    }
+    /// <summary>None</summary>
+    None = 0,
+    /// <summary>Fast</summary>
+    Fast = 1,
+    /// <summary>Low</summary>
+    Low = 3,
+    /// <summary>Normal</summary>
+    Normal = 5,
+    /// <summary>High</summary>
+    High = 7,
+    /// <summary>Ultra</summary>
+    Ultra = 9,
 }

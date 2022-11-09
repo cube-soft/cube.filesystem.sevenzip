@@ -16,41 +16,40 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip;
+
 using System;
 using System.Collections.Generic;
 
-namespace Cube.FileSystem.SevenZip
+/* ------------------------------------------------------------------------- */
+///
+/// Filter
+///
+/// <summary>
+/// Provides functionality to create the filter functions.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+public static class Filter
 {
+    #region Methods
+
     /* --------------------------------------------------------------------- */
     ///
-    /// Filter
+    /// From
     ///
     /// <summary>
-    /// Provides functionality to create the filter functions.
+    /// Creates a new filter function with the specified file or
+    /// directory names.
     /// </summary>
     ///
+    /// <param name="src">
+    /// Collection of file or directory  names to be filtered.
+    /// </param>
+    ///
     /* --------------------------------------------------------------------- */
-    public static class Filter
-    {
-        #region Methods
+    public static Predicate<Entity> From(IEnumerable<string> src) =>
+        new FilterCollection(src).Match;
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// From
-        ///
-        /// <summary>
-        /// Creates a new filter function with the specified file or
-        /// directory names.
-        /// </summary>
-        ///
-        /// <param name="src">
-        /// Collection of file or directory  names to be filtered.
-        /// </param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static Predicate<Entity> From(IEnumerable<string> src) =>
-            new FilterCollection(src).Match;
-
-        #endregion
-    }
+    #endregion
 }

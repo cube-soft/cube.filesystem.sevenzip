@@ -16,104 +16,103 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip;
+
 using System.Collections.Generic;
 using System.Linq;
-using Cube.Mixin.String;
+using Cube.Text.Extensions;
 
-namespace Cube.FileSystem.SevenZip
+/* ------------------------------------------------------------------------- */
+///
+/// FilterCollection
+///
+/// <summary>
+/// Provides functionality to determine if the provided file or
+/// directory is filtered.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+public class FilterCollection
 {
+    #region Constructors
+
     /* --------------------------------------------------------------------- */
     ///
     /// FilterCollection
     ///
     /// <summary>
-    /// Provides functionality to determine if the provided file or
-    /// directory is filtered.
+    /// Initializes a new instance of the FilterCollection class with
+    /// the specified file or directory names.
+    /// </summary>
+    ///
+    /// <param name="src">
+    /// Collection of file or directory  names to be filtered.
+    /// </param>
+    ///
+    /* --------------------------------------------------------------------- */
+    public FilterCollection(IEnumerable<string> src) => Names = src;
+
+    #endregion
+
+    #region Properties
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Names
+    ///
+    /// <summary>
+    /// Gets the collection of file or directory names to be filtered.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class FilterCollection
+    public IEnumerable<string> Names { get; }
+
+    #endregion
+
+    #region Methods
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Match
+    ///
+    /// <summary>
+    /// Determines if the specified file or directory is filtered.
+    /// </summary>
+    ///
+    /// <param name="src">File or directory information.</param>
+    ///
+    /// <returns>true for filtered.</returns>
+    ///
+    /* --------------------------------------------------------------------- */
+    public bool Match(Entity src)
     {
-        #region Constructors
+        if (!Names.Any()) return false;
+        var parts = Split(src.FullName);
+        if (!parts.Any()) return false;
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// FilterCollection
-        ///
-        /// <summary>
-        /// Initializes a new instance of the FilterCollection class with
-        /// the specified file or directory names.
-        /// </summary>
-        ///
-        /// <param name="src">
-        /// Collection of file or directory  names to be filtered.
-        /// </param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public FilterCollection(IEnumerable<string> src) => Names = src;
-
-        #endregion
-
-        #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Names
-        ///
-        /// <summary>
-        /// Gets the collection of file or directory names to be filtered.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public IEnumerable<string> Names { get; }
-
-        #endregion
-
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Match
-        ///
-        /// <summary>
-        /// Determines if the specified file or directory is filtered.
-        /// </summary>
-        ///
-        /// <param name="src">File or directory information.</param>
-        ///
-        /// <returns>true for filtered.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public bool Match(Entity src)
+        foreach (var name in Names)
         {
-            if (!Names.Any()) return false;
-            var parts = Split(src.FullName);
-            if (!parts.Any()) return false;
-
-            foreach (var name in Names)
-            {
-                if (parts.Any(e => string.Compare(e, name, true) == 0)) return true;
-            }
-            return false;
+            if (parts.Any(e => string.Compare(e, name, true) == 0)) return true;
         }
-
-        #endregion
-
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Split
-        ///
-        /// <summary>
-        /// Splits the specified path with the path separator.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private IEnumerable<string> Split(string src) =>
-            src.Split(SafePath.SeparatorChars.ToArray())
-               .SkipWhile(s => !s.HasValue());
-
-        #endregion
+        return false;
     }
+
+    #endregion
+
+    #region Implementations
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Split
+    ///
+    /// <summary>
+    /// Splits the specified path with the path separator.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private IEnumerable<string> Split(string src) =>
+        src.Split(SafePath.SeparatorChars.ToArray())
+           .SkipWhile(s => !s.HasValue());
+
+    #endregion
 }

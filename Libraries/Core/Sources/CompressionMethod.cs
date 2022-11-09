@@ -16,38 +16,37 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-namespace Cube.FileSystem.SevenZip
+namespace Cube.FileSystem.SevenZip;
+
+/* ------------------------------------------------------------------------- */
+///
+/// CompressionMethod
+///
+/// <summary>
+/// Specifies compression methods.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+public enum CompressionMethod
 {
-    /* --------------------------------------------------------------------- */
-    ///
-    /// CompressionMethod
-    ///
-    /// <summary>
-    /// Specifies compression methods.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    public enum CompressionMethod
-    {
-        /// <summary>Copy</summary>
-        Copy,
-        /// <summary>Deflate</summary>
-        Deflate,
-        /// <summary>Deflate (64bit)</summary>
-        Deflate64,
-        /// <summary>GZip</summary>
-        GZip,
-        /// <summary>BZip2</summary>
-        BZip2,
-        /// <summary>XZ</summary>
-        XZ,
-        /// <summary>LZMA</summary>
-        Lzma,
-        /// <summary>LZMA2</summary>
-        Lzma2,
-        /// <summary>PPMD</summary>
-        Ppmd,
-        /// <summary>Default settings</summary>
-        Default,
-    }
+    /// <summary>Copy</summary>
+    Copy,
+    /// <summary>Deflate</summary>
+    Deflate,
+    /// <summary>Deflate (64bit)</summary>
+    Deflate64,
+    /// <summary>GZip</summary>
+    GZip,
+    /// <summary>BZip2</summary>
+    BZip2,
+    /// <summary>XZ</summary>
+    XZ,
+    /// <summary>LZMA</summary>
+    Lzma,
+    /// <summary>LZMA2</summary>
+    Lzma2,
+    /// <summary>PPMD</summary>
+    Ppmd,
+    /// <summary>Default settings</summary>
+    Default,
 }
