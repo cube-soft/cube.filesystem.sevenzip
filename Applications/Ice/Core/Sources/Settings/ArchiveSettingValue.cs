@@ -15,97 +15,96 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip.Ice;
+
 using System.Runtime.Serialization;
 using Cube.DataContract;
 
-namespace Cube.FileSystem.SevenZip.Ice.Settings
+/* ------------------------------------------------------------------------- */
+///
+/// ArchiveSettingValue
+///
+/// <summary>
+/// Represents the common settings of compressing or extracting
+/// archives.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+[DataContract]
+public abstract class ArchiveSettingValue : SerializableBase
 {
+    #region Properties
+
     /* --------------------------------------------------------------------- */
     ///
-    /// ArchiveSettingValue
+    /// SaveLocation
     ///
     /// <summary>
-    /// Represents the common settings of compressing or extracting
-    /// archives.
+    /// Gets or sets the value that represents the save location.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [DataContract]
-    public abstract class ArchiveSettingValue : SerializableBase
+    [DataMember]
+    public SaveLocation SaveLocation
     {
-        #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SaveLocation
-        ///
-        /// <summary>
-        /// Gets or sets the value that represents the save location.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [DataMember]
-        public SaveLocation SaveLocation
-        {
-            get => Get(() => SaveLocation.Preset);
-            set => Set(value);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SaveDirectory
-        ///
-        /// <summary>
-        /// Gets or sets the directory name to save.
-        /// </summary>
-        ///
-        /// <remarks>
-        /// The property is used when the SaveLocation property is set
-        /// to Others.
-        /// </remarks>
-        ///
-        /* ----------------------------------------------------------------- */
-        [DataMember(Name = "SaveDirectoryName")]
-        public string SaveDirectory
-        {
-            get => Get(() => string.Empty);
-            set => Set(value);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Filtering
-        ///
-        /// <summary>
-        /// Gets or sets a value indicating whether to filter some files
-        /// and directories.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [DataMember]
-        public bool Filtering
-        {
-            get => Get(() => true);
-            set => Set(value);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OpenDirectory
-        ///
-        /// <summary>
-        /// Gets or sets the value that represents the method to open
-        /// directory.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [DataMember(Name = "OpenDirectory")]
-        public OpenMethod OpenMethod
-        {
-            get => Get(() => OpenMethod.OpenNotDesktop);
-            set => Set(value);
-        }
-
-        #endregion
+        get => Get(() => SaveLocation.Preset);
+        set => Set(value);
     }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// SaveDirectory
+    ///
+    /// <summary>
+    /// Gets or sets the directory name to save.
+    /// </summary>
+    ///
+    /// <remarks>
+    /// The property is used when the SaveLocation property is set
+    /// to Others.
+    /// </remarks>
+    ///
+    /* --------------------------------------------------------------------- */
+    [DataMember(Name = "SaveDirectoryName")]
+    public string SaveDirectory
+    {
+        get => Get(() => string.Empty);
+        set => Set(value);
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Filtering
+    ///
+    /// <summary>
+    /// Gets or sets a value indicating whether to filter some files
+    /// and directories.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    [DataMember]
+    public bool Filtering
+    {
+        get => Get(() => true);
+        set => Set(value);
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// OpenDirectory
+    ///
+    /// <summary>
+    /// Gets or sets the value that represents the method to open
+    /// directory.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    [DataMember(Name = "OpenDirectory")]
+    public OpenMethod OpenMethod
+    {
+        get => Get(() => OpenMethod.OpenNotDesktop);
+        set => Set(value);
+    }
+
+    #endregion
 }

@@ -15,80 +15,79 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip.Ice;
+
 using System;
 using System.Threading;
 
-namespace Cube.FileSystem.SevenZip.Ice
+/* ------------------------------------------------------------------------- */
+///
+/// SuspendableProgress
+///
+/// <summary>
+/// Represents the IProgress(T) implementation that can suspend the
+/// progress.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+public sealed class SuspendableProgress<T> : IProgress<T>
 {
+    #region Constructors
+
     /* --------------------------------------------------------------------- */
     ///
     /// SuspendableProgress
     ///
     /// <summary>
-    /// Represents the IProgress(T) implementation that can suspend the
-    /// progress.
+    /// Initializes a new instance of the SuspendableProgress class
+    /// with the specified arguments.
     /// </summary>
     ///
+    /// <param name="cancel">Cancellation token.</param>
+    /// <param name="suspend">Object to suspend the progress.</param>
+    /// <param name="callback">Callback action.</param>
+    ///
     /* --------------------------------------------------------------------- */
-    public sealed class SuspendableProgress<T> : IProgress<T>
+    public SuspendableProgress(CancellationToken cancel, WaitHandle suspend, Action<T> callback)
     {
-        #region Constructors
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SuspendableProgress
-        ///
-        /// <summary>
-        /// Initializes a new instance of the SuspendableProgress class
-        /// with the specified arguments.
-        /// </summary>
-        ///
-        /// <param name="cancel">Cancellation token.</param>
-        /// <param name="suspend">Object to suspend the progress.</param>
-        /// <param name="callback">Callback action.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public SuspendableProgress(CancellationToken cancel, WaitHandle suspend, Action<T> callback)
-        {
-            _cancel   = cancel;
-            _suspend  = suspend  ?? throw new ArgumentNullException(nameof(suspend));
-            _callback = callback ?? throw new ArgumentNullException(nameof(callback));
-        }
-
-        #endregion
-
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Report
-        ///
-        /// <summary>
-        /// Reports the current progress.
-        /// </summary>
-        ///
-        /// <param name="value">Current progress.</param>
-        ///
-        /// <remarks>
-        /// Check CancellationToken after checking WaitHandle.
-        /// Therefore, WaitHnale must be in the signal state in order for
-        /// the cancellation process to invoke.
-        /// </remarks>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Report(T value)
-        {
-            if (!_suspend.WaitOne()) GetType().LogWarn($"WaitOne:False");
-            _cancel.ThrowIfCancellationRequested();
-            _callback(value);
-        }
-
-        #endregion
-
-        #region Fields
-        private readonly Action<T> _callback;
-        private readonly CancellationToken _cancel;
-        private readonly WaitHandle _suspend;
-        #endregion
+        _cancel   = cancel;
+        _suspend  = suspend  ?? throw new ArgumentNullException(nameof(suspend));
+        _callback = callback ?? throw new ArgumentNullException(nameof(callback));
     }
+
+    #endregion
+
+    #region Methods
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Report
+    ///
+    /// <summary>
+    /// Reports the current progress.
+    /// </summary>
+    ///
+    /// <param name="value">Current progress.</param>
+    ///
+    /// <remarks>
+    /// Check CancellationToken after checking WaitHandle.
+    /// Therefore, WaitHnale must be in the signal state in order for
+    /// the cancellation process to invoke.
+    /// </remarks>
+    ///
+    /* --------------------------------------------------------------------- */
+    public void Report(T value)
+    {
+        if (!_suspend.WaitOne()) Logger.Warn($"WaitOne:False");
+        _cancel.ThrowIfCancellationRequested();
+        _callback(value);
+    }
+
+    #endregion
+
+    #region Fields
+    private readonly Action<T> _callback;
+    private readonly CancellationToken _cancel;
+    private readonly WaitHandle _suspend;
+    #endregion
 }

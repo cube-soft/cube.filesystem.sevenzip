@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
     <metadata>
-        <version>7.0.0</version>
+        <version>8.0.0</version>
         <id>Cube.FileSystem.SevenZip</id>
         <title>Cube.FileSystem.SevenZip</title>
         <authors>clown,cube-soft</authors>
@@ -16,16 +16,16 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <dependencies>
             <group targetFramework="netstandard2.0">
-                <dependency id="Cube.Core" version="7.0.0" />
-                <dependency id="Cube.Native.SevenZip" version="22.0.1" />
+                <dependency id="Cube.Core" version="8.0.0" />
+                <dependency id="Cube.Native.SevenZip" version="22.1.1" />
             </group>
             <group targetFramework="net47">
-                <dependency id="Cube.Core" version="7.0.0" />
-                <dependency id="Cube.Native.SevenZip" version="22.0.1" />
+                <dependency id="Cube.Core" version="8.0.0" />
+                <dependency id="Cube.Native.SevenZip" version="22.1.1" />
             </group>
             <group targetFramework="net35">
-                <dependency id="Cube.Core" version="7.0.0" />
-                <dependency id="Cube.Native.SevenZip" version="22.0.1" />
+                <dependency id="Cube.Core" version="8.0.0" />
+                <dependency id="Cube.Native.SevenZip" version="22.1.1" />
             </group>
         </dependencies>
     </metadata>

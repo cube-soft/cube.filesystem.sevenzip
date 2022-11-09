@@ -16,122 +16,121 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.String;
+namespace Cube.FileSystem.SevenZip;
 
-namespace Cube.FileSystem.SevenZip
+using Cube.Text.Extensions;
+
+/* ------------------------------------------------------------------------- */
+///
+/// PasswordQuery
+///
+/// <summary>
+/// Provides functionality to request the password.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+internal class PasswordQuery : IQuery<string>
 {
+    #region Constructors
+
     /* --------------------------------------------------------------------- */
     ///
     /// PasswordQuery
     ///
     /// <summary>
-    /// Provides functionality to request the password.
+    /// Initializes a new instance of the PasswordQuery class with the
+    /// specified value. If you specify a password in the constructor,
+    /// the result of the Request method will always be set to the value.
+    /// </summary>
+    ///
+    /// <param name="password">Password result of the request.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    public PasswordQuery(string password) => Password = password;
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// PasswordQuery
+    ///
+    /// <summary>
+    /// Initializes a new instance of the PasswordQuery class with the
+    /// specified object.
+    /// </summary>
+    ///
+    /// <param name="inner">Object to request the password.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    public PasswordQuery(IQuery<string> inner) => Query = inner;
+
+    #endregion
+
+    #region Properties
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Password
+    ///
+    /// <summary>
+    /// Gets the password.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal class PasswordQuery : IQuery<string>
+    public string Password { get; }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Query
+    ///
+    /// <summary>
+    /// Gets the query to invokes the password request.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public IQuery<string> Query { get; }
+
+    #endregion
+
+    #region Methods
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Request
+    ///
+    /// <summary>
+    /// Requests the password.
+    /// </summary>
+    ///
+    /// <param name="e">Message to request the password.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    public void Request(QueryMessage<string, string> e)
     {
-        #region Constructors
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// PasswordQuery
-        ///
-        /// <summary>
-        /// Initializes a new instance of the PasswordQuery class with the
-        /// specified value. If you specify a password in the constructor,
-        /// the result of the Request method will always be set to the value.
-        /// </summary>
-        ///
-        /// <param name="password">Password result of the request.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public PasswordQuery(string password) { Password = password; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// PasswordQuery
-        ///
-        /// <summary>
-        /// Initializes a new instance of the PasswordQuery class with the
-        /// specified object.
-        /// </summary>
-        ///
-        /// <param name="inner">Object to request the password.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public PasswordQuery(IQuery<string> inner) { Query = inner; }
-
-        #endregion
-
-        #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Password
-        ///
-        /// <summary>
-        /// Gets the password.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public string Password { get; }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Query
-        ///
-        /// <summary>
-        /// Gets the query to invokes the password request.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public IQuery<string> Query { get; }
-
-        #endregion
-
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Request
-        ///
-        /// <summary>
-        /// Requests the password.
-        /// </summary>
-        ///
-        /// <param name="e">Message to request the password.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Request(QueryMessage<string, string> e)
+        if (Password.HasValue() || _cache.HasValue())
         {
-            if (Password.HasValue() || _cache.HasValue())
-            {
-                e.Value  = Password.HasValue() ? Password : _cache;
-                e.Cancel = false;
-            }
-            else
-            {
-                Query?.Request(e);
-                if (!e.Cancel && e.Value.HasValue()) _cache = e.Value;
-            }
+            e.Value  = Password.HasValue() ? Password : _cache;
+            e.Cancel = false;
         }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Reset
-        ///
-        /// <summary>
-        /// Resets inner condition.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Reset() => _cache = null;
-
-        #endregion
-
-        #region Fields
-        private string _cache;
-        #endregion
+        else
+        {
+            Query?.Request(e);
+            if (!e.Cancel && e.Value.HasValue()) _cache = e.Value;
+        }
     }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Reset
+    ///
+    /// <summary>
+    /// Resets inner condition.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public void Reset() => _cache = null;
+
+    #endregion
+
+    #region Fields
+    private string _cache;
+    #endregion
 }

@@ -48,7 +48,7 @@ namespace Cube.FileSystem.SevenZip.Ice
             src.Select,
             src.Source,
             src.Request,
-            src.Settings.Value.Extract
+            src.Settings.Value.Extraction
         ).Value;
 
         /* ----------------------------------------------------------------- */

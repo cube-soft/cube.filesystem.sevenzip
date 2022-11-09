@@ -16,134 +16,77 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip;
+
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace Cube.FileSystem.SevenZip
+/* ------------------------------------------------------------------------- */
+///
+/// IOutStream
+///
+/// <summary>
+/// Represents an interface for processing the output stream of an
+/// archive.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+[ComImport]
+[Guid("23170F69-40C1-278A-0000-000300040000")]
+[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+internal interface IOutStream
 {
-    #region ISequentialOutStream
-
     /* --------------------------------------------------------------------- */
     ///
-    /// ISequentialOutStream
+    /// Write
     ///
     /// <summary>
-    /// Represents an interface for processing the output stream of an
-    /// archive.
+    /// Write routine
     /// </summary>
     ///
+    /// <param name="data">Array of bytes to get</param>
+    /// <param name="size">Array size</param>
+    /// <param name="processedSize">Processed size</param>
+    ///
+    /// <returns>Zero if Ok</returns>
+    ///
     /* --------------------------------------------------------------------- */
-    [ComImport]
-    [Guid("23170F69-40C1-278A-0000-000300020000")]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ISequentialOutStream
-    {
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Write
-        ///
-        /// <summary>
-        /// Writes data to unpacked file stream
-        /// </summary>
-        ///
-        /// <param name="data">Array of bytes available for reading</param>
-        /// <param name="size">Array size</param>
-        /// <param name="processedSize">Processed data size</param>
-        ///
-        /// <returns>S_OK if success</returns>
-        ///
-        /// <remarks>
-        /// If size != 0, return value is S_OK and (*processedSize == 0),
-        /// then there are no more bytes in stream.
-        /// If (size > 0) and there are bytes in stream,
-        /// this function must read at least 1 byte.
-        /// This function is allowed to rwrite less than "size" bytes.
-        /// You must call Write function in loop, if you need exact
-        /// amount of data.
-        /// </remarks>
-        ///
-        /* ----------------------------------------------------------------- */
-        [PreserveSig]
-        int Write(
-            [In, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] byte[] data,
-            uint size,
-            IntPtr processedSize
-        );
-    }
-
-    #endregion
-
-    #region IOutStream
+    [PreserveSig]
+    int Write(
+        [In, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] byte[] data,
+        uint size,
+        IntPtr processedSize
+    );
 
     /* --------------------------------------------------------------------- */
     ///
-    /// IOutStream
+    /// Seek
     ///
     /// <summary>
-    /// Represents an interface for processing the output stream of an
-    /// archive.
+    /// Seek routine
     /// </summary>
     ///
+    /// <param name="offset">Offset value</param>
+    /// <param name="origin">Seek origin value</param>
+    /// <param name="newpos">New position pointer</param>
+    ///
     /* --------------------------------------------------------------------- */
-    [ComImport]
-    [Guid("23170F69-40C1-278A-0000-000300040000")]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface IOutStream
-    {
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Write
-        ///
-        /// <summary>
-        /// Write routine
-        /// </summary>
-        ///
-        /// <param name="data">Array of bytes to get</param>
-        /// <param name="size">Array size</param>
-        /// <param name="processedSize">Processed size</param>
-        ///
-        /// <returns>Zero if Ok</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        [PreserveSig]
-        int Write(
-            [In, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] byte[] data,
-            uint size,
-            IntPtr processedSize
-        );
+    void Seek(long offset, SeekOrigin origin, IntPtr newpos);
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Seek
-        ///
-        /// <summary>
-        /// Seek routine
-        /// </summary>
-        ///
-        /// <param name="offset">Offset value</param>
-        /// <param name="origin">Seek origin value</param>
-        /// <param name="newpos">New position pointer</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        void Seek(long offset, SeekOrigin origin, IntPtr newpos);
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SetSize
-        ///
-        /// <summary>
-        /// Set size routine
-        /// </summary>
-        ///
-        /// <param name="size">New size value</param>
-        ///
-        /// <returns>Zero if Ok</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        [PreserveSig]
-        int SetSize(long size);
-    }
-
-    #endregion
+    /* --------------------------------------------------------------------- */
+    ///
+    /// SetSize
+    ///
+    /// <summary>
+    /// Set size routine
+    /// </summary>
+    ///
+    /// <param name="size">New size value</param>
+    ///
+    /// <returns>Zero if Ok</returns>
+    ///
+    /* --------------------------------------------------------------------- */
+    [PreserveSig]
+    int SetSize(long size);
 }

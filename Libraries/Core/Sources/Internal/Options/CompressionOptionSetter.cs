@@ -16,133 +16,132 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using Cube.Mixin.Collections;
+using Cube.Collections.Extensions;
 
-namespace Cube.FileSystem.SevenZip
+/* ------------------------------------------------------------------------- */
+///
+/// CompressionOptionSetter
+///
+/// <summary>
+/// Provides the functionality to set optional settings for archives.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+internal class CompressionOptionSetter
 {
+    #region Constructors
+
     /* --------------------------------------------------------------------- */
     ///
     /// CompressionOptionSetter
     ///
     /// <summary>
-    /// Provides the functionality to set optional settings for archives.
+    /// Initializes a new instance of the CompressionOptionSetter class
+    /// with the specified options.
+    /// </summary>
+    ///
+    /// <param name="options">Archive options.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    public CompressionOptionSetter(CompressionOption options) =>
+        Options = options ?? throw new ArgumentNullException();
+
+    #endregion
+
+    #region Properties
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Options
+    ///
+    /// <summary>
+    /// Gets the archive options.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    internal class CompressionOptionSetter
+    public CompressionOption Options { get; }
+
+    #endregion
+
+    #region Methods
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// From
+    ///
+    /// <summary>
+    /// Creates a new instance of the CompressionOptionSetter class
+    /// with the specified arguments.
+    /// </summary>
+    ///
+    /// <param name="format">Archive format.</param>
+    /// <param name="options">Archive options.</param>
+    ///
+    /// <returns>CompressionOptionSetter object.</returns>
+    ///
+    /* --------------------------------------------------------------------- */
+    public static CompressionOptionSetter From(Format format, CompressionOption options) => format switch
     {
-        #region Constructors
+        Format.Zip      => new ZipOptionSetter(options),
+        Format.SevenZip => new SevenZipOptionSetter(options),
+        Format.Sfx      => new SevenZipOptionSetter(options),
+        Format.Tar      => null,
+        _               => new CompressionOptionSetter(options),
+    };
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CompressionOptionSetter
-        ///
-        /// <summary>
-        /// Initializes a new instance of the CompressionOptionSetter class
-        /// with the specified options.
-        /// </summary>
-        ///
-        /// <param name="options">Archive options.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public CompressionOptionSetter(CompressionOption options) =>
-            Options = options ?? throw new ArgumentNullException();
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Invoke
+    ///
+    /// <summary>
+    /// Sets the current options to the specified archive.
+    /// </summary>
+    ///
+    /// <param name="dest">Archive object.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    public void Invoke(ISetProperties dest)
+    {
+        if (dest == null) return;
 
-        #endregion
+        var src = new Dictionary<string, PropVariant>();
+        Invoke(src);
 
-        #region Properties
+        var k = src.Keys.Concat("x", "mt").ToArray();
+        var v = src.Values.Concat(
+            PropVariant.Create((uint)Options.CompressionLevel),
+            PropVariant.Create((uint)Options.ThreadCount)
+        ).ToArray();
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Options
-        ///
-        /// <summary>
-        /// Gets the archive options.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public CompressionOption Options { get; }
-
-        #endregion
-
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// From
-        ///
-        /// <summary>
-        /// Creates a new instance of the CompressionOptionSetter class
-        /// with the specified arguments.
-        /// </summary>
-        ///
-        /// <param name="format">Archive format.</param>
-        /// <param name="options">Archive options.</param>
-        ///
-        /// <returns>CompressionOptionSetter object.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static CompressionOptionSetter From(Format format, CompressionOption options) => format switch
-        {
-            Format.Zip      => new ZipOptionSetter(options),
-            Format.SevenZip => new SevenZipOptionSetter(options),
-            Format.Sfx      => new SevenZipOptionSetter(options),
-            Format.Tar      => null,
-            _               => new CompressionOptionSetter(options),
-        };
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Invoke
-        ///
-        /// <summary>
-        /// Sets the current options to the specified archive.
-        /// </summary>
-        ///
-        /// <param name="dest">Archive object.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public void Invoke(ISetProperties dest)
-        {
-            if (dest == null) return;
-
-            var src = new Dictionary<string, PropVariant>();
-            Invoke(src);
-
-            var k = src.Keys.Concat("x", "mt").ToArray();
-            var v = src.Values.Concat(
-                PropVariant.Create((uint)Options.CompressionLevel),
-                PropVariant.Create((uint)Options.ThreadCount)
-            ).ToArray();
-
-            var obj = GCHandle.Alloc(v, GCHandleType.Pinned);
-            try { _ = dest.SetProperties(k, obj.AddrOfPinnedObject(), (uint)k.Length); }
-            finally { obj.Free(); }
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Invoke
-        ///
-        /// <summary>
-        /// Sets the current options to the specified collection.
-        /// </summary>
-        ///
-        /// <param name="dest">Collection of options.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected virtual void Invoke(IDictionary<string, PropVariant> dest)
-        {
-            if (Options.CodePage != CodePage.Oem)
-            {
-                dest.Add("cp", PropVariant.Create((uint)Options.CodePage));
-            }
-        }
-
-        #endregion
+        var obj = GCHandle.Alloc(v, GCHandleType.Pinned);
+        try { _ = dest.SetProperties(k, obj.AddrOfPinnedObject(), (uint)k.Length); }
+        finally { obj.Free(); }
     }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Invoke
+    ///
+    /// <summary>
+    /// Sets the current options to the specified collection.
+    /// </summary>
+    ///
+    /// <param name="dest">Collection of options.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    protected virtual void Invoke(IDictionary<string, PropVariant> dest)
+    {
+        if (Options.CodePage != CodePage.Oem)
+        {
+            dest.Add("cp", PropVariant.Create((uint)Options.CodePage));
+        }
+    }
+
+    #endregion
 }

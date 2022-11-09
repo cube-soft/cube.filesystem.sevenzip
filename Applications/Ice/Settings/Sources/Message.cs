@@ -15,49 +15,43 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Mixin.String;
+namespace Cube.FileSystem.SevenZip.Ice.Settings;
 
-namespace Cube.FileSystem.SevenZip.Ice.Settings
+using Cube.Text.Extensions;
+
+/* ------------------------------------------------------------------------- */
+///
+/// Message
+///
+/// <summary>
+/// Provides functionality to create a message object.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+public static class Message
 {
+    #region Methods
+
     /* --------------------------------------------------------------------- */
     ///
-    /// Message
+    /// ForSaveDirectory
     ///
     /// <summary>
-    /// Provides functionality to create a message object.
+    /// Creates a new instance of the OpenDirectoryMessage class with
+    /// the specified source.
     /// </summary>
     ///
+    /// <param name="src">Query source object.</param>
+    ///
+    /// <returns>OpenDirectoryMessage object.</returns>
+    ///
     /* --------------------------------------------------------------------- */
-    public static class Message
+    public static OpenDirectoryMessage ForSaveDirectory(string src)
     {
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// ForSaveDirectory
-        ///
-        /// <summary>
-        /// Creates a new instance of the OpenDirectoryMessage class with
-        /// the specified source.
-        /// </summary>
-        ///
-        /// <param name="src">Query source object.</param>
-        ///
-        /// <returns>OpenDirectoryMessage object.</returns>
-        ///
-        /* ----------------------------------------------------------------- */
-        public static OpenDirectoryMessage ForSaveDirectory(string src)
-        {
-            var dest = new OpenDirectoryMessage
-            {
-                Text      = Properties.Resources.MessageSave,
-                NewButton = true,
-            };
-
-            if (src.HasValue()) dest.Value = src;
-            return dest;
-        }
-
-        #endregion
+        var dest = new OpenDirectoryMessage(Properties.Resources.MessageSave) { NewButton = true };
+        if (src.HasValue()) dest.Value = src;
+        return dest;
     }
+
+    #endregion
 }

@@ -15,156 +15,153 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System;
-using System.Linq;
-using Cube.FileSystem.SevenZip.Ice.Settings;
-using Cube.Mixin.String;
+namespace Cube.FileSystem.SevenZip.Ice;
 
-namespace Cube.FileSystem.SevenZip.Ice
+using System;
+using Cube.Text.Extensions;
+
+/* ------------------------------------------------------------------------- */
+///
+/// CompressFacade
+///
+/// <summary>
+/// Provides functionality to compress files and directories.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+public sealed class CompressFacade : ArchiveFacade
 {
+    #region Constructors
+
     /* --------------------------------------------------------------------- */
     ///
     /// CompressFacade
     ///
     /// <summary>
-    /// Provides functionality to compress files and directories.
+    /// Initializes a new instance of the CompressFacade class with the
+    /// specified arguments.
+    /// </summary>
+    ///
+    /// <param name="src">Request of the process.</param>
+    /// <param name="settings">User settings.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    public CompressFacade(Request src, SettingFolder settings) : base(src, settings) { }
+
+    #endregion
+
+    #region Properties
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Configure
+    ///
+    /// <summary>
+    /// Gets or sets the query object for compress runtime settings.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public sealed class CompressFacade : ArchiveFacade
+    public CompressQuery Configure { get; set; }
+
+    #endregion
+
+    #region Methods
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Invoke
+    ///
+    /// <summary>
+    /// Invokes the main process.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    protected override void Invoke()
     {
-        #region Constructors
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// CompressFacade
-        ///
-        /// <summary>
-        /// Initializes a new instance of the CompressFacade class with the
-        /// specified arguments.
-        /// </summary>
-        ///
-        /// <param name="src">Request of the process.</param>
-        /// <param name="settings">User settings.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public CompressFacade(Request src, SettingFolder settings) : base(src, settings) { }
-
-        #endregion
-
-        #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Configure
-        ///
-        /// <summary>
-        /// Gets or sets the query object for compress runtime settings.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public CompressQuery Configure { get; set; }
-
-        #endregion
-
-        #region Methods
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Invoke
-        ///
-        /// <summary>
-        /// Invokes the main process.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected override void Invoke()
-        {
-            var src = Configure.Get(Request, Settings.Value.Compress);
-            InvokePreProcess(src);
-            Invoke(src);
-            InvokePostProcess();
-        }
-
-        #endregion
-
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Invoke
-        ///
-        /// <summary>
-        /// Invokes the compression and saves the archive.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void Invoke(CompressQueryValue src)
-        {
-            GetType().LogDebug(
-                $"Format:{src.Format}",
-                $"Method:{src.CompressionMethod}",
-                $"Level:{src.CompressionLevel}"
-            );
-
-            using (var writer = new ArchiveWriter(src.Format, src.ToOption(Settings)))
-            {
-                foreach (var e in Request.Sources) writer.Add(e);
-                writer.Save(Temp, GetProgress());
-            }
-
-            if (Io.Exists(Temp)) Io.Move(Temp, Destination, true);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// InvokePreProcess
-        ///
-        /// <summary>
-        /// Invokes the pre-processes.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void InvokePreProcess(CompressQueryValue src)
-        {
-            Destination = this.Select(src);
-            SetTemp(Io.Get(Destination).DirectoryName);
-            SetPassword(src);
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// InvokePostProcess
-        ///
-        /// <summary>
-        /// Invokes the post-processes.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void InvokePostProcess() => Io.Get(Destination).Open(
-            Settings.Value.Compress.OpenMethod,
-            Settings.Value.Explorer
-        );
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SetPassword
-        ///
-        /// <summary>
-        /// Sets the password.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        private void SetPassword(CompressQueryValue src)
-        {
-            if (src.Password.HasValue() || !Request.Password) return;
-
-            var e = Query.NewMessage(Destination);
-            Password.Request(e);
-            if (e.Cancel) throw new OperationCanceledException();
-            src.Password = e.Value;
-        }
-
-        #endregion
+        var src = Configure.Get(Request, Settings.Value.Compression);
+        InvokePreProcess(src);
+        Invoke(src);
+        InvokePostProcess();
     }
+
+    #endregion
+
+    #region Implementations
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Invoke
+    ///
+    /// <summary>
+    /// Invokes the compression and saves the archive.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private void Invoke(CompressionQueryValue src)
+    {
+        Logger.Debug(string.Join(", ", new[] {
+            $"Format:{src.Format}",
+            $"Method:{src.CompressionMethod}",
+            $"Level:{src.CompressionLevel}"
+        }));
+
+        using (var writer = new ArchiveWriter(src.Format, src.ToOption(Settings)))
+        {
+            foreach (var e in Request.Sources) writer.Add(e);
+            writer.Save(Temp, GetProgress());
+        }
+
+        if (Io.Exists(Temp)) Io.Move(Temp, Destination, true);
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// InvokePreProcess
+    ///
+    /// <summary>
+    /// Invokes the pre-processes.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private void InvokePreProcess(CompressionQueryValue src)
+    {
+        Destination = this.Select(src);
+        SetTemp(Io.GetDirectoryName(Destination));
+        SetPassword(src);
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// InvokePostProcess
+    ///
+    /// <summary>
+    /// Invokes the post-processes.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private void InvokePostProcess() => Io.Get(Destination).Open(
+        Settings.Value.Compression.OpenMethod,
+        Settings.Value.Explorer
+    );
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// SetPassword
+    ///
+    /// <summary>
+    /// Sets the password.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private void SetPassword(CompressionQueryValue src)
+    {
+        if (src.Password.HasValue() || !Request.Password) return;
+
+        var e = Query.NewMessage(Destination);
+        Password.Request(e);
+        if (e.Cancel) throw new OperationCanceledException();
+        src.Password = e.Value;
+    }
+
+    #endregion
 }

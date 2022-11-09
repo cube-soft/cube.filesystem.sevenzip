@@ -16,34 +16,53 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-using System;
-using System.IO;
+namespace Cube.FileSystem.SevenZip;
 
-namespace Cube.FileSystem.SevenZip
+using System;
+
+/* ------------------------------------------------------------------------- */
+///
+/// ArchiveOption
+///
+/// <summary>
+/// Represents options when creating a new archive.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+public class ArchiveOption
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// UnknownFormatException
+    /// ThreadCount
     ///
     /// <summary>
-    /// Represents that the specified file is not supported by the SevenZip
-    /// module.
+    /// Gets or sets the number of threads that the archiver is
+    /// available.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [Serializable]
-    public class UnknownFormatException : NotSupportedException { }
+    public int ThreadCount { get; init; } = 1;
 
     /* --------------------------------------------------------------------- */
     ///
-    /// EncryptionException
+    /// CodePage
     ///
     /// <summary>
-    /// Represents the encryption related exception like the password
-    /// unmatched error.
+    /// Gets or sets the value of code page.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    [Serializable]
-    public class EncryptionException : IOException { }
+    public CodePage CodePage { get; init; } = CodePage.Oem;
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Filter
+    ///
+    /// <summary>
+    /// Gets or sets the predicate function to filter some of files or
+    /// directories.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public Predicate<Entity> Filter { get; init; }
 }

@@ -16,31 +16,27 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-namespace Cube.FileSystem.SevenZip
-{
-    /* --------------------------------------------------------------------- */
-    ///
-    /// OperationResult
-    ///
-    /// <summary>
-    /// Specifies the operation result.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    internal enum OperationResult
-    {
-        OK = 0,
-        UnsupportedMethod,
-        DataError,
-        CrcError,
-        Unavailable,
-        UnexpectedEnd,
-        DataAfterEnd,
-        IsNotArc,
-        HeadersError,
-        WrongPassword,
+namespace Cube.FileSystem.SevenZip;
 
-        // Extended for Cube.FileSystem
-        UserCancel = -2,
-    }
+/* ------------------------------------------------------------------------- */
+///
+/// ProgressState
+///
+/// <summary>
+/// Specifies the progress state for compression or extraction.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+public enum ProgressState
+{
+    /// <summary>Prepares operation for compression or extraction.</summary>
+    Prepare,
+    /// <summary>Starts compressing or extracting for the current file.</summary>
+    Start,
+    /// <summary>Compression or Extraction is in progress.</summary>
+    Progress,
+    /// <summary>Successfully compressed or decompressed.</summary>
+    Success,
+    /// <summary>Any erorrs occur when compressing or extracting.</summary>
+    Failed,
 }

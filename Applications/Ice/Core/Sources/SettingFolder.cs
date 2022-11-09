@@ -15,111 +15,110 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using System.Reflection;
-using Cube.Mixin.Assembly;
+namespace Cube.FileSystem.SevenZip.Ice;
 
-namespace Cube.FileSystem.SevenZip.Ice
+using System.Reflection;
+using Cube.Reflection.Extensions;
+
+/* ------------------------------------------------------------------------- */
+///
+/// SettingFolder
+///
+/// <summary>
+/// Represents the application and/or user settings.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+public class SettingFolder : SettingFolder<SettingValue>
 {
+    #region Constructors
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// SettingsFolder
+    ///
+    /// <summary>
+    /// Initializes a new instance of the SettingFolder class.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public SettingFolder() : this(DataContract.Format.Registry, @"CubeSoft\CubeICE\v3") { }
+
     /* --------------------------------------------------------------------- */
     ///
     /// SettingFolder
     ///
     /// <summary>
-    /// Represents the application and/or user settings.
+    /// Initializes a new instance of the SettingFolder with the
+    /// specified parameters.
+    /// </summary>
+    ///
+    /// <param name="format">Serialized format.</param>
+    /// <param name="location">Location for the settings.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    public SettingFolder(DataContract.Format format, string location) :
+        this(typeof(SettingFolder).Assembly, format, location) { }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// SettingFolder
+    ///
+    /// <summary>
+    /// Initializes a new instance of the SettingFolder with the
+    /// specified parameters.
+    /// </summary>
+    ///
+    /// <param name="assembly">Assembly information.</param>
+    /// <param name="format">Serialized format.</param>
+    /// <param name="location">Location for the settings.</param>
+    ///
+    /* --------------------------------------------------------------------- */
+    public SettingFolder(Assembly assembly, DataContract.Format format, string location) :
+        base(format, location, assembly.GetSoftwareVersion())
+    {
+        AutoSave = false;
+
+        var exe = Io.Combine(assembly.GetDirectoryName(), "CubeChecker.exe");
+        Startup = new("cubeice-checker") { Source = exe };
+        Startup.Arguments.Add("cubeice");
+        Startup.Arguments.Add("/subkey");
+        Startup.Arguments.Add("CubeICE");
+    }
+
+    #endregion
+
+    #region Properties
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Startup
+    ///
+    /// <summary>
+    /// Get the startup registration object.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class SettingFolder : SettingFolder<Settings.SettingValue>
+    public Startup Startup { get; }
+
+    #endregion
+
+    #region Implementations
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// OnSave
+    ///
+    /// <summary>
+    /// Saves the user settings.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    protected override void OnSave()
     {
-        #region Constructors
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SettingsFolder
-        ///
-        /// <summary>
-        /// Initializes a new instance of the SettingFolder class.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public SettingFolder() : this(DataContract.Format.Registry, @"CubeSoft\CubeICE\v3") { }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SettingFolder
-        ///
-        /// <summary>
-        /// Initializes a new instance of the SettingFolder with the
-        /// specified parameters.
-        /// </summary>
-        ///
-        /// <param name="format">Serialized format.</param>
-        /// <param name="location">Location for the settings.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public SettingFolder(DataContract.Format format, string location) :
-            this(typeof(SettingFolder).Assembly, format, location) { }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SettingFolder
-        ///
-        /// <summary>
-        /// Initializes a new instance of the SettingFolder with the
-        /// specified parameters.
-        /// </summary>
-        ///
-        /// <param name="assembly">Assembly information.</param>
-        /// <param name="format">Serialized format.</param>
-        /// <param name="location">Location for the settings.</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public SettingFolder(Assembly assembly, DataContract.Format format, string location) :
-            base(format, location, assembly.GetSoftwareVersion())
-        {
-            AutoSave = false;
-
-            var exe = Io.Combine(assembly.GetDirectoryName(), "CubeChecker.exe");
-            Startup = new("cubeice-checker") { Source = exe };
-            Startup.Arguments.Add("cubeice");
-            Startup.Arguments.Add("/subkey");
-            Startup.Arguments.Add("CubeICE");
-        }
-
-        #endregion
-
-        #region Properties
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Startup
-        ///
-        /// <summary>
-        /// Get the startup registration object.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        public Startup Startup { get; }
-
-        #endregion
-
-        #region Implementations
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// OnSave
-        ///
-        /// <summary>
-        /// Saves the user settings.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected override void OnSave()
-        {
-            base.OnSave();
-            Startup.Save(true);
-        }
-
-        #endregion
+        base.OnSave();
+        Startup.Save(true);
     }
+
+    #endregion
 }

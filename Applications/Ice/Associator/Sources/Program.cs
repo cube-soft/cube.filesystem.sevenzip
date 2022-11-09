@@ -15,92 +15,88 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip.Ice.Associator;
+
 using System;
 using System.Linq;
-using Cube.Mixin.Assembly;
-using Cube.Mixin.Collections;
+using Cube.Collections.Extensions;
+using Cube.Reflection.Extensions;
 
-namespace Cube.FileSystem.SevenZip.Ice.Associator
+/* ------------------------------------------------------------------------- */
+///
+/// Program
+///
+/// <summary>
+/// Represents the main program.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+static class Program
 {
+    #region Methods
+
     /* --------------------------------------------------------------------- */
     ///
-    /// Program
+    /// Main
     ///
     /// <summary>
-    /// Represents the main program.
+    /// Executes the main program of the application.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    static class Program
+    [STAThread]
+    static void Main(string[] args) => Logger.Error(() =>
     {
-        #region Methods
+        Logger.Configure(new Logging.NLog.LoggerSource());
+        Logger.Info(typeof(Program).Assembly);
+        Logger.Info($"[ {args.Join(" ")} ]");
 
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Main
-        ///
-        /// <summary>
-        /// Executes the main program of the application.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [STAThread]
-        static void Main(string[] args) => Source.LogError(() =>
+        var settings = new SettingFolder();
+        if (args.Length > 0 && args[0].ToLowerInvariant() == "/uninstall") Clear(settings);
+        else settings.Load();
+
+        var dir  = typeof(Program).Assembly.GetDirectoryName();
+        var exe  = System.IO.Path.Combine(dir, "cubeice.exe");
+        var icon = $"{exe},{settings.Value.Association.IconIndex}";
+        var src  = settings.Value.Association.Value;
+
+        Logger.Info($"FileName:{exe}");
+        Logger.Info($"IconLocation:{icon}");
+        Logger.Info($"Associate:[ {src.Where(e => e.Value).Select(e => e.Key).Join(" ")} ]");
+
+        var registrar = new AssociateRegistrar(exe)
         {
-            Source.LogInfo(Source.Assembly);
-            Source.LogInfo($"[ {args.Join(" ")} ]");
+            IconLocation = icon,
+            ToolTip      = settings.Value.ToolTip,
+        };
 
-            var settings = new SettingFolder();
-            if (args.Length > 0 && args[0].ToLowerInvariant() == "/uninstall") Clear(settings);
-            else settings.Load();
+        registrar.Update(src);
 
-            var dir  = Source.Assembly.GetDirectoryName();
-            var exe  = System.IO.Path.Combine(dir, "cubeice.exe");
-            var icon = $"{exe},{settings.Value.Associate.IconIndex}";
-            var src  = settings.Value.Associate.Value;
+        Shell32.NativeMethods.SHChangeNotify(
+            0x08000000, // SHCNE_ASSOCCHANGED
+            0x00001000, // SHCNF_FLUSH
+            IntPtr.Zero,
+            IntPtr.Zero
+        );
+    });
 
-            Source.LogInfo($"FileName:{exe}");
-            Source.LogInfo($"IconLocation:{icon}");
-            Source.LogInfo($"Associate:[ {src.Where(e => e.Value).Select(e => e.Key).Join(" ")} ]");
-
-            var registrar = new AssociateRegistrar(exe)
-            {
-                IconLocation = icon,
-                ToolTip      = settings.Value.ToolTip,
-            };
-
-            registrar.Update(src);
-
-            Shell32.NativeMethods.SHChangeNotify(
-                0x08000000, // SHCNE_ASSOCCHANGED
-                0x00001000, // SHCNF_FLUSH
-                IntPtr.Zero,
-                IntPtr.Zero
-            );
-        });
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Clear
-        ///
-        /// <summary>
-        /// Disables all association settings.
-        /// The method is used when uninstalling.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        static void Clear(SettingFolder settings)
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Clear
+    ///
+    /// <summary>
+    /// Disables all association settings.
+    /// The method is used when uninstalling.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    static void Clear(SettingFolder settings)
+    {
+        foreach (var key in settings.Value.Association.Value.Keys.ToArray())
         {
-            foreach (var key in settings.Value.Associate.Value.Keys.ToArray())
-            {
-                settings.Value.Associate.Value[key] = false;
-            }
+            settings.Value.Association.Value[key] = false;
         }
-
-        #endregion
-
-        #region Fields
-        private static readonly Type Source = typeof(Program);
-        #endregion
     }
+
+    #endregion
 }

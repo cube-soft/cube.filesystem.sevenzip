@@ -16,16 +16,15 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-namespace System.Runtime.CompilerServices
-{
-    /* --------------------------------------------------------------------- */
-    ///
-    /// IsExternalInit
-    ///
-    /// <summary>
-    /// Provides init accessor of properties.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    internal sealed class IsExternalInit { }
-}
+namespace System.Runtime.CompilerServices;
+
+/* ------------------------------------------------------------------------- */
+///
+/// IsExternalInit
+///
+/// <summary>
+/// Provides init accessor of properties.
+/// </summary>
+///
+/* ------------------------------------------------------------------------- */
+internal sealed class IsExternalInit { }
