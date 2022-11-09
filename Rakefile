@@ -22,6 +22,7 @@ require 'rake/clean'
 # configuration
 # --------------------------------------------------------------------------- #
 PROJECT     = "Cube.FileSystem.SevenZip"
+LATEST      = "v8"
 BRANCHES    = ["net47", "net60", "net35"]
 CONFIGS     = ["Release", "Debug"]
 PLATFORMS   = ["Any CPU", "x86", "x64"]
@@ -36,9 +37,9 @@ CLOBBER.include("../packages/cube.*")
 # --------------------------------------------------------------------------- #
 # default
 # --------------------------------------------------------------------------- #
-desc "Clean, build, test, and create NuGet packages."
+desc "Clean, build, and create NuGet packages."
 task :default => [:clean, :build_all] do
-    checkout("net35") { Rake::Task[:pack].execute }
+    checkout("#{LATEST}/net35") { Rake::Task[:pack].execute }
 end
 
 # --------------------------------------------------------------------------- #
@@ -47,6 +48,21 @@ end
 desc "Resote NuGet packages in the current branch."
 task :restore do
     cmd("nuget restore #{PROJECT}.sln")
+end
+
+# --------------------------------------------------------------------------- #
+# pack
+# --------------------------------------------------------------------------- #
+desc "Create NuGet packages."
+task :pack do
+    PACKAGES.each do |e|
+        spec = File.exists?("#{e}.nuspec")
+        pack = spec ?
+               %(nuget pack -Properties "Configuration=Release;Platform=AnyCPU") :
+               "dotnet pack -c Release --no-restore --no-build -o ."
+        ext  = spec ? "nuspec" : "csproj"
+        cmd("#{pack} #{e}.#{ext}")
+    end
 end
 
 # --------------------------------------------------------------------------- #
@@ -68,15 +84,17 @@ end
 # build_all
 # --------------------------------------------------------------------------- #
 desc "Build projects in pre-defined branches and platforms."
-task :build_all do
+task :build_all, [:version] do |_, e|
+    e.with_defaults(:version => LATEST)
+
     BRANCHES.product(PLATFORMS).each do |bp|
-        checkout(bp[0]) do
+        checkout("#{e.version}/#{bp[0]}") do
             Rake::Task[:build].reenable
             Rake::Task[:build].invoke(bp[1])
         end
     end
 
-    checkout(BRANCHES[0]) do
+    checkout("#{e.version}/#{BRANCHES[0]}") do
         ['x86', 'x64'].each do |e|
             cmd(%(msbuild -v:m -p:Configuration=Release -p:Platform="#{e}" #{PROJECT}.Com.sln))
         end
@@ -89,21 +107,6 @@ end
 desc "Test projects in the current branch."
 task :test do
     cmd("dotnet test -c Release --no-restore --no-build #{PROJECT}.sln")
-end
-
-# --------------------------------------------------------------------------- #
-# pack
-# --------------------------------------------------------------------------- #
-desc "Create NuGet packages."
-task :pack do
-    PACKAGES.each do |e|
-        spec = File.exists?("#{e}.nuspec")
-        pack = spec ?
-               %(nuget pack -Properties "Configuration=Release;Platform=AnyCPU") :
-               "dotnet pack -c Release --no-restore --no-build -o ."
-        ext  = spec ? "nuspec" : "csproj"
-        cmd("#{pack} #{e}.#{ext}")
-    end
 end
 
 # --------------------------------------------------------------------------- #
