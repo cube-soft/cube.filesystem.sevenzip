@@ -58,26 +58,26 @@ public class Report
 
     /* --------------------------------------------------------------------- */
     ///
-    /// Exception
-    ///
-    /// <summary>
-    /// Gets or sets an exception object. The property is set when the value
-    /// of Status is Failed.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    public Exception Exception { get; set; }
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// Current
+    /// Target
     ///
     /// <summary>
     /// Gets or sets the file information that is currently processing.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public Entity Current { get; set; }
+    public Entity Target { get; set; }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Exception
+    ///
+    /// <summary>
+    /// Gets or sets an exception object. The property is set when the value
+    /// of State is Failed.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public Exception Exception { get; set; }
 
     /* --------------------------------------------------------------------- */
     ///
@@ -122,20 +122,6 @@ public class Report
     ///
     /* --------------------------------------------------------------------- */
     public long TotalBytes { get; set; }
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// Ratio
-    ///
-    /// <summary>
-    /// Gets the progress ratio within the range of [0, 1].
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    public double Ratio => Math.Min(
-        TotalBytes > 0 ? Bytes / (double)TotalBytes : 0.0,
-        TotalCount > 0 ? Count / (double)TotalCount : 0.0
-    );
 
     #endregion
 }

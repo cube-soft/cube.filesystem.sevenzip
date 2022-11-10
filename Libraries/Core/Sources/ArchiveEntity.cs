@@ -18,6 +18,8 @@
 /* ------------------------------------------------------------------------- */
 namespace Cube.FileSystem.SevenZip;
 
+using System;
+
 /* ------------------------------------------------------------------------- */
 ///
 /// ArchiveEntity
@@ -27,6 +29,7 @@ namespace Cube.FileSystem.SevenZip;
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
+[Serializable]
 public sealed class ArchiveEntity : Entity
 {
     #region Constructors
@@ -43,11 +46,15 @@ public sealed class ArchiveEntity : Entity
     /// <param name="src">Source object.</param>
     ///
     /* --------------------------------------------------------------------- */
-    internal ArchiveEntity(ArchiveEntitySource src) : base(src)
+    internal ArchiveEntity(ArchiveEntitySource src) : base(src, false)
     {
-        Index     = src.Index;
-        Crc       = src.Crc;
-        Encrypted = src.Encrypted;
+        try
+        {
+            Index     = src.Index;
+            Crc       = src.Crc;
+            Encrypted = src.Encrypted;
+        }
+        finally { src.Dispose(); }
     }
 
     #endregion

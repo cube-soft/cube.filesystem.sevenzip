@@ -102,7 +102,7 @@ public abstract class ProgressViewModel : PresentableBase<ProgressFacade>
     {
         get
         {
-            var src = Math.Max((int)(Facade.Report.Ratio * Unit), 1);
+            var src = Math.Max((int)(Facade.Report.GetRatio() * Unit), 1);
             var cmp = Get<int>();
             if (src > cmp) { _ = Set(src); return src; }
             else return cmp;

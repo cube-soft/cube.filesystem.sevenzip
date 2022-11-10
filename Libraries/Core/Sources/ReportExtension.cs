@@ -22,47 +22,26 @@ using System;
 
 /* ------------------------------------------------------------------------- */
 ///
-/// ArchiveOption
+/// ReportExtension
 ///
 /// <summary>
-/// Represents options when creating a new archive.
+/// Provides extended methods of the Report class.
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-public class ArchiveOption
+public static class ReportExtension
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ThreadCount
+    /// GetRatio
     ///
     /// <summary>
-    /// Gets or sets the number of threads that the archiver is
-    /// available.
+    /// Gets the progress ratio within the range of [0, 1].
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public int ThreadCount { get; init; } = 1;
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// CodePage
-    ///
-    /// <summary>
-    /// Gets or sets the value of code page.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    public CodePage CodePage { get; init; } = CodePage.Oem;
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// Filter
-    ///
-    /// <summary>
-    /// Gets or sets the predicate function to filter some of files or
-    /// directories.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    public Predicate<Entity> Filter { get; init; }
+    public static double GetRatio(this Report src) => Math.Min(
+        src.TotalBytes > 0 ? src.Bytes / (double)src.TotalBytes : 0.0,
+        src.TotalCount > 0 ? src.Count / (double)src.TotalCount : 0.0
+    );
 }

@@ -129,7 +129,7 @@ public sealed class ExtractFacade : ArchiveFacade
             e.CopyTo(Report);
             if (Report.State == ProgressState.Success)
             {
-                try { Move(e.Current); }
+                try { Move(e.Target); }
                 catch (Exception err)
                 {
                     e.State     = ProgressState.Failed;
@@ -140,7 +140,7 @@ public sealed class ExtractFacade : ArchiveFacade
             else if (Report.State == ProgressState.Failed)
             {
                 Error?.Invoke(e);
-                if (!e.Cancel) Logger.Warn(() => Move(e.Current));
+                if (!e.Cancel) Logger.Warn(() => Move(e.Target));
             }
         });
 

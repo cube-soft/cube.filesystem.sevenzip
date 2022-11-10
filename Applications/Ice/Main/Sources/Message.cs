@@ -138,7 +138,7 @@ public static class Message
                    src.Exception is SevenZipException se ? se.Code.ToString() :
                    src.Exception.GetType().Name;
 
-        if (src.Current is not null) _ = dest.AppendLine(src.Current.RawName);
+        if (src.Target is not null) _ = dest.AppendLine(src.Target.RawName);
 
         return dest.AppendFormat(Properties.Resources.ErrorGeneric, e)
                    .AppendLine()
