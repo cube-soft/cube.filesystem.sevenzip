@@ -20,7 +20,6 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests;
 using System.Linq;
 using System.Threading.Tasks;
 using Cube.Collections.Extensions;
-using Cube.FileSystem.SevenZip.Ice.Settings;
 using Cube.Tests;
 using NUnit.Framework;
 

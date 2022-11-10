@@ -48,16 +48,9 @@ internal class ArchiveEntitySource : EntitySource
     /// <param name="path">Path of the archive file.</param>
     ///
     /* --------------------------------------------------------------------- */
-    public ArchiveEntitySource(IInArchive core, int index, string path) :
-        base(core.GetPath(index, path), false)
+    public ArchiveEntitySource(IInArchive core, int index, string path) : base(core.GetPath(index, path))
     {
-        Index         = index;
-        FullName      = string.Empty;
-        Name          = string.Empty;
-        BaseName      = string.Empty;
-        Extension     = string.Empty;
-        DirectoryName = string.Empty;
-
+        Index = index;
         _core = core;
         _path = new(RawName)
         {
@@ -67,8 +60,6 @@ internal class ArchiveEntitySource : EntitySource
             AllowInactivation     = false,
             AllowUnc              = false,
         };
-
-        Refresh();
     }
 
     #endregion
@@ -114,14 +105,14 @@ internal class ArchiveEntitySource : EntitySource
 
     /* --------------------------------------------------------------------- */
     ///
-    /// OnRefresh
+    /// Setup
     ///
     /// <summary>
-    /// Refreshes the archived item information.
+    /// Sets up the archived item information.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    protected override void OnRefresh()
+    public override void Setup()
     {
         Crc            = _core.Get<uint>(Index, ItemPropId.Crc);
         Encrypted      = _core.Get<bool>(Index, ItemPropId.Encrypted);

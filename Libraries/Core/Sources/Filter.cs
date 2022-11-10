@@ -48,8 +48,7 @@ public static class Filter
     /// </param>
     ///
     /* --------------------------------------------------------------------- */
-    public static Predicate<Entity> From(IEnumerable<string> src) =>
-        new FilterCollection(src).Match;
+    public static Predicate<Entity> From(IEnumerable<string> src) => new FilterCollection(src).Match;
 
     #endregion
 }

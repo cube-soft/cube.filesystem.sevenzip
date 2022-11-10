@@ -145,15 +145,14 @@ public sealed class ArchiveReader : DisposableBase
         Source  = src;
         Format  = format;
         Options = options;
-        _query  = password;
+        _password  = password;
         _core   = Hook(new SevenZipLibrary()).GetInArchive(format);
 
-        var cb = Hook(new OpenCallback(src) { Password = _query });
-
+        var cb = Hook(new OpenCallback(src) { Password = _password });
         var ss = new ArchiveStreamReader(Io.Open(src));
         cb.Streams.Add(ss);
         var code = _core.Open(ss, IntPtr.Zero, cb);
-        if (code != 0) Logger.Warn($"Open failed ({code})");
+        if (code != 0) Logger.Warn($"[Open] Code:{code}");
 
         var n = (int)Math.Max(_core.GetNumberOfItems(), 1);
         Items = new ArchiveCollection(_core, n, src);
@@ -279,7 +278,7 @@ public sealed class ArchiveReader : DisposableBase
             if (code == (int)SevenZipCode.Cancel) throw cb.GetCancelException();
             else throw cb.GetException(code);
         }
-        finally { _query.Reset(); }
+        finally { _password.Reset(); }
     }
 
     /* --------------------------------------------------------------------- */
@@ -341,7 +340,7 @@ public sealed class ArchiveReader : DisposableBase
         return new(Source, e, progress)
         {
             Destination = dest ?? string.Empty,
-            Password    = _query,
+            Password    = _password,
             Filter      = Options.Filter,
         };
     }
@@ -350,7 +349,7 @@ public sealed class ArchiveReader : DisposableBase
 
     #region Fields
     private readonly IInArchive _core;
-    private readonly PasswordQuery _query;
+    private readonly PasswordQuery _password;
     private readonly DisposableContainer _disposable = new();
     #endregion
 }

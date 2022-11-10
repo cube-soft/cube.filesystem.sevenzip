@@ -27,7 +27,7 @@ namespace Cube.FileSystem.SevenZip;
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-public record SfxOption : CompressionOption
+public class SfxOption : CompressionOption
 {
     /* --------------------------------------------------------------------- */
     ///
