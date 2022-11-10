@@ -78,7 +78,7 @@ internal static class ProgressExtension
     /* --------------------------------------------------------------------- */
     public static string GetTitle(this ProgressFacade src, string path)
     {
-        var percentage = (int)(src.Report.Ratio * 100.0);
+        var percentage = (int)(src.Report.GetRatio() * 100.0);
         var dest = new StringBuilder();
         _ = dest.Append($"{percentage}%");
         if (path.HasValue()) _ = dest.Append($" - {Io.GetFileName(path)}");
