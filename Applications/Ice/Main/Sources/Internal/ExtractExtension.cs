@@ -80,8 +80,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         ///
         /* ----------------------------------------------------------------- */
         public static string GetText(this ExtractFacade src) =>
-            src.Report.Current != null ?
-            src.Report.Current.FullName :
+            src.Report.Target != null ?
+            src.Report.Target.FullName :
             Properties.Resources.MessagePreExtract;
 
         #endregion

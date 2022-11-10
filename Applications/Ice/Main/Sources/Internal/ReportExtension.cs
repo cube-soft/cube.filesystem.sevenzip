@@ -55,10 +55,10 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         public static TimeSpan Estimate(this Report src, TimeSpan elapsed, TimeSpan prev)
         {
-            if (src.Ratio < 0.01 || elapsed <= TimeSpan.Zero) return TimeSpan.Zero;
+            if (src.GetRatio() < 0.01 || elapsed <= TimeSpan.Zero) return TimeSpan.Zero;
 
             var unit  = 10L;
-            var ratio = Math.Max(1 / src.Ratio - 1.0, 0.0);
+            var ratio = Math.Max(1 / src.GetRatio() - 1.0, 0.0);
             var value = elapsed.TotalSeconds * ratio;
             var delta = value - prev.TotalSeconds;
 
@@ -80,8 +80,8 @@ namespace Cube.FileSystem.SevenZip.Ice
         /* ----------------------------------------------------------------- */
         public static void CopyTo(this Report src, Report dest)
         {
-            dest.Current    = src.Current;
             dest.State      = src.State;
+            dest.Target     = src.Target;
             dest.Count      = src.Count;
             dest.TotalCount = src.TotalCount;
             dest.Bytes      = src.Bytes;

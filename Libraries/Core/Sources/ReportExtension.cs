@@ -19,36 +19,29 @@
 namespace Cube.FileSystem.SevenZip;
 
 using System;
-using System.Collections.Generic;
 
 /* ------------------------------------------------------------------------- */
 ///
-/// Filter
+/// ReportExtension
 ///
 /// <summary>
-/// Provides functionality to create the filter functions.
+/// Provides extended methods of the Report class.
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-public static class Filter
+public static class ReportExtension
 {
-    #region Methods
-
     /* --------------------------------------------------------------------- */
     ///
-    /// From
+    /// GetRatio
     ///
     /// <summary>
-    /// Creates a new filter function with the specified file or
-    /// directory names.
+    /// Gets the progress ratio within the range of [0, 1].
     /// </summary>
     ///
-    /// <param name="src">
-    /// Collection of file or directory  names to be filtered.
-    /// </param>
-    ///
     /* --------------------------------------------------------------------- */
-    public static Predicate<Entity> From(IEnumerable<string> src) => new FilterCollection(src).Match;
-
-    #endregion
+    public static double GetRatio(this Report src) => Math.Min(
+        src.TotalBytes > 0 ? src.Bytes / (double)src.TotalBytes : 0.0,
+        src.TotalCount > 0 ? src.Count / (double)src.TotalCount : 0.0
+    );
 }

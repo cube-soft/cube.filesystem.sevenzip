@@ -276,7 +276,7 @@ internal abstract class CallbackBase : DisposableBase
         Cancel     = state == ProgressState.Failed,
         State      = state,
         Exception  = error,
-        Current    = entity,
+        Target     = entity,
         Bytes      = Bytes,
         Count      = Count,
         TotalBytes = TotalBytes,
