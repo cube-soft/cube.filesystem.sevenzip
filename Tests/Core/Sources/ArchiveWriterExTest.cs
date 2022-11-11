@@ -61,7 +61,7 @@ class ArchiveWriterExTest : FileFixture
         }
 
         using var ss = Io.Open(dest);
-        Assert.That(FormatDetector.From(ss), Is.EqualTo(zip));
+        Assert.That(FormatFactory.From(ss), Is.EqualTo(zip));
     }
 
     /* --------------------------------------------------------------------- */

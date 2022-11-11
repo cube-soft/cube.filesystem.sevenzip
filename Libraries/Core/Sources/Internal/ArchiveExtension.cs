@@ -78,7 +78,7 @@ internal static class ArchiveExtension
         if (dest.HasValue()) return dest;
 
         var tmp = Io.GetBaseName(path);
-        var fmt = FormatDetector.FromExtension(Io.GetExtension(tmp));
+        var fmt = FormatFactory.FromExtension(Io.GetExtension(tmp));
         if (fmt != Format.Unknown) return Io.GetFileName(tmp);
 
         var name = index == 0 ? Io.GetFileName(tmp) : $"{Io.GetFileName(tmp)}({index})";

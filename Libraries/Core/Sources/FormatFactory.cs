@@ -25,14 +25,15 @@ using System.IO;
 
 /* ------------------------------------------------------------------------- */
 ///
-/// Formatter
+/// FormatFactory
 ///
 /// <summary>
-/// Provides extended methods of the Format.
+/// Provides functionality to detect the archive format with the specified
+/// arguments.
 /// </summary>
 ///
 /* ------------------------------------------------------------------------- */
-public static class FormatDetector
+public static class FormatFactory
 {
     #region Methods
 
