@@ -264,7 +264,7 @@ public sealed class CompressionQueryValue : ObservableBase
         if (!src.HasValue()) return;
 
         var ext = Io.GetExtension(src).ToLowerInvariant();
-        var obj = ext == ".exe" ? Format.Sfx : FormatDetector.FromExtension(ext);
+        var obj = ext == ".exe" ? Format.Sfx : FormatFactory.FromExtension(ext);
         if (obj == Format.Unknown) return;
 
         var fmt = obj == Format.GZip || obj == Format.BZip2 || obj == Format.XZ ? Format.Tar : obj;

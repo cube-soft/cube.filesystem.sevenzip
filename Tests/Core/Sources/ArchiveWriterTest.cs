@@ -58,7 +58,7 @@ class ArchiveWriterTest : FileFixture
             obj.Clear();
         }
 
-        using (var obj = Io.Open(dest)) return FormatDetector.From(obj);
+        using (var obj = Io.Open(dest)) return FormatFactory.From(obj);
     }
 
     #endregion

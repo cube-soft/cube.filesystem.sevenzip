@@ -71,7 +71,7 @@ class FormatTest : FileFixture
     {
         var dest = Get(Guid.NewGuid().ToString("N"));
         Io.Copy(GetSource(filename), dest, true);
-        return FormatDetector.From(dest);
+        return FormatFactory.From(dest);
     }
 
     /* --------------------------------------------------------------------- */
@@ -102,7 +102,7 @@ class FormatTest : FileFixture
     /* --------------------------------------------------------------------- */
     [Test]
     public void FromFile_NotFound()=> Assert.That(
-        FormatDetector.From(GetSource("NotFound.rar")),
+        FormatFactory.From(GetSource("NotFound.rar")),
         Is.EqualTo(Format.Rar)
     );
 
