@@ -40,8 +40,11 @@ public static class ReportExtension
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public static double GetRatio(this Report src) => Math.Min(
-        src.TotalBytes > 0 ? src.Bytes / (double)src.TotalBytes : 0.0,
-        src.TotalCount > 0 ? src.Count / (double)src.TotalCount : 0.0
-    );
+    public static double GetRatio(this Report src) {
+        var c0 = src.Bytes / Math.Max(src.TotalBytes, 1.0);
+        var c1 = src.Count / Math.Max(src.TotalCount, 1.0);
+
+        return src.TotalBytes <=   0 ? c1 :
+               src.TotalCount <  100 ? c0 : Math.Min(c0, c1);
+    }
 }
