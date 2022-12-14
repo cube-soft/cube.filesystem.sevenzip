@@ -89,8 +89,16 @@ public static class Message
     /// <returns>SaveFileDialog object.</returns>
     ///
     /* --------------------------------------------------------------------- */
-    public static SaveFileMessage ForCompressLocation(string src, Format format) =>
-        new(src) { Filters = Resource.GetDialogFilters(format) };
+    public static SaveFileMessage ForCompressLocation(string src, Format format) {
+        var file = src.HasValue() ? Io.GetFileName(src) : string.Empty;
+        var dir  = src.HasValue() ? Io.GetDirectoryName(src) : string.Empty;
+
+        return new() {
+            Value            = file,
+            InitialDirectory = dir,
+            Filters          = Resource.GetDialogFilters(format),
+        };
+    }
 
     /* --------------------------------------------------------------------- */
     ///
