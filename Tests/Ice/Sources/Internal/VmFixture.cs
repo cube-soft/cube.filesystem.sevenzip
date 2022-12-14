@@ -125,7 +125,7 @@ abstract class VmFixture : FileFixture
     /* --------------------------------------------------------------------- */
     protected SettingFolder NewSettings()
     {
-        var dest = new SettingFolder(DataContract.Format.Json, Get("Settings.json"));
+        var dest = new SettingFolder(typeof(Program).Assembly, DataContract.Format.Json, Get("Settings.json"));
 
         dest.Value.Filters  = "Filter.txt|FilterDirectory|__MACOSX";
         dest.Value.Explorer = "dummy.exe";
