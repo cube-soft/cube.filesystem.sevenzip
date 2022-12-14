@@ -123,7 +123,13 @@ public class AssociateRegistrar
     /* --------------------------------------------------------------------- */
     public void Update(IDictionary<string, bool> extensions)
     {
-        foreach (var kv in extensions) Update(kv.Key, kv.Value);
+        foreach (var kv in extensions) Logger.Warn(() => Update(kv.Key, kv.Value));
+        Logger.Warn(() =>
+        {
+            var exe = Io.GetFileName(FileName);
+            using var sk = Registry.ClassesRoot.CreateSubKey($@"Applications\{exe}\DefaultIcon");
+            sk.SetValue("", IconLocation);
+        });
     }
 
     #endregion
@@ -290,8 +296,7 @@ public class AssociateRegistrar
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private string GetSubKeyName(string id) =>
-        $"{System.IO.Path.GetFileNameWithoutExtension(FileName)}_{id}".ToLowerInvariant();
+    private string GetSubKeyName(string id) => $"{Io.GetBaseName(FileName)}_{id}".ToLowerInvariant();
 
     /* --------------------------------------------------------------------- */
     ///
@@ -302,8 +307,7 @@ public class AssociateRegistrar
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private string GetExtension(string src) =>
-        ((src[0] == '.') ? src : $".{src}").ToLowerInvariant();
+    private string GetExtension(string src) => ((src[0] == '.') ? src : $".{src}").ToLowerInvariant();
 
     #endregion
 
