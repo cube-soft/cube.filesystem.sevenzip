@@ -19,6 +19,7 @@ namespace Cube.FileSystem.SevenZip.Ice;
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Cube.Backports;
 using Cube.Text.Extensions;
 using Microsoft.Win32;
@@ -123,7 +124,13 @@ public class AssociateRegistrar
     /* --------------------------------------------------------------------- */
     public void Update(IDictionary<string, bool> extensions)
     {
-        foreach (var kv in extensions) Update(kv.Key, kv.Value);
+        foreach (var kv in extensions) Logger.Warn(() => Update(kv.Key, kv.Value));
+        Logger.Warn(() =>
+        {
+            var exe = Io.GetFileName(FileName);
+            using var sk = Registry.ClassesRoot.CreateSubKey($@"Applications\{exe}\DefaultIcon");
+            sk.SetValue("", IconLocation);
+        });
     }
 
     #endregion
@@ -188,13 +195,7 @@ public class AssociateRegistrar
         using (var sk = Registry.ClassesRoot.CreateSubKey(name)) Register(sk, id);
 
         Register(extension, name);
-        OpenUserChoice(extension, sk =>
-        {
-            var prev = sk.GetValue("Progid") as string ?? "";
-            sk.SetValue(PreArchiver, prev);
-            sk.SetValue("Progid", name);
-            Logger.Debug($"[Explorer] {extension}:{prev}->{name}");
-        });
+        CheckUserChoice(extension);
     }
 
     /* --------------------------------------------------------------------- */
@@ -252,17 +253,6 @@ public class AssociateRegistrar
     /* --------------------------------------------------------------------- */
     private void Delete(string extension)
     {
-        OpenUserChoice(extension, sk =>
-        {
-            var name = GetSubKeyName(extension.TrimStart('.'));
-            var cur  = sk.GetValue("Progid") as string ?? "";
-            var prev = sk.GetValue(PreArchiver) as string ?? "";
-
-            sk.SetValue("Progid", prev);
-            sk.DeleteValue(PreArchiver, false);
-            Logger.Debug($"[Explorer] {extension}:{cur}->{prev}");
-        });
-
         using (var sk = Registry.ClassesRoot.CreateSubKey(GetExtension(extension)))
         {
             var prev = sk.GetValue(PreArchiver, "") as string;
@@ -275,25 +265,27 @@ public class AssociateRegistrar
 
             UpdateToolTip(sk, false);
         }
+
         Registry.ClassesRoot.DeleteSubKeyTree(GetSubKeyName(extension), false);
+        CheckUserChoice(extension);
     }
 
     /* --------------------------------------------------------------------- */
     ///
-    /// OpenUserChoice
+    /// CheckUserChoice
     ///
     /// <summary>
-    /// Opens the UserChoice subkey of the specified extension and
-    /// invokes the specified callback action.
+    /// Determines if the UserChoice registry subkey for the specified
+    /// extension exists.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private void OpenUserChoice(string extension, Action<RegistryKey> callback)
+    private void CheckUserChoice(string extension, [CallerMemberName] string name = null)
     {
-        var root = @"Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts";
-        var src  = $@"{root}\{GetExtension(extension)}\UserChoice";
-        using var sk = Registry.CurrentUser.OpenSubKey(src, true);
-        if (sk != null) callback(sk);
+        var src = @$"Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\{GetExtension(extension)}\UserChoice";
+        using var sk = Registry.CurrentUser.OpenSubKey(src, false);
+        if (sk is null) return;
+        Logger.Warn($"[{name}] {extension} UserChoice found");
     }
 
     /* --------------------------------------------------------------------- */
@@ -305,8 +297,7 @@ public class AssociateRegistrar
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private string GetSubKeyName(string id) =>
-        $"{System.IO.Path.GetFileNameWithoutExtension(FileName)}_{id}".ToLowerInvariant();
+    private string GetSubKeyName(string id) => $"{Io.GetBaseName(FileName)}_{id}".ToLowerInvariant();
 
     /* --------------------------------------------------------------------- */
     ///
@@ -317,8 +308,7 @@ public class AssociateRegistrar
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private string GetExtension(string src) =>
-        ((src[0] == '.') ? src : $".{src}").ToLowerInvariant();
+    private string GetExtension(string src) => ((src[0] == '.') ? src : $".{src}").ToLowerInvariant();
 
     #endregion
 

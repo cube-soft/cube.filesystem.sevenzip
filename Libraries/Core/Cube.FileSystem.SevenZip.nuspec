@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
     <metadata>
-        <version>8.0.0</version>
+        <version>8.0.1</version>
         <id>Cube.FileSystem.SevenZip</id>
         <title>Cube.FileSystem.SevenZip</title>
         <authors>clown,cube-soft</authors>

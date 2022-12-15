@@ -42,23 +42,21 @@ public class SettingFolder : SettingFolder<SettingValue>
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public SettingFolder() : this(DataContract.Format.Registry, @"CubeSoft\CubeICE\v3") { }
+    public SettingFolder() : this(Assembly.GetCallingAssembly()) { }
 
     /* --------------------------------------------------------------------- */
     ///
-    /// SettingFolder
+    /// SettingsFolder
     ///
     /// <summary>
     /// Initializes a new instance of the SettingFolder with the
-    /// specified parameters.
+    /// specified arguments.
     /// </summary>
     ///
-    /// <param name="format">Serialized format.</param>
-    /// <param name="location">Location for the settings.</param>
+    /// <param name="assembly">Source assembly.</param>
     ///
     /* --------------------------------------------------------------------- */
-    public SettingFolder(DataContract.Format format, string location) :
-        this(typeof(SettingFolder).Assembly, format, location) { }
+    public SettingFolder(Assembly assembly) : this(assembly, DataContract.Format.Registry, @"CubeSoft\CubeICE\v3") { }
 
     /* --------------------------------------------------------------------- */
     ///
