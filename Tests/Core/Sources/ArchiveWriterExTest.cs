@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 namespace Cube.FileSystem.SevenZip.Tests;
 
+using System;
 using Cube.Tests;
 using NUnit.Framework;
 
@@ -33,6 +34,46 @@ using NUnit.Framework;
 class ArchiveWriterExTest : FileFixture
 {
     #region Tests
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// TestHierarchicalDirectory
+    ///
+    /// <summary>
+    /// Tests to compress files and hierarchical directories.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    [Test]
+    public void TestHierarchicalDirectory()
+    {
+        var expected = new[]
+        {
+            @"Sample.txt",
+            @"Sample 00..01",
+            @"Sample 00..01\Dot 2018.02.13.txt",
+            @"Sample 00..01\Empty.txt",
+            @"Sample 00..01\FileInDirectory.txt",
+            @"Sample 00..01\Filter.txt",
+            @"Sample 00..01\FilterDirectory",
+            @"Sample 00..01\FilterDirectory\Filter.txt",
+            @"Sample 00..01\FilterDirectory\Sample.txt",
+        };
+
+        var file = Get($"{nameof(TestHierarchicalDirectory)}.zip");
+        using (var obj = new ArchiveWriter(Format.Zip, new()))
+        {
+            obj.Add(GetSource("Sample.txt"));
+            obj.Add(GetSource("Sample 00..01"));
+            obj.Save(file);
+        }
+
+        using var dest = new ArchiveReader(file);
+        for (var i = 0; i < Math.Min(dest.Items.Count, expected.Length); ++i)
+        {
+            Assert.That(dest.Items[i].FullName, Is.EqualTo(expected[i]));
+        }
+    }
 
     /* --------------------------------------------------------------------- */
     ///

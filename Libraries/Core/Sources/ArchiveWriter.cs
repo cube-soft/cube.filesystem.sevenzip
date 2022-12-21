@@ -324,17 +324,30 @@ public sealed class ArchiveWriter : DisposableBase
         if (CanRead(src)) _items.Add(src);
         if (!src.IsDirectory) return;
 
-        var files = Io.GetFiles(src.FullName).Select(e => IoEx.GetEntitySource(e));
-        foreach (var f in files)
+        foreach (var e in Io.GetFiles(src.FullName))
         {
-            var e = new RawEntity(f, Io.Combine(src.RelativeName, f.Name));
-            if (Options.Filter?.Invoke(e) ?? false) continue;
-            _items.Add(new(f, Io.Combine(src.RelativeName, f.Name)));
+            var entity = NewItem(src, e);
+            if (Options.Filter?.Invoke(entity) ?? false) continue;
+            _items.Add(entity);
         }
 
-        var dirs = Io.GetDirectories(src.FullName).Select(e => IoEx.GetEntitySource(e));
-        foreach (var e in dirs) AddItem(new(e, Io.Combine(src.RelativeName, e.Name)));
+        foreach (var e in Io.GetDirectories(src.FullName)) AddItem(NewItem(src, e));
     }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// NewItem
+    ///
+    /// <summary>
+    /// Creates a new instance of the RawEntity class with the specified
+    /// arguments.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private RawEntity NewItem(RawEntity parent, string src) => new(
+        IoEx.GetEntitySource(src),
+        Io.Combine(parent.RelativeName, Io.GetFileName(src))
+    );
 
     /* --------------------------------------------------------------------- */
     ///
