@@ -41,24 +41,10 @@ public class RawEntity : Entity
     /// </summary>
     ///
     /// <param name="src">Source object.</param>
-    ///
-    /* --------------------------------------------------------------------- */
-    public RawEntity(EntitySource src) : this(src, src.Name) { }
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// RawEntity
-    ///
-    /// <summary>
-    /// Initializes a new instance of the RawEntity class with the
-    /// specified arguments.
-    /// </summary>
-    ///
-    /// <param name="src">Source object.</param>
     /// <param name="name">Relative path in the archive.</param>
     ///
     /* --------------------------------------------------------------------- */
-    public RawEntity(EntitySource src, string name) : base(src) => RelativeName = name;
+    public RawEntity(string src, string name) : base(IoEx.GetEntitySource(src)) => RelativeName = name;
 
     #endregion
 
