@@ -125,7 +125,7 @@ public sealed class ArchiveWriter : DisposableBase
     /* --------------------------------------------------------------------- */
     public void Add(string src, string name)
     {
-        var e = new RawEntity(IoEx.GetEntitySource(src), name);
+        var e = new RawEntity(src, name);
         if (e.Exists) AddItem(e);
         else throw new System.IO.FileNotFoundException(e.FullName);
     }
@@ -237,7 +237,7 @@ public sealed class ArchiveWriter : DisposableBase
             var m = Options.CompressionMethod;
             if (m == CompressionMethod.BZip2 || m == CompressionMethod.GZip || m == CompressionMethod.XZ)
             {
-                var f = new List<RawEntity> { new(IoEx.GetEntitySource(tmp)) };
+                var f = new List<RawEntity> { new(tmp, Io.GetFileName(tmp)) };
                 SaveAs(dest, f, m.ToFormat(), progress);
             }
             else Io.Move(tmp, dest, true);
@@ -324,30 +324,18 @@ public sealed class ArchiveWriter : DisposableBase
         if (CanRead(src)) _items.Add(src);
         if (!src.IsDirectory) return;
 
+        static RawEntity make(string s, RawEntity e) =>
+            new(s, Io.Combine(e.RelativeName, Io.GetFileName(s)));
+
         foreach (var e in Io.GetFiles(src.FullName))
         {
-            var entity = NewItem(src, e);
+            var entity = make(e, src);
             if (Options.Filter?.Invoke(entity) ?? false) continue;
             _items.Add(entity);
         }
 
-        foreach (var e in Io.GetDirectories(src.FullName)) AddItem(NewItem(src, e));
+        foreach (var e in Io.GetDirectories(src.FullName)) AddItem(make(e, src));
     }
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// NewItem
-    ///
-    /// <summary>
-    /// Creates a new instance of the RawEntity class with the specified
-    /// arguments.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    private RawEntity NewItem(RawEntity parent, string src) => new(
-        IoEx.GetEntitySource(src),
-        Io.Combine(parent.RelativeName, Io.GetFileName(src))
-    );
 
     /* --------------------------------------------------------------------- */
     ///
