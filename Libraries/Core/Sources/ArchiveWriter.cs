@@ -125,7 +125,7 @@ public sealed class ArchiveWriter : DisposableBase
     /* --------------------------------------------------------------------- */
     public void Add(string src, string name)
     {
-        var e = new RawEntity(IoEx.GetEntitySource(src), name);
+        var e = new RawEntity(src, name);
         if (e.Exists) AddItem(e);
         else throw new System.IO.FileNotFoundException(e.FullName);
     }
@@ -237,7 +237,7 @@ public sealed class ArchiveWriter : DisposableBase
             var m = Options.CompressionMethod;
             if (m == CompressionMethod.BZip2 || m == CompressionMethod.GZip || m == CompressionMethod.XZ)
             {
-                var f = new List<RawEntity> { new(IoEx.GetEntitySource(tmp)) };
+                var f = new List<RawEntity> { new(tmp, Io.GetFileName(tmp)) };
                 SaveAs(dest, f, m.ToFormat(), progress);
             }
             else Io.Move(tmp, dest, true);
@@ -324,16 +324,17 @@ public sealed class ArchiveWriter : DisposableBase
         if (CanRead(src)) _items.Add(src);
         if (!src.IsDirectory) return;
 
-        var files = Io.GetFiles(src.FullName).Select(e => IoEx.GetEntitySource(e));
-        foreach (var f in files)
+        static RawEntity make(string s, RawEntity e) =>
+            new(s, Io.Combine(e.RelativeName, Io.GetFileName(s)));
+
+        foreach (var e in Io.GetFiles(src.FullName))
         {
-            var e = new RawEntity(f, Io.Combine(src.RelativeName, f.Name));
-            if (Options.Filter?.Invoke(e) ?? false) continue;
-            _items.Add(new(f, Io.Combine(src.RelativeName, f.Name)));
+            var entity = make(e, src);
+            if (Options.Filter?.Invoke(entity) ?? false) continue;
+            _items.Add(entity);
         }
 
-        var dirs = Io.GetDirectories(src.FullName).Select(e => IoEx.GetEntitySource(e));
-        foreach (var e in dirs) AddItem(new(e, Io.Combine(src.RelativeName, e.Name)));
+        foreach (var e in Io.GetDirectories(src.FullName)) AddItem(make(e, src));
     }
 
     /* --------------------------------------------------------------------- */
