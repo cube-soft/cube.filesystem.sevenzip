@@ -117,6 +117,22 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             set => Facade.Bursty = value;
         }
 
+        /* --------------------------------------------------------------------- */
+        ///
+        /// PropagateZone
+        ///
+        /// <summary>
+        /// Gets or sets a value indicating whether to propagate the ZoneID of
+        /// the archve.
+        /// </summary>
+        ///
+        /* --------------------------------------------------------------------- */
+        public bool PropagateZone
+        {
+            get => Facade.PropagateZone;
+            set => Facade.PropagateZone = value;
+        }
+
         #endregion
 
         #region Implementations
@@ -130,7 +146,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public void SetSaveMethod(SaveMethod value, bool check)
+        private void SetSaveMethod(SaveMethod value, bool check)
         {
             if (check) Facade.SaveMethod |= value;
             else Facade.SaveMethod &= ~value;

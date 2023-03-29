@@ -78,6 +78,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             Behaviors.Add(new CloseBehavior(this, vm));
             Behaviors.Add(new DialogBehavior(vm));
             Behaviors.Add(new OpenDirectoryBehavior(vm));
+            Behaviors.Add(new ProcessBehavior(vm));
             Behaviors.Add(new ClickEventBehavior(ExecuteButton, () => vm.Save(true)));
             Behaviors.Add(new ClickEventBehavior(ApplyButton, () => vm.Save(false)));
             Behaviors.Add(new ClickEventBehavior(ExitButton, Close));
@@ -86,6 +87,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             Behaviors.Add(new ClickEventBehavior(AssociateIconButton, vm.Associate.SelectIcon));
             Behaviors.Add(new ClickEventBehavior(AssociateAllButton, vm.Associate.SelectAll));
             Behaviors.Add(new ClickEventBehavior(AssociateClearButton, vm.Associate.Clear));
+            Behaviors.Add(new ClickEventBehavior(AssociateHelpButton, vm.Associate.Help));
             Behaviors.Add(new ClickEventBehavior(CompressSaveButton, vm.Compress.Browse));
             Behaviors.Add(new ClickEventBehavior(ExtractSaveButton, vm.Extract.Browse));
             Behaviors.Add(new ClickEventBehavior(TempButton, vm.Browse));

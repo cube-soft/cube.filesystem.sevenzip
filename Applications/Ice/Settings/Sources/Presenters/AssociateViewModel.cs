@@ -592,6 +592,17 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /* --------------------------------------------------------------------- */
     public void Clear() => SetAll(false);
 
+    /* ----------------------------------------------------------------- */
+    ///
+    /// Help
+    ///
+    /// <summary>
+    /// Invokes the command to display a help page on file associations.
+    /// </summary>
+    ///
+    /* ----------------------------------------------------------------- */
+    public void Help() => Send(Message.ForAssociateHelp());
+
     /* --------------------------------------------------------------------- */
     ///
     /// Dispose

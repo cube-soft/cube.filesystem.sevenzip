@@ -53,5 +53,19 @@ public static class Message
         return dest;
     }
 
+    /* --------------------------------------------------------------------- */
+    ///
+    /// ForAssociateHelp
+    ///
+    /// <summary>
+    /// Creates a message to display a help page on file associations.
+    /// </summary>
+    ///
+    /// <returns>ProcessMessage object.</returns>
+    ///
+    /* --------------------------------------------------------------------- */
+    public static ProcessMessage ForAssociateHelp() =>
+        new("https://clown.cube-soft.jp/entry/cubeice/issues/file-association");
+
     #endregion
 }

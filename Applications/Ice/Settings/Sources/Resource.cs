@@ -21,14 +21,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// Resource
+    /// Surface
     ///
     /// <summary>
     /// Provides resources for display.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public static class Resource
+    public static class Surface
     {
         #region Properties
 
