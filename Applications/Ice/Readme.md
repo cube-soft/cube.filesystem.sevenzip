@@ -53,8 +53,11 @@ CubeICE は、以下のライブラリを利用しています。
     - 3-clause BSD License
     - https://nlog-project.org/
     - https://www.nuget.org/packages/NLog/
+* Managed NTFS Data Streams
+    - Apache 2.0 License
+    - https://github.com/Emzi0767/Managed-NTFS-Data-Streams
 * AsyncBridge (net35)
-    - MIT license
+    - MIT License
     - https://omermor.github.io/AsyncBridge/
     - https://www.nuget.org/packages/AsyncBridge/
 
