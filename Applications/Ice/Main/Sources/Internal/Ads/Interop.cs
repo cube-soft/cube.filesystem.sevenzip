@@ -111,9 +111,10 @@ internal static class Interop
         if (ads.Name.Length == 0) // default stream
             return Io.Open(ads.Source);
 
-        var (nmode, nflags) = ManagedToNative(mode);
+        var nmode   = ManagedToNative(mode);
+        var nflags  = NativeMethods.FileFlagsAndAttributes.FILE_FLAG_OVERLAPPED;
         var naccess = ManagedToNative(access);
-        var nshare = ManagedToNative(share);
+        var nshare  = ManagedToNative(share);
 
         var lpFileName = $"{ads.Source}:{ads.Name}";
 
@@ -164,21 +165,17 @@ internal static class Interop
         return mode;
     }
 
-    private static (NativeMethods.FileCreationDisposition creation, NativeMethods.FileFlagsAndAttributes attribs) ManagedToNative(FileMode mode)
+    private static NativeMethods.FileCreationDisposition ManagedToNative(FileMode mode) =>  mode switch
     {
-        var mode1 = mode switch
-        {
-            FileMode.CreateNew => NativeMethods.FileCreationDisposition.CREATE_NEW,
-            FileMode.Create => NativeMethods.FileCreationDisposition.CREATE_ALWAYS,
-            FileMode.Open => NativeMethods.FileCreationDisposition.OPEN_EXISTING,
-            FileMode.OpenOrCreate => NativeMethods.FileCreationDisposition.OPEN_ALWAYS,
-            FileMode.Truncate => NativeMethods.FileCreationDisposition.TRUNCATE_EXISTING,
-            FileMode.Append => NativeMethods.FileCreationDisposition.OPEN_ALWAYS,
-            _ => NativeMethods.FileCreationDisposition.None,
-        };
+        FileMode.CreateNew    => NativeMethods.FileCreationDisposition.CREATE_NEW,
+        FileMode.Create       => NativeMethods.FileCreationDisposition.CREATE_ALWAYS,
+        FileMode.Open         => NativeMethods.FileCreationDisposition.OPEN_EXISTING,
+        FileMode.OpenOrCreate => NativeMethods.FileCreationDisposition.OPEN_ALWAYS,
+        FileMode.Truncate     => NativeMethods.FileCreationDisposition.TRUNCATE_EXISTING,
+        FileMode.Append       => NativeMethods.FileCreationDisposition.OPEN_ALWAYS,
+        _                     => NativeMethods.FileCreationDisposition.None,
+    };
 
-        return (mode1, NativeMethods.FileFlagsAndAttributes.FILE_FLAG_OVERLAPPED);
-    }
     #endregion
 
     #region Helpers
