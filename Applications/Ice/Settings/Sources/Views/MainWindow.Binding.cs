@@ -45,7 +45,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             b0.Bind(nameof(s0.AlphaFS),      IoHandlerComboBox, nameof(ComboBox.SelectedValue));
             b0.Bind(nameof(s0.Temp),         TempTextBox,       nameof(TextBox.Text));
             b0.Bind(nameof(s0.CheckUpdate),  UpdateCheckBox,    nameof(CheckBox.Checked));
-            IoHandlerComboBox.Bind(Resource.IoHandlers);
+            IoHandlerComboBox.Bind(Surface.IoHandlers);
 
             // File association
             var b1 = Behaviors.Hook(new BindingSource(vm.Associate, ""));
@@ -69,7 +69,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             b3.Bind(nameof(s3.CompressOptions), ShortcutCompressComboBox,  nameof(ComboBox.SelectedValue));
             b3.Bind(nameof(s3.Extract),         ShortcutExtractCheckBox,   nameof(CheckBox.Checked));
             b3.Bind(nameof(s3.Settings),        ShortcutSettingsCheckBox,  nameof(CheckBox.Checked));
-            ShortcutCompressComboBox.Bind(Resource.Shortcuts);
+            ShortcutCompressComboBox.Bind(Surface.Shortcuts);
 
             // Compression
             var s4 = vm.Compress;
@@ -87,7 +87,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             b4.Bind(nameof(s4.OpenDirectory),    CompressOpenCheckBox,          nameof(CheckBox.Checked));
             b4.Bind(nameof(s4.OpenDirectory),    CompressOpenSmartCheckBox,     nameof(Enabled));
             b4.Bind(nameof(s4.SkipDesktop),      CompressOpenSmartCheckBox,     nameof(CheckBox.Checked));
-            CompressLevelComboBox.Bind(Resource.CompressionLevels);
+            CompressLevelComboBox.Bind(Surface.CompressionLevels);
 
             // Extracting
             var s5 = vm.Extract;
@@ -105,6 +105,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             b5.Bind(nameof(s5.CreateDirectory),     ExtractCreateSmartCheckBox,   nameof(Enabled));
             b5.Bind(nameof(s5.SkipSingleDirectory), ExtractCreateSmartCheckBox,   nameof(CheckBox.Checked));
             b5.Bind(nameof(s5.OpenDirectory),       ExtractOpenCheckBox,          nameof(CheckBox.Checked));
+            b5.Bind(nameof(s5.PropagateZone),       ExtractZoneCheckBox,          nameof(ExtractZoneCheckBox.Checked));
             b5.Bind(nameof(s5.OpenDirectory),       ExtractOpenSmartCheckBox,     nameof(Enabled));
             b5.Bind(nameof(s5.SkipDesktop),         ExtractOpenSmartCheckBox,     nameof(CheckBox.Checked));
         }

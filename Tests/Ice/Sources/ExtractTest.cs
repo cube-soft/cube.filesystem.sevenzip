@@ -19,7 +19,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests;
 
 using System.Collections.Generic;
 using System.Linq;
-using Cube.FileSystem.SevenZip.Ice.Settings;
+using System.Security;
 using NUnit.Framework;
 
 /* ------------------------------------------------------------------------- */
@@ -51,7 +51,10 @@ class ExtractTest : VmFixture
     {
         settings.SaveDirectory = Get("Preset");
 
-        using var vm = NewVM(args.Concat(files.Select(e => GetSource(e))), settings);
+        var sources = files.Select(e => GetSource(e));
+        foreach (var e in sources) ZoneId.Set(e, SecurityZone.Internet);
+
+        using var vm = NewVM(args.Concat(sources), settings);
         using (vm.SetPassword("password")) // if needed
         using (vm.SetDestination(Get("Runtime")))
         {

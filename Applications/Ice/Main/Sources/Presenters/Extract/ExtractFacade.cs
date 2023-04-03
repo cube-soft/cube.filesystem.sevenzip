@@ -18,6 +18,7 @@
 namespace Cube.FileSystem.SevenZip.Ice;
 
 using System;
+using System.Security;
 using Cube.Text.Extensions;
 
 /* ------------------------------------------------------------------------- */
@@ -65,6 +66,17 @@ public sealed class ExtractFacade : ArchiveFacade
 
     /* --------------------------------------------------------------------- */
     ///
+    /// Zone
+    ///
+    /// <summary>
+    /// Gets the Zone ID of the provided archive.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public SecurityZone Zone { get; private set; }
+
+    /* --------------------------------------------------------------------- */
+    ///
     /// Overwrite
     ///
     /// <summary>
@@ -92,6 +104,7 @@ public sealed class ExtractFacade : ArchiveFacade
         foreach (var src in Request.Sources)
         {
             Source = src;
+
             var dir = new ExtractDirectory(this.Select(), Settings);
             InvokePreProcess(dir);
 
@@ -122,14 +135,14 @@ public sealed class ExtractFacade : ArchiveFacade
     /* --------------------------------------------------------------------- */
     private void Invoke(ArchiveReader src, ExtractDirectory dir)
     {
-        Logger.Debug($"Format:{src.Format}, Source:{src.Source}");
+        Logger.Debug($"Format:{src.Format}, Source:{src.Source}, Zone:{Zone:D}");
         SetDestination(src, dir);
 
         var progress = GetProgress(e => {
             e.CopyTo(Report);
             if (Report.State == ProgressState.Success)
             {
-                try { Move(e.Target); }
+                try { Transfer(e.Target); }
                 catch (Exception err)
                 {
                     e.State     = ProgressState.Failed;
@@ -140,7 +153,7 @@ public sealed class ExtractFacade : ArchiveFacade
             else if (Report.State == ProgressState.Failed)
             {
                 Error?.Invoke(e);
-                if (!e.Cancel) Logger.Warn(() => Move(e.Target));
+                if (!e.Cancel) Logger.Warn(() => Transfer(e.Target));
             }
         });
 
@@ -158,14 +171,14 @@ public sealed class ExtractFacade : ArchiveFacade
     /* --------------------------------------------------------------------- */
     private void Invoke(ArchiveReader src, int index, ExtractDirectory dir)
     {
-        Logger.Debug($"Format:{src.Format}, Source:{src.Source}");
+        Logger.Debug($"Format:{src.Format}, Source:{src.Source}, Zone:{Zone:D}");
         SetDestination(src, dir);
 
         var item = src.Items[index];
         Retry(() => src.Save(Temp, item, GetProgress()));
 
         var dest = Io.Combine(Temp, item.FullName);
-        if (FormatFactory.From(dest) != Format.Tar) Move(item);
+        if (FormatFactory.From(dest) != Format.Tar) Transfer(item);
         else
         {
             using var e = new ArchiveReader(dest, Password, src.Options);
@@ -182,7 +195,11 @@ public sealed class ExtractFacade : ArchiveFacade
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private void InvokePreProcess(ExtractDirectory dir) => SetTemp(dir.Source);
+    private void InvokePreProcess(ExtractDirectory dir)
+    {
+        SetTemp(dir.Source);
+        if (Settings.Value.Extraction.PropagateZone) Zone = ZoneId.Get(Source);
+    }
 
     /* --------------------------------------------------------------------- */
     ///
@@ -203,14 +220,15 @@ public sealed class ExtractFacade : ArchiveFacade
 
     /* --------------------------------------------------------------------- */
     ///
-    /// Move
+    /// Transfer
     ///
     /// <summary>
     /// Moves from the temporary directory to the provided directory.
+    /// If necessary, an ADS file for ZoneID is also created.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private void Move(Entity item)
+    private void Transfer(Entity item)
     {
         if (!item.FullName.HasValue()) return;
 
@@ -219,6 +237,10 @@ public sealed class ExtractFacade : ArchiveFacade
 
         var dest = Io.Combine(Destination, item.FullName);
         Io.Get(src).Move(dest, Overwrite);
+
+        var zone = Settings.Value.Extraction.PropagateZone &&
+                  (Zone == SecurityZone.Internet || Zone == SecurityZone.Untrusted);
+        if (!item.IsDirectory && zone) ZoneId.Set(dest, Zone);
     }
 
     /* --------------------------------------------------------------------- */

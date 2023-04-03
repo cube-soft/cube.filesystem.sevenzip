@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <Version>2.2.1</Version>
+        <Version>3.0.0</Version>
         <Authors>clown;cube-soft</Authors>
         <Company>CubeSoft</Company>
         <Product>CubeIceAssociator</Product>
@@ -35,5 +35,6 @@
         <Compile Update="Properties\Resources.Designer.cs" DependentUpon="Resources.resx" AutoGen="True" DesignTime="True" />
         <EmbeddedResource Update="Properties\Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
         <None Include="App.*" />
+		<None Include="NLog.config" CopyToOutputDirectory="Always" />
     </ItemGroup>
 </Project>
