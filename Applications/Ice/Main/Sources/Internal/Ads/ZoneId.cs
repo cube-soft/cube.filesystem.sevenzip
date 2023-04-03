@@ -86,7 +86,7 @@ public static class ZoneId
         var ads = GetStream(src);
         if (ads is null) return SecurityZone.NoZone;
 
-        using var reader = ads.OpenText(Encoding.Default);
+        using var reader = new StreamReader(ads.OpenRead(), Encoding.Default);
         if (!MoveSection(reader)) return SecurityZone.NoZone;
 
         var str = string.Empty;
@@ -120,7 +120,7 @@ public static class ZoneId
     public static void Set(string src, SecurityZone id)
     {
         var ads = new FileDataStream(src, FileName, 0, FileDataStreamType.Data);
-        using var writer = ads.CreateText(Encoding.Default);
+        using var writer = new StreamWriter(ads.Create(), Encoding.Default);
         writer.WriteLine($"[{SectionName}]");
         writer.WriteLine($"{KeyName}={id:D}");
     }
@@ -138,7 +138,7 @@ public static class ZoneId
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private static FileDataStream GetStream(string src) => InteropWrapper
+    private static FileDataStream GetStream(string src) => Interop
         .EnumerateDataStreams(src)
         .FirstOrDefault(e => e.Type == FileDataStreamType.Data && e.Name == FileName);
 

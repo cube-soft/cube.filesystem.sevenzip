@@ -1,4 +1,6 @@
-﻿// This file is part of Managed NTFS Data Streams project
+﻿/* ------------------------------------------------------------------------- */
+//
+// This file is part of Managed NTFS Data Streams project
 //
 // Copyright 2020 Emzi0767
 //
@@ -6,163 +8,232 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//   http://www.apache.org/licenses/LICENSE-2.0
+// http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+//
+/* ------------------------------------------------------------------------- */
+namespace Cube.FileSystem.SevenZip.Ice;
 
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
+using Microsoft.Win32.SafeHandles;
 
-namespace Cube.FileSystem.SevenZip.Ice
+internal static class Interop
 {
-    internal static class Interop
+    #region Stream Enumerators
+    public static IEnumerable<FileDataStream> EnumerateDataStreams(string src)
     {
-        public const string KERNEL32 = "kernel32";
+        if (string.IsNullOrEmpty(src)) throw new ArgumentNullException(nameof(src));
 
-        #region Data Streams
-        /// <summary>
-        /// https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-findfirststreamw
-        /// </summary>
-        /// <param name="lpFileName">Path to file.</param>
-        /// <param name="infoLevel">Must be <see cref="StreamInfoLevels.FindStreamInfoStandard"/>.</param>
-        /// <param name="lpFindStreamData">Pointer to <see cref="FindStreamData"/>.</param>
-        /// <param name="flags">Must be 0.</param>
-        /// <returns>Handle or <see cref="INVALID_HANDLE_VALUE"/>.</returns>
-        [DllImport(KERNEL32, CharSet = CharSet.Unicode, SetLastError = true)]
-        public static extern IntPtr FindFirstStreamW(
-            string lpFileName,
-            StreamInfoLevels infoLevel,
-            IntPtr lpFindStreamData,
-            int flags);
+        // init locals
+        var hFindStream = NativeMethods.INVALID_HANDLE_VALUE;
 
-        [DllImport(KERNEL32, CharSet = CharSet.Unicode, SetLastError = true)]
-        public static extern bool FindNextStreamW(
-            IntPtr hFindStream,
-            IntPtr lpFindStreamData);
-
-        [DllImport(KERNEL32, SetLastError = true)]
-        public static extern bool FindClose(
-            IntPtr hFindFile);
-
-        public enum StreamInfoLevels : int
+        try
         {
-            FindStreamInfoStandard = 0,
-            FindStreamInfoMaxInfoLevel
-        }
+            // check if we can get any stream
+            var first = FindFirstStream(src, out hFindStream);
+            if (!first.HasValue) yield break;
 
-        [StructLayout(LayoutKind.Sequential)]
-        public unsafe struct FindStreamData
+            // Extract stream info
+            ExtractStreamInfo(first.Value.PtrToString(), out var streamName, out var streamType);
+            yield return new(src, streamName, first.Value.StreamSize, streamType);
+
+            // Extract more streams until we run out
+            while (true)
+            {
+                var fsd = FindNextStream(hFindStream);
+                if (!fsd.HasValue) break;
+                ExtractStreamInfo(fsd.Value.PtrToString(), out streamName, out streamType);
+                yield return new(src, streamName, fsd.Value.StreamSize, streamType);
+            }
+        }
+        finally
         {
-            public long StreamSize;
-            // TODO: name
-            public fixed char cStreamName[296];
+            if (hFindStream != NativeMethods.INVALID_HANDLE_VALUE) FindClose(hFindStream);
         }
-
-        public const int ERROR_HANDLE_EOF = 38;
-
-        public static IntPtr INVALID_HANDLE_VALUE { get; } = new IntPtr(-1);
-        #endregion
-
-        #region Error Messages
-        [DllImport(KERNEL32, CharSet = CharSet.Unicode, SetLastError = true)]
-        public static extern int FormatMessage(
-            FormatMessageFlags dwFlags,
-            IntPtr lpSource,
-            int dwMessageId,
-            int dwLanguageId,
-            IntPtr buffer,
-            int nSize,
-            IntPtr arguments);
-
-        [Flags]
-        public enum FormatMessageFlags : int
-        {
-            FORMAT_MESSAGE_ALLOCATE_BUFFER = 0x100,
-            FORMAT_MESSAGE_ARGUMENT_ARRAY = 0x2000,
-            FORMAT_MESSAGE_FROM_HMODULE = 0x800,
-            FORMAT_MESSAGE_FROM_STRING = 0x400,
-            FORMAT_MESSAGE_FROM_SYSTEM = 0x1000,
-            FORMAT_MESSAGE_IGNORE_INSERTS = 0x200,
-            FORMAT_MESSAGE_MAX_WIDTH_MASK = 0xFF,
-
-            Defaults = FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ARGUMENT_ARRAY
-        }
-        #endregion
-
-        #region File IO
-        [DllImport(KERNEL32, CharSet = CharSet.Unicode, SetLastError = true)]
-        public static extern IntPtr CreateFileW(
-            string lpFileName,
-            FileAccessMode dwDesiredAccess,
-            FileShareMode dwShareMode,
-            IntPtr lpSecurityAttributes, // always 0
-            FileCreationDisposition dwCreationDisposition,
-            FileFlagsAndAttributes dwFlagsAndAttributes, // typically just FILE_FLAG_OVERLAPPED
-            IntPtr hTemplateFile);
-
-        [DllImport(KERNEL32, CharSet = CharSet.Unicode, SetLastError = true)]
-        public static extern bool DeleteFileW(
-            string lpFileName);
-
-        [Flags]
-        public enum FileAccessMode : uint
-        {
-            None = 0,
-            GENERIC_READ = 0x80000000,
-            GENERIC_WRITE = 0x40000000,
-            GENERIC_EXECUTE = 0x20000000,
-            GENERIC_ALL = 0x10000000
-        }
-
-        [Flags]
-        public enum FileShareMode : int
-        {
-            None = 0,
-            FILE_SHARE_DELETE = 0x00000004,
-            FILE_SHARE_READ = 0x00000001,
-            FILE_SHARE_WRITE = 0x00000002
-        }
-
-        public enum FileCreationDisposition : int
-        {
-            None = 0,
-            CREATE_ALWAYS = 2,
-            CREATE_NEW = 1,
-            OPEN_ALWAYS = 4,
-            OPEN_EXISTING = 3,
-            TRUNCATE_EXISTING = 5
-        }
-
-        [Flags]
-        public enum FileFlagsAndAttributes : uint
-        {
-            None = 0,
-
-            FILE_ATTRIBUTE_ARCHIVE = 0x20,
-            FILE_ATTRIBUTE_ENCRYPTED = 0x4000,
-            FILE_ATTRIBUTE_HIDDEN = 0x2,
-            FILE_ATTRIBUTE_NORMAL = 0x80,
-            FILE_ATTRIBUTE_OFFLINE = 0x1000,
-            FILE_ATTRIBUTE_READONLY = 0x1,
-            FILE_ATTRIBUTE_SYSTEM = 0x4,
-            FILE_ATTRIBUTE_TEMPORARY = 0x100,
-
-            FILE_FLAG_BACKUP_SEMANTICS = 0x02000000,
-            FILE_FLAG_DELETE_ON_CLOSE = 0x04000000,
-            FILE_FLAG_NO_BUFFERING = 0x20000000,
-            FILE_FLAG_OPEN_NO_RECALL = 0x00100000,
-            FILE_FLAG_OPEN_REPARSE_POINT = 0x00200000,
-            FILE_FLAG_OVERLAPPED = 0x40000000,
-            FILE_FLAG_POSIX_SEMANTICS = 0x01000000,
-            FILE_FLAG_RANDOM_ACCESS = 0x10000000,
-            FILE_FLAG_SESSION_AWARE = 0x00800000,
-            FILE_FLAG_SEQUENTIAL_SCAN = 0x08000000,
-            FILE_FLAG_WRITE_THROUGH = 0x80000000
-        }
-        #endregion
     }
+
+    // enumerator workarounds
+    private static unsafe NativeMethods.FindStreamData? FindFirstStream(string lpFileName, out IntPtr hFindStream)
+    {
+        NativeMethods.FindStreamData data = new();
+        IntPtr lpFindStreamData = new IntPtr(&data);
+        hFindStream = NativeMethods.FindFirstStreamW(lpFileName, NativeMethods.StreamInfoLevels.FindStreamInfoStandard, lpFindStreamData, 0);
+        if (hFindStream == NativeMethods.INVALID_HANDLE_VALUE)
+        {
+            var err = Marshal.GetLastWin32Error();
+            if (err == NativeMethods.ERROR_HANDLE_EOF)
+                return default;
+
+            ThrowErrorAsException(err, lpFileName);
+        }
+
+        Logger.Debug($"{lpFileName} -> {new string(data.cStreamName)}");
+        return data;
+    }
+
+    private static unsafe NativeMethods.FindStreamData? FindNextStream(IntPtr hFindStream)
+    {
+        NativeMethods.FindStreamData data = new();
+        IntPtr lpFindStreamData = new IntPtr(&data);
+        if (!NativeMethods.FindNextStreamW(hFindStream, lpFindStreamData))
+        {
+            var err = Marshal.GetLastWin32Error();
+            if (err == NativeMethods.ERROR_HANDLE_EOF)
+                return default;
+
+            ThrowErrorAsException(err, null);
+        }
+
+        return data;
+    }
+
+    private static unsafe void FindClose(IntPtr hFindStream)
+    {
+        if (!NativeMethods.FindClose(hFindStream))
+            ThrowErrorAsException(Marshal.GetLastWin32Error(), null);
+    }
+    #endregion
+
+    #region IO Helpers
+    public static FileStream Open(FileDataStream ads, FileMode mode, FileAccess access, FileShare share)
+    {
+        if (ads.Type != FileDataStreamType.Data)
+            throw new InvalidOperationException("Only $DATA streams can be opened for reading or writing.");
+
+        if (ads.Name.Length == 0) // default stream
+            return Io.Open(ads.Source);
+
+        var (nmode, nflags) = ManagedToNative(mode);
+        var naccess = ManagedToNative(access);
+        var nshare = ManagedToNative(share);
+
+        var lpFileName = $"{ads.Source}:{ads.Name}";
+
+        var hFile = NativeMethods.CreateFileW(lpFileName, naccess, nshare, IntPtr.Zero, nmode, nflags, IntPtr.Zero);
+        if (hFile == NativeMethods.INVALID_HANDLE_VALUE)
+        {
+            ThrowErrorAsException(Marshal.GetLastWin32Error(), lpFileName);
+            return null;
+        }
+
+        return new FileStream(new SafeFileHandle(hFile, true), access, 4096, true);
+    }
+
+    public static void Delete(FileDataStream ads)
+    {
+        if (ads.Type != FileDataStreamType.Data)
+            throw new InvalidOperationException("Only $DATA streams can be deleted.");
+
+        if (ads.Name.Length == 0) // default stream
+        {
+            Io.Delete(ads.Source);
+            return;
+        }
+
+        var lpFileName = $"{ads.Source}:{ads.Name}";
+        if (!NativeMethods.DeleteFileW(lpFileName))
+            ThrowErrorAsException(Marshal.GetLastWin32Error(), lpFileName);
+    }
+
+    private static NativeMethods.FileShareMode ManagedToNative(FileShare share)
+    {
+        var mode = NativeMethods.FileShareMode.None;
+
+        if ((share & FileShare.Delete) == FileShare.Delete) mode |= NativeMethods.FileShareMode.FILE_SHARE_DELETE;
+        if ((share & FileShare.Read) == FileShare.Read) mode |= NativeMethods.FileShareMode.FILE_SHARE_READ;
+        if ((share & FileShare.Write) == FileShare.Write) mode |= NativeMethods.FileShareMode.FILE_SHARE_WRITE;
+
+        return mode;
+    }
+
+    private static NativeMethods.FileAccessMode ManagedToNative(FileAccess access)
+    {
+        var mode = NativeMethods.FileAccessMode.None;
+
+        if ((access & FileAccess.Read) == FileAccess.Read) mode |= NativeMethods.FileAccessMode.GENERIC_READ;
+        if ((access & FileAccess.Write) == FileAccess.Write) mode |= NativeMethods.FileAccessMode.GENERIC_WRITE;
+
+        return mode;
+    }
+
+    private static (NativeMethods.FileCreationDisposition creation, NativeMethods.FileFlagsAndAttributes attribs) ManagedToNative(FileMode mode)
+    {
+        var mode1 = mode switch
+        {
+            FileMode.CreateNew => NativeMethods.FileCreationDisposition.CREATE_NEW,
+            FileMode.Create => NativeMethods.FileCreationDisposition.CREATE_ALWAYS,
+            FileMode.Open => NativeMethods.FileCreationDisposition.OPEN_EXISTING,
+            FileMode.OpenOrCreate => NativeMethods.FileCreationDisposition.OPEN_ALWAYS,
+            FileMode.Truncate => NativeMethods.FileCreationDisposition.TRUNCATE_EXISTING,
+            FileMode.Append => NativeMethods.FileCreationDisposition.OPEN_ALWAYS,
+            _ => NativeMethods.FileCreationDisposition.None,
+        };
+
+        return (mode1, NativeMethods.FileFlagsAndAttributes.FILE_FLAG_OVERLAPPED);
+    }
+    #endregion
+
+    #region Helpers
+    private static unsafe string PtrToString(this NativeMethods.FindStreamData fsd) => new(fsd.cStreamName);
+
+    private static void ExtractStreamInfo(string s, out string name, out FileDataStreamType type)
+    {
+        name = string.Empty;
+        type = FileDataStreamType.Unknown;
+
+        if (string.IsNullOrEmpty(s) || s[0] != ':') return;
+
+        var pos = s.IndexOf(':', 1);
+        if (pos < 0) return;
+        if (pos - 1 > 0) name = s.Substring(1, pos - 1);
+        type = FileDataStreamHelper.GetStreamType(s.Substring(pos + 1));
+    }
+
+    private static void ThrowErrorAsException(int code, string fpath)
+    {
+        fpath ??= "<null>";
+        throw code switch
+        {
+            2   => new FileNotFoundException("Specified file was not found.", fpath),
+            3   => new DirectoryNotFoundException($"Could not find a part of the path \"{fpath}\"."),
+            5   => new UnauthorizedAccessException($"Access to the path \"{fpath}\" was denied."),
+            15  => new DriveNotFoundException($"Access to the path \"{fpath}\" was denied."),
+            32  => new IOException($"The process cannot access the file \"{fpath}\" because it is being used by another process.", HResultFromError(code)),
+            80  => new IOException($"The file \"{fpath}\" already exists.", HResultFromError(code)),
+            87  => new IOException(MessageFromError(code), HResultFromError(code)),
+            183 => new IOException($"Cannot create \"{fpath}\" because a file or directory with the same name already exists."),
+            206 => new PathTooLongException(),
+            995 => new OperationCanceledException(),
+            _   => Marshal.GetExceptionForHR(HResultFromError(code))
+        };
+    }
+
+    private static int HResultFromError(int code)
+        => unchecked((int)0x80070000 | code);
+
+    private unsafe static string MessageFromError(int code)
+    {
+        var lpBufferSize = 512;
+        var lpBuffer = stackalloc char[lpBufferSize];
+        lpBufferSize = NativeMethods.FormatMessage(NativeMethods.FormatMessageFlags.Defaults, IntPtr.Zero, code, 0, new IntPtr(lpBuffer), lpBufferSize, IntPtr.Zero);
+        if (lpBufferSize != 0)
+            return new string(lpBuffer, 0, lpBufferSize);
+
+        return $"Unknown IO error.";
+    }
+
+    internal static FileStream SeekToEnd(this FileStream fs)
+    {
+        fs.Seek(0, SeekOrigin.End);
+        return fs;
+    }
+    #endregion
 }
