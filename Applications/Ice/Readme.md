@@ -53,13 +53,19 @@ CubeICE は、以下のライブラリを利用しています。
     - 3-clause BSD License
     - https://nlog-project.org/
     - https://www.nuget.org/packages/NLog/
+* Managed NTFS Data Streams
+    - Apache 2.0 License
+    - https://github.com/Emzi0767/Managed-NTFS-Data-Streams
 * AsyncBridge (net35)
-    - MIT license
+    - MIT License
     - https://omermor.github.io/AsyncBridge/
     - https://www.nuget.org/packages/AsyncBridge/
 
 ## バージョン履歴
 
+* 2023-04-03 version 3.0.0
+    - ZoneID を伝搬するように修正 (Mark of the Web)
+    - 設定画面のファイル関連付け項目にヘルプボタンを追加
 * 2022-12-23 version 2.2.1
     - 圧縮時に 2 階層以上のフォルダー構造が消失する不具合を修正
 * 2022-12-16 version 2.2.0

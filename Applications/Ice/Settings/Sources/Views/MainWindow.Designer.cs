@@ -78,6 +78,7 @@
             this.ExtractPanel = new System.Windows.Forms.TableLayoutPanel();
             this.ExtractOptionGroupBox = new System.Windows.Forms.GroupBox();
             this.ExtractOptionPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.ExtractZoneCheckBox = new System.Windows.Forms.CheckBox();
             this.ExtractDeleteCheckBox = new System.Windows.Forms.CheckBox();
             this.ExtractOpenSmartCheckBox = new System.Windows.Forms.CheckBox();
             this.ExtractOpenCheckBox = new System.Windows.Forms.CheckBox();
@@ -114,6 +115,7 @@
             this.ApplyButton = new System.Windows.Forms.Button();
             this.ExitButton = new System.Windows.Forms.Button();
             this.ExecuteButton = new System.Windows.Forms.Button();
+            this.AssociateHelpButton = new System.Windows.Forms.Button();
             this.RootPanel.SuspendLayout();
             this.SettingTabControl.SuspendLayout();
             this.GeneralTabPage.SuspendLayout();
@@ -161,7 +163,7 @@
             this.RootPanel.RowCount = 2;
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.RootPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 54F));
-            this.RootPanel.Size = new System.Drawing.Size(544, 651);
+            this.RootPanel.Size = new System.Drawing.Size(538, 644);
             this.RootPanel.TabIndex = 0;
             //
             // SettingTabControl
@@ -176,7 +178,7 @@
             this.SettingTabControl.Margin = new System.Windows.Forms.Padding(9);
             this.SettingTabControl.Name = "SettingTabControl";
             this.SettingTabControl.SelectedIndex = 0;
-            this.SettingTabControl.Size = new System.Drawing.Size(526, 579);
+            this.SettingTabControl.Size = new System.Drawing.Size(520, 572);
             this.SettingTabControl.TabIndex = 2;
             //
             // GeneralTabPage
@@ -185,7 +187,7 @@
             this.GeneralTabPage.Controls.Add(this.GeneralPanel);
             this.GeneralTabPage.Location = new System.Drawing.Point(4, 24);
             this.GeneralTabPage.Name = "GeneralTabPage";
-            this.GeneralTabPage.Size = new System.Drawing.Size(518, 551);
+            this.GeneralTabPage.Size = new System.Drawing.Size(512, 544);
             this.GeneralTabPage.TabIndex = 0;
             this.GeneralTabPage.Text = "一般";
             this.GeneralTabPage.UseVisualStyleBackColor = true;
@@ -208,7 +210,7 @@
             this.GeneralPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 286F));
             this.GeneralPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.GeneralPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 6F));
-            this.GeneralPanel.Size = new System.Drawing.Size(518, 544);
+            this.GeneralPanel.Size = new System.Drawing.Size(512, 544);
             this.GeneralPanel.TabIndex = 0;
             //
             // ShortcutGroupBox
@@ -218,7 +220,7 @@
             this.ShortcutGroupBox.Location = new System.Drawing.Point(9, 481);
             this.ShortcutGroupBox.Name = "ShortcutGroupBox";
             this.ShortcutGroupBox.Padding = new System.Windows.Forms.Padding(9, 3, 9, 6);
-            this.ShortcutGroupBox.Size = new System.Drawing.Size(500, 54);
+            this.ShortcutGroupBox.Size = new System.Drawing.Size(494, 54);
             this.ShortcutGroupBox.TabIndex = 3;
             this.ShortcutGroupBox.TabStop = false;
             this.ShortcutGroupBox.Text = "デスクトップに作成するショートカット";
@@ -241,7 +243,7 @@
             this.ShortcutPanel.Name = "ShortcutPanel";
             this.ShortcutPanel.RowCount = 1;
             this.ShortcutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.ShortcutPanel.Size = new System.Drawing.Size(482, 29);
+            this.ShortcutPanel.Size = new System.Drawing.Size(476, 29);
             this.ShortcutPanel.TabIndex = 0;
             //
             // ShortcutCompressCheckBox
@@ -292,7 +294,7 @@
             this.ContextGroupBox.Location = new System.Drawing.Point(9, 195);
             this.ContextGroupBox.Name = "ContextGroupBox";
             this.ContextGroupBox.Padding = new System.Windows.Forms.Padding(9, 3, 9, 3);
-            this.ContextGroupBox.Size = new System.Drawing.Size(500, 280);
+            this.ContextGroupBox.Size = new System.Drawing.Size(494, 280);
             this.ContextGroupBox.TabIndex = 2;
             this.ContextGroupBox.TabStop = false;
             this.ContextGroupBox.Text = "コンテキストメニュー";
@@ -312,7 +314,7 @@
             this.ContextPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.ContextPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
             this.ContextPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.ContextPanel.Size = new System.Drawing.Size(482, 258);
+            this.ContextPanel.Size = new System.Drawing.Size(476, 258);
             this.ContextPanel.TabIndex = 0;
             //
             // ContextPresetPanel
@@ -332,7 +334,7 @@
             this.ContextPresetPanel.RowCount = 2;
             this.ContextPresetPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.ContextPresetPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.ContextPresetPanel.Size = new System.Drawing.Size(482, 227);
+            this.ContextPresetPanel.Size = new System.Drawing.Size(476, 227);
             this.ContextPresetPanel.TabIndex = 0;
             //
             // ContextExtractPanel
@@ -340,19 +342,19 @@
             this.ContextExtractPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ContextExtractPanel.Enabled = false;
             this.ContextExtractPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.ContextExtractPanel.Location = new System.Drawing.Point(261, 24);
+            this.ContextExtractPanel.Location = new System.Drawing.Point(258, 24);
             this.ContextExtractPanel.Margin = new System.Windows.Forms.Padding(20, 0, 0, 0);
             this.ContextExtractPanel.Name = "ContextExtractPanel";
-            this.ContextExtractPanel.Size = new System.Drawing.Size(221, 203);
+            this.ContextExtractPanel.Size = new System.Drawing.Size(218, 203);
             this.ContextExtractPanel.TabIndex = 3;
             //
             // ContextExtractCheckBox
             //
             this.ContextExtractCheckBox.AutoSize = true;
             this.ContextExtractCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ContextExtractCheckBox.Location = new System.Drawing.Point(244, 3);
+            this.ContextExtractCheckBox.Location = new System.Drawing.Point(241, 3);
             this.ContextExtractCheckBox.Name = "ContextExtractCheckBox";
-            this.ContextExtractCheckBox.Size = new System.Drawing.Size(235, 18);
+            this.ContextExtractCheckBox.Size = new System.Drawing.Size(232, 18);
             this.ContextExtractCheckBox.TabIndex = 2;
             this.ContextExtractCheckBox.Text = "解凍";
             this.ContextExtractCheckBox.UseVisualStyleBackColor = true;
@@ -363,7 +365,7 @@
             this.ContextCompressCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ContextCompressCheckBox.Location = new System.Drawing.Point(3, 3);
             this.ContextCompressCheckBox.Name = "ContextCompressCheckBox";
-            this.ContextCompressCheckBox.Size = new System.Drawing.Size(235, 18);
+            this.ContextCompressCheckBox.Size = new System.Drawing.Size(232, 18);
             this.ContextCompressCheckBox.TabIndex = 0;
             this.ContextCompressCheckBox.Text = "圧縮";
             this.ContextCompressCheckBox.UseVisualStyleBackColor = true;
@@ -376,7 +378,7 @@
             this.ContextCompressPanel.Location = new System.Drawing.Point(20, 24);
             this.ContextCompressPanel.Margin = new System.Windows.Forms.Padding(20, 0, 0, 0);
             this.ContextCompressPanel.Name = "ContextCompressPanel";
-            this.ContextCompressPanel.Size = new System.Drawing.Size(221, 203);
+            this.ContextCompressPanel.Size = new System.Drawing.Size(218, 203);
             this.ContextCompressPanel.TabIndex = 1;
             //
             // ContextButtonPanel
@@ -393,13 +395,13 @@
             this.ContextButtonPanel.Name = "ContextButtonPanel";
             this.ContextButtonPanel.RowCount = 1;
             this.ContextButtonPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.ContextButtonPanel.Size = new System.Drawing.Size(482, 31);
+            this.ContextButtonPanel.Size = new System.Drawing.Size(476, 31);
             this.ContextButtonPanel.TabIndex = 4;
             //
             // ContextResetButton
             //
             this.ContextResetButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ContextResetButton.Location = new System.Drawing.Point(379, 3);
+            this.ContextResetButton.Location = new System.Drawing.Point(373, 3);
             this.ContextResetButton.Name = "ContextResetButton";
             this.ContextResetButton.Size = new System.Drawing.Size(100, 25);
             this.ContextResetButton.TabIndex = 1;
@@ -409,7 +411,7 @@
             // ContextCustomizeButton
             //
             this.ContextCustomizeButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ContextCustomizeButton.Location = new System.Drawing.Point(273, 3);
+            this.ContextCustomizeButton.Location = new System.Drawing.Point(267, 3);
             this.ContextCustomizeButton.Name = "ContextCustomizeButton";
             this.ContextCustomizeButton.Size = new System.Drawing.Size(100, 25);
             this.ContextCustomizeButton.TabIndex = 0;
@@ -423,7 +425,7 @@
             this.AssociateGroupBox.Location = new System.Drawing.Point(9, 9);
             this.AssociateGroupBox.Name = "AssociateGroupBox";
             this.AssociateGroupBox.Padding = new System.Windows.Forms.Padding(9, 3, 9, 3);
-            this.AssociateGroupBox.Size = new System.Drawing.Size(500, 180);
+            this.AssociateGroupBox.Size = new System.Drawing.Size(494, 180);
             this.AssociateGroupBox.TabIndex = 1;
             this.AssociateGroupBox.TabStop = false;
             this.AssociateGroupBox.Text = "ファイルの関連付け";
@@ -440,7 +442,7 @@
             this.AssociatePanel.RowCount = 2;
             this.AssociatePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.AssociatePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
-            this.AssociatePanel.Size = new System.Drawing.Size(482, 158);
+            this.AssociatePanel.Size = new System.Drawing.Size(476, 158);
             this.AssociatePanel.TabIndex = 0;
             //
             // AssociateMenuPanel
@@ -449,16 +451,18 @@
             this.AssociateMenuPanel.Location = new System.Drawing.Point(0, 0);
             this.AssociateMenuPanel.Margin = new System.Windows.Forms.Padding(0);
             this.AssociateMenuPanel.Name = "AssociateMenuPanel";
-            this.AssociateMenuPanel.Size = new System.Drawing.Size(482, 127);
+            this.AssociateMenuPanel.Size = new System.Drawing.Size(476, 127);
             this.AssociateMenuPanel.TabIndex = 0;
             //
             // AssociateButtonPanel
             //
-            this.AssociateButtonPanel.ColumnCount = 4;
+            this.AssociateButtonPanel.ColumnCount = 5;
             this.AssociateButtonPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.AssociateButtonPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 106F));
             this.AssociateButtonPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 106F));
             this.AssociateButtonPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 106F));
+            this.AssociateButtonPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 106F));
+            this.AssociateButtonPanel.Controls.Add(this.AssociateHelpButton, 4, 0);
             this.AssociateButtonPanel.Controls.Add(this.AssociateClearButton, 3, 0);
             this.AssociateButtonPanel.Controls.Add(this.AssociateAllButton, 2, 0);
             this.AssociateButtonPanel.Controls.Add(this.AssociateIconButton, 1, 0);
@@ -468,16 +472,13 @@
             this.AssociateButtonPanel.Name = "AssociateButtonPanel";
             this.AssociateButtonPanel.RowCount = 1;
             this.AssociateButtonPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.AssociateButtonPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.AssociateButtonPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.AssociateButtonPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.AssociateButtonPanel.Size = new System.Drawing.Size(482, 31);
+            this.AssociateButtonPanel.Size = new System.Drawing.Size(476, 31);
             this.AssociateButtonPanel.TabIndex = 1;
             //
             // AssociateClearButton
             //
             this.AssociateClearButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.AssociateClearButton.Location = new System.Drawing.Point(379, 3);
+            this.AssociateClearButton.Location = new System.Drawing.Point(267, 3);
             this.AssociateClearButton.Name = "AssociateClearButton";
             this.AssociateClearButton.Size = new System.Drawing.Size(100, 25);
             this.AssociateClearButton.TabIndex = 2;
@@ -487,7 +488,7 @@
             // AssociateAllButton
             //
             this.AssociateAllButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.AssociateAllButton.Location = new System.Drawing.Point(273, 3);
+            this.AssociateAllButton.Location = new System.Drawing.Point(161, 3);
             this.AssociateAllButton.Name = "AssociateAllButton";
             this.AssociateAllButton.Size = new System.Drawing.Size(100, 25);
             this.AssociateAllButton.TabIndex = 1;
@@ -497,7 +498,7 @@
             // AssociateIconButton
             //
             this.AssociateIconButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.AssociateIconButton.Location = new System.Drawing.Point(167, 3);
+            this.AssociateIconButton.Location = new System.Drawing.Point(55, 3);
             this.AssociateIconButton.Name = "AssociateIconButton";
             this.AssociateIconButton.Size = new System.Drawing.Size(100, 25);
             this.AssociateIconButton.TabIndex = 0;
@@ -508,9 +509,9 @@
             //
             this.CompressTabPage.AutoScroll = true;
             this.CompressTabPage.Controls.Add(this.CompressPanel);
-            this.CompressTabPage.Location = new System.Drawing.Point(4, 24);
+            this.CompressTabPage.Location = new System.Drawing.Point(4, 28);
             this.CompressTabPage.Name = "CompressTabPage";
-            this.CompressTabPage.Size = new System.Drawing.Size(518, 551);
+            this.CompressTabPage.Size = new System.Drawing.Size(512, 540);
             this.CompressTabPage.TabIndex = 1;
             this.CompressTabPage.Text = "圧縮";
             this.CompressTabPage.UseVisualStyleBackColor = true;
@@ -531,7 +532,7 @@
             this.CompressPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 150F));
             this.CompressPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 200F));
             this.CompressPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 6F));
-            this.CompressPanel.Size = new System.Drawing.Size(518, 362);
+            this.CompressPanel.Size = new System.Drawing.Size(512, 362);
             this.CompressPanel.TabIndex = 0;
             //
             // CompressOptionGroupBox
@@ -541,7 +542,7 @@
             this.CompressOptionGroupBox.Location = new System.Drawing.Point(9, 159);
             this.CompressOptionGroupBox.Name = "CompressOptionGroupBox";
             this.CompressOptionGroupBox.Padding = new System.Windows.Forms.Padding(9, 3, 9, 3);
-            this.CompressOptionGroupBox.Size = new System.Drawing.Size(500, 194);
+            this.CompressOptionGroupBox.Size = new System.Drawing.Size(494, 194);
             this.CompressOptionGroupBox.TabIndex = 2;
             this.CompressOptionGroupBox.TabStop = false;
             this.CompressOptionGroupBox.Text = "オプション";
@@ -569,7 +570,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(482, 172);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(476, 172);
             this.tableLayoutPanel1.TabIndex = 0;
             //
             // CompressFilterCheckBox
@@ -579,7 +580,7 @@
             this.CompressFilterCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CompressFilterCheckBox.Location = new System.Drawing.Point(3, 31);
             this.CompressFilterCheckBox.Name = "CompressFilterCheckBox";
-            this.CompressFilterCheckBox.Size = new System.Drawing.Size(476, 20);
+            this.CompressFilterCheckBox.Size = new System.Drawing.Size(470, 20);
             this.CompressFilterCheckBox.TabIndex = 2;
             this.CompressFilterCheckBox.Text = "ファイルのフィルタリングを行う（フィルタリング設定は詳細へ）";
             this.CompressFilterCheckBox.UseVisualStyleBackColor = true;
@@ -591,7 +592,7 @@
             this.CompressUtf8CheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CompressUtf8CheckBox.Location = new System.Drawing.Point(3, 57);
             this.CompressUtf8CheckBox.Name = "CompressUtf8CheckBox";
-            this.CompressUtf8CheckBox.Size = new System.Drawing.Size(476, 20);
+            this.CompressUtf8CheckBox.Size = new System.Drawing.Size(470, 20);
             this.CompressUtf8CheckBox.TabIndex = 3;
             this.CompressUtf8CheckBox.Text = "ファイル名を UTF-8 に変換する";
             this.CompressUtf8CheckBox.UseVisualStyleBackColor = true;
@@ -603,7 +604,7 @@
             this.CompressOverwriteCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CompressOverwriteCheckBox.Location = new System.Drawing.Point(3, 83);
             this.CompressOverwriteCheckBox.Name = "CompressOverwriteCheckBox";
-            this.CompressOverwriteCheckBox.Size = new System.Drawing.Size(476, 20);
+            this.CompressOverwriteCheckBox.Size = new System.Drawing.Size(470, 20);
             this.CompressOverwriteCheckBox.TabIndex = 4;
             this.CompressOverwriteCheckBox.Text = "同名の圧縮ファイルが存在する時にダイアログを表示する";
             this.CompressOverwriteCheckBox.UseVisualStyleBackColor = true;
@@ -615,7 +616,7 @@
             this.CompressOpenCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CompressOpenCheckBox.Location = new System.Drawing.Point(3, 109);
             this.CompressOpenCheckBox.Name = "CompressOpenCheckBox";
-            this.CompressOpenCheckBox.Size = new System.Drawing.Size(476, 20);
+            this.CompressOpenCheckBox.Size = new System.Drawing.Size(470, 20);
             this.CompressOpenCheckBox.TabIndex = 5;
             this.CompressOpenCheckBox.Text = "圧縮後に保存先フォルダを開く";
             this.CompressOpenCheckBox.UseVisualStyleBackColor = true;
@@ -629,7 +630,7 @@
             this.CompressOpenSmartCheckBox.Location = new System.Drawing.Point(20, 135);
             this.CompressOpenSmartCheckBox.Margin = new System.Windows.Forms.Padding(20, 3, 3, 3);
             this.CompressOpenSmartCheckBox.Name = "CompressOpenSmartCheckBox";
-            this.CompressOpenSmartCheckBox.Size = new System.Drawing.Size(459, 20);
+            this.CompressOpenSmartCheckBox.Size = new System.Drawing.Size(453, 20);
             this.CompressOpenSmartCheckBox.TabIndex = 6;
             this.CompressOpenSmartCheckBox.Text = "デスクトップの場合は開かない";
             this.CompressOpenSmartCheckBox.UseVisualStyleBackColor = true;
@@ -653,7 +654,7 @@
             this.CompressLevelComboBox.FormattingEnabled = true;
             this.CompressLevelComboBox.Location = new System.Drawing.Point(83, 3);
             this.CompressLevelComboBox.Name = "CompressLevelComboBox";
-            this.CompressLevelComboBox.Size = new System.Drawing.Size(396, 23);
+            this.CompressLevelComboBox.Size = new System.Drawing.Size(390, 23);
             this.CompressLevelComboBox.TabIndex = 1;
             //
             // CompressSaveGroupBox
@@ -663,7 +664,7 @@
             this.CompressSaveGroupBox.Location = new System.Drawing.Point(9, 9);
             this.CompressSaveGroupBox.Name = "CompressSaveGroupBox";
             this.CompressSaveGroupBox.Padding = new System.Windows.Forms.Padding(9, 3, 9, 3);
-            this.CompressSaveGroupBox.Size = new System.Drawing.Size(500, 144);
+            this.CompressSaveGroupBox.Size = new System.Drawing.Size(494, 144);
             this.CompressSaveGroupBox.TabIndex = 1;
             this.CompressSaveGroupBox.TabStop = false;
             this.CompressSaveGroupBox.Text = "保存場所";
@@ -687,7 +688,7 @@
             this.CompressSavePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.CompressSavePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.CompressSavePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.CompressSavePanel.Size = new System.Drawing.Size(482, 122);
+            this.CompressSavePanel.Size = new System.Drawing.Size(476, 122);
             this.CompressSavePanel.TabIndex = 0;
             //
             // CompressSaveRadioButton
@@ -698,7 +699,7 @@
             this.CompressSaveRadioButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CompressSaveRadioButton.Location = new System.Drawing.Point(3, 3);
             this.CompressSaveRadioButton.Name = "CompressSaveRadioButton";
-            this.CompressSaveRadioButton.Size = new System.Drawing.Size(476, 20);
+            this.CompressSaveRadioButton.Size = new System.Drawing.Size(470, 20);
             this.CompressSaveRadioButton.TabIndex = 0;
             this.CompressSaveRadioButton.TabStop = true;
             this.CompressSaveRadioButton.Text = "指定したフォルダ（省略時はデスクトップ）";
@@ -710,13 +711,13 @@
             this.CompressSaveTextBox.Location = new System.Drawing.Point(20, 29);
             this.CompressSaveTextBox.Margin = new System.Windows.Forms.Padding(20, 3, 3, 3);
             this.CompressSaveTextBox.Name = "CompressSaveTextBox";
-            this.CompressSaveTextBox.Size = new System.Drawing.Size(399, 23);
+            this.CompressSaveTextBox.Size = new System.Drawing.Size(393, 23);
             this.CompressSaveTextBox.TabIndex = 1;
             //
             // CompressSaveButton
             //
             this.CompressSaveButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.CompressSaveButton.Location = new System.Drawing.Point(425, 28);
+            this.CompressSaveButton.Location = new System.Drawing.Point(419, 28);
             this.CompressSaveButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 1);
             this.CompressSaveButton.Name = "CompressSaveButton";
             this.CompressSaveButton.Size = new System.Drawing.Size(54, 25);
@@ -731,7 +732,7 @@
             this.CompressSaveSourceRadioButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CompressSaveSourceRadioButton.Location = new System.Drawing.Point(3, 57);
             this.CompressSaveSourceRadioButton.Name = "CompressSaveSourceRadioButton";
-            this.CompressSaveSourceRadioButton.Size = new System.Drawing.Size(476, 20);
+            this.CompressSaveSourceRadioButton.Size = new System.Drawing.Size(470, 20);
             this.CompressSaveSourceRadioButton.TabIndex = 3;
             this.CompressSaveSourceRadioButton.Text = "元のファイルと同じフォルダ";
             this.CompressSaveSourceRadioButton.UseVisualStyleBackColor = true;
@@ -743,7 +744,7 @@
             this.CompressSaveQueryRadioButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CompressSaveQueryRadioButton.Location = new System.Drawing.Point(3, 83);
             this.CompressSaveQueryRadioButton.Name = "CompressSaveQueryRadioButton";
-            this.CompressSaveQueryRadioButton.Size = new System.Drawing.Size(476, 20);
+            this.CompressSaveQueryRadioButton.Size = new System.Drawing.Size(470, 20);
             this.CompressSaveQueryRadioButton.TabIndex = 4;
             this.CompressSaveQueryRadioButton.Text = "実行時に指定する";
             this.CompressSaveQueryRadioButton.UseVisualStyleBackColor = true;
@@ -752,9 +753,9 @@
             //
             this.ExtractTabPage.AutoScroll = true;
             this.ExtractTabPage.Controls.Add(this.ExtractPanel);
-            this.ExtractTabPage.Location = new System.Drawing.Point(4, 24);
+            this.ExtractTabPage.Location = new System.Drawing.Point(4, 28);
             this.ExtractTabPage.Name = "ExtractTabPage";
-            this.ExtractTabPage.Size = new System.Drawing.Size(518, 551);
+            this.ExtractTabPage.Size = new System.Drawing.Size(512, 540);
             this.ExtractTabPage.TabIndex = 2;
             this.ExtractTabPage.Text = "解凍";
             this.ExtractTabPage.UseVisualStyleBackColor = true;
@@ -773,9 +774,9 @@
             this.ExtractPanel.RowCount = 4;
             this.ExtractPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 6F));
             this.ExtractPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 150F));
-            this.ExtractPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 220F));
+            this.ExtractPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 246F));
             this.ExtractPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 6F));
-            this.ExtractPanel.Size = new System.Drawing.Size(518, 382);
+            this.ExtractPanel.Size = new System.Drawing.Size(512, 408);
             this.ExtractPanel.TabIndex = 0;
             //
             // ExtractOptionGroupBox
@@ -785,7 +786,7 @@
             this.ExtractOptionGroupBox.Location = new System.Drawing.Point(9, 159);
             this.ExtractOptionGroupBox.Name = "ExtractOptionGroupBox";
             this.ExtractOptionGroupBox.Padding = new System.Windows.Forms.Padding(9, 3, 9, 3);
-            this.ExtractOptionGroupBox.Size = new System.Drawing.Size(500, 214);
+            this.ExtractOptionGroupBox.Size = new System.Drawing.Size(494, 240);
             this.ExtractOptionGroupBox.TabIndex = 1;
             this.ExtractOptionGroupBox.TabStop = false;
             this.ExtractOptionGroupBox.Text = "オプション";
@@ -794,9 +795,10 @@
             //
             this.ExtractOptionPanel.ColumnCount = 1;
             this.ExtractOptionPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.ExtractOptionPanel.Controls.Add(this.ExtractDeleteCheckBox, 0, 6);
-            this.ExtractOptionPanel.Controls.Add(this.ExtractOpenSmartCheckBox, 0, 5);
-            this.ExtractOptionPanel.Controls.Add(this.ExtractOpenCheckBox, 0, 4);
+            this.ExtractOptionPanel.Controls.Add(this.ExtractZoneCheckBox, 0, 4);
+            this.ExtractOptionPanel.Controls.Add(this.ExtractDeleteCheckBox, 0, 7);
+            this.ExtractOptionPanel.Controls.Add(this.ExtractOpenSmartCheckBox, 0, 6);
+            this.ExtractOptionPanel.Controls.Add(this.ExtractOpenCheckBox, 0, 5);
             this.ExtractOptionPanel.Controls.Add(this.ExtractFilterCheckBox, 0, 3);
             this.ExtractOptionPanel.Controls.Add(this.ExtractCreateSmartCheckBox, 0, 2);
             this.ExtractOptionPanel.Controls.Add(this.ExtractCreateCheckBox, 0, 1);
@@ -804,7 +806,8 @@
             this.ExtractOptionPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ExtractOptionPanel.Location = new System.Drawing.Point(9, 19);
             this.ExtractOptionPanel.Name = "ExtractOptionPanel";
-            this.ExtractOptionPanel.RowCount = 8;
+            this.ExtractOptionPanel.RowCount = 9;
+            this.ExtractOptionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.ExtractOptionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.ExtractOptionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.ExtractOptionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
@@ -813,17 +816,28 @@
             this.ExtractOptionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.ExtractOptionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.ExtractOptionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.ExtractOptionPanel.Size = new System.Drawing.Size(482, 192);
+            this.ExtractOptionPanel.Size = new System.Drawing.Size(476, 218);
             this.ExtractOptionPanel.TabIndex = 0;
+            //
+            // ExtractZoneCheckBox
+            //
+            this.ExtractZoneCheckBox.AutoSize = true;
+            this.ExtractZoneCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ExtractZoneCheckBox.Location = new System.Drawing.Point(3, 107);
+            this.ExtractZoneCheckBox.Name = "ExtractZoneCheckBox";
+            this.ExtractZoneCheckBox.Size = new System.Drawing.Size(470, 20);
+            this.ExtractZoneCheckBox.TabIndex = 4;
+            this.ExtractZoneCheckBox.Text = "ZoneID を伝搬する (Mark of the Web)";
+            this.ExtractZoneCheckBox.UseVisualStyleBackColor = true;
             //
             // ExtractDeleteCheckBox
             //
             this.ExtractDeleteCheckBox.AutoSize = true;
             this.ExtractDeleteCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ExtractDeleteCheckBox.Location = new System.Drawing.Point(3, 159);
+            this.ExtractDeleteCheckBox.Location = new System.Drawing.Point(3, 185);
             this.ExtractDeleteCheckBox.Name = "ExtractDeleteCheckBox";
-            this.ExtractDeleteCheckBox.Size = new System.Drawing.Size(476, 20);
-            this.ExtractDeleteCheckBox.TabIndex = 6;
+            this.ExtractDeleteCheckBox.Size = new System.Drawing.Size(470, 20);
+            this.ExtractDeleteCheckBox.TabIndex = 7;
             this.ExtractDeleteCheckBox.Text = "解凍後に元のファイルを削除する";
             this.ExtractDeleteCheckBox.UseVisualStyleBackColor = true;
             //
@@ -832,11 +846,11 @@
             this.ExtractOpenSmartCheckBox.AutoSize = true;
             this.ExtractOpenSmartCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ExtractOpenSmartCheckBox.Enabled = false;
-            this.ExtractOpenSmartCheckBox.Location = new System.Drawing.Point(20, 133);
+            this.ExtractOpenSmartCheckBox.Location = new System.Drawing.Point(20, 159);
             this.ExtractOpenSmartCheckBox.Margin = new System.Windows.Forms.Padding(20, 3, 3, 3);
             this.ExtractOpenSmartCheckBox.Name = "ExtractOpenSmartCheckBox";
-            this.ExtractOpenSmartCheckBox.Size = new System.Drawing.Size(459, 20);
-            this.ExtractOpenSmartCheckBox.TabIndex = 5;
+            this.ExtractOpenSmartCheckBox.Size = new System.Drawing.Size(453, 20);
+            this.ExtractOpenSmartCheckBox.TabIndex = 6;
             this.ExtractOpenSmartCheckBox.Text = "デスクトップの場合は開かない";
             this.ExtractOpenSmartCheckBox.UseVisualStyleBackColor = true;
             //
@@ -844,10 +858,10 @@
             //
             this.ExtractOpenCheckBox.AutoSize = true;
             this.ExtractOpenCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ExtractOpenCheckBox.Location = new System.Drawing.Point(3, 107);
+            this.ExtractOpenCheckBox.Location = new System.Drawing.Point(3, 133);
             this.ExtractOpenCheckBox.Name = "ExtractOpenCheckBox";
-            this.ExtractOpenCheckBox.Size = new System.Drawing.Size(476, 20);
-            this.ExtractOpenCheckBox.TabIndex = 4;
+            this.ExtractOpenCheckBox.Size = new System.Drawing.Size(470, 20);
+            this.ExtractOpenCheckBox.TabIndex = 5;
             this.ExtractOpenCheckBox.Text = "解凍後に保存先フォルダを開く";
             this.ExtractOpenCheckBox.UseVisualStyleBackColor = true;
             //
@@ -857,7 +871,7 @@
             this.ExtractFilterCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ExtractFilterCheckBox.Location = new System.Drawing.Point(3, 81);
             this.ExtractFilterCheckBox.Name = "ExtractFilterCheckBox";
-            this.ExtractFilterCheckBox.Size = new System.Drawing.Size(476, 20);
+            this.ExtractFilterCheckBox.Size = new System.Drawing.Size(470, 20);
             this.ExtractFilterCheckBox.TabIndex = 3;
             this.ExtractFilterCheckBox.Text = "ファイルのフィルタリングを行う（フィルタリング設定は詳細へ）";
             this.ExtractFilterCheckBox.UseVisualStyleBackColor = true;
@@ -870,7 +884,7 @@
             this.ExtractCreateSmartCheckBox.Location = new System.Drawing.Point(20, 55);
             this.ExtractCreateSmartCheckBox.Margin = new System.Windows.Forms.Padding(20, 3, 3, 3);
             this.ExtractCreateSmartCheckBox.Name = "ExtractCreateSmartCheckBox";
-            this.ExtractCreateSmartCheckBox.Size = new System.Drawing.Size(459, 20);
+            this.ExtractCreateSmartCheckBox.Size = new System.Drawing.Size(453, 20);
             this.ExtractCreateSmartCheckBox.TabIndex = 2;
             this.ExtractCreateSmartCheckBox.Text = "単一フォルダの場合は作成しない";
             this.ExtractCreateSmartCheckBox.UseVisualStyleBackColor = true;
@@ -881,7 +895,7 @@
             this.ExtractCreateCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ExtractCreateCheckBox.Location = new System.Drawing.Point(3, 29);
             this.ExtractCreateCheckBox.Name = "ExtractCreateCheckBox";
-            this.ExtractCreateCheckBox.Size = new System.Drawing.Size(476, 20);
+            this.ExtractCreateCheckBox.Size = new System.Drawing.Size(470, 20);
             this.ExtractCreateCheckBox.TabIndex = 1;
             this.ExtractCreateCheckBox.Text = "フォルダを自動的に作成する";
             this.ExtractCreateCheckBox.UseVisualStyleBackColor = true;
@@ -892,7 +906,7 @@
             this.ExtractBurstCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ExtractBurstCheckBox.Location = new System.Drawing.Point(3, 3);
             this.ExtractBurstCheckBox.Name = "ExtractBurstCheckBox";
-            this.ExtractBurstCheckBox.Size = new System.Drawing.Size(476, 20);
+            this.ExtractBurstCheckBox.Size = new System.Drawing.Size(470, 20);
             this.ExtractBurstCheckBox.TabIndex = 0;
             this.ExtractBurstCheckBox.Text = "複数の圧縮ファイルを同時に解凍する";
             this.ExtractBurstCheckBox.UseVisualStyleBackColor = true;
@@ -904,7 +918,7 @@
             this.ExtractSaveGroupBox.Location = new System.Drawing.Point(9, 9);
             this.ExtractSaveGroupBox.Name = "ExtractSaveGroupBox";
             this.ExtractSaveGroupBox.Padding = new System.Windows.Forms.Padding(9, 3, 9, 3);
-            this.ExtractSaveGroupBox.Size = new System.Drawing.Size(500, 144);
+            this.ExtractSaveGroupBox.Size = new System.Drawing.Size(494, 144);
             this.ExtractSaveGroupBox.TabIndex = 0;
             this.ExtractSaveGroupBox.TabStop = false;
             this.ExtractSaveGroupBox.Text = "保存場所";
@@ -928,7 +942,7 @@
             this.ExtractSavePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.ExtractSavePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.ExtractSavePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.ExtractSavePanel.Size = new System.Drawing.Size(482, 122);
+            this.ExtractSavePanel.Size = new System.Drawing.Size(476, 122);
             this.ExtractSavePanel.TabIndex = 0;
             //
             // ExtractSaveRadioButton
@@ -939,7 +953,7 @@
             this.ExtractSaveRadioButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ExtractSaveRadioButton.Location = new System.Drawing.Point(3, 3);
             this.ExtractSaveRadioButton.Name = "ExtractSaveRadioButton";
-            this.ExtractSaveRadioButton.Size = new System.Drawing.Size(476, 20);
+            this.ExtractSaveRadioButton.Size = new System.Drawing.Size(470, 20);
             this.ExtractSaveRadioButton.TabIndex = 0;
             this.ExtractSaveRadioButton.TabStop = true;
             this.ExtractSaveRadioButton.Text = "指定したフォルダ（省略時はデスクトップ）";
@@ -951,13 +965,13 @@
             this.ExtractSaveTextBox.Location = new System.Drawing.Point(20, 29);
             this.ExtractSaveTextBox.Margin = new System.Windows.Forms.Padding(20, 3, 3, 3);
             this.ExtractSaveTextBox.Name = "ExtractSaveTextBox";
-            this.ExtractSaveTextBox.Size = new System.Drawing.Size(399, 23);
+            this.ExtractSaveTextBox.Size = new System.Drawing.Size(393, 23);
             this.ExtractSaveTextBox.TabIndex = 1;
             //
             // ExtractSaveButton
             //
             this.ExtractSaveButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ExtractSaveButton.Location = new System.Drawing.Point(425, 28);
+            this.ExtractSaveButton.Location = new System.Drawing.Point(419, 28);
             this.ExtractSaveButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 1);
             this.ExtractSaveButton.Name = "ExtractSaveButton";
             this.ExtractSaveButton.Size = new System.Drawing.Size(54, 25);
@@ -972,7 +986,7 @@
             this.ExtractSaveSourceRadioButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ExtractSaveSourceRadioButton.Location = new System.Drawing.Point(3, 57);
             this.ExtractSaveSourceRadioButton.Name = "ExtractSaveSourceRadioButton";
-            this.ExtractSaveSourceRadioButton.Size = new System.Drawing.Size(476, 20);
+            this.ExtractSaveSourceRadioButton.Size = new System.Drawing.Size(470, 20);
             this.ExtractSaveSourceRadioButton.TabIndex = 3;
             this.ExtractSaveSourceRadioButton.Text = "元のファイルと同じフォルダ";
             this.ExtractSaveSourceRadioButton.UseVisualStyleBackColor = true;
@@ -984,7 +998,7 @@
             this.ExtractSaveQueryRadioButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ExtractSaveQueryRadioButton.Location = new System.Drawing.Point(3, 83);
             this.ExtractSaveQueryRadioButton.Name = "ExtractSaveQueryRadioButton";
-            this.ExtractSaveQueryRadioButton.Size = new System.Drawing.Size(476, 20);
+            this.ExtractSaveQueryRadioButton.Size = new System.Drawing.Size(470, 20);
             this.ExtractSaveQueryRadioButton.TabIndex = 4;
             this.ExtractSaveQueryRadioButton.Text = "実行時に指定する";
             this.ExtractSaveQueryRadioButton.UseVisualStyleBackColor = true;
@@ -993,9 +1007,9 @@
             //
             this.MiscTabPage.AutoScroll = true;
             this.MiscTabPage.Controls.Add(this.MiscPanel);
-            this.MiscTabPage.Location = new System.Drawing.Point(4, 24);
+            this.MiscTabPage.Location = new System.Drawing.Point(4, 28);
             this.MiscTabPage.Name = "MiscTabPage";
-            this.MiscTabPage.Size = new System.Drawing.Size(518, 551);
+            this.MiscTabPage.Size = new System.Drawing.Size(512, 540);
             this.MiscTabPage.TabIndex = 3;
             this.MiscTabPage.Text = "詳細";
             this.MiscTabPage.UseVisualStyleBackColor = true;
@@ -1016,7 +1030,7 @@
             this.MiscPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 250F));
             this.MiscPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 180F));
             this.MiscPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 6F));
-            this.MiscPanel.Size = new System.Drawing.Size(518, 442);
+            this.MiscPanel.Size = new System.Drawing.Size(512, 442);
             this.MiscPanel.TabIndex = 0;
             //
             // MiscOptionGroupBox
@@ -1026,7 +1040,7 @@
             this.MiscOptionGroupBox.Location = new System.Drawing.Point(9, 259);
             this.MiscOptionGroupBox.Name = "MiscOptionGroupBox";
             this.MiscOptionGroupBox.Padding = new System.Windows.Forms.Padding(8, 3, 8, 3);
-            this.MiscOptionGroupBox.Size = new System.Drawing.Size(500, 174);
+            this.MiscOptionGroupBox.Size = new System.Drawing.Size(494, 174);
             this.MiscOptionGroupBox.TabIndex = 2;
             this.MiscOptionGroupBox.TabStop = false;
             this.MiscOptionGroupBox.Text = "その他";
@@ -1056,7 +1070,7 @@
             this.MiscOptionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
             this.MiscOptionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.MiscOptionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.MiscOptionPanel.Size = new System.Drawing.Size(484, 152);
+            this.MiscOptionPanel.Size = new System.Drawing.Size(478, 152);
             this.MiscOptionPanel.TabIndex = 0;
             //
             // ToolTipCheckBox
@@ -1066,7 +1080,7 @@
             this.ToolTipCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ToolTipCheckBox.Location = new System.Drawing.Point(3, 3);
             this.ToolTipCheckBox.Name = "ToolTipCheckBox";
-            this.ToolTipCheckBox.Size = new System.Drawing.Size(478, 20);
+            this.ToolTipCheckBox.Size = new System.Drawing.Size(472, 20);
             this.ToolTipCheckBox.TabIndex = 0;
             this.ToolTipCheckBox.Text = "圧縮ファイルのツールチップにファイル一覧を表示する";
             this.ToolTipCheckBox.UseVisualStyleBackColor = true;
@@ -1136,13 +1150,13 @@
             this.TempTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TempTextBox.Location = new System.Drawing.Point(123, 85);
             this.TempTextBox.Name = "TempTextBox";
-            this.TempTextBox.Size = new System.Drawing.Size(292, 23);
+            this.TempTextBox.Size = new System.Drawing.Size(286, 23);
             this.TempTextBox.TabIndex = 6;
             //
             // TempButton
             //
             this.TempButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TempButton.Location = new System.Drawing.Point(421, 84);
+            this.TempButton.Location = new System.Drawing.Point(415, 84);
             this.TempButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 1);
             this.TempButton.Name = "TempButton";
             this.TempButton.Size = new System.Drawing.Size(60, 25);
@@ -1157,7 +1171,7 @@
             this.UpdateCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.UpdateCheckBox.Location = new System.Drawing.Point(3, 113);
             this.UpdateCheckBox.Name = "UpdateCheckBox";
-            this.UpdateCheckBox.Size = new System.Drawing.Size(478, 20);
+            this.UpdateCheckBox.Size = new System.Drawing.Size(472, 20);
             this.UpdateCheckBox.TabIndex = 8;
             this.UpdateCheckBox.Text = "コンピュータの起動時にアップデートを確認する";
             this.UpdateCheckBox.UseVisualStyleBackColor = true;
@@ -1169,7 +1183,7 @@
             this.FilterGroupBox.Location = new System.Drawing.Point(9, 9);
             this.FilterGroupBox.Name = "FilterGroupBox";
             this.FilterGroupBox.Padding = new System.Windows.Forms.Padding(9, 3, 9, 3);
-            this.FilterGroupBox.Size = new System.Drawing.Size(500, 244);
+            this.FilterGroupBox.Size = new System.Drawing.Size(494, 244);
             this.FilterGroupBox.TabIndex = 1;
             this.FilterGroupBox.TabStop = false;
             this.FilterGroupBox.Text = "フィルタリング";
@@ -1187,7 +1201,7 @@
             this.FilterPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
             this.FilterPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.FilterPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 9F));
-            this.FilterPanel.Size = new System.Drawing.Size(482, 222);
+            this.FilterPanel.Size = new System.Drawing.Size(476, 222);
             this.FilterPanel.TabIndex = 0;
             //
             // FilterTextBox
@@ -1197,7 +1211,7 @@
             this.FilterTextBox.Multiline = true;
             this.FilterTextBox.Name = "FilterTextBox";
             this.FilterTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.FilterTextBox.Size = new System.Drawing.Size(476, 171);
+            this.FilterTextBox.Size = new System.Drawing.Size(470, 171);
             this.FilterTextBox.TabIndex = 1;
             this.FilterTextBox.WordWrap = false;
             //
@@ -1208,15 +1222,15 @@
             this.FilterLabel.Location = new System.Drawing.Point(3, 3);
             this.FilterLabel.Margin = new System.Windows.Forms.Padding(3);
             this.FilterLabel.Name = "FilterLabel";
-            this.FilterLabel.Size = new System.Drawing.Size(476, 30);
+            this.FilterLabel.Size = new System.Drawing.Size(470, 30);
             this.FilterLabel.TabIndex = 0;
             this.FilterLabel.Text = "圧縮または解凍時にフィルタリング（除外）するファイル名を記述します。\r\n1 行に 1 つずつ記述して下さい。";
             //
             // VersionTabPage
             //
-            this.VersionTabPage.Location = new System.Drawing.Point(4, 24);
+            this.VersionTabPage.Location = new System.Drawing.Point(4, 28);
             this.VersionTabPage.Name = "VersionTabPage";
-            this.VersionTabPage.Size = new System.Drawing.Size(518, 551);
+            this.VersionTabPage.Size = new System.Drawing.Size(512, 540);
             this.VersionTabPage.TabIndex = 4;
             this.VersionTabPage.Text = "バージョン情報";
             this.VersionTabPage.UseVisualStyleBackColor = true;
@@ -1233,21 +1247,21 @@
             this.FooterPanel.Controls.Add(this.ExitButton, 2, 1);
             this.FooterPanel.Controls.Add(this.ExecuteButton, 1, 1);
             this.FooterPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FooterPanel.Location = new System.Drawing.Point(0, 597);
+            this.FooterPanel.Location = new System.Drawing.Point(0, 590);
             this.FooterPanel.Margin = new System.Windows.Forms.Padding(0);
             this.FooterPanel.Name = "FooterPanel";
             this.FooterPanel.RowCount = 3;
             this.FooterPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 9F));
             this.FooterPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.FooterPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 9F));
-            this.FooterPanel.Size = new System.Drawing.Size(544, 54);
+            this.FooterPanel.Size = new System.Drawing.Size(538, 54);
             this.FooterPanel.TabIndex = 3;
             //
             // ApplyButton
             //
             this.ApplyButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.ApplyButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ApplyButton.Location = new System.Drawing.Point(432, 12);
+            this.ApplyButton.Location = new System.Drawing.Point(426, 12);
             this.ApplyButton.Name = "ApplyButton";
             this.ApplyButton.Size = new System.Drawing.Size(100, 30);
             this.ApplyButton.TabIndex = 2;
@@ -1258,7 +1272,7 @@
             //
             this.ExitButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.ExitButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ExitButton.Location = new System.Drawing.Point(326, 12);
+            this.ExitButton.Location = new System.Drawing.Point(320, 12);
             this.ExitButton.Name = "ExitButton";
             this.ExitButton.Size = new System.Drawing.Size(100, 30);
             this.ExitButton.TabIndex = 1;
@@ -1269,19 +1283,29 @@
             //
             this.ExecuteButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.ExecuteButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ExecuteButton.Location = new System.Drawing.Point(195, 12);
+            this.ExecuteButton.Location = new System.Drawing.Point(189, 12);
             this.ExecuteButton.Name = "ExecuteButton";
             this.ExecuteButton.Size = new System.Drawing.Size(125, 30);
             this.ExecuteButton.TabIndex = 0;
             this.ExecuteButton.Text = "OK";
             this.ExecuteButton.UseVisualStyleBackColor = true;
             //
+            // AssociateHelpButton
+            //
+            this.AssociateHelpButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.AssociateHelpButton.Location = new System.Drawing.Point(373, 3);
+            this.AssociateHelpButton.Name = "AssociateHelpButton";
+            this.AssociateHelpButton.Size = new System.Drawing.Size(100, 25);
+            this.AssociateHelpButton.TabIndex = 3;
+            this.AssociateHelpButton.Text = "ヘルプ";
+            this.AssociateHelpButton.UseVisualStyleBackColor = true;
+            //
             // MainWindow
             //
             this.AcceptButton = this.ExecuteButton;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.CancelButton = this.ExitButton;
-            this.ClientSize = new System.Drawing.Size(544, 651);
+            this.ClientSize = new System.Drawing.Size(538, 644);
             this.Controls.Add(this.RootPanel);
             this.Font = new System.Drawing.Font("Meiryo UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(128)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -1422,6 +1446,8 @@
         private System.Windows.Forms.ComboBox ShortcutCompressComboBox;
         private System.Windows.Forms.CheckBox ShortcutExtractCheckBox;
         private System.Windows.Forms.CheckBox ShortcutSettingsCheckBox;
+        private System.Windows.Forms.CheckBox ExtractZoneCheckBox;
+        private System.Windows.Forms.Button AssociateHelpButton;
     }
 }
 

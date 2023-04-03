@@ -83,5 +83,22 @@ public sealed class ExtractionSettingValue : ArchiveSettingValue
         set => Set(value);
     }
 
+    /* --------------------------------------------------------------------- */
+    ///
+    /// PropagateZone
+    ///
+    /// <summary>
+    /// Gets or sets a value indicating whether to propagate the ZoneID of
+    /// the archve.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    [DataMember]
+    public bool PropagateZone
+    {
+        get => Get(() => true);
+        set => Set(value);
+    }
+
     #endregion
 }
