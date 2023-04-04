@@ -21,6 +21,7 @@ using System.IO;
 using System.Linq;
 using System.Security;
 using System.Text;
+using Cube.Text.Extensions;
 
 /* ------------------------------------------------------------------------- */
 ///
@@ -94,7 +95,9 @@ public static class ZoneId
 
         while ((str = reader.ReadLine()) != null)
         {
-            if (str.StartsWith(key) && int.TryParse(str.Trim().Substring(key.Length), out var n)) return n switch
+            if (str.FuzzyStartsWith(key) &&
+                int.TryParse(str.Trim().Substring(key.Length), out var n)
+            ) return n switch
             {
                  0 => SecurityZone.MyComputer,
                  1 => SecurityZone.Intranet,
@@ -119,10 +122,17 @@ public static class ZoneId
     /* --------------------------------------------------------------------- */
     public static void Set(string src, SecurityZone id)
     {
-        var ads = new FileDataStream(src, FileName, 0, FileDataStreamType.Data);
-        using var writer = new StreamWriter(ads.Create(), Encoding.Default);
-        writer.WriteLine($"[{SectionName}]");
-        writer.WriteLine($"{KeyName}={id:D}");
+        var attr = Io.Get(src).Attributes;
+
+        try
+        {
+            Io.SetAttributes(src, FileAttributes.Normal);
+            var ads = new FileDataStream(src, FileName, 0, FileDataStreamType.Data);
+            using var writer = new StreamWriter(ads.Create(), Encoding.Default);
+            writer.WriteLine($"[{SectionName}]");
+            writer.WriteLine($"{KeyName}={id:D}");
+        }
+        finally { Io.SetAttributes(src, attr); }
     }
 
     #endregion
@@ -156,7 +166,7 @@ public static class ZoneId
         string str;
         while ((str = src.ReadLine()) != null)
         {
-            if (str.Trim() == $"[{SectionName}]") return true;
+            if (str.Trim().FuzzyEquals($"[{SectionName}]")) return true;
         }
         return false;
     }
