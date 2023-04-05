@@ -74,8 +74,6 @@ internal static class Interop
 
             ThrowErrorAsException(err, lpFileName);
         }
-
-        Logger.Debug($"{lpFileName} -> {new string(data.cStreamName)}");
         return data;
     }
 
@@ -91,7 +89,6 @@ internal static class Interop
 
             ThrowErrorAsException(err, null);
         }
-
         return data;
     }
 
