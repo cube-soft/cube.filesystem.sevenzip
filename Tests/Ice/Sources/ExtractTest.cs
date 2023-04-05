@@ -20,6 +20,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security;
+using Cube.Tests.Mocks;
 using NUnit.Framework;
 
 /* ------------------------------------------------------------------------- */
@@ -55,6 +56,10 @@ class ExtractTest : VmFixture
         foreach (var e in sources) ZoneId.Set(e, SecurityZone.Internet);
 
         using var vm = NewVM(args.Concat(sources), settings);
+        using var dc = new DisposableContainer();
+
+        dc.Add(new MockDialogBehavior(vm));
+
         using (vm.SetPassword("password")) // if needed
         using (vm.SetDestination(Get("Runtime")))
         {
@@ -138,6 +143,18 @@ class ExtractTest : VmFixture
         yield return new(
             @"Preset\名称未設定フォルダ",
             new[] { "SampleMac.zip" },
+            Preset.Extract.ToArguments(),
+            new ExtractionSettingValue
+            {
+                SaveLocation = SaveLocation.Preset,
+                SaveMethod   = SaveMethod.CreateSmart,
+                Filtering    = true,
+            }
+        );
+
+        yield return new(
+            @"Preset\SampleReadOnly",
+            new[] { "SampleReadOnly.zip" },
             Preset.Extract.ToArguments(),
             new ExtractionSettingValue
             {
