@@ -1,0 +1,7 @@
+"SampleReadOnly",0,0
+"SampleReadOnly\Bar.txt",7816,3450353414
+"SampleReadOnly\BarReadOnly.txt",7816,3450353414
+"SampleReadOnly\Bas.txt",0,0
+"SampleReadOnly\BasReadOnly.txt",0,0
+"SampleReadOnly\Foo.txt",3,3023971265
+"SampleReadOnly\FooReadOnly.txt",3,3023971265

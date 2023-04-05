@@ -139,6 +139,7 @@ class ArchiveReaderTest : FileFixture
         {
             yield return new TestCaseData("Sample.zip", "");
             yield return new TestCaseData("SampleEmpty.zip", "");
+            yield return new TestCaseData("SampleReadOnly.zip", "");
             yield return new TestCaseData("SampleVolume.zip", "");
             yield return new TestCaseData("SampleVolume.rar.001", "");
             yield return new TestCaseData("SampleComma.zip", "");
