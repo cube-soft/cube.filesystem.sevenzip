@@ -148,8 +148,8 @@ public static class ZoneId
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private static FileDataStream GetStream(string src) => Interop
-        .EnumerateDataStreams(src)
+    private static FileDataStream GetStream(string src) => FileDataStreamHelper
+        .GetStreams(src)
         .FirstOrDefault(e => e.Type == FileDataStreamType.Data && e.Name == FileName);
 
     /* --------------------------------------------------------------------- */

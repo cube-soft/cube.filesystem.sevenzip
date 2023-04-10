@@ -156,7 +156,7 @@ public sealed class FileDataStream
     ///
     /* --------------------------------------------------------------------- */
     public FileStream Open(FileMode mode, FileAccess access, FileShare share) =>
-        Interop.Open(this, mode, access, share);
+        FileDataStreamHelper.Open(this, mode, access, share);
 
     /* --------------------------------------------------------------------- */
     ///
@@ -194,7 +194,7 @@ public sealed class FileDataStream
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public void Delete() => Interop.Delete(this);
+    public void Delete() => FileDataStreamHelper.Delete(this);
 
     #endregion
 }
