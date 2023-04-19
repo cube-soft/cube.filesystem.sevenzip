@@ -52,7 +52,7 @@ internal static class FileDataStreamHelper
     {
         if (string.IsNullOrEmpty(src)) throw new ArgumentNullException(nameof(src));
 
-        var handle = NativeMethods.INVALID_HANDLE_VALUE;
+        var handle = _invalid;
 
         try
         {
@@ -73,7 +73,7 @@ internal static class FileDataStreamHelper
         }
         finally
         {
-            if (handle != NativeMethods.INVALID_HANDLE_VALUE)
+            if (handle != _invalid)
             {
                 if (!NativeMethods.FindClose(handle)) throw MakeException(Marshal.GetLastWin32Error(), null);
             }
@@ -101,11 +101,11 @@ internal static class FileDataStreamHelper
             share.ToNative(),
             IntPtr.Zero,
             mode.ToNative(),
-            NativeMethods.FileFlagsAndAttributes.FILE_FLAG_OVERLAPPED,
+            FileFlagsAndAttributes.FILE_FLAG_OVERLAPPED,
             IntPtr.Zero
         );
 
-        if (handle == NativeMethods.INVALID_HANDLE_VALUE) throw MakeException(Marshal.GetLastWin32Error(), path);
+        if (handle == _invalid) throw MakeException(Marshal.GetLastWin32Error(), path);
         return new FileStream(new SafeFileHandle(handle, true), access, 4096, true);
     }
 
@@ -143,9 +143,9 @@ internal static class FileDataStreamHelper
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private static void ParseStreamName(NativeMethods.FindStreamData fsd, out string name, out FileDataStreamType type)
+    private static void ParseStreamName(FindStreamData fsd, out string name, out FileDataStreamType type)
     {
-        static unsafe string to_string(NativeMethods.FindStreamData fsd) => new(fsd.cStreamName);
+        static unsafe string to_string(FindStreamData fsd) => new(fsd.cStreamName);
         static FileDataStreamType to_type(string name) =>
             _cache.TryGetValue(name, out var dest) ? dest : FileDataStreamType.Unknown;
 
@@ -202,16 +202,16 @@ internal static class FileDataStreamHelper
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private static unsafe NativeMethods.FindStreamData? FindFirstStream(string path, out IntPtr handle)
+    private static unsafe FindStreamData? FindFirstStream(string path, out IntPtr handle)
     {
-        var dest = new NativeMethods.FindStreamData();
+        var dest = new FindStreamData();
         var ptr  = new IntPtr(&dest);
 
-        handle = NativeMethods.FindFirstStreamW(path, NativeMethods.StreamInfoLevels.FindStreamInfoStandard, ptr, 0);
-        if (handle == NativeMethods.INVALID_HANDLE_VALUE)
+        handle = NativeMethods.FindFirstStreamW(path, StreamInfoLevels.FindStreamInfoStandard, ptr, 0);
+        if (handle == _invalid)
         {
             var err = Marshal.GetLastWin32Error();
-            if (err == NativeMethods.ERROR_HANDLE_EOF) return default;
+            if (err == 38 /* ERROR_HANDLE_EOF */) return default;
             else throw MakeException(err, path);
         }
         return dest;
@@ -226,15 +226,15 @@ internal static class FileDataStreamHelper
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private static unsafe NativeMethods.FindStreamData? FindNextStream(IntPtr handle)
+    private static unsafe FindStreamData? FindNextStream(IntPtr handle)
     {
-        var dest = new NativeMethods.FindStreamData();
+        var dest = new FindStreamData();
         var ptr  = new IntPtr(&dest);
 
         if (!NativeMethods.FindNextStreamW(handle, ptr))
         {
             var err = Marshal.GetLastWin32Error();
-            if (err == NativeMethods.ERROR_HANDLE_EOF) return default;
+            if (err == 38 /* ERROR_HANDLE_EOF */) return default;
             else throw MakeException(err, null);
         }
         return dest;
@@ -253,7 +253,7 @@ internal static class FileDataStreamHelper
     {
         var size = 512;
         var buffer = stackalloc char[size];
-        size = NativeMethods.FormatMessage(NativeMethods.FormatMessageFlags.Defaults, IntPtr.Zero, code, 0, new IntPtr(buffer), size, IntPtr.Zero);
+        size = NativeMethods.FormatMessage(FormatMessageFlags.Defaults, IntPtr.Zero, code, 0, new IntPtr(buffer), size, IntPtr.Zero);
 
         if (size != 0) return new string(buffer, 0, size);
         return "Unknown IO error.";
@@ -264,6 +264,7 @@ internal static class FileDataStreamHelper
     #endregion
 
     #region Fields
+    private static readonly IntPtr _invalid = new(-1);
     private static readonly Dictionary<string, FileDataStreamType> _cache = new()
     {
         { "$ATTRIBUTE_LIST",        FileDataStreamType.AttributeList },

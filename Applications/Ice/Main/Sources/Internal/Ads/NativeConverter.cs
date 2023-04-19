@@ -43,12 +43,12 @@ internal static class NativeConverter
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public static NativeMethods.FileShareMode ToNative(this FileShare src)
+    public static FileShareMode ToNative(this FileShare src)
     {
-        var dest = NativeMethods.FileShareMode.None;
-        if ((src & FileShare.Delete) == FileShare.Delete) dest |= NativeMethods.FileShareMode.FILE_SHARE_DELETE;
-        if ((src & FileShare.Read  ) == FileShare.Read  ) dest |= NativeMethods.FileShareMode.FILE_SHARE_READ;
-        if ((src & FileShare.Write ) == FileShare.Write ) dest |= NativeMethods.FileShareMode.FILE_SHARE_WRITE;
+        var dest = FileShareMode.None;
+        if ((src & FileShare.Delete) == FileShare.Delete) dest |= FileShareMode.FILE_SHARE_DELETE;
+        if ((src & FileShare.Read  ) == FileShare.Read  ) dest |= FileShareMode.FILE_SHARE_READ;
+        if ((src & FileShare.Write ) == FileShare.Write ) dest |= FileShareMode.FILE_SHARE_WRITE;
         return dest;
     }
 
@@ -61,11 +61,11 @@ internal static class NativeConverter
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public static NativeMethods.FileAccessMode ToNative(this FileAccess src)
+    public static FileAccessMode ToNative(this FileAccess src)
     {
-        var dest = NativeMethods.FileAccessMode.None;
-        if ((src & FileAccess.Read ) == FileAccess.Read ) dest |= NativeMethods.FileAccessMode.GENERIC_READ;
-        if ((src & FileAccess.Write) == FileAccess.Write) dest |= NativeMethods.FileAccessMode.GENERIC_WRITE;
+        var dest = FileAccessMode.None;
+        if ((src & FileAccess.Read ) == FileAccess.Read ) dest |= FileAccessMode.GENERIC_READ;
+        if ((src & FileAccess.Write) == FileAccess.Write) dest |= FileAccessMode.GENERIC_WRITE;
         return dest;
     }
 
@@ -78,15 +78,15 @@ internal static class NativeConverter
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public static NativeMethods.FileCreationDisposition ToNative(this FileMode mode) =>  mode switch
+    public static FileCreationDisposition ToNative(this FileMode mode) =>  mode switch
     {
-        FileMode.CreateNew    => NativeMethods.FileCreationDisposition.CREATE_NEW,
-        FileMode.Create       => NativeMethods.FileCreationDisposition.CREATE_ALWAYS,
-        FileMode.Open         => NativeMethods.FileCreationDisposition.OPEN_EXISTING,
-        FileMode.OpenOrCreate => NativeMethods.FileCreationDisposition.OPEN_ALWAYS,
-        FileMode.Truncate     => NativeMethods.FileCreationDisposition.TRUNCATE_EXISTING,
-        FileMode.Append       => NativeMethods.FileCreationDisposition.OPEN_ALWAYS,
-        _                     => NativeMethods.FileCreationDisposition.None,
+        FileMode.CreateNew    => FileCreationDisposition.CREATE_NEW,
+        FileMode.Create       => FileCreationDisposition.CREATE_ALWAYS,
+        FileMode.Open         => FileCreationDisposition.OPEN_EXISTING,
+        FileMode.OpenOrCreate => FileCreationDisposition.OPEN_ALWAYS,
+        FileMode.Truncate     => FileCreationDisposition.TRUNCATE_EXISTING,
+        FileMode.Append       => FileCreationDisposition.OPEN_ALWAYS,
+        _                     => FileCreationDisposition.None,
     };
 
     #endregion
