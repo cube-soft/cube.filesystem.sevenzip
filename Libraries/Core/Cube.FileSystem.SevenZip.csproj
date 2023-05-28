@@ -9,7 +9,7 @@
         <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
         <PackageIcon>images\Icon.png</PackageIcon>
         <PackageProjectUrl>https://github.com/cube-soft/Cube.FileSystem.SevenZip</PackageProjectUrl>
-        <TargetFramework>net47</TargetFramework>
+        <TargetFramework>net46</TargetFramework>
         <LangVersion>latest</LangVersion>
         <Optimize>true</Optimize>
         <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
@@ -24,7 +24,7 @@
         <DocumentationFile>bin\Any CPU\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Cube.Core" Version="8.0.0" />
+        <PackageReference Include="Cube.Core" Version="8.1.0" />
         <PackageReference Include="Cube.Native.SevenZip" Version="22.1.1" />
     </ItemGroup>
     <ItemGroup>
