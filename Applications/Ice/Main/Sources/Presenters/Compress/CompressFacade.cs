@@ -139,7 +139,7 @@ public sealed class CompressFacade : ArchiveFacade
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private void InvokePostProcess() => Io.Get(Destination).Open(
+    private void InvokePostProcess() => new Entity(Destination).Open(
         Settings.Value.Compression.OpenMethod,
         Settings.Value.Explorer
     );

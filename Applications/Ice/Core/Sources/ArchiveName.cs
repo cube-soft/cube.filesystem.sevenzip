@@ -38,7 +38,7 @@ public sealed class ArchiveName
     /// ArchiveName
     ///
     /// <summary>
-    /// Initializes a new instance of the PathConverter class with
+    /// Initializes a new instance of the ArchiveName class with
     /// the specified arguments.
     /// </summary>
     ///
@@ -54,7 +54,7 @@ public sealed class ArchiveName
     /// ArchiveName
     ///
     /// <summary>
-    /// Initializes a new instance of the PathConverter class with
+    /// Initializes a new instance of the ArchiveName class with
     /// the specified arguments.
     /// </summary>
     ///
@@ -126,14 +126,14 @@ public sealed class ArchiveName
     /* --------------------------------------------------------------------- */
     private Entity GetEntity()
     {
-        var src  = Io.Get(_source);
+        var src  = new Entity(_source);
         var tmp  = src.BaseName.HasValue() ? src.BaseName : src.Name;
         var name = src.IsDirectory ? src.Name :
                    Io.GetExtension(tmp).FuzzyEquals(".tar") ? Io.GetBaseName(tmp) :
                    Io.GetFileName(tmp);
         var dest = Io.Combine(src.DirectoryName, $"{name}{GetExtension()}");
 
-        return Io.Get(dest);
+        return new(dest);
     }
 
     /* --------------------------------------------------------------------- */

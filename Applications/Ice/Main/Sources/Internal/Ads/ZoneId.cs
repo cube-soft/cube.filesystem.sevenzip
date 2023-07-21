@@ -122,7 +122,7 @@ public static class ZoneId
     /* --------------------------------------------------------------------- */
     public static void Set(string src, SecurityZone id)
     {
-        var attr = Io.Get(src).Attributes;
+        var attr = new Entity(src).Attributes;
 
         try
         {
