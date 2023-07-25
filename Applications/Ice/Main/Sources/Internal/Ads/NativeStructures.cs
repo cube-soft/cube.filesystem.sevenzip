@@ -168,36 +168,6 @@ public enum FileFlagsAndAttributes : uint
 
 /* ------------------------------------------------------------------------- */
 ///
-/// FormatMessageFlag
-///
-/// <summary>
-/// Specifies the flags for the message.
-/// </summary>
-///
-/* ------------------------------------------------------------------------- */
-[Flags]
-public enum FormatMessageFlags : int
-{
-    /// <summary>Allocate buffer flag</summary>
-    FORMAT_MESSAGE_ALLOCATE_BUFFER = 0x100,
-    /// <summary>Argument array flag</summary>
-    FORMAT_MESSAGE_ARGUMENT_ARRAY = 0x2000,
-    /// <summary>From HModule flag</summary>
-    FORMAT_MESSAGE_FROM_HMODULE = 0x800,
-    /// <summary>From string flag</summary>
-    FORMAT_MESSAGE_FROM_STRING = 0x400,
-    /// <summary>From system flag</summary>
-    FORMAT_MESSAGE_FROM_SYSTEM = 0x1000,
-    /// <summary>Ignore inserts flag</summary>
-    FORMAT_MESSAGE_IGNORE_INSERTS = 0x200,
-    /// <summary>Max width mask</summary>
-    FORMAT_MESSAGE_MAX_WIDTH_MASK = 0xFF,
-    /// <summary>Default flags</summary>
-    Defaults = FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ARGUMENT_ARRAY
-}
-
-/* ------------------------------------------------------------------------- */
-///
 /// FindStreamData
 ///
 /// <summary>

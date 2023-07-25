@@ -23,6 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using Cube.Text.Extensions;
 using Microsoft.Win32.SafeHandles;
 
 /* ------------------------------------------------------------------------- */
@@ -50,32 +51,32 @@ internal static class FileDataStreamHelper
     /* --------------------------------------------------------------------- */
     public static IEnumerable<FileDataStream> GetStreams(string src)
     {
-        if (string.IsNullOrEmpty(src)) throw new ArgumentNullException(nameof(src));
+        if (!src.HasValue()) throw new ArgumentNullException(nameof(src));
 
         var handle = _invalid;
 
         try
         {
             {
-                var fsd = FindFirstStream(src, out handle);
-                if (!fsd.HasValue) yield break;
-                ParseStreamName(fsd.Value, out var name, out var type);
-                yield return new(src, name, fsd.Value.StreamSize, type);
+                var data = FindFirstStreamData(src, out handle);
+                if (!data.HasValue) yield break;
+                SplitStreamData(data.Value, out var name, out var type);
+                yield return new(src, name, data.Value.StreamSize, type);
             }
 
             while (true)
             {
-                var fsd = FindNextStream(handle);
-                if (!fsd.HasValue) break;
-                ParseStreamName(fsd.Value, out var name, out var type);
-                yield return new(src, name, fsd.Value.StreamSize, type);
+                var data = FindNextStreamData(handle);
+                if (!data.HasValue) break;
+                SplitStreamData(data.Value, out var name, out var type);
+                yield return new(src, name, data.Value.StreamSize, type);
             }
         }
         finally
         {
             if (handle != _invalid)
             {
-                if (!NativeMethods.FindClose(handle)) throw MakeException(Marshal.GetLastWin32Error(), null);
+                if (!NativeMethods.FindClose(handle)) throw new FileDataStreamException(Marshal.GetLastWin32Error(), null);
             }
         }
     }
@@ -89,14 +90,15 @@ internal static class FileDataStreamHelper
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public static FileStream Open(FileDataStream ads, FileMode mode, FileAccess access, FileShare share)
+    public static FileStream Open(FileDataStream stream, FileMode mode, FileAccess access, FileShare share)
     {
-        if (ads.Type != FileDataStreamType.Data) throw new InvalidOperationException("Only $DATA streams can be opened for reading or writing.");
-        if (ads.Name.Length == 0) return Io.Open(ads.Source);
+        var name = $"{stream.Source}:{stream.Name}";
 
-        var path   = $"{ads.Source}:{ads.Name}";
+        if (stream.Type != FileDataStreamType.Data) throw new FileDataStreamException("Only $DATA streams can be opened for reading or writing.", name);
+        if (stream.Name.Length == 0) return Io.Open(stream.Source);
+
         var handle = NativeMethods.CreateFileW(
-            path,
+            name,
             access.ToNative(),
             share.ToNative(),
             IntPtr.Zero,
@@ -105,7 +107,7 @@ internal static class FileDataStreamHelper
             IntPtr.Zero
         );
 
-        if (handle == _invalid) throw MakeException(Marshal.GetLastWin32Error(), path);
+        if (handle == _invalid) throw new FileDataStreamException(Marshal.GetLastWin32Error(), name);
         return new FileStream(new SafeFileHandle(handle, true), access, 4096, true);
     }
 
@@ -118,15 +120,12 @@ internal static class FileDataStreamHelper
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public static void Delete(FileDataStream ads)
+    public static void Delete(FileDataStream stream)
     {
-        if (ads.Type != FileDataStreamType.Data) throw new InvalidOperationException("Only $DATA streams can be deleted.");
-        if (ads.Name.Length == 0) Io.Delete(ads.Source);
-        else
-        {
-            var path = $"{ads.Source}:{ads.Name}";
-            if (!NativeMethods.DeleteFileW(path)) throw MakeException(Marshal.GetLastWin32Error(), path);
-        }
+        var name = $"{stream.Source}:{stream.Name}";
+        if (stream.Type != FileDataStreamType.Data) throw new FileDataStreamException("Only $DATA streams can be deleted.", name);
+        if (stream.Name.Length == 0) Io.Delete(stream.Source);
+        else if (!NativeMethods.DeleteFileW(name)) throw new FileDataStreamException(Marshal.GetLastWin32Error(), name);
     }
 
     #endregion
@@ -135,7 +134,7 @@ internal static class FileDataStreamHelper
 
     /* --------------------------------------------------------------------- */
     ///
-    /// ParseStreamName
+    /// SplitStreamData
     ///
     /// <summary>
     /// Split the path of the specified FindStreamData object into stream
@@ -143,17 +142,17 @@ internal static class FileDataStreamHelper
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private static void ParseStreamName(FindStreamData fsd, out string name, out FileDataStreamType type)
+    private static void SplitStreamData(FindStreamData data, out string name, out FileDataStreamType type)
     {
-        static unsafe string to_string(FindStreamData fsd) => new(fsd.cStreamName);
-        static FileDataStreamType to_type(string name) =>
-            _cache.TryGetValue(name, out var dest) ? dest : FileDataStreamType.Unknown;
+        static unsafe string to_string(FindStreamData s) => new(s.cStreamName);
+        static FileDataStreamType to_type(string s) =>
+            _cache.TryGetValue(s, out var dest) ? dest : FileDataStreamType.Unknown;
 
-        var src = to_string(fsd);
+        var src = to_string(data);
         name = string.Empty;
         type = FileDataStreamType.Unknown;
 
-        if (string.IsNullOrEmpty(src) || src[0] != ':') return;
+        if (!src.HasValue() || src[0] != ':') return;
 
         var pos = src.IndexOf(':', 1);
         if (pos < 0) return;
@@ -163,100 +162,65 @@ internal static class FileDataStreamHelper
 
     /* --------------------------------------------------------------------- */
     ///
-    /// MakeException
+    /// IsIgnore
     ///
     /// <summary>
-    /// Creates a new exception object with the specified arguments.
+    /// Gets a value indicating whether or not to ignore the specified error
+    /// code.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private static Exception MakeException(int code, string path)
-    {
-        static int to_hresult(int code) => unchecked((int)0x80070000 | code);
-
-        var cvt = path ?? "<null>";
-        return code switch
-        {
-            2   => new FileNotFoundException("Specified file was not found.", cvt),
-            3   => new DirectoryNotFoundException($"Could not find a part of the path \"{cvt}\"."),
-            5   => new UnauthorizedAccessException($"Access to the path \"{cvt}\" was denied."),
-            15  => new DriveNotFoundException($"Access to the path \"{cvt}\" was denied."),
-            32  => new IOException($"The process cannot access the file \"{cvt}\" because it is being used by another process.", to_hresult(code)),
-            80  => new IOException($"The file \"{cvt}\" already exists.", to_hresult(code)),
-            87  => new IOException(MakeMessage(code), to_hresult(code)),
-            183 => new IOException($"Cannot create \"{cvt}\" because a file or directory with the same name already exists."),
-            206 => new PathTooLongException(),
-            995 => new OperationCanceledException(),
-            _   => Marshal.GetExceptionForHR(to_hresult(code))
-        };
-    }
+    private static bool IsIgnore(int code) =>
+        code == 38 || // ERROR_HANDLE_EOF (no streams can be found)
+        code == 87;   // ERROR_INVALID_PARAMETER (filesystem does not support streams)
 
     #region Unsafe methods
 
     /* --------------------------------------------------------------------- */
     ///
-    /// FindNextStream
+    /// FindNextStreamData
     ///
     /// <summary>
     /// Gets the first data stream with the specified handle.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private static unsafe FindStreamData? FindFirstStream(string path, out IntPtr handle)
+    private static unsafe FindStreamData? FindFirstStreamData(string name, out IntPtr handle)
     {
         var dest = new FindStreamData();
         var ptr  = new IntPtr(&dest);
 
-        handle = NativeMethods.FindFirstStreamW(path, StreamInfoLevels.FindStreamInfoStandard, ptr, 0);
+        handle = NativeMethods.FindFirstStreamW(name, StreamInfoLevels.FindStreamInfoStandard, ptr, 0);
         if (handle == _invalid)
         {
-            var err = Marshal.GetLastWin32Error();
-            if (err == 38 /* ERROR_HANDLE_EOF */) return default;
-            else throw MakeException(err, path);
+            var code = Marshal.GetLastWin32Error();
+            if (IsIgnore(code)) return default;
+            else throw new FileDataStreamException(code, name);
         }
         return dest;
     }
 
     /* --------------------------------------------------------------------- */
     ///
-    /// FindNextStream
+    /// FindNextStreamData
     ///
     /// <summary>
     /// Gets the next data stream with the specified handle.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private static unsafe FindStreamData? FindNextStream(IntPtr handle)
+    private static unsafe FindStreamData? FindNextStreamData(IntPtr handle)
     {
         var dest = new FindStreamData();
         var ptr  = new IntPtr(&dest);
 
         if (!NativeMethods.FindNextStreamW(handle, ptr))
         {
-            var err = Marshal.GetLastWin32Error();
-            if (err == 38 /* ERROR_HANDLE_EOF */) return default;
-            else throw MakeException(err, null);
+            var code = Marshal.GetLastWin32Error();
+            if (IsIgnore(code)) return default;
+            else throw new FileDataStreamException(code, null);
         }
         return dest;
-    }
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// MakeMessage
-    ///
-    /// <summary>
-    /// Creates a new message with the specified error code.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    private unsafe static string MakeMessage(int code)
-    {
-        var size = 512;
-        var buffer = stackalloc char[size];
-        size = NativeMethods.FormatMessage(FormatMessageFlags.Defaults, IntPtr.Zero, code, 0, new IntPtr(buffer), size, IntPtr.Zero);
-
-        if (size != 0) return new string(buffer, 0, size);
-        return "Unknown IO error.";
     }
 
     #endregion

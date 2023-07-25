@@ -89,23 +89,6 @@ internal static class NativeMethods
 
     #endregion
 
-    #region Error Messages
-
-    /* ------------------------------------------------------------------------- */
-    /// FormatMessage
-    /* ------------------------------------------------------------------------- */
-    [DllImport(LibName, CharSet = CharSet.Unicode, SetLastError = true)]
-    public static extern int FormatMessage(
-        FormatMessageFlags dwFlags,
-        IntPtr lpSource,
-        int dwMessageId,
-        int dwLanguageId,
-        IntPtr buffer,
-        int nSize,
-        IntPtr arguments);
-
-    #endregion
-
     #region Fields
     private const string LibName = "kernel32";
     #endregion
