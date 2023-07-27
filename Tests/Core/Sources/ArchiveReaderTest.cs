@@ -59,7 +59,7 @@ class ArchiveReaderTest : FileFixture
 
         foreach (var cmp in GetAnswer(filename))
         {
-            var fi = Io.Get(Io.Combine(dest, cmp.Key));
+            var fi = new Entity(Io.Combine(dest, cmp.Key));
 
             Assert.That(fi.Exists,         Is.True, cmp.Key);
             Assert.That(fi.Length,         Is.EqualTo(cmp.Value.Length), cmp.Key);

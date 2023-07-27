@@ -124,8 +124,8 @@ public class AssociateRegistrar
     /* --------------------------------------------------------------------- */
     public void Update(IDictionary<string, bool> extensions)
     {
-        foreach (var kv in extensions) Logger.Warn(() => Update(kv.Key, kv.Value));
-        Logger.Warn(() =>
+        foreach (var kv in extensions) Logger.Try(() => Update(kv.Key, kv.Value));
+        Logger.Try(() =>
         {
             var exe = Io.GetFileName(FileName);
             using var sk = Registry.ClassesRoot.CreateSubKey($@"Applications\{exe}\DefaultIcon");

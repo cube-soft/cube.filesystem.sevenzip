@@ -60,7 +60,7 @@ internal static class EntityExtension
 
         var cvt = app.HasValue() ? app : "explorer.exe";
         Logger.Debug($"Path:{src.FullName.Quote()}, App:{cvt.Quote()}");
-        Logger.Warn(() => new Process
+        Logger.Try(() => new Process
         {
             StartInfo = new()
             {
@@ -104,7 +104,7 @@ internal static class EntityExtension
                 Io.SetAttributes(dest, src.Attributes);
             }
         }
-        else if (Io.Exists(dest)) Move(src, dest, query.Get(src, Io.Get(dest)));
+        else if (Io.Exists(dest)) Move(src, dest, query.Get(src, new(dest)));
         else Io.Move(src.FullName, dest, true);
     }
 

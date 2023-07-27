@@ -306,7 +306,7 @@ internal class ExtractCallback : PasswordCallback, IArchiveExtractCallback
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private void Skip(ArchiveEntity src) => Logger.Warn(() => {
+    private void Skip(ArchiveEntity src) => Logger.Try(() => {
         if (!src.IsDirectory) Count++;
         Logger.Debug($"[{nameof(Skip)}] ({Count}/{TotalCount}) {src.FullName.Quote()}");
     });

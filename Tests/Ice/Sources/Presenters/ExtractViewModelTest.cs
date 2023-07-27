@@ -173,7 +173,7 @@ class ExtractViewModelTest : VmFixture
     public void CancelOverwrite()
     {
         var dummy = GetSource("Sample.txt");
-        var size  = Io.Get(dummy).Length;
+        var size  = new Entity(dummy).Length;
         var dest  = Get("CancelOverwrite");
         var args  = Preset.Extract.ToArguments().Concat(GetSource("Complex.1.0.0.zip"));
         var value = new ExtractionSettingValue
@@ -185,7 +185,7 @@ class ExtractViewModelTest : VmFixture
         Io.Copy(dummy, Io.Combine(dest, "Foo.txt"), true);
         using var vm = NewVM(args, value);
         using (vm.SetOverwrite(OverwriteMethod.Cancel)) vm.Test();
-        Assert.That(Io.Get(Io.Combine(dest, "Foo.txt")).Length, Is.EqualTo(size));
+        Assert.That(new Entity(Io.Combine(dest, "Foo.txt")).Length, Is.EqualTo(size));
     }
 
     #endregion

@@ -153,7 +153,7 @@ public sealed class ExtractFacade : ArchiveFacade
             else if (Report.State == ProgressState.Failed)
             {
                 Error?.Invoke(e);
-                if (!e.Cancel) Logger.Warn(() => Transfer(e.Target));
+                if (!e.Cancel) Logger.Try(() => Transfer(e.Target));
             }
         });
 
@@ -214,8 +214,8 @@ public sealed class ExtractFacade : ArchiveFacade
     {
         var ss = Settings.Value.Extraction;
         var app = Settings.Value.Explorer;
-        Io.Get(dir.ValueToOpen).Open(ss.OpenMethod, app);
-        if (ss.DeleteSource) Logger.Warn(() => Io.Delete(Source));
+        new Entity(dir.ValueToOpen).Open(ss.OpenMethod, app);
+        if (ss.DeleteSource) Logger.Try(() => Io.Delete(Source));
     }
 
     /* --------------------------------------------------------------------- */
@@ -236,7 +236,7 @@ public sealed class ExtractFacade : ArchiveFacade
         if (!Io.Exists(src)) return;
 
         var dest = Io.Combine(Destination, item.FullName);
-        Io.Get(src).Move(dest, Overwrite);
+        new Entity(src).Move(dest, Overwrite);
 
         var zone = Settings.Value.Extraction.PropagateZone &&
                   (Zone == SecurityZone.Internet || Zone == SecurityZone.Untrusted);

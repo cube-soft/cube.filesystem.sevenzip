@@ -183,7 +183,7 @@ public abstract class ArchiveFacade : ProgressFacade
     /* --------------------------------------------------------------------- */
     protected override void Dispose(bool disposing)
     {
-        Logger.Warn(() => Io.Delete(Temp));
+        Logger.Try(() => Io.Delete(Temp));
         base.Dispose(disposing);
     }
 

@@ -48,7 +48,7 @@ static class Program
     ///
     /* --------------------------------------------------------------------- */
     [STAThread]
-    static void Main(string[] args) => Logger.Error(() =>
+    static void Main(string[] args) => Logger.Try(() =>
     {
         if (args.Length <= 0) return;
 
@@ -115,7 +115,7 @@ static class Program
         foreach (var e in src.Options) _ = args.Append($"{e.Quote()} ");
         foreach (var path in src.Sources)
         {
-            Logger.Error(() => Process.Start(exec, $"/x /sr {args} {path.Quote()}"));
+            Logger.Try(() => Process.Start(exec, $"/x /sr {args} {path.Quote()}"));
         }
     }
 

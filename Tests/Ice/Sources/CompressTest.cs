@@ -247,8 +247,7 @@ class CompressTest : VmFixture
     /* ----------------------------------------------------------------- */
     private string GetFileName(string src, string dest)
     {
-        var fi   = Io.Get(src);
-        var name = fi.IsDirectory ? fi.Name : fi.BaseName;
+        var name = Io.IsDirectory(src) ? Io.GetFileName(src) : Io.GetBaseName(src);
         var ext  = Io.GetExtension(dest);
         return ext == ".bz2" || ext == ".gz" || ext == ".xz" ?
                $"{name}.tar{ext}" :

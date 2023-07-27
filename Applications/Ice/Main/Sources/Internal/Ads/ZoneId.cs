@@ -122,7 +122,7 @@ public static class ZoneId
     /* --------------------------------------------------------------------- */
     public static void Set(string src, SecurityZone id)
     {
-        var attr = Io.Get(src).Attributes;
+        var attr = new Entity(src).Attributes;
 
         try
         {
@@ -148,8 +148,8 @@ public static class ZoneId
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private static FileDataStream GetStream(string src) => Interop
-        .EnumerateDataStreams(src)
+    private static FileDataStream GetStream(string src) => FileDataStreamHelper
+        .GetStreams(src)
         .FirstOrDefault(e => e.Type == FileDataStreamType.Data && e.Name == FileName);
 
     /* --------------------------------------------------------------------- */
