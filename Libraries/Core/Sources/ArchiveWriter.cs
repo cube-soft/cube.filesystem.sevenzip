@@ -242,7 +242,7 @@ public sealed class ArchiveWriter : DisposableBase
             }
             else Io.Move(tmp, dest, true);
         }
-        finally { Logger.Warn(() => Io.Delete(dir)); }
+        finally { Logger.Try(() => Io.Delete(dir)); }
     }
 
     /* --------------------------------------------------------------------- */
@@ -269,7 +269,7 @@ public sealed class ArchiveWriter : DisposableBase
             using (var ss = Io.Open(sfx)) ss.CopyTo(ds);
             using (var ss = Io.Open(tmp)) ss.CopyTo(ds);
         }
-        finally { Logger.Warn(() => Io.Delete(tmp)); }
+        finally { Logger.Try(() => Io.Delete(tmp)); }
     }
 
     /* --------------------------------------------------------------------- */

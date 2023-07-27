@@ -43,9 +43,9 @@ public static class SettingExtension
     /* --------------------------------------------------------------------- */
     public static void SaveEx(this SettingFolder src)
     {
-        Logger.Warn(src.Save);
-        Logger.Warn(src.Value.Shortcut.Save);
-        Logger.Warn(() => Associate(src.Value.Association));
+        Logger.Try(src.Save);
+        Logger.Try(src.Value.Shortcut.Save);
+        Logger.Try(() => Associate(src.Value.Association));
     }
 
     #endregion
