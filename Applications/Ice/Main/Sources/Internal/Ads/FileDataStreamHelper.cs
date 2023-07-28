@@ -170,9 +170,15 @@ internal static class FileDataStreamHelper
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private static bool IsIgnore(int code) =>
-        code == 38 || // ERROR_HANDLE_EOF (no streams can be found)
-        code == 87;   // ERROR_INVALID_PARAMETER (filesystem does not support streams)
+    private static bool IsIgnore(int code)
+    {
+        if (code == 87)
+        {
+            Logger.Debug("ERROR_INVALID_PARAMETER (filesystem does not support streams)");
+            return true;
+        }
+        return code == 38; // ERROR_HANDLE_EOF (no streams can be found)
+    }
 
     #region Unsafe methods
 
