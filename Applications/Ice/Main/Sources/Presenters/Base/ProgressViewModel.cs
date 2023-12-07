@@ -48,12 +48,12 @@ public abstract class ProgressViewModel : PresentableBase<ProgressFacade>
     /// <param name="context">Synchronization context.</param>
     ///
     /* --------------------------------------------------------------------- */
-    public ProgressViewModel(ProgressFacade src, Aggregator aggregator, SynchronizationContext context) :
+    protected ProgressViewModel(ProgressFacade src, Aggregator aggregator, SynchronizationContext context) :
         base(src, aggregator, context)
     {
-        Assets.Add(Facade.Subscribe(e => {
-            if (e == nameof(Facade.Report)) Refresh(nameof(Title));
-            else Refresh(e);
+        Assets.Add(Facade.Subscribe(e =>  {
+            var name = e == nameof(Facade.Report) ? nameof(Title) : e;
+            Refresh(name);
         }));
 
         src.Error = e => {

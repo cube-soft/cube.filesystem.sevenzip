@@ -93,7 +93,7 @@ public abstract class ArchiveFacade : ProgressFacade
         protected set
         {
             if (value.FuzzyEquals(Destination)) return;
-            Logger.Debug($"{nameof(Destination)}:{value}");
+            Logger.Debug($"{nameof(Destination)}:{value.Quote()}");
             _ = Set(value);
         }
     }
@@ -162,8 +162,7 @@ public abstract class ArchiveFacade : ProgressFacade
             var root = src.HasValue() && Io.Exists(src) ? src : alternate;
             Temp = Io.Combine(root, Guid.NewGuid().ToString("N"));
         }
-
-        Logger.Debug($"{nameof(Temp)}:{Temp}");
+        Logger.Debug($"{nameof(Temp)}:{Temp.Quote()}");
     }
 
     /* --------------------------------------------------------------------- */
@@ -183,7 +182,13 @@ public abstract class ArchiveFacade : ProgressFacade
     /* --------------------------------------------------------------------- */
     protected override void Dispose(bool disposing)
     {
+        static void f(string s) { foreach (var e in Io.GetFiles(s)) Logger.Debug($"[GC] {e}"); }
+        static void d(string s) { foreach (var e in Io.GetDirectories(s)) { f(e); d(e); }}
+
+        Logger.Try(() => f(Temp));
+        Logger.Try(() => d(Temp));
         Logger.Try(() => Io.Delete(Temp));
+
         base.Dispose(disposing);
     }
 

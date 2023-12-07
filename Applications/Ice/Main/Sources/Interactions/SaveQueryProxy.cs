@@ -145,8 +145,7 @@ public sealed class SaveQueryProxy
                        Request.Location :
                        Settings.SaveLocation;
 
-            Logger.Debug(string.Format("SaveLocation:({0},{1})->{2}",
-                Request.Location, Settings.SaveLocation, dest));
+            Logger.Debug($"Query:({Request.Location},{Settings.SaveLocation}), Result:{dest}");
             return dest;
         }
     }

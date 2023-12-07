@@ -99,11 +99,7 @@ public sealed class CompressFacade : ArchiveFacade
     /* --------------------------------------------------------------------- */
     private void Invoke(CompressionQueryValue src)
     {
-        Logger.Debug(string.Join(", ",
-            $"Format:{src.Format}",
-            $"Method:{src.CompressionMethod}",
-            $"Level:{src.CompressionLevel}"
-        ));
+        Logger.Debug($"Format:{src.Format}, Method:{src.CompressionMethod}, Level:{src.CompressionLevel}");
 
         using (var writer = new ArchiveWriter(src.Format, src.ToOption(Settings)))
         {

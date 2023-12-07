@@ -21,6 +21,7 @@ using System;
 using System.Linq;
 using Cube.Collections.Extensions;
 using Cube.Reflection.Extensions;
+using Cube.Text.Extensions;
 
 /* ------------------------------------------------------------------------- */
 ///
@@ -49,7 +50,7 @@ static class Program
     {
         Logger.Configure(new Logging.NLog.LoggerSource());
         Logger.Info(typeof(Program).Assembly);
-        Logger.Info($"[ {args.Join(" ")} ]");
+        Logger.Info($"[ {args.Select(e => e.Quote()).Join(" ")} ]");
 
         var settings = new SettingFolder();
         if (args.Length > 0 && args[0].ToLowerInvariant() == "/uninstall") Clear(settings);

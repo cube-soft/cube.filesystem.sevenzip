@@ -18,10 +18,12 @@
 namespace Cube.FileSystem.SevenZip.Ice.Settings;
 
 using System;
+using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using Cube.Collections;
 using Cube.Collections.Extensions;
+using Cube.Text.Extensions;
 
 /* ------------------------------------------------------------------------- */
 ///
@@ -51,7 +53,7 @@ static class Program
         Logger.Configure(new Logging.NLog.LoggerSource());
         Logger.ObserveTaskException();
         Logger.Info(typeof(Program).Assembly);
-        Logger.Info($"[ {s.Join(" ")} ]");
+        Logger.Info($"[ {s.Select(e => e.Quote()).Join(" ")} ]");
 
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);

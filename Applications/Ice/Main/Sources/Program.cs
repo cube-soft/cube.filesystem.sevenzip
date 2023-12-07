@@ -55,7 +55,7 @@ static class Program
         Logger.Configure(new Logging.NLog.LoggerSource());
         Logger.ObserveTaskException();
         Logger.Info(typeof(Program).Assembly);
-        Logger.Info($"[ {args.Join(" ")} ]");
+        Logger.Info($"[ {args.Select(e => e.Quote()).Join(" ")} ]");
 
         var ss = new SettingFolder();
         ss.Load();

@@ -58,7 +58,7 @@ internal static class EntityExtension
         if (skip) return;
 
         var cvt = app.HasValue() ? app : "explorer.exe";
-        Logger.Debug($"Path:{src.FullName.Quote()}, App:{cvt.Quote()}");
+        Logger.Debug($"Method:{nameof(Open)}, Source:{src.FullName.Quote()}, App:{cvt.Quote()}");
         Logger.Try(() => new Process
         {
             StartInfo = new()
