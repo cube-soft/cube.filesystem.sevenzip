@@ -71,10 +71,10 @@ public static class ArchiveEntityExtension
         var path = Io.Combine(root, src.FullName);
         if (!Io.Exists(path)) return;
 
-        SetCreationTime(src, path);
-        SetLastWriteTime(src, path);
-        SetLastAccessTime(src, path);
-        Io.SetAttributes(path, src.Attributes);
+        Logger.Try(() => SetCreationTime(src, path));
+        Logger.Try(() => SetLastWriteTime(src, path));
+        Logger.Try(() => SetLastAccessTime(src, path));
+        Logger.Try(() => Io.SetAttributes(path, src.Attributes));
     }
 
     #endregion
