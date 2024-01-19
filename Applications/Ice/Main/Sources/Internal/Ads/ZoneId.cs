@@ -90,10 +90,9 @@ public static class ZoneId
         using var reader = new StreamReader(ads.OpenRead(), Encoding.Default);
         if (!MoveSection(reader)) return SecurityZone.NoZone;
 
-        var str = string.Empty;
         var key = $"{KeyName}=";
 
-        while ((str = reader.ReadLine()) != null)
+        while (reader.ReadLine() is { } str)
         {
             if (str.FuzzyStartsWith(key) &&
                 int.TryParse(str.Trim().Substring(key.Length), out var n)
@@ -157,14 +156,13 @@ public static class ZoneId
     /// MoveSection
     ///
     /// <summary>
-    /// Moves the the ZoneTransfer section.
+    /// Moves the ZoneTransfer section.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     private static bool MoveSection(StreamReader src)
     {
-        string str;
-        while ((str = src.ReadLine()) != null)
+        while (src.ReadLine() is { } str)
         {
             if (str.Trim().FuzzyEquals($"[{SectionName}]")) return true;
         }

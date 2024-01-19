@@ -87,7 +87,7 @@ internal static class EntityExtension
     ///
     /// <param name="src">Source file or directory information.</param>
     /// <param name="dest">Destination path to move.</param>
-    /// <param name="query">Query to confirm the overwrite.</param>
+    /// <param name="query">Query to confirm to overwrite.</param>
     ///
     /* --------------------------------------------------------------------- */
     public static void Move(this Entity src, string dest, OverwriteQuery query)
@@ -97,10 +97,10 @@ internal static class EntityExtension
             if (!Io.Exists(dest))
             {
                 Io.CreateDirectory(dest);
-                Io.SetCreationTime(dest, src.CreationTime);
-                Io.SetLastWriteTime(dest, src.LastWriteTime);
-                Io.SetLastAccessTime(dest, src.LastAccessTime);
-                Io.SetAttributes(dest, src.Attributes);
+                Logger.Try(() => Io.SetCreationTime(dest, src.CreationTime));
+                Logger.Try(() => Io.SetLastWriteTime(dest, src.LastWriteTime));
+                Logger.Try(() => Io.SetLastAccessTime(dest, src.LastAccessTime));
+                Logger.Try(() => Io.SetAttributes(dest, src.Attributes));
             }
         }
         else if (Io.Exists(dest)) Move(src, dest, query.Get(src, new(dest)));
@@ -126,7 +126,8 @@ internal static class EntityExtension
         switch (method & OverwriteMethod.Operations)
         {
             case OverwriteMethod.Yes:
-                Io.Move(src.FullName, dest, true);
+                // Because Move is a little tricky...
+                Io.Copy(src.FullName, dest, true);
                 break;
             case OverwriteMethod.Rename:
                 Io.Move(src.FullName, IoEx.GetUniqueName(dest), false);
