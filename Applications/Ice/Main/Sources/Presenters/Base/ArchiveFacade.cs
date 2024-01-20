@@ -182,7 +182,7 @@ public abstract class ArchiveFacade : ProgressFacade
     /* --------------------------------------------------------------------- */
     protected override void Dispose(bool disposing)
     {
-        static void f(string s) { foreach (var e in Io.GetFiles(s)) Logger.Debug($"[GC] {e}"); }
+        static void f(string s) { foreach (var e in Io.GetFiles(s)) Logger.Trace($"[GC] {e}"); }
         static void d(string s) { foreach (var e in Io.GetDirectories(s)) { f(e); d(e); }}
 
         Logger.Try(() => f(Temp));
