@@ -135,7 +135,7 @@ public sealed class ExtractFacade : ArchiveFacade
     /* --------------------------------------------------------------------- */
     private void Invoke(ArchiveReader src, ExtractDirectory dir)
     {
-        Logger.Debug($"Format:{src.Format}, Source:{src.Source}, Zone:{Zone:D}");
+        Logger.Debug($"Format:{src.Format}, Source:{src.Source.Quote()}, Zone:{Zone:D}");
         SetDestination(src, dir);
 
         var progress = GetProgress(e => {
@@ -147,11 +147,14 @@ public sealed class ExtractFacade : ArchiveFacade
                 {
                     e.State     = ProgressState.Failed;
                     e.Exception = err;
+                    Logger.Warn($"Name:{e.Target.FullName}, 7z:Success");
+                    Logger.Warn(err);
                     Error?.Invoke(e);
                 }
             }
             else if (Report.State == ProgressState.Failed)
             {
+                if (e.Exception is not null) Logger.Warn(e.Exception);
                 Error?.Invoke(e);
                 if (!e.Cancel) Logger.Try(() => Transfer(e.Target));
             }
@@ -171,7 +174,7 @@ public sealed class ExtractFacade : ArchiveFacade
     /* --------------------------------------------------------------------- */
     private void Invoke(ArchiveReader src, int index, ExtractDirectory dir)
     {
-        Logger.Debug($"Format:{src.Format}, Source:{src.Source}, Zone:{Zone:D}");
+        Logger.Debug($"Format:{src.Format}, Source:{src.Source.Quote()}, Zone:{Zone:D}");
         SetDestination(src, dir);
 
         var item = src.Items[index];
@@ -230,13 +233,28 @@ public sealed class ExtractFacade : ArchiveFacade
     /* --------------------------------------------------------------------- */
     private void Transfer(Entity item)
     {
-        if (!item.FullName.HasValue()) return;
+        if (!item.FullName.HasValue())
+        {
+            Logger.Warn("Entity is empty");
+            return;
+        }
 
         var src = Io.Combine(Temp, item.FullName);
-        if (!Io.Exists(src)) return;
+        if (!Io.Exists(src))
+        {
+            Logger.Warn($"{src.Quote()} not found");
+            return;
+        }
 
         var dest = Io.Combine(Destination, item.FullName);
-        new Entity(src).Move(dest, Overwrite);
+        var obj  = new Entity(src);
+
+        if (obj.Exists) obj.Move(dest, Overwrite);
+        else
+        {
+            Logger.Warn($"{obj.FullName.Quote()} not found (Entity)");
+            return;
+        }
 
         var zone = Settings.Value.Extraction.PropagateZone &&
                   (Zone == SecurityZone.Internet || Zone == SecurityZone.Untrusted);
@@ -254,7 +272,7 @@ public sealed class ExtractFacade : ArchiveFacade
     /* --------------------------------------------------------------------- */
     private void SetDestination(ArchiveReader src, ExtractDirectory dir)
     {
-        static bool is_trim(Format e) => e == Format.GZip || e == Format.BZip2 || e == Format.XZ;
+        static bool is_trim(Format e) => e is Format.GZip or Format.BZip2 or Format.XZ;
 
         var tmp  = Io.GetBaseName(src.Source);
         var name = is_trim(src.Format) ? TrimExtension(tmp) : tmp;

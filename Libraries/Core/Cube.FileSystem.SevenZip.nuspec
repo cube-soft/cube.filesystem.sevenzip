@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
     <metadata>
-        <version>8.0.1</version>
+        <version>8.3.0</version>
         <id>Cube.FileSystem.SevenZip</id>
         <title>Cube.FileSystem.SevenZip</title>
         <authors>clown,cube-soft</authors>
@@ -12,20 +12,20 @@
         <readme>docs\Readme.md</readme>
         <icon>images\Icon.png</icon>
         <license type="expression">LGPL-3.0-or-later</license>
-        <projectUrl>https://github.com/cube-soft/Cube.FileSystem.SevenZip</projectUrl>
+        <projectUrl>https://github.com/cube-soft/cube.filesystem.sevenzip</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <dependencies>
             <group targetFramework="netstandard2.0">
-                <dependency id="Cube.Core" version="8.0.0" />
-                <dependency id="Cube.Native.SevenZip" version="22.1.1" />
+                <dependency id="Cube.Core" version="8.6.1" />
+                <dependency id="Cube.Native.SevenZip" version="23.1.1" />
             </group>
             <group targetFramework="net47">
-                <dependency id="Cube.Core" version="8.0.0" />
-                <dependency id="Cube.Native.SevenZip" version="22.1.1" />
+                <dependency id="Cube.Core" version="8.6.1" />
+                <dependency id="Cube.Native.SevenZip" version="23.1.1" />
             </group>
             <group targetFramework="net35">
-                <dependency id="Cube.Core" version="8.0.0" />
-                <dependency id="Cube.Native.SevenZip" version="22.1.1" />
+                <dependency id="Cube.Core" version="8.6.1" />
+                <dependency id="Cube.Native.SevenZip" version="23.1.1" />
             </group>
         </dependencies>
     </metadata>

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <Version>3.1.0</Version>
+        <Version>3.2.0</Version>
         <Authors>clown;cube-soft</Authors>
         <Company>CubeSoft</Company>
         <Description>CubeICE core library.</Description>
@@ -10,9 +10,10 @@
         <Optimize>true</Optimize>
         <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
         <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
-        <DefineConstants Condition=" '$(Configuration)' == 'Debug' ">DEBUG;TRACE</DefineConstants>
+        <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
         <SignAssembly>true</SignAssembly>
         <AssemblyOriginatorKeyFile>..\..\..\Cube.snk</AssemblyOriginatorKeyFile>
+        <DefineConstants Condition=" '$(Configuration)' == 'Debug' ">DEBUG;TRACE</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
         <OutputPath>bin\Any CPU\$(Configuration)\</OutputPath>
@@ -20,7 +21,7 @@
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\..\Libraries\Core\Cube.FileSystem.SevenZip.csproj" />
-        <PackageReference Include="Cube.Trick" Version="8.2.0" />
+        <PackageReference Include="Cube.Trick" Version="8.6.1" />
     </ItemGroup>
     <ItemGroup>
         <Compile Update="Properties\Resources.Designer.cs" DependentUpon="Resources.resx" AutoGen="True" DesignTime="True" />

@@ -273,6 +273,7 @@ public sealed class ArchiveReader : DisposableBase
             var test = dest.HasValue() ? 0 : 1;
             var code = _core.Extract(src, n , test, cb);
 
+            Logger.Debug($"Code:{code}");
             if (code == (int)SevenZipCode.Success) return;
             if (code == (int)SevenZipCode.WrongPassword) throw new EncryptionException();
             if (code == (int)SevenZipCode.Cancel) throw cb.GetCancelException();
