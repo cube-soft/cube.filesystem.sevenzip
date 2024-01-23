@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <Version>8.2.0</Version>
+        <Version>8.3.0</Version>
         <Authors>clown;cube-soft</Authors>
         <Company>CubeSoft</Company>
         <Description>7-Zip wrapper library for .NET.</Description>
@@ -15,16 +15,17 @@
         <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
         <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <DefineConstants Condition=" '$(Configuration)' == 'Debug' ">DEBUG;TRACE</DefineConstants>
+        <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
         <SignAssembly>true</SignAssembly>
         <AssemblyOriginatorKeyFile>..\..\Cube.snk</AssemblyOriginatorKeyFile>
+        <DefineConstants Condition=" '$(Configuration)' == 'Debug' ">DEBUG;TRACE</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
         <OutputPath>bin\Any CPU\$(Configuration)\</OutputPath>
         <DocumentationFile>bin\Any CPU\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Cube.Core" Version="8.2.0" />
+        <PackageReference Include="Cube.Core" Version="8.6.1" />
         <PackageReference Include="Cube.Native.SevenZip" Version="23.1.1" />
     </ItemGroup>
     <ItemGroup>

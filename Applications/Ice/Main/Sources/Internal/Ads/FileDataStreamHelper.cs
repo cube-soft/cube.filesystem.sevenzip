@@ -174,7 +174,7 @@ internal static class FileDataStreamHelper
     {
         if (code == 87)
         {
-            Logger.Debug("ERROR_INVALID_PARAMETER (filesystem does not support streams)");
+            Logger.Warn("ERROR_INVALID_PARAMETER (filesystem does not support streams)");
             return true;
         }
         return code == 38; // ERROR_HANDLE_EOF (no streams can be found)

@@ -1302,7 +1302,6 @@
             //
             // MainWindow
             //
-            this.AcceptButton = this.ExecuteButton;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.CancelButton = this.ExitButton;
             this.ClientSize = new System.Drawing.Size(538, 644);

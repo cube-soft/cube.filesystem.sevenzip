@@ -138,7 +138,11 @@ public abstract class ProgressFacade : ObservableBase
     public IProgress<Report> GetProgress() => GetProgress(e =>
     {
         e.CopyTo(Report);
-        if (Report.State == ProgressState.Failed) Error?.Invoke(e);
+        if (Report.State == ProgressState.Failed)
+        {
+            if (e.Exception is not null) Logger.Warn(e.Exception);
+            Error?.Invoke(e);
+        }
     });
 
     /* --------------------------------------------------------------------- */
@@ -292,19 +296,16 @@ public abstract class ProgressFacade : ObservableBase
     /* --------------------------------------------------------------------- */
     private void Terminate()
     {
+        Logger.Debug($"Count:{Report.Count:#,0}/{Report.TotalCount:#,0}");
+        Logger.Debug($"Bytes:{Report.Bytes:#,0}/{Report.TotalBytes:#,0}");
+
         var hack = Report.Count < Report.TotalCount ||
                    Report.Bytes < Report.TotalBytes;
 
         if (hack)
         {
-            Logger.Debug(string.Join(", ",
-                $"Count:{Report.Count:#,0}/{Report.TotalCount:#,0}",
-                $"Bytes:{Report.Bytes:#,0}/{Report.TotalBytes:#,0}"
-            ));
-
             Report.Count = Report.TotalCount;
             Report.Bytes = Report.TotalBytes;
-
             Refresh(nameof(Report));
         }
     }
