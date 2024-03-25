@@ -121,7 +121,7 @@ public static class ZoneId
     /* --------------------------------------------------------------------- */
     public static void Set(string src, SecurityZone id)
     {
-        var attr = new Entity(src).Attributes;
+        var entity = new Entity(src);
 
         try
         {
@@ -131,7 +131,10 @@ public static class ZoneId
             writer.WriteLine($"[{SectionName}]");
             writer.WriteLine($"{KeyName}={id:D}");
         }
-        finally { Io.SetAttributes(src, attr); }
+        finally {
+            Io.SetLastWriteTime(src, entity.LastWriteTime);
+            Io.SetAttributes(src, entity.Attributes);
+        }
     }
 
     #endregion
