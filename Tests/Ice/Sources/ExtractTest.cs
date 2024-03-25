@@ -360,6 +360,13 @@ class ExtractTest : VmFixture
         );
 
         yield return new(
+            @"RootDirectory\SigleDirectoryNoFiles",
+            new[] { "SigleDirectoryNoFiles.zip" },
+            GetPathArgs("RootDirectory"),
+            new ExtractionSettingValue { SaveMethod = SaveMethod.CreateSmart }
+        );
+
+        yield return new(
             @"Tar\TarSample",
             new[] { "Sample.tar" },
             GetPathArgs("Tar"),
