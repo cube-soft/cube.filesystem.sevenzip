@@ -17,6 +17,7 @@
 /* ------------------------------------------------------------------------- */
 namespace Cube.FileSystem.SevenZip.Ice.Tests;
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security;
@@ -46,9 +47,14 @@ class ExtractTest : VmFixture
     /// Tests the extraction.
     /// </summary>
     ///
+    /// <param name="check">Path to check if the process completed.</param>
+    /// <param name="files">Source files to be extracted.</param>
+    /// <param name="args">Program options.</param>
+    /// <param name="settings">User settings for extracting.</param>
+    ///
     /* --------------------------------------------------------------------- */
     [TestCaseSource(nameof(TestCases))]
-    public void Extract(string dest, IEnumerable<string> files, IEnumerable<string> args, ExtractionSettingValue settings)
+    public void Extract(string check, IEnumerable<string> files, IEnumerable<string> args, ExtractionSettingValue settings)
     {
         settings.SaveDirectory = Get("Preset");
 
@@ -73,7 +79,8 @@ class ExtractTest : VmFixture
             Logger.Debug($"{vm.Elapsed}, {vm.Remaining}, {vm.Title}");
         }
 
-        Assert.That(Io.Exists(Get(dest)), Is.True, dest);
+        var dest = new Entity(Get(check));
+        Assert.That(dest.Exists, Is.True, check);
     }
 
     #endregion
