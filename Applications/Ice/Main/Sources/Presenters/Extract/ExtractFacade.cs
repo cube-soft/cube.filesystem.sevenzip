@@ -181,7 +181,7 @@ public sealed class ExtractFacade : ArchiveFacade
         Retry(() => src.Save(Temp, item, GetProgress()));
 
         var dest = Io.Combine(Temp, item.FullName);
-        if (FormatFactory.From(dest) != Format.Tar) Transfer(item);
+        if (Io.IsDirectory(dest) || FormatFactory.From(dest) != Format.Tar) Transfer(item);
         else
         {
             using var e = new ArchiveReader(dest, Password, src.Options);

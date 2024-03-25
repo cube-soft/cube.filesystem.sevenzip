@@ -96,7 +96,7 @@ internal static class EntityExtension
         {
             if (!Io.Exists(dest))
             {
-                Io.CreateDirectory(dest);
+                Try(() => Io.CreateDirectory(dest));
                 Logger.Try(() => Io.SetCreationTime(dest, src.CreationTime));
                 Logger.Try(() => Io.SetLastWriteTime(dest, src.LastWriteTime));
                 Logger.Try(() => Io.SetLastAccessTime(dest, src.LastAccessTime));
@@ -104,7 +104,7 @@ internal static class EntityExtension
             }
         }
         else if (Io.Exists(dest)) Move(src, dest, query.Get(src, new(dest)));
-        else Io.Move(src.FullName, dest, true);
+        else Try(() => Io.Move(src.FullName, dest, true));
     }
 
     /* --------------------------------------------------------------------- */
@@ -127,14 +127,33 @@ internal static class EntityExtension
         {
             case OverwriteMethod.Yes:
                 // Because Move is a little tricky...
-                Io.Copy(src.FullName, dest, true);
+                Try(() => Io.Copy(src.FullName, dest, true));
                 break;
             case OverwriteMethod.Rename:
-                Io.Move(src.FullName, IoEx.GetUniqueName(dest), false);
+                Try(() => Io.Move(src.FullName, IoEx.GetUniqueName(dest), false));
                 break;
             case OverwriteMethod.No:
             case OverwriteMethod.Cancel:
                 break;
+        }
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Try
+    ///
+    /// <summary>
+    /// Tries the specified action up to two times.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private static void Try(Action action)
+    {
+        try { action(); }
+        catch (Exception err)
+        {
+            Logger.Warn($"[Retry] {err.Message}");
+            action();
         }
     }
 
