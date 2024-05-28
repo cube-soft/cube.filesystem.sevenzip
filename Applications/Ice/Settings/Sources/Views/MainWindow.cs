@@ -25,7 +25,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
     /// MainWindow
     ///
     /// <summary>
-    /// Represetns the settings window.
+    /// Represents the settings window.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */

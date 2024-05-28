@@ -355,6 +355,7 @@ class SettingViewModelTest : VmFixture
         Assert.That(dest.Xz,       Is.EqualTo(src.Xz).And.True);
         Assert.That(dest.Z,        Is.EqualTo(src.Z).And.True);
         Assert.That(dest.Zip,      Is.EqualTo(src.Zip).And.True);
+        Assert.That(dest.Zst,      Is.EqualTo(src.Zst).And.True);
 
         src.Clear();
         Assert.That(dest.Arj,      Is.EqualTo(src.Arj).And.False);
@@ -386,6 +387,7 @@ class SettingViewModelTest : VmFixture
         Assert.That(dest.Xz,       Is.EqualTo(src.Xz).And.False);
         Assert.That(dest.Z,        Is.EqualTo(src.Z).And.False);
         Assert.That(dest.Zip,      Is.EqualTo(src.Zip).And.False);
+        Assert.That(dest.Zst,      Is.EqualTo(src.Zst).And.False);
 
         src.Arj      = true; Assert.That(dest.Arj,      Is.True);
         src.Bz2      = true; Assert.That(dest.Bz2,      Is.True);
@@ -416,6 +418,7 @@ class SettingViewModelTest : VmFixture
         src.Xz       = true; Assert.That(dest.Xz,       Is.True);
         src.Z        = true; Assert.That(dest.Z,        Is.True);
         src.Zip      = true; Assert.That(dest.Zip,      Is.True);
+        src.Zst      = true; Assert.That(dest.Zst,      Is.True);
     }
 
     /* --------------------------------------------------------------------- */

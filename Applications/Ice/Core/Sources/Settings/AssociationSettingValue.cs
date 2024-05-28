@@ -76,6 +76,7 @@ public sealed class AssociationSettingValue : SerializableBase
         { nameof(Xz),    false },
         { nameof(Z),     false },
         { nameof(Zip),   false },
+        { nameof(Zst),   false },
     });
 
     /* --------------------------------------------------------------------- */
@@ -598,6 +599,23 @@ public sealed class AssociationSettingValue : SerializableBase
     /* --------------------------------------------------------------------- */
     [DataMember(Name = "zip")]
     public bool Zip
+    {
+        get => GetAssociateValue();
+        set => SetAssociateValue(value);
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Zst
+    ///
+    /// <summary>
+    /// Gets or sets a value indicating whether to associate with
+    /// the *.zst files.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    [DataMember(Name = "zst")]
+    public bool Zst
     {
         get => GetAssociateValue();
         set => SetAssociateValue(value);

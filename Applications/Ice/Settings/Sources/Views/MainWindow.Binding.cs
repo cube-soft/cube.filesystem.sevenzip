@@ -123,13 +123,13 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
         /// <param name="start">Start tab index.</param>
         ///
         /* ----------------------------------------------------------------- */
-        private void BindAssociate(BindingSource src, int start) => AssociateMenuPanel.Controls.AddRange(new[]
-        {
+        private void BindAssociate(BindingSource src, int start) => AssociateMenuPanel.Controls.AddRange([
             // well-known
             src.Bind(nameof(AssociationSettingValue.Zip),      "*.zip",   start++),
             src.Bind(nameof(AssociationSettingValue.Lzh),      "*.lzh",   start++),
             src.Bind(nameof(AssociationSettingValue.Rar),      "*.rar",   start++),
             src.Bind(nameof(AssociationSettingValue.SevenZip), "*.7z",    start++),
+            src.Bind(nameof(AssociationSettingValue.Zst),      "*.zst",   start++),
             src.Bind(nameof(AssociationSettingValue.Iso),      "*.iso",   start++),
             src.Bind(nameof(AssociationSettingValue.Tar),      "*.tar",   start++),
             src.Bind(nameof(AssociationSettingValue.Gz),       "*.gz",    start++),
@@ -154,8 +154,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             src.Bind(nameof(AssociationSettingValue.Vmdk),     "*.vmdk",  start++),
             src.Bind(nameof(AssociationSettingValue.Wim),      "*.wim",   start++),
             src.Bind(nameof(AssociationSettingValue.Xar),      "*.xar",   start++),
-            src.Bind(nameof(AssociationSettingValue.Z),        "*.z",     start++),
-        });
+            src.Bind(nameof(AssociationSettingValue.Z),        "*.z",     start++)
+        ]);
 
         /* ----------------------------------------------------------------- */
         ///
