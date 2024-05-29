@@ -19,7 +19,6 @@
 namespace Cube.FileSystem.SevenZip;
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Cube.Text.Extensions;
@@ -179,6 +178,7 @@ internal sealed class UpdateCallback : CallbackBase, IArchiveUpdateCallback, ICr
     {
         var i   = (int)index;
         var src = (i >= 0 && i < _items.Count) ? _items[i] : default;
+        if (src is null) return SevenZipCode.Unavailable;
 
         switch (pid)
         {
@@ -210,7 +210,7 @@ internal sealed class UpdateCallback : CallbackBase, IArchiveUpdateCallback, ICr
                 value.Clear(); // TODO: implement
                 break;
             default:
-                Logger.Debug($"Unknown\tPid:{pid}");
+                Logger.Trace($"Pid:{pid}");
                 value.Clear();
                 break;
         }
@@ -370,7 +370,7 @@ internal sealed class UpdateCallback : CallbackBase, IArchiveUpdateCallback, ICr
     #endregion
 
     #region Fields
-    private readonly List<ArchiveStreamReader> _streams = new();
+    private readonly List<ArchiveStreamReader> _streams = [];
     private readonly IList<RawEntity> _items;
     private int _index = -1;
     #endregion

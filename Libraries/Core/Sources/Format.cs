@@ -59,6 +59,8 @@ public enum Format
     XZ = 0x0c,
     /// <summary>PPMD format</summary>
     Ppmd = 0x0d,
+    /// <summary>Zstd format</summary>
+    Zstd = 0x0e,
     /// <summary>Linux file system format</summary>
     Ext = 0xc7,
     /// <summary>VMware disk format</summary>

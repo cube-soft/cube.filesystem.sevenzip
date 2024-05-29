@@ -170,6 +170,7 @@ public static class FormatFactory
                 { ".xz",   Format.XZ       },
                 { ".txz",  Format.XZ       },
                 { ".z",    Format.Lzw      },
+                { ".zst",  Format.Zstd     },
             };
 
             foreach (Format item in Enum.GetValues(typeof(Format)))
@@ -216,6 +217,7 @@ public static class FormatFactory
         { "49-54-53-46",                Format.Chm      },
         { "ED-AB-EE-DB",                Format.Rpm      },
         { "1F-8B-08",                   Format.GZip     },
+        { "28-B5-2F-FD",                Format.Zstd     },
     };
 
     #endregion

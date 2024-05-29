@@ -99,15 +99,17 @@ public sealed class CompressFacade : ArchiveFacade
     /* --------------------------------------------------------------------- */
     private void Invoke(CompressionQueryValue src)
     {
+        var tmp = Io.Combine(Temp, Io.GetFileName(Destination));
+        Logger.Debug($"Temp:{tmp.Quote()}");
         Logger.Debug($"Format:{src.Format}, Method:{src.CompressionMethod}, Level:{src.CompressionLevel}");
 
         using (var writer = new ArchiveWriter(src.Format, src.ToOption(Settings)))
         {
             foreach (var e in Request.Sources) writer.Add(e);
-            writer.Save(Temp, GetProgress());
+            writer.Save(tmp, GetProgress());
         }
 
-        if (Io.Exists(Temp)) Io.Move(Temp, Destination, true);
+        if (Io.Exists(tmp)) Io.Move(tmp, Destination, true);
     }
 
     /* --------------------------------------------------------------------- */
