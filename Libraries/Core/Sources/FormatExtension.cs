@@ -74,6 +74,7 @@ public static class FormatExtension
         Format.BZip2    => ".bz2",
         Format.GZip     => ".gz",
         Format.Lzw      => ".z",
+        Format.Zstd     => ".zst",
         Format.Sfx      => ".exe",
         Format.Unknown  => string.Empty,
         _               => $".{src.ToString().ToLowerInvariant()}",

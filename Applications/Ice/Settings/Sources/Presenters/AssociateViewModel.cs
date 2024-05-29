@@ -95,8 +95,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// SevenZip
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.7z files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.7z files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -111,8 +111,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// Arj
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.arj files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.arj files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -127,8 +127,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// Bz2
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.bz2 files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.bz2 files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -143,8 +143,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// Cab
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.cab files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.cab files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -159,8 +159,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// Chm
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.chm files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.chm files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -175,8 +175,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// Cpio
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.cpio files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.cpio files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -191,8 +191,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// Deb
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.deb files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.deb files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -207,8 +207,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// Dmg
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.dmg files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.dmg files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -223,8 +223,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// Flv
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.flv files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.flv files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -239,8 +239,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// Gz
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.gz files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.gz files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -255,8 +255,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// Hfs
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.hfs files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.hfs files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -271,8 +271,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// Jar
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.jar files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.jar files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -287,8 +287,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// Iso
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.iso files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.iso files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -303,8 +303,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// Lzh
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.lzh files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.lzh files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -319,8 +319,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// Nupkg
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.nupkg files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.nupkg files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -335,8 +335,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// Rar
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.rar files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.rar files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -351,8 +351,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// Rpm
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.rpm files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.rpm files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -367,8 +367,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// Swf
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.swf files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.swf files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -383,8 +383,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// Tar
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.tar files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.tar files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -399,8 +399,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// Tbz
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.tbz files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.tbz files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -415,8 +415,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// Tgz
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.tgz files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.tgz files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -431,8 +431,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// Txz
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.txz files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.txz files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -447,8 +447,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// Vhd
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.vhd files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.vhd files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -463,8 +463,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// Vmdk
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.vmdk files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.vmdk files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -479,8 +479,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// Wim
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.wim files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.wim files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -495,8 +495,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// Xar
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.xar files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.xar files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -511,8 +511,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// Xz
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.xz files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.xz files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -527,8 +527,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// Z
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.z files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.z files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -543,8 +543,8 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     /// Zip
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether or not to associate
-    /// with the *.zip files.
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.zip files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -552,6 +552,22 @@ public class AssociateViewModel : PresentableBase<AssociationSettingValue>
     {
         get => Facade.Zip;
         set => Facade.Zip = value;
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Zst
+    ///
+    /// <summary>
+    /// Gets or sets a value indicating whether to associate with the
+    /// *.zst files.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public bool Zst
+    {
+        get => Facade.Zst;
+        set => Facade.Zst = value;
     }
 
     #endregion

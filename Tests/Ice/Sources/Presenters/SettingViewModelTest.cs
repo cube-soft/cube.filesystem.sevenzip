@@ -106,38 +106,38 @@ class SettingViewModelTest : VmFixture
 
         src.SaveSource = true;
         Assert.That(src.SaveSource,    Is.True);
-        Assert.That(src.SaveQuery,   Is.False);
+        Assert.That(src.SaveQuery,     Is.False);
         Assert.That(src.SaveOthers,    Is.False);
         Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Source));
 
         src.SaveQuery = true;
         Assert.That(src.SaveSource,    Is.False);
-        Assert.That(src.SaveQuery,   Is.True);
+        Assert.That(src.SaveQuery,     Is.True);
         Assert.That(src.SaveOthers,    Is.False);
         Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Query));
 
         src.SaveOthers = true;
         Assert.That(src.SaveSource,    Is.False);
-        Assert.That(src.SaveQuery,   Is.False);
+        Assert.That(src.SaveQuery,     Is.False);
         Assert.That(src.SaveOthers,    Is.True);
         Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Preset));
 
         // update only when set to true
         src.SaveOthers = false;
         Assert.That(src.SaveSource,    Is.False);
-        Assert.That(src.SaveQuery,   Is.False);
+        Assert.That(src.SaveQuery,     Is.False);
         Assert.That(src.SaveOthers,    Is.True);
         Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Preset));
 
         src.SaveSource = false;
         Assert.That(src.SaveSource,    Is.False);
-        Assert.That(src.SaveQuery,   Is.False);
+        Assert.That(src.SaveQuery,     Is.False);
         Assert.That(src.SaveOthers,    Is.True);
         Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Preset));
 
         src.SaveQuery = false;
         Assert.That(src.SaveSource,    Is.False);
-        Assert.That(src.SaveQuery,   Is.False);
+        Assert.That(src.SaveQuery,     Is.False);
         Assert.That(src.SaveOthers,    Is.True);
         Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Preset));
 
@@ -317,7 +317,7 @@ class SettingViewModelTest : VmFixture
         var src  = vm.Associate;
         var dest = m.Value.Association;
 
-        Assert.That(dest.Value.Count, Is.EqualTo(29));
+        Assert.That(dest.Value.Count, Is.EqualTo(30));
         Assert.That(dest.IconIndex,   Is.EqualTo(3));
         Assert.That(dest.Changed,     Is.False);
 
@@ -355,6 +355,7 @@ class SettingViewModelTest : VmFixture
         Assert.That(dest.Xz,       Is.EqualTo(src.Xz).And.True);
         Assert.That(dest.Z,        Is.EqualTo(src.Z).And.True);
         Assert.That(dest.Zip,      Is.EqualTo(src.Zip).And.True);
+        Assert.That(dest.Zst,      Is.EqualTo(src.Zst).And.True);
 
         src.Clear();
         Assert.That(dest.Arj,      Is.EqualTo(src.Arj).And.False);
@@ -386,6 +387,7 @@ class SettingViewModelTest : VmFixture
         Assert.That(dest.Xz,       Is.EqualTo(src.Xz).And.False);
         Assert.That(dest.Z,        Is.EqualTo(src.Z).And.False);
         Assert.That(dest.Zip,      Is.EqualTo(src.Zip).And.False);
+        Assert.That(dest.Zst,      Is.EqualTo(src.Zst).And.False);
 
         src.Arj      = true; Assert.That(dest.Arj,      Is.True);
         src.Bz2      = true; Assert.That(dest.Bz2,      Is.True);
@@ -416,6 +418,7 @@ class SettingViewModelTest : VmFixture
         src.Xz       = true; Assert.That(dest.Xz,       Is.True);
         src.Z        = true; Assert.That(dest.Z,        Is.True);
         src.Zip      = true; Assert.That(dest.Zip,      Is.True);
+        src.Zst      = true; Assert.That(dest.Zst,      Is.True);
     }
 
     /* --------------------------------------------------------------------- */

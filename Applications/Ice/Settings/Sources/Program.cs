@@ -97,6 +97,7 @@ static class Program
         src.Value.Association.Lzh      = true;
         src.Value.Association.Rar      = true;
         src.Value.Association.SevenZip = true;
+        src.Value.Association.Zst      = true;
         src.Value.Association.Tar      = true;
         src.Value.Association.Gz       = true;
         src.Value.Association.Tgz      = true;
@@ -104,7 +105,7 @@ static class Program
         src.Value.Association.Tbz      = true;
         src.Value.Association.Xz       = true;
         src.Value.Association.Txz      = true;
-        src.Value.Shortcut.Preset    = Preset.Settings;
+        src.Value.Shortcut.Preset      = Preset.Settings;
     }
 
     #endregion
