@@ -106,38 +106,38 @@ class SettingViewModelTest : VmFixture
 
         src.SaveSource = true;
         Assert.That(src.SaveSource,    Is.True);
-        Assert.That(src.SaveQuery,   Is.False);
+        Assert.That(src.SaveQuery,     Is.False);
         Assert.That(src.SaveOthers,    Is.False);
         Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Source));
 
         src.SaveQuery = true;
         Assert.That(src.SaveSource,    Is.False);
-        Assert.That(src.SaveQuery,   Is.True);
+        Assert.That(src.SaveQuery,     Is.True);
         Assert.That(src.SaveOthers,    Is.False);
         Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Query));
 
         src.SaveOthers = true;
         Assert.That(src.SaveSource,    Is.False);
-        Assert.That(src.SaveQuery,   Is.False);
+        Assert.That(src.SaveQuery,     Is.False);
         Assert.That(src.SaveOthers,    Is.True);
         Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Preset));
 
         // update only when set to true
         src.SaveOthers = false;
         Assert.That(src.SaveSource,    Is.False);
-        Assert.That(src.SaveQuery,   Is.False);
+        Assert.That(src.SaveQuery,     Is.False);
         Assert.That(src.SaveOthers,    Is.True);
         Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Preset));
 
         src.SaveSource = false;
         Assert.That(src.SaveSource,    Is.False);
-        Assert.That(src.SaveQuery,   Is.False);
+        Assert.That(src.SaveQuery,     Is.False);
         Assert.That(src.SaveOthers,    Is.True);
         Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Preset));
 
         src.SaveQuery = false;
         Assert.That(src.SaveSource,    Is.False);
-        Assert.That(src.SaveQuery,   Is.False);
+        Assert.That(src.SaveQuery,     Is.False);
         Assert.That(src.SaveOthers,    Is.True);
         Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Preset));
 
@@ -317,7 +317,7 @@ class SettingViewModelTest : VmFixture
         var src  = vm.Associate;
         var dest = m.Value.Association;
 
-        Assert.That(dest.Value.Count, Is.EqualTo(29));
+        Assert.That(dest.Value.Count, Is.EqualTo(30));
         Assert.That(dest.IconIndex,   Is.EqualTo(3));
         Assert.That(dest.Changed,     Is.False);
 
