@@ -20,7 +20,7 @@ namespace Cube.FileSystem.SevenZip;
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using Cube.Text.Extensions;
 
 /* ------------------------------------------------------------------------- */
 ///
@@ -211,6 +211,7 @@ public sealed class ArchiveWriter : DisposableBase
             var archive = _lib.GetOutArchive(fmt);
             var setter  = CompressionOptionSetter.From(Format, Options);
 
+            // ReSharper disable once SuspiciousTypeConversion.Global
             setter?.Invoke(archive as ISetProperties);
             return archive.UpdateItems(ss, (uint)src.Count, cb);
         }, src, dest, progress);
@@ -281,11 +282,10 @@ public sealed class ArchiveWriter : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private string GetTarName(string src)
+    private static string GetTarName(string src)
     {
         var name = Io.GetBaseName(src);
-        var cmp  = StringComparison.InvariantCultureIgnoreCase;
-        return name.EndsWith(".tar", cmp) ? name : $"{name}.tar";
+        return name.EndsWith(".tar", StringComparison.InvariantCultureIgnoreCase) ? name : $"{name}.tar";
     }
 
     /* --------------------------------------------------------------------- */
@@ -298,15 +298,19 @@ public sealed class ArchiveWriter : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private bool CanRead(RawEntity src)
+    private static bool CanRead(Entity src)
     {
         if (src.IsDirectory) return true;
         try
         {
             using var stream = Io.Open(src.FullName);
-            return stream != null;
+            if (stream is null) Logger.Warn($"Path:{src.FullName.Quote()}, Error:null");
+            return stream is not null;
         }
-        catch { return false; }
+        catch (Exception e) {
+            Logger.Warn($"Path:{src.FullName.Quote()}, Error:{e.Message} ({e.GetType().Name})");
+            return false;
+        }
     }
 
     /* --------------------------------------------------------------------- */
@@ -359,13 +363,13 @@ public sealed class ArchiveWriter : DisposableBase
         var code = func(cb);
         if (code == (int)SevenZipCode.Success) return;
         if (code == (int)SevenZipCode.Cancel) throw cb.GetCancelException();
-        else throw cb.GetException(code);
+        throw cb.GetException(code);
     }
 
     #endregion
 
     #region Fields
     private readonly SevenZipLibrary _lib = new();
-    private readonly List<RawEntity> _items = new();
+    private readonly List<RawEntity> _items = [];
     #endregion
 }
