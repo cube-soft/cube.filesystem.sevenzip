@@ -61,6 +61,7 @@ static class Program
         ss.Load();
 
         if (ss.Value.UseAltFS) Io.Configure(new AlphaFS.IoController());
+        Logger.Debug($"FileSystem:{ss.Value.UseAltFS}");
 
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
