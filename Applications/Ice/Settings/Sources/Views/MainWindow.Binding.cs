@@ -42,7 +42,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             b0.Bind(nameof(s0.ToolTip),      ToolTipCheckBox,   nameof(CheckBox.Checked));
             b0.Bind(nameof(s0.ToolTip),      ToolTipNumeric,    nameof(Enabled));
             b0.Bind(nameof(s0.ToolTipCount), ToolTipNumeric,    nameof(NumericUpDown.Value));
-            b0.Bind(nameof(s0.AlphaFS),      IoHandlerComboBox, nameof(ComboBox.SelectedValue));
+            b0.Bind(nameof(s0.UseAltFS),     IoHandlerComboBox, nameof(ComboBox.SelectedValue));
             b0.Bind(nameof(s0.Temp),         TempTextBox,       nameof(TextBox.Text));
             b0.Bind(nameof(s0.CheckUpdate),  UpdateCheckBox,    nameof(CheckBox.Checked));
             IoHandlerComboBox.Bind(Surface.IoHandlers);
