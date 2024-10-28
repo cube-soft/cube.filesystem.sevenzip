@@ -299,6 +299,7 @@ public sealed class ArchiveWriter : DisposableBase
     /* --------------------------------------------------------------------- */
     private void AddItem(RawEntity src)
     {
+        Logger.Trace($"[Add] {src.RawName.Quote()}");
         if (Options.Filter?.Invoke(src) ?? false) return;
 
         Verify(src);
