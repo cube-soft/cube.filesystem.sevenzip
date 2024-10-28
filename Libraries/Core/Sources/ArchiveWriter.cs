@@ -290,31 +290,6 @@ public sealed class ArchiveWriter : DisposableBase
 
     /* --------------------------------------------------------------------- */
     ///
-    /// CanRead
-    ///
-    /// <summary>
-    /// Gets the value indicating whether the specified file or
-    /// directory is readable.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    private static bool CanRead(Entity src)
-    {
-        if (src.IsDirectory) return true;
-        try
-        {
-            using var stream = Io.Open(src.FullName);
-            if (stream is null) Logger.Warn($"Path:{src.FullName.Quote()}, Error:null");
-            return stream is not null;
-        }
-        catch (Exception e) {
-            Logger.Warn($"Path:{src.FullName.Quote()}, Error:{e.Message} ({e.GetType().Name})");
-            return false;
-        }
-    }
-
-    /* --------------------------------------------------------------------- */
-    ///
     /// AddItem
     ///
     /// <summary>
@@ -325,7 +300,10 @@ public sealed class ArchiveWriter : DisposableBase
     private void AddItem(RawEntity src)
     {
         if (Options.Filter?.Invoke(src) ?? false) return;
-        if (CanRead(src)) _items.Add(src);
+
+        Verify(src);
+        _items.Add(src);
+
         if (!src.IsDirectory) return;
 
         static RawEntity make(string s, RawEntity e) =>
@@ -339,6 +317,30 @@ public sealed class ArchiveWriter : DisposableBase
         }
 
         foreach (var e in Io.GetDirectories(src.FullName)) AddItem(make(e, src));
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Verify
+    ///
+    /// <summary>
+    /// Verifies if the specified file is accessible.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private static void Verify(Entity src)
+    {
+        if (src.IsDirectory) return;
+        try
+        {
+            using var stream = Io.Open(src.FullName);
+            if (stream is null) throw new ArgumentNullException(nameof(stream));
+        }
+        catch (Exception e)
+        {
+            Logger.Warn($"Path:{src.FullName.Quote()}, Error:{e.Message} ({e.GetType().Name})");
+            throw new AccessException(src.RawName, e);
+        }
     }
 
     /* --------------------------------------------------------------------- */
