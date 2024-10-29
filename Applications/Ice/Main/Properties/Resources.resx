@@ -62,7 +62,7 @@
     <value>エラーを無視して処理を継続しますか？継続した場合、圧縮・解凍結果の一部または全部が破損している可能性があるのでご注意下さい。</value>
   </data>
   <data name="ErrorGeneric" xml:space="preserve">
-    <value>処理中にエラーが発生しました ({0})。</value>
+    <value>処理中にエラーが発生しました ({0})</value>
   </data>
   <data name="Filter7z" xml:space="preserve">
     <value>7-Zip ファイル</value>
