@@ -182,8 +182,11 @@ public static class Message
     private static string GetMessage(Exception src)
     {
         var dest = new StringBuilder();
-        if (src is AccessException ae) dest.Append($"{ae.FileName} ");
-        return dest.AppendFormat(Properties.Resources.ErrorGeneric, src.GetType().Name).ToString();
+        return dest.AppendFormat(Properties.Resources.ErrorGeneric, src.GetType().Name)
+                   .AppendLine()
+                   .AppendLine()
+                   .Append(src.Message)
+                   .ToString();
     }
 
     #endregion
