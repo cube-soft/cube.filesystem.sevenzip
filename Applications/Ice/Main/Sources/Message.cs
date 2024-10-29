@@ -19,7 +19,6 @@ namespace Cube.FileSystem.SevenZip.Ice;
 
 using System;
 using System.Text;
-using System.Windows.Forms;
 using Cube.Text.Extensions;
 
 /* ------------------------------------------------------------------------- */
@@ -37,6 +36,27 @@ public static class Message
 
     /* --------------------------------------------------------------------- */
     ///
+    /// From
+    ///
+    /// <summary>
+    /// Create a message to show a DialogBox with an error icon and OK
+    /// button.
+    /// </summary>
+    ///
+    /// <param name="src">Occurred exception.</param>
+    ///
+    /// <returns>DialogMessage object.</returns>
+    ///
+    /* --------------------------------------------------------------------- */
+    public static DialogMessage From(Exception src) => new(GetMessage(src))
+    {
+        Title   = "CubeICE",
+        Icon    = DialogIcon.Error,
+        Buttons = DialogButtons.Ok,
+    };
+
+    /* --------------------------------------------------------------------- */
+    ///
     /// Error
     ///
     /// <summary>
@@ -49,7 +69,7 @@ public static class Message
     /// <returns>DialogMessage object.</returns>
     ///
     /* --------------------------------------------------------------------- */
-    public static DialogMessage Error(Report src) => new(GetErrorText(src))
+    public static DialogMessage Error(Report src) => new(GetMessage(src))
     {
         Title   = "CubeICE",
         Icon    = DialogIcon.Error,
@@ -127,19 +147,14 @@ public static class Message
 
     /* --------------------------------------------------------------------- */
     ///
-    /// Error
+    /// GetMessage
     ///
     /// <summary>
-    /// Create a message to show a DialogBox with an error icon and YES/NO
-    /// buttons.
+    /// Gets the error text with specified arguments.
     /// </summary>
     ///
-    /// <param name="src">Source object.</param>
-    ///
-    /// <returns>DialogMessage object.</returns>
-    ///
     /* --------------------------------------------------------------------- */
-    private static string GetErrorText(Report src)
+    private static string GetMessage(Report src)
     {
         var dest = new StringBuilder();
         var e    = src.Exception is null ? "UnexpectedError" :
@@ -153,6 +168,22 @@ public static class Message
                    .AppendLine()
                    .Append(Properties.Resources.ErrorContinue)
                    .ToString();
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// GetMessage
+    ///
+    /// <summary>
+    /// Gets the error text with specified arguments.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private static string GetMessage(Exception src)
+    {
+        var dest = new StringBuilder();
+        if (src is AccessException ae) dest.Append($"{ae.FileName} ");
+        return dest.AppendFormat(Properties.Resources.ErrorGeneric, src.GetType().Name).ToString();
     }
 
     #endregion

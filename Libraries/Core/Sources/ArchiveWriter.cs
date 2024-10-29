@@ -20,7 +20,7 @@ namespace Cube.FileSystem.SevenZip;
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using Cube.Text.Extensions;
 using Cube.Backports;
 
 /* ------------------------------------------------------------------------- */
@@ -212,6 +212,7 @@ public sealed class ArchiveWriter : DisposableBase
             var archive = _lib.GetOutArchive(fmt);
             var setter  = CompressionOptionSetter.From(Format, Options);
 
+            // ReSharper disable once SuspiciousTypeConversion.Global
             setter?.Invoke(archive as ISetProperties);
             return archive.UpdateItems(ss, (uint)src.Count, cb);
         }, src, dest, progress);
@@ -282,32 +283,10 @@ public sealed class ArchiveWriter : DisposableBase
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private string GetTarName(string src)
+    private static string GetTarName(string src)
     {
         var name = Io.GetBaseName(src);
-        var cmp  = StringComparison.InvariantCultureIgnoreCase;
-        return name.EndsWith(".tar", cmp) ? name : $"{name}.tar";
-    }
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// CanRead
-    ///
-    /// <summary>
-    /// Gets the value indicating whether the specified file or
-    /// directory is readable.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    private bool CanRead(RawEntity src)
-    {
-        if (src.IsDirectory) return true;
-        try
-        {
-            using var stream = Io.Open(src.FullName);
-            return stream != null;
-        }
-        catch { return false; }
+        return name.EndsWith(".tar", StringComparison.InvariantCultureIgnoreCase) ? name : $"{name}.tar";
     }
 
     /* --------------------------------------------------------------------- */
@@ -321,8 +300,12 @@ public sealed class ArchiveWriter : DisposableBase
     /* --------------------------------------------------------------------- */
     private void AddItem(RawEntity src)
     {
+        Logger.Trace($"[Add] {src.RawName.Quote()}");
         if (Options.Filter?.Invoke(src) ?? false) return;
-        if (CanRead(src)) _items.Add(src);
+
+        Verify(src);
+        _items.Add(src);
+
         if (!src.IsDirectory) return;
 
         static RawEntity make(string s, RawEntity e) =>
@@ -336,6 +319,30 @@ public sealed class ArchiveWriter : DisposableBase
         }
 
         foreach (var e in Io.GetDirectories(src.FullName)) AddItem(make(e, src));
+    }
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// Verify
+    ///
+    /// <summary>
+    /// Verifies if the specified file is accessible.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private static void Verify(Entity src)
+    {
+        if (src.IsDirectory) return;
+        try
+        {
+            using var stream = Io.Open(src.FullName);
+            if (stream is null) throw new ArgumentNullException(nameof(stream));
+        }
+        catch (Exception e)
+        {
+            Logger.Debug($"Path:{src.FullName.Quote()}, Error:{e.Message} ({e.GetType().Name})");
+            throw new AccessException(src.RawName, e);
+        }
     }
 
     /* --------------------------------------------------------------------- */
@@ -360,13 +367,13 @@ public sealed class ArchiveWriter : DisposableBase
         var code = func(cb);
         if (code == (int)SevenZipCode.Success) return;
         if (code == (int)SevenZipCode.Cancel) throw cb.GetCancelException();
-        else throw cb.GetException(code);
+        throw cb.GetException(code);
     }
 
     #endregion
 
     #region Fields
     private readonly SevenZipLibrary _lib = new();
-    private readonly List<RawEntity> _items = new();
+    private readonly List<RawEntity> _items = [];
     #endregion
 }

@@ -174,18 +174,18 @@ public class SettingViewModel : PresentableBase<SettingFolder>
 
     /* --------------------------------------------------------------------- */
     ///
-    /// AlphaFS
+    /// UseAltFS
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether to use the AlphaFS
-    /// module for I/O operation.
+    /// Gets or sets a value indicating whether to use the alternative
+    /// filesystem (AlphaFS) module for I/O operation.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public bool AlphaFS
+    public bool UseAltFS
     {
-        get => Facade.Value.AlphaFS;
-        set => Facade.Value.AlphaFS = value;
+        get => Facade.Value.UseAltFS;
+        set => Facade.Value.UseAltFS = value;
     }
 
     /* --------------------------------------------------------------------- */

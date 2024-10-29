@@ -60,7 +60,8 @@ static class Program
         var ss = new SettingFolder();
         ss.Load();
 
-        if (ss.Value.AlphaFS) Io.Configure(new AlphaFS.IoController());
+        if (ss.Value.UseAltFS) Io.Configure(new AlphaFS.IoController());
+        Logger.Debug($"{nameof(ss.Value.UseAltFS)}:{ss.Value.UseAltFS}");
 
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);

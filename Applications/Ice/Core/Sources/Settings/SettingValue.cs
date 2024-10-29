@@ -40,18 +40,18 @@ public sealed class SettingValue : SerializableBase
 
     /* --------------------------------------------------------------------- */
     ///
-    /// AlphaFS
+    /// UseAltFS
     ///
     /// <summary>
-    /// Gets or sets a value indicating whether to use the AlphaFS
-    /// module for I/O operation.
+    /// Gets or sets a value indicating whether to use the alternative
+    /// filesystem (AlphaFS) module for I/O operation.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [DataMember]
-    public bool AlphaFS
+    public bool UseAltFS
     {
-        get => Get(() => true);
+        get => Get(() => false);
         set => Set(value);
     }
 
