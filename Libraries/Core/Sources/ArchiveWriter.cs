@@ -339,7 +339,7 @@ public sealed class ArchiveWriter : DisposableBase
         }
         catch (Exception e)
         {
-            Logger.Warn($"Path:{src.FullName.Quote()}, Error:{e.Message} ({e.GetType().Name})");
+            Logger.Debug($"Path:{src.FullName.Quote()}, Error:{e.Message} ({e.GetType().Name})");
             throw new AccessException(src.RawName, e);
         }
     }
