@@ -299,12 +299,9 @@ public sealed class ArchiveWriter : DisposableBase
     /* --------------------------------------------------------------------- */
     private void AddItem(RawEntity src)
     {
-        Logger.Trace($"[Add] {src.RawName.Quote()}");
         if (Options.Filter?.Invoke(src) ?? false) return;
 
-        Verify(src);
         _items.Add(src);
-
         if (!src.IsDirectory) return;
 
         static RawEntity make(string s, RawEntity e) =>
@@ -318,30 +315,6 @@ public sealed class ArchiveWriter : DisposableBase
         }
 
         foreach (var e in Io.GetDirectories(src.FullName)) AddItem(make(e, src));
-    }
-
-    /* --------------------------------------------------------------------- */
-    ///
-    /// Verify
-    ///
-    /// <summary>
-    /// Verifies if the specified file is accessible.
-    /// </summary>
-    ///
-    /* --------------------------------------------------------------------- */
-    private static void Verify(Entity src)
-    {
-        if (src.IsDirectory) return;
-        try
-        {
-            using var stream = Io.Open(src.FullName);
-            if (stream is null) throw new ArgumentNullException(nameof(stream));
-        }
-        catch (Exception e)
-        {
-            Logger.Debug($"Path:{src.FullName.Quote()}, Error:{e.Message} ({e.GetType().Name})");
-            throw new AccessException(src.RawName, e);
-        }
     }
 
     /* --------------------------------------------------------------------- */

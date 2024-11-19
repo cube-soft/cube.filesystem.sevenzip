@@ -265,11 +265,14 @@ internal sealed class UpdateCallback : CallbackBase, IArchiveUpdateCallback, ICr
     public SevenZipCode SetOperationResult(SevenZipCode code)
     {
         Count++;
-        if (code != SevenZipCode.Success) Logger.Warn($"[{code}] Index:{_index}, Name:{Current()?.RawName ?? ""}");
+
+        var log = $"[{code}] Index:{_index}, Name:{Current()?.RawName.Quote() ?? ""}";
+        if (code != SevenZipCode.Success) Logger.Warn(log);
+        else Logger.Trace(log);
+
         return code == SevenZipCode.Success ?
                Report(ProgressState.Success, Current()) :
                Report(new SevenZipException(code), Current());
-
     }
 
     /* --------------------------------------------------------------------- */
