@@ -126,7 +126,7 @@ public sealed class ArchiveWriter : DisposableBase
     public void Add(string src, string name)
     {
         var e = new RawEntity(src, name);
-        if (e.Exists) AddItem(e);
+        if (e.Exists) AddRecursive(e);
         else throw new System.IO.FileNotFoundException(e.FullName);
     }
 
@@ -290,21 +290,21 @@ public sealed class ArchiveWriter : DisposableBase
 
     /* --------------------------------------------------------------------- */
     ///
-    /// AddItem
+    /// AddRecursive
     ///
     /// <summary>
-    /// Add the specified file or directory to the archive.
+    /// Adds the specified file or directory to the archive.
+    /// If the specified entity is a directory, the method recursively adds
+    /// the files or directories contained in that directory.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private void AddItem(RawEntity src)
+    private void AddRecursive(RawEntity src)
     {
         Logger.Trace($"[Add] {src.RawName.Quote()}");
         if (Options.Filter?.Invoke(src) ?? false) return;
 
-        Verify(src);
-        _items.Add(src);
-
+        AddItem(src);
         if (!src.IsDirectory) return;
 
         static RawEntity make(string s, RawEntity e) =>
@@ -314,28 +314,31 @@ public sealed class ArchiveWriter : DisposableBase
         {
             var entity = make(e, src);
             if (Options.Filter?.Invoke(entity) ?? false) continue;
-            _items.Add(entity);
+            AddItem(entity);
         }
 
-        foreach (var e in Io.GetDirectories(src.FullName)) AddItem(make(e, src));
+        foreach (var e in Io.GetDirectories(src.FullName)) AddRecursive(make(e, src));
     }
 
     /* --------------------------------------------------------------------- */
     ///
-    /// Verify
+    /// AddItem
     ///
     /// <summary>
-    /// Verifies if the specified file is accessible.
+    /// Adds the specified file or directory to the archive.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private static void Verify(Entity src)
+    private void AddItem(RawEntity src)
     {
-        if (src.IsDirectory) return;
         try
         {
-            using var stream = Io.Open(src.FullName);
-            if (stream is null) throw new ArgumentNullException(nameof(stream));
+            if (!src.IsDirectory)
+            {
+                using var stream = Io.Open(src.FullName);
+                if (stream is null) throw new ArgumentNullException(nameof(stream));
+            }
+            _items.Add(src);
         }
         catch (Exception e)
         {

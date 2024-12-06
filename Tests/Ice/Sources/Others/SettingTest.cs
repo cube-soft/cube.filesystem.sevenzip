@@ -51,7 +51,7 @@ class SettingTest : FileFixture
         var dest = new SettingFolder();
         Assert.That(dest.AutoSave,           Is.False);
         Assert.That(dest.AutoSaveDelay,      Is.EqualTo(TimeSpan.FromSeconds(1)));
-        Assert.That(dest.Version.ToString(), Is.EqualTo("3.5.0"));
+        Assert.That(dest.Version.ToString(), Is.EqualTo("3.5.1"));
         Assert.That(dest.Format,             Is.EqualTo(DataContract.Format.Registry));
         Assert.That(dest.Location,           Is.EqualTo(@"CubeSoft\CubeICE\v3"));
 
@@ -86,10 +86,10 @@ class SettingTest : FileFixture
         Assert.That(src.Preset, Is.EqualTo(menu));
 
         src.Load();
-        Assert.That(src.Preset.HasFlag(Preset.Compress),       Is.False);
+        Assert.That(src.Preset.HasFlag(Preset.Compress),        Is.False);
         Assert.That(src.Preset.HasFlag(Preset.CompressDetails), Is.True);
-        Assert.That(src.Preset.HasFlag(Preset.Extract),        Is.False);
-        Assert.That(src.Preset.HasFlag(Preset.Settings),       Is.False);
+        Assert.That(src.Preset.HasFlag(Preset.Extract),         Is.False);
+        Assert.That(src.Preset.HasFlag(Preset.Settings),        Is.False);
 
         src.Preset = menu;
         src.Save();
