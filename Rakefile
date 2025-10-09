@@ -22,8 +22,8 @@ require 'rake/clean'
 # configuration
 # --------------------------------------------------------------------------- #
 PROJECT     = "Cube.FileSystem.SevenZip"
-LATEST      = "v8"
-BRANCHES    = ["net47", "net60", "net35"]
+LATEST      = "v9"
+BRANCHES    = ["net47", "net35"]
 CONFIGS     = ["Release", "Debug"]
 PLATFORMS   = ["Any CPU", "x86", "x64"]
 PACKAGES    = ["Libraries/Core/Cube.FileSystem.SevenZip"]
