@@ -119,6 +119,23 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
 
         /* --------------------------------------------------------------------- */
         ///
+        /// ResetAccessControl
+        ///
+        /// <summary>
+        /// Gets or sets a value indicating whether to reset the ACL of
+        /// extracted files and directories so that they inherit permissions
+        /// from the destination directory.
+        /// </summary>
+        ///
+        /* --------------------------------------------------------------------- */
+        public bool ResetAccessControl
+        {
+            get => Facade.ResetAccessControl;
+            set => Facade.ResetAccessControl = value;
+        }
+
+        /* --------------------------------------------------------------------- */
+        ///
         /// PropagateZone
         ///
         /// <summary>

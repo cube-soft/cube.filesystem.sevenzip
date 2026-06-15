@@ -135,7 +135,8 @@ public sealed class ExtractFacade : ArchiveFacade
     /* --------------------------------------------------------------------- */
     private void Invoke(ArchiveReader src, ExtractDirectory dir)
     {
-        Logger.Debug($"Format:{src.Format}, Source:{src.Source.Quote()}, Zone:{Zone:D}");
+        var acl = Settings.Value.Extraction.ResetAccessControl;
+        Logger.Debug($"Format:{src.Format}, Source:{src.Source.Quote()}, Zone:{Zone:D}, ACL:{acl}");
         SetDestination(src, dir);
 
         var progress = GetProgress(e => {
@@ -174,7 +175,8 @@ public sealed class ExtractFacade : ArchiveFacade
     /* --------------------------------------------------------------------- */
     private void Invoke(ArchiveReader src, int index, ExtractDirectory dir)
     {
-        Logger.Debug($"Format:{src.Format}, Source:{src.Source.Quote()}, Zone:{Zone:D}");
+        var acl = Settings.Value.Extraction.ResetAccessControl;
+        Logger.Debug($"Format:{src.Format}, Source:{src.Source.Quote()}, Zone:{Zone:D}, ACL:{acl}");
         SetDestination(src, dir);
 
         var item = src.Items[index];
@@ -233,32 +235,25 @@ public sealed class ExtractFacade : ArchiveFacade
     /* --------------------------------------------------------------------- */
     private void Transfer(Entity item)
     {
-        if (!item.FullName.HasValue())
-        {
-            Logger.Warn("Entity is empty");
-            return;
-        }
+        if (!item.FullName.HasValue()) { Logger.Warn("Entity is empty"); return; }
 
         var src = Io.Combine(Temp, item.FullName);
-        if (!Io.Exists(src))
+        if (!Io.Exists(src)) { Logger.Warn($"{src.Quote()} not found"); return; }
+
+        // Invoked only when the file is actually moved.
+        void next(string s)
         {
-            Logger.Warn($"{src.Quote()} not found");
-            return;
+            var zone = Settings.Value.Extraction.PropagateZone &&
+                      (Zone == SecurityZone.Internet || Zone == SecurityZone.Untrusted);
+            if (!item.IsDirectory && zone) ZoneId.Set(s, Zone);
+
+            if (Settings.Value.Extraction.ResetAccessControl) s.ResetAccessControl();
         }
 
         var dest = Io.Combine(Destination, item.FullName);
-        var obj  = new Entity(src);
-
-        if (obj.Exists) obj.Move(dest, Overwrite);
-        else
-        {
-            Logger.Warn($"{obj.FullName.Quote()} not found (Entity)");
-            return;
-        }
-
-        var zone = Settings.Value.Extraction.PropagateZone &&
-                  (Zone == SecurityZone.Internet || Zone == SecurityZone.Untrusted);
-        if (!item.IsDirectory && zone) ZoneId.Set(dest, Zone);
+        var obj = new Entity(src);
+        if (obj.Exists) obj.Move(dest, next, Overwrite);
+        else Logger.Warn($"{obj.FullName.Quote()} not found (Entity)");
     }
 
     /* --------------------------------------------------------------------- */

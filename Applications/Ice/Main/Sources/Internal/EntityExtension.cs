@@ -87,10 +87,11 @@ internal static class EntityExtension
     ///
     /// <param name="src">Source file or directory information.</param>
     /// <param name="dest">Destination path to move.</param>
+    /// <param name="next">Invoked only when the file is actually moved.</param>
     /// <param name="query">Query to confirm to overwrite.</param>
     ///
     /* --------------------------------------------------------------------- */
-    public static void Move(this Entity src, string dest, OverwriteQuery query)
+    public static void Move(this Entity src, string dest, Action<string> next, OverwriteQuery query)
     {
         if (src.IsDirectory)
         {
@@ -103,8 +104,12 @@ internal static class EntityExtension
                 Logger.Try(() => Io.SetAttributes(dest, src.Attributes));
             }
         }
-        else if (Io.Exists(dest)) Move(src, dest, query.Get(src, new(dest)));
-        else Try(() => Io.Move(src.FullName, dest, true));
+        else if (Io.Exists(dest)) Move(src, dest, next, query.Get(src, new(dest)));
+        else
+        {
+            Try(() => Io.Move(src.FullName, dest, true));
+            next(dest);
+        }
     }
 
     /* --------------------------------------------------------------------- */
@@ -118,20 +123,25 @@ internal static class EntityExtension
     ///
     /// <param name="src">Source file or directory information.</param>
     /// <param name="dest">Destination path to move.</param>
+    /// <param name="next">Invoked only when the file is actually moved.</param>
     /// <param name="method">Overwrite method.</param>
     ///
     /* --------------------------------------------------------------------- */
-    private static void Move(this Entity src, string dest, OverwriteMethod method)
+    private static void Move(this Entity src, string dest, Action<string> next, OverwriteMethod method)
     {
         switch (method & OverwriteMethod.Operations)
         {
             case OverwriteMethod.Yes:
                 // Because Move is a little tricky...
                 Try(() => Io.Copy(src.FullName, dest, true));
+                next(dest);
                 break;
-            case OverwriteMethod.Rename:
-                Try(() => Io.Move(src.FullName, IoEx.GetUniqueName(dest), false));
+            case OverwriteMethod.Rename: {
+                var alt = IoEx.GetUniqueName(dest);
+                Try(() => Io.Move(src.FullName, alt, false));
+                next(alt);
                 break;
+            }
             case OverwriteMethod.No:
             case OverwriteMethod.Cancel:
                 break;
