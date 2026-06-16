@@ -143,7 +143,7 @@ class ContextMenuViewModelTest : VmFixture
         Assert.That(root[1].Children.Count,   Is.EqualTo(4));
         Assert.That(root[1].Children[0].Name, Is.EqualTo("ここに解凍"));
         Assert.That(root[1].Children[1].Name, Is.EqualTo("デスクトップに解凍"));
-        Assert.That(root[1].Children[2].Name, Is.EqualTo("マイドキュメントに解凍"));
+        Assert.That(root[1].Children[2].Name, Is.EqualTo("ドキュメントに解凍"));
         Assert.That(root[1].Children[3].Name, Is.EqualTo("場所を指定して解凍"));
 
         foreach (var item in root[1].Children)

@@ -100,5 +100,23 @@ public sealed class ExtractionSettingValue : ArchiveSettingValue
         set => Set(value);
     }
 
+    /* --------------------------------------------------------------------- */
+    ///
+    /// ResetAccessControl
+    ///
+    /// <summary>
+    /// Gets or sets a value indicating whether to reset the ACL of
+    /// extracted files and directories so that they inherit permissions
+    /// from the destination directory.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    [DataMember]
+    public bool ResetAccessControl
+    {
+        get => Get(() => false);
+        set => Set(value);
+    }
+
     #endregion
 }

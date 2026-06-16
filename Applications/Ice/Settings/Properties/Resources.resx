@@ -120,7 +120,7 @@
     <value>ここに解凍</value>
   </data>
   <data name="MenuMyDocuments" xml:space="preserve">
-    <value>マイドキュメントに解凍</value>
+    <value>ドキュメントに解凍</value>
   </data>
   <data name="MenuNewCategory" xml:space="preserve">
     <value>新しいカテゴリー</value>

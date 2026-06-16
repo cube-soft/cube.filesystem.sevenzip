@@ -37,5 +37,5 @@
 
 #define CUBEICE_MENU_ESOURCE        _T("ここに解凍")
 #define CUBEICE_MENU_EDESKTOP       _T("デスクトップに解凍")
-#define CUBEICE_MENU_EMYDOCS        _T("マイドキュメントに解凍")
+#define CUBEICE_MENU_EMYDOCS        _T("ドキュメントに解凍")
 #define CUBEICE_MENU_ERUNTIME       _T("場所を指定して解凍")

@@ -133,7 +133,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Properties {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to マイドキュメントに解凍.
+        ///   Looks up a localized string similar to ドキュメントに解凍.
         /// </summary>
         internal static string CtxMyDocuments {
             get {

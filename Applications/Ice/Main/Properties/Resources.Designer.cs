@@ -296,7 +296,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 解凍したファイルを保存するフォルダを選択してください。.
+        ///   Looks up a localized string similar to 解凍したファイルを保存するフォルダーを選択してください。.
         /// </summary>
         internal static string MessageExtractDestination {
             get {

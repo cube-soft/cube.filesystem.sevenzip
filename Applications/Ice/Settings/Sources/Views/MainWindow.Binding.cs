@@ -105,7 +105,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Settings
             b5.Bind(nameof(s5.CreateDirectory),     ExtractCreateSmartCheckBox,   nameof(Enabled));
             b5.Bind(nameof(s5.SkipSingleDirectory), ExtractCreateSmartCheckBox,   nameof(CheckBox.Checked));
             b5.Bind(nameof(s5.OpenDirectory),       ExtractOpenCheckBox,          nameof(CheckBox.Checked));
-            b5.Bind(nameof(s5.PropagateZone),       ExtractZoneCheckBox,          nameof(ExtractZoneCheckBox.Checked));
+            b5.Bind(nameof(s5.ResetAccessControl),  ExtractAccessControlCheckBox, nameof(CheckBox.Checked));
+            b5.Bind(nameof(s5.PropagateZone),       ExtractZoneCheckBox,          nameof(CheckBox.Checked));
             b5.Bind(nameof(s5.OpenDirectory),       ExtractOpenSmartCheckBox,     nameof(Enabled));
             b5.Bind(nameof(s5.SkipDesktop),         ExtractOpenSmartCheckBox,     nameof(CheckBox.Checked));
         }

@@ -65,7 +65,7 @@ class PresetTest
         Assert.That(d1.Count, Is.EqualTo(4));
         Assert.That(d1[0].Name, Is.EqualTo("ここに解凍"));
         Assert.That(d1[1].Name, Is.EqualTo("デスクトップに解凍"));
-        Assert.That(d1[2].Name, Is.EqualTo("マイドキュメントに解凍"));
+        Assert.That(d1[2].Name, Is.EqualTo("ドキュメントに解凍"));
         Assert.That(d1[3].Name, Is.EqualTo("場所を指定して解凍"));
 
         foreach (var m in d0) Assert.That(m.IconIndex, Is.EqualTo(1), m.Name);
