@@ -989,7 +989,7 @@
             this.ExtractAccessControlCheckBox.Name = "ExtractAccessControlCheckBox";
             this.ExtractAccessControlCheckBox.Size = new System.Drawing.Size(191, 20);
             this.ExtractAccessControlCheckBox.TabIndex = 5;
-            this.ExtractAccessControlCheckBox.Text = "解凍先フォルダーのアクセス権を継承する";
+            this.ExtractAccessControlCheckBox.Text = "解凍先フォルダーのアクセス許可を継承する";
             this.ExtractAccessControlCheckBox.UseVisualStyleBackColor = true;
             // 
             // ExtractOpenCheckBox
