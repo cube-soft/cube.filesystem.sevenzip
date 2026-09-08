@@ -1,4 +1,4 @@
-﻿/* ------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
 //
@@ -138,6 +138,7 @@ class ArchiveReaderTest : FileFixture
         get
         {
             yield return new TestCaseData("Sample.zip", "");
+            yield return new TestCaseData("Sample.dmg", "");
             yield return new TestCaseData("SampleEmpty.zip", "");
             yield return new TestCaseData("SampleReadOnly.zip", "");
             yield return new TestCaseData("SampleVolume.zip", "");
