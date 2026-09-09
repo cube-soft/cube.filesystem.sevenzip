@@ -1,4 +1,4 @@
-﻿/* ------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------- */
 //
 // This file is part of Managed NTFS Data Streams project
 //
@@ -98,7 +98,7 @@ internal static class FileDataStreamHelper
         if (stream.Name.Length == 0) return Io.Open(stream.Source);
 
         var handle = NativeMethods.CreateFileW(
-            name,
+            $"{ToNativePath(stream.Source)}:{stream.Name}",
             access.ToNative(),
             share.ToNative(),
             IntPtr.Zero,
@@ -125,12 +125,33 @@ internal static class FileDataStreamHelper
         var name = $"{stream.Source}:{stream.Name}";
         if (stream.Type != FileDataStreamType.Data) throw new FileDataStreamException("Only $DATA streams can be deleted.", name);
         if (stream.Name.Length == 0) Io.Delete(stream.Source);
-        else if (!NativeMethods.DeleteFileW(name)) throw new FileDataStreamException(Marshal.GetLastWin32Error(), name);
+        else if (!NativeMethods.DeleteFileW($"{ToNativePath(stream.Source)}:{stream.Name}")) throw new FileDataStreamException(Marshal.GetLastWin32Error(), name);
     }
 
     #endregion
 
     #region Implementations
+
+    /* --------------------------------------------------------------------- */
+    ///
+    /// ToNativePath
+    ///
+    /// <summary>
+    /// Normalizes a file path before adding the extended-length prefix.
+    /// The ADS name must be appended after this conversion.
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    private static string ToNativePath(string src)
+    {
+        if (!src.HasValue()) return src;
+
+        var cvt = src.Replace('/', '\\');
+        if (cvt.StartsWith(@"\\?\") || cvt.StartsWith(@"\\.\")) return cvt;
+
+        cvt = Path.GetFullPath(cvt);
+        return cvt.StartsWith(@"\\") ? $@"\\?\UNC\{cvt.Substring(2)}" : $@"\\?\{cvt}";
+    }
 
     /* --------------------------------------------------------------------- */
     ///
@@ -196,7 +217,7 @@ internal static class FileDataStreamHelper
         var dest = new FindStreamData();
         var ptr  = new IntPtr(&dest);
 
-        handle = NativeMethods.FindFirstStreamW(name, StreamInfoLevels.FindStreamInfoStandard, ptr, 0);
+        handle = NativeMethods.FindFirstStreamW(ToNativePath(name), StreamInfoLevels.FindStreamInfoStandard, ptr, 0);
         if (handle == _invalid)
         {
             var code = Marshal.GetLastWin32Error();

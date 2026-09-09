@@ -2,6 +2,8 @@
 
 *.sh            text eol=lf
 
+*.cs            text eol=crlf
+
 *.sln           text eol=crlf
 *.csproj        text eol=crlf
 *.vbproj        text eol=crlf
@@ -23,6 +25,7 @@
 *.png           binary
 *.ico           binary
 *.svg           binary
+*.dmg           binary
 *.7z            binary
 *.zip           binary
 *.tar           binary

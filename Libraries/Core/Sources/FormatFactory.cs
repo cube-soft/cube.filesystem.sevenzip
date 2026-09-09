@@ -1,4 +1,4 @@
-﻿/* ------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------- */
 //
 // Copyright (c) 2010 CubeSoft, Inc.
 //
@@ -70,6 +70,11 @@ public static class FormatFactory
             if (Match(src, 0x101, 5, "75-73-74-61-72")) return Format.Tar;
             if (Match(src, 0x002, 3, "2D-6C-68")) return Format.Lzh;
 
+            // DMG can store their header at the start or in the last 512 bytes.
+            const string dmg = "6B-6F-6C-79-00-00-00-04-00-00-02-00";
+            if (Match(src, 0, 12, dmg)) return Format.Dmg;
+            if (src.Length >= 512 && Match(src, src.Length - 512, 12, dmg)) return Format.Dmg;
+
             return Format.Unknown;
         }
         finally { _ = src.Seek(origin, SeekOrigin.Begin); }
@@ -135,7 +140,7 @@ public static class FormatFactory
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    private static bool Match(Stream stream, int offset, int count, string compared)
+    private static bool Match(Stream stream, long offset, int count, string compared)
     {
         var bytes = new byte[count];
         _ = stream.Seek(offset, SeekOrigin.Begin);
@@ -211,7 +216,6 @@ public static class FormatFactory
         { "4D-5A",                      Format.PE       },
         { "7F-45-4C-46",                Format.Elf      },
         { "78-61-72-21",                Format.Xar      },
-        { "78",                         Format.Dmg      },
         { "4D-53-57-49-4D-00-00-00",    Format.Wim      },
         { "43-44-30-30-31",             Format.Iso      },
         { "49-54-53-46",                Format.Chm      },
