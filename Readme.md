@@ -1,7 +1,8 @@
 Cube.FileSystem.SevenZip
 ====
 
-[![Package](https://badgen.net/nuget/v/cube.filesystem.sevenzip)](https://www.nuget.org/packages/cube.filesystem.sevenzip/)
+[![Package](https://badgen.net/nuget/v/cube.filesystem.sevenzip?label=Package)](https://www.nuget.org/packages/cube.filesystem.sevenzip/)
+[![7-Zip](https://badgen.net/nuget/v/cube.native.sevenzip?label=7-Zip)](https://www.nuget.org/packages/Cube.Native.SevenZip)
 [![AppVeyor](https://badgen.net/appveyor/ci/clown/cube-filesystem-sevenzip)](https://ci.appveyor.com/project/clown/cube-filesystem-sevenzip)
 [![Codecov](https://badgen.net/codecov/c/github/cube-soft/cube.filesystem.sevenzip)](https://codecov.io/gh/cube-soft/cube.filesystem.sevenzip)
 
